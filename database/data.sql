@@ -1,18 +1,6 @@
 -- Database Seed Data for Interview Preparation Tracker
 
-USE interview_tracker;
-
--- Clear Existing Data (Optional but useful for clean setup)
-SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE TABLE bookmarks;
-TRUNCATE TABLE notes;
-TRUNCATE TABLE job_applications;
-TRUNCATE TABLE mock_interviews;
-TRUNCATE TABLE progress;
-TRUNCATE TABLE study_plans;
-TRUNCATE TABLE interview_questions;
-TRUNCATE TABLE users;
-SET FOREIGN_KEY_CHECKS = 1;
+-- Truncates and foreign key checks removed for H2 compatibility
 
 -- 1. Insert Users
 -- User password is: password -> BCrypt hash

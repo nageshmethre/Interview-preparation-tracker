@@ -1,7 +1,6 @@
 -- Database Schema for Interview Preparation Tracker
 
-CREATE DATABASE IF NOT EXISTS interview_tracker;
-USE interview_tracker;
+-- Database context is automatically managed by the runner datasource
 
 -- Users Table
 CREATE TABLE IF NOT EXISTS users (
