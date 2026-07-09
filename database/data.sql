@@ -6,8 +6,8 @@
 -- User password is: password -> BCrypt hash
 -- Admin password is: adminpass -> BCrypt hash
 INSERT INTO users (id, name, email, password, role) VALUES
-(1, 'Admin Tracker', 'admin@tracker.com', '$2a$10$8.UnVuG9HHgffUDAlk8GP.3q3SLGG663SgNpGcK9B9k1T.4HupX6e', 'ADMIN'),
-(2, 'Nagesh Methre', 'nagesh@tracker.com', '$2a$10$8.UnVuG9HHgffUDAlk8GP.3q3SLGG663SgNpGcK9B9k1T.4HupX6e', 'USER');
+(1, 'Admin Tracker', 'admin@tracker.com', '$2a$10$kPdvJZw/HPUmzTD5osQUu.9jIFTkliTlAUBF3xnF0L6pzEFliYNAK', 'ADMIN'),
+(2, 'Nagesh Methre', 'nagesh@tracker.com', '$2a$10$k1Uh/cYeupTtTtf0YczJEewqw7qS8CJojkJ7NFu4Abb8e0xa7XL/S', 'USER');
 
 -- 2. Insert Interview Questions
 INSERT INTO interview_questions (id, title, company, category, difficulty, question, answer, tags) VALUES
