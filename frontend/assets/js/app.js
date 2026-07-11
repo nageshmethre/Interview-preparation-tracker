@@ -1325,6 +1325,8 @@ function switchSettingsTab(tab) {
   } else if (tab === 'developer') {
     mount.innerHTML = components.settingsDeveloper(currentSettings);
     bindSettingsDeveloperEvents();
+  } else if (tab === 'subscription') {
+    mount.innerHTML = components.settingsSubscription();
   } else if (tab === 'about') {
     mount.innerHTML = components.settingsAbout();
   }

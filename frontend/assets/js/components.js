@@ -865,6 +865,9 @@ const components = {
             <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-3 btn-settings-tab" data-tab="developer">
               <i class="fa-solid fa-code me-2 text-muted"></i> Developer Keys
             </button>
+            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-3 btn-settings-tab" data-tab="subscription">
+              <i class="fa-solid fa-credit-card me-2 text-indigo"></i> PrepPro Plan
+            </button>
             <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-3 btn-settings-tab" data-tab="about">
               <i class="fa-solid fa-circle-info me-2 text-muted"></i> About Platform
             </button>
@@ -1116,6 +1119,26 @@ const components = {
         <button class="btn btn-glass btn-sm py-1" id="btn-rotate-apikey"><i class="fa-solid fa-arrows-rotate"></i> Rotate</button>
       </div>
       <small class="text-muted">Use this API key inside requests header: <code>Authorization: Bearer [key]</code> to automate solutions uploads externally.</small>
+    </div>
+  `,
+
+  settingsSubscription: () => `
+    <h5 class="text-white fw-bold mb-4">💳 Subscription Details</h5>
+    <div class="glass-panel p-4 border-indigo text-center mb-4">
+      <div class="badge bg-indigo-subtle text-primary mb-3 py-2 px-3 fs-7">ACTIVE PLAN: PREPPRO (FREE ACCREDITED)</div>
+      <h3 class="text-white fw-bold mb-2">PrepPro Premium Edition</h3>
+      <p class="text-muted fs-7 mb-4">Recommended for Active Jobseekers • Lifetime Zero-Cost Developer Access</p>
+      
+      <div class="row g-3 justify-content-center text-start max-w-sm mx-auto mb-4 fs-7 text-muted" style="max-width: 320px;">
+        <div class="col-12"><i class="fa-solid fa-circle-check text-success me-2"></i> Custom Target Study Plans</div>
+        <div class="col-12"><i class="fa-solid fa-circle-check text-success me-2"></i> Mock AI Feedback Logs</div>
+        <div class="col-12"><i class="fa-solid fa-circle-check text-success me-2"></i> Export Excel/PDF Reports</div>
+        <div class="col-12"><i class="fa-solid fa-circle-check text-success me-2"></i> Advanced Platform Syncs</div>
+      </div>
+      
+      <div class="alert alert-success fs-7 d-inline-block px-4 py-2 border-success-subtle mb-0">
+        <i class="fa-solid fa-circle-info me-1"></i> Subscription constraints have been removed. Enjoy full developer access at $0.00/month.
+      </div>
     </div>
   `,
 
