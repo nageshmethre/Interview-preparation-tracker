@@ -7,7 +7,7 @@ import com.interviewtracker.dto.RegisterRequest;
 import com.interviewtracker.dto.UserDto;
 
 public interface AuthService {
-    AuthResponse login(AuthRequest request);
+    AuthResponse login(AuthRequest request, String ipAddress, String userAgent);
     AuthResponse verifyOtp(MfaVerifyRequest request, String ipAddress, String userAgent);
     AuthResponse refreshToken(String refreshTokenCookie, String ipAddress, String userAgent);
     void logout(String accessTokenCookie);

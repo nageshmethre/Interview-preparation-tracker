@@ -34,6 +34,9 @@ public class AuthServiceImpl implements AuthService {
     private UserRepository userRepository;
 
     @Autowired
+    private com.interviewtracker.repository.UserSettingsRepository userSettingsRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -53,7 +56,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public AuthResponse login(AuthRequest request) {
+    public AuthResponse login(AuthRequest request, String ipAddress, String userAgent) {
         // 1. Check account lockout policy
         if (loginAttemptService.isBlocked(request.getEmail())) {
             logger.warn("Login attempt blocked for locked account: {}", request.getEmail());
@@ -78,15 +81,45 @@ public class AuthServiceImpl implements AuthService {
         // 4. Reset lock counter on success
         loginAttemptService.loginSucceeded(request.getEmail());
 
-        // 5. Generate and stage MFA OTP (sent via log alert)
-        otpService.generateOtp(request.getEmail());
+        // 5. Check if user has 2FA enabled in settings
+        com.interviewtracker.entity.UserSettings settings = userSettingsRepository.findByUserId(user.getId()).orElse(null);
+        boolean mfaRequired = settings != null && Boolean.TRUE.equals(settings.getEnable2fa());
 
-        // Return staged validation response
+        if (mfaRequired) {
+            // Generate and stage MFA OTP (sent via log alert)
+            otpService.generateOtp(request.getEmail());
+
+            return AuthResponse.builder()
+                    .email(user.getEmail())
+                    .name(user.getName())
+                    .role(user.getRole())
+                    .mfaRequired(true)
+                    .build();
+        }
+
+        // 6. 2FA is disabled: bypass OTP, generate tokens immediately
+        String accessToken = tokenProvider.generateAccessToken(user.getEmail(), user.getRole());
+        String jti = tokenProvider.getJtiFromJWT(accessToken);
+
+        // Audit session creation (Zero Trust Session registry)
+        DeviceSession session = DeviceSession.builder()
+                .user(user)
+                .tokenId(jti)
+                .ipAddress(ipAddress)
+                .userAgent(userAgent)
+                .location("IP Lookup Direct")
+                .isActive(true)
+                .build();
+        deviceSessionRepository.save(session);
+
+        logger.info("Direct Login success: User {} logged in from session jti {}", user.getEmail(), jti);
+
         return AuthResponse.builder()
+                .token(accessToken)
                 .email(user.getEmail())
                 .name(user.getName())
                 .role(user.getRole())
-                .mfaRequired(true)
+                .mfaRequired(false)
                 .build();
     }
 

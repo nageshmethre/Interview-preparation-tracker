@@ -28,8 +28,13 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request) {
-        AuthResponse response = authService.login(request);
+    public ResponseEntity<AuthResponse> login(
+            @Valid @RequestBody AuthRequest request,
+            jakarta.servlet.http.HttpServletRequest servletRequest
+    ) {
+        String ipAddress = servletRequest.getRemoteAddr();
+        String userAgent = servletRequest.getHeader("User-Agent");
+        AuthResponse response = authService.login(request, ipAddress, userAgent);
         return ResponseEntity.ok(response);
     }
 
