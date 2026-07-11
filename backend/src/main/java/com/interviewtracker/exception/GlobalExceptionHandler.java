@@ -2,6 +2,8 @@ package com.interviewtracker.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -63,6 +65,32 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    // Handle Spring Security Bad Credentials (Wrong email/password) -> 401
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentials(BadCredentialsException ex, WebRequest request) {
+        ErrorResponse response = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.UNAUTHORIZED.value(),
+                "Unauthorized",
+                "Invalid email or password",
+                request.getDescription(false)
+        );
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    // Handle Spring Security Authentication errors -> 401
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex, WebRequest request) {
+        ErrorResponse response = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.UNAUTHORIZED.value(),
+                "Unauthorized",
+                "Authentication failed",
+                request.getDescription(false)
+        );
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     // Handle Global Generic Exceptions

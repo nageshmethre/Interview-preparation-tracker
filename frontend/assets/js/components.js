@@ -153,8 +153,9 @@ const components = {
                 <input type="email" id="register-email" class="form-control glass-input" placeholder="nagesh@tracker.com" required>
               </div>
               <div class="mb-4 text-start">
-                <label class="form-label text-muted fs-7">PASSWORD (Min. 6 chars)</label>
-                <input type="password" id="register-password" class="form-control glass-input" placeholder="••••••••" required>
+                <label class="form-label text-muted fs-7">PASSWORD (Min. 6 chars, A-Z, a-z, 0-9)</label>
+                <input type="password" id="register-password" class="form-control glass-input" placeholder="••••••••" minlength="6" required>
+                <div class="form-text text-muted" style="font-size:0.7rem;">Must include uppercase, lowercase, and a number</div>
               </div>
               <button type="submit" class="btn btn-premium w-100 py-2 fs-6 mb-3">Create Account</button>
             </form>

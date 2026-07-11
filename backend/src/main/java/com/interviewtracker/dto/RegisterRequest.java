@@ -17,10 +17,10 @@ public class RegisterRequest {
     private String email;
 
     @NotBlank(message = "Password is required")
-    @Size(min = 12, message = "Password must be at least 12 characters")
+    @Size(min = 6, message = "Password must be at least 6 characters")
     @Pattern(
-        regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#])[A-Za-z\\d@$!%*?&#]{12,}$",
-        message = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+        regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$",
+        message = "Password must contain at least one uppercase letter, one lowercase letter, and one number"
     )
     private String password;
 }
