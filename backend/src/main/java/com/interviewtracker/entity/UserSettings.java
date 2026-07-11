@@ -128,4 +128,49 @@ public class UserSettings {
     @Column(name = "auto_suggestions")
     @Builder.Default
     private Boolean autoSuggestions = true;
+
+    // Spec Extensions (Added for Settings Architecture compliance)
+    @Column(name = "cover_image_url")
+    private String coverImageUrl;
+    @Column(name = "resume_url")
+    private String resumeUrl;
+
+    @Column(name = "date_format")
+    @Builder.Default
+    private String dateFormat = "YYYY-MM-DD";
+    @Column(name = "time_format")
+    @Builder.Default
+    private String timeFormat = "24h";
+    @Column(name = "first_day_of_week")
+    @Builder.Default
+    private String firstDayOfWeek = "Monday";
+
+    @Column(name = "dashboard_widgets", length = 500)
+    @Builder.Default
+    private String dashboardWidgets = "Progress Chart,Heatmap,Daily Goals,Calendar,DSA Progress,Course Progress,Certificates";
+
+    @Column(name = "connected_providers", length = 255)
+    @Builder.Default
+    private String connectedProviders = "Google,GitHub";
+
+    @Column(name = "hide_email")
+    @Builder.Default
+    private Boolean hideEmail = false;
+    @Column(name = "hide_phone")
+    @Builder.Default
+    private Boolean hidePhone = false;
+
+    @Column(name = "accessibility_dyslexia")
+    @Builder.Default
+    private Boolean accessibilityDyslexia = false;
+    @Column(name = "accessibility_reduce_motion")
+    @Builder.Default
+    private Boolean accessibilityReduceMotion = false;
+
+    @Column(name = "response_length")
+    @Builder.Default
+    private String responseLength = "Medium"; // Short, Medium, Long
+    @Column(name = "ai_difficulty_level")
+    @Builder.Default
+    private String aiDifficultyLevel = "Adaptive"; // Basic, Adaptive, Extreme
 }

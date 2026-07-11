@@ -407,5 +407,18 @@ CREATE TABLE IF NOT EXISTS user_settings (
     api_key VARCHAR(100),
     ai_model VARCHAR(50) DEFAULT 'Gemini-Pro',
     auto_suggestions BOOLEAN DEFAULT TRUE,
+    cover_image_url VARCHAR(255),
+    resume_url VARCHAR(255),
+    date_format VARCHAR(20) DEFAULT 'YYYY-MM-DD',
+    time_format VARCHAR(10) DEFAULT '24h',
+    first_day_of_week VARCHAR(20) DEFAULT 'Monday',
+    dashboard_widgets VARCHAR(500) DEFAULT 'Progress Chart,Heatmap,Daily Goals,Calendar,DSA Progress,Course Progress,Certificates',
+    connected_providers VARCHAR(255) DEFAULT 'Google,GitHub',
+    hide_email BOOLEAN DEFAULT FALSE,
+    hide_phone BOOLEAN DEFAULT FALSE,
+    accessibility_dyslexia BOOLEAN DEFAULT FALSE,
+    accessibility_reduce_motion BOOLEAN DEFAULT FALSE,
+    response_length VARCHAR(20) DEFAULT 'Medium',
+    ai_difficulty_level VARCHAR(20) DEFAULT 'Adaptive',
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

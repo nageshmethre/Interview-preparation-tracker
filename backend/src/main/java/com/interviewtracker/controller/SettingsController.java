@@ -101,6 +101,21 @@ public class SettingsController {
         settings.setAiModel(updated.getAiModel());
         settings.setAutoSuggestions(updated.getAutoSuggestions());
 
+        // Spec Extensions Bindings
+        settings.setCoverImageUrl(updated.getCoverImageUrl());
+        settings.setResumeUrl(updated.getResumeUrl());
+        settings.setDateFormat(updated.getDateFormat());
+        settings.setTimeFormat(updated.getTimeFormat());
+        settings.setFirstDayOfWeek(updated.getFirstDayOfWeek());
+        settings.setDashboardWidgets(updated.getDashboardWidgets());
+        settings.setConnectedProviders(updated.getConnectedProviders());
+        settings.setHideEmail(updated.getHideEmail());
+        settings.setHidePhone(updated.getHidePhone());
+        settings.setAccessibilityDyslexia(updated.getAccessibilityDyslexia());
+        settings.setAccessibilityReduceMotion(updated.getAccessibilityReduceMotion());
+        settings.setResponseLength(updated.getResponseLength());
+        settings.setAiDifficultyLevel(updated.getAiDifficultyLevel());
+
         return ResponseEntity.ok(settingsRepository.save(settings));
     }
 

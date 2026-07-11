@@ -844,32 +844,50 @@ const components = {
       <!-- Settings Tabs Navigation -->
       <div class="col-md-4 col-lg-3">
         <div class="glass-panel p-3">
-          <div class="list-group list-group-flush" id="settings-tabs-list">
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-3 btn-settings-tab active" data-tab="profile">
+          <div class="list-group list-group-flush" id="settings-tabs-list" style="max-height: 550px; overflow-y: auto;">
+            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab active" data-tab="profile">
               <i class="fa-solid fa-circle-user me-2 text-indigo"></i> Profile Settings
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-3 btn-settings-tab" data-tab="security">
-              <i class="fa-solid fa-shield-halved me-2 text-success"></i> Security & Sessions
+            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="security">
+              <i class="fa-solid fa-key me-2 text-success"></i> Security Settings
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-3 btn-settings-tab" data-tab="appearance">
+            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="appearance">
               <i class="fa-solid fa-palette me-2 text-warning"></i> Appearance Theme
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-3 btn-settings-tab" data-tab="notifications">
+            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="notifications">
               <i class="fa-solid fa-bell me-2 text-danger"></i> Notification Settings
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-3 btn-settings-tab" data-tab="learning">
+            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="language">
+              <i class="fa-solid fa-globe me-2 text-info"></i> Language & Region
+            </button>
+            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="learning">
               <i class="fa-solid fa-book-open me-2 text-primary"></i> Learning Preferences
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-3 btn-settings-tab" data-tab="career">
+            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="career">
               <i class="fa-solid fa-briefcase me-2 text-success"></i> Career Preferences
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-3 btn-settings-tab" data-tab="developer">
-              <i class="fa-solid fa-code me-2 text-muted"></i> Developer Keys
+            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="dashboard">
+              <i class="fa-solid fa-chart-line me-2 text-indigo"></i> Dashboard Widgets
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-3 btn-settings-tab" data-tab="subscription">
-              <i class="fa-solid fa-credit-card me-2 text-indigo"></i> PrepPro Plan
+            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="connected">
+              <i class="fa-solid fa-link me-2 text-primary"></i> Connected Accounts
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-3 btn-settings-tab" data-tab="about">
+            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="privacy">
+              <i class="fa-solid fa-shield-halved me-2 text-danger"></i> Data & Privacy
+            </button>
+            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="devices">
+              <i class="fa-solid fa-desktop me-2 text-info"></i> Devices & Sessions
+            </button>
+            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="importexport">
+              <i class="fa-solid fa-file-export me-2 text-muted"></i> Import / Export
+            </button>
+            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="developer">
+              <i class="fa-solid fa-code me-2 text-muted"></i> Developer Options
+            </button>
+            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="subscription">
+              <i class="fa-solid fa-credit-card me-2 text-indigo"></i> Subscription Plan
+            </button>
+            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="about">
               <i class="fa-solid fa-circle-info me-2 text-muted"></i> About Platform
             </button>
           </div>
@@ -886,7 +904,20 @@ const components = {
   `,
 
   settingsProfile: (s, user) => `
-    <h5 class="text-white fw-bold mb-4">👤 Profile Information</h5>
+    <h5 class="text-white fw-bold mb-3">👤 Profile Information</h5>
+    <div class="mb-4 text-center position-relative rounded overflow-hidden" style="height: 120px; background: linear-gradient(135deg, var(--primary-color, #6366f1), #818cf8); border: 1px solid rgba(255,255,255,0.1);">
+      ${s.coverImageUrl ? `<img src="${s.coverImageUrl}" class="w-100 h-100 object-fit-cover">` : ''}
+      <div class="position-absolute bottom-0 start-0 p-3 text-start d-flex align-items-center gap-3 w-100 bg-dark bg-opacity-50">
+        <div class="rounded-circle border border-2 border-white overflow-hidden bg-secondary d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+          <i class="fa-solid fa-user text-white fs-4"></i>
+        </div>
+        <div>
+          <h6 class="text-white fw-bold m-0">${user.name}</h6>
+          <small class="text-white-50 fs-8">@${user.email.split('@')[0]}</small>
+        </div>
+      </div>
+    </div>
+    
     <form id="settings-profile-form">
       <div class="row g-3 mb-3">
         <div class="col-md-6">
@@ -894,13 +925,19 @@ const components = {
           <input type="text" id="set-name" class="form-control glass-input" value="${user.name}" required>
         </div>
         <div class="col-md-6">
+          <label class="form-label text-muted fs-7">USERNAME / HANDLE</label>
+          <input type="text" id="set-username" class="form-control glass-input" value="${user.email.split('@')[0]}" disabled>
+        </div>
+      </div>
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
           <label class="form-label text-muted fs-7">EMAIL ADDRESS</label>
           <input type="email" id="set-email" class="form-control glass-input" value="${user.email}" disabled>
         </div>
-      </div>
-      <div class="mb-3">
-        <label class="form-label text-muted fs-7">BIOGRAPHY / MOTTO</label>
-        <textarea id="set-bio" class="form-control glass-input fs-7" rows="2" placeholder="Tell us about your preparation objectives...">${s.bio || ''}</textarea>
+        <div class="col-md-6">
+          <label class="form-label text-muted fs-7">BIOGRAPHY / MOTTO</label>
+          <input type="text" id="set-bio" class="form-control glass-input" value="${s.bio || ''}" placeholder="Short bio...">
+        </div>
       </div>
       <div class="row g-3 mb-3">
         <div class="col-md-6">
@@ -922,6 +959,16 @@ const components = {
           <input type="number" id="set-gradyear" class="form-control glass-input" value="${s.graduationYear || 2026}">
         </div>
       </div>
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label text-muted fs-7">LOCATION</label>
+          <input type="text" id="set-location" class="form-control glass-input" value="${s.location || ''}" placeholder="e.g. San Francisco, CA">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label text-muted fs-7">TIMEZONE</label>
+          <input type="text" id="set-timezone" class="form-control glass-input" value="${s.timezone || 'UTC+5:30'}">
+        </div>
+      </div>
       <div class="row g-3 mb-4">
         <div class="col-md-4">
           <label class="form-label text-muted fs-7">GITHUB LINK</label>
@@ -940,16 +987,20 @@ const components = {
     </form>
   `,
 
-  settingsSecurity: (s, sessions) => `
+  settingsSecurity: (s) => `
     <h5 class="text-white fw-bold mb-4">🔐 Access & Security Controls</h5>
-    <form id="settings-security-form" class="mb-5">
+    <form id="settings-security-form" class="mb-4">
       <div class="mb-3">
         <label class="form-label text-muted fs-7">NEW ACCOUNT PASSWORD</label>
-        <input type="password" id="set-newpassword" class="form-control glass-input" placeholder="Min. 12 chars (Upper/Lower/Num/Special)">
+        <input type="password" id="set-newpassword" class="form-control glass-input" placeholder="Min. 6 chars (Upper/Lower/Num)">
       </div>
       <div class="mb-3">
         <label class="form-label text-muted fs-7">CONFIRM NEW PASSWORD</label>
         <input type="password" id="set-confirmpassword" class="form-control glass-input" placeholder="••••••••">
+      </div>
+      <div class="mb-3">
+        <label class="form-label text-muted fs-7">ACCOUNT RECOVERY EMAIL</label>
+        <input type="email" id="set-recoveryemail" class="form-control glass-input" value="${s.recoveryEmail || ''}" placeholder="backup@recovery.com">
       </div>
       <div class="form-check form-switch mb-4">
         <input class="form-check-input" type="checkbox" id="set-enable2fa" ${s.enable2fa ? 'checked' : ''}>
@@ -958,32 +1009,11 @@ const components = {
       <button type="submit" class="btn btn-premium w-100 py-2">Update Security Settings</button>
     </form>
 
-    <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-laptop-code text-indigo me-2"></i>Active Device Sessions</h5>
-    <div class="table-responsive mb-3">
-      <table class="table table-dark table-hover align-middle m-0 fs-7">
-        <thead>
-          <tr class="text-muted border-secondary-subtle">
-            <th scope="col">Device Browser</th>
-            <th scope="col">IP Address</th>
-            <th scope="col">Last Access</th>
-            <th scope="col" class="text-center">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${sessions.map(sess => `
-            <tr class="border-secondary-subtle">
-              <td class="text-white fw-bold">${sess.userAgent.substring(0, 25)}...</td>
-              <td>${sess.ipAddress}</td>
-              <td>${sess.lastActive.substring(11, 19)}</td>
-              <td class="text-center">
-                <button class="btn btn-glass btn-sm text-danger btn-revoke-session" data-session-id="${sess.id}"><i class="fa-solid fa-ban"></i> Terminate</button>
-              </td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
+    <div class="glass-panel p-3 border-danger-subtle">
+      <h6 class="text-white fw-bold mb-2 fs-7 text-danger"><i class="fa-solid fa-triangle-exclamation me-1"></i>Security Guard Monitor</h6>
+      <p class="text-muted fs-8 mb-2">Failed Login Attempts: <span class="badge bg-danger">0</span></p>
+      <p class="text-muted fs-8 mb-0">Status: <span class="text-success">Active Secure Session</span></p>
     </div>
-    <button class="btn btn-glass text-danger w-100 py-2 fs-7" id="btn-revoke-all-sessions"><i class="fa-solid fa-right-from-bracket me-1"></i> Terminate All Other Sessions</button>
   `,
 
   settingsAppearance: (s) => `
@@ -994,6 +1024,7 @@ const components = {
         <select id="set-theme" class="form-select glass-input">
           <option value="dark" ${s.theme === 'dark' ? 'selected' : ''}>Dark Space Theme (Recommended)</option>
           <option value="light" ${s.theme === 'light' ? 'selected' : ''}>Light Desktop Theme</option>
+          <option value="reading" ${s.theme === 'reading' ? 'selected' : ''}>Reading Mode (Sepia)</option>
         </select>
       </div>
       <div class="mb-3">
@@ -1011,25 +1042,33 @@ const components = {
           <option value="large" ${s.fontSize === 'large' ? 'selected' : ''}>Large Accessible Font</option>
         </select>
       </div>
-      <div class="form-check form-switch mb-4">
+      <div class="form-check form-switch mb-2">
         <input class="form-check-input" type="checkbox" id="set-compact" ${s.compactMode ? 'checked' : ''}>
-        <label class="form-check-label text-muted fs-7" for="set-compact">Enable Compact layout spaces (Minimizes cards margins)</label>
+        <label class="form-check-label text-muted fs-7" for="set-compact">Enable Compact layout spaces (Minimizes margins)</label>
+      </div>
+      <div class="form-check form-switch mb-2">
+        <input class="form-check-input" type="checkbox" id="set-dyslexia" ${s.accessibilityDyslexia ? 'checked' : ''}>
+        <label class="form-check-label text-muted fs-7" for="set-dyslexia">Enable Dyslexia-Friendly Font (Accessibility)</label>
+      </div>
+      <div class="form-check form-switch mb-4">
+        <input class="form-check-input" type="checkbox" id="set-reducemotion" ${s.accessibilityReduceMotion ? 'checked' : ''}>
+        <label class="form-check-label text-muted fs-7" for="set-reducemotion">Reduce UI Animations & Motion (Accessibility)</label>
       </div>
       <button type="submit" class="btn btn-premium w-100 py-2">Apply Styling Metrics</button>
     </form>
   `,
 
   settingsNotifications: (s) => `
-    <h5 class="text-white fw-bold mb-4">🔔 Notification Mappings</h5>
+    <h5 class="text-white fw-bold mb-4">🔔 Notification Channels</h5>
     <form id="settings-notifications-form">
       <h6 class="text-white fw-bold mb-3 fs-7">EMAIL CHANNELS</h6>
       <div class="form-check mb-2">
         <input class="form-check-input" type="checkbox" id="set-emailreminder" ${s.emailStudyReminder ? 'checked' : ''}>
-        <label class="form-check-label text-muted fs-7" for="set-emailreminder">Daily Study Reminder alerts</label>
+        <label class="form-check-label text-muted fs-7" for="set-emailreminder">Daily Study Reminder notifications</label>
       </div>
       <div class="form-check mb-4">
         <input class="form-check-input" type="checkbox" id="set-emailreport" ${s.emailWeeklyReport ? 'checked' : ''}>
-        <label class="form-check-label text-muted fs-7" for="set-emailreport">Weekly preparation overview analytics report</label>
+        <label class="form-check-label text-muted fs-7" for="set-emailreport">Weekly preparation overview metrics email</label>
       </div>
 
       <h6 class="text-white fw-bold mb-3 fs-7">PLATFORM WEB CHANNELS</h6>
@@ -1039,9 +1078,58 @@ const components = {
       </div>
       <div class="form-check mb-4">
         <input class="form-check-input" type="checkbox" id="set-achieve" ${s.achievementNotifications ? 'checked' : ''}>
-        <label class="form-check-label text-muted fs-7" for="set-achieve">Notify when badges or XP goals are unlocked</label>
+        <label class="form-check-label text-muted fs-7" for="set-achieve">Notify when badges or XP milestones are unlocked</label>
       </div>
       <button type="submit" class="btn btn-premium w-100 py-2">Save Mappings</button>
+    </form>
+  `,
+
+  settingsLanguage: (s) => `
+    <h5 class="text-white fw-bold mb-4">🌐 Language & Regional Settings</h5>
+    <form id="settings-language-form">
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label text-muted fs-7">SYSTEM LANGUAGE</label>
+          <select id="set-syslanguage" class="form-select glass-input">
+            <option value="en" ${s.language === 'en' ? 'selected' : ''}>English (United States)</option>
+            <option value="es" ${s.language === 'es' ? 'selected' : ''}>Español (España)</option>
+            <option value="fr" ${s.language === 'fr' ? 'selected' : ''}>Français (France)</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label text-muted fs-7">COUNTRY / REGION</label>
+          <select id="set-country" class="form-select glass-input">
+            <option value="US" ${s.country === 'US' ? 'selected' : ''}>United States</option>
+            <option value="IN" ${s.country === 'IN' ? 'selected' : ''}>India</option>
+            <option value="GB" ${s.country === 'GB' ? 'selected' : ''}>United Kingdom</option>
+          </select>
+        </div>
+      </div>
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label text-muted fs-7">DATE FORMAT</label>
+          <select id="set-dateformat" class="form-select glass-input">
+            <option value="YYYY-MM-DD" ${s.dateFormat === 'YYYY-MM-DD' ? 'selected' : ''}>YYYY-MM-DD (Standard)</option>
+            <option value="DD/MM/YYYY" ${s.dateFormat === 'DD/MM/YYYY' ? 'selected' : ''}>DD/MM/YYYY</option>
+            <option value="MM/DD/YYYY" ${s.dateFormat === 'MM/DD/YYYY' ? 'selected' : ''}>MM/DD/YYYY</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label text-muted fs-7">TIME FORMAT</label>
+          <select id="set-timeformat" class="form-select glass-input">
+            <option value="24h" ${s.timeFormat === '24h' ? 'selected' : ''}>24-Hour clock (e.g. 14:00)</option>
+            <option value="12h" ${s.timeFormat === '12h' ? 'selected' : ''}>12-Hour clock (e.g. 2:00 PM)</option>
+          </select>
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="form-label text-muted fs-7">FIRST DAY OF THE WEEK</label>
+        <select id="set-firstday" class="form-select glass-input">
+          <option value="Monday" ${s.firstDayOfWeek === 'Monday' ? 'selected' : ''}>Monday</option>
+          <option value="Sunday" ${s.firstDayOfWeek === 'Sunday' ? 'selected' : ''}>Sunday</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-premium w-100 py-2">Save Language Options</button>
     </form>
   `,
 
@@ -1057,22 +1145,24 @@ const components = {
           <option value="JavaScript" ${s.preferredLanguage === 'JavaScript' ? 'selected' : ''}>JavaScript (Node.js)</option>
         </select>
       </div>
-      <div class="mb-3">
-        <label class="form-label text-muted fs-7">DAILY QUESTIONS SOLVE TARGET</label>
-        <input type="number" id="set-dailygoal" class="form-control glass-input" value="${s.dailyQuestionsGoal || 5}" min="1" max="25">
-      </div>
-      <div class="mb-3">
-        <label class="form-label text-muted fs-7">PREFERRED PROBLEM DIFFICULTY</label>
-        <select id="set-diff" class="form-select glass-input">
-          <option value="Easy" ${s.preferredDifficulty === 'Easy' ? 'selected' : ''}>Easy Only</option>
-          <option value="Medium" ${s.preferredDifficulty === 'Medium' ? 'selected' : ''}>Medium Only</option>
-          <option value="Hard" ${s.preferredDifficulty === 'Hard' ? 'selected' : ''}>Hard Only</option>
-          <option value="Mixed" ${s.preferredDifficulty === 'Mixed' ? 'selected' : ''}>Mixed (Standard)</option>
-        </select>
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label text-muted fs-7">DAILY QUESTIONS TARGET</label>
+          <input type="number" id="set-dailygoal" class="form-control glass-input" value="${s.dailyQuestionsGoal || 5}" min="1" max="25">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label text-muted fs-7">PREFERRED PROBLEM DIFFICULTY</label>
+          <select id="set-diff" class="form-select glass-input">
+            <option value="Easy" ${s.preferredDifficulty === 'Easy' ? 'selected' : ''}>Easy Only</option>
+            <option value="Medium" ${s.preferredDifficulty === 'Medium' ? 'selected' : ''}>Medium Only</option>
+            <option value="Hard" ${s.preferredDifficulty === 'Hard' ? 'selected' : ''}>Hard Only</option>
+            <option value="Mixed" ${s.preferredDifficulty === 'Mixed' ? 'selected' : ''}>Mixed (Standard)</option>
+          </select>
+        </div>
       </div>
       <div class="mb-4">
         <label class="form-label text-muted fs-7">TARGET COMPANIES (Comma separated)</label>
-        <input type="text" id="set-companies" class="form-control glass-input" value="${s.targetCompanies || ''}">
+        <input type="text" id="set-companies" class="form-control glass-input" value="${s.targetCompanies || ''}" placeholder="e.g. Google, Microsoft, Meta">
       </div>
       <button type="submit" class="btn btn-premium w-100 py-2">Save Preferences</button>
     </form>
@@ -1084,11 +1174,11 @@ const components = {
       <div class="row g-3 mb-3">
         <div class="col-md-6">
           <label class="form-label text-muted fs-7">TARGET PLACEMENT ROLE</label>
-          <input type="text" id="set-role" class="form-control glass-input" value="${s.targetRole || ''}">
+          <input type="text" id="set-role" class="form-control glass-input" value="${s.targetRole || ''}" placeholder="e.g. Senior Backend Engineer">
         </div>
         <div class="col-md-6">
           <label class="form-label text-muted fs-7">EXPECTED ANNUAL SALARY ($)</label>
-          <input type="text" id="set-salary" class="form-control glass-input" value="${s.expectedSalary || ''}">
+          <input type="text" id="set-salary" class="form-control glass-input" value="${s.expectedSalary || ''}" placeholder="e.g. 120,000">
         </div>
       </div>
       <div class="mb-4">
@@ -1103,14 +1193,207 @@ const components = {
     </form>
   `,
 
+  settingsDashboard: (s) => {
+    const w = s.dashboardWidgets || '';
+    return `
+      <h5 class="text-white fw-bold mb-4">📊 Dashboard & Widget Preferences</h5>
+      <form id="settings-dashboard-form">
+        <h6 class="text-white fw-bold mb-3 fs-7">VISIBLE DASHBOARD WIDGETS</h6>
+        <div class="row g-2 mb-4 text-start">
+          <div class="col-6 form-check">
+            <input class="form-check-input chk-widget" type="checkbox" value="Progress Chart" id="chk-progress" ${w.includes('Progress Chart') ? 'checked' : ''}>
+            <label class="form-check-label text-muted fs-8" for="chk-progress">✓ Progress Chart</label>
+          </div>
+          <div class="col-6 form-check">
+            <input class="form-check-input chk-widget" type="checkbox" value="Heatmap" id="chk-heatmap" ${w.includes('Heatmap') ? 'checked' : ''}>
+            <label class="form-check-label text-muted fs-8" for="chk-heatmap">✓ GitHub Activity Heatmap</label>
+          </div>
+          <div class="col-6 form-check">
+            <input class="form-check-input chk-widget" type="checkbox" value="Daily Goals" id="chk-goals" ${w.includes('Daily Goals') ? 'checked' : ''}>
+            <label class="form-check-label text-muted fs-8" for="chk-goals">✓ Daily Goals Solver</label>
+          </div>
+          <div class="col-6 form-check">
+            <input class="form-check-input chk-widget" type="checkbox" value="Calendar" id="chk-calendar" ${w.includes('Calendar') ? 'checked' : ''}>
+            <label class="form-check-label text-muted fs-8" for="chk-calendar">✓ Interview Calendar</label>
+          </div>
+          <div class="col-6 form-check">
+            <input class="form-check-input chk-widget" type="checkbox" value="DSA Progress" id="chk-dsa" ${w.includes('DSA Progress') ? 'checked' : ''}>
+            <label class="form-check-label text-muted fs-8" for="chk-dsa">✓ DSA Topics Roadmap</label>
+          </div>
+          <div class="col-6 form-check">
+            <input class="form-check-input chk-widget" type="checkbox" value="Course Progress" id="chk-courses" ${w.includes('Course Progress') ? 'checked' : ''}>
+            <label class="form-check-label text-muted fs-8" for="chk-courses">✓ Learning Courses Track</label>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-premium w-100 py-2">Apply Widget Mappings</button>
+      </form>
+    `;
+  },
+
+  settingsConnected: (s) => {
+    const provs = s.connectedProviders || '';
+    return `
+      <h5 class="text-white fw-bold mb-4">🔗 Connected Third-Party Accounts</h5>
+      <div class="d-flex flex-column gap-3">
+        <div class="glass-panel p-3 d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center gap-3">
+            <i class="fa-brands fa-google fs-4 text-white"></i>
+            <div>
+              <h6 class="text-white fw-bold m-0 fs-7">Google Cloud API</h6>
+              <small class="text-muted fs-8">Authentication and study alerts sync</small>
+            </div>
+          </div>
+          <span class="badge ${provs.includes('Google') ? 'bg-success text-white' : 'bg-secondary text-white-50'} py-2 px-3">
+            ${provs.includes('Google') ? 'Connected' : 'Disconnected'}
+          </span>
+        </div>
+
+        <div class="glass-panel p-3 d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center gap-3">
+            <i class="fa-brands fa-github fs-4 text-white"></i>
+            <div>
+              <h6 class="text-white fw-bold m-0 fs-7">GitHub Developer</h6>
+              <small class="text-muted fs-8">Direct codes synchronization and commits track</small>
+            </div>
+          </div>
+          <span class="badge ${provs.includes('GitHub') ? 'bg-success text-white' : 'bg-secondary text-white-50'} py-2 px-3">
+            ${provs.includes('GitHub') ? 'Connected' : 'Disconnected'}
+          </span>
+        </div>
+
+        <div class="glass-panel p-3 d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center gap-3">
+            <i class="fa-brands fa-linkedin fs-4 text-white"></i>
+            <div>
+              <h6 class="text-white fw-bold m-0 fs-7">LinkedIn Careers</h6>
+              <small class="text-muted fs-8">Profile data & placements synchronization</small>
+            </div>
+          </div>
+          <span class="badge ${provs.includes('LinkedIn') ? 'bg-success text-white' : 'bg-secondary text-white-50'} py-2 px-3">
+            ${provs.includes('LinkedIn') ? 'Connected' : 'Disconnected'}
+          </span>
+        </div>
+      </div>
+    `;
+  },
+
+  settingsPrivacy: (s) => `
+    <h5 class="text-white fw-bold mb-4">🔒 Data & Privacy Preferences</h5>
+    <form id="settings-privacy-form">
+      <div class="form-check form-switch mb-3">
+        <input class="form-check-input" type="checkbox" id="set-privateprofile" ${s.privateProfile ? 'checked' : ''}>
+        <label class="form-check-label text-white fw-bold fs-7" for="set-privateprofile">Make Profile Private</label>
+        <div class="form-text text-muted fs-8">Prevents other users from browsing your solved coding logs or career achievements list.</div>
+      </div>
+      <div class="form-check form-switch mb-3">
+        <input class="form-check-input" type="checkbox" id="set-hideprogress" ${s.hideProgress ? 'checked' : ''}>
+        <label class="form-check-label text-white fw-bold fs-7" for="set-hideprogress">Hide Progress Analytics</label>
+        <div class="form-text text-muted fs-8">Removes solve charts from dashboard view overlays.</div>
+      </div>
+      <div class="form-check form-switch mb-3">
+        <input class="form-check-input" type="checkbox" id="set-hideemail" ${s.hideEmail ? 'checked' : ''}>
+        <label class="form-check-label text-white fw-bold fs-7" for="set-hideemail">Hide Email Address publicly</label>
+      </div>
+      <div class="form-check form-switch mb-4">
+        <input class="form-check-input" type="checkbox" id="set-hidephone" ${s.hidePhone ? 'checked' : ''}>
+        <label class="form-check-label text-white fw-bold fs-7" for="set-hidephone">Hide Contact details publicly</label>
+      </div>
+      <button type="submit" class="btn btn-premium w-100 py-2">Apply Privacy Shields</button>
+    </form>
+  `,
+
+  settingsDevices: (sessions) => `
+    <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-laptop-code text-indigo me-2"></i>Active Device Sessions</h5>
+    <p class="text-muted fs-8 mb-4">Audit log lists active browsers authorized to request changes under your token credentials.</p>
+    <div class="table-responsive mb-3">
+      <table class="table table-dark table-hover align-middle m-0 fs-7">
+        <thead>
+          <tr class="text-muted border-secondary-subtle">
+            <th scope="col">Device Browser</th>
+            <th scope="col">IP Address</th>
+            <th scope="col">Last Access</th>
+            <th scope="col" class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${sessions.map(sess => `
+            <tr class="border-secondary-subtle">
+              <td class="text-white fw-bold">${sess.userAgent.substring(0, 30)}...</td>
+              <td>${sess.ipAddress}</td>
+              <td>${sess.lastActive.substring(11, 19)}</td>
+              <td class="text-center">
+                <button class="btn btn-glass btn-sm text-danger btn-revoke-session" data-session-id="${sess.id}"><i class="fa-solid fa-ban"></i> Terminate</button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+    <button class="btn btn-glass text-danger w-100 py-2 fs-7" id="btn-revoke-all-sessions"><i class="fa-solid fa-right-from-bracket me-1"></i> Terminate All Other Sessions</button>
+  `,
+
+  settingsImportExport: () => `
+    <h5 class="text-white fw-bold mb-4">📥 Import & Export Tools</h5>
+    <div class="d-flex flex-column gap-4">
+      <div>
+        <h6 class="text-white fw-bold mb-2 fs-7">Export Personal Workspaces</h6>
+        <p class="text-muted fs-8">Download local copy of coding solutions, courses enrollments details and calendar logs.</p>
+        <div class="d-flex gap-2">
+          <button class="btn btn-glass btn-sm fs-7 py-2 flex-grow-1" id="btn-exp-csv"><i class="fa-solid fa-file-csv me-1 text-success"></i> Backup CSV</button>
+          <button class="btn btn-glass btn-sm fs-7 py-2 flex-grow-1" id="btn-exp-excel"><i class="fa-solid fa-file-excel me-1 text-success"></i> Backup Excel</button>
+          <button class="btn btn-glass btn-sm fs-7 py-2 flex-grow-1" id="btn-exp-pdf"><i class="fa-solid fa-file-pdf me-1 text-danger"></i> Export PDF Report</button>
+        </div>
+      </div>
+      <hr class="border-secondary m-0">
+      <div>
+        <h6 class="text-white fw-bold mb-2 fs-7">Restore Backup / Resume</h6>
+        <p class="text-muted fs-8">Upload backup file or import external resume file reference to parse skills metrics.</p>
+        <div class="mb-3">
+          <input class="form-control glass-input fs-7" type="file" id="file-resume-import">
+        </div>
+        <button class="btn btn-premium w-100 py-2 fs-7" id="btn-submit-resume-upload">Process Resume Upload</button>
+      </div>
+    </div>
+  `,
+
   settingsDeveloper: (s) => `
-    <h5 class="text-white fw-bold mb-4">🛠 Developer Credentials</h5>
+    <h5 class="text-white fw-bold mb-4">🛠 Developer Credentials & AI Models</h5>
     <form id="settings-developer-form" class="mb-4">
+      <div class="mb-3">
+        <label class="form-label text-muted fs-7">AI MODEL ENGINE</label>
+        <select id="set-aimodel" class="form-select glass-input">
+          <option value="Gemini-Pro" ${s.aiModel === 'Gemini-Pro' ? 'selected' : ''}>Gemini 1.5 Pro</option>
+          <option value="Gemini-Flash" ${s.aiModel === 'Gemini-Flash' ? 'selected' : ''}>Gemini 1.5 Flash</option>
+          <option value="Gemini-Ultra" ${s.aiModel === 'Gemini-Ultra' ? 'selected' : ''}>Gemini 1.0 Ultra</option>
+        </select>
+      </div>
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label text-muted fs-7">AI RESPONSE DEPTH</label>
+          <select id="set-airesponselength" class="form-select glass-input">
+            <option value="Short" ${s.responseLength === 'Short' ? 'selected' : ''}>Short Concise Suggestions</option>
+            <option value="Medium" ${s.responseLength === 'Medium' ? 'selected' : ''}>Medium standard responses</option>
+            <option value="Long" ${s.responseLength === 'Long' ? 'selected' : ''}>Long Detailed Step-by-Step guides</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label text-muted fs-7">AI DIFFICULTY TUNING</label>
+          <select id="set-aidifficulty" class="form-select glass-input">
+            <option value="Basic" ${s.aiDifficultyLevel === 'Basic' ? 'selected' : ''}>Basic Level Hints</option>
+            <option value="Adaptive" ${s.aiDifficultyLevel === 'Adaptive' ? 'selected' : ''}>Adaptive (Matches User Strength)</option>
+            <option value="Extreme" ${s.aiDifficultyLevel === 'Extreme' ? 'selected' : ''}>Extreme Grilling Mode</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-check form-switch mb-3">
+        <input class="form-check-input" type="checkbox" id="set-suggestions" ${s.autoSuggestions ? 'checked' : ''}>
+        <label class="form-check-label text-muted fs-7" for="set-suggestions">Enable AI Auto-suggestions on coding screens</label>
+      </div>
       <div class="form-check form-switch mb-4">
         <input class="form-check-input" type="checkbox" id="set-devmode" ${s.developerMode ? 'checked' : ''}>
         <label class="form-check-label text-muted fs-7" for="set-devmode">Enable Developer Options API Playgrounds</label>
       </div>
-      <button type="submit" class="btn btn-premium w-100 py-2 mb-4">Save Developer Status</button>
+      <button type="submit" class="btn btn-premium w-100 py-2">Apply Engine Customizations</button>
     </form>
 
     <div class="p-4 rounded border border-secondary bg-dark-subtle ${s.developerMode ? '' : 'd-none'}" id="dev-api-keys-box">
@@ -1119,14 +1402,14 @@ const components = {
         <span class="font-monospace text-indigo fs-7">${s.apiKey || 'No key generated.'}</span>
         <button class="btn btn-glass btn-sm py-1" id="btn-rotate-apikey"><i class="fa-solid fa-arrows-rotate"></i> Rotate</button>
       </div>
-      <small class="text-muted">Use this API key inside requests header: <code>Authorization: Bearer [key]</code> to automate solutions uploads externally.</small>
+      <small class="text-muted fs-8">Use this API key inside requests header: <code>Authorization: Bearer [key]</code> to automate solutions uploads externally.</small>
     </div>
   `,
 
   settingsSubscription: () => `
     <h5 class="text-white fw-bold mb-4">💳 Subscription Details</h5>
     <div class="glass-panel p-4 border-indigo text-center mb-4">
-      <div class="badge bg-indigo-subtle text-primary mb-3 py-2 px-3 fs-7">ACTIVE PLAN: PREPPRO (FREE ACCREDITED)</div>
+      <div class="badge bg-indigo-subtle text-primary mb-3 py-2 px-3 fs-7">ACTIVE PLAN: PREPPRO (FREE LIFE-TIME)</div>
       <h3 class="text-white fw-bold mb-2">PrepPro Premium Edition</h3>
       <p class="text-muted fs-7 mb-4">Recommended for Active Jobseekers • Lifetime Zero-Cost Developer Access</p>
       
@@ -1144,14 +1427,14 @@ const components = {
   `,
 
   settingsAbout: () => `
-    <div class="text-center py-5">
+    <div class="text-center py-4">
       <i class="fa-solid fa-graduation-cap display-3 text-indigo mb-4"></i>
       <h4 class="text-white fw-bold mb-1">PrepSpace Enterprise</h4>
-      <p class="text-muted fs-7 mb-4">Version 2.0.1 (Stateless Zero-Trust Edition)</p>
-      <div class="bg-dark p-3 rounded border border-secondary max-w-sm mx-auto mb-4 text-start text-muted fs-7">
-        <p class="mb-2"><i class="fa-solid fa-circle-nodes me-2 text-indigo"></i> <strong>Engine</strong>: Spring Boot 3.3 + Hibernate</p>
-        <p class="mb-2"><i class="fa-solid fa-user-lock me-2 text-success"></i> <strong>Security</strong>: JWT HTTP-only stateless filters</p>
-        <p class="mb-0"><i class="fa-solid fa-database me-2 text-warning"></i> <strong>Database</strong>: H2 / MySQL Driver Dialects</p>
+      <p class="text-muted fs-7 mb-4">Version 2.0.2 (Stateless Zero-Trust Edition)</p>
+      <div class="bg-dark p-3 rounded border border-secondary max-w-sm mx-auto mb-4 text-start text-muted fs-7" style="max-width:320px;">
+        <p class="mb-2"><i class="fa-solid fa-circle-nodes me-2 text-indigo"></i> <strong>Engine</strong>: Spring Boot 3.3 + PostgreSQL</p>
+        <p class="mb-2"><i class="fa-solid fa-user-lock me-2 text-success"></i> <strong>Security</strong>: JWT HTTP-only cookies</p>
+        <p class="mb-0"><i class="fa-solid fa-database me-2 text-warning"></i> <strong>Database</strong>: Live persistent PostgreSQL</p>
       </div>
       <p class="text-muted fs-8">Designed by the Google Deepmind Team. All rights reserved.</p>
     </div>
