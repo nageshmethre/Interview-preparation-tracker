@@ -48,6 +48,31 @@
   --glass-shadow: 0 8px 32px 0 rgba(148, 163, 184, 0.15);
 }
 
+[data-theme="reading"] {
+  /* Theme: Reading Mode (Warm Sepia) */
+  --bg-space: #fbf0d9;
+  --bg-gradient: radial-gradient(circle at 50% 50%, #fefcf7 0%, #f4ecd8 100%);
+  --panel-glass: rgba(253, 251, 247, 0.95);
+  --panel-border: rgba(45, 35, 21, 0.1);
+  --input-glass: rgba(45, 35, 21, 0.03);
+  --input-border: rgba(45, 35, 21, 0.15);
+  
+  --accent-primary: #855325;
+  --accent-secondary: #a3703d;
+  --accent-gradient: linear-gradient(135deg, #855325 0%, #a3703d 100%);
+  --accent-glow: rgba(133, 83, 37, 0.1);
+  
+  --text-main: #2d2315;
+  --text-muted: #6e5c4a;
+  --text-dark: #fbf0d9;
+  
+  --glass-shadow: 0 8px 32px 0 rgba(45, 35, 21, 0.08);
+}
+
+.text-muted {
+  color: var(--text-muted) !important;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

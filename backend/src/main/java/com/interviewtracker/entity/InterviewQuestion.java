@@ -24,16 +24,18 @@ public class InterviewQuestion {
     @Column(name = "companies", length = 500)
     private String companies;
 
+    @com.fasterxml.jackson.annotation.JsonProperty("topic")
     @Column(nullable = false, length = 100)
     private String category; // Maps to topic in LeetCode context
 
     @Column(nullable = false, length = 20)
     private String difficulty; // EASY, MEDIUM, HARD
 
+    @com.fasterxml.jackson.annotation.JsonProperty("description")
     @Column(nullable = false, columnDefinition = "TEXT")
     private String question; // Maps to problem description
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = true, columnDefinition = "TEXT")
     private String answer; // Maps to basic approach/answer
 
     @Column(length = 255)

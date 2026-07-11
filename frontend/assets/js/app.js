@@ -1,7 +1,7 @@
 // app.js - PrepSpace SaaS client core controller
 
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:8080/api'
+  ? 'http://localhost:8085/api'
   : 'https://api.stream-in.app/api';
 
 // State Store
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Theme Management
 function initTheme() {
   document.documentElement.setAttribute('data-theme', state.theme);
-  const icon = state.theme === 'light' ? 'fa-sun' : 'fa-moon';
+  const icon = state.theme === 'light' ? 'fa-sun' : state.theme === 'reading' ? 'fa-book-open' : 'fa-moon';
   setTimeout(() => {
     const btn = document.getElementById('dark-mode-toggle');
     if (btn) btn.innerHTML = `<i class="fa-solid ${icon}"></i>`;
@@ -35,10 +35,16 @@ function initTheme() {
 }
 
 function toggleTheme() {
-  state.theme = state.theme === 'dark' ? 'light' : 'dark';
+  if (state.theme === 'dark') {
+    state.theme = 'light';
+  } else if (state.theme === 'light') {
+    state.theme = 'reading';
+  } else {
+    state.theme = 'dark';
+  }
   localStorage.setItem('theme', state.theme);
   document.documentElement.setAttribute('data-theme', state.theme);
-  const icon = state.theme === 'light' ? 'fa-sun' : 'fa-moon';
+  const icon = state.theme === 'light' ? 'fa-sun' : state.theme === 'reading' ? 'fa-book-open' : 'fa-moon';
   const btn = document.getElementById('dark-mode-toggle');
   if (btn) btn.innerHTML = `<i class="fa-solid ${icon}"></i>`;
   showToast(`Switched to ${state.theme} mode`, 'success');
