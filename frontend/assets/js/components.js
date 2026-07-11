@@ -92,14 +92,14 @@ const components = {
           <div class="glass-panel p-4 h-100 text-center border-primary" style="box-shadow: 0 0 25px var(--accent-glow);">
             <h3 class="text-white">PrepPro</h3>
             <p class="text-indigo">Recommended for Active Jobseekers</p>
-            <div class="my-4"><span class="display-4 fw-bold text-white">$29</span><span class="text-muted">/month</span></div>
+            <div class="my-4"><span class="display-4 fw-bold text-white">FREE</span><span class="text-muted">/lifetime</span></div>
             <ul class="list-unstyled text-start mb-5 text-muted">
               <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Custom Target Study Plans</li>
               <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Mock AI Feedback Logs</li>
               <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Export Excel/PDF Reports</li>
               <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Advanced Platform Syncs</li>
             </ul>
-            <a href="#/register" class="btn btn-premium w-100 py-3">Unlock Premium Access</a>
+            <a href="#/register" class="btn btn-premium w-100 py-3">Get Free Lifetime Access</a>
           </div>
         </div>
       </div>
