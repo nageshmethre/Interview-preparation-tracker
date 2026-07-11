@@ -1,89 +1,73 @@
--- Database Seed Data for Interview Preparation Tracker
+-- Database Seed Data for Interview Preparation Platform
 
 -- Truncates and foreign key checks removed for H2 compatibility
 
 -- 1. Insert Users
--- User password is: password -> BCrypt hash
--- Admin password is: adminpass -> BCrypt hash
+-- Default passwords:
+-- Admin: adminpass -> $2a$10$kPdvJZw/HPUmzTD5osQUu.9jIFTkliTlAUBF3xnF0L6pzEFliYNAK
+-- Student: password -> $2a$10$k1Uh/cYeupTtTtf0YczJEewqw7qS8CJojkJ7NFu4Abb8e0xa7XL/S
 INSERT INTO users (id, name, email, password, role) VALUES
 (1, 'Admin Tracker', 'admin@tracker.com', '$2a$10$kPdvJZw/HPUmzTD5osQUu.9jIFTkliTlAUBF3xnF0L6pzEFliYNAK', 'ADMIN'),
-(2, 'Nagesh Methre', 'nagesh@tracker.com', '$2a$10$k1Uh/cYeupTtTtf0YczJEewqw7qS8CJojkJ7NFu4Abb8e0xa7XL/S', 'USER');
+(2, 'Nagesh Methre', 'nagesh@tracker.com', '$2a$10$k1Uh/cYeupTtTtf0YczJEewqw7qS8CJojkJ7NFu4Abb8e0xa7XL/S', 'STUDENT');
 
--- 2. Insert Interview Questions
-INSERT INTO interview_questions (id, title, company, category, difficulty, question, answer, tags) VALUES
-(1, 'Two Sum', 'Google', 'Data Structures', 'EASY', 
-'Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice.', 
-'Use a HashMap to store the complement of the current element and its index. For each element, check if it exists in the map; if so, return its index and the map value index. Time Complexity: O(n), Space Complexity: O(n).', 
-'Array,Hash Table,Algorithms'),
+-- 2. Insert Gamification Badges
+INSERT INTO badges (id, name, icon_class, description) VALUES
+(1, 'Daily Streaker', 'fa-fire', 'Maintained a login streak of at least 5 consecutive days.'),
+(2, 'Code Warrior', 'fa-keyboard', 'Successfully solved 10 LeetCode coding problems.'),
+(3, 'Master Mind', 'fa-graduation-cap', 'Completed at least one specialized course with a verified certificate.'),
+(4, 'Mock Hero', 'fa-stopwatch', 'Scored above 80% on any mock exam.'),
+(5, 'Guru Talker', 'fa-comments', 'Shared an approved interview experience with the community.');
 
-(2, 'Design a URL Shortener (TinyURL)', 'Google', 'System Design', 'MEDIUM', 
-'How would you design a URL shortening service like TinyURL?', 
-'Key design points: 1. API Endpoints (POST /api/v1/shorten, GET /{shortUrl}). 2. Base62 conversion algorithm. 3. Unique ID Generator (Snowflake/Zookeeper). 4. Storage schema (Relational/NoSQL). 5. Caching layer (Redis). 6. Redirection (HTTP 301/302).', 
-'System Design,Scalability,Caching'),
+-- 3. Initialize User Streaks & XP Profiles
+INSERT INTO user_streaks (id, user_id, current_streak, longest_streak, xp_points, last_activity_date) VALUES
+(1, 1, 1, 1, 100, CURRENT_DATE),
+(2, 2, 5, 12, 1250, CURRENT_DATE);
 
-(3, 'Merge K Sorted Lists', 'Amazon', 'Algorithms', 'HARD', 
-'You are given an array of k linked-lists lists, each linked-list is sorted in ascending order. Merge all the linked-lists into one sorted linked-list and return it.', 
-'Optimize using a Min-Heap (Priority Queue) containing the head of each list. At each step, extract the minimum element and push its next pointer back into the heap. Time Complexity: O(N log k), Space Complexity: O(k).', 
-'Divide and Conquer,Heap,Linked List'),
+-- 4. Initialize DSA Roadmap Topics
+INSERT INTO dsa_topics (id, name, sequence_number) VALUES
+(1, 'Arrays', 1),
+(2, 'Strings', 2),
+(3, 'Linked Lists', 3),
+(4, 'Stacks & Queues', 4),
+(5, 'Trees & BST', 5),
+(6, 'Graphs', 6),
+(7, 'Dynamic Programming', 7);
 
-(4, 'Behavioral: Tell me about a time you had a conflict with a teammate', 'Meta', 'Behavioral', 'EASY', 
-'How do you resolve professional conflicts inside engineering teams?', 
-'Use the STAR method (Situation, Task, Action, Result). Focus on communication, empathy, technical alignment, and avoiding personal attacks. Show a positive resolution where teamwork prevailed.', 
-'Behavioral,Soft Skills,STAR'),
+-- 5. Initialize DSA Roadmap Subtopics
+INSERT INTO dsa_subtopics (id, topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number) VALUES
+(1, 1, 'Two Pointer Technique', 'The two-pointer technique uses two markers (indices) scanning through an array concurrently to optimize searching from O(N^2) to O(N). Commonly applied to sorted arrays.', '{"nodes":[{"id":"L","label":"Left Pointer (start)"},{"id":"R","label":"Right Pointer (end)"}]}', '{"examples":["Container With Most Water","Two Sum II","Valid Palindrome"]}', 'Time Complexity: O(N), Space Complexity: O(1)', 'Always sort the array first if relative ordering is not critical.', 1),
+(2, 1, 'Sliding Window', 'A sliding window maintains a contiguous subsegment of elements, dynamically expanding or contracting based on boundaries. Extremely useful for contiguous subarray aggregates.', '{"nodes":[{"id":"W","label":"Subarray Window [i...j]"}]}', '{"examples":["Longest Substring Without Repeat","Minimum Size Subarray Sum"]}', 'Time Complexity: O(N), Space Complexity: O(1) or O(K) for hashes', 'Keep a frequency map of characters inside the active window.', 2),
+(3, 3, 'Fast and Slow Pointer', 'Also known as Floyds Cycle-Finding Algorithm. By moving one pointer twice as fast as the other, cycle check and midpoint resolution runs in linear time.', '{"nodes":[{"id":"S","label":"Slow (1 step)"},{"id":"F","label":"Fast (2 steps)"}]}', '{"examples":["LinkedList Cycle Detection","Find Midpoint of Linked List"]}', 'Time Complexity: O(N), Space Complexity: O(1)', 'If the fast pointer reaches null, there is no cycle in the linked list.', 1),
+(4, 7, 'Memoization vs Tabulation', 'Dynamic programming divides complex tasks into overlapping subproblems. Memoization is top-down (caching recursion), whereas Tabulation is bottom-up (iterative table filling).', '{"nodes":[{"id":"R","label":"Recursive Call Stack"},{"id":"T","label":"DP Table Matrix"}]}', '{"examples":["0/1 Knapsack Problem","Longest Common Subsequence"]}', 'Time Complexity: O(N*W), Space Complexity: O(N*W) or optimized O(W)', 'Start with the recursive relations before constructing the table.', 1);
 
-(5, 'LRU Cache', 'Meta', 'Data Structures', 'MEDIUM', 
-'Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.', 
-'Use a combination of a Doubly Linked List (to track access recency) and a HashMap (for O(1) lookup). Add new/recently used nodes to the head, and evict from the tail. Time Complexity: O(1) for put and get.', 
-'Design,Linked List,Hash Table'),
+-- 6. Insert Default Platform Courses
+INSERT INTO courses (id, title, thumbnail_url, description, instructor, duration, difficulty, prerequisites, rating, enrollment_count) VALUES
+(1, 'Mastering Java 21 & OOP Essentials', '/assets/thumbnails/java21.png', 'Learn Java 21 from absolute scratch. Master Object-Oriented programming, Lambdas, Virtual Threads, Records, Pattern Matching, and safe memory architecture.', 'Dr. Helen Carter', '15 hours', 'BEGINNER', 'None', 4.9, 320),
+(2, 'Enterprise Spring Boot 3 & Microservices', '/assets/thumbnails/springboot3.png', 'Build production-ready, highly secure enterprise microservices. Focus on Spring Security 6, JWT, Spring Cloud Gateway, Docker configurations, and JPA database parameters.', 'Prof. Alan Turing', '22 hours', 'INTERMEDIATE', 'Basic Java', 4.8, 480),
+(3, 'Advanced System Design Architectures', '/assets/thumbnails/sysdesign.png', 'Learn how large scale companies design systems like Netflix, Uber, and Twitter. Master CDN distribution, caching layers, database sharding, and message broker setups.', 'Arch. Sarah Connor', '18 hours', 'ADVANCED', 'Basic Computer Networks & Databases', 5.0, 195);
 
-(6, 'Valid Parentheses', 'Meta', 'Data Structures', 'EASY', 
-'Given a string containing characters (,),{,},[,], determine if the input string is valid.', 
-'Use a Stack. Push opening brackets onto the stack. For every closing bracket, pop from stack and check if it matches the current closing bracket. Return true if stack is empty at the end.', 
-'Stack,String'),
+-- 7. Insert Course Lessons
+INSERT INTO lessons (id, course_id, title, video_url, pdf_notes_url, assignments, quiz_questions, coding_exercise, sequence_number) VALUES
+-- Java 21 Lessons
+(1, 1, 'Introduction to Java Virtual Machine (JVM)', 'https://www.youtube.com/embed/5a8b79f', '/assets/notes/jvm_intro.pdf', 'Write a simple class demonstrating JRE compilations.', '[{"question":"What runs compiled Java bytecode?","options":["JVM","JDK","Javac","C++ Linker"],"answer":"JVM"}]', 'public class Main { public static void main(String[] args) { System.out.println("JVM Setup Completed"); } }', 1),
+(2, 1, 'Virtual Threads & Structured Concurrency', 'https://www.youtube.com/embed/vthreads', '/assets/notes/virtual_threads.pdf', 'Benchmark 10,000 platform threads vs virtual threads.', '[{"question":"Virtual threads are managed by:","options":["Operating System","JVM","Hardware Scheduler","Docker Daemon"],"answer":"JVM"}]', 'public class ThreadDemo {}', 2),
+-- Spring Boot Lessons
+(3, 2, 'Spring Security 6 Stateless Filter Chains', 'https://www.youtube.com/embed/springsec', '/assets/notes/security_filters.pdf', 'Set up a custom Bearer Token Authentication Filter.', '[{"question":"JWT sessions are typically:","options":["Stateful","Stateless","Stored in Servlet Container","Session-Replicated"],"answer":"Stateless"}]', 'public class SecurityFilter {}', 1),
+-- System Design Lessons
+(4, 3, 'Designing Consistent Hashing Rings', 'https://www.youtube.com/embed/hashing_ring', '/assets/notes/consistent_hashing.pdf', 'Explain consistent hashing ring node distributions.', '[{"question":"Consistent hashing minimizes:","options":["Network requests","Database size","Data relocation on scale","Memory usage"],"answer":"Data relocation on scale"}]', '', 1);
 
-(7, 'Design Twitter/Threads Feed', 'Meta', 'System Design', 'HARD', 
-'Design a news feed system like Twitter or Instagram where users can post tweets, follow others, and view a chronological home feed.', 
-'Key aspects: 1. Fanout on write (push model for active users) vs Fanout on read (pull model for celebrity accounts). 2. Redis cluster for feed caches. 3. CDN for media files. 4. Relational database with sharding for tweets and user mappings.', 
-'System Design,Redis,Feeds,Sharding'),
-
-(8, 'Longest Substring Without Repeating Characters', 'Amazon', 'Algorithms', 'MEDIUM', 
-'Given a string s, find the length of the longest substring without repeating characters.', 
-'Use a Sliding Window with two pointers and a Set/Map to keep track of character frequencies. Move the right pointer to expand, and left pointer to shrink when duplicates are found. Time Complexity: O(n).', 
-'String,Sliding Window');
-
--- 3. Insert Study Plans
+-- 8. Default Study Plans
 INSERT INTO study_plans (id, user_id, title, target_company, start_date, end_date, status) VALUES
-(1, 2, 'FAANG Algorithm Prep', 'Google', '2026-07-01', '2026-08-30', 'ACTIVE'),
-(2, 2, 'System Design Deep Dive', 'Meta', '2026-09-01', '2026-10-15', 'ACTIVE');
+(1, 2, 'FAANG Backend Track', 'Google', '2026-07-01', '2026-09-30', 'ACTIVE');
 
--- 4. Insert Progress Log
+-- 9. Legacy Progress Log seeds
 INSERT INTO progress (id, user_id, topic, difficulty, completed, score, time_spent, date) VALUES
-(1, 2, 'Arrays & Hashing', 'EASY', TRUE, 90, 45, '2026-07-05'),
-(2, 2, 'Linked Lists', 'MEDIUM', TRUE, 80, 60, '2026-07-06'),
-(3, 2, 'System Design Basics', 'MEDIUM', TRUE, 75, 90, '2026-07-07'),
-(4, 2, 'Trees & Graphs', 'HARD', FALSE, 40, 120, '2026-07-08'),
-(5, 2, 'Dynamic Programming', 'HARD', FALSE, 20, 60, '2026-07-09');
+(1, 2, 'Two Pointer Arrays', 'EASY', TRUE, 100, 30, '2026-07-10');
 
--- 5. Insert Job Applications
-INSERT INTO job_applications (id, user_id, company, role, status, applied_date) VALUES
-(1, 2, 'Google', 'Senior Software Engineer', 'APPLIED', '2026-07-01'),
-(2, 2, 'Meta', 'Software Engineer II', 'INTERVIEW_SCHEDULED', '2026-06-20'),
-(3, 2, 'Netflix', 'Backend Platform Architect', 'REJECTED', '2026-06-15'),
-(4, 2, 'Amazon', 'SDE 3 - AWS Elastic Container Service', 'OFFER', '2026-06-01'),
-(5, 2, 'Microsoft', 'Cloud Infrastructure Engineer', 'PHONE_SCREEN', '2026-07-05');
+-- 10. Sample Completed Course Enrollment (for certificate unlock checks)
+INSERT INTO enrollments (id, user_id, course_id, enrolled_at, progress_percentage, completed_at, rating, feedback) VALUES
+(1, 2, 1, '2026-07-01 10:00:00', 100.0, '2026-07-10 16:30:00', 5, 'Absolutely spectacular course! Mastered JVM virtual thread architectures.');
 
--- 6. Insert Mock Interviews
-INSERT INTO mock_interviews (id, user_id, date, score, feedback, duration) VALUES
-(1, 2, '2026-07-05 10:00:00', 85, 'Solid coding structure. Handled Two Sum and LRU Cache well. Needs improvement in scaling explanations for the System Design question.', 60),
-(2, 2, '2026-07-08 14:30:00', 70, 'Struggled slightly with dynamic programming logic. Walked through the recursive approach but failed to correctly memoize the subproblems in time.', 45);
-
--- 7. Insert Notes
-INSERT INTO notes (id, user_id, title, content) VALUES
-(1, 2, 'Dynamic Programming Tip', 'Remember: DP is essentially recursion + memoization. Always define the base cases and subproblem transitions first.'),
-(2, 2, 'System Design Checklist', '1. Requirements clarification (functional/non-functional). 2. Scale calculations (QPS, storage, bandwidth). 3. High-level architecture. 4. Detailed component design. 5. Bottlenecks & solutions.');
-
--- 8. Insert Bookmarks
-INSERT INTO bookmarks (id, user_id, question_id) VALUES
-(1, 2, 2),
-(2, 2, 3),
-(3, 2, 5);
+-- 11. Initial Verified Certificate Seeding
+INSERT INTO certificates (id, user_id, course_id, certificate_id, completion_date, student_name, course_name, verification_url, qr_code, instructor_signature) VALUES
+(1, 2, 1, 'CERT-JAVA21-NAGESH99', '2026-07-10 16:30:00', 'Nagesh Methre', 'Mastering Java 21 & OOP Essentials', 'https://stream-in.app/verify/CERT-JAVA21-NAGESH99', '/assets/qrcodes/cert_java21_nagesh.png', 'Dr. Helen Carter');

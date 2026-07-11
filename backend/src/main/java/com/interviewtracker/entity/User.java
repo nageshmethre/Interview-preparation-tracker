@@ -26,7 +26,15 @@ public class User {
     private String password;
 
     @Column(nullable = false, length = 20)
-    private String role; // e.g. "USER", "ADMIN"
+    @Builder.Default
+    private String role = "STUDENT"; // STUDENT, INSTRUCTOR, MODERATOR, ADMIN
+
+    @Column(name = "failed_login_attempts")
+    @Builder.Default
+    private Integer failedLoginAttempts = 0;
+
+    @Column(name = "account_locked_until")
+    private LocalDateTime accountLockedUntil;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -39,7 +47,7 @@ public class User {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
         if (role == null) {
-            role = "USER";
+            role = "STUDENT";
         }
     }
 

@@ -15,24 +15,48 @@ public class InterviewQuestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "problem_id", unique = true)
+    private Integer problemId;
+
     @Column(nullable = false, length = 255)
     private String title;
 
-    @Column(nullable = false, length = 100)
-    private String company;
+    @Column(name = "companies", length = 500)
+    private String companies;
 
     @Column(nullable = false, length = 100)
-    private String category; // e.g. "Data Structures", "System Design", "Behavioral"
+    private String category; // Maps to topic in LeetCode context
 
     @Column(nullable = false, length = 20)
-    private String difficulty; // "EASY", "MEDIUM", "HARD"
+    private String difficulty; // EASY, MEDIUM, HARD
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    private String question;
+    private String question; // Maps to problem description
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    private String answer;
+    private String answer; // Maps to basic approach/answer
 
     @Column(length = 255)
-    private String tags; // Comma-separated values
+    private String tags;
+
+    @Column(columnDefinition = "TEXT")
+    private String examples; // JSON list string
+
+    @Column(name = "constraints_text", columnDefinition = "TEXT")
+    private String constraintsText;
+
+    @Column(columnDefinition = "TEXT")
+    private String hints;
+
+    @Column(name = "optimal_approach", columnDefinition = "TEXT")
+    private String optimalApproach;
+
+    @Column(name = "time_complexity", length = 50)
+    private String timeComplexity;
+
+    @Column(name = "space_complexity", length = 50)
+    private String spaceComplexity;
+
+    @Column(name = "reference_solution", columnDefinition = "TEXT")
+    private String referenceSolution;
 }

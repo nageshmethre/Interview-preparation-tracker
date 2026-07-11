@@ -74,7 +74,7 @@ public class DtoMapper {
         QuestionDto dto = new QuestionDto();
         dto.setId(question.getId());
         dto.setTitle(question.getTitle());
-        dto.setCompany(question.getCompany());
+        dto.setCompany(question.getCompanies());
         dto.setCategory(question.getCategory());
         dto.setDifficulty(question.getDifficulty());
         dto.setQuestion(question.getQuestion());
@@ -90,7 +90,7 @@ public class DtoMapper {
         InterviewQuestion question = new InterviewQuestion();
         question.setId(dto.getId());
         question.setTitle(dto.getTitle());
-        question.setCompany(dto.getCompany());
+        question.setCompanies(dto.getCompany());
         question.setCategory(dto.getCategory());
         question.setDifficulty(dto.getDifficulty());
         question.setQuestion(dto.getQuestion());

@@ -55,7 +55,7 @@ public class QuestionServiceTests {
         mockQuestion = InterviewQuestion.builder()
                 .id(1)
                 .title("Two Sum")
-                .company("Google")
+                .companies("Google")
                 .category("Data Structures")
                 .difficulty("EASY")
                 .question("Two Sum Prompt")

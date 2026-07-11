@@ -321,3 +321,69 @@ body {
   letter-spacing: 2px;
   color: #fff;
 }
+
+/* Course catalog layout badges */
+.course-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--accent-gradient);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  z-index: 10;
+  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.4);
+}
+
+/* Interactive Roadmap node hover animations */
+.roadmap-node-card {
+  transition: var(--transition-smooth);
+}
+.roadmap-node-card:hover {
+  transform: translateX(5px);
+  border-color: var(--accent-primary) !important;
+  background: rgba(99, 102, 241, 0.08);
+}
+
+/* Active Mock Timer clock warning state */
+#mock-timer-display {
+  font-family: monospace;
+  letter-spacing: 3px;
+  text-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+  animation: pulse-timer 1.5s infinite;
+}
+
+@keyframes pulse-timer {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Spaced Repetition Flashcard Flip visual container style */
+.flashcard-card-inner {
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
+}
+.flashcard-card-inner:hover {
+  border-color: var(--accent-secondary) !important;
+  box-shadow: 0 8px 30px rgba(168, 85, 247, 0.25);
+}
+.border-indigo {
+  border-color: var(--accent-primary) !important;
+}
+
+/* Markdown Notes Preview highlights */
+.note-preview-card {
+  transition: var(--transition-smooth);
+}
+.note-preview-card:hover {
+  border-color: var(--accent-primary) !important;
+  background: rgba(255,255,255,0.03);
+}
+.note-preview-card.active {
+  border-color: var(--accent-secondary) !important;
+  background: rgba(168, 85, 247, 0.08);
+}

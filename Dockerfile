@@ -12,5 +12,12 @@ FROM eclipse-temurin:21-jre
 WORKDIR /app
 COPY --from=build /app/target/InterviewPreparationTracker-0.0.1-SNAPSHOT.jar app.jar
 COPY --from=build /app/database ./database
+
+# Run container as non-root user
+RUN groupadd -g 10001 appgroup && \
+    useradd -u 10001 -g appgroup -m -s /bin/bash appuser && \
+    chown -R appuser:appgroup /app
+USER appuser
+
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -9,12 +9,9 @@ import java.util.List;
 
 @Repository
 public interface InterviewQuestionRepository extends JpaRepository<InterviewQuestion, Integer> {
-    List<InterviewQuestion> findByCompany(String company);
-    List<InterviewQuestion> findByCategory(String category);
-    List<InterviewQuestion> findByDifficulty(String difficulty);
     
     @Query("SELECT q FROM InterviewQuestion q WHERE " +
-           "(:company IS NULL OR q.company = :company) AND " +
+           "(:company IS NULL OR q.companies LIKE %:company%) AND " +
            "(:category IS NULL OR q.category = :category) AND " +
            "(:difficulty IS NULL OR q.difficulty = :difficulty)")
     List<InterviewQuestion> filterQuestions(
@@ -27,10 +24,10 @@ public interface InterviewQuestionRepository extends JpaRepository<InterviewQues
            "q.title LIKE %:keyword% OR " +
            "q.question LIKE %:keyword% OR " +
            "q.tags LIKE %:keyword% OR " +
-           "q.company LIKE %:keyword%")
+           "q.companies LIKE %:keyword%")
     List<InterviewQuestion> searchQuestions(@Param("keyword") String keyword);
     
-    @Query("SELECT DISTINCT q.company FROM InterviewQuestion q")
+    @Query("SELECT DISTINCT q.companies FROM InterviewQuestion q")
     List<String> findDistinctCompanies();
     
     @Query("SELECT DISTINCT q.category FROM InterviewQuestion q")

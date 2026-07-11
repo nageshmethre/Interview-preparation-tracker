@@ -3,14 +3,13 @@ package com.interviewtracker.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Component
@@ -19,44 +18,52 @@ public class JwtTokenProvider {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
-    @Value("${jwt.expiration}")
-    private long jwtExpirationInMs;
+    // Short-lived Access Token: 15 minutes (900000 ms)
+    private static final long ACCESS_TOKEN_EXPIRY = 900000;
+    // Long-lived Refresh Token: 7 days (604800000 ms)
+    private static final long REFRESH_TOKEN_EXPIRY = 604800000;
 
     private Key getSigningKey() {
         byte[] keyBytes = this.jwtSecret.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // Generate token from authentication object
-    public String generateToken(Authentication authentication) {
-        UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
+    public String generateAccessToken(String username, String role) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", userPrincipal.getAuthorities());
-        return createToken(claims, userPrincipal.getUsername());
+        claims.put("role", role);
+        claims.put("jti", UUID.randomUUID().toString()); // Set unique token ID for session audits
+        return createToken(claims, username, ACCESS_TOKEN_EXPIRY);
     }
 
-    // Generate token from username (direct use if needed)
-    public String generateToken(String username) {
+    public String generateRefreshToken(String username) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
+        claims.put("jti", UUID.randomUUID().toString());
+        return createToken(claims, username, REFRESH_TOKEN_EXPIRY);
     }
 
-    private String createToken(Map<String, Object> claims, String subject) {
+    private String createToken(Map<String, Object> claims, String subject, long expiryTime) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
+        Date expiryDate = new Date(now.getTime() + expiryTime);
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
-                .setIssuedAt(new Date())
+                .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // Extract username from token
     public String getUsernameFromJWT(String token) {
         return getClaimFromToken(token, Claims::getSubject);
+    }
+
+    public String getJtiFromJWT(String token) {
+        return getClaimFromToken(token, Claims::getId);
+    }
+
+    public String getRoleFromJWT(String token) {
+        return getClaimFromToken(token, claims -> (String) claims.get("role"));
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
@@ -72,7 +79,6 @@ public class JwtTokenProvider {
                 .getBody();
     }
 
-    // Validate JWT token
     public boolean validateToken(String authToken) {
         try {
             Jwts.parserBuilder()
