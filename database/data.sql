@@ -71,3 +71,16 @@ INSERT INTO enrollments (id, user_id, course_id, enrolled_at, progress_percentag
 -- 11. Initial Verified Certificate Seeding
 INSERT INTO certificates (id, user_id, course_id, certificate_id, completion_date, student_name, course_name, verification_url, qr_code, instructor_signature) VALUES
 (1, 2, 1, 'CERT-JAVA21-NAGESH99', '2026-07-10 16:30:00', 'Nagesh Methre', 'Mastering Java 21 & OOP Essentials', 'https://stream-in.app/verify/CERT-JAVA21-NAGESH99', '/assets/qrcodes/cert_java21_nagesh.png', 'Dr. Helen Carter');
+
+-- Align Identity Sequence Indexes
+ALTER TABLE users ALTER COLUMN id RESTART WITH 3;
+ALTER TABLE badges ALTER COLUMN id RESTART WITH 6;
+ALTER TABLE user_streaks ALTER COLUMN id RESTART WITH 3;
+ALTER TABLE dsa_topics ALTER COLUMN id RESTART WITH 8;
+ALTER TABLE dsa_subtopics ALTER COLUMN id RESTART WITH 5;
+ALTER TABLE courses ALTER COLUMN id RESTART WITH 4;
+ALTER TABLE lessons ALTER COLUMN id RESTART WITH 5;
+ALTER TABLE study_plans ALTER COLUMN id RESTART WITH 2;
+ALTER TABLE progress ALTER COLUMN id RESTART WITH 2;
+ALTER TABLE enrollments ALTER COLUMN id RESTART WITH 2;
+ALTER TABLE certificates ALTER COLUMN id RESTART WITH 2;
