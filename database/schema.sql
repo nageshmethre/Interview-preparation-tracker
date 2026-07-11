@@ -1,6 +1,5 @@
 -- Database Schema for Interview Preparation Platform
-
--- Database context is automatically managed by the runner datasource
+-- H2 Compatible Version (also works with MySQL in MODE=MySQL)
 
 -- 1. Core Users Table
 CREATE TABLE IF NOT EXISTS users (
@@ -8,13 +7,13 @@ CREATE TABLE IF NOT EXISTS users (
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    role VARCHAR(20) NOT NULL DEFAULT 'STUDENT', -- STUDENT, INSTRUCTOR, MODERATOR, ADMIN
+    role VARCHAR(20) NOT NULL DEFAULT 'STUDENT',
     failed_login_attempts INT DEFAULT 0,
     account_locked_until TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_user_email (email)
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+CREATE INDEX IF NOT EXISTS idx_user_email ON users(email);
 
 -- 2. Audit & Device Session Management
 CREATE TABLE IF NOT EXISTS device_sessions (
@@ -25,14 +24,14 @@ CREATE TABLE IF NOT EXISTS device_sessions (
     user_agent VARCHAR(255) NOT NULL,
     location VARCHAR(100),
     login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    last_active TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    last_active TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_active BOOLEAN DEFAULT TRUE,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    INDEX idx_session_user (user_id),
-    INDEX idx_session_token (token_id)
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+CREATE INDEX IF NOT EXISTS idx_session_user ON device_sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_session_token ON device_sessions(token_id);
 
--- 3. Study Plans Table (Study Planner Module)
+-- 3. Study Plans Table
 CREATE TABLE IF NOT EXISTS study_plans (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -40,12 +39,12 @@ CREATE TABLE IF NOT EXISTS study_plans (
     target_company VARCHAR(100),
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
-    status VARCHAR(50) NOT NULL DEFAULT 'ACTIVE', -- ACTIVE, COMPLETED, ARCHIVED
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    INDEX idx_study_user (user_id)
+    status VARCHAR(50) NOT NULL DEFAULT 'ACTIVE',
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+CREATE INDEX IF NOT EXISTS idx_study_user ON study_plans(user_id);
 
--- 4. Progress Tracking Table (Legacy Progress Log)
+-- 4. Progress Tracking Table
 CREATE TABLE IF NOT EXISTS progress (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -53,63 +52,65 @@ CREATE TABLE IF NOT EXISTS progress (
     difficulty VARCHAR(20) NOT NULL,
     completed BOOLEAN NOT NULL DEFAULT FALSE,
     score INT DEFAULT 0,
-    time_spent INT DEFAULT 0, -- in minutes
+    time_spent INT DEFAULT 0,
     date DATE NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    INDEX idx_progress_user (user_id),
-    INDEX idx_progress_date (date)
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+CREATE INDEX IF NOT EXISTS idx_progress_user ON progress(user_id);
+CREATE INDEX IF NOT EXISTS idx_progress_date ON progress(date);
 
--- 5. Coding Practice Problems (LeetCode Section - 250 problems)
+-- 5. Coding Practice Problems - column names aligned with entity mappings
 CREATE TABLE IF NOT EXISTS interview_questions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     problem_id INT UNIQUE,
     title VARCHAR(255) NOT NULL,
-    difficulty VARCHAR(20) NOT NULL, -- EASY, MEDIUM, HARD
-    topic VARCHAR(100) NOT NULL,
-    companies VARCHAR(500), -- Comma separated company names
-    description TEXT NOT NULL,
-    examples TEXT NOT NULL, -- JSON structured text
-    constraints_text TEXT NOT NULL, -- New name to avoid SQL reserve word clash
-    hints TEXT, -- Comma or newline separated hints
-    optimal_approach TEXT NOT NULL,
+    difficulty VARCHAR(20) NOT NULL,
+    category VARCHAR(100),
+    companies VARCHAR(500),
+    question TEXT,
+    answer TEXT,
+    examples TEXT,
+    constraints_text TEXT,
+    hints TEXT,
+    optimal_approach TEXT,
     time_complexity VARCHAR(50),
     space_complexity VARCHAR(50),
-    reference_solution TEXT NOT NULL,
-    INDEX idx_question_difficulty (difficulty),
-    INDEX idx_question_topic (topic)
+    reference_solution TEXT,
+    tags VARCHAR(255)
 );
+CREATE INDEX IF NOT EXISTS idx_question_difficulty ON interview_questions(difficulty);
+CREATE INDEX IF NOT EXISTS idx_question_category ON interview_questions(category);
 
--- 6. User Problem Submission & Workspace Status
+-- 6. User Problem Status
 CREATE TABLE IF NOT EXISTS user_problem_status (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     question_id INT NOT NULL,
-    status VARCHAR(20) NOT NULL DEFAULT 'UNSOLVED', -- UNSOLVED, ATTEMPTED, SOLVED
+    status VARCHAR(20) NOT NULL DEFAULT 'UNSOLVED',
     bookmarked BOOLEAN DEFAULT FALSE,
     favorite BOOLEAN DEFAULT FALSE,
     in_revision BOOLEAN DEFAULT FALSE,
     notes TEXT,
     code_submitted TEXT,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (question_id) REFERENCES interview_questions(id) ON DELETE CASCADE,
-    UNIQUE KEY uq_user_question (user_id, question_id)
+    CONSTRAINT uq_user_question UNIQUE (user_id, question_id)
 );
 
--- 7. Job Application Pipelines (Placement Tracker)
+-- 7. Job Application Pipelines
 CREATE TABLE IF NOT EXISTS job_applications (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     company VARCHAR(100) NOT NULL,
     role VARCHAR(100) NOT NULL,
-    status VARCHAR(50) NOT NULL DEFAULT 'APPLIED', -- APPLIED, PHONE_SCREEN, INTERVIEWING, OFFER, REJECTED
+    status VARCHAR(50) NOT NULL DEFAULT 'APPLIED',
     applied_date DATE NOT NULL,
     notes TEXT,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    INDEX idx_job_user (user_id),
-    INDEX idx_job_status (status)
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+CREATE INDEX IF NOT EXISTS idx_job_user ON job_applications(user_id);
+CREATE INDEX IF NOT EXISTS idx_job_status ON job_applications(status);
 
 -- 8. Learning Platform: Courses
 CREATE TABLE IF NOT EXISTS courses (
@@ -118,14 +119,14 @@ CREATE TABLE IF NOT EXISTS courses (
     thumbnail_url VARCHAR(255),
     description TEXT NOT NULL,
     instructor VARCHAR(100) NOT NULL,
-    duration VARCHAR(50) NOT NULL, -- e.g. '12 hours'
-    difficulty VARCHAR(20) NOT NULL DEFAULT 'BEGINNER', -- BEGINNER, INTERMEDIATE, ADVANCED
+    duration VARCHAR(50) NOT NULL,
+    difficulty VARCHAR(20) NOT NULL DEFAULT 'BEGINNER',
     prerequisites VARCHAR(255),
-    rating DOUBLE DEFAULT 5.0,
+    rating FLOAT DEFAULT 5.0,
     enrollment_count INT DEFAULT 0
 );
 
--- 9. Learning Platform: Course Lessons
+-- 9. Course Lessons
 CREATE TABLE IF NOT EXISTS lessons (
     id INT AUTO_INCREMENT PRIMARY KEY,
     course_id INT NOT NULL,
@@ -133,29 +134,29 @@ CREATE TABLE IF NOT EXISTS lessons (
     video_url VARCHAR(255),
     pdf_notes_url VARCHAR(255),
     assignments TEXT,
-    quiz_questions TEXT, -- JSON structure
+    quiz_questions TEXT,
     coding_exercise TEXT,
     sequence_number INT NOT NULL,
-    FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE,
-    INDEX idx_lesson_course (course_id)
+    FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
 );
+CREATE INDEX IF NOT EXISTS idx_lesson_course ON lessons(course_id);
 
--- 10. Learning Platform: Enrollments & Progress
+-- 10. Enrollments & Progress
 CREATE TABLE IF NOT EXISTS enrollments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     course_id INT NOT NULL,
     enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    progress_percentage DOUBLE DEFAULT 0.0,
+    progress_percentage FLOAT DEFAULT 0.0,
     completed_at TIMESTAMP NULL,
     rating INT DEFAULT 5,
     feedback TEXT,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE,
-    UNIQUE KEY uq_user_course (user_id, course_id)
+    CONSTRAINT uq_user_course UNIQUE (user_id, course_id)
 );
 
--- 11. Learning Platform: Certification Registry
+-- 11. Certification Registry
 CREATE TABLE IF NOT EXISTS certificates (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -171,7 +172,7 @@ CREATE TABLE IF NOT EXISTS certificates (
     FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
 );
 
--- 12. Interactive DSA Roadmap topics
+-- 12. DSA Roadmap
 CREATE TABLE IF NOT EXISTS dsa_topics (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE,
@@ -183,14 +184,14 @@ CREATE TABLE IF NOT EXISTS dsa_subtopics (
     topic_id INT NOT NULL,
     name VARCHAR(100) NOT NULL,
     theory TEXT NOT NULL,
-    visualization TEXT, -- JSON roadmap nodes mapping
-    examples TEXT, -- JSON mapping
+    visualization TEXT,
+    examples TEXT,
     complexity_analysis VARCHAR(255),
     interview_tips TEXT,
     sequence_number INT NOT NULL,
-    FOREIGN KEY (topic_id) REFERENCES dsa_topics(id) ON DELETE CASCADE,
-    INDEX idx_subtopic_topic (topic_id)
+    FOREIGN KEY (topic_id) REFERENCES dsa_topics(id) ON DELETE CASCADE
 );
+CREATE INDEX IF NOT EXISTS idx_subtopic_topic ON dsa_subtopics(topic_id);
 
 -- 13. Mock Exams Platform
 CREATE TABLE IF NOT EXISTS mock_tests (
@@ -199,19 +200,32 @@ CREATE TABLE IF NOT EXISTS mock_tests (
     title VARCHAR(100) NOT NULL,
     duration_minutes INT NOT NULL,
     question_count INT NOT NULL,
-    category VARCHAR(50) NOT NULL, -- Java, DSA, DBMS, SQL, OS, CN, JavaScript
+    category VARCHAR(50) NOT NULL,
     score INT DEFAULT 0,
     completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- 14. Community Forum
+-- 14. Mock Interviews
+CREATE TABLE IF NOT EXISTS mock_interviews (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    topic VARCHAR(100) NOT NULL,
+    difficulty VARCHAR(20) NOT NULL DEFAULT 'MEDIUM',
+    status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+    feedback TEXT,
+    ai_score INT DEFAULT 0,
+    scheduled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- 15. Community Forum
 CREATE TABLE IF NOT EXISTS discussion_posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     title VARCHAR(200) NOT NULL,
     content TEXT NOT NULL,
-    category VARCHAR(50) NOT NULL DEFAULT 'GENERAL', -- GENERAL, INTERVIEWS, CODING, COURSES
+    category VARCHAR(50) NOT NULL DEFAULT 'GENERAL',
     tags VARCHAR(200),
     likes_count INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -228,7 +242,7 @@ CREATE TABLE IF NOT EXISTS discussion_comments (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- 15. Rich Study Planner Notes
+-- 16. Folders & Rich Notes
 CREATE TABLE IF NOT EXISTS folders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -244,12 +258,23 @@ CREATE TABLE IF NOT EXISTS rich_notes (
     content TEXT NOT NULL,
     tags VARCHAR(200),
     markdown_enabled BOOLEAN DEFAULT TRUE,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (folder_id) REFERENCES folders(id) ON DELETE SET NULL
 );
 
--- 16. Spaced Repetition Flashcards
+-- 17. Notes (Simple)
+CREATE TABLE IF NOT EXISTS notes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    title VARCHAR(150) NOT NULL,
+    content TEXT NOT NULL,
+    tags VARCHAR(200),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- 18. Flashcards
 CREATE TABLE IF NOT EXISTS flashcards (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -257,13 +282,13 @@ CREATE TABLE IF NOT EXISTS flashcards (
     answer TEXT NOT NULL,
     repetitions INT DEFAULT 0,
     interval_days INT DEFAULT 0,
-    ease_factor DOUBLE DEFAULT 2.5,
+    ease_factor FLOAT DEFAULT 2.5,
     next_review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     bookmarked BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- 17. Daily Streaks & Leaderboards
+-- 19. User Streaks & Badges
 CREATE TABLE IF NOT EXISTS user_streaks (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL UNIQUE,
@@ -288,10 +313,10 @@ CREATE TABLE IF NOT EXISTS user_badges (
     awarded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (badge_id) REFERENCES badges(id) ON DELETE CASCADE,
-    UNIQUE KEY uq_user_badge (user_id, badge_id)
+    CONSTRAINT uq_user_badge UNIQUE (user_id, badge_id)
 );
 
--- 18. Daily Challenges & Submissions
+-- 20. Daily Challenges
 CREATE TABLE IF NOT EXISTS daily_challenges (
     id INT AUTO_INCREMENT PRIMARY KEY,
     date DATE NOT NULL UNIQUE,
@@ -309,27 +334,38 @@ CREATE TABLE IF NOT EXISTS daily_challenge_attempts (
     code_submitted TEXT,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (challenge_id) REFERENCES daily_challenges(id) ON DELETE CASCADE,
-    UNIQUE KEY uq_user_challenge (user_id, challenge_id)
+    CONSTRAINT uq_user_challenge UNIQUE (user_id, challenge_id)
 );
 
--- 19. Shared Interview Experiences (Submitted by users, approved by mod/admin)
+-- 21. Interview Experiences
 CREATE TABLE IF NOT EXISTS interview_experiences (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     company VARCHAR(100) NOT NULL,
     role VARCHAR(100) NOT NULL,
-    rounds TEXT NOT NULL, -- JSON structured rounds details
+    rounds TEXT NOT NULL,
     questions_asked TEXT NOT NULL,
     difficulty VARCHAR(20) NOT NULL DEFAULT 'MEDIUM',
     tips TEXT,
-    outcome VARCHAR(20) NOT NULL, -- OFFER, REJECTED, PENDING
-    status VARCHAR(20) NOT NULL DEFAULT 'PENDING', -- PENDING, APPROVED
+    outcome VARCHAR(20) NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX IF NOT EXISTS idx_experience_company ON interview_experiences(company);
+
+-- 22. Bookmarks
+CREATE TABLE IF NOT EXISTS bookmarks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    question_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    INDEX idx_experience_company (company)
+    FOREIGN KEY (question_id) REFERENCES interview_questions(id) ON DELETE CASCADE,
+    CONSTRAINT uq_bookmark UNIQUE (user_id, question_id)
 );
 
--- 20. Expanded settings preferences options
+-- 23. User Settings
 CREATE TABLE IF NOT EXISTS user_settings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL UNIQUE,
@@ -373,4 +409,3 @@ CREATE TABLE IF NOT EXISTS user_settings (
     auto_suggestions BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
-
