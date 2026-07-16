@@ -95,11 +95,3 @@ docker-compose up --build -d
 ```
 This command automatically builds the Maven package, runs the unit test suites, pulls a MySQL 8 database instance, mounts schema/data files, and boots the Spring Boot backend server on port `8080`.
 
-### Step 2: Access & Credentials
-- Open `http://localhost:8080` in your web browser.
-- **Candidate User Details**:
-  - Email: `nagesh@tracker.com`
-  - Password: `password`
-- **Administrator Details**:
-  - Email: `admin@tracker.com`
-  - Password: `password`
