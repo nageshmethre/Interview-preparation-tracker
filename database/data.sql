@@ -94,19 +94,19 @@ WHERE NOT EXISTS (SELECT 1 FROM courses WHERE title = 'Advanced System Design Ar
 
 -- 7. Insert Course Lessons
 INSERT INTO lessons (course_id, title, video_url, pdf_notes_url, assignments, quiz_questions, coding_exercise, sequence_number)
-SELECT 1, 'Introduction to Java Virtual Machine (JVM)', 'https://www.youtube.com/embed/5a8b79f', '/assets/notes/jvm_intro.pdf', 'Write a simple class demonstrating JRE compilations.', '[{"question":"What runs compiled Java bytecode?","options":["JVM","JDK","Javac","C++ Linker"],"answer":"JVM"}]', 'public class Main { public static void main(String[] args) { System.out.println("JVM Setup Completed"); } }', 1
+SELECT 1, 'Introduction to Java Virtual Machine (JVM)', 'https://www.youtube.com/embed/h8g5S1yUscI', '/assets/notes/jvm_intro.pdf', 'Write a simple class demonstrating JRE compilations.', '[{"question":"What runs compiled Java bytecode?","options":["JVM","JDK","Javac","C++ Linker"],"answer":"JVM"}]', 'public class Main { public static void main(String[] args) { System.out.println("JVM Setup Completed"); } }', 1
 WHERE NOT EXISTS (SELECT 1 FROM lessons WHERE title = 'Introduction to Java Virtual Machine (JVM)');
 
 INSERT INTO lessons (course_id, title, video_url, pdf_notes_url, assignments, quiz_questions, coding_exercise, sequence_number)
-SELECT 1, 'Virtual Threads & Structured Concurrency', 'https://www.youtube.com/embed/vthreads', '/assets/notes/virtual_threads.pdf', 'Benchmark 10,000 platform threads vs virtual threads.', '[{"question":"Virtual threads are managed by:","options":["Operating System","JVM","Hardware Scheduler","Docker Daemon"],"answer":"JVM"}]', 'public class ThreadDemo {}', 2
+SELECT 1, 'Virtual Threads & Structured Concurrency', 'https://www.youtube.com/embed/5E0LU85EnZI', '/assets/notes/virtual_threads.pdf', 'Benchmark 10,000 platform threads vs virtual threads.', '[{"question":"Virtual threads are managed by:","options":["Operating System","JVM","Hardware Scheduler","Docker Daemon"],"answer":"JVM"}]', 'public class ThreadDemo {}', 2
 WHERE NOT EXISTS (SELECT 1 FROM lessons WHERE title = 'Virtual Threads & Structured Concurrency');
 
 INSERT INTO lessons (course_id, title, video_url, pdf_notes_url, assignments, quiz_questions, coding_exercise, sequence_number)
-SELECT 2, 'Spring Security 6 Stateless Filter Chains', 'https://www.youtube.com/embed/springsec', '/assets/notes/security_filters.pdf', 'Set up a custom Bearer Token Authentication Filter.', '[{"question":"JWT sessions are typically:","options":["Stateful","Stateless","Stored in Servlet Container","Session-Replicated"],"answer":"Stateless"}]', 'public class SecurityFilter {}', 1
+SELECT 2, 'Spring Security 6 Stateless Filter Chains', 'https://www.youtube.com/embed/her_78-Y9bM', '/assets/notes/security_filters.pdf', 'Set up a custom Bearer Token Authentication Filter.', '[{"question":"JWT sessions are typically:","options":["Stateful","Stateless","Stored in Servlet Container","Session-Replicated"],"answer":"Stateless"}]', 'public class SecurityFilter {}', 1
 WHERE NOT EXISTS (SELECT 1 FROM lessons WHERE title = 'Spring Security 6 Stateless Filter Chains');
 
 INSERT INTO lessons (course_id, title, video_url, pdf_notes_url, assignments, quiz_questions, coding_exercise, sequence_number)
-SELECT 3, 'Designing Consistent Hashing Rings', 'https://www.youtube.com/embed/hashing_ring', '/assets/notes/consistent_hashing.pdf', 'Explain consistent hashing ring node distributions.', '[{"question":"Consistent hashing minimizes:","options":["Network requests","Database size","Data relocation on scale","Memory usage"],"answer":"Data relocation on scale"}]', '', 1
+SELECT 3, 'Designing Consistent Hashing Rings', 'https://www.youtube.com/embed/zaRkONvyGr8', '/assets/notes/consistent_hashing.pdf', 'Explain consistent hashing ring node distributions.', '[{"question":"Consistent hashing minimizes:","options":["Network requests","Database size","Data relocation on scale","Memory usage"],"answer":"Data relocation on scale"}]', '', 1
 WHERE NOT EXISTS (SELECT 1 FROM lessons WHERE title = 'Designing Consistent Hashing Rings');
 
 -- 8. Default Study Plans

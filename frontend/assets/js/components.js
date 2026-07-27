@@ -1546,7 +1546,7 @@ const components = {
       <div class="col-lg-8">
         <div class="glass-panel p-4 mb-4">
           <div class="ratio ratio-16x9 bg-dark mb-4 rounded">
-            <iframe id="video-frame" src="https://www.youtube.com/embed/5a8b79f" title="Lesson Player" allowfullscreen></iframe>
+            <iframe id="video-frame" src="https://www.youtube.com/embed/h8g5S1yUscI" title="Lesson Player" allowfullscreen></iframe>
           </div>
           <h4 class="text-white fw-bold" id="active-lesson-title">Select a Lesson to Begin</h4>
         </div>
