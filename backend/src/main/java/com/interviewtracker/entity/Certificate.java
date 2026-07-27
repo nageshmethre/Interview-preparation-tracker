@@ -17,10 +17,12 @@ public class Certificate {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", nullable = false)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Course course;
 
     @Column(name = "certificate_id", nullable = false, unique = true)
