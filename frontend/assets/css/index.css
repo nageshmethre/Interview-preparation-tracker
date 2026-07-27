@@ -186,7 +186,7 @@ body {
 
 .sidebar {
   width: var(--sidebar-width);
-  min-height: 100vh;
+  height: 100vh;
   position: fixed;
   z-index: 100;
   display: flex;
@@ -241,6 +241,23 @@ body {
 
 #app-container.collapsed #sidebar-collapse-btn {
   margin-top: 4px;
+}
+
+.sidebar .overflow-y-auto::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar .overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar .overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+}
+
+.sidebar .overflow-y-auto:hover::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.4);
 }
 
 @media (max-width: 991.98px) {
