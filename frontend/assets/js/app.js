@@ -233,6 +233,9 @@ function router() {
     pageMount.innerHTML = components.profile();
     loadProfileDetails();
     bindProfileEvents();
+  } else if (hash === '#/desktop-client') {
+    viewTitle.textContent = 'Desktop Client';
+    pageMount.innerHTML = components.desktopClient();
   } else if (hash === '#/admin') {
     if (state.role !== 'ADMIN') {
       redirectTo('#/dashboard');

@@ -195,6 +195,7 @@ const components = {
           <a href="#/calendar" class="sidebar-link"><i class="fa-solid fa-calendar-days text-muted"></i> Calendar</a>
           <a href="#/reports" class="sidebar-link"><i class="fa-solid fa-file-invoice text-muted"></i> Reports</a>
           <a href="#/profile" class="sidebar-link"><i class="fa-solid fa-user-gear"></i> Settings</a>
+          <a href="#/desktop-client" class="sidebar-link"><i class="fa-solid fa-desktop text-indigo"></i> Desktop Client</a>
           ${isAdmin ? `<a href="#/admin" class="sidebar-link text-warning-emphasis"><i class="fa-solid fa-shield-halved text-warning"></i> Admin Panel</a>` : ''}
         </div>
         
@@ -2024,6 +2025,29 @@ const components = {
           <!-- Weak Topic Detector mounted by default -->
           <div class="text-center py-5"><div class="spinner-border text-primary"></div></div>
         </div>
+      </div>
+    </div>
+  `,
+
+  desktopClient: () => `
+    <div class="glass-panel p-5 text-center">
+      <i class="fa-solid fa-desktop display-4 text-indigo mb-4"></i>
+      <h3 class="text-white fw-bold mb-2">Java Swing Desktop Client</h3>
+      <p class="text-muted fs-7 max-w-md mx-auto mb-4" style="max-width: 450px;">
+        PrepSpace provides a complete, high-performance Java Swing desktop application that integrates directly with the MySQL database via JDBC for ultra-fast, local placement tracking.
+      </p>
+      
+      <div class="card bg-dark bg-opacity-25 border-secondary text-start mx-auto p-4 mb-4 text-muted fs-7" style="max-width: 550px;">
+        <h6 class="text-white fw-bold mb-3"><i class="fa-solid fa-terminal text-indigo me-2"></i> How to Compile and Run Locally</h6>
+        <p class="mb-2">1. Open your terminal and navigate to the project desktop folder:</p>
+        <pre class="bg-black text-success p-2 rounded mb-3">cd desktop-app</pre>
+        <p class="mb-2">2. Clean, compile and start the Swing application GUI:</p>
+        <pre class="bg-black text-success p-2 rounded mb-0">mvn clean compile exec:java</pre>
+      </div>
+
+      <div class="alert alert-indigo-subtle border-indigo text-start d-inline-block px-4 py-3 fs-7 text-muted" style="max-width: 550px;">
+        <i class="fa-solid fa-circle-info text-indigo me-2"></i> 
+        <strong>Author Note:</strong> Build requirements include Java SDK 17+ and Maven. Direct database configs can be adjusted under the app settings panel.
       </div>
     </div>
   `
