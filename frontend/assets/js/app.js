@@ -286,13 +286,21 @@ async function apiFetch(endpoint, options = {}) {
 
 
   if (response.status === 401) {
-    handleSessionExpired();
-    throw new Error('Unauthorized');
+    if (!endpoint.includes('/auth/')) {
+      handleSessionExpired();
+    }
+    const errorData = await response.json().catch(() => ({ message: 'Invalid email or password' }));
+    throw new Error(errorData.message || 'Invalid credentials');
   }
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({ message: 'API Request failed' }));
-    throw new Error(errorData.message || 'API request failed');
+    let msg = errorData.message || errorData.error;
+    if (!msg && typeof errorData === 'object') {
+      const vals = Object.values(errorData).filter(v => typeof v === 'string');
+      if (vals.length > 0) msg = vals.join(', ');
+    }
+    throw new Error(msg || 'API request failed');
   }
 
   // Handle binary endpoints
@@ -1348,8 +1356,6 @@ function switchSettingsTab(tab) {
   } else if (tab === 'developer') {
     mount.innerHTML = components.settingsDeveloper(currentSettings);
     bindSettingsDeveloperEvents();
-  } else if (tab === 'subscription') {
-    mount.innerHTML = components.settingsSubscription();
   } else if (tab === 'about') {
     mount.innerHTML = components.settingsAbout();
   }
