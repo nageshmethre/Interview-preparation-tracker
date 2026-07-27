@@ -335,6 +335,37 @@ function bindLayoutEvents() {
     toggleBtn.addEventListener('click', () => sidebar.classList.toggle('active'));
   }
 
+  const collapseBtn = document.getElementById('sidebar-collapse-btn');
+  const container = document.getElementById('app-container');
+  if (collapseBtn && container) {
+    // Read state from localStorage to persist user preference
+    if (localStorage.getItem('sidebar-collapsed') === 'true') {
+      container.classList.add('collapsed');
+      const icon = document.getElementById('collapse-icon');
+      if (icon) {
+        icon.classList.remove('fa-chevron-left');
+        icon.classList.add('fa-chevron-right');
+      }
+    }
+
+    collapseBtn.addEventListener('click', () => {
+      container.classList.toggle('collapsed');
+      const collapsed = container.classList.contains('collapsed');
+      localStorage.setItem('sidebar-collapsed', collapsed);
+      
+      const icon = document.getElementById('collapse-icon');
+      if (icon) {
+        if (collapsed) {
+          icon.classList.remove('fa-chevron-left');
+          icon.classList.add('fa-chevron-right');
+        } else {
+          icon.classList.remove('fa-chevron-right');
+          icon.classList.add('fa-chevron-left');
+        }
+      }
+    });
+  }
+
   const logoutBtn = document.getElementById('logout-btn');
   const dLogout = document.getElementById('dropdown-logout');
   const performLogout = () => {

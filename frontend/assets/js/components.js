@@ -172,35 +172,38 @@ const components = {
     <div id="app-container" class="d-flex w-100">
       <!-- Sidebar -->
       <div class="sidebar glass-panel border-top-0 border-bottom-0 border-start-0 rounded-0">
-        <div class="p-4 border-bottom border-secondary-subtle">
-          <a class="navbar-brand fw-extrabold fs-4 text-white d-flex align-items-center" href="#/dashboard">
-            <i class="fa-solid fa-graduation-cap text-primary me-2"></i>PrepSpace
+        <div class="p-4 border-bottom border-secondary-subtle d-flex align-items-center justify-content-between">
+          <a class="navbar-brand fw-extrabold fs-4 text-white d-flex align-items-center brand-text" href="#/dashboard">
+            <i class="fa-solid fa-graduation-cap text-primary me-2"></i><span class="brand-name">PrepSpace</span>
           </a>
+          <button id="sidebar-collapse-btn" class="btn btn-glass btn-sm border-0 rounded-circle text-white d-none d-lg-flex align-items-center justify-content-center" style="width: 26px; height: 26px; padding: 0;">
+            <i class="fa-solid fa-chevron-left" id="collapse-icon" style="font-size: 0.8rem;"></i>
+          </button>
         </div>
         
         <div class="flex-grow-1 py-4 overflow-y-auto">
-          <a href="#/dashboard" class="sidebar-link active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
-          <a href="#/studyplanner" class="sidebar-link"><i class="fa-solid fa-calendar-check"></i> Study Planner</a>
-          <a href="#/courses" class="sidebar-link"><i class="fa-solid fa-graduation-cap text-info"></i> LMS Courses</a>
-          <a href="#/certificates" class="sidebar-link"><i class="fa-solid fa-award text-warning"></i> Certificates</a>
-          <a href="#/dsa-roadmap" class="sidebar-link"><i class="fa-solid fa-route text-success"></i> DSA Roadmap</a>
-          <a href="#/coding-practice" class="sidebar-link"><i class="fa-solid fa-code text-indigo"></i> Coding Practice</a>
-          <a href="#/experiences" class="sidebar-link"><i class="fa-solid fa-user-tie text-secondary"></i> Experiences</a>
-          <a href="#/mock-exams" class="sidebar-link"><i class="fa-solid fa-stopwatch text-danger"></i> Mock Exams</a>
-          <a href="#/flashcards" class="sidebar-link"><i class="fa-solid fa-clone text-primary"></i> Flashcards</a>
-          <a href="#/community" class="sidebar-link"><i class="fa-solid fa-comments text-info"></i> Community</a>
-          <a href="#/notes" class="sidebar-link"><i class="fa-solid fa-note-sticky text-warning"></i> Study Notes</a>
-          <a href="#/placement" class="sidebar-link"><i class="fa-solid fa-briefcase text-success"></i> Placements</a>
-          <a href="#/ai-assistant" class="sidebar-link"><i class="fa-solid fa-robot text-primary"></i> AI Assistant</a>
-          <a href="#/calendar" class="sidebar-link"><i class="fa-solid fa-calendar-days text-muted"></i> Calendar</a>
-          <a href="#/reports" class="sidebar-link"><i class="fa-solid fa-file-invoice text-muted"></i> Reports</a>
-          <a href="#/profile" class="sidebar-link"><i class="fa-solid fa-user-gear"></i> Settings</a>
-          <a href="#/desktop-client" class="sidebar-link"><i class="fa-solid fa-desktop text-indigo"></i> Desktop Client</a>
-          ${isAdmin ? `<a href="#/admin" class="sidebar-link text-warning-emphasis"><i class="fa-solid fa-shield-halved text-warning"></i> Admin Panel</a>` : ''}
+          <a href="#/dashboard" class="sidebar-link active"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
+          <a href="#/studyplanner" class="sidebar-link"><i class="fa-solid fa-calendar-check"></i> <span>Study Planner</span></a>
+          <a href="#/courses" class="sidebar-link"><i class="fa-solid fa-graduation-cap text-info"></i> <span>LMS Courses</span></a>
+          <a href="#/certificates" class="sidebar-link"><i class="fa-solid fa-award text-warning"></i> <span>Certificates</span></a>
+          <a href="#/dsa-roadmap" class="sidebar-link"><i class="fa-solid fa-route text-success"></i> <span>DSA Roadmap</span></a>
+          <a href="#/coding-practice" class="sidebar-link"><i class="fa-solid fa-code text-indigo"></i> <span>Coding Practice</span></a>
+          <a href="#/experiences" class="sidebar-link"><i class="fa-solid fa-user-tie text-secondary"></i> <span>Experiences</span></a>
+          <a href="#/mock-exams" class="sidebar-link"><i class="fa-solid fa-stopwatch text-danger"></i> <span>Mock Exams</span></a>
+          <a href="#/flashcards" class="sidebar-link"><i class="fa-solid fa-clone text-primary"></i> <span>Flashcards</span></a>
+          <a href="#/community" class="sidebar-link"><i class="fa-solid fa-comments text-info"></i> <span>Community</span></a>
+          <a href="#/notes" class="sidebar-link"><i class="fa-solid fa-note-sticky text-warning"></i> <span>Study Notes</span></a>
+          <a href="#/placement" class="sidebar-link"><i class="fa-solid fa-briefcase text-success"></i> <span>Placements</span></a>
+          <a href="#/ai-assistant" class="sidebar-link"><i class="fa-solid fa-robot text-primary"></i> <span>AI Assistant</span></a>
+          <a href="#/calendar" class="sidebar-link"><i class="fa-solid fa-calendar-days text-muted"></i> <span>Calendar</span></a>
+          <a href="#/reports" class="sidebar-link"><i class="fa-solid fa-file-invoice text-muted"></i> <span>Reports</span></a>
+          <a href="#/profile" class="sidebar-link"><i class="fa-solid fa-user-gear"></i> <span>Settings</span></a>
+          <a href="#/desktop-client" class="sidebar-link"><i class="fa-solid fa-desktop text-indigo"></i> <span>Desktop Client</span></a>
+          ${isAdmin ? `<a href="#/admin" class="sidebar-link text-warning-emphasis"><i class="fa-solid fa-shield-halved text-warning"></i> <span>Admin Panel</span></a>` : ''}
         </div>
         
         <div class="p-3 border-top border-secondary-subtle mt-auto">
-          <button id="logout-btn" class="btn btn-glass w-100 py-2"><i class="fa-solid fa-right-from-bracket me-2 text-danger"></i> Logout</button>
+          <button id="logout-btn" class="btn btn-glass w-100 py-2"><i class="fa-solid fa-right-from-bracket me-2 text-danger"></i> <span>Logout</span></button>
         </div>
       </div>
 

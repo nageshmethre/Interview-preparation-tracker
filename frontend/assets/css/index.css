@@ -191,6 +191,7 @@ body {
   z-index: 100;
   display: flex;
   flex-direction: column;
+  transition: var(--transition-smooth);
 }
 
 .main-content {
@@ -198,6 +199,48 @@ body {
   flex-grow: 1;
   padding: 24px;
   transition: var(--transition-smooth);
+}
+
+/* Sidebar Collapsed Sliding States */
+#app-container.collapsed {
+  --sidebar-width: 78px;
+}
+
+#app-container.collapsed .sidebar .brand-name,
+#app-container.collapsed .sidebar-link span,
+#app-container.collapsed .sidebar button span {
+  display: none;
+}
+
+#app-container.collapsed .sidebar-link {
+  justify-content: center;
+  padding: 12px 0;
+  margin: 4px 8px;
+}
+
+#app-container.collapsed .sidebar-link i {
+  margin-right: 0;
+}
+
+#app-container.collapsed .sidebar .p-4 {
+  padding: 1.5rem 0.5rem !important;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+}
+
+#app-container.collapsed .sidebar .brand-text {
+  justify-content: center;
+}
+
+#app-container.collapsed .sidebar .brand-text i {
+  margin-right: 0 !important;
+}
+
+#app-container.collapsed #sidebar-collapse-btn {
+  margin-top: 4px;
 }
 
 @media (max-width: 991.98px) {
