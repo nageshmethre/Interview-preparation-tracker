@@ -1829,6 +1829,7 @@ function loadAiDiagnosticsTab(tab) {
         .then(res => { mount.innerHTML = res; });
     });
   }
+}
 function bindSettingsProfileEvents() {
   const form = document.getElementById('settings-profile-form');
   if (form) {
