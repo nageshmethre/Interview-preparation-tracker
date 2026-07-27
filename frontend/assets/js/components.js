@@ -1417,7 +1417,7 @@ const components = {
         <p class="mb-2"><i class="fa-solid fa-user-lock me-2 text-success"></i> <strong>Security</strong>: JWT HTTP-only cookies</p>
         <p class="mb-0"><i class="fa-solid fa-database me-2 text-warning"></i> <strong>Database</strong>: Live persistent PostgreSQL</p>
       </div>
-      <p class="text-muted fs-8">Designed by the Google Deepmind Team. All rights reserved.</p>
+      <p class="text-muted fs-8">Designed by Nandini Pandey. All rights reserved.</p>
     </div>
   `,
 
