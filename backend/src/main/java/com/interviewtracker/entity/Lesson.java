@@ -1,6 +1,7 @@
 package com.interviewtracker.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,6 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @ToString(exclude = "course")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
