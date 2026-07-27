@@ -109,6 +109,30 @@ INSERT INTO lessons (course_id, title, video_url, pdf_notes_url, assignments, qu
 SELECT 3, 'Designing Consistent Hashing Rings', 'https://www.youtube.com/embed/UF9Iqgd37no', '/assets/notes/consistent_hashing.pdf', 'Explain consistent hashing ring node distributions.', '[{"question":"Consistent hashing minimizes:","options":["Network requests","Database size","Data relocation on scale","Memory usage"],"answer":"Data relocation on scale"}]', '', 1
 WHERE NOT EXISTS (SELECT 1 FROM lessons WHERE title = 'Designing Consistent Hashing Rings');
 
+INSERT INTO lessons (course_id, title, video_url, pdf_notes_url, assignments, quiz_questions, coding_exercise, sequence_number)
+SELECT 1, 'Java Garbage Collection Algorithms', 'https://www.youtube.com/embed/grEKMHGYyns', '/assets/notes/gc_intro.pdf', 'Analyze different garbage collector logs.', '[{"question":"Which Garbage Collector is the default in Java 17+?","options":["G1 Garbage Collector","Z Garbage Collector","Serial Collector","Parallel Collector"],"answer":"G1 Garbage Collector"}]', '', 3
+WHERE NOT EXISTS (SELECT 1 FROM lessons WHERE title = 'Java Garbage Collection Algorithms');
+
+INSERT INTO lessons (course_id, title, video_url, pdf_notes_url, assignments, quiz_questions, coding_exercise, sequence_number)
+SELECT 1, 'Object-Oriented Design Patterns', 'https://www.youtube.com/embed/grEKMHGYyns', '/assets/notes/oop_patterns.pdf', 'Implement a simple Factory Pattern in Java.', '[{"question":"Which pattern is used to instantiate objects without specifying their exact class?","options":["Factory Method Pattern","Singleton Pattern","Observer Pattern","Decorator Pattern"],"answer":"Factory Method Pattern"}]', '', 4
+WHERE NOT EXISTS (SELECT 1 FROM lessons WHERE title = 'Object-Oriented Design Patterns');
+
+INSERT INTO lessons (course_id, title, video_url, pdf_notes_url, assignments, quiz_questions, coding_exercise, sequence_number)
+SELECT 2, 'Service Discovery with Netflix Eureka', 'https://www.youtube.com/embed/35EQXmHKZYs', '/assets/notes/eureka_intro.pdf', 'Configure a Spring Boot application as a Eureka client.', '[{"question":"Which annotation enables service registry in a Spring Boot application?","options":["@EnableEurekaServer","@SpringBootApplication","@EnableDiscoveryClient","@RestController"],"answer":"@EnableEurekaServer"}]', '', 2
+WHERE NOT EXISTS (SELECT 1 FROM lessons WHERE title = 'Service Discovery with Netflix Eureka');
+
+INSERT INTO lessons (course_id, title, video_url, pdf_notes_url, assignments, quiz_questions, coding_exercise, sequence_number)
+SELECT 2, 'Resilience4j Circuit Breakers', 'https://www.youtube.com/embed/35EQXmHKZYs', '/assets/notes/circuit_breakers.pdf', 'Set up a circuit breaker fallback response.', '[{"question":"What is the default state of a Circuit Breaker when requests are succeeding?","options":["CLOSED","OPEN","HALF_OPEN","DISABLED"],"answer":"CLOSED"}]', '', 3
+WHERE NOT EXISTS (SELECT 1 FROM lessons WHERE title = 'Resilience4j Circuit Breakers');
+
+INSERT INTO lessons (course_id, title, video_url, pdf_notes_url, assignments, quiz_questions, coding_exercise, sequence_number)
+SELECT 3, 'Database Sharding & Partitioning Strategies', 'https://www.youtube.com/embed/UF9Iqgd37no', '/assets/notes/db_sharding.pdf', 'Explain partition keys and database sharding trade-offs.', '[{"question":"What is horizontal partitioning of database rows called?","options":["Sharding","Normalisation","Replication","Indexing"],"answer":"Sharding"}]', '', 2
+WHERE NOT EXISTS (SELECT 1 FROM lessons WHERE title = 'Database Sharding & Partitioning Strategies');
+
+INSERT INTO lessons (course_id, title, video_url, pdf_notes_url, assignments, quiz_questions, coding_exercise, sequence_number)
+SELECT 3, 'Message Broker Queues: Kafka vs RabbitMQ', 'https://www.youtube.com/embed/UF9Iqgd37no', '/assets/notes/brokers_intro.pdf', 'Compare Kafka log commits with RabbitMQ ACK patterns.', '[{"question":"Which broker operates primarily on a pull-based commit log model?","options":["Apache Kafka","RabbitMQ","ActiveMQ","Amazon SQS"],"answer":"Apache Kafka"}]', '', 3
+WHERE NOT EXISTS (SELECT 1 FROM lessons WHERE title = 'Message Broker Queues: Kafka vs RabbitMQ');
+
 -- 8. Default Study Plans
 INSERT INTO study_plans (user_id, title, target_company, start_date, end_date, status)
 SELECT 2, 'FAANG Backend Track', 'Google', '2026-07-01', '2026-09-30', 'ACTIVE'
