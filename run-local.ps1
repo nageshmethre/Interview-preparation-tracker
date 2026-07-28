@@ -95,7 +95,7 @@ if ($lastExitCode -ne 0) {
 }
 
 # 4. Start Application
-Write-Host "[4/4] Starting PrepSpace Service on http://localhost:8080 ..." -ForegroundColor Green
+Write-Host "[4/4] Starting PrepSpace Service on http://localhost:8085 ..." -ForegroundColor Green
 $jarFile = Get-ChildItem -Path "target" -Filter "InterviewPreparationTracker-*.jar" | Select-Object -First 1
 
 if (!$jarFile) {
