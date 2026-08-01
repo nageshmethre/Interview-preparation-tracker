@@ -1412,11 +1412,6 @@ const components = {
       <i class="fa-solid fa-graduation-cap display-3 text-indigo mb-4"></i>
       <h4 class="text-white fw-bold mb-1">PrepSpace Enterprise</h4>
       <p class="text-muted fs-7 mb-4">Version 2.0.2 (Stateless Zero-Trust Edition)</p>
-      <div class="bg-dark p-3 rounded border border-secondary max-w-sm mx-auto mb-4 text-start text-muted fs-7" style="max-width:320px;">
-        <p class="mb-2"><i class="fa-solid fa-circle-nodes me-2 text-indigo"></i> <strong>Engine</strong>: Spring Boot 3.3 + PostgreSQL</p>
-        <p class="mb-2"><i class="fa-solid fa-user-lock me-2 text-success"></i> <strong>Security</strong>: JWT HTTP-only cookies</p>
-        <p class="mb-0"><i class="fa-solid fa-database me-2 text-warning"></i> <strong>Database</strong>: Live persistent PostgreSQL</p>
-      </div>
       <p class="text-muted fs-8">Designed by Nagesh Methre. All rights reserved.</p>
     </div>
   `,
