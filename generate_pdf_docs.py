@@ -109,7 +109,7 @@ def build_project_manual_pdf():
 
     # Title Header
     story.append(Paragraph("📖 PrepSpace — Complete Technical Manual", title_style))
-    story.append(Paragraph("Full-Stack AI-Powered Interview Preparation & Career Portal Guide<br/><b>Author: Nandini Pandey</b> | System Version: 0.0.1-SNAPSHOT | Production Live", subtitle_style))
+    story.append(Paragraph("Full-Stack AI-Powered Interview Preparation & Career Portal Guide<br/><b>Author: Nagesh Methre</b> | System Version: 0.0.1-SNAPSHOT | Production Live", subtitle_style))
     story.append(HRFlowable(width="100%", thickness=1.5, color=ACCENT, spaceBefore=0, spaceAfter=12))
 
     # 1. Executive Summary & Purpose
@@ -280,7 +280,7 @@ def build_presentation_deck_pdf():
             Spacer(1, 10),
             Paragraph("<font size=10 color='#6366f1'>Spring Boot 3.3.1  |  Java 21  |  PostgreSQL  |  Spring Security JWT  |  Vanilla JS SPA</font>", ParagraphStyle('C3', alignment=TA_CENTER)),
             Spacer(1, 15),
-            Paragraph("<font size=9 color='#94a3b8'>Presenter: Nandini Pandey  |  Production Live API: api.stream-in.app</font>", ParagraphStyle('C4', alignment=TA_CENTER))
+            Paragraph("<font size=9 color='#94a3b8'>Presenter: Nagesh Methre  |  Production Live API: api.stream-in.app</font>", ParagraphStyle('C4', alignment=TA_CENTER))
         ],
         # Slide 2: Problem Statement
         [

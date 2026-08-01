@@ -73,7 +73,7 @@ public class MainFrame extends JFrame {
         statusLabel.setForeground(Color.GRAY);
         statusBar.add(statusLabel, BorderLayout.WEST);
 
-        JLabel authorLabel = new JLabel("Author: nandini pandey  |  College Project");
+        JLabel authorLabel = new JLabel("Author: nagesh methre  |  College Project");
         authorLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
         authorLabel.setForeground(Color.GRAY);
         statusBar.add(authorLabel, BorderLayout.EAST);

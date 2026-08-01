@@ -3,12 +3,15 @@
 
 -- 1. Insert Users
 INSERT INTO users (name, email, password, role)
-SELECT 'Admin Tracker', 'admin@tracker.com', '$2a$10$kPdvJZw/HPUmzTD5osQUu.9jIFTkliTlAUBF3xnF0L6pzEFliYNAK', 'ADMIN'
+SELECT 'Admin Tracker', 'admin@tracker.com', '$2b$10$qQ8Ko/X/jMTuGVv8SRcGN.2m4K4gvs8N18a8duJpJPXfbvvh7TqlS', 'ADMIN'
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'admin@tracker.com');
 
 INSERT INTO users (name, email, password, role)
-SELECT 'Nagesh Methre', 'nagesh@tracker.com', '$2a$10$k1Uh/cYeupTtTtf0YczJEewqw7qS8CJojkJ7NFu4Abb8e0xa7XL/S', 'STUDENT'
+SELECT 'Nagesh Methre', 'nagesh@tracker.com', '$2b$10$ASlE3WyH.Sw7EZ04s1NAkexkJz.kO3k9axEvQd4KyNxmvsQnx6uHW', 'STUDENT'
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'nagesh@tracker.com');
+
+UPDATE users SET password = '$2b$10$qQ8Ko/X/jMTuGVv8SRcGN.2m4K4gvs8N18a8duJpJPXfbvvh7TqlS' WHERE email = 'admin@tracker.com';
+UPDATE users SET password = '$2b$10$ASlE3WyH.Sw7EZ04s1NAkexkJz.kO3k9axEvQd4KyNxmvsQnx6uHW' WHERE email = 'nagesh@tracker.com';
 
 -- 2. Insert Gamification Badges
 INSERT INTO badges (name, icon_class, description)

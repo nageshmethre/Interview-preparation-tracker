@@ -114,7 +114,7 @@ def create_presentation():
     p3.space_before = Pt(20)
 
     p4 = tf1.add_paragraph()
-    p4.text = "Presenter: Nandini Pandey  |  Production Live: api.stream-in.app"
+    p4.text = "Presenter: Nagesh Methre  |  Production Live: api.stream-in.app"
     p4.font.size = Pt(14)
     p4.font.color.rgb = TEXT_MUTED
     p4.alignment = PP_ALIGN.CENTER
