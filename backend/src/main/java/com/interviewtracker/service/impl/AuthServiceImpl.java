@@ -237,6 +237,7 @@ public class AuthServiceImpl implements AuthService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role("STUDENT") // Defaults to standard STUDENT role
+                .failedLoginAttempts(0)
                 .build();
 
         User savedUser = userRepository.save(user);

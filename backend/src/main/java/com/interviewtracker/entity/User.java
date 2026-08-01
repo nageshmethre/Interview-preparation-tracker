@@ -49,6 +49,9 @@ public class User {
         if (role == null) {
             role = "STUDENT";
         }
+        if (failedLoginAttempts == null) {
+            failedLoginAttempts = 0;
+        }
     }
 
     @PreUpdate
