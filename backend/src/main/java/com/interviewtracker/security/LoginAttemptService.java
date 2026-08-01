@@ -28,7 +28,8 @@ public class LoginAttemptService {
     @Transactional
     public void loginFailed(String email) {
         userRepository.findByEmail(email).ifPresent(user -> {
-            int newAttempts = user.getFailedLoginAttempts() + 1;
+            int currentAttempts = user.getFailedLoginAttempts() == null ? 0 : user.getFailedLoginAttempts();
+            int newAttempts = currentAttempts + 1;
             user.setFailedLoginAttempts(newAttempts);
             if (newAttempts >= MAX_ATTEMPTS) {
                 user.setAccountLockedUntil(LocalDateTime.now().plusMinutes(LOCK_DURATION_MINUTES));

@@ -12,6 +12,7 @@ WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'nagesh@tracker.com');
 
 UPDATE users SET password = '$2b$10$qQ8Ko/X/jMTuGVv8SRcGN.2m4K4gvs8N18a8duJpJPXfbvvh7TqlS' WHERE email = 'admin@tracker.com';
 UPDATE users SET password = '$2b$10$ASlE3WyH.Sw7EZ04s1NAkexkJz.kO3k9axEvQd4KyNxmvsQnx6uHW' WHERE email = 'nagesh@tracker.com';
+UPDATE users SET failed_login_attempts = 0 WHERE failed_login_attempts IS NULL;
 
 -- 2. Insert Gamification Badges
 INSERT INTO badges (name, icon_class, description)
