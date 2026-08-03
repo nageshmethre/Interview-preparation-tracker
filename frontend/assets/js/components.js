@@ -3,107 +3,119 @@
 const components = {
   // Public SaaS Landing Page
   landing: () => `
-    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent py-4">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-transparent py-4">
+        <div class="container">
+          <a class="navbar-brand fw-extrabold fs-3 text-white" href="#"><i class="fa-solid fa-graduation-cap text-primary me-2"></i>PrepSpace</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+              <li class="nav-item"><a class="nav-link px-3" href="#features">Features</a></li>
+              <li class="nav-item"><a class="nav-link px-3" href="#pricing">Pricing</a></li>
+              <li class="nav-item"><a class="nav-link px-3" href="#contact">Contact</a></li>
+              <li class="nav-item ms-3">
+                <a class="btn btn-glass px-4 me-2" href="#/login">Login</a>
+                <a class="btn btn-premium px-4" href="#/register">Get Started</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <div class="container text-center py-5">
+        <div class="row justify-content-center py-5">
+          <div class="col-lg-10 col-xl-8">
+            <span class="badge bg-indigo-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill mb-3">AI-POWERED PREPARATION SYSTEM</span>
+            <h1 class="display-3 fw-extrabold text-white mb-4">Cracking Tech Interviews is now <span class="hero-gradient">Predictable</span></h1>
+            <p class="lead text-muted mb-5 fs-4">An enterprise-level SaaS platform to manage study plans, track coding platform statistics, run mock interview feedback loops, and track job applications in a single unified dashboard.</p>
+            <div class="d-flex justify-content-center gap-3">
+              <a href="#/register" class="btn btn-premium btn-lg px-5 py-3 fs-5">Initialize Space</a>
+              <a href="#features" class="btn btn-glass btn-lg px-5 py-3 fs-5">View Core Features</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- Features Section -->
+      <section id="features" class="container py-5">
+        <div class="text-center mb-5">
+          <h2 class="display-5 fw-bold text-white mb-3">Engineered for High-Performance Candidates</h2>
+          <p class="text-muted fs-5">Everything you need to level up and land your dream offer.</p>
+        </div>
+        <div class="row g-4 mt-2">
+          <div class="col-md-4">
+            <div class="glass-panel p-4 h-100">
+              <div class="feature-icon mb-3"><i class="fa-solid fa-chart-line fs-2 text-primary"></i></div>
+              <h3 class="text-white h5">Unified Dashboard Analytics</h3>
+              <p class="text-muted">Interactive charts mapping study hours, problem difficulties, streak data, and target completion counts.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="glass-panel p-4 h-100">
+              <div class="feature-icon mb-3"><i class="fa-solid fa-brain fs-2 text-secondary"></i></div>
+              <h3 class="text-white h5">AI Feedback Engine</h3>
+              <p class="text-muted">Simulated evaluation feedback and readiness metrics outlining your technical gaps and soft skill adjustments.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="glass-panel p-4 h-100">
+              <div class="feature-icon mb-3"><i class="fa-solid fa-kanban fs-2 text-success"></i></div>
+              <h3 class="text-white h5">Kanban Job Tracker</h3>
+              <p class="text-muted">Organize job pipelines, record scheduling dates, and trace outcomes on an interactive board layout.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pricing Section -->
+      <section id="pricing" class="container py-5">
+        <div class="text-center mb-5">
+          <h2 class="display-5 fw-bold text-white mb-3">Flexible Plans for Every Developer</h2>
+          <p class="text-muted fs-5">Choose the pace that matches your target timelines.</p>
+        </div>
+        <div class="row g-4 justify-content-center mt-2">
+          <div class="col-md-5 col-lg-4">
+            <div class="glass-panel p-4 h-100 text-center">
+              <h3 class="text-white h4">PrepFree</h3>
+              <p class="text-muted">Perfect for getting started</p>
+              <div class="my-4"><span class="display-4 fw-bold text-white">$0</span><span class="text-muted">/month</span></div>
+              <ul class="list-unstyled text-start mb-5 text-muted">
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Access to Question Bank</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Log Solved Problems</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Standard Kanban Tracker</li>
+              </ul>
+              <a href="#/register" class="btn btn-glass w-100 py-3">Register Account</a>
+            </div>
+          </div>
+          <div class="col-md-5 col-lg-4">
+            <div class="glass-panel p-4 h-100 text-center border-primary" style="box-shadow: 0 0 25px var(--accent-glow);">
+              <h3 class="text-white h4">PrepPro</h3>
+              <p class="text-indigo">Recommended for Active Jobseekers</p>
+              <div class="my-4"><span class="display-4 fw-bold text-white">FREE</span><span class="text-muted">/lifetime</span></div>
+              <ul class="list-unstyled text-start mb-5 text-muted">
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Custom Target Study Plans</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Mock AI Feedback Logs</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Export Excel/PDF Reports</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Advanced Platform Syncs</li>
+              </ul>
+              <a href="#/register" class="btn btn-premium w-100 py-3">Get Free Lifetime Access</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-5 text-center border-top border-secondary-subtle border-opacity-10 mt-5">
       <div class="container">
-        <a class="navbar-brand fw-extrabold fs-3 text-white" href="#"><i class="fa-solid fa-graduation-cap text-primary me-2"></i>PrepSpace</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navMenu">
-          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
-            <li class="nav-item"><a class="nav-link px-3" href="#features">Features</a></li>
-            <li class="nav-item"><a class="nav-link px-3" href="#pricing">Pricing</a></li>
-            <li class="nav-item"><a class="nav-link px-3" href="#contact">Contact</a></li>
-            <li class="nav-item ms-3">
-              <a class="btn btn-glass px-4 me-2" href="#/login">Login</a>
-              <a class="btn btn-premium px-4" href="#/register">Get Started</a>
-            </li>
-          </ul>
-        </div>
+        <p class="text-muted small mb-0">&copy; 2026 PrepSpace. All copyrights go to Nagesh Methre.</p>
       </div>
-    </nav>
-
-    <div class="container text-center py-5">
-      <div class="row justify-content-center py-5">
-        <div class="col-lg-10 col-xl-8">
-          <span class="badge bg-indigo-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill mb-3">AI-POWERED PREPARATION SYSTEM</span>
-          <h1 class="display-3 fw-extrabold text-white mb-4">Cracking Tech Interviews is now <span class="hero-gradient">Predictable</span></h1>
-          <p class="lead text-muted mb-5 fs-4">An enterprise-level SaaS platform to manage study plans, track coding platform statistics, run mock interview feedback loops, and track job applications in a single unified dashboard.</p>
-          <div class="d-flex justify-content-center gap-3">
-            <a href="#/register" class="btn btn-premium btn-lg px-5 py-3 fs-5">Initialize Space</a>
-            <a href="#features" class="btn btn-glass btn-lg px-5 py-3 fs-5">View Core Features</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Features Section -->
-    <div id="features" class="container py-5">
-      <div class="text-center mb-5">
-        <h2 class="display-5 fw-bold text-white mb-3">Engineered for High-Performance Candidates</h2>
-        <p class="text-muted fs-5">Everything you need to level up and land your dream offer.</p>
-      </div>
-      <div class="row g-4 mt-2">
-        <div class="col-md-4">
-          <div class="glass-panel p-4 h-100">
-            <div class="feature-icon mb-3"><i class="fa-solid fa-chart-line fs-2 text-primary"></i></div>
-            <h4 class="text-white">Unified Dashboard Analytics</h4>
-            <p class="text-muted">Interactive charts mapping study hours, problem difficulties, streak data, and target completion counts.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="glass-panel p-4 h-100">
-            <div class="feature-icon mb-3"><i class="fa-solid fa-brain fs-2 text-secondary"></i></div>
-            <h4 class="text-white">AI Feedback Engine</h4>
-            <p class="text-muted">Simulated evaluation feedback and readiness metrics outlining your technical gaps and soft skill adjustments.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="glass-panel p-4 h-100">
-            <div class="feature-icon mb-3"><i class="fa-solid fa-kanban fs-2 text-success"></i></div>
-            <h4 class="text-white">Kanban Job Tracker</h4>
-            <p class="text-muted">Organize job pipelines, record scheduling dates, and trace outcomes on an interactive board layout.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Pricing Section -->
-    <div id="pricing" class="container py-5">
-      <div class="text-center mb-5">
-        <h2 class="display-5 fw-bold text-white mb-3">Flexible Plans for Every Developer</h2>
-        <p class="text-muted fs-5">Choose the pace that matches your target timelines.</p>
-      </div>
-      <div class="row g-4 justify-content-center mt-2">
-        <div class="col-md-5 col-lg-4">
-          <div class="glass-panel p-4 h-100 text-center">
-            <h3 class="text-white">PrepFree</h3>
-            <p class="text-muted">Perfect for getting started</p>
-            <div class="my-4"><span class="display-4 fw-bold text-white">$0</span><span class="text-muted">/month</span></div>
-            <ul class="list-unstyled text-start mb-5 text-muted">
-              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Access to Question Bank</li>
-              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Log Solved Problems</li>
-              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Standard Kanban Tracker</li>
-            </ul>
-            <a href="#/register" class="btn btn-glass w-100 py-3">Register Account</a>
-          </div>
-        </div>
-        <div class="col-md-5 col-lg-4">
-          <div class="glass-panel p-4 h-100 text-center border-primary" style="box-shadow: 0 0 25px var(--accent-glow);">
-            <h3 class="text-white">PrepPro</h3>
-            <p class="text-indigo">Recommended for Active Jobseekers</p>
-            <div class="my-4"><span class="display-4 fw-bold text-white">FREE</span><span class="text-muted">/lifetime</span></div>
-            <ul class="list-unstyled text-start mb-5 text-muted">
-              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Custom Target Study Plans</li>
-              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Mock AI Feedback Logs</li>
-              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Export Excel/PDF Reports</li>
-              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Advanced Platform Syncs</li>
-            </ul>
-            <a href="#/register" class="btn btn-premium w-100 py-3">Get Free Lifetime Access</a>
-          </div>
-        </div>
-      </div>
-    </div>
+    </footer>
+  `,
   `,
 
   // Authentication: Login Page
