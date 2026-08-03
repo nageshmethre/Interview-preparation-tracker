@@ -116,7 +116,6 @@ const components = {
       </div>
     </footer>
   `,
-  `,
 
   // Authentication: Login Page
   login: () => `
