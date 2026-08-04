@@ -102,32 +102,34 @@ function router() {
 
   if (hash === '#/dashboard') {
     viewTitle.textContent = 'Dashboard';
-    const cachedStatsStr = localStorage.getItem('cached_dashboard_stats');
+    const freshStats = getCachedData('cached_dashboard_stats_v2', 180000);
+    if (freshStats) {
+      pageMount.innerHTML = components.dashboard(freshStats);
+      renderDashboardCharts(freshStats);
+      return;
+    }
+    const cachedStatsStr = localStorage.getItem('cached_dashboard_stats_v2');
     let hasCache = false;
     if (cachedStatsStr) {
       try {
-        const stats = JSON.parse(cachedStatsStr);
+        const stats = JSON.parse(cachedStatsStr).data;
         pageMount.innerHTML = components.dashboard(stats);
         renderDashboardCharts(stats);
         hasCache = true;
-      } catch (e) {
-        console.error('Error parsing cached stats', e);
-      }
+      } catch (e) {}
     }
     if (!hasCache) {
       pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
     }
     apiFetch('/dashboard/stats')
       .then(stats => {
-        localStorage.setItem('cached_dashboard_stats', JSON.stringify(stats));
+        setCachedData('cached_dashboard_stats_v2', stats);
         pageMount.innerHTML = components.dashboard(stats);
         renderDashboardCharts(stats);
       })
       .catch(err => {
         if (!hasCache) {
           pageMount.innerHTML = `<div class="alert alert-danger">Failed to load statistics: ${err.message}</div>`;
-        } else {
-          console.warn('Silent refresh of dashboard stats failed', err);
         }
       });
   } else if (hash === '#/studyplanner') {
@@ -137,11 +139,17 @@ function router() {
     bindStudyPlannerEvents();
   } else if (hash === '#/courses') {
     viewTitle.textContent = 'LMS Course Catalog';
-    const cachedCoursesStr = localStorage.getItem('cached_courses');
+    const freshCourses = getCachedData('cached_courses_v2', 180000);
+    if (freshCourses) {
+      pageMount.innerHTML = components.courses(freshCourses);
+      bindCoursesEvents();
+      return;
+    }
+    const cachedCoursesStr = localStorage.getItem('cached_courses_v2');
     let hasCache = false;
     if (cachedCoursesStr) {
       try {
-        const courses = JSON.parse(cachedCoursesStr);
+        const courses = JSON.parse(cachedCoursesStr).data;
         pageMount.innerHTML = components.courses(courses);
         bindCoursesEvents();
         hasCache = true;
@@ -152,7 +160,7 @@ function router() {
     }
     apiFetch('/v1/courses')
       .then(courses => {
-        localStorage.setItem('cached_courses', JSON.stringify(courses));
+        setCachedData('cached_courses_v2', courses);
         pageMount.innerHTML = components.courses(courses);
         bindCoursesEvents();
       })
@@ -163,11 +171,17 @@ function router() {
       });
   } else if (hash === '#/certificates') {
     viewTitle.textContent = 'Certification Center';
-    const cachedCertsStr = localStorage.getItem('cached_certs');
+    const freshCerts = getCachedData('cached_certs_v2', 180000);
+    if (freshCerts) {
+      pageMount.innerHTML = components.certificates(freshCerts);
+      bindCertificatesEvents();
+      return;
+    }
+    const cachedCertsStr = localStorage.getItem('cached_certs_v2');
     let hasCache = false;
     if (cachedCertsStr) {
       try {
-        const certs = JSON.parse(cachedCertsStr);
+        const certs = JSON.parse(cachedCertsStr).data;
         pageMount.innerHTML = components.certificates(certs);
         bindCertificatesEvents();
         hasCache = true;
@@ -178,7 +192,7 @@ function router() {
     }
     apiFetch('/v1/certificates')
       .then(certs => {
-        localStorage.setItem('cached_certs', JSON.stringify(certs));
+        setCachedData('cached_certs_v2', certs);
         pageMount.innerHTML = components.certificates(certs);
         bindCertificatesEvents();
       })
@@ -189,11 +203,17 @@ function router() {
       });
   } else if (hash === '#/dsa-roadmap') {
     viewTitle.textContent = 'Interactive DSA Roadmap';
-    const cachedRoadmapStr = localStorage.getItem('cached_roadmap');
+    const freshRoadmap = getCachedData('cached_roadmap_v2', 180000);
+    if (freshRoadmap) {
+      pageMount.innerHTML = components.dsaRoadmap(freshRoadmap);
+      bindDsaRoadmapEvents();
+      return;
+    }
+    const cachedRoadmapStr = localStorage.getItem('cached_roadmap_v2');
     let hasCache = false;
     if (cachedRoadmapStr) {
       try {
-        const roadmap = JSON.parse(cachedRoadmapStr);
+        const roadmap = JSON.parse(cachedRoadmapStr).data;
         pageMount.innerHTML = components.dsaRoadmap(roadmap);
         bindDsaRoadmapEvents();
         hasCache = true;
@@ -204,7 +224,7 @@ function router() {
     }
     apiFetch('/v1/dsa/roadmap')
       .then(roadmap => {
-        localStorage.setItem('cached_roadmap', JSON.stringify(roadmap));
+        setCachedData('cached_roadmap_v2', roadmap);
         pageMount.innerHTML = components.dsaRoadmap(roadmap);
         bindDsaRoadmapEvents();
       })
@@ -215,11 +235,17 @@ function router() {
       });
   } else if (hash === '#/coding-practice') {
     viewTitle.textContent = 'LeetCode Coding Workspace';
-    const cachedQuestionsStr = localStorage.getItem('cached_questions');
+    const freshQuestions = getCachedData('cached_questions_v2', 180000);
+    if (freshQuestions) {
+      pageMount.innerHTML = components.codingPractice(freshQuestions);
+      bindCodingPracticeEvents();
+      return;
+    }
+    const cachedQuestionsStr = localStorage.getItem('cached_questions_v2');
     let hasCache = false;
     if (cachedQuestionsStr) {
       try {
-        const questions = JSON.parse(cachedQuestionsStr);
+        const questions = JSON.parse(cachedQuestionsStr).data;
         pageMount.innerHTML = components.codingPractice(questions);
         bindCodingPracticeEvents();
         hasCache = true;
@@ -230,7 +256,7 @@ function router() {
     }
     apiFetch('/v1/questions')
       .then(questions => {
-        localStorage.setItem('cached_questions', JSON.stringify(questions));
+        setCachedData('cached_questions_v2', questions);
         pageMount.innerHTML = components.codingPractice(questions);
         bindCodingPracticeEvents();
       })
@@ -348,6 +374,30 @@ function updateSidebarSelection(hash) {
       link.classList.remove('active');
     }
   });
+}
+
+// Local Storage Cache Helpers
+function getCachedData(key, maxAgeMs = 300000) {
+  const cachedStr = localStorage.getItem(key);
+  if (!cachedStr) return null;
+  try {
+    const cached = JSON.parse(cachedStr);
+    const age = Date.now() - cached.timestamp;
+    if (age < maxAgeMs) {
+      return cached.data;
+    }
+  } catch (e) {
+    console.error('Error parsing cache', e);
+  }
+  return null;
+}
+
+function setCachedData(key, data) {
+  const cacheObj = {
+    timestamp: Date.now(),
+    data: data
+  };
+  localStorage.setItem(key, JSON.stringify(cacheObj));
 }
 
 // API client wrapper
