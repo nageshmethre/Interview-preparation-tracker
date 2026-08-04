@@ -102,14 +102,33 @@ function router() {
 
   if (hash === '#/dashboard') {
     viewTitle.textContent = 'Dashboard';
-    pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
+    const cachedStatsStr = localStorage.getItem('cached_dashboard_stats');
+    let hasCache = false;
+    if (cachedStatsStr) {
+      try {
+        const stats = JSON.parse(cachedStatsStr);
+        pageMount.innerHTML = components.dashboard(stats);
+        renderDashboardCharts(stats);
+        hasCache = true;
+      } catch (e) {
+        console.error('Error parsing cached stats', e);
+      }
+    }
+    if (!hasCache) {
+      pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
+    }
     apiFetch('/dashboard/stats')
       .then(stats => {
+        localStorage.setItem('cached_dashboard_stats', JSON.stringify(stats));
         pageMount.innerHTML = components.dashboard(stats);
         renderDashboardCharts(stats);
       })
       .catch(err => {
-        pageMount.innerHTML = `<div class="alert alert-danger">Failed to load statistics: ${err.message}</div>`;
+        if (!hasCache) {
+          pageMount.innerHTML = `<div class="alert alert-danger">Failed to load statistics: ${err.message}</div>`;
+        } else {
+          console.warn('Silent refresh of dashboard stats failed', err);
+        }
       });
   } else if (hash === '#/studyplanner') {
     viewTitle.textContent = 'Study Planner';
@@ -118,47 +137,107 @@ function router() {
     bindStudyPlannerEvents();
   } else if (hash === '#/courses') {
     viewTitle.textContent = 'LMS Course Catalog';
-    pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
+    const cachedCoursesStr = localStorage.getItem('cached_courses');
+    let hasCache = false;
+    if (cachedCoursesStr) {
+      try {
+        const courses = JSON.parse(cachedCoursesStr);
+        pageMount.innerHTML = components.courses(courses);
+        bindCoursesEvents();
+        hasCache = true;
+      } catch (e) {}
+    }
+    if (!hasCache) {
+      pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
+    }
     apiFetch('/v1/courses')
       .then(courses => {
+        localStorage.setItem('cached_courses', JSON.stringify(courses));
         pageMount.innerHTML = components.courses(courses);
         bindCoursesEvents();
       })
       .catch(err => {
-        pageMount.innerHTML = `<div class="alert alert-danger">Failed to load courses: ${err.message}</div>`;
+        if (!hasCache) {
+          pageMount.innerHTML = `<div class="alert alert-danger">Failed to load courses: ${err.message}</div>`;
+        }
       });
   } else if (hash === '#/certificates') {
     viewTitle.textContent = 'Certification Center';
-    pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
+    const cachedCertsStr = localStorage.getItem('cached_certs');
+    let hasCache = false;
+    if (cachedCertsStr) {
+      try {
+        const certs = JSON.parse(cachedCertsStr);
+        pageMount.innerHTML = components.certificates(certs);
+        bindCertificatesEvents();
+        hasCache = true;
+      } catch (e) {}
+    }
+    if (!hasCache) {
+      pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
+    }
     apiFetch('/v1/certificates')
       .then(certs => {
+        localStorage.setItem('cached_certs', JSON.stringify(certs));
         pageMount.innerHTML = components.certificates(certs);
         bindCertificatesEvents();
       })
       .catch(err => {
-        pageMount.innerHTML = `<div class="alert alert-danger">Failed to load certificates: ${err.message}</div>`;
+        if (!hasCache) {
+          pageMount.innerHTML = `<div class="alert alert-danger">Failed to load certificates: ${err.message}</div>`;
+        }
       });
   } else if (hash === '#/dsa-roadmap') {
     viewTitle.textContent = 'Interactive DSA Roadmap';
-    pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
+    const cachedRoadmapStr = localStorage.getItem('cached_roadmap');
+    let hasCache = false;
+    if (cachedRoadmapStr) {
+      try {
+        const roadmap = JSON.parse(cachedRoadmapStr);
+        pageMount.innerHTML = components.dsaRoadmap(roadmap);
+        bindDsaRoadmapEvents();
+        hasCache = true;
+      } catch (e) {}
+    }
+    if (!hasCache) {
+      pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
+    }
     apiFetch('/v1/dsa/roadmap')
       .then(roadmap => {
+        localStorage.setItem('cached_roadmap', JSON.stringify(roadmap));
         pageMount.innerHTML = components.dsaRoadmap(roadmap);
         bindDsaRoadmapEvents();
       })
       .catch(err => {
-        pageMount.innerHTML = `<div class="alert alert-danger">Failed to load roadmap: ${err.message}</div>`;
+        if (!hasCache) {
+          pageMount.innerHTML = `<div class="alert alert-danger">Failed to load roadmap: ${err.message}</div>`;
+        }
       });
   } else if (hash === '#/coding-practice') {
     viewTitle.textContent = 'LeetCode Coding Workspace';
-    pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
+    const cachedQuestionsStr = localStorage.getItem('cached_questions');
+    let hasCache = false;
+    if (cachedQuestionsStr) {
+      try {
+        const questions = JSON.parse(cachedQuestionsStr);
+        pageMount.innerHTML = components.codingPractice(questions);
+        bindCodingPracticeEvents();
+        hasCache = true;
+      } catch (e) {}
+    }
+    if (!hasCache) {
+      pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
+    }
     apiFetch('/v1/questions')
       .then(questions => {
+        localStorage.setItem('cached_questions', JSON.stringify(questions));
         pageMount.innerHTML = components.codingPractice(questions);
         bindCodingPracticeEvents();
       })
       .catch(err => {
-        pageMount.innerHTML = `<div class="alert alert-danger">Failed to load coding problem set: ${err.message}</div>`;
+        if (!hasCache) {
+          pageMount.innerHTML = `<div class="alert alert-danger">Failed to load coding problem set: ${err.message}</div>`;
+        }
       });
   } else if (hash === '#/experiences') {
     viewTitle.textContent = 'Interview Experiences';
