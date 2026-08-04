@@ -190,6 +190,9 @@ const components = {
           <button id="sidebar-collapse-btn" class="btn btn-glass btn-sm border-0 rounded-circle text-white d-none d-lg-flex align-items-center justify-content-center" style="width: 26px; height: 26px; padding: 0;">
             <i class="fa-solid fa-chevron-left" id="collapse-icon" style="font-size: 0.8rem;"></i>
           </button>
+          <button id="sidebar-close-btn" class="btn btn-glass btn-sm border-0 rounded-circle text-white d-flex d-lg-none align-items-center justify-content-center" style="width: 26px; height: 26px; padding: 0;">
+            <i class="fa-solid fa-xmark" style="font-size: 0.9rem;"></i>
+          </button>
         </div>
         
         <div class="flex-grow-1 py-4 overflow-y-auto">

@@ -461,8 +461,38 @@ function bindLayoutEvents() {
   const toggleBtn = document.getElementById('sidebar-toggle-btn');
   const sidebar = document.querySelector('.sidebar');
   if (toggleBtn && sidebar) {
-    toggleBtn.addEventListener('click', () => sidebar.classList.toggle('active'));
+    toggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sidebar.classList.toggle('active');
+    });
   }
+
+  // Mobile sidebar close button handler
+  const closeBtn = document.getElementById('sidebar-close-btn');
+  if (closeBtn && sidebar) {
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sidebar.classList.remove('active');
+    });
+  }
+
+  // Mobile sidebar auto-close on link clicks
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth < 992 && sidebar && sidebar.classList.contains('active')) {
+        sidebar.classList.remove('active');
+      }
+    });
+  });
+
+  // Mobile sidebar click outside to close
+  document.addEventListener('click', (e) => {
+    if (window.innerWidth < 992 && sidebar && sidebar.classList.contains('active')) {
+      if (!sidebar.contains(e.target) && (!toggleBtn || !toggleBtn.contains(e.target))) {
+        sidebar.classList.remove('active');
+      }
+    }
+  });
 
   const collapseBtn = document.getElementById('sidebar-collapse-btn');
   const container = document.getElementById('app-container');
