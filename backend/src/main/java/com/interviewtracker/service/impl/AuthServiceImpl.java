@@ -71,6 +71,10 @@ public class AuthServiceImpl implements AuthService {
                     return new BadCredentialsException("Bad credentials");
                 });
 
+        if (Boolean.TRUE.equals(user.getIsSuspended())) {
+            throw new BadRequestException("Account has been suspended by an administrator.");
+        }
+
         // 3. Verify password hash
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             loginAttemptService.loginFailed(request.getEmail());
@@ -301,6 +305,9 @@ public class AuthServiceImpl implements AuthService {
         }
 
         User user = userRepository.findByEmail(email).orElse(null);
+        if (user != null && Boolean.TRUE.equals(user.getIsSuspended())) {
+            throw new BadRequestException("Account has been suspended by an administrator.");
+        }
         if (user == null) {
             Integer referredById = null;
             if (request.getReferralCode() != null && !request.getReferralCode().trim().isEmpty()) {

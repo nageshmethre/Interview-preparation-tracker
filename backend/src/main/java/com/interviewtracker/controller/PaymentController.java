@@ -3,6 +3,8 @@ package com.interviewtracker.controller;
 import com.interviewtracker.entity.Payment;
 import com.interviewtracker.entity.ReferralReward;
 import com.interviewtracker.entity.User;
+import com.interviewtracker.entity.WebhookLog;
+import com.interviewtracker.repository.WebhookLogRepository;
 import com.interviewtracker.repository.PaymentRepository;
 import com.interviewtracker.repository.ReferralRewardRepository;
 import com.interviewtracker.repository.SystemSettingRepository;
@@ -43,6 +45,9 @@ public class PaymentController {
 
     @Autowired
     private SystemSettingRepository systemSettingRepository;
+
+    @Autowired
+    private WebhookLogRepository webhookLogRepository;
 
     private static final String HMAC_SHA256_ALGORITHM = "HmacSHA256";
 
@@ -208,6 +213,8 @@ public class PaymentController {
     @PostMapping("/webhook")
     @Transactional
     public ResponseEntity<?> handleWebhook(@RequestBody String body, @RequestHeader("X-Razorpay-Signature") String signature) {
+        String eventId = null;
+        String event = null;
         try {
             String webhookSecret = System.getenv("RAZORPAY_WEBHOOK_SECRET");
             if (webhookSecret != null) {
@@ -218,7 +225,13 @@ public class PaymentController {
             }
 
             JSONObject json = new JSONObject(body);
-            String event = json.optString("event");
+            eventId = json.optString("id");
+            event = json.optString("event");
+
+            // Verify idempotence
+            if (webhookLogRepository.findByEventId(eventId).isPresent()) {
+                return ResponseEntity.ok("ok");
+            }
 
             if ("payment.captured".equals(event)) {
                 JSONObject paymentEntity = json.getJSONObject("payload").getJSONObject("payment").getJSONObject("entity");
@@ -270,9 +283,26 @@ public class PaymentController {
                 }
             }
 
+            // Save webhook log success record
+            WebhookLog wlog = WebhookLog.builder()
+                    .provider("Razorpay")
+                    .eventId(eventId)
+                    .eventType(event)
+                    .status("SUCCESS")
+                    .build();
+            webhookLogRepository.save(wlog);
+
             return ResponseEntity.ok("ok");
         } catch (Exception e) {
             logger.error("Razorpay webhook failed", e);
+            WebhookLog wlog = WebhookLog.builder()
+                    .provider("Razorpay")
+                    .eventId(eventId != null ? eventId : "err_" + System.currentTimeMillis())
+                    .eventType(event != null ? event : "unknown")
+                    .status("FAILED")
+                    .errorTrace(e.getMessage())
+                    .build();
+            webhookLogRepository.save(wlog);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Webhook failed: " + e.getMessage());
         }
     }

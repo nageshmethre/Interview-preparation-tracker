@@ -377,7 +377,7 @@ function router() {
     viewTitle.textContent = 'Desktop Client';
     pageMount.innerHTML = components.desktopClient();
   } else if (hash === '#/admin') {
-    if (state.role !== 'ADMIN') {
+    if (!state.role || !state.role.startsWith('ADMIN')) {
       redirectTo('#/dashboard');
       return;
     }
@@ -390,7 +390,11 @@ function router() {
         // Bind tab clicks
         document.getElementById('tab-claims').addEventListener('click', () => loadAdminPanelTab('claims'));
         document.getElementById('tab-payments').addEventListener('click', () => loadAdminPanelTab('payments'));
+        document.getElementById('tab-users').addEventListener('click', () => loadAdminPanelTab('users'));
+        document.getElementById('tab-risk').addEventListener('click', () => loadAdminPanelTab('risk'));
         document.getElementById('tab-rules').addEventListener('click', () => loadAdminPanelTab('rules'));
+        document.getElementById('tab-audit-logs').addEventListener('click', () => loadAdminPanelTab('audit-logs'));
+        document.getElementById('tab-health').addEventListener('click', () => loadAdminPanelTab('health'));
         
         loadAdminPanelTab('claims');
         
@@ -2753,11 +2757,19 @@ function loadReferralHistory() {
 function loadAdminPanelTab(tab) {
   const tabClaims = document.getElementById('tab-claims');
   const tabPayments = document.getElementById('tab-payments');
+  const tabUsers = document.getElementById('tab-users');
+  const tabRisk = document.getElementById('tab-risk');
   const tabRules = document.getElementById('tab-rules');
+  const tabAudit = document.getElementById('tab-audit-logs');
+  const tabHealth = document.getElementById('tab-health');
   
   if (tabClaims) tabClaims.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
   if (tabPayments) tabPayments.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
+  if (tabUsers) tabUsers.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
+  if (tabRisk) tabRisk.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
   if (tabRules) tabRules.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
+  if (tabAudit) tabAudit.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
+  if (tabHealth) tabHealth.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
   
   const activeTabBtn = document.getElementById(`tab-${tab}`);
   if (activeTabBtn) {
@@ -2767,68 +2779,18 @@ function loadAdminPanelTab(tab) {
   const contentArea = document.getElementById('admin-tab-content');
   if (!contentArea) return;
 
+  contentArea.innerHTML = `<div class="text-center py-4"><div class="spinner-border text-primary spinner-border-sm"></div></div>`;
+
   if (tab === 'claims') {
-    contentArea.innerHTML = `<div class="text-center py-4"><div class="spinner-border text-primary spinner-border-sm"></div></div>`;
     apiFetch('/admin/withdrawals')
       .then(claims => {
-        const pendingClaims = claims.filter(c => c.status === 'PENDING' || c.status === 'PROCESSING');
-        if (pendingClaims.length === 0) {
-          contentArea.innerHTML = `
-            <div class="glass-panel p-4 text-center text-muted">
-              No pending payout claims in queue.
-            </div>
-          `;
-          return;
-        }
+        contentArea.innerHTML = components.adminClaimsList(claims);
 
-        let rows = pendingClaims.map(c => `
-          <tr class="border-secondary-subtle">
-            <td>${c.userEmail}</td>
-            <td class="font-mono text-primary">${c.payoutDetails}</td>
-            <td class="fw-bold text-white">₹${c.amount}</td>
-            <td>${new Date(c.createdAt).toLocaleDateString()}</td>
-            <td><span class="badge bg-warning text-dark">${c.status}</span></td>
-            <td class="text-end">
-              <button class="btn btn-sm btn-glass text-success me-1 btn-approve-claim" data-id="${c.id}"><i class="fa-solid fa-check"></i> Approve</button>
-              <button class="btn btn-sm btn-glass text-danger btn-reject-claim" data-id="${c.id}"><i class="fa-solid fa-xmark"></i> Reject</button>
-            </td>
-          </tr>
-        `).join('');
-
-        contentArea.innerHTML = `
-          <div class="glass-panel p-4">
-            <h5 class="text-white fw-bold mb-3">Pending Payout Claims Queue</h5>
-            <div class="table-responsive">
-              <table class="table table-dark table-hover fs-7 align-middle mb-0">
-                <thead>
-                  <tr class="text-muted border-secondary">
-                    <th>User Email</th>
-                    <th>UPI Coordinates</th>
-                    <th>Amount</th>
-                    <th>Date Filed</th>
-                    <th>Status</th>
-                    <th class="text-end">Approve / Decline</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${rows}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        `;
-
-        document.querySelectorAll('.btn-approve-claim').forEach(btn => {
+        document.querySelectorAll('.btn-claim-action').forEach(btn => {
           btn.addEventListener('click', (e) => {
             const id = e.currentTarget.dataset.id;
-            handleClaimAction(id, 'PAID');
-          });
-        });
-
-        document.querySelectorAll('.btn-reject-claim').forEach(btn => {
-          btn.addEventListener('click', (e) => {
-            const id = e.currentTarget.dataset.id;
-            handleClaimAction(id, 'REJECTED');
+            const action = e.currentTarget.dataset.action;
+            handleClaimAction(id, action);
           });
         });
       })
@@ -2836,115 +2798,75 @@ function loadAdminPanelTab(tab) {
         contentArea.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
       });
   } else if (tab === 'payments') {
-    contentArea.innerHTML = `<div class="text-center py-4"><div class="spinner-border text-primary spinner-border-sm"></div></div>`;
     apiFetch('/admin/payments')
       .then(payments => {
-        if (payments.length === 0) {
-          contentArea.innerHTML = `
-            <div class="glass-panel p-4 text-center text-muted">
-              No payment logs found in database.
-            </div>
-          `;
-          return;
-        }
+        contentArea.innerHTML = components.adminPaymentsList(payments);
+      })
+      .catch(err => {
+        contentArea.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
+      });
+  } else if (tab === 'users') {
+    apiFetch('/admin/users')
+      .then(users => {
+        contentArea.innerHTML = components.adminUsersList(users);
 
-        let rows = payments.map(p => `
-          <tr class="border-secondary-subtle">
-            <td>${p.userEmail}</td>
-            <td class="font-mono fs-8 text-muted">${p.orderId}</td>
-            <td class="font-mono fs-8 text-primary">${p.paymentId || 'N/A'}</td>
-            <td class="fw-bold text-white">₹${p.amount}</td>
-            <td>${new Date(p.createdAt).toLocaleDateString()}</td>
-            <td class="text-end"><span class="badge ${p.status === 'SUCCESS' ? 'bg-success' : 'bg-danger'}">${p.status}</span></td>
-          </tr>
-        `).join('');
-
-        contentArea.innerHTML = `
-          <div class="glass-panel p-4">
-            <h5 class="text-white fw-bold mb-3">Razorpay Transaction Logs</h5>
-            <div class="table-responsive">
-              <table class="table table-dark table-hover fs-7 align-middle mb-0">
-                <thead>
-                  <tr class="text-muted border-secondary">
-                    <th>User Email</th>
-                    <th>Order ID</th>
-                    <th>Payment ID</th>
-                    <th>Amount</th>
-                    <th>Date</th>
-                    <th class="text-end">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${rows}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        `;
+        document.querySelectorAll('.btn-user-action').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const id = e.currentTarget.dataset.id;
+            const action = e.currentTarget.dataset.action;
+            apiFetch(`/admin/users/${id}/${action}`, { method: 'POST' })
+              .then(() => {
+                showToast(`User status modified successfully!`, 'success');
+                loadAdminPanelTab('users');
+              })
+              .catch(err => showToast(err.message, 'danger'));
+          });
+        });
+      })
+      .catch(err => {
+        contentArea.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
+      });
+  } else if (tab === 'risk') {
+    apiFetch('/admin/referrals/risk')
+      .then(risks => {
+        contentArea.innerHTML = components.adminRiskList(risks);
       })
       .catch(err => {
         contentArea.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
       });
   } else if (tab === 'rules') {
-    contentArea.innerHTML = `<div class="text-center py-4"><div class="spinner-border text-primary spinner-border-sm"></div></div>`;
     apiFetch('/admin/settings')
       .then(settings => {
-        contentArea.innerHTML = `
-          <div class="glass-panel p-4">
-            <h5 class="text-white fw-bold mb-4"><i class="fa-solid fa-gears text-primary me-2"></i>Global Pricing Rules</h5>
-            
-            <div class="row g-4">
-              <div class="col-md-4">
-                <div class="card bg-dark bg-opacity-20 border-secondary p-3">
-                  <label class="form-label text-muted fs-8">PREMPRO PRICE (₹)</label>
-                  <div class="input-group">
-                    <input type="number" id="rule-price" class="form-control glass-input fw-bold" value="${settings.PRODUCT_PRICE_INR || 99}">
-                    <button class="btn btn-premium" id="btn-save-rule-price">Update</button>
-                  </div>
-                </div>
-              </div>
+        contentArea.innerHTML = components.adminSettingsForm(settings);
 
-              <div class="col-md-4">
-                <div class="card bg-dark bg-opacity-20 border-secondary p-3">
-                  <label class="form-label text-muted fs-8">REFERRAL REWARD (₹)</label>
-                  <div class="input-group">
-                    <input type="number" id="rule-reward" class="form-control glass-input fw-bold" value="${settings.REFERRAL_REWARD_INR || 49}">
-                    <button class="btn btn-premium" id="btn-save-rule-reward">Update</button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="card bg-dark bg-opacity-20 border-secondary p-3">
-                  <label class="form-label text-muted fs-8">MIN. WITHDRAWAL LIMIT (₹)</label>
-                  <div class="input-group">
-                    <input type="number" id="rule-min" class="form-control glass-input fw-bold" value="${settings.MIN_WITHDRAWAL_INR || 100}">
-                    <button class="btn btn-premium" id="btn-save-rule-min">Update</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-
-        document.getElementById('btn-save-rule-price').addEventListener('click', () => {
-          const val = document.getElementById('rule-price').value;
-          updateRuleSetting('PRODUCT_PRICE_INR', val);
-        });
-
-        document.getElementById('btn-save-rule-reward').addEventListener('click', () => {
-          const val = document.getElementById('rule-reward').value;
-          updateRuleSetting('REFERRAL_REWARD_INR', val);
-        });
-
-        document.getElementById('btn-save-rule-min').addEventListener('click', () => {
-          const val = document.getElementById('rule-min').value;
-          updateRuleSetting('MIN_WITHDRAWAL_INR', val);
+        document.querySelectorAll('.btn-save-setting').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const key = e.currentTarget.dataset.key;
+            const value = document.getElementById(`setting-${key}`).value;
+            updateRuleSetting(key, value);
+          });
         });
       })
       .catch(err => {
         contentArea.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
       });
+  } else if (tab === 'audit-logs') {
+    apiFetch('/admin/audit-logs')
+      .then(logs => {
+        contentArea.innerHTML = components.adminAuditList(logs);
+      })
+      .catch(err => {
+        contentArea.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
+      });
+  } else if (tab === 'health') {
+    Promise.all([
+      apiFetch('/admin/health'),
+      apiFetch('/admin/webhooks')
+    ]).then(([health, webhooks]) => {
+      contentArea.innerHTML = components.adminHealthReport(health, webhooks);
+    }).catch(err => {
+      contentArea.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
+    });
   }
 }
 

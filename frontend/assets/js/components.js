@@ -2342,6 +2342,372 @@ const components = {
     </div>
   `,
 
+  adminClaimsList: (claims) => {
+    if (!claims || claims.length === 0) {
+      return `<div class="text-center py-5 text-muted"><i class="fa-solid fa-hourglass-empty fa-2x mb-3"></i><p>No withdrawal claims found in the queue.</p></div>`;
+    }
+    return `
+      <div class="table-responsive">
+        <table class="table table-dark table-hover fs-7 align-middle mb-0">
+          <thead>
+            <tr class="text-muted border-secondary">
+              <th>ID</th>
+              <th>User Email</th>
+              <th>UPI ID (Payout Details)</th>
+              <th>Request Date</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${claims.map(c => `
+              <tr class="border-secondary">
+                <td class="text-white">${c.id}</td>
+                <td>${c.userEmail}</td>
+                <td class="text-info">${c.payoutDetails}</td>
+                <td>${new Date(c.createdAt).toLocaleString()}</td>
+                <td class="text-success fw-bold">₹${c.amount}</td>
+                <td>
+                  <span class="badge ${c.status === 'PAID' ? 'bg-success-subtle text-success' : c.status === 'REJECTED' ? 'bg-danger-subtle text-danger' : c.status === 'PROCESSING' ? 'bg-warning-subtle text-warning' : 'bg-secondary-subtle text-muted'}">
+                    ${c.status}
+                  </span>
+                </td>
+                <td class="text-end">
+                  ${c.status === 'PENDING' || c.status === 'PROCESSING' ? `
+                    <button class="btn btn-sm btn-success btn-claim-action px-2 py-1 me-1" data-id="${c.id}" data-action="PAID"><i class="fa-solid fa-check"></i> Approve & Paid</button>
+                    <button class="btn btn-sm btn-danger btn-claim-action px-2 py-1" data-id="${c.id}" data-action="REJECTED"><i class="fa-solid fa-times"></i> Reject</button>
+                  ` : '<span class="text-muted fs-8">No actions</span>'}
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  },
+
+  adminPaymentsList: (payments) => {
+    if (!payments || payments.length === 0) {
+      return `<div class="text-center py-5 text-muted"><i class="fa-solid fa-circle-exclamation fa-2x mb-3"></i><p>No payment logs found.</p></div>`;
+    }
+    return `
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="text-muted fs-8">Total Transactions: ${payments.length}</div>
+        <a href="/api/admin/reports/payments" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-download me-1"></i> Export CSV Report</a>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-dark table-hover fs-7 align-middle mb-0">
+          <thead>
+            <tr class="text-muted border-secondary">
+              <th>ID</th>
+              <th>User</th>
+              <th>Razorpay Order ID</th>
+              <th>Razorpay Payment ID</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${payments.map(p => `
+              <tr class="border-secondary">
+                <td>${p.id}</td>
+                <td class="text-white">${p.userEmail}</td>
+                <td>${p.orderId}</td>
+                <td>${p.paymentId || '<span class="text-muted">N/A</span>'}</td>
+                <td class="text-success fw-bold">₹${p.amount}</td>
+                <td>
+                  <span class="badge ${p.status === 'SUCCESS' ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning'}">
+                    ${p.status}
+                  </span>
+                </td>
+                <td>${new Date(p.createdAt).toLocaleString()}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  },
+
+  adminUsersList: (users) => {
+    if (!users || users.length === 0) {
+      return `<div class="text-center py-5 text-muted"><i class="fa-solid fa-users-slash fa-2x mb-3"></i><p>No users registered.</p></div>`;
+    }
+    return `
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="text-muted fs-8">Registered Users: ${users.length}</div>
+        <a href="/api/admin/reports/users" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-download me-1"></i> Export Users CSV</a>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-dark table-hover fs-7 align-middle mb-0">
+          <thead>
+            <tr class="text-muted border-secondary">
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Access Status</th>
+              <th>Referral Code</th>
+              <th>Earnings</th>
+              <th>Joined</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${users.map(u => `
+              <tr class="border-secondary">
+                <td>${u.id}</td>
+                <td class="text-white fw-bold">${u.name}</td>
+                <td>${u.email}</td>
+                <td><span class="badge bg-secondary">${u.role}</span></td>
+                <td>
+                  <span class="badge ${u.isPaid ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning'}">
+                    ${u.isPaid ? 'PAID / PREMIUM' : 'FREE'}
+                  </span>
+                  ${u.isSuspended ? '<span class="badge bg-danger-subtle text-danger ms-1">SUSPENDED</span>' : ''}
+                </td>
+                <td><code>${u.referralCode || 'N/A'}</code></td>
+                <td class="text-success">₹${u.referralEarnings || 0}</td>
+                <td>${new Date(u.createdAt).toLocaleDateString()}</td>
+                <td class="text-end">
+                  ${u.isSuspended ? `
+                    <button class="btn btn-sm btn-outline-success btn-user-action px-2 py-1" data-id="${u.id}" data-action="unsuspend"><i class="fa-solid fa-user-check"></i> Unsuspend</button>
+                  ` : `
+                    <button class="btn btn-sm btn-outline-danger btn-user-action px-2 py-1" data-id="${u.id}" data-action="suspend"><i class="fa-solid fa-user-slash"></i> Suspend</button>
+                  `}
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  },
+
+  adminRiskList: (risks) => {
+    if (!risks || risks.length === 0) {
+      return `<div class="text-center py-5 text-success"><i class="fa-solid fa-circle-check fa-2x mb-3"></i><p>No suspicious referral activities detected. Risk level clear.</p></div>`;
+    }
+    return `
+      <div class="table-responsive">
+        <table class="table table-dark table-hover fs-7 align-middle mb-0">
+          <thead>
+            <tr class="text-muted border-secondary">
+              <th>Referrer User</th>
+              <th>Referred User</th>
+              <th>Referral Bounty</th>
+              <th>Bounty Status</th>
+              <th>Risk Score</th>
+              <th>Risk Level</th>
+              <th>Risk Reason</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${risks.map(r => `
+              <tr class="border-secondary">
+                <td class="text-white">${r.referrerEmail}</td>
+                <td class="text-white">${r.referredEmail}</td>
+                <td class="text-success">₹${r.amount}</td>
+                <td>
+                  <span class="badge ${r.status === 'APPROVED' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'}">
+                    ${r.status}
+                  </span>
+                </td>
+                <td class="fw-bold">${r.riskScore}%</td>
+                <td>
+                  <span class="badge ${r.riskLevel === 'HIGH' ? 'bg-danger text-white' : r.riskLevel === 'MEDIUM' ? 'bg-warning text-dark' : 'bg-info text-dark'}">
+                     ${r.riskLevel}
+                  </span>
+                </td>
+                <td class="text-danger-emphasis">${r.reasons.join(', ')}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  },
+
+  adminSettingsForm: (settings) => {
+    return `
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="glass-panel p-4">
+            <h5 class="text-white fw-bold mb-4"><i class="fa-solid fa-gears text-primary me-2"></i>Financial Configurations</h5>
+            
+            <div class="mb-3">
+              <label class="form-label text-muted fs-8 uppercase">Product Premium Access Price (INR)</label>
+              <div class="input-group">
+                <span class="input-group-text bg-secondary border-0 text-white">₹</span>
+                <input type="number" id="setting-PRODUCT_PRICE_INR" class="form-control glass-input" value="${settings.PRODUCT_PRICE_INR || 99}">
+                <button class="btn btn-primary btn-save-setting" data-key="PRODUCT_PRICE_INR">Update</button>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label text-muted fs-8 uppercase">Referral Reward Commission (INR)</label>
+              <div class="input-group">
+                <span class="input-group-text bg-secondary border-0 text-white">₹</span>
+                <input type="number" id="setting-REFERRAL_REWARD_INR" class="form-control glass-input" value="${settings.REFERRAL_REWARD_INR || 49}">
+                <button class="btn btn-primary btn-save-setting" data-key="REFERRAL_REWARD_INR">Update</button>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label text-muted fs-8 uppercase">Minimum Withdrawal Threshold (INR)</label>
+              <div class="input-group">
+                <span class="input-group-text bg-secondary border-0 text-white">₹</span>
+                <input type="number" id="setting-MIN_WITHDRAWAL_INR" class="form-control glass-input" value="${settings.MIN_WITHDRAWAL_INR || 100}">
+                <button class="btn btn-primary btn-save-setting" data-key="MIN_WITHDRAWAL_INR">Update</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="glass-panel p-4">
+            <h5 class="text-white fw-bold mb-4"><i class="fa-solid fa-rectangle-ad text-warning me-2"></i>Advertising & SEO Meta Settings</h5>
+            
+            <div class="mb-3">
+              <label class="form-label text-muted fs-8 uppercase">Google AdSense Publisher ID</label>
+              <div class="input-group">
+                <input type="text" id="setting-ADSENSE_PUBLISHER_ID" class="form-control glass-input" value="${settings.ADSENSE_PUBLISHER_ID || 'ca-pub-4662205173096609'}">
+                <button class="btn btn-primary btn-save-setting" data-key="ADSENSE_PUBLISHER_ID">Update</button>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label text-muted fs-8 uppercase">SEO Portal Global Meta Title</label>
+              <div class="input-group">
+                <input type="text" id="setting-SEO_META_TITLE" class="form-control glass-input" value="${settings.SEO_META_TITLE || 'PrepSpace - Premium Interview Preparation Tracker SaaS'}">
+                <button class="btn btn-primary btn-save-setting" data-key="SEO_META_TITLE">Update</button>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label text-muted fs-8 uppercase">SEO Portal Global Meta Description</label>
+              <div class="input-group">
+                <input type="text" id="setting-SEO_META_DESCRIPTION" class="form-control glass-input" value="${settings.SEO_META_DESCRIPTION || ''}">
+                <button class="btn btn-primary btn-save-setting" data-key="SEO_META_DESCRIPTION">Update</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  adminAuditList: (logs) => {
+    if (!logs || logs.length === 0) {
+      return `<div class="text-center py-5 text-muted"><i class="fa-solid fa-clipboard-list fa-2x mb-3"></i><p>No administrative audits logged.</p></div>`;
+    }
+    return `
+      <div class="table-responsive">
+        <table class="table table-dark table-hover fs-7 align-middle mb-0">
+          <thead>
+            <tr class="text-muted border-secondary">
+              <th>Timestamp</th>
+              <th>Admin Email</th>
+              <th>Action Taken</th>
+              <th>Settings Key</th>
+              <th>Before Value</th>
+              <th>After Value</th>
+              <th>IP Address</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${logs.map(l => `
+              <tr class="border-secondary">
+                <td>${new Date(l.createdAt).toLocaleString()}</td>
+                <td class="text-warning">${l.adminEmail}</td>
+                <td class="text-white">${l.action}</td>
+                <td><code>${l.targetKey || 'N/A'}</code></td>
+                <td class="text-muted">${l.beforeValue || 'N/A'}</td>
+                <td class="text-info">${l.afterValue || 'N/A'}</td>
+                <td><code>${l.ipAddress || 'N/A'}</code></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  },
+
+  adminHealthReport: (health, webhooks) => {
+    return `
+      <div class="row g-4 mb-4">
+        <div class="col-md-3">
+          <div class="glass-panel p-4 text-center">
+            <div class="text-muted fs-8 uppercase mb-2">Application Server</div>
+            <h4 class="fw-bold ${health.appStatus === 'UP' ? 'text-success' : 'text-danger'} mb-0">
+              <i class="fa-solid fa-circle-check me-2"></i>${health.appStatus}
+            </h4>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="glass-panel p-4 text-center">
+            <div class="text-muted fs-8 uppercase mb-2">PostgreSQL Database</div>
+            <h4 class="fw-bold ${health.databaseStatus === 'UP' ? 'text-success' : 'text-danger'} mb-0">
+               <i class="fa-solid fa-database me-2"></i>${health.databaseStatus}
+            </h4>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="glass-panel p-4 text-center">
+            <div class="text-muted fs-8 uppercase mb-2">Razorpay Gateway API</div>
+            <h4 class="fw-bold ${health.paymentGatewayStatus === 'UP' ? 'text-success' : 'text-danger'} mb-0">
+              <i class="fa-solid fa-credit-card me-2"></i>${health.paymentGatewayStatus}
+            </h4>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="glass-panel p-4 text-center">
+            <div class="text-muted fs-8 uppercase mb-2">System Uptime</div>
+            <h4 class="text-white fw-bold mb-0">
+              <i class="fa-solid fa-clock me-2"></i>${Math.floor(health.uptimeSeconds / 3600)}h ${Math.floor((health.uptimeSeconds % 3600) / 60)}m
+            </h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-panel p-4">
+        <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-network-wired text-info me-2"></i>Webhook Inbound Log Audit (Idempotent Webhooks)</h5>
+        <div class="table-responsive">
+          <table class="table table-dark table-hover fs-7 align-middle mb-0">
+            <thead>
+              <tr class="text-muted border-secondary">
+                <th>Received At</th>
+                <th>Event ID</th>
+                <th>Event Type</th>
+                <th>Status</th>
+                <th>Error Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${webhooks.length === 0 ? '<tr><td colspan="5" class="text-center text-muted">No webhook receipts recorded.</td></tr>' : 
+                webhooks.map(w => `
+                  <tr class="border-secondary">
+                    <td>${new Date(w.receivedAt).toLocaleString()}</td>
+                    <td class="text-info">${w.eventId}</td>
+                    <td><code>${w.eventType}</code></td>
+                    <td>
+                      <span class="badge ${w.status === 'SUCCESS' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'}">
+                        ${w.status}
+                      </span>
+                    </td>
+                    <td class="text-danger-emphasis">${w.errorTrace || '<span class="text-muted">None</span>'}</td>
+                  </tr>
+                `).join('')
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  },
+
   admin: (stats) => `
     <div class="container-fluid py-4">
       <div class="border-bottom border-secondary border-opacity-10 pb-4 mb-4 d-flex justify-content-between align-items-center">
@@ -2396,7 +2762,19 @@ const components = {
           <button class="nav-link text-muted bg-transparent border-0 px-4 py-2" id="tab-payments">Payment Logs</button>
         </li>
         <li class="nav-item">
+          <button class="nav-link text-muted bg-transparent border-0 px-4 py-2" id="tab-users">Users</button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link text-muted bg-transparent border-0 px-4 py-2" id="tab-risk">Risk Audit</button>
+        </li>
+        <li class="nav-item">
           <button class="nav-link text-muted bg-transparent border-0 px-4 py-2" id="tab-rules">Business Rules</button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link text-muted bg-transparent border-0 px-4 py-2" id="tab-audit-logs">Audit Logs</button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link text-muted bg-transparent border-0 px-4 py-2" id="tab-health">System Health</button>
         </li>
       </ul>
 

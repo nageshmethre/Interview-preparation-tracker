@@ -62,6 +62,10 @@ public class User {
     @Builder.Default
     private Double referralEarnings = 0.0;
 
+    @Column(name = "is_suspended")
+    @Builder.Default
+    private Boolean isSuspended = false;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -77,6 +81,9 @@ public class User {
         }
         if (referralEarnings == null) {
             referralEarnings = 0.0;
+        }
+        if (isSuspended == null) {
+            isSuspended = false;
         }
         if (referralCode == null || referralCode.trim().isEmpty()) {
             referralCode = "REF-" + java.util.UUID.randomUUID().toString().substring(0, 8).toUpperCase();
