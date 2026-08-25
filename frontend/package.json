@@ -4,7 +4,8 @@
   "description": "PrepSpace Mobile Application wrapper using Ionic Capacitor",
   "main": "index.html",
   "scripts": {
-    "build": "node build.js"
+    "build": "echo 'No build step required for Vercel'",
+    "build-mobile": "node build.js"
   },
   "dependencies": {
     "@capacitor/core": "^8.5.0"
