@@ -112,7 +112,14 @@ const components = {
     <!-- Footer -->
     <footer class="py-5 text-center border-top border-secondary-subtle border-opacity-10 mt-5">
       <div class="container">
-        <p class="text-muted small mb-0">&copy; 2026 PrepSpace. All copyrights go to Nagesh Methre.</p>
+        <p class="text-muted small mb-3">&copy; 2026 PrepSpace. All copyrights go to Nagesh Methre.</p>
+        <div class="d-flex justify-content-center gap-3 text-muted small">
+          <a href="/about" target="_blank" class="text-muted text-decoration-none">About</a>
+          <span>•</span>
+          <a href="/privacy" target="_blank" class="text-muted text-decoration-none">Privacy Policy</a>
+          <span>•</span>
+          <a href="/terms" target="_blank" class="text-muted text-decoration-none">Terms of Service</a>
+        </div>
       </div>
     </footer>
   `,
@@ -217,7 +224,14 @@ const components = {
         </div>
         
         <div class="p-3 border-top border-secondary-subtle mt-auto">
-          <button id="logout-btn" class="btn btn-glass w-100 py-2"><i class="fa-solid fa-right-from-bracket me-2 text-danger"></i> <span>Logout</span></button>
+          <button id="logout-btn" class="btn btn-glass w-100 py-2 mb-2"><i class="fa-solid fa-right-from-bracket me-2 text-danger"></i> <span>Logout</span></button>
+          <div class="d-flex justify-content-center gap-2 text-center" style="font-size: 0.7rem; opacity: 0.6;">
+            <a href="/about" target="_blank" class="text-muted text-decoration-none">About</a>
+            <span>•</span>
+            <a href="/privacy" target="_blank" class="text-muted text-decoration-none">Privacy</a>
+            <span>•</span>
+            <a href="/terms" target="_blank" class="text-muted text-decoration-none">Terms</a>
+          </div>
         </div>
       </div>
 
