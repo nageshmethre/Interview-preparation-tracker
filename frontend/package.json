@@ -1,0 +1,16 @@
+{
+  "name": "prepspace-mobile",
+  "version": "1.0.0",
+  "description": "PrepSpace Mobile Application wrapper using Ionic Capacitor",
+  "main": "index.html",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "dependencies": {
+    "@capacitor/core": "^8.5.0"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^8.5.0",
+    "@capacitor/cli": "^8.5.0"
+  }
+}
