@@ -108,7 +108,7 @@ function router() {
 
   // Inject workspace layout if not already rendered
   if (!document.getElementById('app-container')) {
-    appRoot.innerHTML = components.appLayout(state.name, state.role === 'ADMIN');
+    appRoot.innerHTML = components.appLayout(state.name, state.role && state.role.startsWith('ADMIN'));
     bindLayoutEvents();
   }
 
