@@ -35,9 +35,15 @@ public class ReferralController {
 
     @GetMapping("/stats")
     @PreAuthorize("isAuthenticated()")
+    @Transactional
     public ResponseEntity<?> getStats(Principal principal) {
         User user = userRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (user.getReferralCode() == null || user.getReferralCode().trim().isEmpty()) {
+            user.setReferralCode("REF-" + java.util.UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+            user = userRepository.save(user);
+        }
 
         Integer userId = user.getId();
 

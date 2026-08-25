@@ -25,9 +25,14 @@ public class UserServiceImpl implements UserService {
     private DtoMapper dtoMapper;
 
     @Override
+    @Transactional
     public UserDto getProfile(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+        if (user.getReferralCode() == null || user.getReferralCode().trim().isEmpty()) {
+            user.setReferralCode("REF-" + java.util.UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+            user = userRepository.save(user);
+        }
         return dtoMapper.toUserDto(user);
     }
 
