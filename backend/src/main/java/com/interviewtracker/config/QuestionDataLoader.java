@@ -69,8 +69,9 @@ public class QuestionDataLoader implements ApplicationRunner {
         seedSetting("SEO_META_DESCRIPTION", "Track your technical interview prep lifecycle. Manage study plans, log DSA practice, analyze readiness, and organize mock evaluations on a single premium dashboard.");
         seedSetting("ROBOTS_TXT_STATUS", "INDEX_FOLLOW");
 
-        // 3. Seed default Super Admin User if none exists
-        if (userRepository.findAll().stream().noneMatch(u -> "ADMIN_SUPER".equals(u.getRole()))) {
+        // 3. Seed default Super Admin User if none exists and email is not already taken
+        if (!userRepository.findByEmail("admin@tracker.com").isPresent() && 
+            userRepository.findAll().stream().noneMatch(u -> "ADMIN_SUPER".equals(u.getRole()))) {
             logger.info("No Super Admin found. Seeding default admin account (admin@tracker.com)...");
             User admin = User.builder()
                     .email("admin@tracker.com")
