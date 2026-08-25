@@ -148,4 +148,26 @@ public class AuthController {
         UserDto userDto = authService.register(request);
         return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }
+
+    @PostMapping("/google")
+    public ResponseEntity<AuthResponse> googleLogin(
+            @RequestBody com.interviewtracker.dto.GoogleLoginRequest request,
+            HttpServletRequest servletRequest,
+            HttpServletResponse servletResponse
+    ) {
+        String ipAddress = servletRequest.getRemoteAddr();
+        String userAgent = servletRequest.getHeader("User-Agent");
+        AuthResponse authResponse = authService.googleLogin(request, ipAddress, userAgent);
+
+        ResponseCookie tokenCookie = ResponseCookie.from("AUTH-TOKEN", authResponse.getToken())
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("Strict")
+                .path("/")
+                .maxAge(900)
+                .build();
+
+        servletResponse.addHeader(HttpHeaders.SET_COOKIE, tokenCookie.toString());
+        return ResponseEntity.ok(authResponse);
+    }
 }

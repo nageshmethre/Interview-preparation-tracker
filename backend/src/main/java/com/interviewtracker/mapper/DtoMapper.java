@@ -14,6 +14,9 @@ public class DtoMapper {
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
         dto.setRole(user.getRole());
+        dto.setIsPaid(user.getIsPaid());
+        dto.setReferralCode(user.getReferralCode());
+        dto.setReferralEarnings(user.getReferralEarnings());
         return dto;
     }
 

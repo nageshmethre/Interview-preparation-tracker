@@ -9,4 +9,9 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByEmail(String email);
     boolean existsByEmail(String email);
+    Optional<User> findByGoogleId(String googleId);
+    Optional<User> findByReferralCode(String referralCode);
+    long countByReferredById(Integer referredById);
+    long countByReferredByIdAndIsPaid(Integer referredById, Boolean isPaid);
+    java.util.List<User> findAllByReferredById(Integer referredById);
 }

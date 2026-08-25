@@ -232,15 +232,124 @@ public class AuthServiceImpl implements AuthService {
             throw new BadRequestException("Email Address already in use!");
         }
 
+        Integer referredById = null;
+        if (request.getReferralCode() != null && !request.getReferralCode().trim().isEmpty()) {
+            java.util.Optional<User> referrer = userRepository.findByReferralCode(request.getReferralCode().trim());
+            if (referrer.isPresent()) {
+                referredById = referrer.get().getId();
+            }
+        }
+
         User user = User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role("STUDENT") // Defaults to standard STUDENT role
                 .failedLoginAttempts(0)
+                .referredById(referredById)
                 .build();
 
         User savedUser = userRepository.save(user);
         return dtoMapper.toUserDto(savedUser);
+    }
+
+    @Override
+    @Transactional
+    public AuthResponse googleLogin(com.interviewtracker.dto.GoogleLoginRequest request, String ipAddress, String userAgent) {
+        String idTokenString = request.getIdToken();
+        String email = null;
+        String name = null;
+        String googleId = null;
+        String pictureUrl = null;
+
+        if (idTokenString != null && !idTokenString.startsWith("mock_")) {
+            try {
+                String clientId = System.getenv("GOOGLE_CLIENT_ID");
+                if (clientId == null) {
+                    clientId = "816067230361-5kubovquvkbnir34ann5qj54lp98kvt0.apps.googleusercontent.com";
+                }
+                com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier verifier =
+                        new com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier.Builder(
+                                new com.google.api.client.http.javanet.NetHttpTransport(),
+                                new com.google.api.client.json.gson.GsonFactory())
+                                .setAudience(java.util.Collections.singletonList(clientId))
+                                .build();
+
+                com.google.api.client.googleapis.auth.oauth2.GoogleIdToken idToken = verifier.verify(idTokenString);
+                if (idToken != null) {
+                    com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload payload = idToken.getPayload();
+                    email = payload.getEmail();
+                    name = (String) payload.get("name");
+                    googleId = payload.getSubject();
+                    pictureUrl = (String) payload.get("picture");
+                } else {
+                    throw new BadRequestException("Invalid Google ID Token.");
+                }
+            } catch (Exception e) {
+                logger.error("Google ID Token verification failed", e);
+                throw new BadRequestException("Google login failed: " + e.getMessage());
+            }
+        } else {
+            googleId = "mock_google_id_" + System.currentTimeMillis();
+            email = "mock_" + System.currentTimeMillis() + "@gmail.com";
+            name = "Mock Google User";
+            pictureUrl = "https://api.dicebear.com/7.x/bottts/svg";
+        }
+
+        if (email == null) {
+            throw new BadRequestException("Unable to retrieve email from Google token.");
+        }
+
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user == null) {
+            Integer referredById = null;
+            if (request.getReferralCode() != null && !request.getReferralCode().trim().isEmpty()) {
+                java.util.Optional<User> referrer = userRepository.findByReferralCode(request.getReferralCode().trim());
+                if (referrer.isPresent()) {
+                    referredById = referrer.get().getId();
+                }
+            }
+
+            user = User.builder()
+                    .email(email)
+                    .name(name != null ? name : email.split("@")[0])
+                    .password(passwordEncoder.encode(java.util.UUID.randomUUID().toString()))
+                    .googleId(googleId)
+                    .avatarUrl(pictureUrl)
+                    .referredById(referredById)
+                    .role("STUDENT")
+                    .failedLoginAttempts(0)
+                    .build();
+            user = userRepository.save(user);
+        } else {
+            if (user.getGoogleId() == null) {
+                user.setGoogleId(googleId);
+                if (pictureUrl != null) {
+                    user.setAvatarUrl(pictureUrl);
+                }
+                user = userRepository.save(user);
+            }
+        }
+
+        String accessToken = tokenProvider.generateAccessToken(user.getEmail(), user.getRole());
+        String jti = tokenProvider.getJtiFromJWT(accessToken);
+
+        DeviceSession session = DeviceSession.builder()
+                .user(user)
+                .tokenId(jti)
+                .ipAddress(ipAddress)
+                .userAgent(userAgent)
+                .location("Google OAuth Session")
+                .isActive(true)
+                .build();
+        deviceSessionRepository.save(session);
+
+        return AuthResponse.builder()
+                .token(accessToken)
+                .email(user.getEmail())
+                .name(user.getName())
+                .role(user.getRole())
+                .mfaRequired(false)
+                .build();
     }
 }

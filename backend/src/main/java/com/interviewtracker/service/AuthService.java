@@ -13,4 +13,5 @@ public interface AuthService {
     void logout(String accessTokenCookie);
     void logoutAllDevices(String email);
     UserDto register(RegisterRequest request);
+    AuthResponse googleLogin(com.interviewtracker.dto.GoogleLoginRequest request, String ipAddress, String userAgent);
 }

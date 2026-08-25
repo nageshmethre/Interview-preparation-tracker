@@ -62,4 +62,10 @@ public class CourseController {
     public ResponseEntity<Certificate> verifyCertificate(@PathVariable String certificateId) {
         return ResponseEntity.ok(courseService.verifyCertificate(certificateId));
     }
+
+    @PostMapping("/courses")
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('ADMIN')")
+    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
+        return ResponseEntity.ok(courseService.createCourse(course));
+    }
 }

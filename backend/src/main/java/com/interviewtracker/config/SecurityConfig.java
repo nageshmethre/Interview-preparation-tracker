@@ -41,6 +41,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/index.html", "/favicon.ico", "/assets/**", "/static/**").permitAll()
                 .requestMatchers("/api/auth/**", "/api/v1/auth/**").permitAll()
+                .requestMatchers("/api/payments/webhook").permitAll()
                 .requestMatchers("/api/v1/certificates/verify/**").permitAll()
                 .anyRequest().authenticated()
             );

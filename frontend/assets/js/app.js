@@ -17,8 +17,25 @@ const state = {
   theme: localStorage.getItem('theme') || 'dark'
 };
 
+function getReferralCodeFromUrl() {
+  const urlParams = new URLSearchParams(window.location.search);
+  let ref = urlParams.get('ref');
+  if (!ref) {
+    const hash = window.location.hash;
+    if (hash.includes('?')) {
+      const hashParams = new URLSearchParams(hash.split('?')[1]);
+      ref = hashParams.get('ref');
+    }
+  }
+  if (ref) {
+    localStorage.setItem('referral_code', ref);
+  }
+  return ref || localStorage.getItem('referral_code') || '';
+}
+
 // Application Init
 document.addEventListener('DOMContentLoaded', () => {
+  getReferralCodeFromUrl();
   initTheme();
   window.addEventListener('hashchange', router);
   router();
@@ -67,16 +84,18 @@ function router() {
     appRoot.innerHTML = components.landing();
     return;
   }
-  if (hash === '#/login') {
+  if (hash.startsWith('#/login')) {
     if (isAuthenticated()) { redirectTo('#/dashboard'); return; }
     appRoot.innerHTML = components.login();
     bindAuthEvents('login');
+    initGoogleSignIn();
     return;
   }
-  if (hash === '#/register') {
+  if (hash.startsWith('#/register')) {
     if (isAuthenticated()) { redirectTo('#/dashboard'); return; }
     appRoot.innerHTML = components.register();
     bindAuthEvents('register');
+    initGoogleSignIn();
     return;
   }
 
@@ -338,6 +357,22 @@ function router() {
     pageMount.innerHTML = components.profile();
     loadProfileDetails();
     bindProfileEvents();
+  } else if (hash === '#/billing') {
+    viewTitle.textContent = 'Billing & Upgrade';
+    pageMount.innerHTML = components.billing(state.isPaid);
+    bindBillingEvents();
+  } else if (hash === '#/referral') {
+    viewTitle.textContent = 'Refer & Earn';
+    pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
+    apiFetch('/referrals/stats')
+      .then(stats => {
+        pageMount.innerHTML = components.referral(stats);
+        bindReferralEvents();
+        loadReferralHistory();
+      })
+      .catch(err => {
+        pageMount.innerHTML = `<div class="alert alert-danger">Failed to load referral stats: ${err.message}</div>`;
+      });
   } else if (hash === '#/desktop-client') {
     viewTitle.textContent = 'Desktop Client';
     pageMount.innerHTML = components.desktopClient();
@@ -347,9 +382,28 @@ function router() {
       return;
     }
     viewTitle.textContent = 'Admin Dashboard';
-    pageMount.innerHTML = components.admin();
-    loadAdminData();
-    bindAdminEvents();
+    pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
+    apiFetch('/admin/stats')
+      .then(stats => {
+        pageMount.innerHTML = components.admin(stats);
+        
+        // Bind tab clicks
+        document.getElementById('tab-claims').addEventListener('click', () => loadAdminPanelTab('claims'));
+        document.getElementById('tab-payments').addEventListener('click', () => loadAdminPanelTab('payments'));
+        document.getElementById('tab-rules').addEventListener('click', () => loadAdminPanelTab('rules'));
+        
+        loadAdminPanelTab('claims');
+        
+        const refreshBtn = document.getElementById('btn-admin-refresh');
+        if (refreshBtn) {
+          refreshBtn.addEventListener('click', () => {
+            router();
+          });
+        }
+      })
+      .catch(err => {
+        pageMount.innerHTML = `<div class="alert alert-danger">Failed to load admin stats: ${err.message}</div>`;
+      });
   } else {
     viewTitle.textContent = 'Not Found';
     pageMount.innerHTML = `<div class="text-center py-5"><h3 class="text-white">Page Not Found</h3><a href="#/dashboard" class="btn btn-premium mt-3">Back to Dashboard</a></div>`;
@@ -560,6 +614,73 @@ function showToast(message, type = 'success') {
   }, 3500);
 }
 
+function fetchUserProfile() {
+  if (!state.token) return Promise.resolve();
+  return apiFetch('/users/profile')
+    .then(profile => {
+      localStorage.setItem('isPaid', profile.isPaid ? 'true' : 'false');
+      localStorage.setItem('referralCode', profile.referralCode || '');
+      localStorage.setItem('referralEarnings', profile.referralEarnings || '0');
+      
+      state.isPaid = profile.isPaid;
+      state.referralCode = profile.referralCode;
+    });
+}
+
+function initGoogleSignIn() {
+  setTimeout(() => {
+    const btnContainer = document.getElementById('google-login-btn');
+    if (!btnContainer) return;
+
+    if (typeof google === 'undefined') {
+      console.error('Google client library not loaded.');
+      return;
+    }
+
+    google.accounts.id.initialize({
+      client_id: '816067230361-5kubovquvkbnir34ann5qj54lp98kvt0.apps.googleusercontent.com',
+      callback: handleGoogleCredentialResponse
+    });
+
+    google.accounts.id.renderButton(
+      btnContainer,
+      { theme: 'filled_black', size: 'large', shape: 'pill', width: '250' }
+    );
+  }, 200);
+}
+
+function handleGoogleCredentialResponse(response) {
+  const referralCode = localStorage.getItem('referral_code') || '';
+  
+  apiFetch('/auth/google', {
+    method: 'POST',
+    body: JSON.stringify({
+      idToken: response.credential,
+      referralCode: referralCode
+    })
+  }).then(res => {
+    localStorage.setItem('token', res.token);
+    localStorage.setItem('name', res.name);
+    localStorage.setItem('email', res.email);
+    localStorage.setItem('role', res.role);
+
+    state.token = res.token;
+    state.name = res.name;
+    state.email = res.email;
+    state.role = res.role;
+
+    fetchUserProfile().then(() => {
+      showToast(`Welcome back, ${res.name}!`, 'success');
+      redirectTo('#/dashboard');
+    }).catch(() => {
+      showToast(`Welcome back, ${res.name}!`, 'success');
+      redirectTo('#/dashboard');
+    });
+  }).catch(err => {
+    showToast(err.message, 'danger');
+  });
+}
+
 // ----------------------------------------------------
 // BIND EVENTS FOR PAGES
 // ----------------------------------------------------
@@ -586,8 +707,13 @@ function bindAuthEvents(mode) {
         state.email = res.email;
         state.role = res.role;
 
-        showToast(`Welcome back, ${res.name}!`, 'success');
-        redirectTo('#/dashboard');
+        fetchUserProfile().then(() => {
+          showToast(`Welcome back, ${res.name}!`, 'success');
+          redirectTo('#/dashboard');
+        }).catch(() => {
+          showToast(`Welcome back, ${res.name}!`, 'success');
+          redirectTo('#/dashboard');
+        });
       }).catch(err => {
         showToast(err.message, 'danger');
       });
@@ -599,10 +725,11 @@ function bindAuthEvents(mode) {
       const name = document.getElementById('register-name').value;
       const email = document.getElementById('register-email').value;
       const password = document.getElementById('register-password').value;
+      const referralCode = localStorage.getItem('referral_code') || '';
 
       apiFetch('/auth/register', {
         method: 'POST',
-        body: JSON.stringify({ name, email, password })
+        body: JSON.stringify({ name, email, password, referralCode })
       }).then(res => {
         showToast('Registration complete. Login to continue.', 'success');
         redirectTo('#/login');
@@ -2415,22 +2542,432 @@ function loadAdminData() {
 
 function bindAdminEvents() {
   const form = document.getElementById('admin-question-form');
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const title = document.getElementById('admin-q-title').value;
-    const company = document.getElementById('admin-q-company').value;
-    const category = document.getElementById('admin-q-category').value;
-    const difficulty = document.getElementById('admin-q-difficulty').value;
-    const question = document.getElementById('admin-q-desc').value;
-    const answer = document.getElementById('admin-q-answer').value;
-    const tags = document.getElementById('admin-q-tags').value;
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('admin-q-title').value;
+      const company = document.getElementById('admin-q-company').value;
+      const category = document.getElementById('admin-q-category').value;
+      const difficulty = document.getElementById('admin-q-difficulty').value;
+      const question = document.getElementById('admin-q-desc').value;
+      const answer = document.getElementById('admin-q-answer').value;
+      const tags = document.getElementById('admin-q-tags').value;
 
-    apiFetch('/admin/questions', {
-      method: 'POST',
-      body: JSON.stringify({ title, company, category, difficulty, question, answer, tags })
-    }).then(() => {
-      showToast('Official Question published to Database!', 'success');
-      form.reset();
-    }).catch(err => showToast(err.message, 'danger'));
+      apiFetch('/admin/questions', {
+        method: 'POST',
+        body: JSON.stringify({ title, company, category, difficulty, question, answer, tags })
+      }).then(() => {
+        showToast('Official Question published to Database!', 'success');
+        form.reset();
+      }).catch(err => showToast(err.message, 'danger'));
+    });
+  }
+
+  const courseForm = document.getElementById('admin-course-form');
+  if (courseForm) {
+    courseForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('admin-c-title').value;
+      const courseLink = document.getElementById('admin-c-link').value;
+      const instructor = document.getElementById('admin-c-instructor').value;
+      const duration = document.getElementById('admin-c-duration').value;
+      const difficulty = document.getElementById('admin-c-difficulty').value;
+      const thumbnailUrl = document.getElementById('admin-c-thumbnail').value || 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7';
+      const description = document.getElementById('admin-c-desc').value;
+
+      apiFetch('/v1/courses', {
+        method: 'POST',
+        body: JSON.stringify({ title, courseLink, instructor, duration, difficulty, thumbnailUrl, description })
+      }).then(() => {
+        showToast('New course published successfully!', 'success');
+        courseForm.reset();
+      }).catch(err => showToast(err.message, 'danger'));
+    });
+  }
+}
+
+function loadRazorpayScript() {
+  return new Promise((resolve) => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+}
+
+function bindBillingEvents() {
+  const upgradeBtn = document.getElementById('btn-upgrade-pro');
+  if (!upgradeBtn) return;
+  upgradeBtn.addEventListener('click', () => {
+    upgradeBtn.disabled = true;
+    upgradeBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Processing...`;
+    
+    apiFetch('/payments/order', { method: 'POST' })
+      .then(orderData => {
+        loadRazorpayScript().then(loaded => {
+          if (!loaded) {
+            showToast('Failed to load Razorpay SDK. Are you offline?', 'danger');
+            upgradeBtn.disabled = false;
+            upgradeBtn.textContent = 'Buy PrepPro Access';
+            return;
+          }
+          
+          const options = {
+            key: orderData.keyId,
+            amount: orderData.amount,
+            currency: orderData.currency,
+            name: 'PrepSpace Premium',
+            description: 'Upgrade your space tracker to premium pro access',
+            order_id: orderData.orderId,
+            handler: function (response) {
+              apiFetch('/payments/verify', {
+                method: 'POST',
+                body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature
+                })
+              }).then(verifyRes => {
+                if (verifyRes.status === 'SUCCESS') {
+                  showToast('Payment verified! Welcome to PrepSpace Pro.', 'success');
+                  fetchUserProfile().then(() => {
+                    redirectTo('#/referral');
+                  });
+                }
+              }).catch(err => {
+                showToast('Payment verification failed: ' + err.message, 'danger');
+                upgradeBtn.disabled = false;
+                upgradeBtn.textContent = 'Buy PrepPro Access';
+              });
+            },
+            prefill: {
+              name: state.name || '',
+              email: state.email || ''
+            },
+            theme: { color: '#6366f1' }
+          };
+          
+          const rzp = new window.Razorpay(options);
+          rzp.open();
+        });
+      })
+      .catch(err => {
+        showToast(err.message, 'danger');
+        upgradeBtn.disabled = false;
+        upgradeBtn.textContent = 'Buy PrepPro Access';
+      });
+  });
+}
+
+function bindReferralEvents() {
+  const copyBtn = document.getElementById('btn-copy-ref-link');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      const linkVal = document.getElementById('ref-link-val');
+      linkVal.select();
+      navigator.clipboard.writeText(linkVal.value);
+      showToast('Referral link copied to clipboard!', 'success');
+    });
+  }
+  
+  const withdrawForm = document.getElementById('ref-withdraw-form');
+  if (withdrawForm) {
+    withdrawForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const amount = document.getElementById('withdraw-amount').value;
+      const upi = document.getElementById('withdraw-upi').value;
+      
+      const submitBtn = document.getElementById('btn-submit-withdraw');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Filing...`;
+      
+      apiFetch('/referrals/withdraw', {
+        method: 'POST',
+        body: JSON.stringify({ amount: parseFloat(amount), payoutDetails: 'UPI ID: ' + upi })
+      }).then(res => {
+        showToast('Withdrawal payout request filed successfully!', 'success');
+        router();
+      }).catch(err => {
+        showToast(err.message, 'danger');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'File Payout Claim';
+      });
+    });
+  }
+}
+
+function loadReferralHistory() {
+  const histRows = document.getElementById('referral-history-rows');
+  const withRows = document.getElementById('withdrawal-history-rows');
+  
+  if (histRows) {
+    apiFetch('/referrals/history')
+      .then(history => {
+        if (history.length === 0) {
+          histRows.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No referrals audited yet.</td></tr>`;
+          return;
+        }
+        histRows.innerHTML = history.map(h => `
+          <tr class="border-secondary-subtle">
+            <td>${h.referredUser}</td>
+            <td>${new Date(h.date).toLocaleDateString()}</td>
+            <td><span class="badge ${h.purchaseStatus === 'PAID' ? 'bg-success' : 'bg-warning text-dark'}">${h.purchaseStatus}</span></td>
+            <td class="text-end fw-bold text-white">₹${h.reward}</td>
+          </tr>
+        `).join('');
+      })
+      .catch(err => {
+        histRows.innerHTML = `<tr><td colspan="4" class="text-center text-danger">Failed: ${err.message}</td></tr>`;
+      });
+  }
+  
+  if (withRows) {
+    apiFetch('/referrals/withdrawals')
+      .then(withdrawals => {
+        if (withdrawals.length === 0) {
+          withRows.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No withdrawal claims found.</td></tr>`;
+          return;
+        }
+        withRows.innerHTML = withdrawals.map(w => `
+          <tr class="border-secondary-subtle">
+            <td class="fw-bold text-white">₹${w.amount}</td>
+            <td>${w.payoutDetails}</td>
+            <td>${new Date(w.createdAt).toLocaleDateString()}</td>
+            <td class="text-end">
+              <span class="badge ${
+                w.status === 'PAID' ? 'bg-success' :
+                w.status === 'PENDING' ? 'bg-warning text-dark' :
+                w.status === 'PROCESSING' ? 'bg-info text-dark' : 'bg-danger'
+              }">${w.status}</span>
+            </td>
+          </tr>
+        `).join('');
+      })
+      .catch(err => {
+        withRows.innerHTML = `<tr><td colspan="4" class="text-center text-danger">Failed: ${err.message}</td></tr>`;
+      });
+  }
+}
+
+function loadAdminPanelTab(tab) {
+  const tabClaims = document.getElementById('tab-claims');
+  const tabPayments = document.getElementById('tab-payments');
+  const tabRules = document.getElementById('tab-rules');
+  
+  if (tabClaims) tabClaims.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
+  if (tabPayments) tabPayments.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
+  if (tabRules) tabRules.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
+  
+  const activeTabBtn = document.getElementById(`tab-${tab}`);
+  if (activeTabBtn) {
+    activeTabBtn.className = 'nav-link active text-white bg-transparent border-0 border-bottom border-primary border-2 px-4 py-2';
+  }
+
+  const contentArea = document.getElementById('admin-tab-content');
+  if (!contentArea) return;
+
+  if (tab === 'claims') {
+    contentArea.innerHTML = `<div class="text-center py-4"><div class="spinner-border text-primary spinner-border-sm"></div></div>`;
+    apiFetch('/admin/withdrawals')
+      .then(claims => {
+        const pendingClaims = claims.filter(c => c.status === 'PENDING' || c.status === 'PROCESSING');
+        if (pendingClaims.length === 0) {
+          contentArea.innerHTML = `
+            <div class="glass-panel p-4 text-center text-muted">
+              No pending payout claims in queue.
+            </div>
+          `;
+          return;
+        }
+
+        let rows = pendingClaims.map(c => `
+          <tr class="border-secondary-subtle">
+            <td>${c.userEmail}</td>
+            <td class="font-mono text-primary">${c.payoutDetails}</td>
+            <td class="fw-bold text-white">₹${c.amount}</td>
+            <td>${new Date(c.createdAt).toLocaleDateString()}</td>
+            <td><span class="badge bg-warning text-dark">${c.status}</span></td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-glass text-success me-1 btn-approve-claim" data-id="${c.id}"><i class="fa-solid fa-check"></i> Approve</button>
+              <button class="btn btn-sm btn-glass text-danger btn-reject-claim" data-id="${c.id}"><i class="fa-solid fa-xmark"></i> Reject</button>
+            </td>
+          </tr>
+        `).join('');
+
+        contentArea.innerHTML = `
+          <div class="glass-panel p-4">
+            <h5 class="text-white fw-bold mb-3">Pending Payout Claims Queue</h5>
+            <div class="table-responsive">
+              <table class="table table-dark table-hover fs-7 align-middle mb-0">
+                <thead>
+                  <tr class="text-muted border-secondary">
+                    <th>User Email</th>
+                    <th>UPI Coordinates</th>
+                    <th>Amount</th>
+                    <th>Date Filed</th>
+                    <th>Status</th>
+                    <th class="text-end">Approve / Decline</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${rows}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+
+        document.querySelectorAll('.btn-approve-claim').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const id = e.currentTarget.dataset.id;
+            handleClaimAction(id, 'PAID');
+          });
+        });
+
+        document.querySelectorAll('.btn-reject-claim').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const id = e.currentTarget.dataset.id;
+            handleClaimAction(id, 'REJECTED');
+          });
+        });
+      })
+      .catch(err => {
+        contentArea.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
+      });
+  } else if (tab === 'payments') {
+    contentArea.innerHTML = `<div class="text-center py-4"><div class="spinner-border text-primary spinner-border-sm"></div></div>`;
+    apiFetch('/admin/payments')
+      .then(payments => {
+        if (payments.length === 0) {
+          contentArea.innerHTML = `
+            <div class="glass-panel p-4 text-center text-muted">
+              No payment logs found in database.
+            </div>
+          `;
+          return;
+        }
+
+        let rows = payments.map(p => `
+          <tr class="border-secondary-subtle">
+            <td>${p.userEmail}</td>
+            <td class="font-mono fs-8 text-muted">${p.orderId}</td>
+            <td class="font-mono fs-8 text-primary">${p.paymentId || 'N/A'}</td>
+            <td class="fw-bold text-white">₹${p.amount}</td>
+            <td>${new Date(p.createdAt).toLocaleDateString()}</td>
+            <td class="text-end"><span class="badge ${p.status === 'SUCCESS' ? 'bg-success' : 'bg-danger'}">${p.status}</span></td>
+          </tr>
+        `).join('');
+
+        contentArea.innerHTML = `
+          <div class="glass-panel p-4">
+            <h5 class="text-white fw-bold mb-3">Razorpay Transaction Logs</h5>
+            <div class="table-responsive">
+              <table class="table table-dark table-hover fs-7 align-middle mb-0">
+                <thead>
+                  <tr class="text-muted border-secondary">
+                    <th>User Email</th>
+                    <th>Order ID</th>
+                    <th>Payment ID</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th class="text-end">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${rows}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      })
+      .catch(err => {
+        contentArea.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
+      });
+  } else if (tab === 'rules') {
+    contentArea.innerHTML = `<div class="text-center py-4"><div class="spinner-border text-primary spinner-border-sm"></div></div>`;
+    apiFetch('/admin/settings')
+      .then(settings => {
+        contentArea.innerHTML = `
+          <div class="glass-panel p-4">
+            <h5 class="text-white fw-bold mb-4"><i class="fa-solid fa-gears text-primary me-2"></i>Global Pricing Rules</h5>
+            
+            <div class="row g-4">
+              <div class="col-md-4">
+                <div class="card bg-dark bg-opacity-20 border-secondary p-3">
+                  <label class="form-label text-muted fs-8">PREMPRO PRICE (₹)</label>
+                  <div class="input-group">
+                    <input type="number" id="rule-price" class="form-control glass-input fw-bold" value="${settings.PRODUCT_PRICE_INR || 99}">
+                    <button class="btn btn-premium" id="btn-save-rule-price">Update</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="card bg-dark bg-opacity-20 border-secondary p-3">
+                  <label class="form-label text-muted fs-8">REFERRAL REWARD (₹)</label>
+                  <div class="input-group">
+                    <input type="number" id="rule-reward" class="form-control glass-input fw-bold" value="${settings.REFERRAL_REWARD_INR || 49}">
+                    <button class="btn btn-premium" id="btn-save-rule-reward">Update</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="card bg-dark bg-opacity-20 border-secondary p-3">
+                  <label class="form-label text-muted fs-8">MIN. WITHDRAWAL LIMIT (₹)</label>
+                  <div class="input-group">
+                    <input type="number" id="rule-min" class="form-control glass-input fw-bold" value="${settings.MIN_WITHDRAWAL_INR || 100}">
+                    <button class="btn btn-premium" id="btn-save-rule-min">Update</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        document.getElementById('btn-save-rule-price').addEventListener('click', () => {
+          const val = document.getElementById('rule-price').value;
+          updateRuleSetting('PRODUCT_PRICE_INR', val);
+        });
+
+        document.getElementById('btn-save-rule-reward').addEventListener('click', () => {
+          const val = document.getElementById('rule-reward').value;
+          updateRuleSetting('REFERRAL_REWARD_INR', val);
+        });
+
+        document.getElementById('btn-save-rule-min').addEventListener('click', () => {
+          const val = document.getElementById('rule-min').value;
+          updateRuleSetting('MIN_WITHDRAWAL_INR', val);
+        });
+      })
+      .catch(err => {
+        contentArea.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
+      });
+  }
+}
+
+function handleClaimAction(withdrawalId, action) {
+  apiFetch('/admin/withdrawals/action', {
+    method: 'POST',
+    body: JSON.stringify({ withdrawalId, action })
+  }).then(res => {
+    showToast(`Claim request successfully marked as ${action}`, 'success');
+    loadAdminPanelTab('claims');
+  }).catch(err => {
+    showToast(err.message, 'danger');
+  });
+}
+
+function updateRuleSetting(key, value) {
+  apiFetch('/admin/settings', {
+    method: 'POST',
+    body: JSON.stringify({ key, value })
+  }).then(res => {
+    showToast(`System setting '${key}' updated successfully!`, 'success');
+    loadAdminPanelTab('rules');
+  }).catch(err => {
+    showToast(err.message, 'danger');
   });
 }

@@ -13,4 +13,5 @@ public interface CourseService {
     Certificate getCertificate(String email, Integer courseId);
     Certificate verifyCertificate(String certificateId);
     List<Certificate> getUserCertificates(String email);
+    Course createCourse(Course course);
 }

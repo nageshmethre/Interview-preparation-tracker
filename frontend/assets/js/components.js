@@ -109,6 +109,17 @@ const components = {
       </section>
     </main>
 
+    <!-- Google AdSense Multiplex Ad Unit -->
+    <div class="container my-5">
+      <div class="glass-panel p-4">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-format="autorelaxed"
+             data-ad-client="ca-pub-4662205173096609"
+             data-ad-slot="3928140249"></ins>
+      </div>
+    </div>
+
     <!-- Footer -->
     <footer class="py-5 text-center border-top border-secondary-subtle border-opacity-10 mt-5">
       <div class="container">
@@ -144,6 +155,13 @@ const components = {
               </div>
               <button type="submit" class="btn btn-premium w-100 py-2 fs-6 mb-3">Authenticate</button>
             </form>
+
+            <div class="my-3 d-flex align-items-center">
+              <hr class="flex-grow-1 border-secondary-subtle">
+              <span class="px-2 text-muted small">OR</span>
+              <hr class="flex-grow-1 border-secondary-subtle">
+            </div>
+            <div id="google-login-btn" class="w-100 d-flex justify-content-center mb-3"></div>
             
             <p class="text-muted fs-7">Don't have an account? <a href="#/register" class="text-indigo text-decoration-none">Register here</a></p>
           </div>
@@ -177,6 +195,13 @@ const components = {
               </div>
               <button type="submit" class="btn btn-premium w-100 py-2 fs-6 mb-3">Create Account</button>
             </form>
+
+            <div class="my-3 d-flex align-items-center">
+              <hr class="flex-grow-1 border-secondary-subtle">
+              <span class="px-2 text-muted small">OR</span>
+              <hr class="flex-grow-1 border-secondary-subtle">
+            </div>
+            <div id="google-login-btn" class="w-100 d-flex justify-content-center mb-3"></div>
             
             <p class="text-muted fs-7">Already registered? <a href="#/login" class="text-indigo text-decoration-none">Login here</a></p>
           </div>
@@ -219,6 +244,8 @@ const components = {
           <a href="#/calendar" class="sidebar-link"><i class="fa-solid fa-calendar-days text-muted"></i> <span>Calendar</span></a>
           <a href="#/reports" class="sidebar-link"><i class="fa-solid fa-file-invoice text-muted"></i> <span>Reports</span></a>
           <a href="#/profile" class="sidebar-link"><i class="fa-solid fa-user-gear"></i> <span>Settings</span></a>
+          <a href="#/referral" class="sidebar-link"><i class="fa-solid fa-gift text-primary"></i> <span>Refer & Earn</span></a>
+          <a href="#/billing" class="sidebar-link"><i class="fa-solid fa-credit-card text-success"></i> <span>Billing</span></a>
           <a href="#/desktop-client" class="sidebar-link"><i class="fa-solid fa-desktop text-indigo"></i> <span>Desktop Client</span></a>
           ${isAdmin ? `<a href="#/admin" class="sidebar-link text-warning-emphasis"><i class="fa-solid fa-shield-halved text-warning"></i> <span>Admin Panel</span></a>` : ''}
         </div>
@@ -359,6 +386,19 @@ const components = {
         <div class="glass-panel p-4">
           <h5 class="text-white fw-bold mb-3">Application Pipeline</h5>
           <canvas id="pipelineStatusChart" height="220"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- AdSense Dashboard Multiplex Ad Unit -->
+    <div class="row g-4 mt-4">
+      <div class="col-12">
+        <div class="glass-panel p-4">
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-format="autorelaxed"
+               data-ad-client="ca-pub-4662205173096609"
+               data-ad-slot="3928140249"></ins>
         </div>
       </div>
     </div>
@@ -1512,6 +1552,49 @@ const components = {
             <button type="submit" class="btn btn-premium w-100">Publish Question</button>
           </form>
         </div>
+
+        <div class="glass-panel p-4 mt-4">
+          <h5 class="text-white fw-bold mb-4"><i class="fa-solid fa-graduation-cap text-indigo me-2"></i>Add Course by Link</h5>
+          <form id="admin-course-form">
+            <div class="mb-3">
+              <label class="form-label text-muted fs-7">COURSE TITLE</label>
+              <input type="text" id="admin-c-title" class="form-control glass-input" placeholder="e.g. Master System Design" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-muted fs-7">COURSE / PLAYLIST LINK</label>
+              <input type="url" id="admin-c-link" class="form-control glass-input" placeholder="https://youtube.com/... or playlist URL" required>
+            </div>
+            <div class="row mb-3">
+              <div class="col-6">
+                <label class="form-label text-muted fs-7">INSTRUCTOR</label>
+                <input type="text" id="admin-c-instructor" class="form-control glass-input" placeholder="e.g. John Doe" required>
+              </div>
+              <div class="col-6">
+                <label class="form-label text-muted fs-7">DURATION</label>
+                <input type="text" id="admin-c-duration" class="form-control glass-input" placeholder="e.g. 5h 45m" required>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-6">
+                <label class="form-label text-muted fs-7">DIFFICULTY</label>
+                <select id="admin-c-difficulty" class="form-select glass-input">
+                  <option value="BEGINNER">BEGINNER</option>
+                  <option value="INTERMEDIATE">INTERMEDIATE</option>
+                  <option value="ADVANCED">ADVANCED</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label class="form-label text-muted fs-7">THUMBNAIL URL (OPTIONAL)</label>
+                <input type="text" id="admin-c-thumbnail" class="form-control glass-input" placeholder="https://...">
+              </div>
+            </div>
+            <div class="mb-4">
+              <label class="form-label text-muted fs-7">DESCRIPTION</label>
+              <textarea id="admin-c-desc" class="form-control glass-input" rows="3" placeholder="Briefly describe the course content..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-premium w-100">Publish Course</button>
+          </form>
+        </div>
       </div>
     </div>
   `,
@@ -1530,6 +1613,7 @@ const components = {
             </div>
             <div class="p-4 flex-grow-1 d-flex flex-column">
               <h5 class="text-white fw-bold mb-2">${c.title}</h5>
+              ${c.courseLink ? `<div class="mb-2"><a href="${c.courseLink}" target="_blank" class="text-indigo fs-7 text-decoration-none"><i class="fa-solid fa-link me-1"></i>View Course Link</a></div>` : ''}
               <p class="text-muted fs-7 flex-grow-1">${c.description}</p>
               <div class="d-flex align-items-center justify-content-between text-muted fs-7 mb-3">
                 <span><i class="fa-solid fa-user-tie me-1"></i>${c.instructor}</span>
@@ -2074,6 +2158,251 @@ const components = {
       <div class="alert alert-indigo-subtle border-indigo text-start d-inline-block px-4 py-3 fs-7 text-muted" style="max-width: 550px;">
         <i class="fa-solid fa-circle-info text-indigo me-2"></i> 
         <strong>Author Note:</strong> Build requirements include Java SDK 17+ and Maven. Direct database configs can be adjusted under the app settings panel.
+      </div>
+    </div>
+  `,
+
+  billing: (isPaid) => `
+    <div class="container-fluid py-4">
+      <div class="row justify-content-center text-center mb-5">
+        <div class="col-lg-6">
+          <h2 class="text-white fw-bold mb-2">Upgrade Space Metrics</h2>
+          <p class="text-muted">Level up your placement preparation and unlock passive income</p>
+        </div>
+      </div>
+
+      <div class="row g-4 justify-content-center">
+        <div class="col-md-5 col-lg-4">
+          <div class="glass-panel p-4 h-100 text-center">
+            <h3 class="text-white h4">PrepFree</h3>
+            <p class="text-muted">Perfect for getting started</p>
+            <div class="my-4"><span class="display-4 fw-bold text-white">₹0</span></div>
+            <ul class="list-unstyled text-start mb-5 text-muted">
+              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Access to Question Bank</li>
+              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Log Solved Problems</li>
+              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Standard Kanban Placements</li>
+            </ul>
+            <button class="btn btn-glass w-100 py-3 disabled">${!isPaid ? 'Current Active Plan' : 'Basic Tier'}</button>
+          </div>
+        </div>
+        
+        <div class="col-md-5 col-lg-4">
+          <div class="glass-panel p-4 h-100 text-center border-primary" style="box-shadow: 0 0 25px var(--accent-glow);">
+            <h3 class="text-white h4">PrepPro</h3>
+            <p class="text-indigo">Recommended for Active Jobseekers</p>
+            <div class="my-4"><span class="display-4 fw-bold text-white">₹99</span><span class="text-muted">/one-time</span></div>
+            <ul class="list-unstyled text-start mb-5 text-muted">
+              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Unlock Refer & Earn (Earn ₹49 per refer!)</li>
+              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Custom Target Study Plans</li>
+              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Mock AI Feedback Logs</li>
+              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Export Excel/PDF Reports</li>
+            </ul>
+            <button id="btn-upgrade-pro" class="btn btn-premium w-100 py-3" ${isPaid ? 'disabled' : ''}>
+              ${isPaid ? 'Active Premium Access' : 'Buy PrepPro Access'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
+
+  referral: (stats) => `
+    <div class="container-fluid py-4">
+      <div class="glass-panel p-5 mb-5 bg-gradient-to-r" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(168, 85, 247, 0.05));">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <span class="badge bg-indigo-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill mb-3">AFFILIATE PROGRAM</span>
+            <h2 class="text-white fw-bold mb-2">Share PrepSpace, Earn Cash Payouts!</h2>
+            <p class="text-muted mb-0">Invite your classmates and friends. You earn <strong class="text-primary">₹49</strong> on every user who upgrades their tracker space to premium (₹99)!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="row g-4 mb-5">
+        <div class="col-sm-6 col-lg-3">
+          <div class="glass-panel p-4">
+            <div class="text-muted fs-8 uppercase tracking-wider mb-2">Total Referrals</div>
+            <div class="d-flex justify-content-between align-items-center">
+              <h3 class="text-white fw-bold mb-0">${stats.totalReferrals}</h3>
+              <i class="fa-solid fa-users text-primary fs-4"></i>
+            </div>
+            <div class="text-muted fs-9 mt-2">Signups using your link</div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+          <div class="glass-panel p-4">
+            <div class="text-muted fs-8 uppercase tracking-wider mb-2">Successful Referrals</div>
+            <div class="d-flex justify-content-between align-items-center">
+              <h3 class="text-white fw-bold mb-0">${stats.successfulReferrals}</h3>
+              <i class="fa-solid fa-circle-check text-success fs-4"></i>
+            </div>
+            <div class="text-muted fs-9 mt-2">Upgraded referral accounts</div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+          <div class="glass-panel p-4">
+            <div class="text-muted fs-8 uppercase tracking-wider mb-2">Total Earnings</div>
+            <div class="d-flex justify-content-between align-items-center">
+              <h3 class="text-white fw-bold mb-0">₹${stats.totalEarned}</h3>
+              <i class="fa-solid fa-indian-rupee-sign text-indigo fs-4"></i>
+            </div>
+            <div class="text-muted fs-9 mt-2">Commission ledger total</div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+          <div class="glass-panel p-4">
+            <div class="text-muted fs-8 uppercase tracking-wider mb-2">Available Balance</div>
+            <div class="d-flex justify-content-between align-items-center">
+              <h3 class="text-white fw-bold mb-0">₹${stats.availableBalance}</h3>
+              <i class="fa-solid fa-wallet text-warning fs-4"></i>
+            </div>
+            <div class="text-muted fs-9 mt-2">Threshold limit: ₹${stats.minWithdrawal}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <!-- Payout Request and Links -->
+        <div class="col-lg-4">
+          <div class="glass-panel p-4 mb-4">
+            <h5 class="text-white fw-bold mb-3">Copy Referral link</h5>
+            <div class="d-flex gap-2">
+              <input type="text" readonly id="ref-link-val" class="form-control glass-input fs-7 font-mono" value="https://stream-in.app/#/register?ref=${stats.referralCode}">
+              <button id="btn-copy-ref-link" class="btn btn-glass px-3"><i class="fa-regular fa-copy"></i></button>
+            </div>
+          </div>
+
+          <div class="glass-panel p-4">
+            <h5 class="text-white fw-bold mb-3">Request Withdrawal</h5>
+            <form id="ref-withdraw-form">
+              <div class="mb-3">
+                <label class="form-label text-muted fs-7">AMOUNT (INR)</label>
+                <input type="number" id="withdraw-amount" class="form-control glass-input" placeholder="Min. ₹${stats.minWithdrawal}" required>
+              </div>
+              <div class="mb-4">
+                <label class="form-label text-muted fs-7">UPI ID FOR INSTANT PAYOUT</label>
+                <input type="text" id="withdraw-upi" class="form-control glass-input" placeholder="username@okaxis" required>
+              </div>
+              <button type="submit" id="btn-submit-withdraw" class="btn btn-premium w-100 py-2" ${stats.availableBalance < stats.minWithdrawal ? 'disabled' : ''}>
+                File Payout Claim
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- History Tables -->
+        <div class="col-lg-8">
+          <div class="glass-panel p-4 mb-4">
+            <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-list-check text-primary me-2"></i>Referral Audit Trail</h5>
+            <div class="table-responsive">
+              <table class="table table-dark table-hover fs-7 align-middle mb-0">
+                <thead>
+                  <tr class="text-muted border-secondary">
+                    <th>Referred Email</th>
+                    <th>Date Registered</th>
+                    <th>Upgrade status</th>
+                    <th class="text-end">My Commission</th>
+                  </tr>
+                </thead>
+                <tbody id="referral-history-rows">
+                  <tr>
+                    <td colspan="4" class="text-center py-4 text-muted">Loading audit trails...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="glass-panel p-4">
+            <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-arrow-right-arrow-left text-success me-2"></i>Withdrawal Claims</h5>
+            <div class="table-responsive">
+              <table class="table table-dark table-hover fs-7 align-middle mb-0">
+                <thead>
+                  <tr class="text-muted border-secondary">
+                    <th>Claim Amount</th>
+                    <th>UPI ID</th>
+                    <th>Date Filed</th>
+                    <th class="text-end">Claim Status</th>
+                  </tr>
+                </thead>
+                <tbody id="withdrawal-history-rows">
+                  <tr>
+                    <td colspan="4" class="text-center py-4 text-muted">Loading withdrawal claims...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
+
+  admin: (stats) => `
+    <div class="container-fluid py-4">
+      <div class="border-bottom border-secondary border-opacity-10 pb-4 mb-4 d-flex justify-content-between align-items-center">
+        <div>
+          <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-2 rounded-pill mb-2">ADMIN PANEL</span>
+          <h2 class="text-white fw-bold mb-0">Global Operations Panel</h2>
+        </div>
+        <button id="btn-admin-refresh" class="btn btn-glass btn-sm px-3"><i class="fa-solid fa-rotate me-1"></i> Sync</button>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="row g-4 mb-5">
+        <div class="col-sm-6 col-lg-3">
+          <div class="glass-panel p-4">
+            <div class="text-muted fs-8 uppercase tracking-wider mb-2">Total Users</div>
+            <h3 class="text-white fw-bold mb-0">${stats.totalUsers}</h3>
+            <div class="text-muted fs-9 mt-2">${stats.paidUsers} Premium Subscriber accounts</div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+          <div class="glass-panel p-4">
+            <div class="text-muted fs-8 uppercase tracking-wider mb-2">Gross Revenue</div>
+            <h3 class="text-white fw-bold mb-0">₹${stats.totalRevenue}</h3>
+            <div class="text-muted fs-9 mt-2">Lifetime ₹99 sales</div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+          <div class="glass-panel p-4">
+            <div class="text-muted fs-8 uppercase tracking-wider mb-2">Referral Payouts</div>
+            <h3 class="text-white fw-bold mb-0">₹${stats.totalReferralPayouts}</h3>
+            <div class="text-muted fs-9 mt-2">Approved affiliate payouts</div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+          <div class="glass-panel p-4">
+            <div class="text-muted fs-8 uppercase tracking-wider mb-2">Pending Claims Queue</div>
+            <h3 class="text-white fw-bold mb-0">₹${stats.totalPendingWithdrawalAmount}</h3>
+            <div class="text-muted fs-9 mt-2">Awaiting admin transaction verify</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs Header -->
+      <ul class="nav nav-tabs border-secondary border-opacity-25 mb-4">
+        <li class="nav-item">
+          <button class="nav-link active text-white bg-transparent border-0 border-bottom border-primary border-2 px-4 py-2" id="tab-claims">Claims Queue</button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link text-muted bg-transparent border-0 px-4 py-2" id="tab-payments">Payment Logs</button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link text-muted bg-transparent border-0 px-4 py-2" id="tab-rules">Business Rules</button>
+        </li>
+      </ul>
+
+      <!-- Tab Content Area -->
+      <div id="admin-tab-content">
+        <!-- Injected Dynamically by app.js admin view builders -->
       </div>
     </div>
   `

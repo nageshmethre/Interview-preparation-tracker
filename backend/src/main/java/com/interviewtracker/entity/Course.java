@@ -36,6 +36,9 @@ public class Course {
     @Column(nullable = false, length = 20)
     private String difficulty; // BEGINNER, INTERMEDIATE, ADVANCED
 
+    @Column(name = "course_link")
+    private String courseLink;
+
     private String prerequisites;
 
     private Double rating = 5.0;

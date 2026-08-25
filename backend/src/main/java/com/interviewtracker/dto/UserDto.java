@@ -8,4 +8,7 @@ public class UserDto {
     private String name;
     private String email;
     private String role;
+    private Boolean isPaid;
+    private String referralCode;
+    private Double referralEarnings;
 }

@@ -126,4 +126,10 @@ public class CourseServiceImpl implements CourseService {
                 .orElseThrow(() -> new BadRequestException("User profile not found."));
         return certificateRepository.findByUserId(user.getId());
     }
+
+    @Override
+    @Transactional
+    public Course createCourse(Course course) {
+        return courseRepository.save(course);
+    }
 }

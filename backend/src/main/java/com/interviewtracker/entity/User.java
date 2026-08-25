@@ -42,6 +42,26 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "google_id", unique = true, length = 100)
+    private String googleId;
+
+    @Column(name = "avatar_url", length = 500)
+    private String avatarUrl;
+
+    @Column(name = "referral_code", unique = true, length = 50)
+    private String referralCode;
+
+    @Column(name = "referred_by_id")
+    private Integer referredById;
+
+    @Column(name = "is_paid")
+    @Builder.Default
+    private Boolean isPaid = false;
+
+    @Column(name = "referral_earnings")
+    @Builder.Default
+    private Double referralEarnings = 0.0;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -51,6 +71,15 @@ public class User {
         }
         if (failedLoginAttempts == null) {
             failedLoginAttempts = 0;
+        }
+        if (isPaid == null) {
+            isPaid = false;
+        }
+        if (referralEarnings == null) {
+            referralEarnings = 0.0;
+        }
+        if (referralCode == null || referralCode.trim().isEmpty()) {
+            referralCode = "REF-" + java.util.UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         }
     }
 
