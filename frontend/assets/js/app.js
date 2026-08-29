@@ -2015,200 +2015,279 @@ function bindCodingPracticeEvents() {
 function bindMockExamsEvents() {
   const form = document.getElementById('mock-exam-form');
   if (!form) return;
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const category = document.getElementById('mock-category').value;
     const duration = parseInt(document.getElementById('mock-duration').value);
-    const qcount = parseInt(document.getElementById('mock-qcount').value);
+    const qcount = parseInt(document.getElementById('mock-qcount').value) || 50;
 
     apiFetch(`/v1/mocktests?category=${category}&durationMinutes=${duration}&questionCount=${qcount}`, {
       method: 'POST'
     }).then(test => {
-      // Fetch actual questions for the exam from database
-      apiFetch(`/questions?category=${category}`)
-        .then(rawQuestions => {
-          // Shuffle and slice to qcount
-          let questions = rawQuestions.sort(() => 0.5 - Math.random()).slice(0, qcount);
-          
-          // Fallback if no questions are returned from database
-          if (questions.length === 0) {
-            questions = [
-              {
-                id: 9901,
-                title: "Explain the pillars of OOP",
-                question: "What are the four fundamental concepts/pillars of Object-Oriented Programming?",
-                answer: "The four pillars are Encapsulation (hiding data), Abstraction (hiding implementation details), Inheritance (reusing code), and Polymorphism (many forms/methods)."
-              },
-              {
-                id: 9902,
-                title: "Compare Process vs Thread",
-                question: "What is the key difference between a Process and a Thread in operating systems?",
-                answer: "A process is an executing program instance with its own memory space. A thread is the smallest execution unit within a process that shares memory with other threads of the same process."
-              },
-              {
-                id: 9903,
-                title: "Define database indexing",
-                question: "How does a database index work and what is its primary benefit and drawback?",
-                answer: "An index is a data structure (like B-Tree) that speeds up data retrieval. Benefit: Faster queries. Drawback: Slower inserts/updates/deletes due to index write overhead and extra storage space."
-              }
-            ];
+      // 1. Generate exact count of high-yield MCQs (e.g. 10, 20, 30, 50)
+      const questions = (typeof getMcqQuestions === 'function') 
+        ? getMcqQuestions(category === 'ALL' ? null : category, qcount)
+        : Array.from({ length: qcount }, (_, i) => ({
+            id: i + 1,
+            category: category,
+            question: `Assessment Question ${i + 1} regarding ${category} system architectures and algorithms.`,
+            options: ['Option A: Optimal Linear Time', 'Option B: Logarithmic Binary Search', 'Option C: Constant Space Complexity', 'Option D: Dynamic Tabulation'],
+            answer: 0,
+            explanation: 'Option A matches the standard theoretical performance bounds.'
+          }));
+
+      showToast(`Assessment Staged: ${questions.length} MCQs loaded. Timer starting!`, 'success');
+      
+      // 2. Mount Active Exam Pane
+      const pageMount = document.getElementById('page-mount');
+      pageMount.innerHTML = components.mockExamActive(test.id, category, duration, questions.length);
+      
+      // 3. Active State Tracking
+      let currentIndex = 0;
+      const userAnswers = {}; // question.id -> selectedOptionIndex (0..3)
+      const startTime = Date.now();
+      
+      // 4. Timer Countdown
+      let timeLeft = duration * 60;
+      const timerDisplay = document.getElementById('mock-timer-display');
+      const timerInterval = setInterval(() => {
+        timeLeft--;
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        if (timerDisplay) {
+          timerDisplay.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+          if (timeLeft <= 300) {
+            timerDisplay.classList.add('text-danger');
           }
+        }
 
-          showToast('Mock Exam Staged successfully! Timer starting...', 'success');
-          
-          // Mount Active Exam Pane
-          const pageMount = document.getElementById('page-mount');
-          pageMount.innerHTML = components.mockExamActive(test.id, category, duration, questions.length);
-          
-          // Active state tracking
-          let currentIndex = 0;
-          const userAnswers = {};
-          const scores = {}; // question.id -> boolean
-          
-          // Timer countdown clock
-          let timeLeft = duration * 60;
-          const timerDisplay = document.getElementById('mock-timer-display');
-          const timerInterval = setInterval(() => {
-            timeLeft--;
-            const mins = Math.floor(timeLeft / 60);
-            const secs = timeLeft % 60;
-            if (timerDisplay) {
-              timerDisplay.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-            }
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          showToast('Time expired! Automatically submitting and grading your assessment paper.', 'warning');
+          finishAndGradeExam(test.id, questions, userAnswers, startTime, duration);
+        }
+      }, 1000);
 
-            if (timeLeft <= 0) {
-              clearInterval(timerInterval);
-              showToast('Time expired! Submitting assessment paper.', 'danger');
-              submitExamScore(test.id, Object.values(scores).filter(Boolean).length, questions.length);
-            }
-          }, 1000);
+      // 5. Render Individual MCQ
+      function renderMcqCard(idx) {
+        const workspace = document.getElementById('mock-question-card-workspace');
+        if (!workspace) return;
+        
+        const q = questions[idx];
+        const selectedChoice = userAnswers[q.id];
+        
+        // Update Drawer Palette and Counters
+        const answeredTotal = Object.keys(userAnswers).length;
+        const progressBar = document.getElementById('mock-progress-bar');
+        const progressText = document.getElementById('mock-progress-text');
+        const answeredCounter = document.getElementById('mock-answered-count');
+        
+        if (progressBar) progressBar.style.width = `${((idx + 1) / questions.length) * 100}%`;
+        if (progressText) progressText.textContent = `Progress: Question ${idx + 1} of ${questions.length}`;
+        if (answeredCounter) answeredCounter.textContent = `Answered: ${answeredTotal}/${questions.length}`;
 
-          function renderMockQuestion(idx) {
-            const workspace = document.getElementById('mock-question-card-workspace');
-            if (!workspace) return;
-            
-            const q = questions[idx];
-            
-            // Update tracker stats
-            const progressBar = document.getElementById('mock-progress-bar');
-            const progressText = document.getElementById('mock-progress-text');
-            const scoreEstimate = document.getElementById('mock-score-estimate');
-            
-            if (progressBar) progressBar.style.width = `${((idx + 1) / questions.length) * 100}%`;
-            if (progressText) progressText.textContent = `Question ${idx + 1} of ${questions.length}`;
-            
-            const correctCount = Object.values(scores).filter(Boolean).length;
-            if (scoreEstimate) scoreEstimate.textContent = `Score: ${correctCount} / ${questions.length}`;
-            
-            workspace.innerHTML = `
-              <div class="d-flex justify-content-between align-items-center mb-3 border-bottom border-secondary border-opacity-10 pb-3">
-                <h5 class="text-white fw-bold m-0">${q.title || 'Technical Question'}</h5>
-                <span class="badge bg-secondary">QId: #${q.id}</span>
-              </div>
-              
-              <div class="mb-4">
-                <p class="text-white fs-7" style="line-height: 1.6; white-space: pre-line;">${q.question}</p>
-              </div>
-              
-              <div class="mb-4 flex-grow-1">
-                <label class="form-label text-muted fs-8 uppercase mb-2">Your Draft Answer Workspace</label>
-                <textarea id="mock-draft-textarea" class="form-control glass-input fs-7" rows="5" placeholder="Draft your detailed answer here...">${userAnswers[q.id] || ''}</textarea>
-              </div>
+        // Highlight active button in Question Grid Palette
+        document.querySelectorAll('.btn-jump-q').forEach((btn, bIdx) => {
+          btn.classList.remove('border-primary', 'bg-primary', 'bg-opacity-25', 'fw-bold');
+          if (bIdx === idx) {
+            btn.classList.add('border-primary', 'bg-primary', 'bg-opacity-25', 'fw-bold');
+          }
+          if (userAnswers[questions[bIdx].id] !== undefined) {
+            btn.classList.add('border-success', 'text-success');
+          }
+        });
 
-              <!-- Answer Reveal Workspace -->
-              <div id="mock-reveal-pane" class="mb-4 d-none">
-                <div class="glass-panel p-3 border-indigo mb-3 bg-dark bg-opacity-50">
-                  <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-square-check text-indigo me-2"></i>Official Model Answer Reference</h6>
-                  <p class="text-white fs-7 mb-0 font-mono" style="line-height: 1.5; white-space: pre-line;">${q.answer}</p>
-                </div>
-                
-                <div class="d-flex align-items-center justify-content-between p-3 rounded bg-secondary bg-opacity-10">
-                  <span class="fs-8 text-muted uppercase font-bold">Compare & Rate your answer draft:</span>
-                  <div class="d-flex gap-2">
-                    <button class="btn btn-sm btn-success px-3 btn-assess-option" data-val="true">
-                      <i class="fa-solid fa-thumbs-up me-1"></i> Matched / Correct
-                    </button>
-                    <button class="btn btn-sm btn-danger px-3 btn-assess-option" data-val="false">
-                      <i class="fa-solid fa-thumbs-down me-1"></i> Needs Review
-                    </button>
+        // MCQ Card HTML
+        workspace.innerHTML = `
+          <div>
+            <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom border-secondary border-opacity-25">
+              <span class="badge bg-primary bg-opacity-20 text-primary fs-7 px-3 py-2">Question ${idx + 1} of ${questions.length}</span>
+              <span class="badge bg-dark text-muted border border-secondary">Topic: ${q.category}</span>
+            </div>
+            
+            <h5 class="text-white fw-bold mb-4" style="line-height: 1.6;">${q.question}</h5>
+            
+            <div class="d-flex flex-column gap-3 mb-4">
+              ${q.options.map((opt, optIdx) => {
+                const isSelected = selectedChoice === optIdx;
+                return `
+                  <div class="p-3 rounded border ${isSelected ? 'border-primary bg-primary bg-opacity-15 text-white' : 'border-secondary bg-dark bg-opacity-50 text-white-50'} d-flex align-items-center gap-3 mcq-option-card" data-opt-idx="${optIdx}" style="cursor: pointer; transition: all 0.2s ease;">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold ${isSelected ? 'bg-primary text-white' : 'bg-dark text-muted border border-secondary'}" style="width: 32px; height: 32px; flex-shrink: 0;">
+                      ${String.fromCharCode(65 + optIdx)}
+                    </div>
+                    <span class="fs-7 flex-grow-1 ${isSelected ? 'text-white fw-semibold' : ''}">${opt}</span>
+                    ${isSelected ? '<i class="fa-solid fa-circle-check text-primary fs-5"></i>' : '<i class="fa-regular fa-circle text-muted fs-6"></i>'}
                   </div>
-                </div>
-              </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
 
-              <div class="d-flex justify-content-between align-items-center mt-auto border-top border-secondary border-opacity-10 pt-3">
-                <button class="btn btn-glass btn-sm px-4" id="btn-mock-prev" ${idx === 0 ? 'disabled' : ''}><i class="fa-solid fa-arrow-left me-1"></i> Prev</button>
-                <button class="btn btn-indigo btn-sm px-4" id="btn-mock-reveal"><i class="fa-solid fa-eye me-1"></i> Reveal Answer</button>
-                <button class="btn btn-glass btn-sm px-4" id="btn-mock-next" ${idx === questions.length - 1 ? 'disabled' : ''}>Next <i class="fa-solid fa-arrow-right ms-1"></i></button>
-              </div>
-            `;
-            
-            // Textarea input monitoring
-            const txt = document.getElementById('mock-draft-textarea');
-            txt.addEventListener('input', (e) => {
-              userAnswers[q.id] = e.target.value;
-            });
-            
-            // Reveal button trigger
-            const revealBtn = document.getElementById('btn-mock-reveal');
-            const revealPane = document.getElementById('mock-reveal-pane');
-            revealBtn.addEventListener('click', () => {
-              revealPane.classList.toggle('d-none');
-              revealBtn.innerHTML = revealPane.classList.contains('d-none') ? '<i class="fa-solid fa-eye me-1"></i> Reveal Answer' : '<i class="fa-solid fa-eye-slash me-1"></i> Hide Answer';
-            });
-            
-            // Assessment buttons bindings
-            document.querySelectorAll('.btn-assess-option').forEach(btn => {
-              btn.addEventListener('click', (e) => {
-                const val = e.currentTarget.dataset.val === 'true';
-                scores[q.id] = val;
-                
-                // Highlight choice visual state
-                showToast(val ? 'Marked as Correct!' : 'Marked as Incorrect / Needs Review', val ? 'success' : 'warning');
-                
-                // Refresh scoreboard
-                const scoreEstimate2 = document.getElementById('mock-score-estimate');
-                const correctCount2 = Object.values(scores).filter(Boolean).length;
-                if (scoreEstimate2) scoreEstimate2.textContent = `Score: ${correctCount2} / ${questions.length}`;
-              });
-            });
-            
-            // Navigation trigger hooks
-            document.getElementById('btn-mock-prev').addEventListener('click', () => {
-              if (currentIndex > 0) {
-                currentIndex--;
-                renderMockQuestion(currentIndex);
-              }
-            });
-            
-            document.getElementById('btn-mock-next').addEventListener('click', () => {
-              if (currentIndex < questions.length - 1) {
-                currentIndex++;
-                renderMockQuestion(currentIndex);
-              }
-            });
-          }
+          <div class="d-flex justify-content-between align-items-center pt-3 border-top border-secondary border-opacity-25 mt-4">
+            <button type="button" class="btn btn-glass btn-sm px-4" id="btn-mcq-prev" ${idx === 0 ? 'disabled' : ''}>
+              <i class="fa-solid fa-arrow-left me-1"></i> Previous
+            </button>
+            <div class="d-flex gap-2">
+              <button type="button" class="btn btn-glass btn-sm px-3" id="btn-mcq-clear">
+                <i class="fa-solid fa-eraser me-1"></i> Clear Choice
+              </button>
+            </div>
+            <button type="button" class="btn btn-glass btn-sm px-4" id="btn-mcq-next" ${idx === questions.length - 1 ? 'disabled' : ''}>
+              Next <i class="fa-solid fa-arrow-right ms-1"></i>
+            </button>
+          </div>
+        `;
 
-          // Initial Render
-          renderMockQuestion(currentIndex);
-
-          document.getElementById('btn-submit-mock-exam').addEventListener('click', () => {
-            clearInterval(timerInterval);
-            const finalScore = Object.values(scores).filter(Boolean).length;
-            submitExamScore(test.id, finalScore, questions.length);
+        // Bind Option Click listeners
+        document.querySelectorAll('.mcq-option-card').forEach(card => {
+          card.addEventListener('click', (ev) => {
+            const optIdx = parseInt(ev.currentTarget.dataset.optIdx);
+            userAnswers[q.id] = optIdx;
+            renderMcqCard(idx);
           });
-        })
-        .catch(err => showToast(err.message, 'danger'));
+        });
+
+        // Clear button
+        const clearBtn = document.getElementById('btn-mcq-clear');
+        if (clearBtn) {
+          clearBtn.addEventListener('click', () => {
+            delete userAnswers[q.id];
+            renderMcqCard(idx);
+          });
+        }
+
+        // Prev & Next handlers
+        const prevBtn = document.getElementById('btn-mcq-prev');
+        if (prevBtn) {
+          prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+              currentIndex--;
+              renderMcqCard(currentIndex);
+            }
+          });
+        }
+
+        const nextBtn = document.getElementById('btn-mcq-next');
+        if (nextBtn) {
+          nextBtn.addEventListener('click', () => {
+            if (currentIndex < questions.length - 1) {
+              currentIndex++;
+              renderMcqCard(currentIndex);
+            }
+          });
+        }
+      }
+
+      // 6. Bind Question Grid Palette Clicks
+      document.querySelectorAll('.btn-jump-q').forEach(btn => {
+        btn.addEventListener('click', (ev) => {
+          const qIdx = parseInt(ev.currentTarget.dataset.qIndex);
+          currentIndex = qIdx;
+          renderMcqCard(currentIndex);
+        });
+      });
+
+      // 7. Initial Card Display
+      renderMcqCard(currentIndex);
+
+      // 8. Submit Exam Button
+      const submitBtn = document.getElementById('btn-submit-mock-exam');
+      if (submitBtn) {
+        submitBtn.addEventListener('click', () => {
+          const answered = Object.keys(userAnswers).length;
+          const unanswered = questions.length - answered;
+          const confirmMsg = unanswered > 0 
+            ? `You have answered ${answered} of ${questions.length} questions (${unanswered} unanswered). Submit and grade now?`
+            : `Are you ready to submit your assessment and view your graded scorecard?`;
+          
+          if (confirm(confirmMsg)) {
+            clearInterval(timerInterval);
+            finishAndGradeExam(test.id, questions, userAnswers, startTime, duration);
+          }
+        });
+      }
     }).catch(err => showToast(err.message, 'danger'));
   });
 }
 
-function submitExamScore(testId, finalScore, totalQuestions) {
-  apiFetch(`/v1/mocktests/${testId}/submit?score=${finalScore}`, { method: 'POST' })
+// Automated System Grading, Score Calculation, and XP Award Engine
+function finishAndGradeExam(testId, questions, userAnswers, startTime, duration) {
+  let correctCount = 0;
+  let incorrectCount = 0;
+  let unansweredCount = 0;
+
+  questions.forEach(q => {
+    const choice = userAnswers[q.id];
+    if (choice === undefined || choice === null) {
+      unansweredCount++;
+    } else if (choice === q.answer) {
+      correctCount++;
+    } else {
+      incorrectCount++;
+    }
+  });
+
+  const total = questions.length;
+  const score = correctCount;
+  const percentage = Math.round((score / total) * 100);
+  
+  // Calculate dynamic XP: 10 XP per correct question + 50 completion bonus + 150 excellence bonus
+  let earnedXp = (score * 10) + 50;
+  if (percentage >= 80) earnedXp += 150;
+
+  const elapsedSecs = Math.max(1, Math.floor((Date.now() - startTime) / 1000));
+  const elapsedMins = Math.floor(elapsedSecs / 60);
+  const remainingSecs = elapsedSecs % 60;
+  const timeSpentStr = `${elapsedMins}m ${remainingSecs}s`;
+
+  const stats = {
+    score,
+    total,
+    percentage,
+    correctCount,
+    incorrectCount,
+    unansweredCount,
+    earnedXp,
+    timeSpent: timeSpentStr
+  };
+
+  // Submit calculated score to server to update UserStreak and Leaderboard
+  apiFetch(`/v1/mocktests/${testId}/submit?score=${score}`, { method: 'POST' })
     .then(res => {
-      showToast(`Exam assessment score published: ${finalScore}/${totalQuestions} Questions Correct.`, 'success');
-      showToast('+200 Performance XP points awarded to profile!', 'success');
-      redirectTo('#/dashboard');
-    }).catch(err => showToast(err.message, 'danger'));
+      showToast(`Exam Graded: ${score}/${total} Correct (${percentage}%). +${earnedXp} XP Points Credited!`, 'success');
+      
+      // Render Scorecard
+      const pageMount = document.getElementById('page-mount');
+      if (pageMount) {
+        pageMount.innerHTML = components.mockExamResult(stats, questions, userAnswers);
+
+        // Bind Result buttons
+        const retakeBtn = document.getElementById('btn-retake-mock');
+        if (retakeBtn) {
+          retakeBtn.addEventListener('click', () => {
+            window.location.hash = '#/mock-exams';
+            router();
+          });
+        }
+
+        const backBtn = document.getElementById('btn-back-to-exams-catalog');
+        if (backBtn) {
+          backBtn.addEventListener('click', () => {
+            window.location.hash = '#/mock-exams';
+            router();
+          });
+        }
+      }
+    })
+    .catch(err => {
+      showToast(err.message, 'danger');
+      // Even if offline, show the graded scorecard
+      const pageMount = document.getElementById('page-mount');
+      if (pageMount) {
+        pageMount.innerHTML = components.mockExamResult(stats, questions, userAnswers);
+      }
+    });
 }
 
 function bindFlashcardsEvents() {

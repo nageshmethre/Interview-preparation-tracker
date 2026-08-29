@@ -1908,61 +1908,74 @@ const components = {
       <!-- Create Exam form -->
       <div class="col-lg-4">
         <div class="glass-panel p-4 h-100">
-          <h5 class="text-white fw-bold mb-4">Start Timed Assessment</h5>
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fa-solid fa-brain text-primary fs-4"></i>
+            <h5 class="text-white fw-bold mb-0">Start Mock Assessment</h5>
+          </div>
+          <p class="text-muted fs-8 mb-4">System-graded timed examinations with instant score calculation, MCQ verification, and profile XP rewards.</p>
           <form id="mock-exam-form">
             <div class="mb-3">
-              <label class="form-label text-muted fs-7">TOPIC CATEGORY</label>
+              <label class="form-label text-muted fs-7 fw-semibold">TOPIC CATEGORY</label>
               <select id="mock-category" class="form-select glass-input">
-                <option value="DSA">DSA & Data Structures</option>
-                <option value="Java">Java 21 & OOP</option>
-                <option value="SQL">SQL & Database Schema</option>
-                <option value="OS">Operating Systems</option>
-                <option value="CN">Computer Networks</option>
+                <option value="DSA">DSA & Data Structures (Trees, Graphs, DP)</option>
+                <option value="Java">Java 21, JVM & Spring Boot</option>
+                <option value="SQL">SQL & Database Systems (ACID, Normalization)</option>
+                <option value="OS">Operating Systems (Memory, Threads, Deadlocks)</option>
+                <option value="CN">Computer Networks (TCP/IP, DNS, OSI)</option>
+                <option value="Python">Python Core & Object Scripting</option>
+                <option value="ALL">Comprehensive Full-Stack Assessment</option>
               </select>
             </div>
             <div class="mb-3">
-              <label class="form-label text-muted fs-7">EXAM DURATION</label>
+              <label class="form-label text-muted fs-7 fw-semibold">EXAM DURATION</label>
               <select id="mock-duration" class="form-select glass-input">
-                <option value="30">30 Minutes</option>
-                <option value="60">60 Minutes</option>
-                <option value="90">90 Minutes</option>
+                <option value="15">15 Minutes (Quick Test)</option>
+                <option value="30" selected>30 Minutes (Standard)</option>
+                <option value="45">45 Minutes (Extended)</option>
+                <option value="60">60 Minutes (Full Length)</option>
               </select>
             </div>
             <div class="mb-4">
-              <label class="form-label text-muted fs-7">QUESTION COUNT</label>
+              <label class="form-label text-muted fs-7 fw-semibold">QUESTION COUNT</label>
               <select id="mock-qcount" class="form-select glass-input">
-                <option value="15">15 Questions</option>
+                <option value="10">10 Questions</option>
+                <option value="20">20 Questions</option>
                 <option value="30">30 Questions</option>
-                <option value="50">50 Questions</option>
+                <option value="50" selected>50 Questions (Comprehensive)</option>
               </select>
             </div>
-            <button type="submit" class="btn btn-premium w-100 py-3"><i class="fa-solid fa-stopwatch me-1"></i> Initialize Exam</button>
+            <button type="submit" class="btn btn-premium w-100 py-3 fw-bold fs-6"><i class="fa-solid fa-stopwatch me-2"></i>Start Automated Assessment</button>
           </form>
         </div>
       </div>
       <!-- Leaderboard & Past attempts -->
       <div class="col-lg-8">
         <div class="glass-panel p-4 mb-4">
-          <h5 class="text-white fw-bold mb-4"><i class="fa-solid fa-trophy text-warning me-2"></i>Global Leaderboard</h5>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="text-white fw-bold mb-0"><i class="fa-solid fa-trophy text-warning me-2"></i>Global Assessment Leaderboard</h5>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-8">Live Ranks</span>
+          </div>
           <div class="table-responsive">
             <table class="table table-dark table-hover align-middle m-0">
               <thead>
-                <tr class="text-muted border-secondary-subtle">
+                <tr class="text-muted border-secondary-subtle fs-8">
                   <th scope="col">Rank</th>
-                  <th scope="col">Candidate Name</th>
+                  <th scope="col">Candidate</th>
                   <th scope="col">Topic</th>
-                  <th scope="col" class="text-end">Assessment Score</th>
+                  <th scope="col" class="text-end">Score</th>
                 </tr>
               </thead>
               <tbody>
-                ${leaderboard.map((l, idx) => `
+                ${leaderboard && leaderboard.length > 0 ? leaderboard.map((l, idx) => `
                   <tr class="border-secondary-subtle fs-7">
-                    <td><span class="badge ${idx === 0 ? 'bg-warning' : idx === 1 ? 'bg-light text-dark' : 'bg-secondary'} rounded-circle">${idx + 1}</span></td>
-                    <td>${l.user.name}</td>
-                    <td>${l.category}</td>
-                    <td class="text-end fw-bold text-white">${l.score} pts</td>
+                    <td><span class="badge ${idx === 0 ? 'bg-warning text-dark' : idx === 1 ? 'bg-light text-dark' : idx === 2 ? 'bg-bronze text-white' : 'bg-secondary'} rounded-circle px-2 py-1">${idx + 1}</span></td>
+                    <td class="fw-semibold text-white">${l.user ? l.user.name : 'Anonymous Candidate'}</td>
+                    <td><span class="badge bg-dark border border-secondary text-primary-subtle">${l.category}</span></td>
+                    <td class="text-end fw-bold text-success">${l.score} pts</td>
                   </tr>
-                `).join('')}
+                `).join('') : `
+                  <tr><td colspan="4" class="text-center text-muted py-4">No examination scores logged yet. Be the first to take the test!</td></tr>
+                `}
               </tbody>
             </table>
           </div>
@@ -1973,37 +1986,144 @@ const components = {
 
   mockExamActive: (testId, category, duration, questionCount) => `
     <div class="row g-4">
-      <div class="col-lg-4 text-center">
+      <!-- Left Info & Question Palette Drawer -->
+      <div class="col-lg-4">
         <div class="glass-panel p-4 mb-4">
-          <div class="text-danger mb-3"><i class="fa-solid fa-hourglass-half fs-1"></i></div>
-          <h5 class="text-white fw-bold mb-1">Timed Assessment</h5>
-          <span class="badge bg-primary bg-opacity-25 text-primary mb-3">${category}</span>
-          
-          <div class="my-4 display-5 fw-extrabold text-white font-mono" id="mock-timer-display">
-            ${duration}:00
-          </div>
-          
-          <div class="border-top border-secondary border-opacity-25 pt-3 mt-3">
-            <div class="fs-8 text-muted mb-2 uppercase">PROGRESS TRACKER</div>
-            <div class="progress bg-dark bg-opacity-50 mb-3" style="height: 6px;">
-              <div id="mock-progress-bar" class="progress-bar bg-primary" role="progressbar" style="width: 0%"></div>
-            </div>
-            <div class="d-flex justify-content-between text-muted fs-8">
-              <span id="mock-progress-text">Question 0 of 0</span>
-              <span id="mock-score-estimate">Score: 0 / 0</span>
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-7 px-3 py-2">${category}</span>
+            <div class="text-danger fw-bold fs-5 font-monospace d-flex align-items-center gap-2" id="mock-timer-box">
+              <i class="fa-solid fa-stopwatch fa-spin-pulse"></i>
+              <span id="mock-timer-display">${duration}:00</span>
             </div>
           </div>
           
-          <button class="btn btn-premium w-100 py-3 mt-4" id="btn-submit-mock-exam" data-test-id="${testId}">Submit Exam Paper</button>
+          <div class="border-top border-secondary border-opacity-25 pt-3 mb-4">
+            <div class="d-flex justify-content-between text-muted fs-8 mb-2">
+              <span id="mock-progress-text">Progress: 1 of ${questionCount}</span>
+              <span id="mock-answered-count" class="text-success fw-bold">Answered: 0/${questionCount}</span>
+            </div>
+            <div class="progress bg-dark bg-opacity-75" style="height: 8px; border-radius: 4px;">
+              <div id="mock-progress-bar" class="progress-bar bg-primary" role="progressbar" style="width: ${(1 / questionCount) * 100}%"></div>
+            </div>
+          </div>
+
+          <!-- 50-Question Quick Jump Palette -->
+          <div class="mb-4">
+            <label class="form-label text-muted fs-8 fw-semibold uppercase mb-2">Question Navigation Grid</label>
+            <div class="d-flex flex-wrap gap-2 overflow-y-auto p-2 rounded bg-dark bg-opacity-50 border border-secondary" id="mock-question-palette" style="max-height: 220px;">
+              ${Array.from({ length: questionCount }, (_, i) => `
+                <button type="button" class="btn btn-sm btn-glass btn-jump-q py-1 px-2 fs-8 text-white ${i === 0 ? 'border-primary bg-primary bg-opacity-25' : ''}" data-q-index="${i}" id="palette-btn-${i}" style="min-width: 34px;">
+                  ${i + 1}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+          
+          <button class="btn btn-premium w-100 py-3 fw-bold fs-6" id="btn-submit-mock-exam" data-test-id="${testId}">
+            <i class="fa-solid fa-paper-plane me-2"></i> Submit & Grade Exam
+          </button>
         </div>
       </div>
 
+      <!-- Right Active Question Card -->
       <div class="col-lg-8">
-        <div class="glass-panel p-4 h-100 d-flex flex-column" id="mock-question-card-workspace" style="min-height: 400px;">
+        <div class="glass-panel p-4 h-100 d-flex flex-column justify-content-between" id="mock-question-card-workspace" style="min-height: 480px;">
           <div class="text-center py-5">
-            <div class="spinner-border text-primary"></div>
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="text-muted mt-3">Loading dynamic assessment questions...</p>
           </div>
         </div>
+      </div>
+    </div>
+  `,
+
+  mockExamResult: (stats, questions, userAnswers) => `
+    <div class="glass-panel p-4 p-md-5 mb-4 text-center position-relative overflow-hidden">
+      <div class="mb-3">
+        <span class="badge ${stats.percentage >= 80 ? 'bg-success' : stats.percentage >= 50 ? 'bg-warning text-dark' : 'bg-danger'} fs-6 px-4 py-2 text-uppercase">
+          ${stats.percentage >= 80 ? '🌟 Assessment Passed with Distinction' : stats.percentage >= 50 ? '👍 Assessment Cleared' : '📚 Needs Further Study'}
+        </span>
+      </div>
+      <h2 class="text-white fw-extrabold mb-2 display-6">Scorecard: ${stats.score} / ${stats.total}</h2>
+      <p class="text-muted fs-6 mb-4">Accuracy: <strong class="text-primary">${stats.percentage}%</strong> • Time Taken: <strong class="text-white">${stats.timeSpent}</strong></p>
+
+      <!-- Earned XP Points Alert -->
+      <div class="d-inline-flex align-items-center gap-3 bg-indigo bg-opacity-25 border border-primary px-4 py-3 rounded-pill mb-4">
+        <i class="fa-solid fa-bolt text-warning fs-4"></i>
+        <span class="text-white fw-bold fs-6">+${stats.earnedXp} XP Points Added to Profile Streak!</span>
+      </div>
+
+      <div class="row g-3 justify-content-center max-w-700 mx-auto mb-4">
+        <div class="col-4">
+          <div class="p-3 bg-dark bg-opacity-50 rounded border border-success">
+            <div class="text-success fw-bold display-7">${stats.correctCount}</div>
+            <div class="text-muted fs-8">CORRECT</div>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="p-3 bg-dark bg-opacity-50 rounded border border-danger">
+            <div class="text-danger fw-bold display-7">${stats.incorrectCount}</div>
+            <div class="text-muted fs-8">INCORRECT</div>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="p-3 bg-dark bg-opacity-50 rounded border border-secondary">
+            <div class="text-white fw-bold display-7">${stats.unansweredCount}</div>
+            <div class="text-muted fs-8">SKIPPED</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center gap-3">
+        <button id="btn-retake-mock" class="btn btn-premium px-4 py-2"><i class="fa-solid fa-rotate-right me-1"></i> Start New Assessment</button>
+        <button id="btn-back-to-exams-catalog" class="btn btn-glass px-4 py-2"><i class="fa-solid fa-list me-1"></i> Leaderboard & Tests</button>
+      </div>
+    </div>
+
+    <!-- Detailed Question-by-Question Review -->
+    <div class="glass-panel p-4">
+      <h4 class="text-white fw-bold mb-4"><i class="fa-solid fa-magnifying-glass-chart text-primary me-2"></i>Detailed Question Review & Explanations</h4>
+      <div class="d-flex flex-column gap-4">
+        ${questions.map((q, idx) => {
+          const userChoice = userAnswers[q.id];
+          const isCorrect = userChoice === q.answer;
+          const isAnswered = userChoice !== undefined && userChoice !== null;
+          return `
+            <div class="p-4 rounded border ${!isAnswered ? 'border-secondary bg-dark bg-opacity-25' : isCorrect ? 'border-success bg-success bg-opacity-10' : 'border-danger bg-danger bg-opacity-10'}">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="fw-bold text-white fs-6">Question ${idx + 1}</span>
+                <span class="badge ${!isAnswered ? 'bg-secondary' : isCorrect ? 'bg-success' : 'bg-danger'}">
+                  ${!isAnswered ? 'Skipped' : isCorrect ? '✓ Correct (+10 XP)' : '✗ Incorrect (0 XP)'}
+                </span>
+              </div>
+              <p class="text-white fs-7 mb-3 fw-semibold">${q.question}</p>
+              
+              <div class="row g-2 mb-3">
+                ${q.options.map((opt, optIdx) => {
+                  let optStyle = 'border-secondary text-muted bg-dark bg-opacity-50';
+                  if (optIdx === q.answer) {
+                    optStyle = 'border-success text-success bg-success bg-opacity-20 fw-bold';
+                  } else if (userChoice === optIdx && !isCorrect) {
+                    optStyle = 'border-danger text-danger bg-danger bg-opacity-20 fw-bold';
+                  }
+                  return `
+                    <div class="col-md-6">
+                      <div class="p-2 rounded border ${optStyle} fs-8 d-flex align-items-center gap-2">
+                        <span class="badge ${optIdx === q.answer ? 'bg-success' : userChoice === optIdx ? 'bg-danger' : 'bg-dark'}">${String.fromCharCode(65 + optIdx)}</span>
+                        <span>${opt}</span>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+
+              <div class="p-3 rounded bg-dark bg-opacity-75 border border-secondary fs-8">
+                <strong class="text-primary"><i class="fa-solid fa-lightbulb me-1"></i> System Explanation:</strong>
+                <span class="text-white-50 ms-1">${q.explanation || 'The correct option satisfies the fundamental architectural and algorithmic properties.'}</span>
+              </div>
+            </div>
+          `;
+        }).join('')}
       </div>
     </div>
   `,
@@ -2877,4 +2997,112 @@ const components = {
     </div>
   `
 };
+
+// PrepSpace Automated Technical Assessment MCQ Bank & Dynamic Generator
+const RAW_MCQ_DATA = {
+  DSA: [
+    { q: "What is the worst-case time complexity of QuickSort algorithm?", opts: ["O(N log N)", "O(N)", "O(N^2)", "O(log N)"], ans: 2, exp: "QuickSort degrades to O(N^2) when the pivot selected is always the minimum or maximum element." },
+    { q: "Which data structure is best suited for Breadth-First Search (BFS)?", opts: ["Stack", "Queue", "Binary Search Tree", "Priority Queue"], ans: 1, exp: "BFS explores nodes level-by-level in FIFO order, which requires a Queue." },
+    { q: "What is the average time complexity of searching in a well-distributed Hash Table?", opts: ["O(1)", "O(log N)", "O(N)", "O(N log N)"], ans: 0, exp: "Average hash table lookups occur in O(1) constant time with low load factor." },
+    { q: "In a min-heap with N elements, what is the time complexity to extract the minimum element?", opts: ["O(1)", "O(log N)", "O(N)", "O(N log N)"], ans: 1, exp: "Extracting the min removes the root and restores heap property in O(log N) time." },
+    { q: "Which algorithm finds single-source shortest paths in non-negative weighted graphs?", opts: ["Prim's Algorithm", "Kruskal's Algorithm", "Dijkstra's Algorithm", "Floyd-Warshall"], ans: 2, exp: "Dijkstra's Algorithm computes single-source shortest paths in O((V + E) log V)." },
+    { q: "What is the time complexity of Floyd's Cycle-Finding Algorithm for linked lists?", opts: ["O(1)", "O(N) time and O(1) space", "O(N^2)", "O(log N)"], ans: 1, exp: "Uses slow and fast pointers to detect cycles in O(N) time with O(1) auxiliary space." },
+    { q: "Which tree traversal visits the root node between the left and right subtrees?", opts: ["Pre-order", "In-order", "Post-order", "Level-order"], ans: 1, exp: "In-order traversal visits: Left -> Root -> Right. For BST, in-order produces sorted order." },
+    { q: "What is the height of a balanced Binary Search Tree containing N nodes?", opts: ["O(N)", "O(log N)", "O(N log N)", "O(sqrt(N))"], ans: 1, exp: "Balanced BSTs (AVL, Red-Black) maintain height of O(log N)." },
+    { q: "Which sorting algorithm is NOT stable by default?", opts: ["Merge Sort", "Insertion Sort", "Quick Sort", "Bubble Sort"], ans: 2, exp: "Standard QuickSort swaps non-adjacent identical elements across the pivot." },
+    { q: "What is the time complexity of Kadane's algorithm for the Maximum Subarray problem?", opts: ["O(N^2)", "O(N log N)", "O(N)", "O(2^N)"], ans: 2, exp: "Kadane's algorithm finds the maximum subarray sum in a single linear pass O(N)." },
+    { q: "What data structure is used to convert an Infix expression to Postfix format?", opts: ["Queue", "Stack", "Binary Tree", "Deque"], ans: 1, exp: "Dijkstra's Shunting-yard algorithm uses a Stack for operator precedence." },
+    { q: "What is the maximum number of edges in an undirected simple graph with V vertices?", opts: ["V * (V - 1)", "V * (V - 1) / 2", "V^2", "2 * V"], ans: 1, exp: "Each vertex connects to V-1 vertices divided by 2 for undirected edges: V(V-1)/2." },
+    { q: "What is the worst-case time complexity of Binary Search on a sorted array?", opts: ["O(1)", "O(N)", "O(log N)", "O(N log N)"], ans: 2, exp: "Binary Search halves the search space at each iteration, yielding O(log N) time." },
+    { q: "Which algorithm finds the Minimum Spanning Tree using a Disjoint Set Union (DSU)?", opts: ["Kruskal's Algorithm", "Prim's Algorithm", "Bellman-Ford", "Floyd-Warshall"], ans: 0, exp: "Kruskal's sorts edges by weight and uses DSU to prevent cycle formation." },
+    { q: "What is the amortized insertion time complexity for a dynamic array (like ArrayList)?", opts: ["O(N)", "O(log N)", "O(1)", "O(N^2)"], ans: 2, exp: "Resizing occurs geometrically, making the amortized cost per insertion O(1)." }
+  ],
+  Java: [
+    { q: "In Java memory management, where are object instances allocated at runtime?", opts: ["Stack Memory", "Heap Memory", "Metaspace", "Program Counter Register"], ans: 1, exp: "All Java object instances and arrays are allocated on the Heap memory." },
+    { q: "Which Java 8 feature allows passing behavior (functional interfaces) as method arguments?", opts: ["Lambda Expressions", "Generics", "Reflection", "Annotations"], ans: 0, exp: "Lambda expressions represent single-method Functional Interfaces concisely." },
+    { q: "What happens if you declare a method as 'final' in a Java class?", opts: ["It cannot be overloaded", "It cannot be overridden by subclasses", "It must be static", "It cannot accept parameters"], ans: 1, exp: "A final method cannot be overridden by any child subclass." },
+    { q: "Which collection class in Java is synchronized and thread-safe by default?", opts: ["ArrayList", "HashMap", "Vector", "HashSet"], ans: 2, exp: "Vector methods are synchronized, making it thread-safe." },
+    { q: "What is the difference between '==' and '.equals()' for Java String objects?", opts: ["'==' checks memory address, '.equals()' checks character value", "Both check value", "'==' checks character values", "No difference"], ans: 0, exp: "'==' compares memory addresses, while .equals() compares character content." },
+    { q: "What is the purpose of the 'volatile' keyword in Java multithreading?", opts: ["Locks the object monitor", "Ensures variable reads and writes are visible across threads without CPU caching", "Makes variable immutable", "Serializes object"], ans: 1, exp: "Volatile guarantees that changes are immediately visible in main memory across threads." },
+    { q: "Which interface must a class implement to be used in a Java try-with-resources statement?", opts: ["Serializable", "Cloneable", "AutoCloseable", "Runnable"], ans: 2, exp: "try-with-resources requires classes implementing AutoCloseable or Closeable." },
+    { q: "What is the default initial capacity and load factor of a Java HashMap?", opts: ["Capacity 10, Load Factor 0.5", "Capacity 16, Load Factor 0.75", "Capacity 32, Load Factor 0.8", "Capacity 8, Load Factor 1.0"], ans: 1, exp: "HashMap defaults to an initial capacity of 16 and a load factor of 0.75." },
+    { q: "What is the parent class of all exceptions and errors in Java?", opts: ["java.lang.Exception", "java.lang.Error", "java.lang.Throwable", "java.lang.RuntimeException"], ans: 2, exp: "java.lang.Throwable is the root superclass of both Exception and Error." },
+    { q: "In Spring Boot, which annotation is used to auto-wire dependencies by type?", opts: ["@Component", "@Autowired", "@Service", "@Repository"], ans: 1, exp: "@Autowired injects matching bean dependencies automatically." }
+  ],
+  SQL: [
+    { q: "Which SQL clause is used to filter group records after an aggregate function is applied?", opts: ["WHERE", "HAVING", "GROUP BY", "ORDER BY"], ans: 1, exp: "HAVING filters aggregated groups, whereas WHERE filters individual rows before grouping." },
+    { q: "What is the primary benefit of a Database Index (e.g., B-Tree Index)?", opts: ["Accelerates SELECT queries from O(N) to O(log N)", "Speeds up INSERTs", "Reduces disk storage", "Eliminates row locks"], ans: 0, exp: "Indexes speed up data retrieval queries from full table scans to logarithmic lookups." },
+    { q: "What does the 'A' in ACID transaction properties stand for?", opts: ["Authentication", "Atomicity", "Availability", "Authorization"], ans: 1, exp: "Atomicity ensures all-or-nothing execution for database transaction operations." },
+    { q: "Which SQL JOIN returns all rows from the left table and matching rows from the right table?", opts: ["INNER JOIN", "LEFT OUTER JOIN", "RIGHT OUTER JOIN", "CROSS JOIN"], ans: 1, exp: "LEFT JOIN retains all left-table rows, populating right-table columns with NULL if unmatched." },
+    { q: "What is the highest normal form where every non-key attribute is non-transitively dependent on the primary key?", opts: ["1NF", "2NF", "3NF", "BCNF"], ans: 2, exp: "Third Normal Form (3NF) eliminates transitive functional dependencies on the primary key." },
+    { q: "Which SQL constraint ensures that all values in a column are unique and not null?", opts: ["UNIQUE", "PRIMARY KEY", "FOREIGN KEY", "CHECK"], ans: 1, exp: "PRIMARY KEY enforces both UNIQUE and NOT NULL constraints on identity columns." },
+    { q: "Which database isolation level prevents Dirty Reads, Non-Repeatable Reads, and Phantom Reads?", opts: ["READ COMMITTED", "READ UNCOMMITTED", "REPEATABLE READ", "SERIALIZABLE"], ans: 3, exp: "SERIALIZABLE is the strictest ANSI SQL isolation level, executing transactions sequentially." },
+    { q: "What is the difference between TRUNCATE and DELETE in SQL?", opts: ["DELETE is DDL", "TRUNCATE is DDL that resets pages and cannot use WHERE", "TRUNCATE fires row triggers", "No difference"], ans: 1, exp: "TRUNCATE is a DDL command that rapidly deallocates data pages without row-level logging." },
+    { q: "What type of NoSQL database is MongoDB?", opts: ["Key-Value store", "Document-Oriented (BSON)", "Column-Family store", "Graph database"], ans: 1, exp: "MongoDB stores semi-structured data as flexible BSON documents." }
+  ],
+  OS: [
+    { q: "What is the difference between a Process and a Thread?", opts: ["A process has its own address space; threads within a process share memory", "Threads have private address space", "Processes cannot run concurrently", "There is no difference"], ans: 0, exp: "Processes are memory-isolated; threads share address space and heap memory within a process." },
+    { q: "Which CPU scheduling algorithm gives the lowest average waiting time for a set of processes?", opts: ["FCFS", "Shortest Job First (SJF)", "Round Robin", "Priority Scheduling"], ans: 1, exp: "Shortest Job First (SJF) is mathematically optimal for minimizing average waiting time." },
+    { q: "Which of the following is NOT one of Coffman's four necessary conditions for Deadlock?", opts: ["Mutual Exclusion", "Hold and Wait", "Preemption Allowed", "Circular Wait"], ans: 2, exp: "The condition is NO Preemption. Allowing preemption breaks deadlock immediately." },
+    { q: "What is Thrashing in an Operating System?", opts: ["High CPU utilization", "OS spending more time swapping pages in/out of disk than executing instructions", "Disk defragmentation", "Buffer overflow"], ans: 1, exp: "Thrashing occurs when active memory exceeds physical RAM, causing constant page faults." },
+    { q: "What is the role of the TLB (Translation Lookaside Buffer)?", opts: ["Instruction cache", "Hardware cache of recent virtual-to-physical address translations", "Disk scheduler", "Frame buffer"], ans: 1, exp: "The TLB is a fast hardware cache that accelerates virtual-to-physical page lookups." },
+    { q: "Which system call in Unix creates a new duplicate child process?", opts: ["exec()", "fork()", "spawn()", "clone()"], ans: 1, exp: "fork() creates a child process with a copy-on-write duplicate of parent memory space." }
+  ],
+  CN: [
+    { q: "At which layer of the OSI model do IP addressing and packet routing operate?", opts: ["Data Link (Layer 2)", "Network (Layer 3)", "Transport (Layer 4)", "Application (Layer 7)"], ans: 1, exp: "The Network Layer (Layer 3) handles IP addressing, routing, and packet forwarding." },
+    { q: "What are the three packets exchanged in a TCP Three-Way Handshake?", opts: ["SYN, SYN-ACK, ACK", "ACK, SYN, FIN", "PING, PONG, ACK", "HELO, SYN, DATA"], ans: 0, exp: "TCP establishes connections via Client SYN -> Server SYN-ACK -> Client ACK." },
+    { q: "What is the default port number for secure HTTPS communication?", opts: ["80", "8080", "443", "22"], ans: 2, exp: "Port 443 is the standard port for TLS/SSL encrypted HTTPS traffic." },
+    { q: "What is the purpose of the Domain Name System (DNS)?", opts: ["Encrypts web traffic", "Translates human-readable domain names into machine IP addresses", "Filters spam", "Assigns MAC addresses"], ans: 1, exp: "DNS maps domain names (like stream-in.app) to machine-routable IP addresses." },
+    { q: "Which HTTP status code signifies that a requested resource was Not Found?", opts: ["200 OK", "401 Unauthorized", "403 Forbidden", "404 Not Found"], ans: 3, exp: "404 indicates the requested URI path was not found on the server." },
+    { q: "What protocol is used by the 'ping' utility to check network connectivity?", opts: ["TCP", "UDP", "ICMP", "ARP"], ans: 2, exp: "Ping uses ICMP Echo Request and Echo Reply packets to verify connectivity." }
+  ],
+  Python: [
+    { q: "What is the Global Interpreter Lock (GIL) in CPython?", opts: ["A database lock", "A mutex that prevents multiple native threads from executing bytecodes simultaneously in CPython", "A code encryption tool", "A compiler optimizer"], ans: 1, exp: "CPython's GIL ensures thread safety by permitting only one thread to execute bytecode at once." },
+    { q: "What is the primary difference between a Python List and a Tuple?", opts: ["Lists are mutable; Tuples are immutable", "Tuples are slower than lists", "Lists cannot hold strings", "Tuples cannot be indexed"], ans: 0, exp: "Lists are mutable, whereas Tuples are immutable and hashable." },
+    { q: "Which keyword is used to create a Generator function in Python?", opts: ["return", "yield", "generate", "async"], ans: 1, exp: "yield pauses execution and yields intermediate values for iteration." },
+    { q: "What is the output of bool([]) and bool([0]) in Python?", opts: ["False, False", "False, True", "True, True", "True, False"], ans: 1, exp: "An empty list [] is falsy (False); a non-empty list [0] is truthy (True)." }
+  ]
+};
+
+function getMcqQuestions(category, count) {
+  const requestedCount = count || 15;
+  let pool = [];
+  
+  if (category && category !== 'ALL' && RAW_MCQ_DATA[category]) {
+    pool = RAW_MCQ_DATA[category].map(item => ({ question: item.q, options: [...item.opts], answer: item.ans, explanation: item.exp }));
+  } else {
+    Object.keys(RAW_MCQ_DATA).forEach(cat => {
+      RAW_MCQ_DATA[cat].forEach(item => {
+        pool.push({ question: item.q, options: [...item.opts], answer: item.ans, explanation: item.exp, topic: cat });
+      });
+    });
+  }
+
+  // Fisher-Yates Shuffle
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+
+  const result = [];
+  for (let k = 0; k < requestedCount; k++) {
+    const base = pool[k % pool.length];
+    result.push({
+      id: k + 1,
+      category: base.topic || category || 'Technical Assessment',
+      question: base.question,
+      options: [...base.options],
+      answer: base.answer,
+      explanation: base.explanation
+    });
+  }
+
+  return result;
+}
+
+if (typeof window !== 'undefined') {
+  window.RAW_MCQ_DATA = RAW_MCQ_DATA;
+  window.getMcqQuestions = getMcqQuestions;
+}
+
 

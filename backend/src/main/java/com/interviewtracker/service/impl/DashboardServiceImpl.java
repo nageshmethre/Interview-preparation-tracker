@@ -26,6 +26,9 @@ public class DashboardServiceImpl implements DashboardService {
     @Autowired
     private JobApplicationRepository jobApplicationRepository;
 
+    @Autowired
+    private UserStreakRepository userStreakRepository;
+
     private User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found: " + email));
@@ -114,8 +117,15 @@ public class DashboardServiceImpl implements DashboardService {
         codingPlatformsSolved.put("CodeChef", totalSolved * 3 + 4);
         codingPlatformsSolved.put("Codeforces", totalSolved * 2);
 
-        // 9. Streak Logic (Consecutive days logged)
+        // 9. Streak Logic (Consecutive days logged or recorded streak)
         int streak = calculateStreak(userId);
+        Optional<UserStreak> streakOpt = userStreakRepository.findByUserId(userId);
+        if (streakOpt.isPresent()) {
+            UserStreak us = streakOpt.get();
+            if (us.getCurrentStreak() != null && us.getCurrentStreak() > streak) {
+                streak = us.getCurrentStreak();
+            }
+        }
 
         // 10. Readiness Score Calculation
         Double avgMockScore = mockInterviewRepository.getAverageScoreByUserId(userId);
@@ -124,9 +134,11 @@ public class DashboardServiceImpl implements DashboardService {
         int readinessScore = Math.min(scorePart + topicsPart, 100);
         if (readinessScore == 0 && appsCount > 0) readinessScore = 55; // Default starter score
 
-        // 11. XP Points
+        // 11. XP Points (Combined from study progress + earned exam/coding awards)
         int totalMinutesVal = totalMinutes == null ? 0 : totalMinutes.intValue();
-        int xpPoints = totalMinutesVal * 2 + (int) (completedCount * 50) + (streak * 10);
+        int baseStudyXp = totalMinutesVal * 2 + (int) (completedCount * 50) + (streak * 10);
+        int streakAwardXp = streakOpt.map(us -> us.getXpPoints() != null ? us.getXpPoints() : 0).orElse(0);
+        int totalXpPoints = baseStudyXp + streakAwardXp;
 
         return DashboardStatsDto.builder()
                 .totalStudyHours(totalHours)
@@ -139,7 +151,7 @@ public class DashboardServiceImpl implements DashboardService {
                 .codingPlatformsSolved(codingPlatformsSolved)
                 .streak(streak)
                 .readinessScore(readinessScore)
-                .xpPoints(xpPoints)
+                .xpPoints(totalXpPoints)
                 .build();
     }
 

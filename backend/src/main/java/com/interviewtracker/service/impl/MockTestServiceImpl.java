@@ -54,13 +54,48 @@ public class MockTestServiceImpl implements MockTestService {
         mockTest.setCompletedAt(LocalDateTime.now());
         MockTest saved = mockTestRepository.save(mockTest);
 
-        // Award dynamic XP for high performance
-        double percentage = ((double) score / mockTest.getQuestionCount()) * 100;
-        if (percentage >= 80.0) {
-            streakRepository.findByUserId(mockTest.getUser().getId()).ifPresent(streak -> {
-                streak.setXpPoints(streak.getXpPoints() + 200); // Reward 200 XP for high score
-                streakRepository.save(streak);
-            });
+        // Award dynamic XP points directly to user's profile and streak
+        User user = mockTest.getUser();
+        if (user != null) {
+            com.interviewtracker.entity.UserStreak streak = streakRepository.findByUserId(user.getId())
+                    .orElseGet(() -> com.interviewtracker.entity.UserStreak.builder()
+                            .user(user)
+                            .currentStreak(1)
+                            .longestStreak(1)
+                            .xpPoints(0)
+                            .lastActivityDate(java.time.LocalDate.now())
+                            .build());
+
+            // 10 XP per correct question + 50 completion bonus
+            int earnedXp = (score * 10) + 50;
+            
+            // High score bonus (>= 80% score)
+            double percentage = ((double) score / Math.max(1, mockTest.getQuestionCount())) * 100;
+            if (percentage >= 80.0) {
+                earnedXp += 150; // Extra bonus for excellence
+            }
+
+            streak.setXpPoints((streak.getXpPoints() != null ? streak.getXpPoints() : 0) + earnedXp);
+            
+            java.time.LocalDate today = java.time.LocalDate.now();
+            if (streak.getLastActivityDate() == null) {
+                streak.setCurrentStreak(1);
+                streak.setLongestStreak(Math.max(1, streak.getLongestStreak() != null ? streak.getLongestStreak() : 1));
+                streak.setLastActivityDate(today);
+            } else if (!streak.getLastActivityDate().equals(today)) {
+                if (streak.getLastActivityDate().equals(today.minusDays(1))) {
+                    int newStreak = (streak.getCurrentStreak() != null ? streak.getCurrentStreak() : 0) + 1;
+                    streak.setCurrentStreak(newStreak);
+                    if (streak.getLongestStreak() == null || newStreak > streak.getLongestStreak()) {
+                        streak.setLongestStreak(newStreak);
+                    }
+                } else if (streak.getLastActivityDate().isBefore(today.minusDays(1))) {
+                    streak.setCurrentStreak(1);
+                }
+                streak.setLastActivityDate(today);
+            }
+
+            streakRepository.save(streak);
         }
 
         return saved;
