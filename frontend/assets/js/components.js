@@ -7,8 +7,8 @@ const components = {
       <nav class="navbar navbar-expand-lg navbar-dark bg-transparent py-4">
         <div class="container">
           <a class="navbar-brand fw-extrabold fs-3 text-white d-flex align-items-center gap-2" href="#/">
-            <img src="assets/streamin_logo.svg" alt="Stream-In Logo" class="brand-logo-img" style="width: 38px; height: 38px; object-fit: contain;">
-            <span>Stream-In (PrepSpace)</span>
+            <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" class="brand-logo-img" style="width: 38px; height: 38px; object-fit: contain;">
+            <span>PrepSpace</span>
           </a>
           <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
             <span class="navbar-toggler-icon"></span>
@@ -125,16 +125,14 @@ const components = {
              data-ad-client="ca-pub-4662205173096609"
              data-ad-slot="3928140249"></ins>
       </div>
-    </div>
-
-    <!-- Footer -->
+    </div>    <!-- Footer -->
     <footer class="py-5 text-center border-top border-secondary-subtle border-opacity-10 mt-5">
       <div class="container">
         <div class="d-flex justify-content-center align-items-center gap-2 mb-2">
-          <img src="assets/streamin_logo.svg" alt="Stream-In Logo" style="width: 28px; height: 28px; object-fit: contain;">
-          <span class="text-white fw-bold fs-7">Stream-In (PrepSpace)</span>
+          <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" style="width: 28px; height: 28px; object-fit: contain;">
+          <span class="text-white fw-bold fs-7">PrepSpace</span>
         </div>
-        <p class="text-muted small mb-3">&copy; 2026 Stream-In (PrepSpace). Developed by Nagesh Methre. All rights reserved.</p>
+        <p class="text-muted small mb-3">&copy; 2026 PrepSpace. Developed by Nagesh Methre. All rights reserved.</p>
         <div class="d-flex justify-content-center gap-3 text-muted small">
           <a href="/about" class="text-muted text-decoration-none">About</a>
           <span>•</span>
@@ -228,8 +226,8 @@ const components = {
       <div class="sidebar glass-panel border-top-0 border-bottom-0 border-start-0 rounded-0">
         <div class="p-4 border-bottom border-secondary-subtle d-flex align-items-center justify-content-between">
           <a class="navbar-brand fw-extrabold fs-4 text-white d-flex align-items-center brand-text" href="#/dashboard">
-            <img src="assets/streamin_logo.svg" alt="Stream-In Logo" class="me-2" style="width: 32px; height: 32px; object-fit: contain;">
-            <span class="brand-name">Stream-In (PrepSpace)</span>
+            <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" class="me-2" style="width: 32px; height: 32px; object-fit: contain;">
+            <span class="brand-name">PrepSpace</span>
           </a>
           <button id="sidebar-collapse-btn" class="btn btn-glass btn-sm border-0 rounded-circle text-white d-none d-lg-flex align-items-center justify-content-center" style="width: 26px; height: 26px; padding: 0;">
             <i class="fa-solid fa-chevron-left" id="collapse-icon" style="font-size: 0.8rem;"></i>
@@ -1488,9 +1486,9 @@ const components = {
 
   settingsAbout: () => `
     <div class="text-center py-4">
-      <img src="assets/streamin_logo.svg" alt="Stream-In Logo" class="mb-3" style="width: 54px; height: 54px; object-fit: contain;">
-      <h4 class="text-white fw-bold mb-1">Stream-In (PrepSpace) Enterprise</h4>
-      <p class="text-muted fs-7 mb-4">Version 2.1.3 (Stateless Zero-Trust Edition)</p>
+      <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" class="mb-3" style="width: 54px; height: 54px; object-fit: contain;">
+      <h4 class="text-white fw-bold mb-1">PrepSpace Enterprise</h4>
+      <p class="text-muted fs-7 mb-4">Version 2.1.5 (Stateless Zero-Trust Edition)</p>
       <p class="text-muted fs-8">Designed by Nagesh Methre. All rights reserved.</p>
     </div>
   `,
@@ -2376,7 +2374,7 @@ const components = {
       <i class="fa-solid fa-desktop display-4 text-indigo mb-4"></i>
       <h3 class="text-white fw-bold mb-2">Java Swing Desktop Client</h3>
       <p class="text-muted fs-7 max-w-md mx-auto mb-4" style="max-width: 450px;">
-        Stream-In (PrepSpace) provides a complete, high-performance Java Swing desktop application that integrates directly with the MySQL database via JDBC for ultra-fast, local placement tracking.
+        PrepSpace provides a complete, high-performance Java Swing desktop application that integrates directly with the MySQL database via JDBC for ultra-fast, local placement tracking.
       </p>
       
       <div class="card bg-dark bg-opacity-25 border-secondary text-start mx-auto p-4 mb-4 text-muted fs-7" style="max-width: 550px;">
@@ -2445,7 +2443,7 @@ const components = {
         <div class="row align-items-center">
           <div class="col-md-8">
             <span class="badge bg-indigo-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill mb-3">AFFILIATE PROGRAM</span>
-            <h2 class="text-white fw-bold mb-2">Share Stream-In (PrepSpace), Earn Cash Payouts!</h2>
+            <h2 class="text-white fw-bold mb-2">Share PrepSpace, Earn Cash Payouts!</h2>
             <p class="text-muted mb-0">Invite your classmates and friends. You earn <strong class="text-primary">₹49</strong> on every user who upgrades their tracker space to premium (₹99)!</p>
           </div>
         </div>
@@ -2767,7 +2765,7 @@ const components = {
             <div class="mb-3">
               <label class="form-label text-muted fs-8 uppercase">SEO Portal Global Meta Title</label>
               <div class="input-group">
-                <input type="text" id="setting-SEO_META_TITLE" class="form-control glass-input" value="${settings.SEO_META_TITLE || 'Stream-In (PrepSpace) - Premium Interview Preparation Tracker SaaS'}">
+                <input type="text" id="setting-SEO_META_TITLE" class="form-control glass-input" value="${settings.SEO_META_TITLE || 'PrepSpace - Premium Interview Preparation Tracker SaaS'}">
                 <button class="btn btn-primary btn-save-setting" data-key="SEO_META_TITLE">Update</button>
               </div>
             </div>
