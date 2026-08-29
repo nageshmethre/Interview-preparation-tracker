@@ -82,27 +82,29 @@ const components = {
             <div class="glass-panel p-4 h-100 text-center">
               <h3 class="text-white h4">PrepFree</h3>
               <p class="text-muted">Perfect for getting started</p>
-              <div class="my-4"><span class="display-4 fw-bold text-white">$0</span><span class="text-muted">/month</span></div>
+              <div class="my-4"><span class="display-4 fw-bold text-white">₹0</span><span class="text-muted">/free</span></div>
               <ul class="list-unstyled text-start mb-5 text-muted">
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Access to Question Bank</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Log Solved Problems</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Access to Core Question Bank</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Log Solved Coding Problems</li>
                 <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Standard Kanban Tracker</li>
               </ul>
-              <a href="#/register" class="btn btn-glass w-100 py-3">Register Account</a>
+              <a href="#/register" class="btn btn-glass w-100 py-3">Register Free Account</a>
             </div>
           </div>
           <div class="col-md-5 col-lg-4">
             <div class="glass-panel p-4 h-100 text-center border-primary" style="box-shadow: 0 0 25px var(--accent-glow);">
+              <div class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle px-3 py-1 mb-2">MOST POPULAR</div>
               <h3 class="text-white h4">PrepPro</h3>
               <p class="text-indigo">Recommended for Active Jobseekers</p>
-              <div class="my-4"><span class="display-4 fw-bold text-white">FREE</span><span class="text-muted">/lifetime</span></div>
+              <div class="my-4"><span class="display-4 fw-bold text-white">₹99</span><span class="text-muted">/one-time lifetime</span></div>
               <ul class="list-unstyled text-start mb-5 text-muted">
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Custom Target Study Plans</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Mock AI Feedback Logs</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Export Excel/PDF Reports</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Advanced Platform Syncs</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>AI Career Assistant</strong> (ATS Audit, Planner)</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Unlimited Mock Assessments & 50-MCQs</strong></li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Company Interview Guides & Prompts</strong></li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Export Excel/PDF Progress Reports</strong></li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Priority Community & Leaderboard Ranks</li>
               </ul>
-              <a href="#/register" class="btn btn-premium w-100 py-3">Get Free Lifetime Access</a>
+              <a href="#/register" class="btn btn-premium w-100 py-3 fw-bold"><i class="fa-solid fa-gem me-1"></i> Get PrepPro Access</a>
             </div>
           </div>
         </div>

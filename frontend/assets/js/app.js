@@ -10,6 +10,7 @@ const state = {
   name: localStorage.getItem('name'),
   email: localStorage.getItem('email'),
   role: localStorage.getItem('role'),
+  isPaid: localStorage.getItem('isPaid') === 'true' || localStorage.getItem('role') === 'ROLE_ADMIN' || localStorage.getItem('role') === 'ADMIN',
   activePomodoroInterval: null,
   pomodoroTimeLeft: 25 * 60,
   pomodoroRunning: false,
@@ -616,11 +617,12 @@ function fetchUserProfile() {
   if (!state.token) return Promise.resolve();
   return apiFetch('/users/profile')
     .then(profile => {
-      localStorage.setItem('isPaid', profile.isPaid ? 'true' : 'false');
+      const isPaidUser = profile.isPaid || (state.role && (state.role.startsWith('ROLE_ADMIN') || state.role.startsWith('ADMIN')));
+      localStorage.setItem('isPaid', isPaidUser ? 'true' : 'false');
       localStorage.setItem('referralCode', profile.referralCode || '');
       localStorage.setItem('referralEarnings', profile.referralEarnings || '0');
       
-      state.isPaid = profile.isPaid;
+      state.isPaid = isPaidUser;
       state.referralCode = profile.referralCode;
     });
 }
