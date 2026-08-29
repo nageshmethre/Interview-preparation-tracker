@@ -1,92 +1,483 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Privacy Policy - PrepSpace</title>
+  <title>Privacy Policy | Stream-In (PrepSpace)</title>
+  <link rel="icon" type="image/jpeg" href="../assets/prepspace_logo.jpg">
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Read the official Privacy Policy for Stream-In (PrepSpace). Understand how we collect, protect, process, and respect your technical preparation data.">
+  <meta name="keywords" content="Stream-In Privacy Policy, PrepSpace privacy, developer data protection, user privacy terms">
+  <meta name="author" content="Nagesh Methre">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://stream-in.app/privacy">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://stream-in.app/privacy">
+  <meta property="og:title" content="Privacy Policy | Stream-In">
+  <meta property="og:description" content="Official Privacy Policy outlining data practices, security, and user rights on Stream-In.">
+  <meta property="og:image" content="https://stream-in.app/assets/css/og-preview.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
   <style>
+    :root {
+      --bg-base: #05070f;
+      --bg-surface: rgba(13, 17, 30, 0.75);
+      --bg-surface-elevated: rgba(20, 26, 45, 0.85);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(99, 102, 241, 0.5);
+      --text-primary: #ffffff;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-primary: #6366f1;
+      --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+      --accent-glow: rgba(99, 102, 241, 0.25);
+    }
+
     body {
-      background-color: #05070f;
-      color: #f3f4f6;
-      font-family: system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.75;
     }
-    .card {
-      background-color: #0d111e;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 1.5rem;
+
+    .hero-gradient-text {
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    .text-purple {
-      color: #a855f7;
+
+    .glass-nav {
+      background: rgba(5, 7, 15, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
     }
-    a {
-      color: #a855f7;
+
+    .glass-card {
+      background: var(--bg-surface);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 1.25rem;
+    }
+
+    .toc-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      display: block;
+      padding: 0.35rem 0.75rem;
+      border-left: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .toc-link:hover, .toc-link.active {
+      color: #818cf8;
+      border-left-color: var(--accent-primary);
+      background: rgba(99, 102, 241, 0.08);
+      border-radius: 0 6px 6px 0;
+    }
+
+    .section-anchor {
+      scroll-margin-top: 100px;
+    }
+
+    .badge-pill {
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #818cf8;
+      font-weight: 600;
+      padding: 0.35rem 0.85rem;
+      border-radius: 50rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .btn-premium {
+      background: var(--accent-gradient);
+      color: #ffffff;
+      font-weight: 600;
+      border: none;
+      border-radius: 0.75rem;
+      padding: 0.5rem 1.25rem;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
       text-decoration: none;
     }
-    a:hover {
-      text-decoration: underline;
+
+    .btn-premium:hover {
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    .btn-glass {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: #f1f5f9;
+      font-weight: 600;
+      border-radius: 0.75rem;
+      padding: 0.5rem 1.25rem;
+      text-decoration: none;
+    }
+
+    .btn-glass:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      background: rgba(5, 7, 15, 0.95);
     }
   </style>
 </head>
-<body class="py-5">
-  <div class="container max-w-4xl">
-    <div class="text-center mb-5">
-      <h1 class="fw-bold text-white mb-2">Privacy Policy</h1>
-      <p class="text-muted">Last updated: August 26, 2026</p>
+<body>
+
+  <!-- Navigation Header -->
+  <nav class="navbar navbar-expand-lg glass-nav sticky-top py-3">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-bold fs-4" href="https://stream-in.app/">
+        <img src="../assets/prepspace_logo.jpg" alt="Stream-In Logo" class="rounded-circle" style="width: 38px; height: 38px; object-fit: cover;">
+        <span>Stream-In</span>
+      </a>
+      <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+        <i class="fa-solid fa-bars fs-4"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navContent">
+        <ul class="navbar-nav ms-auto align-items-center gap-3 mt-3 mt-lg-0">
+          <li class="nav-item"><a class="nav-link text-secondary" href="https://stream-in.app/#features">Features</a></li>
+          <li class="nav-item"><a class="nav-link text-secondary" href="https://stream-in.app/#pricing">Pricing</a></li>
+          <li class="nav-item"><a class="nav-link text-secondary" href="/about">About</a></li>
+          <li class="nav-item"><a class="nav-link active text-white fw-semibold" href="/privacy">Privacy</a></li>
+          <li class="nav-item"><a class="nav-link text-secondary" href="/terms">Terms</a></li>
+          <li class="nav-item ms-lg-2">
+            <a href="https://stream-in.app/#/login" class="btn btn-glass btn-sm px-3 py-2">Sign In</a>
+          </li>
+          <li class="nav-item">
+            <a href="https://stream-in.app/#/register" class="btn btn-premium btn-sm px-4 py-2">Get Started</a>
+          </li>
+        </ul>
+      </div>
     </div>
+  </nav>
 
-    <div class="card p-4 md:p-5 shadow-lg">
-      <p class="lead text-gray-300">
-        At PrepSpace, accessible from <a href="https://stream-in.app">https://stream-in.app</a>, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by PrepSpace and how we use it.
-      </p>
-
-      <hr class="my-4 opacity-10">
-
-      <h3 class="h5 fw-bold text-white mb-3">1. Consent</h3>
-      <p class="text-muted small">
-        By using our website, you hereby consent to our Privacy Policy and agree to its terms.
-      </p>
-
-      <h3 class="h5 fw-bold text-white mt-4 mb-3">2. Information We Collect</h3>
-      <p class="text-muted small">
-        The personal information that you are asked to provide, and the reasons why you are asked to provide it, will be made clear to you at the point we ask you to provide your personal information.
-      </p>
-      <p class="text-muted small">
-        If you register for an account, we may ask for your contact information, including items such as name, company name, address, email address, and telephone number.
-      </p>
-
-      <h3 class="h5 fw-bold text-white mt-4 mb-3">3. Cookies and Web Beacons</h3>
-      <p class="text-muted small">
-        Like any other website, PrepSpace uses "cookies". These cookies are used to store information including visitors' preferences, and the pages on the website that the visitor accessed or visited. The information is used to optimize the users' experience by customizing our web page content based on visitors' browser type and/or other information.
-      </p>
-
-      <h3 class="h5 fw-bold text-white mt-4 mb-3">4. Google DoubleClick DART Cookie</h3>
-      <p class="text-muted small">
-        Google is one of the third-party vendors on our site. It also uses cookies, known as DART cookies, to serve ads to our site visitors based upon their visit to stream-in.app and other sites on the internet. Visitors may choose to decline the use of DART cookies by visiting the Google ad and content network Privacy Policy at <a href="https://policies.google.com/technologies/ads">https://policies.google.com/technologies/ads</a>.
-      </p>
-
-      <h3 class="h5 fw-bold text-white mt-4 mb-3">5. Our Advertising Partners</h3>
-      <p class="text-muted small">
-        Our advertising partners include:
-      </p>
-      <ul class="text-muted small">
-        <li><strong>Google AdSense</strong> (Privacy Policy: <a href="https://policies.google.com/technologies/ads">https://policies.google.com/technologies/ads</a>)</li>
-      </ul>
-
-      <h3 class="h5 fw-bold text-white mt-4 mb-3">6. GDPR and CCPA Data Protection Rights</h3>
-      <p class="text-muted small">
-        We would like to make sure you are fully aware of all of your data protection rights. Every user is entitled to the right to access, rectification, erasure, restrict processing, object to processing, and data portability.
-      </p>
-
-      <h3 class="h5 fw-bold text-white mt-4 mb-3">7. Contact Us</h3>
-      <p class="text-muted small">
-        If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us at <span class="text-purple">support@stream-in.app</span>.
-      </p>
+  <!-- Title Header -->
+  <header class="py-5 text-center border-bottom border-secondary border-opacity-10">
+    <div class="container">
+      <span class="badge-pill mb-3 d-inline-block"><i class="fa-solid fa-shield-halved me-2"></i>Legal & Compliance</span>
+      <h1 class="display-5 fw-extrabold text-white mb-2">Privacy Policy</h1>
+      <p class="text-secondary fs-6 mb-0">Last Updated: <strong class="text-white">August 30, 2026</strong> • Effective Date: <strong class="text-white">August 30, 2026</strong></p>
     </div>
+  </header>
 
-    <div class="text-center mt-4">
-      <a href="https://stream-in.app" class="text-purple">&larr; Back to PrepSpace</a>
+  <!-- Document Body with Sticky Table of Contents -->
+  <main class="py-5">
+    <div class="container">
+      <div class="row g-5">
+        
+        <!-- Sticky Sidebar Navigation -->
+        <aside class="col-lg-4 col-xl-3 d-none d-lg-block">
+          <div class="glass-card p-3 sticky-top" style="top: 100px; max-height: calc(100vh - 120px); overflow-y: auto;">
+            <div class="text-white fw-bold fs-7 mb-3 px-2 text-uppercase tracking-wider">
+              <i class="fa-solid fa-list-ol me-2 text-primary"></i>Table of Contents
+            </div>
+            <nav class="d-flex flex-column gap-1">
+              <a href="#section-1" class="toc-link">1. Introduction & Operator</a>
+              <a href="#section-2" class="toc-link">2. Information We Collect</a>
+              <a href="#section-3" class="toc-link">3. How We Collect Data</a>
+              <a href="#section-4" class="toc-link">4. How We Use Information</a>
+              <a href="#section-5" class="toc-link">5. Cookies & Local Storage</a>
+              <a href="#section-6" class="toc-link">6. Third-Party Integrations</a>
+              <a href="#section-7" class="toc-link">7. Data Sharing & Non-Sale</a>
+              <a href="#section-8" class="toc-link">8. Technical & Data Security</a>
+              <a href="#section-9" class="toc-link">9. Data Retention & Erasure</a>
+              <a href="#section-10" class="toc-link">10. User Rights & Choices</a>
+              <a href="#section-11" class="toc-link">11. Children's Privacy</a>
+              <a href="#section-12" class="toc-link">12. International Transfers</a>
+              <a href="#section-13" class="toc-link">13. Incident Response</a>
+              <a href="#section-14" class="toc-link">14. Policy Revisions</a>
+              <a href="#section-15" class="toc-link">15. Contact & Grievance</a>
+            </nav>
+          </div>
+        </aside>
+
+        <!-- Document Content -->
+        <div class="col-lg-8 col-xl-9">
+          <div class="glass-card p-4 p-md-5">
+
+            <!-- Preamble -->
+            <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 mb-4 fs-7 text-secondary">
+              <strong class="text-white"><i class="fa-solid fa-info-circle text-primary me-2"></i>Summary Overview:</strong> 
+              Stream-In respects your privacy. We collect only the information necessary to provide our career preparation tracking, mock examinations, and dashboard analytics. We do not sell your personal data.
+            </div>
+
+            <!-- Section 1 -->
+            <section id="section-1" class="section-anchor mb-5">
+              <h2 class="h4 text-white fw-bold mb-3">1. Introduction & Operator</h2>
+              <p class="text-secondary fs-7 mb-3">
+                This Privacy Policy describes how Stream-In (also operating as <strong>PrepSpace</strong>, accessible via <a href="https://stream-in.app" class="text-primary text-decoration-none">https://stream-in.app</a>) collects, uses, stores, and protects personal information.
+              </p>
+              <p class="text-secondary fs-7 mb-0">
+                By accessing, registering with, or utilizing any feature of the Stream-In platform, you acknowledge the data collection, processing, and disclosure practices outlined in this policy. For inquiries, you may reach us at <a href="mailto:support@stream-in.app" class="text-primary text-decoration-none">support@stream-in.app</a>.
+              </p>
+            </section>
+
+            <hr class="border-secondary border-opacity-15 my-4">
+
+            <!-- Section 2 -->
+            <section id="section-2" class="section-anchor mb-5">
+              <h2 class="h4 text-white fw-bold mb-3">2. Information We Collect</h2>
+              <p class="text-secondary fs-7 mb-3">We collect information strictly necessary to provide the platform's career preparation services:</p>
+              
+              <h3 class="h6 text-white fw-bold mb-2">2.1 Information You Directly Provide</h3>
+              <ul class="text-secondary fs-7 mb-3">
+                <li><strong>Account Credentials:</strong> Full name, email address, encrypted password hash (processed via BCrypt).</li>
+                <li><strong>Profile & Learning Preferences:</strong> Target tech companies, preferred programming languages, daily study goals, salary targets, and theme preferences.</li>
+                <li><strong>User-Generated Study Content:</strong> Study notes, markdown documents, bookmark tags, personal problem hints, and interview experience postings.</li>
+                <li><strong>Placement Funnels:</strong> Company names, job application stages (Applied, Screening, Technical, Final, Offer), interview dates, and compensation details logged on your Kanban board.</li>
+              </ul>
+
+              <h3 class="h6 text-white fw-bold mb-2">2.2 Assessment & Telemetry Data</h3>
+              <ul class="text-secondary fs-7 mb-3">
+                <li><strong>Assessment Metrics:</strong> Multiple-Choice Question (MCQ) answers, test timestamps, examination scores, accuracy percentages, earned XP points, and streak counts.</li>
+                <li><strong>Coding Activity:</strong> Problem completion timestamps, solved difficulty tiers (Easy, Medium, Hard), and study session durations.</li>
+              </ul>
+
+              <h3 class="h6 text-white fw-bold mb-2">2.3 Payment & Transaction Information</h3>
+              <p class="text-secondary fs-7 mb-0">
+                When purchasing the <strong>PrepPro</strong> tier (₹99 one-time access), payments are processed by our PCI-DSS compliant payment partner, <strong>Razorpay</strong>. Stream-In records only transaction identifiers, order IDs, timestamps, and verification signatures. We <strong>never</strong> store, access, or handle raw credit/debit card numbers, CVVs, or UPI PINs on our servers.
+              </p>
+            </section>
+
+            <hr class="border-secondary border-opacity-15 my-4">
+
+            <!-- Section 3 -->
+            <section id="section-3" class="section-anchor mb-5">
+              <h2 class="h4 text-white fw-bold mb-3">3. How We Collect Data</h2>
+              <ul class="text-secondary fs-7 mb-0">
+                <li class="mb-2"><strong>Direct Interactions:</strong> Data you input when filling registration forms, staging mock exams, updating study planners, or submitting support inquiries.</li>
+                <li class="mb-2"><strong>Third-Party Authentication:</strong> When opting to sign in via Google OAuth2, we receive your verified name, email address, and Google account identifier.</li>
+                <li class="mb-2"><strong>Automated Local Storage:</strong> Client session tokens (`token`), active theme configurations (`theme`), and UI preferences stored directly in your browser's Local Storage.</li>
+                <li><strong>Server Log Telemetry:</strong> Standard HTTP request headers, IP address, user-agent string, and API latency measurements.</li>
+              </ul>
+            </section>
+
+            <hr class="border-secondary border-opacity-15 my-4">
+
+            <!-- Section 4 -->
+            <section id="section-4" class="section-anchor mb-5">
+              <h2 class="h4 text-white fw-bold mb-3">4. How We Use Information</h2>
+              <p class="text-secondary fs-7 mb-3">We process collected data exclusively for legitimate operational purposes:</p>
+              <ul class="text-secondary fs-7 mb-0">
+                <li class="mb-2"><strong>Service Delivery:</strong> Maintaining candidate accounts, rendering customized dashboards, and executing timed 50-MCQ exams.</li>
+                <li class="mb-2"><strong>Automated Grading & Analytics:</strong> Comparing candidate test answers against key indices, computing readiness percentages, and awarding streak XP.</li>
+                <li class="mb-2"><strong>Security & Authentication:</strong> Verifying JWT bearer tokens, authenticating API endpoints, and preventing brute-force attacks.</li>
+                <li class="mb-2"><strong>Transaction Processing:</strong> Validating Razorpay cryptographic payment signatures and activating PrepPro access.</li>
+                <li class="mb-2"><strong>Platform Diagnostics:</strong> Resolving application errors, optimizing API latency, and auditing database performance.</li>
+                <li><strong>Legal Compliance:</strong> Complying with tax regulations, accounting audits, and applicable statutory laws.</li>
+              </ul>
+            </section>
+
+            <hr class="border-secondary border-opacity-15 my-4">
+
+            <!-- Section 5 -->
+            <section id="section-5" class="section-anchor mb-5">
+              <h2 class="h4 text-white fw-bold mb-3">5. Cookies & Local Storage Technologies</h2>
+              <p class="text-secondary fs-7 mb-3">
+                Stream-In uses browser Local Storage and minimal cookies to ensure seamless navigation:
+              </p>
+              <div class="table-responsive">
+                <table class="table table-dark table-hover align-middle fs-8 border border-secondary border-opacity-25">
+                  <thead>
+                    <tr class="text-muted border-secondary-subtle">
+                      <th>Type</th>
+                      <th>Identifier</th>
+                      <th>Purpose</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="fw-bold text-white">Essential Local Storage</td>
+                      <td><code>token</code>, <code>role</code>, <code>email</code></td>
+                      <td>Maintains secure user JWT session authentication across dashboard routes.</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-white">Functional Preference</td>
+                      <td><code>theme</code>, <code>sidebar-collapsed</code></td>
+                      <td>Preserves dark/light UI display mode and sidebar navigation layout.</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-white">Advertising Partner</td>
+                      <td><code>Google DART / AdSense</code></td>
+                      <td>Delivers contextual non-intrusive advertisements on public pages via Google AdSense (pub-4662205173096609).</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="text-secondary fs-7 mb-0">
+                Users may manage cookie preferences through browser settings or visit the <a href="https://policies.google.com/technologies/ads" target="_blank" class="text-primary text-decoration-none">Google Advertising Privacy Terms</a>.
+              </p>
+            </section>
+
+            <hr class="border-secondary border-opacity-15 my-4">
+
+            <!-- Section 6 -->
+            <section id="section-6" class="section-anchor mb-5">
+              <h2 class="h4 text-white fw-bold mb-3">6. Third-Party Integrations</h2>
+              <p class="text-secondary fs-7 mb-3">Stream-In integrates with verified technology service providers:</p>
+              <ul class="text-secondary fs-7 mb-0">
+                <li class="mb-2"><strong>Google Identity Services:</strong> Facilitating optional one-tap Single Sign-On (SSO).</li>
+                <li class="mb-2"><strong>Razorpay Payment Gateway:</strong> Processing order creation and payment authorization.</li>
+                <li class="mb-2"><strong>YouTube Embedded Video Player:</strong> Streaming curriculum video lessons securely.</li>
+                <li class="mb-2"><strong>Google AdSense:</strong> Providing display monetization on public pages.</li>
+                <li><strong>Cloud Infrastructure Providers:</strong> Vercel (Edge CDN frontend) and Render (Secure backend container hosting).</li>
+              </ul>
+            </section>
+
+            <hr class="border-secondary border-opacity-15 my-4">
+
+            <!-- Section 7 -->
+            <section id="section-7" class="section-anchor mb-5">
+              <h2 class="h4 text-white fw-bold mb-3">7. Data Sharing & Non-Sale Statement</h2>
+              <p class="text-secondary fs-7 mb-3">
+                <strong class="text-white">We do NOT sell, rent, monetize, or trade your personal information</strong> with third-party data brokers or marketing agencies.
+              </p>
+              <p class="text-secondary fs-7 mb-0">
+                Information is disclosed only: (a) to operational infrastructure vendors under confidentiality agreements, (b) to comply with lawful subpoenas, court orders, or applicable regulations, or (c) in connection with a corporate merger, acquisition, or asset reorganization.
+              </p>
+            </section>
+
+            <hr class="border-secondary border-opacity-15 my-4">
+
+            <!-- Section 8 -->
+            <section id="section-8" class="section-anchor mb-5">
+              <h2 class="h4 text-white fw-bold mb-3">8. Technical & Data Security</h2>
+              <p class="text-secondary fs-7 mb-3">We implement industry-aligned organizational and technical safeguards:</p>
+              <ul class="text-secondary fs-7 mb-0">
+                <li class="mb-2"><strong>Encryption in Transit:</strong> 100% of platform traffic is encrypted via HTTPS/TLS 1.3.</li>
+                <li class="mb-2"><strong>Cryptographic Password Hashing:</strong> Passwords are irreversibly hashed using BCrypt before persistence.</li>
+                <li class="mb-2"><strong>Stateless JWT Authentication:</strong> API access is guarded by cryptographically signed JSON Web Tokens.</li>
+                <li><strong>Least-Privilege Database Access:</strong> Backend services operate on isolated database clusters with restricted network firewalls.</li>
+              </ul>
+            </section>
+
+            <hr class="border-secondary border-opacity-15 my-4">
+
+            <!-- Section 9 -->
+            <section id="section-9" class="section-anchor mb-5">
+              <h2 class="h4 text-white fw-bold mb-3">9. Data Retention & Erasure</h2>
+              <p class="text-secondary fs-7 mb-0">
+                We retain account data for as long as your profile remains active. You may request immediate and permanent deletion of your account, notes, exam history, and personal information at any time by contacting <a href="mailto:support@stream-in.app" class="text-primary text-decoration-none">support@stream-in.app</a>. Upon verification, data is purged from our production databases within 30 days.
+              </p>
+            </section>
+
+            <hr class="border-secondary border-opacity-15 my-4">
+
+            <!-- Section 10 -->
+            <section id="section-10" class="section-anchor mb-5">
+              <h2 class="h4 text-white fw-bold mb-3">10. User Rights & Choices</h2>
+              <p class="text-secondary fs-7 mb-3">Regardless of your jurisdiction, Stream-In affords you comprehensive privacy rights:</p>
+              <ul class="text-secondary fs-7 mb-0">
+                <li class="mb-2"><strong>Right to Access & Review:</strong> View all logged practice problems, notes, and profile details on your dashboard.</li>
+                <li class="mb-2"><strong>Right to Rectification:</strong> Update your profile name, password, and career targets via Settings.</li>
+                <li class="mb-2"><strong>Right to Data Portability:</strong> Export candidate progress records and application logs as Excel / PDF files.</li>
+                <li><strong>Right to Erasure:</strong> Request permanent removal of your account and personal records.</li>
+              </ul>
+            </section>
+
+            <hr class="border-secondary border-opacity-15 my-4">
+
+            <!-- Section 11 -->
+            <section id="section-11" class="section-anchor mb-5">
+              <h2 class="h4 text-white fw-bold mb-3">11. Children's Privacy</h2>
+              <p class="text-secondary fs-7 mb-0">
+                Stream-In is intended exclusively for software engineering candidates, students, and professionals aged 13 and older (or 16 where required by local jurisdiction). We do not knowingly collect personal information from children under 13. If you believe a minor has registered an account without guardian consent, please contact us for immediate deletion.
+              </p>
+            </section>
+
+            <hr class="border-secondary border-opacity-15 my-4">
+
+            <!-- Section 12 -->
+            <section id="section-12" class="section-anchor mb-5">
+              <h2 class="h4 text-white fw-bold mb-3">12. International Data Transfers</h2>
+              <p class="text-secondary fs-7 mb-0">
+                Your information may be stored and processed on servers located in various cloud availability regions maintained by Vercel and Render. By using Stream-In, you acknowledge that international data transmissions are protected under standard contractual clauses and robust encryption standards.
+              </p>
+            </section>
+
+            <hr class="border-secondary border-opacity-15 my-4">
+
+            <!-- Section 13 -->
+            <section id="section-13" class="section-anchor mb-5">
+              <h2 class="h4 text-white fw-bold mb-3">13. Incident Response & Breach Notification</h2>
+              <p class="text-secondary fs-7 mb-0">
+                In the event of a confirmed security incident impacting personal data, Stream-In maintains an incident response procedure to contain the breach, notify affected users via email, and report to regulatory authorities in compliance with applicable laws.
+              </p>
+            </section>
+
+            <hr class="border-secondary border-opacity-15 my-4">
+
+            <!-- Section 14 -->
+            <section id="section-14" class="section-anchor mb-5">
+              <h2 class="h4 text-white fw-bold mb-3">14. Policy Revisions</h2>
+              <p class="text-secondary fs-7 mb-0">
+                We may revise this Privacy Policy periodically to reflect enhancements in platform functionality or regulatory changes. Significant updates will be noted with a revised "Last Updated" date at the top of this document. Continued use of Stream-In constitutes acceptance of the amended terms.
+              </p>
+            </section>
+
+            <hr class="border-secondary border-opacity-15 my-4">
+
+            <!-- Section 15 -->
+            <section id="section-15" class="section-anchor">
+              <h2 class="h4 text-white fw-bold mb-3">15. Contact & Grievance</h2>
+              <p class="text-secondary fs-7 mb-3">
+                For questions, data access requests, or privacy concerns, contact our designated privacy team:
+              </p>
+              <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 fs-7 text-secondary">
+                <p class="mb-1"><strong class="text-white">Platform Operator:</strong> Stream-In (PrepSpace)</p>
+                <p class="mb-1"><strong class="text-white">Lead Engineer:</strong> Nagesh Methre</p>
+                <p class="mb-1"><strong class="text-white">Direct Email:</strong> <a href="mailto:support@stream-in.app" class="text-primary text-decoration-none">support@stream-in.app</a></p>
+                <p class="mb-0"><strong class="text-white">Location:</strong> Bangalore, Karnataka, India</p>
+              </div>
+            </section>
+
+          </div>
+        </div>
+
+      </div>
     </div>
-  </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-5 text-center text-secondary fs-8">
+    <div class="container">
+      <div class="d-flex justify-content-center align-items-center gap-2 mb-3">
+        <img src="../assets/prepspace_logo.jpg" alt="Stream-In Logo" class="rounded-circle" style="width: 28px; height: 28px; object-fit: cover;">
+        <span class="text-white fw-bold fs-6">Stream-In</span>
+      </div>
+      <p class="text-muted mb-3">&copy; 2026 Stream-In (PrepSpace). Developed by Nagesh Methre. All rights reserved.</p>
+      <div class="d-flex justify-content-center gap-3 text-muted">
+        <a href="/about" class="text-secondary text-decoration-none hover-white">About</a>
+        <span>•</span>
+        <a href="/privacy" class="text-secondary text-decoration-none hover-white">Privacy Policy</a>
+        <span>•</span>
+        <a href="/terms" class="text-secondary text-decoration-none hover-white">Terms of Service</a>
+        <span>•</span>
+        <a href="https://stream-in.app/" class="text-secondary text-decoration-none hover-white">Main Platform</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

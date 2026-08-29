@@ -99,6 +99,18 @@ function router() {
     initGoogleSignIn();
     return;
   }
+  if (hash === '#/about') {
+    window.location.href = '/about';
+    return;
+  }
+  if (hash === '#/privacy') {
+    window.location.href = '/privacy';
+    return;
+  }
+  if (hash === '#/terms') {
+    window.location.href = '/terms';
+    return;
+  }
 
   // Secured routes boundary
   if (!isAuthenticated()) {

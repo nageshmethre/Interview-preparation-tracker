@@ -125,13 +125,17 @@ const components = {
     <!-- Footer -->
     <footer class="py-5 text-center border-top border-secondary-subtle border-opacity-10 mt-5">
       <div class="container">
-        <p class="text-muted small mb-3">&copy; 2026 PrepSpace. All copyrights go to Nagesh Methre.</p>
+        <div class="d-flex justify-content-center align-items-center gap-2 mb-2">
+          <img src="assets/prepspace_logo.jpg" alt="Stream-In Logo" class="rounded-circle" style="width: 26px; height: 26px; object-fit: cover;">
+          <span class="text-white fw-bold fs-7">Stream-In</span>
+        </div>
+        <p class="text-muted small mb-3">&copy; 2026 Stream-In (PrepSpace). Developed by Nagesh Methre. All rights reserved.</p>
         <div class="d-flex justify-content-center gap-3 text-muted small">
-          <a href="/about" target="_blank" class="text-muted text-decoration-none">About</a>
+          <a href="/about" class="text-muted text-decoration-none">About</a>
           <span>•</span>
-          <a href="/privacy" target="_blank" class="text-muted text-decoration-none">Privacy Policy</a>
+          <a href="/privacy" class="text-muted text-decoration-none">Privacy Policy</a>
           <span>•</span>
-          <a href="/terms" target="_blank" class="text-muted text-decoration-none">Terms of Service</a>
+          <a href="/terms" class="text-muted text-decoration-none">Terms of Service</a>
         </div>
       </div>
     </footer>
