@@ -1687,13 +1687,30 @@ const components = {
   },
 
   courseDetail: (course, enrollment) => `
+    <!-- Top Action Bar with Back Button -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 pb-3 border-bottom border-secondary">
+      <div class="d-flex align-items-center gap-3">
+        <button id="btn-back-to-courses-top" class="btn btn-glass py-2 px-3 fs-7 text-white d-flex align-items-center gap-2" style="border: 1px solid rgba(255,255,255,0.25); background: rgba(99, 102, 241, 0.15); border-radius: 8px;">
+          <i class="fa-solid fa-arrow-left text-primary"></i> <span class="fw-bold">Back to Courses Catalog</span>
+        </button>
+        <div>
+          <h4 class="text-white fw-bold mb-0">${course.title}</h4>
+          <span class="text-muted fs-8">Instructor: ${course.instructor || 'Senior Architect'}</span>
+        </div>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-7 px-3 py-2">${course.difficulty || 'All Levels'}</span>
+        <span class="badge bg-dark text-white-50 border border-secondary fs-7 px-3 py-2"><i class="fa-regular fa-clock me-1 text-primary"></i> ${course.duration || 'Self-Paced'}</span>
+      </div>
+    </div>
+
     <div class="row g-4">
       <!-- Lesson Navigation Drawer -->
       <div class="col-lg-4">
         <div class="glass-panel p-4">
           <!-- Back to Courses button -->
           <div class="mb-4">
-            <button id="btn-back-to-courses" class="btn btn-glass btn-sm w-100 text-start py-2 fs-7 text-white d-flex align-items-center gap-2" style="border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.06);">
+            <button id="btn-back-to-courses" class="btn btn-glass btn-sm w-100 text-start py-2 fs-7 text-white d-flex align-items-center gap-2" style="border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.06); border-radius: 6px;">
               <i class="fa-solid fa-arrow-left text-primary"></i> <span class="fw-semibold">Back to Courses Catalog</span>
             </button>
           </div>

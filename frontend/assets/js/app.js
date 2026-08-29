@@ -1776,15 +1776,17 @@ function updateVideoPlayer(videoUrl) {
 }
 
 function bindCourseCurriculumEvents(course, enrollment) {
-  // 1. Bind Back to Courses Button
-  const backBtn = document.getElementById('btn-back-to-courses');
-  if (backBtn) {
-    backBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      window.location.hash = '#/courses';
-      router();
-    });
-  }
+  // 1. Bind Back to Courses Buttons (Top & Drawer)
+  const backButtons = [document.getElementById('btn-back-to-courses'), document.getElementById('btn-back-to-courses-top')];
+  backButtons.forEach(btn => {
+    if (btn) {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.hash = '#/courses';
+        router();
+      });
+    }
+  });
 
   // 2. Select Lesson Buttons
   const lessonButtons = document.querySelectorAll('.btn-select-lesson');
