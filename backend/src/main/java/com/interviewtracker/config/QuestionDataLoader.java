@@ -18,12 +18,14 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Component
+@Transactional
 public class QuestionDataLoader implements ApplicationRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(QuestionDataLoader.class);
