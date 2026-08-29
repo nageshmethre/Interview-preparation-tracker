@@ -178,6 +178,7 @@ public class QuestionDataLoader implements ApplicationRunner {
                     .pdfNotesUrl("https://stream-in.app/notes/doc.pdf")
                     .assignments(seed.assignments)
                     .quizQuestions(seed.quizQuestions)
+                    .sequenceNumber(i + 1)
                     .build();
             course.getLessons().add(lesson);
         }
