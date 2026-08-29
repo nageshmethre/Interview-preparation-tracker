@@ -6,9 +6,12 @@ const components = {
     <header>
       <nav class="navbar navbar-expand-lg navbar-dark bg-transparent py-4">
         <div class="container">
-          <a class="navbar-brand fw-extrabold fs-3 text-white d-flex align-items-center gap-2" href="#/">
-            <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" class="brand-logo-img" style="width: 38px; height: 38px; object-fit: contain;">
-            <span>PrepSpace</span>
+          <a class="navbar-brand d-flex align-items-center gap-2 text-decoration-none" href="#/">
+            <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" class="brand-logo-img" style="width: 42px; height: 42px; object-fit: contain;">
+            <div class="d-flex flex-column text-start">
+              <span class="fw-extrabold fs-4 text-white lh-1">PrepSpace</span>
+              <span class="text-primary fw-bold" style="font-size: 0.68rem; letter-spacing: 0.8px; margin-top: 2px;">(stream-in)</span>
+            </div>
           </a>
           <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
             <span class="navbar-toggler-icon"></span>
@@ -129,10 +132,13 @@ const components = {
     <footer class="py-5 text-center border-top border-secondary-subtle border-opacity-10 mt-5">
       <div class="container">
         <div class="d-flex justify-content-center align-items-center gap-2 mb-2">
-          <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" style="width: 28px; height: 28px; object-fit: contain;">
-          <span class="text-white fw-bold fs-7">PrepSpace</span>
+          <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" style="width: 32px; height: 32px; object-fit: contain;">
+          <div class="d-flex flex-column text-start">
+            <span class="text-white fw-bold fs-6 lh-1">PrepSpace</span>
+            <span class="text-primary fw-semibold" style="font-size: 0.65rem; letter-spacing: 0.5px;">(stream-in)</span>
+          </div>
         </div>
-        <p class="text-muted small mb-3">&copy; 2026 PrepSpace. Developed by Nagesh Methre. All rights reserved.</p>
+        <p class="text-muted small mb-3">&copy; 2026 PrepSpace (stream-in). Developed by Nagesh Methre. All rights reserved.</p>
         <div class="d-flex justify-content-center gap-3 text-muted small">
           <a href="/about" class="text-muted text-decoration-none">About</a>
           <span>•</span>
@@ -225,9 +231,12 @@ const components = {
       <!-- Sidebar -->
       <div class="sidebar glass-panel border-top-0 border-bottom-0 border-start-0 rounded-0">
         <div class="p-4 border-bottom border-secondary-subtle d-flex align-items-center justify-content-between">
-          <a class="navbar-brand fw-extrabold fs-4 text-white d-flex align-items-center brand-text" href="#/dashboard">
-            <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" class="me-2" style="width: 32px; height: 32px; object-fit: contain;">
-            <span class="brand-name">PrepSpace</span>
+          <a class="navbar-brand d-flex align-items-center brand-text text-decoration-none" href="#/dashboard">
+            <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" class="me-2" style="width: 38px; height: 38px; object-fit: contain;">
+            <div class="d-flex flex-column text-start brand-name">
+              <span class="fw-extrabold fs-5 text-white lh-1">PrepSpace</span>
+              <span class="text-primary fw-bold" style="font-size: 0.65rem; letter-spacing: 0.8px; margin-top: 2px;">(stream-in)</span>
+            </div>
           </a>
           <button id="sidebar-collapse-btn" class="btn btn-glass btn-sm border-0 rounded-circle text-white d-none d-lg-flex align-items-center justify-content-center" style="width: 26px; height: 26px; padding: 0;">
             <i class="fa-solid fa-chevron-left" id="collapse-icon" style="font-size: 0.8rem;"></i>
