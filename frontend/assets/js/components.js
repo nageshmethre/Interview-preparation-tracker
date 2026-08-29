@@ -2166,7 +2166,7 @@ const components = {
       <div class="row justify-content-center text-center mb-5">
         <div class="col-lg-6">
           <h2 class="text-white fw-bold mb-2">Upgrade Space Metrics</h2>
-          <p class="text-muted">Level up your placement preparation and unlock passive income</p>
+          <p class="text-muted">Level up your placement preparation and unlock premium tools</p>
         </div>
       </div>
 
@@ -2191,7 +2191,6 @@ const components = {
             <p class="text-indigo">Recommended for Active Jobseekers</p>
             <div class="my-4"><span class="display-4 fw-bold text-white">₹99</span><span class="text-muted">/one-time</span></div>
             <ul class="list-unstyled text-start mb-5 text-muted">
-              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Unlock Refer & Earn (Earn ₹49 per refer!)</li>
               <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Custom Target Study Plans</li>
               <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Mock AI Feedback Logs</li>
               <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Export Excel/PDF Reports</li>
