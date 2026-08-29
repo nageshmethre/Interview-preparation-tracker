@@ -1756,12 +1756,38 @@ function bindCourseCurriculumEvents(course, enrollment) {
       document.getElementById('active-lesson-title').textContent = title;
       document.getElementById('video-frame').src = video;
 
-      // Render quiz questions if present
       const quizBox = document.getElementById('lesson-quiz-container');
+      const submitBtn = document.getElementById('btn-submit-lesson-quiz');
+      
+      // Remove old event listeners
+      const newSubmitBtn = submitBtn.cloneNode(true);
+      submitBtn.parentNode.replaceChild(newSubmitBtn, submitBtn);
+
       if (quiz.length === 0) {
-        quizBox.innerHTML = '<p class="text-muted fs-7">No assessment quiz required for this lesson module.</p>';
-        document.getElementById('btn-submit-lesson-quiz').classList.add('d-none');
+        quizBox.innerHTML = '<p class="text-muted fs-7">No assessment quiz required for this lesson module. Click below to complete.</p>';
+        newSubmitBtn.textContent = 'Mark Module Complete';
+        newSubmitBtn.classList.remove('d-none');
+        
+        newSubmitBtn.addEventListener('click', () => {
+          showToast('Module marked as completed!', 'success');
+          target.querySelector('.lesson-check-status').className = 'fa-solid fa-circle-check text-success';
+          
+          // Increment progress in course
+          const currentProgress = enrollment ? enrollment.progressPercentage : 0;
+          const step = 100.0 / course.lessons.length;
+          const newProgress = Math.min(100.0, currentProgress + step);
+          
+          apiFetch(`/v1/courses/${course.id}/progress?progressPercentage=${newProgress}`, { method: 'POST' })
+            .then(updatedEnrollment => {
+              if (updatedEnrollment.progressPercentage >= 100) {
+                showToast('Congratulations! Course Completed. Certificate unlocked!', 'success');
+              }
+            });
+        });
       } else {
+        newSubmitBtn.textContent = 'Verify Quiz Answers';
+        newSubmitBtn.classList.remove('d-none');
+        
         quizBox.innerHTML = quiz.map((q, idx) => `
           <div class="mb-3 border border-secondary p-3 rounded">
             <p class="text-white fw-bold mb-2 fs-7">${q.question}</p>
@@ -1773,13 +1799,6 @@ function bindCourseCurriculumEvents(course, enrollment) {
             `).join('')}
           </div>
         `).join('');
-
-        const submitBtn = document.getElementById('btn-submit-lesson-quiz');
-        submitBtn.classList.remove('d-none');
-        
-        // Remove old event listeners
-        const newSubmitBtn = submitBtn.cloneNode(true);
-        submitBtn.parentNode.replaceChild(newSubmitBtn, submitBtn);
 
         newSubmitBtn.addEventListener('click', () => {
           let score = 0;
