@@ -1744,17 +1744,65 @@ function bindCoursesEvents() {
   });
 }
 
+function formatVideoEmbedUrl(url) {
+  if (!url) return 'https://www.youtube.com/embed/grEKMHGYyns';
+  url = url.trim();
+  
+  // Extract YouTube ID from various formats (watch?v=, youtu.be/, shorts/, embed/)
+  const ytRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/;
+  const match = url.match(ytRegex);
+  if (match && match[1]) {
+    return `https://www.youtube.com/embed/${match[1]}?autoplay=1&rel=0`;
+  }
+  return url;
+}
+
+function updateVideoPlayer(videoUrl) {
+  const container = document.getElementById('video-frame-container');
+  if (!container) return;
+
+  if (!videoUrl) {
+    container.innerHTML = `<div class="d-flex align-items-center justify-content-center h-100 text-muted"><p class="m-0">No video stream attached to this lesson.</p></div>`;
+    return;
+  }
+
+  const isDirectVideo = videoUrl.endsWith('.mp4') || videoUrl.endsWith('.webm') || videoUrl.endsWith('.ogg');
+  if (isDirectVideo) {
+    container.innerHTML = `<video src="${videoUrl}" controls autoplay class="w-100 h-100 rounded" style="background: #000; object-fit: contain;"></video>`;
+  } else {
+    const embedUrl = formatVideoEmbedUrl(videoUrl);
+    container.innerHTML = `<iframe id="video-frame" class="w-100 h-100 border-0 rounded" src="${embedUrl}" title="Lesson Player" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>`;
+  }
+}
+
 function bindCourseCurriculumEvents(course, enrollment) {
-  document.querySelectorAll('.btn-select-lesson').forEach(btn => {
+  // 1. Bind Back to Courses Button
+  const backBtn = document.getElementById('btn-back-to-courses');
+  if (backBtn) {
+    backBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.hash = '#/courses';
+      router();
+    });
+  }
+
+  // 2. Select Lesson Buttons
+  const lessonButtons = document.querySelectorAll('.btn-select-lesson');
+  lessonButtons.forEach(btn => {
     btn.addEventListener('click', (e) => {
       const target = e.currentTarget;
-      const title = target.textContent.trim();
+      
+      // Update active style
+      lessonButtons.forEach(b => b.classList.remove('bg-primary', 'bg-opacity-20', 'text-primary'));
+      target.classList.add('bg-primary', 'bg-opacity-20', 'text-primary');
+
+      const title = target.querySelector('span') ? target.querySelector('span').textContent.trim() : target.textContent.trim();
       const video = target.dataset.video;
       const quiz = JSON.parse(target.dataset.quiz || '[]');
       const lessonId = target.dataset.lessonId;
 
       document.getElementById('active-lesson-title').textContent = title;
-      document.getElementById('video-frame').src = video;
+      updateVideoPlayer(video);
 
       const quizBox = document.getElementById('lesson-quiz-container');
       const submitBtn = document.getElementById('btn-submit-lesson-quiz');
@@ -1774,7 +1822,7 @@ function bindCourseCurriculumEvents(course, enrollment) {
           
           // Increment progress in course
           const currentProgress = enrollment ? enrollment.progressPercentage : 0;
-          const step = 100.0 / course.lessons.length;
+          const step = 100.0 / (course.lessons && course.lessons.length > 0 ? course.lessons.length : 1);
           const newProgress = Math.min(100.0, currentProgress + step);
           
           apiFetch(`/v1/courses/${course.id}/progress?progressPercentage=${newProgress}`, { method: 'POST' })
@@ -1816,7 +1864,7 @@ function bindCourseCurriculumEvents(course, enrollment) {
             
             // Increment progress in course
             const currentProgress = enrollment ? enrollment.progressPercentage : 0;
-            const step = 100.0 / course.lessons.length;
+            const step = 100.0 / (course.lessons && course.lessons.length > 0 ? course.lessons.length : 1);
             const newProgress = Math.min(100.0, currentProgress + step);
             
             apiFetch(`/v1/courses/${course.id}/progress?progressPercentage=${newProgress}`, { method: 'POST' })
@@ -1832,6 +1880,11 @@ function bindCourseCurriculumEvents(course, enrollment) {
       }
     });
   });
+
+  // Automatically trigger first lesson click on load
+  if (lessonButtons.length > 0) {
+    lessonButtons[0].click();
+  }
 }
 
 function bindCertificatesEvents() {

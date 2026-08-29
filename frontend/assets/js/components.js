@@ -1691,28 +1691,38 @@ const components = {
       <!-- Lesson Navigation Drawer -->
       <div class="col-lg-4">
         <div class="glass-panel p-4">
-          <h5 class="text-white fw-bold mb-3">Course Curriculum</h5>
-          <div class="progress mb-4 bg-dark" style="height: 8px;">
+          <!-- Back to Courses button -->
+          <div class="mb-4">
+            <button id="btn-back-to-courses" class="btn btn-glass btn-sm w-100 text-start py-2 fs-7 text-white d-flex align-items-center gap-2" style="border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.06);">
+              <i class="fa-solid fa-arrow-left text-primary"></i> <span class="fw-semibold">Back to Courses Catalog</span>
+            </button>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5 class="text-white fw-bold mb-0">Course Curriculum</h5>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-8">${course.difficulty || 'All Levels'}</span>
+          </div>
+          <div class="text-muted fs-8 mb-3">${course.title}</div>
+          <div class="progress mb-2 bg-dark" style="height: 8px;">
             <div class="progress-bar bg-indigo" role="progressbar" style="width: ${enrollment ? enrollment.progressPercentage : 0}%"></div>
           </div>
           <p class="text-muted fs-7 mb-4">${enrollment ? Math.round(enrollment.progressPercentage) : 0}% Completed</p>
           <div class="list-group list-group-flush" id="curriculum-drawer">
-            ${course.lessons.map(l => `
-              <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-3 d-flex align-items-center justify-content-between btn-select-lesson" data-lesson-id="${l.id}" data-video="${l.videoUrl}" data-quiz='${l.quizQuestions || '[]'}' data-seq="${l.sequenceNumber}">
+            ${course.lessons && course.lessons.length > 0 ? course.lessons.map(l => `
+              <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-3 d-flex align-items-center justify-content-between btn-select-lesson" data-lesson-id="${l.id}" data-video="${l.videoUrl || ''}" data-quiz='${l.quizQuestions || '[]'}' data-seq="${l.sequenceNumber}">
                 <span><i class="fa-regular fa-circle-play me-2 text-indigo"></i>${l.sequenceNumber}. ${l.title}</span>
                 <i class="fa-solid fa-circle-check text-muted lesson-check-status"></i>
               </button>
-            `).join('')}
+            `).join('') : '<p class="text-muted fs-7">No lessons uploaded yet for this course.</p>'}
           </div>
         </div>
       </div>
       <!-- Video Player and Workspace -->
       <div class="col-lg-8">
         <div class="glass-panel p-4 mb-4">
-          <div class="ratio ratio-16x9 bg-dark mb-4 rounded">
-            <iframe id="video-frame" src="https://www.youtube.com/embed/grEKMHGYyns" title="Lesson Player" allowfullscreen></iframe>
+          <div class="ratio ratio-16x9 bg-dark mb-4 rounded overflow-hidden" id="video-frame-container" style="box-shadow: 0 8px 32px rgba(0,0,0,0.5);">
+            <iframe id="video-frame" class="w-100 h-100 border-0" src="${course.lessons && course.lessons.length > 0 ? course.lessons[0].videoUrl : 'https://www.youtube.com/embed/grEKMHGYyns'}" title="Lesson Player" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
           </div>
-          <h4 class="text-white fw-bold" id="active-lesson-title">Select a Lesson to Begin</h4>
+          <h4 class="text-white fw-bold" id="active-lesson-title">${course.lessons && course.lessons.length > 0 ? course.lessons[0].sequenceNumber + '. ' + course.lessons[0].title : 'Select a Lesson to Begin'}</h4>
         </div>
         <!-- Quizzes & Notes Tab -->
         <div class="glass-panel p-4">
