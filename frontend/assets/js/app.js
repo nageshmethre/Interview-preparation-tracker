@@ -80,9 +80,19 @@ function router() {
     state.pomodoroRunning = false;
   }
 
-  // Public/Unsecured check
-  if (hash === '#/' || hash === '') {
-    appRoot.innerHTML = components.landing();
+  // Public/Unsecured check: landing page & anchor links (e.g. #features, #pricing, #contact)
+  if (hash === '#/' || hash === '' || hash === '#' || !hash.startsWith('#/')) {
+    if (!document.getElementById('features')) {
+      appRoot.innerHTML = components.landing();
+    }
+    if (hash && hash !== '#/' && hash !== '#') {
+      setTimeout(() => {
+        try {
+          const target = document.querySelector(hash);
+          if (target) target.scrollIntoView({ behavior: 'smooth' });
+        } catch (e) {}
+      }, 50);
+    }
     return;
   }
   if (hash.startsWith('#/login')) {

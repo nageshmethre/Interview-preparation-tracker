@@ -6,16 +6,21 @@ const components = {
     <header>
       <nav class="navbar navbar-expand-lg navbar-dark bg-transparent py-4">
         <div class="container">
-          <a class="navbar-brand fw-extrabold fs-3 text-white" href="#"><i class="fa-solid fa-graduation-cap text-primary me-2"></i>PrepSpace</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+          <a class="navbar-brand fw-extrabold fs-3 text-white d-flex align-items-center gap-2" href="#/">
+            <img src="assets/prepspace_logo.jpg" alt="Stream-In Logo" class="rounded-circle" style="width: 34px; height: 34px; object-fit: cover;">
+            <span>Stream-In</span>
+          </a>
+          <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navMenu">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center gap-1">
               <li class="nav-item"><a class="nav-link px-3" href="#features">Features</a></li>
               <li class="nav-item"><a class="nav-link px-3" href="#pricing">Pricing</a></li>
-              <li class="nav-item"><a class="nav-link px-3" href="#contact">Contact</a></li>
-              <li class="nav-item ms-3">
+              <li class="nav-item"><a class="nav-link px-3" href="/about">About</a></li>
+              <li class="nav-item"><a class="nav-link px-3" href="/privacy">Privacy</a></li>
+              <li class="nav-item"><a class="nav-link px-3" href="/terms">Terms</a></li>
+              <li class="nav-item ms-lg-3">
                 <a class="btn btn-glass px-4 me-2" href="#/login">Login</a>
                 <a class="btn btn-premium px-4" href="#/register">Get Started</a>
               </li>
