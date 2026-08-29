@@ -472,3 +472,247 @@ body {
   border-color: var(--accent-secondary) !important;
   background: rgba(168, 85, 247, 0.08);
 }
+
+/* ==========================================================================
+   STRIPE / SUPABASE ENTERPRISE GRADIENT STYLING (STYLE 2)
+   ========================================================================== */
+
+/* Stripe Multi-Mesh Animated Glow Background */
+.stripe-hero-mesh {
+  position: relative;
+  overflow: hidden;
+  background-color: #060913;
+  background-image: 
+    radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.22) 0%, transparent 45%),
+    radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.20) 0%, transparent 50%),
+    radial-gradient(circle at 50% 75%, rgba(6, 182, 212, 0.15) 0%, transparent 55%);
+}
+
+.stripe-hero-mesh::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* Radiant Typography */
+.gradient-text-stripe {
+  background: linear-gradient(135deg, #ffffff 15%, #38bdf8 55%, #a855f7 90%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.gradient-text-cyan {
+  background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-amber {
+  background: linear-gradient(135deg, #fbbf24 0%, #f97316 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Announcement Pill */
+.announcement-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  color: #e0e7ff;
+  transition: var(--transition-smooth);
+  text-decoration: none;
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+}
+.announcement-pill:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.6);
+  transform: translateY(-1px);
+  color: #ffffff;
+}
+
+/* Big-Tech Company Social Proof Logo Pills */
+.company-logo-strip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  opacity: 0.65;
+  transition: var(--transition-smooth);
+}
+.company-logo-strip:hover {
+  opacity: 0.9;
+}
+.company-badge {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Floating 3D Isometric Dashboard Mockup Container */
+.dashboard-mockup-wrapper {
+  position: relative;
+  max-width: 1080px;
+  margin: 0 auto;
+  border-radius: 18px;
+  padding: 8px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(6, 182, 212, 0.2) 40%, rgba(168, 85, 247, 0.4));
+  box-shadow: 0 30px 100px -20px rgba(99, 102, 241, 0.35), 0 0 50px rgba(6, 182, 212, 0.15);
+}
+
+.mockup-window {
+  background: #0b0f1e;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mockup-header {
+  background: #070a14;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.window-dots {
+  display: flex;
+  gap: 6px;
+}
+.window-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+.window-dot.red { background: #ef4444; }
+.window-dot.yellow { background: #f59e0b; }
+.window-dot.green { background: #10b981; }
+
+.mockup-url-bar {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 3px 18px;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-family: monospace;
+}
+
+/* Supabase-Style Feature Tab Selector */
+.feature-tab-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: var(--transition-smooth);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+}
+.feature-tab-btn:hover {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.3);
+  color: #ffffff;
+}
+.feature-tab-btn.active {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.15));
+  border-color: #6366f1;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.25);
+}
+
+/* Bento Grid Cards with Hover Glow */
+.bento-card {
+  background: rgba(13, 18, 36, 0.65);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 32px;
+  transition: var(--transition-smooth);
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.bento-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.8), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.bento-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6), 0 0 30px rgba(99, 102, 241, 0.15);
+}
+.bento-card:hover::before {
+  opacity: 1;
+}
+
+/* Interactive Calculator Sliders */
+.calc-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.12);
+  outline: none;
+}
+.calc-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #6366f1;
+  cursor: pointer;
+  box-shadow: 0 0 12px #6366f1;
+  border: 2px solid #ffffff;
+}
+.calc-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #6366f1;
+  cursor: pointer;
+  box-shadow: 0 0 12px #6366f1;
+  border: 2px solid #ffffff;
+}
+
+/* Call to Action Banner */
+.cta-banner-stripe {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(139, 92, 246, 0.2) 50%, rgba(6, 182, 212, 0.2) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  border-radius: 24px;
+  padding: 60px 40px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+

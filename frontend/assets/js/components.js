@@ -1,10 +1,11 @@
 // components.js - View Templates for PrepSpace SaaS Application
 
 const components = {
-  // Public SaaS Landing Page
+  // Public SaaS Landing Page - Style 2: Stripe / Supabase Enterprise Gradient Look
   landing: () => `
-    <header>
-      <nav class="navbar navbar-expand-lg navbar-dark bg-transparent py-4">
+    <header class="stripe-hero-mesh pb-5">
+      <!-- Enterprise Glass Navigation -->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-transparent py-4 sticky-top glass-nav">
         <div class="container">
           <a class="navbar-brand d-flex align-items-center gap-2 text-decoration-none" href="#/">
             <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" class="brand-logo-img" style="width: 42px; height: 42px; object-fit: contain;">
@@ -18,29 +19,60 @@ const components = {
           </button>
           <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center gap-1">
-              <li class="nav-item"><a class="nav-link px-3" href="#features">Features</a></li>
+              <li class="nav-item"><a class="nav-link px-3" href="#showcase">Platform</a></li>
+              <li class="nav-item"><a class="nav-link px-3" href="#features">Capabilities</a></li>
+              <li class="nav-item"><a class="nav-link px-3" href="#calculator">ROI Calculator</a></li>
               <li class="nav-item"><a class="nav-link px-3" href="#pricing">Pricing</a></li>
               <li class="nav-item"><a class="nav-link px-3" href="/about">About</a></li>
-              <li class="nav-item"><a class="nav-link px-3" href="/privacy">Privacy</a></li>
-              <li class="nav-item"><a class="nav-link px-3" href="/terms">Terms</a></li>
-              <li class="nav-item ms-lg-3">
-                <a class="btn btn-glass px-4 me-2" href="#/login">Login</a>
-                <a class="btn btn-premium px-4" href="#/register">Get Started</a>
+              <li class="nav-item ms-lg-3 d-flex gap-2">
+                <a class="btn btn-glass px-4 py-2" href="#/login">Sign In</a>
+                <a class="btn btn-premium px-4 py-2 fw-bold" href="#/register">Get Started Free</a>
               </li>
             </ul>
           </div>
         </div>
       </nav>
 
-      <div class="container text-center py-5">
-        <div class="row justify-content-center py-5">
-          <div class="col-lg-10 col-xl-8">
-            <span class="badge bg-indigo-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill mb-3">AI-POWERED PREPARATION SYSTEM</span>
-            <h1 class="display-3 fw-extrabold text-white mb-4">Cracking Tech Interviews is now <span class="hero-gradient">Predictable</span></h1>
-            <p class="lead text-muted mb-5 fs-4">An enterprise-level SaaS platform to manage study plans, track coding platform statistics, run mock interview feedback loops, and track job applications in a single unified dashboard.</p>
-            <div class="d-flex justify-content-center gap-3">
-              <a href="#/register" class="btn btn-premium btn-lg px-5 py-3 fs-5">Initialize Space</a>
-              <a href="#features" class="btn btn-glass btn-lg px-5 py-3 fs-5">View Core Features</a>
+      <!-- Hero Banner Section -->
+      <div class="container text-center pt-5 pb-4">
+        <div class="row justify-content-center">
+          <div class="col-lg-10 col-xl-9">
+            <a href="#features" class="announcement-pill mb-4">
+              <span class="badge bg-primary px-2 py-1 rounded-pill fw-bold">NEW</span>
+              <span>50-MCQ Timed Exam Engine & AI ATS Audit is Live</span>
+              <i class="fa-solid fa-arrow-right fs-8"></i>
+            </a>
+
+            <h1 class="display-3 fw-extrabold text-white mb-4 tracking-tight">
+              The Career Engine for <br class="d-none d-md-block"/>
+              <span class="gradient-text-stripe">Elite Tech Placements</span>
+            </h1>
+
+            <p class="lead text-secondary mb-5 fs-5 mx-auto" style="max-width: 780px;">
+              Master Data Structures & Algorithms, test your knowledge with 50-MCQ timed technical screens, audit your resume against AI ATS systems, and manage your entire placement pipeline in one unified platform.
+            </p>
+
+            <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap mb-5">
+              <a href="#/register" class="btn btn-premium btn-lg px-5 py-3 fs-5 fw-bold shadow-lg">
+                <i class="fa-solid fa-rocket me-2"></i>Initialize Space Free
+              </a>
+              <a href="#showcase" class="btn btn-glass btn-lg px-4 py-3 fs-5 text-white">
+                <i class="fa-solid fa-layer-group me-2 text-cyan"></i>Explore Live Platform
+              </a>
+            </div>
+
+            <!-- Social Proof Strip -->
+            <div class="pt-4 border-top border-secondary border-opacity-10">
+              <p class="text-muted small text-uppercase tracking-wider mb-3 fs-8">Preparing Candidates for Engineering Roles at</p>
+              <div class="company-logo-strip">
+                <span class="company-badge"><i class="fa-brands fa-google text-danger"></i> Google</span>
+                <span class="company-badge"><i class="fa-brands fa-microsoft text-primary"></i> Microsoft</span>
+                <span class="company-badge"><i class="fa-brands fa-amazon text-warning"></i> Amazon</span>
+                <span class="company-badge"><i class="fa-brands fa-meta text-info"></i> Meta</span>
+                <span class="company-badge"><i class="fa-brands fa-uber text-white"></i> Uber</span>
+                <span class="company-badge"><i class="fa-brands fa-stripe text-indigo"></i> Stripe</span>
+                <span class="company-badge"><i class="fa-brands fa-atlassian text-primary"></i> Atlassian</span>
+              </div>
             </div>
           </div>
         </div>
@@ -48,103 +80,386 @@ const components = {
     </header>
 
     <main>
-      <!-- Features Section -->
+      <!-- 3D Interactive Floating Dashboard Showcase (Stripe-Style) -->
+      <section id="showcase" class="container py-5">
+        <div class="text-center mb-5">
+          <span class="badge bg-indigo-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-2">INTERACTIVE WORKSPACE</span>
+          <h2 class="display-5 fw-extrabold text-white mb-2">Built for Relentless Focus & Speed</h2>
+          <p class="text-muted fs-5">A real-time control room for your technical preparation journey.</p>
+        </div>
+
+        <div class="dashboard-mockup-wrapper">
+          <div class="mockup-window">
+            <div class="mockup-header">
+              <div class="window-dots">
+                <span class="window-dot red"></span>
+                <span class="window-dot yellow"></span>
+                <span class="window-dot green"></span>
+              </div>
+              <div class="mockup-url-bar">https://stream-in.app/#/dashboard</div>
+              <div class="text-muted fs-8"><i class="fa-solid fa-shield-halved text-success me-1"></i> TLS 1.3 Verified</div>
+            </div>
+
+            <!-- Inside Mockup Viewport -->
+            <div class="p-4 p-md-5 bg-dark bg-opacity-75">
+              <!-- Live Metrics Strip -->
+              <div class="row g-3 mb-4">
+                <div class="col-6 col-md-3">
+                  <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 text-start">
+                    <span class="text-muted fs-8 uppercase">Readiness Score</span>
+                    <h3 class="text-white fw-bold mt-1 mb-0 gradient-text-stripe">96.8%</h3>
+                    <small class="text-success fs-8"><i class="fa-solid fa-arrow-trend-up me-1"></i>+12% this week</small>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 text-start">
+                    <span class="text-muted fs-8 uppercase">DSA Streaks</span>
+                    <h3 class="text-warning fw-bold mt-1 mb-0"><i class="fa-solid fa-fire me-1"></i>18 Days</h3>
+                    <small class="text-muted fs-8">240 Problems Solved</small>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 text-start">
+                    <span class="text-muted fs-8 uppercase">50-MCQ Exam Grade</span>
+                    <h3 class="text-info fw-bold mt-1 mb-0">50 / 50</h3>
+                    <small class="text-success fs-8">100% Top Percentile</small>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 text-start">
+                    <span class="text-muted fs-8 uppercase">Active Pipeline</span>
+                    <h3 class="text-success fw-bold mt-1 mb-0">4 Offers</h3>
+                    <small class="text-muted fs-8">8 Companies In Review</small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Interactive Tabs & Preview Deck (Supabase-Style) -->
+              <div class="row g-4 text-start">
+                <div class="col-lg-4 d-flex flex-column gap-2">
+                  <button class="feature-tab-btn active" onclick="window.switchLandingTab('tab-exam', this)">
+                    <i class="fa-solid fa-stopwatch-20 text-primary fs-5"></i>
+                    <div>
+                      <div class="text-white fw-bold">50-MCQ Exam Engine</div>
+                      <small class="text-muted fs-8">Full-length timed technical testing</small>
+                    </div>
+                  </button>
+
+                  <button class="feature-tab-btn" onclick="window.switchLandingTab('tab-dsa', this)">
+                    <i class="fa-solid fa-code-branch text-success fs-5"></i>
+                    <div>
+                      <div class="text-white fw-bold">DSA Problem Matrix</div>
+                      <small class="text-muted fs-8">Track LeetCode, Striver & NeetCode</small>
+                    </div>
+                  </button>
+
+                  <button class="feature-tab-btn" onclick="window.switchLandingTab('tab-ai', this)">
+                    <i class="fa-solid fa-brain text-secondary fs-5"></i>
+                    <div>
+                      <div class="text-white fw-bold">AI Career & ATS Audit</div>
+                      <small class="text-muted fs-8">Tailored company prompt guides</small>
+                    </div>
+                  </button>
+
+                  <button class="feature-tab-btn" onclick="window.switchLandingTab('tab-kanban', this)">
+                    <i class="fa-solid fa-table-columns text-warning fs-5"></i>
+                    <div>
+                      <div class="text-white fw-bold">Placement Kanban Pipeline</div>
+                      <small class="text-muted fs-8">End-to-end recruitment tracking</small>
+                    </div>
+                  </button>
+                </div>
+
+                <!-- Tab Preview Canvas -->
+                <div class="col-lg-8">
+                  <div class="glass-panel p-4 h-100 border-primary border-opacity-25" id="landing-tab-display">
+                    <!-- Default Tab: Exam Engine -->
+                    <div id="tab-exam" class="tab-pane-content">
+                      <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="badge bg-danger text-white px-3 py-1 rounded-pill"><i class="fa-solid fa-clock me-1"></i> 50:00 Timed Mode</span>
+                        <span class="text-muted fs-8">Topic: Data Structures & Algorithms</span>
+                      </div>
+                      <h5 class="text-white fw-bold mb-3">Question 14 of 50: What is the average time complexity of searching in an AVL tree with n nodes?</h5>
+                      <div class="d-flex flex-column gap-2 mb-3">
+                        <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-white fs-7"><span class="badge bg-secondary me-2">A</span> O(n)</div>
+                        <div class="p-2 rounded bg-primary bg-opacity-25 border border-primary text-white fs-7 fw-bold"><span class="badge bg-primary me-2">B</span> O(log n) <i class="fa-solid fa-check text-success ms-2"></i></div>
+                        <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-white fs-7"><span class="badge bg-secondary me-2">C</span> O(n log n)</div>
+                        <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-white fs-7"><span class="badge bg-secondary me-2">D</span> O(1)</div>
+                      </div>
+                      <div class="alert alert-success bg-opacity-10 border-success text-success fs-8 mb-0">
+                        <i class="fa-solid fa-circle-check me-2"></i><strong>Instant System Check:</strong> Correct! AVL trees maintain strict height balance guaranteeing O(log n) lookups. +10 XP awarded!
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bento Grid Features Section -->
       <section id="features" class="container py-5">
         <div class="text-center mb-5">
-          <h2 class="display-5 fw-bold text-white mb-3">Engineered for High-Performance Candidates</h2>
-          <p class="text-muted fs-5">Everything you need to level up and land your dream offer.</p>
+          <span class="badge bg-indigo-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-2">COMPLETE ECOSYSTEM</span>
+          <h2 class="display-5 fw-extrabold text-white mb-3">Engineered for Technical Mastery</h2>
+          <p class="text-muted fs-5">Every single feature designed to give you the competitive edge in interviews.</p>
         </div>
-        <div class="row g-4 mt-2">
-          <div class="col-md-4">
-            <div class="glass-panel p-4 h-100">
-              <div class="feature-icon mb-3"><i class="fa-solid fa-chart-line fs-2 text-primary"></i></div>
-              <h3 class="text-white h5">Unified Dashboard Analytics</h3>
-              <p class="text-muted">Interactive charts mapping study hours, problem difficulties, streak data, and target completion counts.</p>
+
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-4">
+            <div class="bento-card">
+              <div class="feature-icon mb-3 text-primary fs-2"><i class="fa-solid fa-stopwatch-20"></i></div>
+              <h3 class="text-white h5 fw-bold mb-2">50-MCQ Timed Exam Engine</h3>
+              <p class="text-muted fs-7 mb-0">Experience realistic, timed screening exams across DSA, Java, SQL, and System Design with automatic scoring and detailed review logs.</p>
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="glass-panel p-4 h-100">
-              <div class="feature-icon mb-3"><i class="fa-solid fa-brain fs-2 text-secondary"></i></div>
-              <h3 class="text-white h5">AI Feedback Engine</h3>
-              <p class="text-muted">Simulated evaluation feedback and readiness metrics outlining your technical gaps and soft skill adjustments.</p>
+
+          <div class="col-md-6 col-lg-4">
+            <div class="bento-card">
+              <div class="feature-icon mb-3 text-cyan fs-2"><i class="fa-solid fa-chart-line"></i></div>
+              <h3 class="text-white h5 fw-bold mb-2">DSA Matrix & Heatmaps</h3>
+              <p class="text-muted fs-7 mb-0">Log problems by topic, track difficulty ratios (Easy/Medium/Hard), and maintain daily streak momentum with interactive visual heatmaps.</p>
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="glass-panel p-4 h-100">
-              <div class="feature-icon mb-3"><i class="fa-solid fa-kanban fs-2 text-success"></i></div>
-              <h3 class="text-white h5">Kanban Job Tracker</h3>
-              <p class="text-muted">Organize job pipelines, record scheduling dates, and trace outcomes on an interactive board layout.</p>
+
+          <div class="col-md-6 col-lg-4">
+            <div class="bento-card">
+              <div class="feature-icon mb-3 text-secondary fs-2"><i class="fa-solid fa-brain"></i></div>
+              <h3 class="text-white h5 fw-bold mb-2">AI Career & ATS Audit</h3>
+              <p class="text-muted fs-7 mb-0">Generate personalized 30-to-90-day study roadmaps, company-specific prompt guides, and ATS resume audits tailored for top tech employers.</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4">
+            <div class="bento-card">
+              <div class="feature-icon mb-3 text-success fs-2"><i class="fa-solid fa-kanban"></i></div>
+              <h3 class="text-white h5 fw-bold mb-2">Placement Kanban Board</h3>
+              <p class="text-muted fs-7 mb-0">Move applications seamlessly through Wishlist, Applied, Interviewing, and Offered stages with compensation tracking and interview dates.</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4">
+            <div class="bento-card">
+              <div class="feature-icon mb-3 text-warning fs-2"><i class="fa-solid fa-medal"></i></div>
+              <h3 class="text-white h5 fw-bold mb-2">Verified Academy Credentials</h3>
+              <p class="text-muted fs-7 mb-0">Earn verifiable certificates upon curriculum mastery and share your authenticated credentials directly on LinkedIn and your resume.</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4">
+            <div class="bento-card">
+              <div class="feature-icon mb-3 text-danger fs-2"><i class="fa-solid fa-desktop"></i></div>
+              <h3 class="text-white h5 fw-bold mb-2">Desktop Client & Cloud Sync</h3>
+              <p class="text-muted fs-7 mb-0">Native Java Swing desktop client paired with real-time cloud synchronization for zero latency and offline coding sessions.</p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Pricing Section -->
+      <!-- Interactive Preparation ROI Calculator -->
+      <section id="calculator" class="container py-5">
+        <div class="p-4 p-md-5 rounded-4 bg-dark bg-opacity-50 border border-secondary border-opacity-25">
+          <div class="row align-items-center g-4">
+            <div class="col-lg-6 text-start">
+              <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-3">READINESS SIMULATOR</span>
+              <h2 class="display-6 fw-extrabold text-white mb-3">Calculate Your Interview Readiness</h2>
+              <p class="text-muted fs-7 mb-4">Adjust your daily study pace and preparation timeframe to simulate your total solved problem forecast and target readiness score.</p>
+              
+              <div class="mb-4">
+                <div class="d-flex justify-content-between text-white fs-7 mb-1">
+                  <span>Questions Practiced Per Day</span>
+                  <strong id="calc-questions-val" class="text-primary">5 Problems / day</strong>
+                </div>
+                <input type="range" class="calc-slider" id="calc-questions" min="1" max="20" value="5" oninput="window.updateRoiCalculator()">
+              </div>
+
+              <div class="mb-2">
+                <div class="d-flex justify-content-between text-white fs-7 mb-1">
+                  <span>Preparation Timeframe</span>
+                  <strong id="calc-weeks-val" class="text-cyan">8 Weeks</strong>
+                </div>
+                <input type="range" class="calc-slider" id="calc-weeks" min="2" max="24" value="8" oninput="window.updateRoiCalculator()">
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="row g-3 text-center">
+                <div class="col-sm-6">
+                  <div class="p-4 rounded-3 glass-panel border-primary">
+                    <span class="text-muted fs-8 uppercase">Projected Solved</span>
+                    <h2 class="display-5 fw-extrabold text-white mt-2 mb-0" id="calc-total-problems">280</h2>
+                    <small class="text-success fs-8"><i class="fa-solid fa-code me-1"></i>Mastery Milestone</small>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="p-4 rounded-3 glass-panel border-success">
+                    <span class="text-muted fs-8 uppercase">Readiness Level</span>
+                    <h2 class="display-5 fw-extrabold text-success mt-2 mb-0" id="calc-readiness-score">92%</h2>
+                    <small class="text-muted fs-8">FAANG-Ready Tier</small>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="p-3 rounded-3 bg-black bg-opacity-40 border border-secondary border-opacity-25 text-start d-flex align-items-center justify-content-between">
+                    <div>
+                      <span class="text-white fw-bold fs-7">Estimated Offer Probability</span>
+                      <p class="text-muted fs-8 mb-0" id="calc-odds-desc">Top 5% Placement Performance Group</p>
+                    </div>
+                    <span class="badge bg-success px-3 py-2 fs-6 fw-bold" id="calc-odds-val">94% Probability</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pricing Section (Stripe-Style Cards) -->
       <section id="pricing" class="container py-5">
         <div class="text-center mb-5">
-          <h2 class="display-5 fw-bold text-white mb-3">Flexible Plans for Every Developer</h2>
-          <p class="text-muted fs-5">Choose the pace that matches your target timelines.</p>
+          <span class="badge bg-indigo-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-2">SIMPLE & TRANSPARENT</span>
+          <h2 class="display-5 fw-extrabold text-white mb-3">Straightforward Pricing</h2>
+          <p class="text-muted fs-5">Invest in your career with a single one-time payment. No hidden monthly subscriptions.</p>
         </div>
-        <div class="row g-4 justify-content-center mt-2">
-          <div class="col-md-5 col-lg-4">
-            <div class="glass-panel p-4 h-100 text-center">
-              <h3 class="text-white h4">PrepFree</h3>
-              <p class="text-muted">Perfect for getting started</p>
-              <div class="my-4"><span class="display-4 fw-bold text-white">₹0</span><span class="text-muted">/free</span></div>
-              <ul class="list-unstyled text-start mb-5 text-muted">
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Access to Core Question Bank</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Log Solved Coding Problems</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Standard Kanban Tracker</li>
+
+        <div class="row g-4 justify-content-center">
+          <!-- Free Tier -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-panel p-4 p-md-5 h-100 text-center text-start">
+              <h3 class="text-white h4 fw-bold">PrepFree</h3>
+              <p class="text-muted fs-7">Essential tools to start tracking your daily prep</p>
+              <div class="my-4"><span class="display-4 fw-extrabold text-white">₹0</span><span class="text-muted fs-7"> / lifetime</span></div>
+              <ul class="list-unstyled text-start mb-5 text-muted fs-7 d-flex flex-column gap-2">
+                <li><i class="fa-solid fa-check text-success me-2"></i> Access to Core Question Bank</li>
+                <li><i class="fa-solid fa-check text-success me-2"></i> Log Solved Problems & Streaks</li>
+                <li><i class="fa-solid fa-check text-success me-2"></i> Standard Placement Kanban</li>
+                <li><i class="fa-solid fa-check text-success me-2"></i> Basic Progress Graphs</li>
               </ul>
-              <a href="#/register" class="btn btn-glass w-100 py-3">Register Free Account</a>
+              <a href="#/register" class="btn btn-glass w-100 py-3 fw-bold">Get Started Free</a>
             </div>
           </div>
-          <div class="col-md-5 col-lg-4">
-            <div class="glass-panel p-4 h-100 text-center border-primary" style="box-shadow: 0 0 25px var(--accent-glow);">
-              <div class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle px-3 py-1 mb-2">MOST POPULAR</div>
-              <h3 class="text-white h4">PrepPro</h3>
-              <p class="text-indigo">Recommended for Active Jobseekers</p>
-              <div class="my-4"><span class="display-4 fw-bold text-white">₹99</span><span class="text-muted">/one-time lifetime</span></div>
-              <ul class="list-unstyled text-start mb-5 text-muted">
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>AI Career Assistant</strong> (ATS Audit, Planner)</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Unlimited Mock Assessments & 50-MCQs</strong></li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Company Interview Guides & Prompts</strong></li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Export Excel/PDF Progress Reports</strong></li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Priority Community & Leaderboard Ranks</li>
+
+          <!-- Pro Tier -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-panel p-4 p-md-5 h-100 text-center border-primary position-relative" style="box-shadow: 0 0 40px var(--accent-glow);">
+              <div class="badge bg-primary text-white border border-primary-subtle px-3 py-1 rounded-pill position-absolute top-0 start-50 translate-middle fw-bold">
+                MOST POPULAR
+              </div>
+              <h3 class="text-white h4 fw-bold mt-2">PrepPro</h3>
+              <p class="text-indigo fs-7">Recommended for Active Jobseekers & Students</p>
+              <div class="my-4"><span class="display-4 fw-extrabold text-white">₹99</span><span class="text-muted fs-7"> / one-time lifetime</span></div>
+              <ul class="list-unstyled text-start mb-5 text-muted fs-7 d-flex flex-column gap-2">
+                <li><i class="fa-solid fa-check text-success me-2"></i> <strong>Unlimited 50-MCQ Timed Exams</strong></li>
+                <li><i class="fa-solid fa-check text-success me-2"></i> <strong>AI ATS Resume & Keyword Audit</strong></li>
+                <li><i class="fa-solid fa-check text-success me-2"></i> <strong>AI Custom Study Planners</strong></li>
+                <li><i class="fa-solid fa-check text-success me-2"></i> <strong>Company Interview Guides & Prompts</strong></li>
+                <li><i class="fa-solid fa-check text-success me-2"></i> <strong>Export Excel / PDF Progress Reports</strong></li>
+                <li><i class="fa-solid fa-check text-success me-2"></i> Verified Completion Certificates</li>
               </ul>
-              <a href="#/register" class="btn btn-premium w-100 py-3 fw-bold"><i class="fa-solid fa-gem me-1"></i> Get PrepPro Access</a>
+              <a href="#/register" class="btn btn-premium w-100 py-3 fw-bold"><i class="fa-solid fa-gem me-2"></i>Upgrade to PrepPro Access</a>
             </div>
           </div>
         </div>
       </section>
-    </main>
 
-    <!-- Google AdSense Multiplex Ad Unit -->
-    <div class="container my-5">
-      <div class="glass-panel p-4">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-format="autorelaxed"
-             data-ad-client="ca-pub-4662205173096609"
-             data-ad-slot="3928140249"></ins>
-      </div>
-    </div>    <!-- Footer -->
-    <footer class="py-5 text-center border-top border-secondary-subtle border-opacity-10 mt-5">
-      <div class="container">
-        <div class="d-flex justify-content-center align-items-center gap-2 mb-2">
-          <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" style="width: 32px; height: 32px; object-fit: contain;">
-          <div class="d-flex flex-column text-start">
-            <span class="text-white fw-bold fs-6 lh-1">PrepSpace</span>
-            <span class="text-primary fw-semibold" style="font-size: 0.65rem; letter-spacing: 0.5px;">(stream-in)</span>
+      <!-- FAQ Section -->
+      <section class="container py-5">
+        <div class="text-center mb-5">
+          <h2 class="display-6 fw-bold text-white mb-2">Frequently Asked Questions</h2>
+          <p class="text-muted">Have questions? We have answers.</p>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="accordion d-flex flex-column gap-3" id="landingFaq">
+              <div class="glass-panel p-3">
+                <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-circle-question text-primary me-2"></i>How do the 50-MCQ Mock Exams work?</h6>
+                <p class="text-muted fs-7 mb-0 mt-2">PrepSpace generates a balanced 50-question examination covering Data Structures, Algorithms, Core Java, OOP, and Database concepts. The system auto-grades your submission instantly, calculates exact percentile marks, and awards XP to your profile.</p>
+              </div>
+              <div class="glass-panel p-3">
+                <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-circle-question text-primary me-2"></i>Is the ₹99 PrepPro payment a recurring subscription?</h6>
+                <p class="text-muted fs-7 mb-0 mt-2">No. PrepPro is a single one-time payment of ₹99 with lifetime access. You will never be billed again.</p>
+              </div>
+              <div class="glass-panel p-3">
+                <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-circle-question text-primary me-2"></i>Can I use PrepSpace offline or on desktop?</h6>
+                <p class="text-muted fs-7 mb-0 mt-2">Yes. We provide a complete Java Swing desktop client that connects directly to the tracker database for lightning-fast, offline placement management.</p>
+              </div>
+            </div>
           </div>
         </div>
-        <p class="text-muted small mb-3">&copy; 2026 PrepSpace (stream-in). Developed by Nagesh Methre. All rights reserved.</p>
-        <div class="d-flex justify-content-center gap-3 text-muted small">
-          <a href="/about" class="text-muted text-decoration-none">About</a>
-          <span>•</span>
-          <a href="/privacy" class="text-muted text-decoration-none">Privacy Policy</a>
-          <span>•</span>
-          <a href="/terms" class="text-muted text-decoration-none">Terms of Service</a>
+      </section>
+
+      <!-- Call to Action Banner -->
+      <section class="container py-5">
+        <div class="cta-banner-stripe text-center">
+          <h2 class="display-5 fw-extrabold text-white mb-3">Accelerate Your Placement Preparation Today</h2>
+          <p class="text-secondary fs-5 mb-4 mx-auto" style="max-width: 600px;">Join thousands of engineers organizing their daily coding routines and landing top software engineering offers.</p>
+          <a href="#/register" class="btn btn-premium btn-lg px-5 py-3 fs-5 fw-bold shadow-lg">
+            <i class="fa-solid fa-rocket me-2"></i>Get Started with PrepSpace Free
+          </a>
+        </div>
+      </section>
+
+      <!-- Google AdSense Multiplex Ad Unit -->
+      <div class="container my-4">
+        <div class="glass-panel p-3">
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-format="autorelaxed"
+               data-ad-client="ca-pub-4662205173096609"
+               data-ad-slot="3928140249"></ins>
+        </div>
+      </div>
+    </main>
+
+    <!-- Multi-Column Enterprise Footer -->
+    <footer class="py-5 border-top border-secondary-subtle border-opacity-10 mt-5">
+      <div class="container">
+        <div class="row g-4 justify-content-between mb-5">
+          <div class="col-lg-4 text-start">
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" style="width: 38px; height: 38px; object-fit: contain;">
+              <div class="d-flex flex-column text-start">
+                <span class="text-white fw-bold fs-5 lh-1">PrepSpace</span>
+                <span class="text-primary fw-semibold" style="font-size: 0.65rem; letter-spacing: 0.5px;">(stream-in)</span>
+              </div>
+            </div>
+            <p class="text-muted fs-7 mb-3" style="max-width: 320px;">The unified career intelligence and interview preparation tracker SaaS for developers worldwide.</p>
+            <div class="d-flex align-items-center gap-2 text-success fs-8">
+              <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981;"></span>
+              <span>All Systems Operational (Zero-Trust)</span>
+            </div>
+          </div>
+
+          <div class="col-6 col-lg-2 text-start">
+            <h6 class="text-white fw-bold mb-3 fs-7 uppercase">Platform</h6>
+            <ul class="list-unstyled fs-7 d-flex flex-column gap-2 text-muted">
+              <li><a href="#showcase" class="text-muted text-decoration-none hover-white">Mock Exams</a></li>
+              <li><a href="#features" class="text-muted text-decoration-none hover-white">DSA Matrix</a></li>
+              <li><a href="#features" class="text-muted text-decoration-none hover-white">ATS Resume AI</a></li>
+              <li><a href="#pricing" class="text-muted text-decoration-none hover-white">Pricing</a></li>
+            </ul>
+          </div>
+
+          <div class="col-6 col-lg-2 text-start">
+            <h6 class="text-white fw-bold mb-3 fs-7 uppercase">Company</h6>
+            <ul class="list-unstyled fs-7 d-flex flex-column gap-2 text-muted">
+              <li><a href="/about" class="text-muted text-decoration-none hover-white">About PrepSpace</a></li>
+              <li><a href="/privacy" class="text-muted text-decoration-none hover-white">Privacy Policy</a></li>
+              <li><a href="/terms" class="text-muted text-decoration-none hover-white">Terms of Service</a></li>
+              <li><a href="mailto:support@stream-in.app" class="text-muted text-decoration-none hover-white">Direct Support</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 text-start">
+            <h6 class="text-white fw-bold mb-3 fs-7 uppercase">Security & Verification</h6>
+            <p class="text-muted fs-8 mb-2"><i class="fa-solid fa-lock text-primary me-2"></i>256-Bit SSL Secured</p>
+            <p class="text-muted fs-8 mb-2"><i class="fa-solid fa-shield-check text-success me-2"></i>Stateless JWT Authentication</p>
+            <p class="text-muted fs-8 mb-0"><i class="fa-solid fa-bolt text-warning me-2"></i>Razorpay Encrypted Gateway</p>
+          </div>
+        </div>
+
+        <div class="border-top border-secondary border-opacity-10 pt-4 text-center text-muted fs-8">
+          <p class="mb-0">&copy; 2026 PrepSpace (stream-in). Developed with excellence by Nagesh Methre. All rights reserved.</p>
         </div>
       </div>
     </footer>

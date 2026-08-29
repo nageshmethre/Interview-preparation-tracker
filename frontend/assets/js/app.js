@@ -42,6 +42,146 @@ document.addEventListener('DOMContentLoaded', () => {
   router();
 });
 
+// Interactive Showcase Tabs for Landing Page (Style 2: Stripe / Supabase)
+window.switchLandingTab = function(tabId, btnElement) {
+  document.querySelectorAll('.feature-tab-btn').forEach(btn => btn.classList.remove('active'));
+  if (btnElement) btnElement.classList.add('active');
+
+  const display = document.getElementById('landing-tab-display');
+  if (!display) return;
+
+  if (tabId === 'tab-exam') {
+    display.innerHTML = `
+      <div id="tab-exam" class="tab-pane-content">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <span class="badge bg-danger text-white px-3 py-1 rounded-pill"><i class="fa-solid fa-clock me-1"></i> 50:00 Timed Mode</span>
+          <span class="text-muted fs-8">Topic: Data Structures & Algorithms</span>
+        </div>
+        <h5 class="text-white fw-bold mb-3">Question 14 of 50: What is the average time complexity of searching in an AVL tree with n nodes?</h5>
+        <div class="d-flex flex-column gap-2 mb-3">
+          <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-white fs-7"><span class="badge bg-secondary me-2">A</span> O(n)</div>
+          <div class="p-2 rounded bg-primary bg-opacity-25 border border-primary text-white fs-7 fw-bold"><span class="badge bg-primary me-2">B</span> O(log n) <i class="fa-solid fa-check text-success ms-2"></i></div>
+          <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-white fs-7"><span class="badge bg-secondary me-2">C</span> O(n log n)</div>
+          <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-white fs-7"><span class="badge bg-secondary me-2">D</span> O(1)</div>
+        </div>
+        <div class="alert alert-success bg-opacity-10 border-success text-success fs-8 mb-0">
+          <i class="fa-solid fa-circle-check me-2"></i><strong>Instant System Check:</strong> Correct! AVL trees maintain strict height balance guaranteeing O(log n) lookups. +10 XP awarded!
+        </div>
+      </div>
+    `;
+  } else if (tabId === 'tab-dsa') {
+    display.innerHTML = `
+      <div id="tab-dsa" class="tab-pane-content">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <span class="badge bg-success text-white px-3 py-1 rounded-pill"><i class="fa-solid fa-fire me-1"></i> 18-Day Streak</span>
+          <span class="text-muted fs-8">LeetCode / Striver SDE Sheet</span>
+        </div>
+        <h5 class="text-white fw-bold mb-3">Daily Problem Matrix (240 / 300 Solved)</h5>
+        <div class="progress mb-3" style="height: 10px;">
+          <div class="progress-bar bg-success" style="width: 50%;">Easy 120</div>
+          <div class="progress-bar bg-warning" style="width: 35%;">Med 84</div>
+          <div class="progress-bar bg-danger" style="width: 15%;">Hard 36</div>
+        </div>
+        <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 mb-3 fs-7 text-secondary">
+          <div class="d-flex justify-content-between align-items-center">
+            <span><i class="fa-solid fa-code text-cyan me-2"></i><strong>LRU Cache Implementation (Design)</strong></span>
+            <span class="badge bg-warning-subtle text-warning">Medium</span>
+          </div>
+        </div>
+        <div class="alert alert-info bg-opacity-10 border-info text-info fs-8 mb-0">
+          <i class="fa-solid fa-chart-line me-2"></i><strong>Weekly Velocity:</strong> Solved +28 questions this week across Dynamic Programming & Graphs.
+        </div>
+      </div>
+    `;
+  } else if (tabId === 'tab-ai') {
+    display.innerHTML = `
+      <div id="tab-ai" class="tab-pane-content">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <span class="badge bg-secondary text-white px-3 py-1 rounded-pill"><i class="fa-solid fa-brain me-1"></i> AI ATS Audit</span>
+          <span class="text-success fw-bold fs-7">Match Score: 94%</span>
+        </div>
+        <h5 class="text-white fw-bold mb-2">Target Role: Senior Backend Engineer @ Stripe</h5>
+        <p class="text-muted fs-8 mb-3">Audit matches your distributed systems projects with required production requirements.</p>
+        <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 mb-3 fs-7">
+          <div class="text-white fw-bold mb-1"><i class="fa-solid fa-sparkles text-primary me-2"></i>AI Interview Prompt Recommendation:</div>
+          <p class="text-muted fs-8 mb-0">"Be prepared to explain idempotent API requests, distributed locking with Redis, and dead-letter queue recovery mechanisms."</p>
+        </div>
+        <div class="alert alert-primary bg-opacity-10 border-primary text-primary fs-8 mb-0">
+          <i class="fa-solid fa-check-double me-2"></i><strong>ATS Keyword Verified:</strong> Found Kafka, Redis, Docker, Spring Boot, and System Architecture.
+        </div>
+      </div>
+    `;
+  } else if (tabId === 'tab-kanban') {
+    display.innerHTML = `
+      <div id="tab-kanban" class="tab-pane-content">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <span class="badge bg-warning text-dark px-3 py-1 rounded-pill"><i class="fa-solid fa-briefcase me-1"></i> 4 Active Offers</span>
+          <span class="text-muted fs-8">Pipeline Tracker</span>
+        </div>
+        <h5 class="text-white fw-bold mb-3">Recruitment Pipeline Stages</h5>
+        <div class="row g-2 mb-3">
+          <div class="col-6">
+            <div class="p-2 rounded bg-dark border border-success border-opacity-50">
+              <span class="badge bg-success mb-1">Offer Accepted</span>
+              <div class="text-white fw-bold fs-7">Google - L4 SDE</div>
+              <small class="text-muted fs-8">₹38 LPA • Bangalore</small>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-2 rounded bg-dark border border-primary border-opacity-50">
+              <span class="badge bg-primary mb-1">Final Round</span>
+              <div class="text-white fw-bold fs-7">Amazon - SDE II</div>
+              <small class="text-muted fs-8">System Design Screen</small>
+            </div>
+          </div>
+        </div>
+        <div class="alert alert-success bg-opacity-10 border-success text-success fs-8 mb-0">
+          <i class="fa-solid fa-award me-2"></i><strong>Pipeline Success Rate:</strong> 66.7% Offer conversion rate across technical onsite rounds.
+        </div>
+      </div>
+    `;
+  }
+};
+
+// Interactive ROI & Readiness Calculator for Landing Page
+window.updateRoiCalculator = function() {
+  const qSlider = document.getElementById('calc-questions');
+  const wSlider = document.getElementById('calc-weeks');
+  if (!qSlider || !wSlider) return;
+
+  const q = parseInt(qSlider.value) || 5;
+  const w = parseInt(wSlider.value) || 8;
+
+  const qVal = document.getElementById('calc-questions-val');
+  const wVal = document.getElementById('calc-weeks-val');
+  const totalElem = document.getElementById('calc-total-problems');
+  const scoreElem = document.getElementById('calc-readiness-score');
+  const oddsElem = document.getElementById('calc-odds-val');
+  const oddsDesc = document.getElementById('calc-odds-desc');
+
+  if (qVal) qVal.textContent = `${q} Problems / day`;
+  if (wVal) wVal.textContent = `${w} Weeks`;
+
+  const total = q * w * 7;
+  if (totalElem) totalElem.textContent = total;
+
+  const readiness = Math.min(99, Math.max(50, 45 + Math.floor(total / 5.5)));
+  if (scoreElem) scoreElem.textContent = `${readiness}%`;
+
+  const odds = Math.min(98, Math.max(45, 40 + Math.floor(total / 6.5)));
+  if (oddsElem) oddsElem.textContent = `${odds}% Probability`;
+
+  if (oddsDesc) {
+    if (total >= 400) {
+      oddsDesc.textContent = 'Top 1% Global Elite Placement Group';
+    } else if (total >= 200) {
+      oddsDesc.textContent = 'Top 5% FAANG-Ready Tier';
+    } else {
+      oddsDesc.textContent = 'Strong Intermediate Technical Benchmark';
+    }
+  }
+};
+
 // Theme Management
 function initTheme() {
   document.documentElement.setAttribute('data-theme', state.theme);
