@@ -182,31 +182,31 @@ window.updateRoiCalculator = function() {
   }
 };
 
-// Theme Management
+// Theme Management (Dark & White/Light Mode)
 function initTheme() {
+  if (!state.theme || (state.theme !== 'dark' && state.theme !== 'light')) {
+    state.theme = 'dark';
+  }
   document.documentElement.setAttribute('data-theme', state.theme);
-  const icon = state.theme === 'light' ? 'fa-sun' : state.theme === 'reading' ? 'fa-book-open' : 'fa-moon';
+  const icon = state.theme === 'light' ? 'fa-sun text-warning' : 'fa-moon text-indigo';
   setTimeout(() => {
-    const btn = document.getElementById('dark-mode-toggle');
-    if (btn) btn.innerHTML = `<i class="fa-solid ${icon}"></i>`;
+    document.querySelectorAll('.theme-toggle-btn, #dark-mode-toggle').forEach(btn => {
+      btn.innerHTML = `<i class="fa-solid ${icon}"></i>`;
+    });
   }, 100);
 }
 
-function toggleTheme() {
-  if (state.theme === 'dark') {
-    state.theme = 'light';
-  } else if (state.theme === 'light') {
-    state.theme = 'reading';
-  } else {
-    state.theme = 'dark';
-  }
+window.toggleTheme = function() {
+  state.theme = state.theme === 'light' ? 'dark' : 'light';
   localStorage.setItem('theme', state.theme);
   document.documentElement.setAttribute('data-theme', state.theme);
-  const icon = state.theme === 'light' ? 'fa-sun' : state.theme === 'reading' ? 'fa-book-open' : 'fa-moon';
-  const btn = document.getElementById('dark-mode-toggle');
-  if (btn) btn.innerHTML = `<i class="fa-solid ${icon}"></i>`;
-  showToast(`Switched to ${state.theme} mode`, 'success');
-}
+  const icon = state.theme === 'light' ? 'fa-sun text-warning' : 'fa-moon text-indigo';
+  document.querySelectorAll('.theme-toggle-btn, #dark-mode-toggle').forEach(btn => {
+    btn.innerHTML = `<i class="fa-solid ${icon}"></i>`;
+  });
+  showToast(`Switched to ${state.theme === 'light' ? 'White / Light' : 'Dark'} mode`, 'success');
+};
+function toggleTheme() { window.toggleTheme(); }
 
 // Router
 function router() {

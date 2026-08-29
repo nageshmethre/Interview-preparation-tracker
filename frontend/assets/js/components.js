@@ -24,9 +24,12 @@ const components = {
               <li class="nav-item"><a class="nav-link px-3" href="#calculator">ROI Calculator</a></li>
               <li class="nav-item"><a class="nav-link px-3" href="#pricing">Pricing</a></li>
               <li class="nav-item"><a class="nav-link px-3" href="/about">About</a></li>
-              <li class="nav-item ms-lg-3 d-flex gap-2">
-                <a class="btn btn-glass px-4 py-2" href="#/login">Sign In</a>
-                <a class="btn btn-premium px-4 py-2 fw-bold" href="#/register">Get Started Free</a>
+              <li class="nav-item ms-lg-2 d-flex align-items-center gap-2">
+                <button class="btn btn-glass theme-toggle-btn rounded-circle p-2" onclick="window.toggleTheme()" style="width: 38px; height: 38px;" title="Toggle Dark / White Mode">
+                  <i class="fa-solid fa-moon text-indigo"></i>
+                </button>
+                <a class="btn btn-glass px-3 py-2" href="#/login">Sign In</a>
+                <a class="btn btn-premium px-3 py-2 fw-bold" href="#/register">Get Started Free</a>
               </li>
             </ul>
           </div>
@@ -638,7 +641,7 @@ const components = {
               <i class="fa-solid fa-stopwatch text-danger"></i>
               <span>Mock Exam</span>
             </a>
-            <button id="dark-mode-toggle" class="btn btn-glass rounded-circle p-2" style="width: 40px; height: 40px;"><i class="fa-solid fa-moon"></i></button>
+            <button id="dark-mode-toggle" class="btn btn-glass theme-toggle-btn rounded-circle p-2" onclick="window.toggleTheme()" style="width: 38px; height: 38px;" title="Toggle Dark / White Mode"><i class="fa-solid fa-moon text-indigo"></i></button>
             <div class="dropdown">
               <button class="btn btn-glass dropdown-toggle d-flex align-items-center gap-2" type="button" id="userDropdown" data-bs-toggle="dropdown">
                 <i class="fa-solid fa-circle-user fs-5 text-indigo"></i>
