@@ -144,22 +144,12 @@ public class AdminController {
                 .mapToDouble(Payment::getAmount)
                 .sum();
 
-        double totalReferralPayouts = referralRewardRepository.findAll().stream()
-                .filter(r -> "APPROVED".equals(r.getStatus()))
-                .mapToDouble(ReferralReward::getAmount)
-                .sum();
-
-        double totalPendingWithdrawalAmount = withdrawalRepository.findAll().stream()
-                .filter(w -> "PENDING".equals(w.getStatus()))
-                .mapToDouble(Withdrawal::getAmount)
-                .sum();
-
         Map<String, Object> response = Map.of(
                 "totalUsers", totalUsers,
                 "paidUsers", paidUsers,
                 "totalRevenue", totalRevenue,
-                "totalReferralPayouts", totalReferralPayouts,
-                "totalPendingWithdrawalAmount", totalPendingWithdrawalAmount
+                "totalReferralPayouts", 0.0,
+                "totalPendingWithdrawalAmount", 0.0
         );
         return ResponseEntity.ok(response);
     }

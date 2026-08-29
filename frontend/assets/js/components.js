@@ -244,7 +244,6 @@ const components = {
           <a href="#/calendar" class="sidebar-link"><i class="fa-solid fa-calendar-days text-muted"></i> <span>Calendar</span></a>
           <a href="#/reports" class="sidebar-link"><i class="fa-solid fa-file-invoice text-muted"></i> <span>Reports</span></a>
           <a href="#/profile" class="sidebar-link"><i class="fa-solid fa-user-gear"></i> <span>Settings</span></a>
-          <a href="#/referral" class="sidebar-link"><i class="fa-solid fa-gift text-primary"></i> <span>Refer & Earn</span></a>
           <a href="#/billing" class="sidebar-link"><i class="fa-solid fa-credit-card text-success"></i> <span>Billing</span></a>
           <a href="#/desktop-client" class="sidebar-link"><i class="fa-solid fa-desktop text-indigo"></i> <span>Desktop Client</span></a>
           ${isAdmin ? `<a href="#/admin" class="sidebar-link text-warning-emphasis"><i class="fa-solid fa-shield-halved text-warning"></i> <span>Admin Panel</span></a>` : ''}
@@ -2545,24 +2544,6 @@ const components = {
                 <button class="btn btn-primary btn-save-setting" data-key="PRODUCT_PRICE_INR">Update</button>
               </div>
             </div>
-
-            <div class="mb-3">
-              <label class="form-label text-muted fs-8 uppercase">Referral Reward Commission (INR)</label>
-              <div class="input-group">
-                <span class="input-group-text bg-secondary border-0 text-white">₹</span>
-                <input type="number" id="setting-REFERRAL_REWARD_INR" class="form-control glass-input" value="${settings.REFERRAL_REWARD_INR || 49}">
-                <button class="btn btn-primary btn-save-setting" data-key="REFERRAL_REWARD_INR">Update</button>
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label text-muted fs-8 uppercase">Minimum Withdrawal Threshold (INR)</label>
-              <div class="input-group">
-                <span class="input-group-text bg-secondary border-0 text-white">₹</span>
-                <input type="number" id="setting-MIN_WITHDRAWAL_INR" class="form-control glass-input" value="${settings.MIN_WITHDRAWAL_INR || 100}">
-                <button class="btn btn-primary btn-save-setting" data-key="MIN_WITHDRAWAL_INR">Update</button>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -2720,35 +2701,27 @@ const components = {
 
       <!-- Stats Grid -->
       <div class="row g-4 mb-5">
-        <div class="col-sm-6 col-lg-3">
+        <div class="col-md-4">
           <div class="glass-panel p-4">
             <div class="text-muted fs-8 uppercase tracking-wider mb-2">Total Users</div>
             <h3 class="text-white fw-bold mb-0">${stats.totalUsers}</h3>
-            <div class="text-muted fs-9 mt-2">${stats.paidUsers} Premium Subscriber accounts</div>
+            <div class="text-muted fs-9 mt-2">Registered student/admin profiles</div>
           </div>
         </div>
 
-        <div class="col-sm-6 col-lg-3">
+        <div class="col-md-4">
+          <div class="glass-panel p-4">
+            <div class="text-muted fs-8 uppercase tracking-wider mb-2">Premium Subscribers</div>
+            <h3 class="text-white fw-bold mb-0">${stats.paidUsers}</h3>
+            <div class="text-muted fs-9 mt-2">Active Pro plan accounts</div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
           <div class="glass-panel p-4">
             <div class="text-muted fs-8 uppercase tracking-wider mb-2">Gross Revenue</div>
             <h3 class="text-white fw-bold mb-0">₹${stats.totalRevenue}</h3>
-            <div class="text-muted fs-9 mt-2">Lifetime ₹99 sales</div>
-          </div>
-        </div>
-
-        <div class="col-sm-6 col-lg-3">
-          <div class="glass-panel p-4">
-            <div class="text-muted fs-8 uppercase tracking-wider mb-2">Referral Payouts</div>
-            <h3 class="text-white fw-bold mb-0">₹${stats.totalReferralPayouts}</h3>
-            <div class="text-muted fs-9 mt-2">Approved affiliate payouts</div>
-          </div>
-        </div>
-
-        <div class="col-sm-6 col-lg-3">
-          <div class="glass-panel p-4">
-            <div class="text-muted fs-8 uppercase tracking-wider mb-2">Pending Claims Queue</div>
-            <h3 class="text-white fw-bold mb-0">₹${stats.totalPendingWithdrawalAmount}</h3>
-            <div class="text-muted fs-9 mt-2">Awaiting admin transaction verify</div>
+            <div class="text-muted fs-9 mt-2">Lifetime ₹99 checkout sales</div>
           </div>
         </div>
       </div>
@@ -2756,16 +2729,10 @@ const components = {
       <!-- Tabs Header -->
       <ul class="nav nav-tabs border-secondary border-opacity-25 mb-4">
         <li class="nav-item">
-          <button class="nav-link active text-white bg-transparent border-0 border-bottom border-primary border-2 px-4 py-2" id="tab-claims">Claims Queue</button>
+          <button class="nav-link active text-white bg-transparent border-0 border-bottom border-primary border-2 px-4 py-2" id="tab-users">Users</button>
         </li>
         <li class="nav-item">
           <button class="nav-link text-muted bg-transparent border-0 px-4 py-2" id="tab-payments">Payment Logs</button>
-        </li>
-        <li class="nav-item">
-          <button class="nav-link text-muted bg-transparent border-0 px-4 py-2" id="tab-users">Users</button>
-        </li>
-        <li class="nav-item">
-          <button class="nav-link text-muted bg-transparent border-0 px-4 py-2" id="tab-risk">Risk Audit</button>
         </li>
         <li class="nav-item">
           <button class="nav-link text-muted bg-transparent border-0 px-4 py-2" id="tab-rules">Business Rules</button>

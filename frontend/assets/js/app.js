@@ -361,18 +361,6 @@ function router() {
     viewTitle.textContent = 'Billing & Upgrade';
     pageMount.innerHTML = components.billing(state.isPaid);
     bindBillingEvents();
-  } else if (hash === '#/referral') {
-    viewTitle.textContent = 'Refer & Earn';
-    pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
-    apiFetch('/referrals/stats')
-      .then(stats => {
-        pageMount.innerHTML = components.referral(stats);
-        bindReferralEvents();
-        loadReferralHistory();
-      })
-      .catch(err => {
-        pageMount.innerHTML = `<div class="alert alert-danger">Failed to load referral stats: ${err.message}</div>`;
-      });
   } else if (hash === '#/desktop-client') {
     viewTitle.textContent = 'Desktop Client';
     pageMount.innerHTML = components.desktopClient();
@@ -388,15 +376,13 @@ function router() {
         pageMount.innerHTML = components.admin(stats);
         
         // Bind tab clicks
-        document.getElementById('tab-claims').addEventListener('click', () => loadAdminPanelTab('claims'));
         document.getElementById('tab-payments').addEventListener('click', () => loadAdminPanelTab('payments'));
         document.getElementById('tab-users').addEventListener('click', () => loadAdminPanelTab('users'));
-        document.getElementById('tab-risk').addEventListener('click', () => loadAdminPanelTab('risk'));
         document.getElementById('tab-rules').addEventListener('click', () => loadAdminPanelTab('rules'));
         document.getElementById('tab-audit-logs').addEventListener('click', () => loadAdminPanelTab('audit-logs'));
         document.getElementById('tab-health').addEventListener('click', () => loadAdminPanelTab('health'));
         
-        loadAdminPanelTab('claims');
+        loadAdminPanelTab('users');
         
         const refreshBtn = document.getElementById('btn-admin-refresh');
         if (refreshBtn) {
@@ -2755,18 +2741,14 @@ function loadReferralHistory() {
 }
 
 function loadAdminPanelTab(tab) {
-  const tabClaims = document.getElementById('tab-claims');
   const tabPayments = document.getElementById('tab-payments');
   const tabUsers = document.getElementById('tab-users');
-  const tabRisk = document.getElementById('tab-risk');
   const tabRules = document.getElementById('tab-rules');
   const tabAudit = document.getElementById('tab-audit-logs');
   const tabHealth = document.getElementById('tab-health');
   
-  if (tabClaims) tabClaims.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
   if (tabPayments) tabPayments.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
   if (tabUsers) tabUsers.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
-  if (tabRisk) tabRisk.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
   if (tabRules) tabRules.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
   if (tabAudit) tabAudit.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
   if (tabHealth) tabHealth.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
@@ -2781,23 +2763,7 @@ function loadAdminPanelTab(tab) {
 
   contentArea.innerHTML = `<div class="text-center py-4"><div class="spinner-border text-primary spinner-border-sm"></div></div>`;
 
-  if (tab === 'claims') {
-    apiFetch('/admin/withdrawals')
-      .then(claims => {
-        contentArea.innerHTML = components.adminClaimsList(claims);
-
-        document.querySelectorAll('.btn-claim-action').forEach(btn => {
-          btn.addEventListener('click', (e) => {
-            const id = e.currentTarget.dataset.id;
-            const action = e.currentTarget.dataset.action;
-            handleClaimAction(id, action);
-          });
-        });
-      })
-      .catch(err => {
-        contentArea.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
-      });
-  } else if (tab === 'payments') {
+  if (tab === 'payments') {
     apiFetch('/admin/payments')
       .then(payments => {
         contentArea.innerHTML = components.adminPaymentsList(payments);
@@ -2822,14 +2788,6 @@ function loadAdminPanelTab(tab) {
               .catch(err => showToast(err.message, 'danger'));
           });
         });
-      })
-      .catch(err => {
-        contentArea.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
-      });
-  } else if (tab === 'risk') {
-    apiFetch('/admin/referrals/risk')
-      .then(risks => {
-        contentArea.innerHTML = components.adminRiskList(risks);
       })
       .catch(err => {
         contentArea.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
@@ -2868,18 +2826,6 @@ function loadAdminPanelTab(tab) {
       contentArea.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
     });
   }
-}
-
-function handleClaimAction(withdrawalId, action) {
-  apiFetch('/admin/withdrawals/action', {
-    method: 'POST',
-    body: JSON.stringify({ withdrawalId, action })
-  }).then(res => {
-    showToast(`Claim request successfully marked as ${action}`, 'success');
-    loadAdminPanelTab('claims');
-  }).catch(err => {
-    showToast(err.message, 'danger');
-  });
 }
 
 function updateRuleSetting(key, value) {

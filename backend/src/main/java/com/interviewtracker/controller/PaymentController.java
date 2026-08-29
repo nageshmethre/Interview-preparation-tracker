@@ -165,38 +165,6 @@ public class PaymentController {
             user.setIsPaid(true);
             userRepository.save(user);
 
-            // Process referral commission attribution
-            if (user.getReferredById() != null && !user.getReferredById().equals(user.getId())) {
-                Optional<User> referrerOpt = userRepository.findById(user.getReferredById());
-                if (referrerOpt.isPresent()) {
-                    User referrer = referrerOpt.get();
-                    // Prevent duplicate reward claims
-                    Optional<ReferralReward> existingReward = referralRewardRepository.findByReferredId(user.getId());
-                    if (!existingReward.isPresent()) {
-                        double rewardAmount = 49.0;
-                        Optional<com.interviewtracker.entity.SystemSetting> rewardSetting = systemSettingRepository.findById("REFERRAL_REWARD_INR");
-                        if (rewardSetting.isPresent()) {
-                            rewardAmount = Double.parseDouble(rewardSetting.get().getValue());
-                        }
-
-                        ReferralReward reward = ReferralReward.builder()
-                                .referrer(referrer)
-                                .referred(user)
-                                .payment(payment)
-                                .amount(rewardAmount)
-                                .currency("INR")
-                                .status("APPROVED")
-                                .build();
-                        referralRewardRepository.save(reward);
-
-                        // Increment referrer's overall referral earnings
-                        double currentEarnings = referrer.getReferralEarnings() != null ? referrer.getReferralEarnings() : 0.0;
-                        referrer.setReferralEarnings(currentEarnings + rewardAmount);
-                        userRepository.save(referrer);
-                    }
-                }
-            }
-
             Map<String, String> res = new HashMap<>();
             res.put("message", "Payment verified successfully.");
             res.put("status", "SUCCESS");
@@ -250,35 +218,6 @@ public class PaymentController {
                         User user = payment.getUser();
                         user.setIsPaid(true);
                         userRepository.save(user);
-
-                        if (user.getReferredById() != null && !user.getReferredById().equals(user.getId())) {
-                            Optional<User> referrerOpt = userRepository.findById(user.getReferredById());
-                            if (referrerOpt.isPresent()) {
-                                User referrer = referrerOpt.get();
-                                Optional<ReferralReward> existingReward = referralRewardRepository.findByReferredId(user.getId());
-                                if (!existingReward.isPresent()) {
-                                    double rewardAmount = 49.0;
-                                    Optional<com.interviewtracker.entity.SystemSetting> rewardSetting = systemSettingRepository.findById("REFERRAL_REWARD_INR");
-                                    if (rewardSetting.isPresent()) {
-                                        rewardAmount = Double.parseDouble(rewardSetting.get().getValue());
-                                    }
-
-                                    ReferralReward reward = ReferralReward.builder()
-                                            .referrer(referrer)
-                                            .referred(user)
-                                            .payment(payment)
-                                            .amount(rewardAmount)
-                                            .currency("INR")
-                                            .status("APPROVED")
-                                            .build();
-                                    referralRewardRepository.save(reward);
-
-                                    double currentEarnings = referrer.getReferralEarnings() != null ? referrer.getReferralEarnings() : 0.0;
-                                    referrer.setReferralEarnings(currentEarnings + rewardAmount);
-                                    userRepository.save(referrer);
-                                }
-                            }
-                        }
                     }
                 }
             }
