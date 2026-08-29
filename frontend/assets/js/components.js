@@ -540,14 +540,15 @@ const components = {
     </div>
   `,
 
-  // Application Layout Wrapper (Sidebar + Top Bar + View Mounting Port)
+  // Application Layout Wrapper - Style 2: Stripe / Supabase Enterprise Gradient Workspace
   appLayout: (userName, isAdmin) => `
     <div id="app-container" class="d-flex w-100">
       <!-- Sidebar -->
-      <div class="sidebar glass-panel border-top-0 border-bottom-0 border-start-0 rounded-0">
-        <div class="p-4 border-bottom border-secondary-subtle d-flex align-items-center justify-content-between">
+      <div class="sidebar glass-panel border-top-0 border-bottom-0 border-start-0 rounded-0 d-flex flex-column">
+        <!-- Brand Header -->
+        <div class="p-3 border-bottom border-secondary-subtle d-flex align-items-center justify-content-between">
           <a class="navbar-brand d-flex align-items-center brand-text text-decoration-none" href="#/dashboard">
-            <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" class="me-2" style="width: 38px; height: 38px; object-fit: contain;">
+            <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" class="me-2" style="width: 36px; height: 36px; object-fit: contain;">
             <div class="d-flex flex-column text-start brand-name">
               <span class="fw-extrabold fs-5 text-white lh-1">PrepSpace</span>
               <span class="text-primary fw-bold" style="font-size: 0.65rem; letter-spacing: 0.8px; margin-top: 2px;">(stream-in)</span>
@@ -560,29 +561,53 @@ const components = {
             <i class="fa-solid fa-xmark" style="font-size: 0.9rem;"></i>
           </button>
         </div>
+
+        <!-- User Profile Micro Card -->
+        <div class="px-3 py-2 mx-3 my-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center gap-2 overflow-hidden">
+            <div class="position-relative">
+              <i class="fa-solid fa-circle-user fs-4 text-primary"></i>
+              <span class="position-absolute bottom-0 end-0 bg-success border border-dark rounded-circle" style="width: 8px; height: 8px;"></span>
+            </div>
+            <div class="d-flex flex-column text-start text-truncate">
+              <span class="text-white fw-bold fs-7 text-truncate" id="sidebar-user-name">${userName}</span>
+              <span class="text-muted fs-8">Pro Workspace</span>
+            </div>
+          </div>
+          <a href="#/billing" class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle text-decoration-none">PRO</a>
+        </div>
         
-        <div class="flex-grow-1 py-4 overflow-y-auto">
-          <a href="#/dashboard" class="sidebar-link active"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
-          <a href="#/studyplanner" class="sidebar-link"><i class="fa-solid fa-calendar-check"></i> <span>Study Planner</span></a>
+        <!-- Categorized Nav Links -->
+        <div class="flex-grow-1 py-2 overflow-y-auto">
+          <div class="sidebar-section-title px-4 mb-2 text-muted fs-8 uppercase fw-bold tracking-wider">Core Tracker</div>
+          <a href="#/dashboard" class="sidebar-link active"><i class="fa-solid fa-chart-line text-primary"></i> <span>Dashboard</span></a>
+          <a href="#/coding-practice" class="sidebar-link"><i class="fa-solid fa-code text-cyan"></i> <span>Coding Practice</span></a>
+          <a href="#/mock-exams" class="sidebar-link"><i class="fa-solid fa-stopwatch text-danger"></i> <span>50-MCQ Mock Exams</span></a>
+          <a href="#/dsa-roadmap" class="sidebar-link"><i class="fa-solid fa-route text-success"></i> <span>DSA Roadmap</span></a>
+          <a href="#/studyplanner" class="sidebar-link"><i class="fa-solid fa-calendar-check text-warning"></i> <span>Study Planner</span></a>
+
+          <div class="sidebar-section-title px-4 mt-3 mb-2 text-muted fs-8 uppercase fw-bold tracking-wider">Academy & Prep</div>
           <a href="#/courses" class="sidebar-link"><i class="fa-solid fa-graduation-cap text-info"></i> <span>LMS Courses</span></a>
           <a href="#/certificates" class="sidebar-link"><i class="fa-solid fa-award text-warning"></i> <span>Certificates</span></a>
-          <a href="#/dsa-roadmap" class="sidebar-link"><i class="fa-solid fa-route text-success"></i> <span>DSA Roadmap</span></a>
-          <a href="#/coding-practice" class="sidebar-link"><i class="fa-solid fa-code text-indigo"></i> <span>Coding Practice</span></a>
-          <a href="#/experiences" class="sidebar-link"><i class="fa-solid fa-user-tie text-secondary"></i> <span>Experiences</span></a>
-          <a href="#/mock-exams" class="sidebar-link"><i class="fa-solid fa-stopwatch text-danger"></i> <span>Mock Exams</span></a>
           <a href="#/flashcards" class="sidebar-link"><i class="fa-solid fa-clone text-primary"></i> <span>Flashcards</span></a>
-          <a href="#/community" class="sidebar-link"><i class="fa-solid fa-comments text-info"></i> <span>Community</span></a>
           <a href="#/notes" class="sidebar-link"><i class="fa-solid fa-note-sticky text-warning"></i> <span>Study Notes</span></a>
-          <a href="#/placement" class="sidebar-link"><i class="fa-solid fa-briefcase text-success"></i> <span>Placements</span></a>
-          <a href="#/ai-assistant" class="sidebar-link"><i class="fa-solid fa-robot text-primary"></i> <span>AI Assistant</span></a>
-          <a href="#/calendar" class="sidebar-link"><i class="fa-solid fa-calendar-days text-muted"></i> <span>Calendar</span></a>
-          <a href="#/reports" class="sidebar-link"><i class="fa-solid fa-file-invoice text-muted"></i> <span>Reports</span></a>
-          <a href="#/profile" class="sidebar-link"><i class="fa-solid fa-user-gear"></i> <span>Settings</span></a>
-          <a href="#/billing" class="sidebar-link"><i class="fa-solid fa-credit-card text-success"></i> <span>Billing</span></a>
+          <a href="#/experiences" class="sidebar-link"><i class="fa-solid fa-user-tie text-secondary"></i> <span>Experiences</span></a>
+          <a href="#/community" class="sidebar-link"><i class="fa-solid fa-comments text-info"></i> <span>Community</span></a>
+
+          <div class="sidebar-section-title px-4 mt-3 mb-2 text-muted fs-8 uppercase fw-bold tracking-wider">Career & Tools</div>
+          <a href="#/placement" class="sidebar-link"><i class="fa-solid fa-briefcase text-success"></i> <span>Placement Kanban</span></a>
+          <a href="#/ai-assistant" class="sidebar-link"><i class="fa-solid fa-robot text-primary"></i> <span>AI ATS Assistant</span></a>
+          <a href="#/calendar" class="sidebar-link"><i class="fa-solid fa-calendar-days text-muted"></i> <span>Interview Calendar</span></a>
+          <a href="#/reports" class="sidebar-link"><i class="fa-solid fa-file-invoice text-muted"></i> <span>Progress Reports</span></a>
           <a href="#/desktop-client" class="sidebar-link"><i class="fa-solid fa-desktop text-indigo"></i> <span>Desktop Client</span></a>
+
+          <div class="sidebar-section-title px-4 mt-3 mb-2 text-muted fs-8 uppercase fw-bold tracking-wider">Account</div>
+          <a href="#/profile" class="sidebar-link"><i class="fa-solid fa-user-gear text-secondary"></i> <span>Settings</span></a>
+          <a href="#/billing" class="sidebar-link"><i class="fa-solid fa-credit-card text-success"></i> <span>Upgrade Space</span></a>
           ${isAdmin ? `<a href="#/admin" class="sidebar-link text-warning-emphasis"><i class="fa-solid fa-shield-halved text-warning"></i> <span>Admin Panel</span></a>` : ''}
         </div>
         
+        <!-- Sidebar Bottom Actions -->
         <div class="p-3 border-top border-secondary-subtle mt-auto">
           <button id="logout-btn" class="btn btn-glass w-100 py-2 mb-2"><i class="fa-solid fa-right-from-bracket me-2 text-danger"></i> <span>Logout</span></button>
           <div class="d-flex justify-content-center gap-2 text-center" style="font-size: 0.7rem; opacity: 0.6;">
@@ -595,16 +620,24 @@ const components = {
         </div>
       </div>
 
-      <!-- Content Area -->
+      <!-- Main Content Area -->
       <div class="main-content d-flex flex-column">
-        <!-- Top Nav Header -->
-        <header class="d-flex align-items-center justify-content-between pb-4 border-bottom border-secondary-subtle mb-4">
+        <!-- Top Nav Header (Stripe/Supabase Style) -->
+        <header class="d-flex align-items-center justify-content-between pb-3 border-bottom border-secondary-subtle mb-4">
           <div class="d-flex align-items-center gap-3">
             <button class="btn btn-glass d-lg-none" id="sidebar-toggle-btn"><i class="fa-solid fa-bars"></i></button>
-            <h2 class="text-white fw-bold m-0" id="current-view-title">Dashboard</h2>
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-primary bg-opacity-10 text-primary border border-primary-subtle px-2 py-1 fs-8 fw-bold">WORKSPACE</span>
+              <span class="text-muted fs-7">/</span>
+              <h4 class="text-white fw-bold m-0" id="current-view-title">Dashboard</h4>
+            </div>
           </div>
           
           <div class="d-flex align-items-center gap-3">
+            <a href="#/mock-exams" class="btn btn-glass btn-sm d-none d-md-flex align-items-center gap-2 text-white">
+              <i class="fa-solid fa-stopwatch text-danger"></i>
+              <span>Mock Exam</span>
+            </a>
             <button id="dark-mode-toggle" class="btn btn-glass rounded-circle p-2" style="width: 40px; height: 40px;"><i class="fa-solid fa-moon"></i></button>
             <div class="dropdown">
               <button class="btn btn-glass dropdown-toggle d-flex align-items-center gap-2" type="button" id="userDropdown" data-bs-toggle="dropdown">
@@ -612,9 +645,10 @@ const components = {
                 <span class="d-none d-md-inline" id="user-display-name">${userName}</span>
               </button>
               <ul class="dropdown-menu dropdown-menu-end glass-panel" aria-labelledby="userDropdown">
-                <li><a class="dropdown-item text-white" href="#/profile">Settings</a></li>
+                <li><a class="dropdown-item text-white" href="#/profile"><i class="fa-solid fa-gear me-2 text-secondary"></i>Settings</a></li>
+                <li><a class="dropdown-item text-white" href="#/billing"><i class="fa-solid fa-gem me-2 text-primary"></i>Upgrade Plan</a></li>
                 <li><hr class="dropdown-divider border-secondary"></li>
-                <li><button class="dropdown-item text-danger" id="dropdown-logout">Logout</button></li>
+                <li><button class="dropdown-item text-danger" id="dropdown-logout"><i class="fa-solid fa-right-from-bracket me-2 text-danger"></i>Logout</button></li>
               </ul>
             </div>
           </div>
@@ -626,74 +660,114 @@ const components = {
     </div>
   `,
 
-  // Dashboard Page Sub-view
+  // Dashboard Page Sub-view - Style 2: Stripe / Supabase Enterprise Gradient Look
   dashboard: (stats) => `
-    <div class="row g-4 mb-4">
-      <div class="col-md-3">
-        <div class="glass-panel p-4 text-center">
-          <h6 class="text-muted mb-2">TOTAL STUDY HOURS</h6>
-          <div class="display-5 fw-extrabold text-white">${stats.totalStudyHours}h</div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="glass-panel p-4 text-center">
-          <h6 class="text-muted mb-2">COMPLETED TOPICS</h6>
-          <div class="display-5 fw-extrabold text-white">${stats.completedTopics}</div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="glass-panel p-4 text-center">
-          <h6 class="text-muted mb-2">UPCOMING INTERVIEWS</h6>
-          <div class="display-5 fw-extrabold text-white">${stats.upcomingInterviewsCount}</div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="glass-panel p-4 text-center">
-          <h6 class="text-muted mb-2">ACTIVE APPLICATIONS</h6>
-          <div class="display-5 fw-extrabold text-white">${stats.applicationsCount}</div>
+    <!-- Hero Welcome Banner -->
+    <div class="cta-banner-stripe p-4 p-md-5 mb-4 rounded-4 position-relative overflow-hidden text-start">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <span class="badge bg-primary bg-opacity-25 text-white border border-primary-subtle px-3 py-1 rounded-pill mb-3">
+            <i class="fa-solid fa-bolt text-warning me-1"></i> INTERVIEW READINESS ENGINE
+          </span>
+          <h2 class="display-6 fw-extrabold text-white mb-2">
+            Welcome to Your <span class="gradient-text-stripe">PrepSpace Control Center</span>
+          </h2>
+          <p class="text-secondary fs-7 mb-4" style="max-width: 620px;">
+            Execute timed 50-MCQ screening exams, maintain your daily DSA streak, and track technical interviews across your placement pipeline with real-time analytics.
+          </p>
+          <div class="d-flex gap-2 flex-wrap">
+            <a href="#/mock-exams" class="btn btn-premium px-4 py-2 fs-7 fw-bold shadow">
+              <i class="fa-solid fa-stopwatch me-1"></i> Start 50-MCQ Mock Exam
+            </a>
+            <a href="#/coding-practice" class="btn btn-glass px-4 py-2 fs-7 text-white">
+              <i class="fa-solid fa-code me-1 text-cyan"></i> + Log DSA Problem
+            </a>
+            <a href="#/ai-assistant" class="btn btn-glass px-4 py-2 fs-7 text-white">
+              <i class="fa-solid fa-robot me-1 text-secondary"></i> AI ATS Audit
+            </a>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- Bento Telemetry Metrics Strip (Stripe Style) -->
+    <div class="row g-4 mb-4">
+      <div class="col-6 col-md-3">
+        <div class="bento-card p-4 text-start">
+          <span class="text-muted fs-8 uppercase tracking-wider">Total Study Time</span>
+          <div class="display-5 fw-extrabold text-white mt-2 mb-1">${stats.totalStudyHours}h</div>
+          <small class="text-success fs-8"><i class="fa-solid fa-arrow-trend-up me-1"></i>Consistent Pace</small>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="bento-card p-4 text-start">
+          <span class="text-muted fs-8 uppercase tracking-wider">Completed Topics</span>
+          <div class="display-5 fw-extrabold text-white mt-2 mb-1">${stats.completedTopics}</div>
+          <small class="text-cyan fs-8"><i class="fa-solid fa-layer-group me-1"></i>Core Curriculum</small>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="bento-card p-4 text-start">
+          <span class="text-muted fs-8 uppercase tracking-wider">Upcoming Interviews</span>
+          <div class="display-5 fw-extrabold text-warning mt-2 mb-1">${stats.upcomingInterviewsCount}</div>
+          <small class="text-muted fs-8"><i class="fa-solid fa-calendar me-1"></i>Scheduled Rounds</small>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="bento-card p-4 text-start">
+          <span class="text-muted fs-8 uppercase tracking-wider">Active Pipeline</span>
+          <div class="display-5 fw-extrabold text-success mt-2 mb-1">${stats.applicationsCount}</div>
+          <small class="text-success fs-8"><i class="fa-solid fa-briefcase me-1"></i>In Evaluation</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics & Gamification Row -->
     <div class="row g-4">
-      <!-- Chart column -->
+      <!-- Left Analytics Column -->
       <div class="col-lg-8">
-        <div class="glass-panel p-4 mb-4">
-          <h5 class="text-white fw-bold mb-4">Weekly Time Logs</h5>
+        <div class="bento-card p-4 mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="text-white fw-bold m-0"><i class="fa-solid fa-chart-area text-primary me-2"></i>Weekly Preparation Velocity</h5>
+            <span class="badge bg-indigo-subtle text-primary border border-primary-subtle px-2 py-1 fs-8">HOURS LOGGED</span>
+          </div>
           <canvas id="weeklyHoursChart" height="200"></canvas>
         </div>
         
         <div class="row g-4">
+          <!-- Streak & XP Bento -->
           <div class="col-md-6">
-            <div class="glass-panel p-4">
-              <h5 class="text-white fw-bold mb-3">Topic Streaks & Gamification</h5>
+            <div class="bento-card p-4">
+              <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-trophy text-warning me-2"></i>Gamification & Streaks</h5>
               <div class="d-flex align-items-center justify-content-around py-3">
                 <div class="text-center">
-                  <div class="streak-badge fs-5 mb-2"><i class="fa-solid fa-fire me-1"></i> ${stats.streak} Days</div>
-                  <span class="text-muted">Daily Streak</span>
+                  <div class="streak-badge fs-5 mb-2"><i class="fa-solid fa-fire me-1 text-warning"></i> ${stats.streak} Days</div>
+                  <span class="text-muted fs-8">Daily Problem Streak</span>
                 </div>
                 <div class="text-center">
-                  <div class="xp-badge fs-5 mb-2"><i class="fa-solid fa-trophy me-1"></i> ${stats.xpPoints} XP</div>
-                  <span class="text-muted">Total Points</span>
+                  <div class="xp-badge fs-5 mb-2"><i class="fa-solid fa-gem me-1 text-primary"></i> ${stats.xpPoints} XP</div>
+                  <span class="text-muted fs-8">Total Platform Points</span>
                 </div>
               </div>
             </div>
           </div>
+
+          <!-- Platform Solves Bento -->
           <div class="col-md-6">
-            <div class="glass-panel p-4">
-              <h5 class="text-white fw-bold mb-3">Coding Platform Solves</h5>
+            <div class="bento-card p-4">
+              <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-code text-cyan me-2"></i>External Platform Solves</h5>
               <ul class="list-group list-group-flush bg-transparent">
-                <li class="list-group-item bg-transparent text-white border-secondary-subtle d-flex justify-content-between align-items-center">
+                <li class="list-group-item bg-transparent text-white border-secondary border-opacity-25 d-flex justify-content-between align-items-center px-0">
                   <span><i class="fa-solid fa-circle-nodes text-warning me-2"></i>LeetCode</span>
-                  <span class="badge bg-secondary rounded-pill">${stats.codingPlatformsSolved.LeetCode || 0} Solved</span>
+                  <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle rounded-pill">${stats.codingPlatformsSolved.LeetCode || 0} Solved</span>
                 </li>
-                <li class="list-group-item bg-transparent text-white border-secondary-subtle d-flex justify-content-between align-items-center">
+                <li class="list-group-item bg-transparent text-white border-secondary border-opacity-25 d-flex justify-content-between align-items-center px-0">
                   <span><i class="fa-solid fa-code text-primary me-2"></i>CodeChef</span>
-                  <span class="badge bg-secondary rounded-pill">${stats.codingPlatformsSolved.CodeChef || 0} Solved</span>
+                  <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle rounded-pill">${stats.codingPlatformsSolved.CodeChef || 0} Solved</span>
                 </li>
-                <li class="list-group-item bg-transparent text-white border-0 d-flex justify-content-between align-items-center">
+                <li class="list-group-item bg-transparent text-white border-0 d-flex justify-content-between align-items-center px-0">
                   <span><i class="fa-solid fa-terminal text-info me-2"></i>Codeforces</span>
-                  <span class="badge bg-secondary rounded-pill">${stats.codingPlatformsSolved.Codeforces || 0} Solved</span>
+                  <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle rounded-pill">${stats.codingPlatformsSolved.Codeforces || 0} Solved</span>
                 </li>
               </ul>
             </div>
@@ -701,32 +775,33 @@ const components = {
         </div>
       </div>
 
-      <!-- Sidebar widgets -->
+      <!-- Right Telemetry Widgets Column -->
       <div class="col-lg-4">
-        <div class="glass-panel p-4 text-center mb-4">
-          <h5 class="text-white fw-bold mb-3">Interview Readiness Score</h5>
+        <!-- Readiness Ring Card -->
+        <div class="bento-card p-4 text-center mb-4">
+          <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-circle-notch text-secondary me-2"></i>Interview Readiness Score</h5>
           <div class="readiness-ring mb-3">
-            <div class="readiness-value">${stats.readinessScore}%</div>
-            <!-- Canvas or SVG backing -->
+            <div class="readiness-value fw-extrabold gradient-text-stripe">${stats.readinessScore}%</div>
             <svg class="w-100 h-100" viewBox="0 0 36 36">
-              <path class="circle-bg" stroke="rgba(255,255,255,0.05)" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              <path class="circle" stroke="#a855f7" stroke-width="3" stroke-dasharray="${stats.readinessScore}, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <path class="circle-bg" stroke="rgba(255,255,255,0.06)" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <path class="circle" stroke="url(#primaryBeam)" stroke-width="3.5" stroke-dasharray="${stats.readinessScore}, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
             </svg>
           </div>
-          <p class="text-muted">Calculated based on your topics completed and latest mock interview feedback.</p>
+          <p class="text-muted fs-8 mb-0">Calculated from your completed topics, problem solving consistency, and 50-MCQ mock examination grades.</p>
         </div>
 
-        <div class="glass-panel p-4">
-          <h5 class="text-white fw-bold mb-3">Application Pipeline</h5>
+        <!-- Pipeline Funnel Card -->
+        <div class="bento-card p-4">
+          <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-filter text-success me-2"></i>Recruitment Pipeline</h5>
           <canvas id="pipelineStatusChart" height="220"></canvas>
         </div>
       </div>
     </div>
 
     <!-- AdSense Dashboard Multiplex Ad Unit -->
-    <div class="row g-4 mt-4">
+    <div class="row g-4 mt-2">
       <div class="col-12">
-        <div class="glass-panel p-4">
+        <div class="glass-panel p-3">
           <ins class="adsbygoogle"
                style="display:block"
                data-ad-format="autorelaxed"
