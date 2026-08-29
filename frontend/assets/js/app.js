@@ -1685,6 +1685,47 @@ function switchSettingsTab(tab) {
 // ----------------------------------------------------
 
 function bindCoursesEvents() {
+  // Explore scroll button
+  const exploreBtn = document.getElementById('btn-explore-scroll');
+  if (exploreBtn) {
+    exploreBtn.addEventListener('click', () => {
+      document.getElementById('courses-toolbar-pane').scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+
+  // Filter handlers
+  const searchInput = document.getElementById('courses-search-bar');
+  const difficultyFilter = document.getElementById('courses-difficulty-filter');
+  const categoryFilter = document.getElementById('courses-category-filter');
+
+  function filterCoursesList() {
+    const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const diff = difficultyFilter ? difficultyFilter.value : 'ALL';
+    const cat = categoryFilter ? categoryFilter.value : 'ALL';
+
+    document.querySelectorAll('.course-card-wrapper').forEach(card => {
+      const title = card.dataset.title || '';
+      const desc = card.dataset.desc || '';
+      const instructor = card.dataset.instructor || '';
+      const cardDiff = card.dataset.difficulty || '';
+      const cardCat = card.dataset.category || '';
+
+      const queryMatches = title.includes(query) || desc.includes(query) || instructor.includes(query);
+      const diffMatches = diff === 'ALL' || cardDiff === diff;
+      const catMatches = cat === 'ALL' || cardCat === cat;
+
+      if (queryMatches && diffMatches && catMatches) {
+        card.classList.remove('d-none');
+      } else {
+        card.classList.add('d-none');
+      }
+    });
+  }
+
+  if (searchInput) searchInput.addEventListener('input', filterCoursesList);
+  if (difficultyFilter) difficultyFilter.addEventListener('change', filterCoursesList);
+  if (categoryFilter) categoryFilter.addEventListener('change', filterCoursesList);
+
   document.querySelectorAll('.btn-enroll-course').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const courseId = e.currentTarget.dataset.courseId;

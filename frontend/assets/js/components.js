@@ -1599,37 +1599,92 @@ const components = {
   `,
 
   // 1. Learning Platform (LMS)
-  courses: (list) => `
-    <div class="row g-4">
-      ${list.map(c => `
-        <div class="col-md-4">
-          <div class="glass-panel h-100 d-flex flex-column">
-            <div class="position-relative">
-              <div class="course-badge">${c.difficulty}</div>
-              <div class="ratio ratio-16x9 bg-dark rounded-top d-flex align-items-center justify-content-center text-muted">
-                <i class="fa-solid fa-play-circle fs-1 text-indigo"></i>
-              </div>
-            </div>
-            <div class="p-4 flex-grow-1 d-flex flex-column">
-              <h5 class="text-white fw-bold mb-2">${c.title}</h5>
-              ${c.courseLink ? `<div class="mb-2"><a href="${c.courseLink}" target="_blank" class="text-indigo fs-7 text-decoration-none"><i class="fa-solid fa-link me-1"></i>View Course Link</a></div>` : ''}
-              <p class="text-muted fs-7 flex-grow-1">${c.description}</p>
-              <div class="d-flex align-items-center justify-content-between text-muted fs-7 mb-3">
-                <span><i class="fa-solid fa-user-tie me-1"></i>${c.instructor}</span>
-                <span><i class="fa-solid fa-clock me-1"></i>${c.duration}</span>
-              </div>
-              <div class="d-flex align-items-center justify-content-between mb-4">
-                <div class="text-warning fs-7">
-                  <i class="fa-solid fa-star"></i> ${c.rating} <span class="text-muted">(${c.enrollmentCount} enrolled)</span>
-                </div>
-              </div>
-              <button class="btn btn-premium w-100 btn-enroll-course" data-course-id="${c.id}">Initialize Course</button>
+  courses: (list) => {
+    return `
+      <!-- Hero section -->
+      <div class="glass-panel p-5 mb-5 text-center relative overflow-hidden" style="background: linear-gradient(135deg, rgba(99,102,241,0.06) 0%, rgba(168,85,247,0.06) 100%);">
+        <h1 class="display-4 fw-extrabold text-white mb-3">Learn. Build. Master.</h1>
+        <p class="text-muted fs-6 max-w-2xl mx-auto mb-4" style="max-width: 650px;">
+          Master programming, AI, web development, computer science and the skills you need to build real-world projects and crack technical interviews.
+        </p>
+        <button id="btn-explore-scroll" class="btn btn-premium px-5 py-3 fs-6"><i class="fa-solid fa-compass me-2"></i> Explore Courses →</button>
+      </div>
+
+      <!-- Filters & Search Toolbar -->
+      <div class="glass-panel p-4 mb-4" id="courses-toolbar-pane">
+        <div class="row g-3 align-items-center">
+          <div class="col-md-5">
+            <div class="input-group">
+              <span class="input-group-text bg-dark border-secondary text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+              <input type="text" id="courses-search-bar" class="form-control glass-input" placeholder="Search courses, topics, or instructors...">
             </div>
           </div>
+          <div class="col-md-4">
+            <select id="courses-difficulty-filter" class="form-select glass-input">
+              <option value="ALL">All Difficulties</option>
+              <option value="BEGINNER">Beginner</option>
+              <option value="INTERMEDIATE">Intermediate</option>
+              <option value="ADVANCED">Advanced</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select id="courses-category-filter" class="form-select glass-input">
+              <option value="ALL">All Categories</option>
+              <option value="PROGRAMMING">Programming Languages</option>
+              <option value="AI">Artificial Intelligence</option>
+              <option value="WEB">Web Development</option>
+              <option value="DATABASE">Databases</option>
+              <option value="DSA">Data Structures & Algorithms</option>
+            </select>
+          </div>
         </div>
-      `).join('')}
-    </div>
-  `,
+      </div>
+
+      <!-- Main Course Grid -->
+      <div class="row g-4" id="courses-grid-mount">
+        ${list.length === 0 ? `
+          <div class="col-12 text-center py-5 text-muted">
+            <i class="fa-solid fa-folder-open display-4 mb-3"></i>
+            <h5>No matching courses found.</h5>
+          </div>
+        ` : list.map(c => {
+          // Determine lesson count
+          const lessonsCount = c.lessons ? c.lessons.length : 15;
+          const ratingStars = Array(5).fill(0).map((_, i) => `<i class="fa-star ${i < Math.floor(c.rating || 5) ? 'fa-solid text-warning' : 'fa-regular text-muted'}"></i>`).join('');
+          
+          return `
+            <div class="col-md-6 col-lg-4 course-card-wrapper" data-title="${c.title.toLowerCase()}" data-desc="${c.description.toLowerCase()}" data-instructor="${c.instructor.toLowerCase()}" data-difficulty="${c.difficulty}" data-category="${c.title.includes('Java') ? 'PROGRAMMING' : c.title.includes('Machine') ? 'AI' : c.title.includes('Data') ? 'DSA' : 'WEB'}">
+              <div class="glass-panel h-100 d-flex flex-column rounded-3 border-secondary-subtle">
+                <div class="position-relative">
+                  <img src="${c.thumbnailUrl || 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7'}" class="img-fluid rounded-top w-100 object-fit-cover" style="height: 180px;" alt="${c.title}">
+                  <span class="course-badge position-absolute top-0 start-0 m-3 badge bg-dark bg-opacity-75 text-white border border-secondary-subtle py-2 px-3 rounded-pill">${c.difficulty}</span>
+                </div>
+                
+                <div class="p-4 flex-grow-1 d-flex flex-column">
+                  <h5 class="text-white fw-bold mb-2">${c.title}</h5>
+                  <p class="text-muted fs-7 flex-grow-1 mb-3">${c.description.length > 100 ? c.description.substring(0, 100) + '...' : c.description}</p>
+                  
+                  <div class="d-flex align-items-center justify-content-between text-muted fs-8 mb-3">
+                    <span><i class="fa-solid fa-user-tie me-1"></i>${c.instructor}</span>
+                    <span><i class="fa-solid fa-clock me-1"></i>${c.duration}</span>
+                  </div>
+
+                  <div class="d-flex align-items-center justify-content-between mb-4 border-top border-secondary border-opacity-10 pt-3">
+                    <div class="text-warning fs-8">
+                      ${ratingStars} <span class="text-white ms-1">${c.rating || 5.0}</span>
+                    </div>
+                    <span class="fs-8 text-muted">${lessonsCount} Lessons • ${(lessonsCount / 3).toFixed(0)} Projects</span>
+                  </div>
+
+                  <button class="btn btn-premium w-100 py-3 btn-enroll-course" data-course-id="${c.id}">Start Learning <i class="fa-solid fa-chevron-right ms-1 fs-9"></i></button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  },
 
   courseDetail: (course, enrollment) => `
     <div class="row g-4">

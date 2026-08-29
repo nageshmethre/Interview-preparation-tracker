@@ -5,9 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.interviewtracker.entity.InterviewQuestion;
 import com.interviewtracker.entity.User;
 import com.interviewtracker.entity.SystemSetting;
+import com.interviewtracker.entity.Course;
+import com.interviewtracker.entity.Lesson;
 import com.interviewtracker.repository.InterviewQuestionRepository;
 import com.interviewtracker.repository.UserRepository;
 import com.interviewtracker.repository.SystemSettingRepository;
+import com.interviewtracker.repository.CourseRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +42,9 @@ public class QuestionDataLoader implements ApplicationRunner {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private CourseRepository courseRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -90,6 +97,88 @@ public class QuestionDataLoader implements ApplicationRunner {
                     .build();
             userRepository.save(admin);
             logger.info("Super Admin account seeded successfully with requested password.");
+        }
+
+        // 4. Seed Default Courses & Certifications
+        if (courseRepository.count() == 0) {
+            logger.info("No courses found in database. Seeding default certifications...");
+            
+            Course javaCourse = Course.builder()
+                    .title("Full-Stack Java & OOP Developer Masterclass")
+                    .description("Master Java 21 features, Spring Boot Microservices, OOP Design Patterns, and Hibernate/JPA integration.")
+                    .instructor("Dr. Angela Yu")
+                    .duration("40 Hours")
+                    .difficulty("INTERMEDIATE")
+                    .thumbnailUrl("https://images.unsplash.com/photo-1517694712202-14dd9538aa97")
+                    .courseLink("https://stream-in.app")
+                    .prerequisites("Basic programming concepts")
+                    .rating(4.9)
+                    .enrollmentCount(128)
+                    .lessons(new ArrayList<>())
+                    .build();
+            
+            Lesson javaL1 = Lesson.builder()
+                    .course(javaCourse)
+                    .title("Introduction to OOP & JVM Internals")
+                    .videoUrl("https://www.w3schools.com/html/mov_bbb.mp4")
+                    .pdfNotesUrl("https://stream-in.app/notes/java_oop.pdf")
+                    .assignments("Implement a simple library management system using class inheritance.")
+                    .quizQuestions("[]")
+                    .build();
+            javaCourse.getLessons().add(javaL1);
+            courseRepository.save(javaCourse);
+
+            Course mlCourse = Course.builder()
+                    .title("Machine Learning & Modern AI Algorithms")
+                    .description("Understand linear regression, decision trees, deep neural networks, model training, and AI deployment pipelines.")
+                    .instructor("Prof. Andrew Ng")
+                    .duration("50 Hours")
+                    .difficulty("ADVANCED")
+                    .thumbnailUrl("https://images.unsplash.com/photo-1527474305487-b87b222841cc")
+                    .courseLink("https://stream-in.app")
+                    .prerequisites("Python programming and basic linear algebra")
+                    .rating(4.8)
+                    .enrollmentCount(95)
+                    .lessons(new ArrayList<>())
+                    .build();
+            
+            Lesson mlL1 = Lesson.builder()
+                    .course(mlCourse)
+                    .title("Neural Networks & Deep Learning Foundations")
+                    .videoUrl("https://www.w3schools.com/html/mov_bbb.mp4")
+                    .pdfNotesUrl("https://stream-in.app/notes/ml_ai.pdf")
+                    .assignments("Train a simple logic gate classifier using backpropagation.")
+                    .quizQuestions("[]")
+                    .build();
+            mlCourse.getLessons().add(mlL1);
+            courseRepository.save(mlCourse);
+
+            Course dsaCourse = Course.builder()
+                    .title("Data Structures & Algorithms (DSA) Interview Bootcamp")
+                    .description("Ace coding interviews with step-by-step analysis of recursion, graphs, trees, and dynamic programming.")
+                    .instructor("Abdul Bari")
+                    .duration("30 Hours")
+                    .difficulty("BEGINNER")
+                    .thumbnailUrl("https://images.unsplash.com/photo-1607799279861-4dd421887fb3")
+                    .courseLink("https://stream-in.app")
+                    .prerequisites("None")
+                    .rating(5.0)
+                    .enrollmentCount(240)
+                    .lessons(new ArrayList<>())
+                    .build();
+            
+            Lesson dsaL1 = Lesson.builder()
+                    .course(dsaCourse)
+                    .title("Big-O Complexity & Array Manipulation")
+                    .videoUrl("https://www.w3schools.com/html/mov_bbb.mp4")
+                    .pdfNotesUrl("https://stream-in.app/notes/dsa_bootcamp.pdf")
+                    .assignments("Solve 3 medium Leetcode problems on two pointers technique.")
+                    .quizQuestions("[]")
+                    .build();
+            dsaCourse.getLessons().add(dsaL1);
+            courseRepository.save(dsaCourse);
+            
+            logger.info("Successfully seeded 3 default certification courses.");
         }
     }
 
