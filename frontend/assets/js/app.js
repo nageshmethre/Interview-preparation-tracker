@@ -342,16 +342,24 @@ function router() {
       });
   } else if (hash === '#/ai-assistant') {
     viewTitle.textContent = 'Robotic Placement Diagnostics';
-    pageMount.innerHTML = components.aiAssistant();
-    bindAiAssistantEvents();
+    if (!state.isPaid) {
+      pageMount.innerHTML = components.premiumLock('AI Career Assistant Diagnostics');
+    } else {
+      pageMount.innerHTML = components.aiAssistant();
+      bindAiAssistantEvents();
+    }
   } else if (hash === '#/calendar') {
     viewTitle.textContent = 'Calendar';
     pageMount.innerHTML = components.calendar();
     loadCalendarView();
   } else if (hash === '#/reports') {
     viewTitle.textContent = 'Reports';
-    pageMount.innerHTML = components.reports();
-    bindReportsEvents();
+    if (!state.isPaid) {
+      pageMount.innerHTML = components.premiumLock('Candidate Progress & Excel Reports');
+    } else {
+      pageMount.innerHTML = components.reports();
+      bindReportsEvents();
+    }
   } else if (hash === '#/profile') {
     viewTitle.textContent = 'Settings & Profile';
     pageMount.innerHTML = components.profile();

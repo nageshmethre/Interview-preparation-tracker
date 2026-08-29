@@ -2210,9 +2210,11 @@ const components = {
             <p class="text-indigo">Recommended for Active Jobseekers</p>
             <div class="my-4"><span class="display-4 fw-bold text-white">₹99</span><span class="text-muted">/one-time</span></div>
             <ul class="list-unstyled text-start mb-5 text-muted">
-              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Custom Target Study Plans</li>
-              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Mock AI Feedback Logs</li>
-              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Export Excel/PDF Reports</li>
+              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>AI Career Assistant</strong> (ATS Audit, Planner)</li>
+              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>AI Custom Study Planners</strong></li>
+              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Company Interview Guides</strong> (Prompts)</li>
+              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Export Excel/PDF Progress reports</strong></li>
+              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Mock AI Feedback Logs & Leaderboard</li>
             </ul>
             <button id="btn-upgrade-pro" class="btn btn-premium w-100 py-3" ${isPaid ? 'disabled' : ''}>
               ${isPaid ? 'Active Premium Access' : 'Buy PrepPro Access'}
@@ -2766,6 +2768,29 @@ const components = {
       <!-- Tab Content Area -->
       <div id="admin-tab-content">
         <!-- Injected Dynamically by app.js admin view builders -->
+    </div>
+  `,
+
+  premiumLock: (featureName) => `
+    <div class="row justify-content-center align-items-center py-5">
+      <div class="col-md-8 col-lg-6 text-center">
+        <div class="glass-panel p-5">
+          <div class="text-warning mb-4"><i class="fa-solid fa-lock display-3"></i></div>
+          <h4 class="text-white fw-bold mb-2">PrepPro Premium Feature</h4>
+          <p class="text-muted mb-4">The <strong>${featureName}</strong> tool is exclusive to PrepPro members. Upgrade today to unlock full AI diagnostics, unlimited mock exams, and personalized guides.</p>
+          
+          <div class="bg-dark bg-opacity-25 p-3 rounded mb-4 text-start border border-secondary fs-8 text-muted">
+            <h6 class="text-white fw-bold fs-7 mb-2"><i class="fa-solid fa-gem text-primary me-2"></i>What you get with PrepPro (₹99 one-time):</h6>
+            <ul class="list-unstyled m-0">
+              <li class="mb-1"><i class="fa-solid fa-check text-success me-1"></i> Unlimited AI ATS Resume Compliance Audits</li>
+              <li class="mb-1"><i class="fa-solid fa-check text-success me-1"></i> Custom AI Study Planner & Weak Topic Diagnostic</li>
+              <li class="mb-1"><i class="fa-solid fa-check text-success me-1"></i> Company-Specific AI Interview Guide Generator</li>
+              <li class="mb-1"><i class="fa-solid fa-check text-success me-1"></i> Export candidate progress logs as PDF / Excel</li>
+            </ul>
+          </div>
+
+          <a href="#/billing" class="btn btn-premium w-100 py-3 fs-6"><i class="fa-solid fa-circle-arrow-up me-1"></i> Upgrade to PrepPro Now</a>
+        </div>
       </div>
     </div>
   `
