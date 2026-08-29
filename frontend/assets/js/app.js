@@ -1930,7 +1930,7 @@ function bindCertificatesEvents() {
           </head>
           <body>
             <div class="cert-border">
-              <h1 class="text-primary display-4">PREPSPACE ACADEMY</h1>
+              <h1 class="text-primary display-4">STREAM-IN ACADEMY</h1>
               <p class="lead">Verified Completion Registry</p>
               <hr class="w-50 mx-auto">
               <p class="my-4">This credentials verify that</p>
@@ -2981,8 +2981,8 @@ function bindBillingEvents() {
             key: orderData.keyId,
             amount: orderData.amount,
             currency: orderData.currency,
-            name: 'PrepSpace Premium',
-            description: 'Upgrade your space tracker to premium pro access',
+            name: 'Stream-In Premium',
+            description: 'Upgrade your workspace to Stream-In PrepPro lifetime access',
             order_id: orderData.orderId,
             handler: function (response) {
               apiFetch('/payments/verify', {
@@ -2994,7 +2994,7 @@ function bindBillingEvents() {
                 })
               }).then(verifyRes => {
                 if (verifyRes.status === 'SUCCESS') {
-                  showToast('Payment verified! Welcome to PrepSpace Pro.', 'success');
+                  showToast('Payment verified! Welcome to Stream-In Pro.', 'success');
                   fetchUserProfile().then(() => {
                     redirectTo('#/referral');
                   });
