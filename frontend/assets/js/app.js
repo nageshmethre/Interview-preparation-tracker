@@ -519,16 +519,18 @@ async function apiFetch(endpoint, options = {}) {
   return response.json().catch(() => ({}));
 }
 
-function handleSessionExpired() {
+function handleSessionExpired(target = '#/') {
   localStorage.removeItem('token');
   localStorage.removeItem('name');
   localStorage.removeItem('email');
   localStorage.removeItem('role');
+  localStorage.removeItem('isPaid');
   state.token = null;
   state.name = null;
   state.email = null;
   state.role = null;
-  redirectTo('#/login');
+  state.isPaid = false;
+  redirectTo(target);
 }
 
 // layout events
@@ -603,7 +605,7 @@ function bindLayoutEvents() {
   const logoutBtn = document.getElementById('logout-btn');
   const dLogout = document.getElementById('dropdown-logout');
   const performLogout = () => {
-    handleSessionExpired();
+    handleSessionExpired('#/');
     showToast('Logged out successfully', 'success');
   };
   if (logoutBtn) logoutBtn.addEventListener('click', performLogout);
@@ -1930,7 +1932,7 @@ function bindCertificatesEvents() {
           </head>
           <body>
             <div class="cert-border">
-              <h1 class="text-primary display-4">STREAM-IN ACADEMY</h1>
+              <h1 class="text-primary display-4">STREAM-IN (PREPSPACE) ACADEMY</h1>
               <p class="lead">Verified Completion Registry</p>
               <hr class="w-50 mx-auto">
               <p class="my-4">This credentials verify that</p>
@@ -2981,8 +2983,8 @@ function bindBillingEvents() {
             key: orderData.keyId,
             amount: orderData.amount,
             currency: orderData.currency,
-            name: 'Stream-In Premium',
-            description: 'Upgrade your workspace to Stream-In PrepPro lifetime access',
+            name: 'Stream-In (PrepSpace) Premium',
+            description: 'Upgrade your workspace to Stream-In (PrepSpace) PrepPro lifetime access',
             order_id: orderData.orderId,
             handler: function (response) {
               apiFetch('/payments/verify', {
@@ -2994,7 +2996,7 @@ function bindBillingEvents() {
                 })
               }).then(verifyRes => {
                 if (verifyRes.status === 'SUCCESS') {
-                  showToast('Payment verified! Welcome to Stream-In Pro.', 'success');
+                  showToast('Payment verified! Welcome to Stream-In (PrepSpace) Pro.', 'success');
                   fetchUserProfile().then(() => {
                     redirectTo('#/referral');
                   });
