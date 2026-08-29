@@ -1890,20 +1890,39 @@ const components = {
   `,
 
   mockExamActive: (testId, category, duration, questionCount) => `
-    <div class="glass-panel p-5 text-center">
-      <div class="text-danger mb-4"><i class="fa-solid fa-hourglass-half display-3"></i></div>
-      <h3 class="text-white fw-bold mb-2">Timed Assessment In Progress</h3>
-      <p class="text-indigo fs-6">Category: ${category} • Questions: ${questionCount}</p>
-      
-      <div class="my-5 display-4 fw-extrabold text-white" id="mock-timer-display">
-        ${duration}:00
+    <div class="row g-4">
+      <div class="col-lg-4 text-center">
+        <div class="glass-panel p-4 mb-4">
+          <div class="text-danger mb-3"><i class="fa-solid fa-hourglass-half fs-1"></i></div>
+          <h5 class="text-white fw-bold mb-1">Timed Assessment</h5>
+          <span class="badge bg-primary bg-opacity-25 text-primary mb-3">${category}</span>
+          
+          <div class="my-4 display-5 fw-extrabold text-white font-mono" id="mock-timer-display">
+            ${duration}:00
+          </div>
+          
+          <div class="border-top border-secondary border-opacity-25 pt-3 mt-3">
+            <div class="fs-8 text-muted mb-2 uppercase">PROGRESS TRACKER</div>
+            <div class="progress bg-dark bg-opacity-50 mb-3" style="height: 6px;">
+              <div id="mock-progress-bar" class="progress-bar bg-primary" role="progressbar" style="width: 0%"></div>
+            </div>
+            <div class="d-flex justify-content-between text-muted fs-8">
+              <span id="mock-progress-text">Question 0 of 0</span>
+              <span id="mock-score-estimate">Score: 0 / 0</span>
+            </div>
+          </div>
+          
+          <button class="btn btn-premium w-100 py-3 mt-4" id="btn-submit-mock-exam" data-test-id="${testId}">Submit Exam Paper</button>
+        </div>
       </div>
 
-      <div class="bg-dark p-4 rounded max-w-sm mx-auto mb-4 border border-secondary">
-        <p class="text-muted fs-7 mb-0">Closing or reloading this window will submit the assessment automatically.</p>
+      <div class="col-lg-8">
+        <div class="glass-panel p-4 h-100 d-flex flex-column" id="mock-question-card-workspace" style="min-height: 400px;">
+          <div class="text-center py-5">
+            <div class="spinner-border text-primary"></div>
+          </div>
+        </div>
       </div>
-
-      <button class="btn btn-premium px-5 py-3 fs-6" id="btn-submit-mock-exam" data-test-id="${testId}">Submit Assessment Paper</button>
     </div>
   `,
 
