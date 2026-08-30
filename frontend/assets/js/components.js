@@ -4,14 +4,14 @@ const components = {
   // Public SaaS Landing Page - Style 2: Stripe / Supabase Enterprise Gradient Look
   landing: () => `
     <header class="stripe-hero-mesh pb-5">
-      <!-- Enterprise Glass Navigation -->
-      <nav class="navbar navbar-expand-lg navbar-dark bg-transparent py-4 sticky-top glass-nav">
+      <!-- Vercel Minimalist Glass Navigation -->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-black py-3 sticky-top border-bottom border-secondary border-opacity-25">
         <div class="container">
           <a class="navbar-brand d-flex align-items-center gap-2 text-decoration-none" href="#/">
-            <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" class="brand-logo-img" style="width: 42px; height: 42px; object-fit: contain;">
+            <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" class="brand-logo-img" style="width: 36px; height: 36px; object-fit: contain;">
             <div class="d-flex flex-column text-start">
-              <span class="fw-extrabold fs-4 text-white lh-1">PrepSpace</span>
-              <span class="text-primary fw-bold" style="font-size: 0.68rem; letter-spacing: 0.8px; margin-top: 2px;">(stream-in)</span>
+              <span class="fw-bold fs-5 text-white lh-1">PrepSpace</span>
+              <span class="text-secondary" style="font-size: 0.65rem; letter-spacing: 0.8px; margin-top: 2px; font-family: 'Geist Mono', monospace;">(stream-in)</span>
             </div>
           </a>
           <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
@@ -19,17 +19,14 @@ const components = {
           </button>
           <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center gap-1">
-              <li class="nav-item"><a class="nav-link px-3" href="#showcase">Platform</a></li>
-              <li class="nav-item"><a class="nav-link px-3" href="#features">Capabilities</a></li>
-              <li class="nav-item"><a class="nav-link px-3" href="#calculator">ROI Calculator</a></li>
-              <li class="nav-item"><a class="nav-link px-3" href="#pricing">Pricing</a></li>
-              <li class="nav-item"><a class="nav-link px-3" href="/about">About</a></li>
-              <li class="nav-item ms-lg-2 d-flex align-items-center gap-2">
-                <button class="btn btn-glass theme-toggle-btn rounded-circle p-2" onclick="window.toggleTheme()" style="width: 38px; height: 38px;" title="Toggle Dark / White Mode">
-                  <i class="fa-solid fa-moon text-indigo"></i>
-                </button>
-                <a class="btn btn-glass px-3 py-2" href="#/login">Sign In</a>
-                <a class="btn btn-premium px-3 py-2 fw-bold" href="#/register">Get Started Free</a>
+              <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="#showcase">Platform</a></li>
+              <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="#features">Capabilities</a></li>
+              <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="#calculator">ROI Calculator</a></li>
+              <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="#pricing">Pricing</a></li>
+              <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="/about">About</a></li>
+              <li class="nav-item ms-lg-3 d-flex align-items-center gap-2">
+                <a class="btn btn-glass px-3 py-1 fs-7" href="#/login">Log In</a>
+                <a class="btn btn-premium px-3 py-1 fs-7 fw-bold" href="#/register">Sign Up Free</a>
               </li>
             </ul>
           </div>
@@ -327,39 +324,43 @@ const components = {
 
         <div class="row g-4 justify-content-center">
           <!-- Free Tier -->
-          <div class="col-md-6 col-lg-4">
-            <div class="glass-panel p-4 p-md-5 h-100 text-center text-start">
-              <h3 class="text-white h4 fw-bold">PrepFree</h3>
-              <p class="text-muted fs-7">Essential tools to start tracking your daily prep</p>
-              <div class="my-4"><span class="display-4 fw-extrabold text-white">₹0</span><span class="text-muted fs-7"> / lifetime</span></div>
-              <ul class="list-unstyled text-start mb-5 text-muted fs-7 d-flex flex-column gap-2">
-                <li><i class="fa-solid fa-check text-success me-2"></i> Access to Core Question Bank</li>
-                <li><i class="fa-solid fa-check text-success me-2"></i> Log Solved Problems & Streaks</li>
-                <li><i class="fa-solid fa-check text-success me-2"></i> Standard Placement Kanban</li>
-                <li><i class="fa-solid fa-check text-success me-2"></i> Basic Progress Graphs</li>
-              </ul>
-              <a href="#/register" class="btn btn-glass w-100 py-3 fw-bold">Get Started Free</a>
+          <div class="col-md-6 col-lg-5 col-xl-4">
+            <div class="glass-panel p-4 h-100 d-flex flex-column text-start">
+              <div>
+                <h3 class="text-white h5 fw-bold mb-1">PrepFree</h3>
+                <p class="text-muted fs-8 mb-3">Essential tools to start tracking your daily prep</p>
+                <div class="my-3"><span class="display-6 fw-extrabold text-white">₹0</span><span class="text-muted fs-8"> / lifetime</span></div>
+                <ul class="list-unstyled text-start mb-4 text-muted fs-8 d-flex flex-column gap-2">
+                  <li><i class="fa-solid fa-check text-success me-2"></i> Access to Core Question Bank</li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> Log Solved Problems & Streaks</li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> Standard Placement Kanban</li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> Basic Progress Graphs</li>
+                </ul>
+              </div>
+              <a href="#/register" class="btn btn-glass w-100 py-2 fs-7 fw-bold mt-auto">Get Started Free</a>
             </div>
           </div>
 
           <!-- Pro Tier -->
-          <div class="col-md-6 col-lg-4">
-            <div class="glass-panel p-4 p-md-5 h-100 text-center border-primary position-relative" style="box-shadow: 0 0 40px var(--accent-glow);">
-              <div class="badge bg-primary text-white border border-primary-subtle px-3 py-1 rounded-pill position-absolute top-0 start-50 translate-middle fw-bold">
+          <div class="col-md-6 col-lg-5 col-xl-4">
+            <div class="glass-panel p-4 h-100 d-flex flex-column text-start border-primary position-relative" style="box-shadow: 0 0 35px var(--accent-glow);">
+              <div class="badge bg-primary text-white border border-primary-subtle px-3 py-1 rounded-pill position-absolute top-0 start-50 translate-middle fw-bold fs-9">
                 MOST POPULAR
               </div>
-              <h3 class="text-white h4 fw-bold mt-2">PrepPro</h3>
-              <p class="text-indigo fs-7">Recommended for Active Jobseekers & Students</p>
-              <div class="my-4"><span class="display-4 fw-extrabold text-white">₹99</span><span class="text-muted fs-7"> / one-time lifetime</span></div>
-              <ul class="list-unstyled text-start mb-5 text-muted fs-7 d-flex flex-column gap-2">
-                <li><i class="fa-solid fa-check text-success me-2"></i> <strong>Unlimited 50-MCQ Timed Exams</strong></li>
-                <li><i class="fa-solid fa-check text-success me-2"></i> <strong>AI ATS Resume & Keyword Audit</strong></li>
-                <li><i class="fa-solid fa-check text-success me-2"></i> <strong>AI Custom Study Planners</strong></li>
-                <li><i class="fa-solid fa-check text-success me-2"></i> <strong>Company Interview Guides & Prompts</strong></li>
-                <li><i class="fa-solid fa-check text-success me-2"></i> <strong>Export Excel / PDF Progress Reports</strong></li>
-                <li><i class="fa-solid fa-check text-success me-2"></i> Verified Completion Certificates</li>
-              </ul>
-              <a href="#/register" class="btn btn-premium w-100 py-3 fw-bold"><i class="fa-solid fa-gem me-2"></i>Upgrade to PrepPro Access</a>
+              <div>
+                <h3 class="text-white h5 fw-bold mb-1 mt-1">PrepPro</h3>
+                <p class="text-indigo fs-8 mb-3">Recommended for Active Jobseekers & Students</p>
+                <div class="my-3"><span class="display-6 fw-extrabold text-white">₹99</span><span class="text-muted fs-8"> / one-time lifetime</span></div>
+                <ul class="list-unstyled text-start mb-4 text-muted fs-8 d-flex flex-column gap-2">
+                  <li><i class="fa-solid fa-check text-success me-2"></i> <strong>Unlimited 50-MCQ Timed Exams</strong></li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> <strong>AI ATS Resume & Keyword Audit</strong></li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> <strong>AI Custom Study Planners</strong></li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> <strong>Company Interview Guides & Prompts</strong></li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> <strong>Export Excel / PDF Progress Reports</strong></li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> Verified Completion Certificates</li>
+                </ul>
+              </div>
+              <a href="#/register" class="btn btn-premium w-100 py-2 fs-7 fw-bold mt-auto"><i class="fa-solid fa-gem me-2"></i>Upgrade to PrepPro Access</a>
             </div>
           </div>
         </div>
@@ -545,13 +546,13 @@ const components = {
 
   // Application Layout Wrapper - Style 2: Stripe / Supabase Enterprise Gradient Workspace
   appLayout: (userName, isAdmin) => `
-    <div id="app-container" class="d-flex w-100">
+    <div id="app-container" class="d-flex w-100 position-relative">
       <!-- Sidebar -->
       <div class="sidebar glass-panel border-top-0 border-bottom-0 border-start-0 rounded-0 d-flex flex-column">
         <!-- Brand Header -->
-        <div class="p-3 border-bottom border-secondary-subtle d-flex align-items-center justify-content-between">
+        <div class="p-3 border-bottom border-secondary-subtle d-flex align-items-center justify-content-between brand-header-box">
           <a class="navbar-brand d-flex align-items-center brand-text text-decoration-none" href="#/dashboard">
-            <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" class="me-2" style="width: 36px; height: 36px; object-fit: contain;">
+            <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" class="me-2 brand-logo-img" style="width: 36px; height: 36px; object-fit: contain;">
             <div class="d-flex flex-column text-start brand-name">
               <span class="fw-extrabold fs-5 text-white lh-1">PrepSpace</span>
               <span class="text-primary fw-bold" style="font-size: 0.65rem; letter-spacing: 0.8px; margin-top: 2px;">(stream-in)</span>
@@ -566,13 +567,13 @@ const components = {
         </div>
 
         <!-- User Profile Micro Card -->
-        <div class="px-3 py-2 mx-3 my-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 d-flex align-items-center justify-content-between">
+        <div class="user-micro-card px-3 py-2 mx-3 my-2 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 d-flex align-items-center justify-content-between">
           <div class="d-flex align-items-center gap-2 overflow-hidden">
-            <div class="position-relative">
+            <div class="position-relative user-avatar-dot">
               <i class="fa-solid fa-circle-user fs-4 text-primary"></i>
               <span class="position-absolute bottom-0 end-0 bg-success border border-dark rounded-circle" style="width: 8px; height: 8px;"></span>
             </div>
-            <div class="d-flex flex-column text-start text-truncate">
+            <div class="d-flex flex-column text-start text-truncate user-profile-text">
               <span class="text-white fw-bold fs-7 text-truncate" id="sidebar-user-name">${userName}</span>
               <span class="text-muted fs-8">Pro Workspace</span>
             </div>
@@ -613,7 +614,7 @@ const components = {
         <!-- Sidebar Bottom Actions -->
         <div class="p-3 border-top border-secondary-subtle mt-auto">
           <button id="logout-btn" class="btn btn-glass w-100 py-2 mb-2"><i class="fa-solid fa-right-from-bracket me-2 text-danger"></i> <span>Logout</span></button>
-          <div class="d-flex justify-content-center gap-2 text-center" style="font-size: 0.7rem; opacity: 0.6;">
+          <div class="sidebar-footer-links d-flex justify-content-center gap-2 text-center" style="font-size: 0.7rem; opacity: 0.6;">
             <a href="/about" target="_blank" class="text-muted text-decoration-none">About</a>
             <span>•</span>
             <a href="/privacy" target="_blank" class="text-muted text-decoration-none">Privacy</a>
@@ -624,33 +625,32 @@ const components = {
       </div>
 
       <!-- Main Content Area -->
-      <div class="main-content d-flex flex-column">
-        <!-- Top Nav Header (Stripe/Supabase Style) -->
-        <header class="d-flex align-items-center justify-content-between pb-3 border-bottom border-secondary-subtle mb-4">
-          <div class="d-flex align-items-center gap-3">
-            <button class="btn btn-glass d-lg-none" id="sidebar-toggle-btn"><i class="fa-solid fa-bars"></i></button>
-            <div class="d-flex align-items-center gap-2">
-              <span class="badge bg-primary bg-opacity-10 text-primary border border-primary-subtle px-2 py-1 fs-8 fw-bold">WORKSPACE</span>
-              <span class="text-muted fs-7">/</span>
-              <h4 class="text-white fw-bold m-0" id="current-view-title">Dashboard</h4>
+      <div class="main-content d-flex flex-column flex-grow-1 overflow-hidden">
+        <!-- Top Nav Header (Vercel Style) -->
+        <header class="d-flex align-items-center justify-content-between pb-3 border-bottom border-secondary border-opacity-25 mb-3">
+          <div class="d-flex align-items-center gap-2 overflow-hidden">
+            <button class="btn btn-glass d-lg-none me-1" id="sidebar-toggle-btn"><i class="fa-solid fa-bars"></i></button>
+            <div class="d-flex align-items-center gap-2 overflow-hidden">
+              <span class="badge bg-dark text-white border border-secondary border-opacity-25 px-2 py-1 fs-8 fw-bold d-none d-sm-inline-block font-monospace">WORKSPACE</span>
+              <span class="text-secondary fs-7 d-none d-sm-inline-block">/</span>
+              <h4 class="text-white fw-bold m-0 fs-5 fs-md-4 text-truncate" id="current-view-title">Dashboard</h4>
             </div>
           </div>
           
-          <div class="d-flex align-items-center gap-3">
+          <div class="d-flex align-items-center gap-2 gap-md-3">
             <a href="#/mock-exams" class="btn btn-glass btn-sm d-none d-md-flex align-items-center gap-2 text-white">
               <i class="fa-solid fa-stopwatch text-danger"></i>
               <span>Mock Exam</span>
             </a>
-            <button id="dark-mode-toggle" class="btn btn-glass theme-toggle-btn rounded-circle p-2" onclick="window.toggleTheme()" style="width: 38px; height: 38px;" title="Toggle Dark / White Mode"><i class="fa-solid fa-moon text-indigo"></i></button>
             <div class="dropdown">
-              <button class="btn btn-glass dropdown-toggle d-flex align-items-center gap-2" type="button" id="userDropdown" data-bs-toggle="dropdown">
-                <i class="fa-solid fa-circle-user fs-5 text-indigo"></i>
+              <button class="btn btn-glass dropdown-toggle d-flex align-items-center gap-2 py-1 px-2" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-circle-user fs-5 text-secondary"></i>
                 <span class="d-none d-md-inline" id="user-display-name">${userName}</span>
               </button>
               <ul class="dropdown-menu dropdown-menu-end glass-panel" aria-labelledby="userDropdown">
                 <li><a class="dropdown-item text-white" href="#/profile"><i class="fa-solid fa-gear me-2 text-secondary"></i>Settings</a></li>
                 <li><a class="dropdown-item text-white" href="#/billing"><i class="fa-solid fa-gem me-2 text-primary"></i>Upgrade Plan</a></li>
-                <li><hr class="dropdown-divider border-secondary"></li>
+                <li><hr class="dropdown-divider border-secondary border-opacity-25"></li>
                 <li><button class="dropdown-item text-danger" id="dropdown-logout"><i class="fa-solid fa-right-from-bracket me-2 text-danger"></i>Logout</button></li>
               </ul>
             </div>
@@ -658,69 +658,57 @@ const components = {
         </header>
 
         <!-- Dynamic Sub-view Mounting Port -->
-        <div id="page-mount" class="flex-grow-1"></div>
+        <div id="page-mount" class="flex-grow-1 overflow-y-auto"></div>
       </div>
     </div>
   `,
 
-  // Dashboard Page Sub-view - Style 2: Stripe / Supabase Enterprise Gradient Look
+  // Dashboard Page Sub-view - Vercel Geist Template Look
   dashboard: (stats) => `
-    <!-- Hero Welcome Banner -->
-    <div class="cta-banner-stripe p-4 p-md-5 mb-4 rounded-4 position-relative overflow-hidden text-start">
-      <div class="row align-items-center">
-        <div class="col-lg-8">
-          <span class="badge bg-primary bg-opacity-25 text-white border border-primary-subtle px-3 py-1 rounded-pill mb-3">
-            <i class="fa-solid fa-bolt text-warning me-1"></i> INTERVIEW READINESS ENGINE
-          </span>
-          <h2 class="display-6 fw-extrabold text-white mb-2">
-            Welcome to Your <span class="gradient-text-stripe">PrepSpace Control Center</span>
-          </h2>
-          <p class="text-secondary fs-7 mb-4" style="max-width: 620px;">
-            Execute timed 50-MCQ screening exams, maintain your daily DSA streak, and track technical interviews across your placement pipeline with real-time analytics.
-          </p>
-          <div class="d-flex gap-2 flex-wrap">
-            <a href="#/mock-exams" class="btn btn-premium px-4 py-2 fs-7 fw-bold shadow">
-              <i class="fa-solid fa-stopwatch me-1"></i> Start 50-MCQ Mock Exam
-            </a>
-            <a href="#/coding-practice" class="btn btn-glass px-4 py-2 fs-7 text-white">
-              <i class="fa-solid fa-code me-1 text-cyan"></i> + Log DSA Problem
-            </a>
-            <a href="#/ai-assistant" class="btn btn-glass px-4 py-2 fs-7 text-white">
-              <i class="fa-solid fa-robot me-1 text-secondary"></i> AI ATS Audit
-            </a>
-          </div>
+    <!-- Vercel Project Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary border-opacity-25 gap-3">
+      <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <span class="badge bg-dark text-white border border-secondary border-opacity-25 font-monospace fs-8">PRODUCTION</span>
+          <span class="text-secondary fs-8 font-monospace">stream-in.app</span>
         </div>
+        <h2 class="display-6 fw-bold text-white mb-0">Interview Readiness Engine</h2>
+      </div>
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="#/mock-exams" class="btn btn-premium fs-7"><i class="fa-solid fa-play me-1"></i> Start 50-MCQ Mock</a>
+        <a href="#/coding-practice" class="btn btn-glass fs-7">+ Log DSA Solve</a>
+        <a href="#/ai-assistant" class="btn btn-glass fs-7"><i class="fa-solid fa-robot me-1 text-secondary"></i> AI Audit</a>
       </div>
     </div>
 
-    <!-- Bento Telemetry Metrics Strip (Stripe Style) -->
-    <div class="row g-4 mb-4">
+    <!-- Vercel Telemetry Metrics Strip (4-Column Bento) -->
+    <div class="row g-3 mb-4">
       <div class="col-6 col-md-3">
-        <div class="bento-card p-4 text-start">
-          <span class="text-muted fs-8 uppercase tracking-wider">Total Study Time</span>
-          <div class="display-5 fw-extrabold text-white mt-2 mb-1">${stats.totalStudyHours}h</div>
-          <small class="text-success fs-8"><i class="fa-solid fa-arrow-trend-up me-1"></i>Consistent Pace</small>
+        <div class="bento-card p-3 text-start">
+          <span class="text-secondary fs-8 font-monospace uppercase">Total Study Time</span>
+          <div class="fs-2 fw-bold text-white mt-1 mb-0">${stats.totalStudyHours}h</div>
+          <small class="text-success fs-9 font-monospace"><i class="fa-solid fa-circle text-success me-1" style="font-size: 6px;"></i>Active Pace</small>
         </div>
       </div>
       <div class="col-6 col-md-3">
-        <div class="bento-card p-4 text-start">
-          <span class="text-muted fs-8 uppercase tracking-wider">Completed Topics</span>
-          <div class="display-5 fw-extrabold text-white mt-2 mb-1">${stats.completedTopics}</div>
-          <small class="text-cyan fs-8"><i class="fa-solid fa-layer-group me-1"></i>Core Curriculum</small>
+        <div class="bento-card p-3 text-start">
+          <span class="text-secondary fs-8 font-monospace uppercase">Completed Topics</span>
+          <div class="fs-2 fw-bold text-white mt-1 mb-0">${stats.completedTopics}</div>
+          <small class="text-secondary fs-9 font-monospace">Core Matrix</small>
         </div>
       </div>
       <div class="col-6 col-md-3">
-        <div class="bento-card p-4 text-start">
-          <span class="text-muted fs-8 uppercase tracking-wider">Upcoming Interviews</span>
-          <div class="display-5 fw-extrabold text-warning mt-2 mb-1">${stats.upcomingInterviewsCount}</div>
-          <small class="text-muted fs-8"><i class="fa-solid fa-calendar me-1"></i>Scheduled Rounds</small>
+        <div class="bento-card p-3 text-start">
+          <span class="text-secondary fs-8 font-monospace uppercase">Upcoming Screens</span>
+          <div class="fs-2 fw-bold text-white mt-1 mb-0">${stats.upcomingInterviewsCount}</div>
+          <small class="text-warning fs-9 font-monospace">Scheduled</small>
         </div>
       </div>
       <div class="col-6 col-md-3">
-        <div class="bento-card p-4 text-start">
-          <span class="text-muted fs-8 uppercase tracking-wider">Active Pipeline</span>
-          <div class="display-5 fw-extrabold text-success mt-2 mb-1">${stats.applicationsCount}</div>
-          <small class="text-success fs-8"><i class="fa-solid fa-briefcase me-1"></i>In Evaluation</small>
+        <div class="bento-card p-3 text-start">
+          <span class="text-secondary fs-8 font-monospace uppercase">Active Pipeline</span>
+          <div class="fs-2 fw-bold text-white mt-1 mb-0">${stats.applicationsCount}</div>
+          <small class="text-success fs-9 font-monospace">In Evaluation</small>
         </div>
       </div>
     </div>
@@ -2258,54 +2246,69 @@ const components = {
   codingPractice: (questions) => `
     <div class="row g-4">
       <!-- Coding Questions Table -->
-      <div class="col-md-4">
-        <div class="glass-panel p-4 h-100 d-flex flex-column" style="max-height: 80vh;">
-          <h5 class="text-white fw-bold mb-3">Coding Problem Set</h5>
-          <div class="mb-3">
-            <input type="text" id="practice-search-input" class="form-control glass-input" placeholder="Search title or company...">
+      <div class="col-lg-4 col-12 mb-3 mb-lg-0">
+        <div class="glass-panel p-3 h-100 d-flex flex-column" style="max-height: 80vh;">
+          <h5 class="text-white fw-bold mb-2 fs-6"><i class="fa-solid fa-code text-cyan me-2"></i>Coding Problem Set</h5>
+          <div class="mb-2">
+            <input type="text" id="practice-search-input" class="form-control glass-input py-1 px-2 fs-8" placeholder="Search title or company...">
           </div>
           <div class="flex-grow-1 overflow-y-auto" id="practice-problems-list">
-            ${questions.map(q => `
-              <div class="p-3 rounded border border-secondary mb-2 btn-select-question" style="cursor: pointer;" data-question-id="${q.id}" data-title="${q.title}" data-desc="${q.question}" data-constraints="${q.constraintsText}" data-hints="${q.hints}" data-solution="${q.referenceSolution}">
-                <div class="d-flex align-items-center justify-content-between mb-1">
-                  <span class="fw-bold text-white fs-7">${q.title}</span>
-                  <span class="badge bg-${q.difficulty === 'EASY' ? 'success' : q.difficulty === 'MEDIUM' ? 'warning' : 'danger'}-subtle text-${q.difficulty === 'EASY' ? 'success' : q.difficulty === 'MEDIUM' ? 'warning' : 'danger'} fs-9">${q.difficulty}</span>
+            ${(questions || []).map(q => {
+              const category = q.category || q.topic || 'Algorithms';
+              const companies = q.companies || q.company || 'FAANG & Top Tech';
+              const difficulty = (q.difficulty || 'MEDIUM').toUpperCase();
+              const diffBadge = difficulty === 'EASY' ? 'success' : difficulty === 'MEDIUM' ? 'warning' : 'danger';
+              const title = q.title || 'Algorithmic Problem';
+              const desc = q.question || q.description || q.desc || 'Solve this algorithmic challenge.';
+              const constraints = q.constraintsText || q.constraints || '1 <= N <= 10^5';
+              const hints = q.hints || 'Consider optimal space-time trade-offs.';
+              const solution = q.referenceSolution || `public class Solution {\n    public static void main(String[] args) {\n        // Your code here\n    }\n}`;
+              
+              return `
+                <div class="p-2 rounded border border-secondary border-opacity-25 mb-2 btn-select-question" style="cursor: pointer;" data-question-id="${q.id || 0}" data-title="${title.replace(/"/g, '&quot;')}" data-desc="${desc.replace(/"/g, '&quot;')}" data-constraints="${constraints.replace(/"/g, '&quot;')}" data-hints="${hints.replace(/"/g, '&quot;')}" data-solution="${solution.replace(/"/g, '&quot;')}" data-category="${category}">
+                  <div class="d-flex align-items-center justify-content-between mb-1">
+                    <span class="fw-bold text-white fs-7 text-truncate me-2">${title}</span>
+                    <span class="badge bg-${diffBadge}-subtle text-${diffBadge} fs-9">${difficulty}</span>
+                  </div>
+                  <div class="text-muted fs-8 text-truncate"><span class="text-info">${category}</span> • ${companies}</div>
                 </div>
-                <div class="text-muted fs-8">${q.category} • ${q.companies}</div>
-              </div>
-            `).join('')}
+              `;
+            }).join('')}
           </div>
         </div>
       </div>
       <!-- Interactive Code Workspace Split Pane -->
-      <div class="col-md-8">
+      <div class="col-lg-8 col-12">
         <div class="row g-3 h-100">
           <!-- Problem specs -->
-          <div class="col-12 col-xl-6">
-            <div class="glass-panel p-4 h-100 overflow-y-auto" style="max-height: 80vh;">
-              <h4 class="text-white fw-bold mb-2" id="active-q-title">Select a Problem</h4>
-              <span class="badge bg-indigo-subtle text-primary mb-4" id="active-q-category">Topic</span>
+          <div class="col-12 col-md-6">
+            <div class="glass-panel p-3 h-100 overflow-y-auto" style="max-height: 80vh;">
+              <h5 class="text-white fw-bold mb-1 fs-6" id="active-q-title">Select a Problem</h5>
+              <span class="badge bg-indigo-subtle text-primary mb-3 fs-8" id="active-q-category">Topic</span>
               
-              <h6 class="text-white fw-bold mb-2">Problem Description:</h6>
-              <p class="text-muted fs-7" id="active-q-desc">Click any problem card from the left panel to load its syntax and workspace.</p>
+              <h6 class="text-white fw-bold mb-1 fs-7">Problem Description:</h6>
+              <p class="text-muted fs-8 mb-3" id="active-q-desc">Click any problem card from the left panel to load its syntax and workspace.</p>
               
-              <h6 class="text-white fw-bold mb-2">Constraints:</h6>
-              <pre class="font-monospace text-muted fs-8 p-2 bg-dark rounded border border-secondary" id="active-q-constraints"></pre>
+              <h6 class="text-white fw-bold mb-1 fs-7">Constraints:</h6>
+              <pre class="font-monospace text-muted fs-8 p-2 bg-dark rounded border border-secondary border-opacity-25 mb-3" id="active-q-constraints">1 <= N <= 10^5</pre>
               
-              <h6 class="text-white fw-bold mb-2">Hints:</h6>
-              <p class="text-muted fs-7" id="active-q-hints"></p>
+              <h6 class="text-white fw-bold mb-1 fs-7">Hints:</h6>
+              <p class="text-muted fs-8 mb-0" id="active-q-hints">Select a problem to view hints.</p>
             </div>
           </div>
           <!-- Code editor -->
-          <div class="col-12 col-xl-6">
-            <div class="glass-panel p-4 h-100 d-flex flex-column" style="max-height: 80vh;">
-              <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-code me-2"></i>Java Compiler IDE</h5>
-              <div class="flex-grow-1 mb-3">
-                <textarea id="code-editor-textarea" class="form-control font-monospace text-white bg-dark border-secondary p-3 h-100 fs-7" style="resize:none;" placeholder="public int solve(...) {\n    // Type code here...\n}"></textarea>
+          <div class="col-12 col-md-6">
+            <div class="glass-panel p-3 h-100 d-flex flex-column" style="max-height: 80vh;">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <h6 class="text-white fw-bold m-0 fs-7"><i class="fa-solid fa-code text-cyan me-2"></i>Java Compiler IDE</h6>
+                <span class="badge bg-dark border border-secondary text-muted fs-9">JDK 21</span>
+              </div>
+              <div class="flex-grow-1 mb-2">
+                <textarea id="code-editor-textarea" class="form-control font-monospace text-white bg-dark border-secondary p-2 h-100 fs-8" style="resize:none; min-height: 240px;" placeholder="public int solve(...) {\n    // Type code here...\n}"></textarea>
               </div>
               <div class="d-flex gap-2">
-                <button class="btn btn-glass w-50 py-2 fs-7" id="btn-practice-hints"><i class="fa-solid fa-lightbulb text-warning me-1"></i> Show Hint</button>
-                <button class="btn btn-premium w-50 py-2 fs-7" id="btn-practice-submit"><i class="fa-solid fa-play-circle text-success me-1"></i> Submit Solution</button>
+                <button class="btn btn-glass w-50 py-1 fs-8" id="btn-practice-hints"><i class="fa-solid fa-lightbulb text-warning me-1"></i> Hint</button>
+                <button class="btn btn-premium w-50 py-1 fs-8" id="btn-practice-submit"><i class="fa-solid fa-play text-white me-1"></i> Submit</button>
               </div>
             </div>
           </div>

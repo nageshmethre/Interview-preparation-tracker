@@ -1,185 +1,41 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Theme: Dark Mode (Default) */
-  --bg-space: #0b0f19;
-  --bg-gradient: radial-gradient(circle at 50% 50%, #111827 0%, #030712 100%);
-  --panel-glass: rgba(17, 24, 39, 0.55);
-  --panel-border: rgba(255, 255, 255, 0.06);
-  --input-glass: rgba(255, 255, 255, 0.03);
-  --input-border: rgba(255, 255, 255, 0.08);
+  /* Vercel Geist Design System Core Palette */
+  --bg-space: #000000;
+  --bg-gradient: #000000;
+  --panel-glass: #0a0a0a;
+  --panel-border: #222222;
+  --input-glass: #000000;
+  --input-border: #333333;
   
-  --accent-primary: #6366f1; /* Indigo */
-  --accent-secondary: #a855f7; /* Purple */
-  --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-  --accent-glow: rgba(99, 102, 241, 0.25);
+  --accent-primary: #ffffff;
+  --accent-secondary: #888888;
+  --accent-blue: #0070f3;
+  --accent-emerald: #00e599;
+  --accent-gradient: linear-gradient(180deg, #ffffff 0%, #a1a1a1 100%);
+  --accent-glow: rgba(255, 255, 255, 0.1);
   
-  --text-main: #f3f4f6;
-  --text-muted: #9ca3af;
-  --text-dark: #111827;
+  --text-main: #ededed;
+  --text-muted: #888888;
+  --text-dark: #ffffff;
   
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
+  --success: #00e599;
+  --warning: #f5a623;
+  --danger: #ee0000;
   
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
-  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --sidebar-width: 260px;
+  --glass-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.8);
+  --transition-smooth: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --sidebar-width: 240px;
 }
 
-[data-theme="light"] {
-  /* Theme: White / Light Mode */
-  --bg-space: #f8fafc;
-  --bg-gradient: radial-gradient(circle at 50% 50%, #ffffff 0%, #f1f5f9 100%);
-  --panel-glass: #ffffff;
-  --panel-border: rgba(226, 232, 240, 0.9);
-  --input-glass: #ffffff;
-  --input-border: #cbd5e1;
-  
-  --accent-primary: #4f46e5;
-  --accent-secondary: #7c3aed;
-  --accent-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-  --accent-glow: rgba(79, 70, 229, 0.15);
-  
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --text-dark: #0f172a;
-  
-  --glass-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
-}
-
-/* White (Light) Mode UI Overrides */
-[data-theme="light"] body {
-  background-color: #f8fafc !important;
-  color: #0f172a !important;
-}
-
-[data-theme="light"] .sidebar {
-  background: #ffffff !important;
-  border-right: 1px solid #e2e8f0 !important;
-  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.04);
-}
-
-[data-theme="light"] .sidebar-link {
-  color: #475569 !important;
-}
-
-[data-theme="light"] .sidebar-link:hover {
-  color: #0f172a !important;
-  background: #f1f5f9 !important;
-}
-
-[data-theme="light"] .sidebar-link.active {
-  color: #4f46e5 !important;
-  background: #eef2ff !important;
-  border-left: 3px solid #4f46e5 !important;
-  box-shadow: 0 0 15px rgba(79, 70, 229, 0.15);
-}
-
-[data-theme="light"] .sidebar-section-title {
-  color: #94a3b8 !important;
-}
-
-[data-theme="light"] .glass-panel {
-  background: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-}
-
-[data-theme="light"] .bento-card {
-  background: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-}
-
-[data-theme="light"] .stripe-hero-mesh {
-  background-color: #f8fafc !important;
-  background-image: 
-    radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 45%),
-    radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 50% 75%, rgba(6, 182, 212, 0.06) 0%, transparent 55%) !important;
-}
-
-[data-theme="light"] .mockup-window {
-  background: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
-}
-
-[data-theme="light"] .mockup-header {
-  background: #f8fafc !important;
-  border-bottom: 1px solid #e2e8f0 !important;
-}
-
-[data-theme="light"] .cta-banner-stripe {
-  background: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 50%, #ecfeff 100%) !important;
-  border: 1px solid #c7d2fe !important;
-}
-
-[data-theme="light"] .text-white {
-  color: #0f172a !important;
-}
-
-[data-theme="light"] .text-secondary {
-  color: #475569 !important;
-}
-
-[data-theme="light"] .btn-glass {
-  background: #ffffff !important;
-  border-color: #cbd5e1 !important;
-  color: #0f172a !important;
-}
-
-[data-theme="light"] .btn-glass:hover {
-  background: #f1f5f9 !important;
-}
-
-[data-theme="light"] .company-badge {
-  color: #334155 !important;
-  background: #ffffff !important;
-  border-color: #e2e8f0 !important;
-}
-
-[data-theme="light"] .feature-tab-btn {
-  background: #ffffff !important;
-  border-color: #e2e8f0 !important;
-  color: #475569 !important;
-}
-
-[data-theme="light"] .feature-tab-btn.active {
-  background: #eef2ff !important;
-  border-color: #4f46e5 !important;
-  color: #4f46e5 !important;
-}
-
-[data-theme="light"] .calc-slider {
-  background: #e2e8f0 !important;
-}
-
-[data-theme="light"] .kanban-col {
-  background: #f8fafc !important;
-  border-color: #e2e8f0 !important;
-}
-
-[data-theme="light"] .glass-input {
-  background: #ffffff !important;
-  border-color: #cbd5e1 !important;
-  color: #0f172a !important;
-}
-
-[data-theme="light"] .bg-dark {
-  background-color: #f8fafc !important;
-  border-color: #e2e8f0 !important;
-}
-
-[data-theme="light"] .gradient-text-stripe {
-  background: linear-gradient(135deg, #0f172a 15%, #4f46e5 55%, #7c3aed 90%, #db2777 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+[data-theme="dark"], body {
+  background-color: #000000 !important;
+  color: #ededed !important;
 }
 
 .text-muted {
-  color: var(--text-muted) !important;
+  color: #888888 !important;
 }
 
 * {
@@ -189,110 +45,107 @@
 }
 
 body {
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  background: var(--bg-gradient);
-  background-attachment: fixed;
-  color: var(--text-main);
+  font-family: 'Geist', 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #000000 !important;
+  color: #ededed !important;
   min-height: 100vh;
   overflow-x: hidden;
-  transition: var(--transition-smooth);
+  letter-spacing: -0.01em;
 }
 
 /* Scrollbar Styles */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
+  background: #000000;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--accent-primary);
+  background: #222222;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-secondary);
+  background: #444444;
 }
 
-/* Glassmorphism Classes */
+/* Vercel Glass & Panel Classes */
 .glass-panel {
-  background: var(--panel-glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--panel-border);
-  box-shadow: var(--glass-shadow);
-  border-radius: 16px;
+  background: #0a0a0a;
+  border: 1px solid #222222;
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.7);
+  border-radius: 8px;
   transition: var(--transition-smooth);
 }
 
 .glass-panel:hover {
-  border-color: rgba(99, 102, 241, 0.2);
+  border-color: #333333;
 }
 
 .glass-input {
-  background: var(--input-glass);
-  border: 1px solid var(--input-border);
-  color: var(--text-main) !important;
-  border-radius: 8px;
+  background: #000000;
+  border: 1px solid #222222;
+  color: #ededed !important;
+  border-radius: 6px;
   padding: 8px 12px;
   font-size: 0.88rem;
   transition: var(--transition-smooth);
 }
 
 .glass-input:focus {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 10px var(--accent-glow);
+  background: #0a0a0a;
+  border-color: #555555;
+  box-shadow: 0 0 0 1px #555555;
   outline: none;
 }
 
 /* Compact Space-Efficient Tables & Grids */
 .table {
   --bs-table-bg: transparent;
-  --bs-table-color: var(--text-main);
+  --bs-table-color: #ededed;
   margin-bottom: 0;
 }
 
 .table th, .table td {
   padding: 8px 12px !important;
   vertical-align: middle;
-  border-color: rgba(255, 255, 255, 0.06);
+  border-color: #1f1f1f;
 }
 
-/* Buttons */
-.btn-premium {
-  background: var(--accent-gradient);
-  color: #fff !important;
-  border: none;
-  font-weight: 600;
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  transition: var(--transition-smooth);
-  box-shadow: 0 4px 15px var(--accent-glow);
-}
-
-.btn-premium:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
-}
-
-.btn-premium:active {
-  transform: translateY(0);
-}
-
-.btn-glass {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--panel-border);
-  color: var(--text-main) !important;
-  border-radius: 8px;
+/* Vercel Primary & Outline Buttons */
+.btn-premium, .btn-vercel-primary {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #ffffff !important;
   font-weight: 500;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.88rem;
+  transition: var(--transition-smooth);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.btn-premium:hover, .btn-vercel-primary:hover {
+  background: #d4d4d4 !important;
+  border-color: #d4d4d4 !important;
+  transform: translateY(-1px);
+}
+
+.btn-glass, .btn-vercel-secondary {
+  background: transparent !important;
+  border: 1px solid #333333 !important;
+  color: #ededed !important;
+  border-radius: 6px;
+  font-weight: 500;
+  padding: 8px 16px;
+  font-size: 0.88rem;
   transition: var(--transition-smooth);
 }
 
-.btn-glass:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--accent-primary);
+.btn-glass:hover, .btn-vercel-secondary:hover {
+  background: #111111 !important;
+  border-color: #666666 !important;
+  color: #ffffff !important;
 }
 
 /* Landing Page Hero Header */
@@ -327,44 +180,65 @@ body {
 
 /* Sidebar Collapsed Sliding States */
 #app-container.collapsed {
-  --sidebar-width: 78px;
+  --sidebar-width: 72px;
+}
+
+#app-container.collapsed .sidebar {
+  width: 72px !important;
+  overflow-x: hidden !important;
 }
 
 #app-container.collapsed .sidebar .brand-name,
-#app-container.collapsed .sidebar-link span,
-#app-container.collapsed .sidebar button span {
-  display: none;
+#app-container.collapsed .sidebar .sidebar-section-title,
+#app-container.collapsed .sidebar .sidebar-link span,
+#app-container.collapsed .sidebar button span,
+#app-container.collapsed .sidebar .user-profile-text,
+#app-container.collapsed .sidebar .user-micro-card .badge,
+#app-container.collapsed .sidebar .sidebar-footer-links {
+  display: none !important;
 }
 
-#app-container.collapsed .sidebar-link {
-  justify-content: center;
-  padding: 12px 0;
-  margin: 4px 8px;
+#app-container.collapsed .sidebar .brand-header-box {
+  padding: 10px 4px !important;
+  justify-content: center !important;
+  flex-direction: column !important;
+  gap: 8px !important;
 }
 
-#app-container.collapsed .sidebar-link i {
-  margin-right: 0;
+#app-container.collapsed .sidebar .navbar-brand {
+  margin: 0 !important;
+  justify-content: center !important;
 }
 
-#app-container.collapsed .sidebar .p-4 {
-  padding: 1.5rem 0.5rem !important;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: center;
-  justify-content: center;
-}
-
-#app-container.collapsed .sidebar .brand-text {
-  justify-content: center;
-}
-
-#app-container.collapsed .sidebar .brand-text i {
+#app-container.collapsed .sidebar .brand-logo-img {
   margin-right: 0 !important;
+  width: 32px !important;
+  height: 32px !important;
 }
 
-#app-container.collapsed #sidebar-collapse-btn {
-  margin-top: 4px;
+#app-container.collapsed .sidebar .sidebar-link {
+  justify-content: center !important;
+  padding: 10px 0 !important;
+  margin: 3px 6px !important;
+}
+
+#app-container.collapsed .sidebar .sidebar-link i {
+  margin-right: 0 !important;
+  font-size: 1.15rem !important;
+}
+
+#app-container.collapsed .sidebar .user-micro-card {
+  padding: 8px 4px !important;
+  margin: 6px 6px !important;
+  justify-content: center !important;
+}
+
+#app-container.collapsed .sidebar #collapse-icon {
+  transform: rotate(180deg);
+}
+
+#app-container.collapsed .main-content {
+  margin-left: 72px !important;
 }
 
 .sidebar .overflow-y-auto::-webkit-scrollbar {
@@ -384,15 +258,32 @@ body {
   background: rgba(99, 102, 241, 0.4);
 }
 
+/* Mobile Viewport Responsiveness */
 @media (max-width: 991.98px) {
   .sidebar {
-    margin-left: calc(-1 * var(--sidebar-width));
+    width: 260px !important;
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1050 !important;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5) !important;
   }
+  
   .sidebar.active {
-    margin-left: 0;
+    transform: translateX(0) !important;
   }
+  
   .main-content {
-    margin-left: 0;
+    margin-left: 0 !important;
+    padding: 12px 14px !important;
+    width: 100% !important;
+  }
+
+  #app-container.collapsed .main-content {
+    margin-left: 0 !important;
   }
 }
 
@@ -617,46 +508,47 @@ body {
 }
 
 /* ==========================================================================
-   STRIPE / SUPABASE ENTERPRISE GRADIENT STYLING (STYLE 2)
+   VERCEL GEIST TEMPLATE STYLING
    ========================================================================== */
 
-/* Stripe Multi-Mesh Animated Glow Background */
-.stripe-hero-mesh {
+/* Vercel Linear Grid Mesh Background */
+.stripe-hero-mesh, .vercel-hero-mesh {
   position: relative;
   overflow: hidden;
-  background-color: #060913;
+  background-color: #000000;
   background-image: 
-    radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.22) 0%, transparent 45%),
-    radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.20) 0%, transparent 50%),
-    radial-gradient(circle at 50% 75%, rgba(6, 182, 212, 0.15) 0%, transparent 55%);
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
 
-.stripe-hero-mesh::before {
+.stripe-hero-mesh::before, .vercel-hero-mesh::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-  background-size: 32px 32px;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
   pointer-events: none;
-  opacity: 0.6;
 }
 
 /* Radiant Typography */
-.gradient-text-stripe {
-  background: linear-gradient(135deg, #ffffff 15%, #38bdf8 55%, #a855f7 90%, #ec4899 100%);
+.gradient-text-stripe, .gradient-text-vercel {
+  background: linear-gradient(180deg, #ffffff 0%, #a1a1a1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
 }
 
 .gradient-text-cyan {
-  background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #0070f3 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .gradient-text-amber {
-  background: linear-gradient(135deg, #fbbf24 0%, #f97316 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #f5a623 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -666,20 +558,19 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 16px;
-  background: rgba(99, 102, 241, 0.12);
-  border: 1px solid rgba(99, 102, 241, 0.35);
+  padding: 6px 14px;
+  background: #111111;
+  border: 1px solid #333333;
   border-radius: 9999px;
-  font-size: 0.82rem;
-  color: #e0e7ff;
+  font-size: 0.8rem;
+  color: #ededed;
   transition: var(--transition-smooth);
   text-decoration: none;
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+  font-family: 'Geist Mono', monospace;
 }
 .announcement-pill:hover {
-  background: rgba(99, 102, 241, 0.2);
-  border-color: rgba(99, 102, 241, 0.6);
-  transform: translateY(-1px);
+  background: #1a1a1a;
+  border-color: #555555;
   color: #ffffff;
 }
 
@@ -689,52 +580,52 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 28px;
-  opacity: 0.65;
+  gap: 20px;
+  opacity: 0.75;
   transition: var(--transition-smooth);
 }
 .company-logo-strip:hover {
-  opacity: 0.9;
+  opacity: 1;
 }
 .company-badge {
-  font-size: 0.95rem;
-  font-weight: 700;
+  font-size: 0.85rem;
+  font-weight: 600;
   letter-spacing: 0.5px;
-  color: #cbd5e1;
+  color: #888888;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  background: #0a0a0a;
+  border: 1px solid #222222;
 }
 
-/* Floating 3D Isometric Dashboard Mockup Container */
+/* Minimalist Vercel Mockup Container */
 .dashboard-mockup-wrapper {
   position: relative;
-  max-width: 1080px;
+  max-width: 980px;
   margin: 0 auto;
-  border-radius: 18px;
-  padding: 8px;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(6, 182, 212, 0.2) 40%, rgba(168, 85, 247, 0.4));
-  box-shadow: 0 30px 100px -20px rgba(99, 102, 241, 0.35), 0 0 50px rgba(6, 182, 212, 0.15);
+  border-radius: 10px;
+  padding: 1px;
+  background: #222222;
+  box-shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.9);
 }
 
 .mockup-window {
-  background: #0b0f1e;
-  border-radius: 14px;
+  background: #000000;
+  border-radius: 9px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid #1a1a1a;
 }
 
 .mockup-header {
-  background: #070a14;
-  padding: 12px 18px;
+  background: #0a0a0a;
+  padding: 10px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid #1f1f1f;
 }
 
 .window-dots {
@@ -742,33 +633,32 @@ body {
   gap: 6px;
 }
 .window-dot {
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
 }
-.window-dot.red { background: #ef4444; }
-.window-dot.yellow { background: #f59e0b; }
-.window-dot.green { background: #10b981; }
+.window-dot.red { background: #333333; }
+.window-dot.yellow { background: #444444; }
+.window-dot.green { background: #555555; }
 
 .mockup-url-bar {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
-  padding: 3px 18px;
-  font-size: 0.75rem;
-  color: #94a3b8;
-  font-family: monospace;
+  background: #000000;
+  border: 1px solid #222222;
+  border-radius: 4px;
+  padding: 2px 14px;
+  font-size: 0.72rem;
+  color: #888888;
+  font-family: 'Geist Mono', monospace;
 }
-
-/* Supabase-Style Feature Tab Selector */
+/* Vercel Feature Tab Selector */
 .feature-tab-btn {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #94a3b8;
-  padding: 14px 20px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.95rem;
+  background: #0a0a0a;
+  border: 1px solid #222222;
+  color: #888888;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.88rem;
   transition: var(--transition-smooth);
   cursor: pointer;
   display: flex;
@@ -778,84 +668,67 @@ body {
   text-align: left;
 }
 .feature-tab-btn:hover {
-  background: rgba(99, 102, 241, 0.08);
-  border-color: rgba(99, 102, 241, 0.3);
-  color: #ffffff;
+  background: #111111;
+  border-color: #444444;
+  color: #ededed;
 }
 .feature-tab-btn.active {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.15));
-  border-color: #6366f1;
+  background: #171717;
+  border-color: #555555;
   color: #ffffff;
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.25);
 }
 
-/* Bento Grid Cards with Hover Glow */
-.bento-card {
-  background: rgba(13, 18, 36, 0.65);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
+/* Vercel Minimalist Cards */
+.bento-card, .vercel-card {
+  background: #0a0a0a;
+  border: 1px solid #222222;
+  border-radius: 8px;
   padding: 20px 22px;
   transition: var(--transition-smooth);
   height: 100%;
   position: relative;
   overflow: hidden;
 }
-.bento-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.8), transparent);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.bento-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(99, 102, 241, 0.4);
-  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(99, 102, 241, 0.12);
-}
-.bento-card:hover::before {
-  opacity: 1;
+.bento-card:hover, .vercel-card:hover {
+  border-color: #444444;
 }
 
 /* Interactive Calculator Sliders */
 .calc-slider {
   -webkit-appearance: none;
   width: 100%;
-  height: 6px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.12);
+  height: 4px;
+  border-radius: 2px;
+  background: #222222;
   outline: none;
 }
 .calc-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  background: #6366f1;
+  background: #ffffff;
   cursor: pointer;
-  box-shadow: 0 0 10px #6366f1;
-  border: 2px solid #ffffff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  border: 1px solid #000000;
 }
 .calc-slider::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  background: #6366f1;
+  background: #ffffff;
   cursor: pointer;
-  box-shadow: 0 0 10px #6366f1;
-  border: 2px solid #ffffff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  border: 1px solid #000000;
 }
 
-/* Call to Action Banner */
-.cta-banner-stripe {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(139, 92, 246, 0.2) 50%, rgba(6, 182, 212, 0.2) 100%);
-  border: 1px solid rgba(99, 102, 241, 0.4);
-  border-radius: 18px;
-  padding: 36px 28px;
+/* Vercel Call to Action Banner */
+.cta-banner-stripe, .vercel-banner {
+  background: #0a0a0a;
+  border: 1px solid #222222;
+  border-radius: 8px;
+  padding: 32px 24px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
 }
-

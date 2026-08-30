@@ -182,31 +182,12 @@ window.updateRoiCalculator = function() {
   }
 };
 
-// Theme Management (Dark & White/Light Mode)
+// Vercel Design System Theme Initialization
 function initTheme() {
-  if (!state.theme || (state.theme !== 'dark' && state.theme !== 'light')) {
-    state.theme = 'dark';
-  }
-  document.documentElement.setAttribute('data-theme', state.theme);
-  const icon = state.theme === 'light' ? 'fa-sun text-warning' : 'fa-moon text-indigo';
-  setTimeout(() => {
-    document.querySelectorAll('.theme-toggle-btn, #dark-mode-toggle').forEach(btn => {
-      btn.innerHTML = `<i class="fa-solid ${icon}"></i>`;
-    });
-  }, 100);
+  state.theme = 'dark';
+  localStorage.setItem('theme', 'dark');
+  document.documentElement.setAttribute('data-theme', 'dark');
 }
-
-window.toggleTheme = function() {
-  state.theme = state.theme === 'light' ? 'dark' : 'light';
-  localStorage.setItem('theme', state.theme);
-  document.documentElement.setAttribute('data-theme', state.theme);
-  const icon = state.theme === 'light' ? 'fa-sun text-warning' : 'fa-moon text-indigo';
-  document.querySelectorAll('.theme-toggle-btn, #dark-mode-toggle').forEach(btn => {
-    btn.innerHTML = `<i class="fa-solid ${icon}"></i>`;
-  });
-  showToast(`Switched to ${state.theme === 'light' ? 'White / Light' : 'Dark'} mode`, 'success');
-};
-function toggleTheme() { window.toggleTheme(); }
 
 // Router
 function router() {
