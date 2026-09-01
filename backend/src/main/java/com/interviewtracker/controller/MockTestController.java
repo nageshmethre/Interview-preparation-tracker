@@ -41,4 +41,15 @@ public class MockTestController {
     public ResponseEntity<List<MockTest>> getLeaderboard() {
         return ResponseEntity.ok(mockTestService.getLeaderboard());
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<MockTest>> getAllMockTests() {
+        return ResponseEntity.ok(mockTestService.getAllMockTests());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteMockTest(@PathVariable Integer id) {
+        mockTestService.deleteMockTest(id);
+        return ResponseEntity.ok().build();
+    }
 }

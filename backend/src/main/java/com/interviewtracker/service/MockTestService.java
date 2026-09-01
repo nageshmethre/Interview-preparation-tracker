@@ -8,4 +8,6 @@ public interface MockTestService {
     MockTest submitMockTest(Integer testId, Integer score);
     List<MockTest> getUserMockTests(String email);
     List<MockTest> getLeaderboard();
+    List<MockTest> getAllMockTests();
+    void deleteMockTest(Integer testId);
 }

@@ -9,4 +9,6 @@ import java.util.List;
 public interface MockTestRepository extends JpaRepository<MockTest, Integer> {
     List<MockTest> findByUserIdOrderByCompletedAtDesc(Integer userId);
     List<MockTest> findTop10ByOrderByScoreDescCompletedAtAsc();
+    List<MockTest> findAllByOrderByScoreDescCompletedAtAsc();
+    List<MockTest> findAllByOrderByCompletedAtDesc();
 }

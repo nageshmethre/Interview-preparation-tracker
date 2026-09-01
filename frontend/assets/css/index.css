@@ -417,8 +417,8 @@ body {
 /* Interactive Readiness Score Gauge radial representation */
 .readiness-ring {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 90px;
+  height: 90px;
   margin: 0 auto;
 }
 
@@ -427,9 +427,9 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 1.8rem;
+  font-size: 1.35rem;
   font-weight: 800;
-  color: var(--accent-secondary);
+  color: #ffffff;
 }
 
 /* Pomodoro Timer Styling */
@@ -683,9 +683,9 @@ body {
   background: #0a0a0a;
   border: 1px solid #222222;
   border-radius: 8px;
-  padding: 20px 22px;
+  padding: 16px 18px;
   transition: var(--transition-smooth);
-  height: 100%;
+  height: auto;
   position: relative;
   overflow: hidden;
 }

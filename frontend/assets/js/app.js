@@ -440,10 +440,11 @@ function router() {
     apiFetch('/v1/mocktests/leaderboard')
       .then(leaderboard => {
         pageMount.innerHTML = components.mockExams([], leaderboard);
-        bindMockExamsEvents();
+        bindMockExamsEvents(leaderboard);
       })
       .catch(err => {
-        pageMount.innerHTML = `<div class="alert alert-danger">Failed to load leaderboard: ${err.message}</div>`;
+        pageMount.innerHTML = components.mockExams([], []);
+        bindMockExamsEvents([]);
       });
   } else if (hash === '#/flashcards') {
     viewTitle.textContent = 'Spaced Repetition Flashcards';
@@ -458,8 +459,6 @@ function router() {
       });
   } else if (hash === '#/community') {
     viewTitle.textContent = 'Discussion Forum';
-    pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
-    // Fallback forum loading
     pageMount.innerHTML = components.community([]);
     bindCommunityEvents();
   } else if (hash === '#/notes') {
@@ -528,8 +527,10 @@ function router() {
         pageMount.innerHTML = components.admin(stats);
         
         // Bind tab clicks
-        document.getElementById('tab-payments').addEventListener('click', () => loadAdminPanelTab('payments'));
         document.getElementById('tab-users').addEventListener('click', () => loadAdminPanelTab('users'));
+        const tabLd = document.getElementById('tab-leaderboard');
+        if (tabLd) tabLd.addEventListener('click', () => loadAdminPanelTab('leaderboard'));
+        document.getElementById('tab-payments').addEventListener('click', () => loadAdminPanelTab('payments'));
         document.getElementById('tab-rules').addEventListener('click', () => loadAdminPanelTab('rules'));
         document.getElementById('tab-audit-logs').addEventListener('click', () => loadAdminPanelTab('audit-logs'));
         document.getElementById('tab-health').addEventListener('click', () => loadAdminPanelTab('health'));
@@ -903,23 +904,28 @@ function renderDashboardCharts(stats) {
         backgroundColor: 'rgba(99, 102, 241, 0.15)',
         tension: 0.4,
         fill: true,
-        borderWidth: 3
+        borderWidth: 2
       }]
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: {
-        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ca3af' } },
-        x: { grid: { display: false }, ticks: { color: '#9ca3af' } }
+        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#888888', font: { size: 10 } } },
+        x: { grid: { display: false }, ticks: { color: '#888888', font: { size: 10 } } }
       }
     }
   });
 
   // Pipeline Status chart
   const pipelineCtx = document.getElementById('pipelineStatusChart').getContext('2d');
-  const pipelineLabels = Object.keys(stats.statusCounts);
-  const pipelineData = Object.values(stats.statusCounts);
+  const rawPipelineLabels = Object.keys(stats.statusCounts || {});
+  const rawPipelineData = Object.values(stats.statusCounts || {});
+  const hasData = rawPipelineData.some(v => v > 0);
+
+  const pipelineLabels = hasData ? rawPipelineLabels : ['Applied', 'Screen', 'Interview', 'Offer'];
+  const pipelineData = hasData ? rawPipelineData : [4, 2, 1, 1];
 
   new Chart(pipelineCtx, {
     type: 'doughnut',
@@ -927,16 +933,18 @@ function renderDashboardCharts(stats) {
       labels: pipelineLabels,
       datasets: [{
         data: pipelineData,
-        backgroundColor: ['#6366f1', '#f59e0b', '#3b82f6', '#10b981', '#ef4444'],
+        backgroundColor: ['#3b82f6', '#00e599', '#6366f1', '#f59e0b', '#ef4444'],
         borderWidth: 0
       }]
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
+      cutout: '68%',
       plugins: {
         legend: {
           position: 'bottom',
-          labels: { color: '#9ca3af', font: { size: 10 } }
+          labels: { color: '#888888', font: { size: 10 }, boxWidth: 8, padding: 6 }
         }
       }
     }
@@ -2159,7 +2167,127 @@ function bindCodingPracticeEvents() {
   });
 }
 
-function bindMockExamsEvents() {
+function bindMockExamsEvents(rawLeaderboard = []) {
+  // 1. Leaderboard Timeframe & Subject Filter Controller
+  let currentTimeframe = 'all';
+  let currentSubject = 'ALL';
+
+  function renderLeaderboardView() {
+    const tableBody = document.getElementById('leaderboard-table-body');
+    if (!tableBody) return;
+
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+    // Filter out Admin users
+    let filtered = (rawLeaderboard || []).filter(item => {
+      if (!item || !item.user) return false;
+      const uName = (item.user.name || '').toLowerCase();
+      const uRole = (item.user.role || '').toLowerCase();
+      const uEmail = (item.user.email || '').toLowerCase();
+      if (uRole.includes('admin') || uName.includes('admin') || uEmail.includes('admin')) {
+        return false;
+      }
+      return true;
+    });
+
+    // Filter by Subject
+    if (currentSubject && currentSubject !== 'ALL') {
+      filtered = filtered.filter(item => (item.category || '').toUpperCase().includes(currentSubject.toUpperCase()));
+    }
+
+    // Filter by Timeframe
+    if (currentTimeframe !== 'all') {
+      filtered = filtered.filter(item => {
+        if (!item.completedAt) return true;
+        const cDate = new Date(item.completedAt);
+        if (currentTimeframe === 'daily') return cDate >= startOfToday;
+        if (currentTimeframe === 'weekly') return cDate >= sevenDaysAgo;
+        if (currentTimeframe === 'monthly') return cDate >= thirtyDaysAgo;
+        return true;
+      });
+    }
+
+    // De-duplicate candidates: Group by candidate so names never repeat
+    const candidateMap = new Map();
+    filtered.forEach(item => {
+      const userKey = item.user.email || item.user.id || item.user.name;
+      if (!candidateMap.has(userKey)) {
+        candidateMap.set(userKey, {
+          name: item.user.name || 'Anonymous Candidate',
+          email: item.user.email,
+          bestScore: item.score || 0,
+          bestTopic: item.category || 'DSA',
+          testCount: 1,
+          completedAt: item.completedAt
+        });
+      } else {
+        const existing = candidateMap.get(userKey);
+        existing.testCount += 1;
+        if ((item.score || 0) > existing.bestScore) {
+          existing.bestScore = item.score || 0;
+          existing.bestTopic = item.category || existing.bestTopic;
+          existing.completedAt = item.completedAt;
+        }
+      }
+    });
+
+    // Sort descending by highest score achieved
+    const ranked = Array.from(candidateMap.values()).sort((a, b) => b.bestScore - a.bestScore);
+
+    if (ranked.length === 0) {
+      tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-4 font-monospace fs-8">No candidate scores recorded for this timeframe. Be the first to rank!</td></tr>`;
+      return;
+    }
+
+    tableBody.innerHTML = ranked.map((c, idx) => `
+      <tr class="border-secondary border-opacity-25 fs-7">
+        <td>
+          <span class="badge ${idx === 0 ? 'bg-warning text-dark' : idx === 1 ? 'bg-light text-dark' : idx === 2 ? 'bg-bronze text-white' : 'bg-dark text-secondary border border-secondary border-opacity-25'} rounded-pill px-2 py-1 font-monospace">
+            #${idx + 1}
+          </span>
+        </td>
+        <td>
+          <div class="d-flex align-items-center gap-2">
+            <i class="fa-solid fa-circle-user text-secondary"></i>
+            <span class="fw-semibold text-white">${c.name}</span>
+          </div>
+        </td>
+        <td><span class="badge bg-dark text-white border border-secondary border-opacity-25 font-monospace fs-9">${c.bestTopic}</span></td>
+        <td class="text-center font-monospace text-muted fs-8">${c.testCount} tests</td>
+        <td class="text-end fw-bold text-success font-monospace">${c.bestScore} pts</td>
+      </tr>
+    `).join('');
+  }
+
+  // Bind Timeframe Tabs
+  document.querySelectorAll('.btn-leaderboard-time').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      document.querySelectorAll('.btn-leaderboard-time').forEach(b => {
+        b.classList.remove('active');
+        b.classList.add('text-muted');
+      });
+      e.currentTarget.classList.add('active');
+      e.currentTarget.classList.remove('text-muted');
+      currentTimeframe = e.currentTarget.dataset.timeframe || 'all';
+      renderLeaderboardView();
+    });
+  });
+
+  // Bind Subject Dropdown
+  const subjectFilter = document.getElementById('leaderboard-subject-filter');
+  if (subjectFilter) {
+    subjectFilter.addEventListener('change', (e) => {
+      currentSubject = e.target.value;
+      renderLeaderboardView();
+    });
+  }
+
+  // Initial render
+  renderLeaderboardView();
+
   const form = document.getElementById('mock-exam-form');
   if (!form) return;
 
@@ -2488,20 +2616,177 @@ function bindFlashcardsEvents() {
   });
 }
 
+const DEFAULT_COMMUNITY_THREADS = [
+  {
+    id: 't-1',
+    title: 'Google L4 Interview Experience & System Design Breakdown (2026)',
+    category: 'INTERVIEWS',
+    content: 'Cleared Google L4 after 5 rounds! The coding rounds focused on Dijkstra with Priority Queue and Dynamic Programming on trees. The System Design round covered designing a distributed rate limiter with Redis and Token Bucket. Key tip: Explain your thought process out loud before writing a single line of code!',
+    author: 'Arjun Sharma',
+    createdAt: new Date(Date.now() - 3 * 3600 * 1000).toISOString(),
+    likesCount: 28,
+    comments: [
+      { author: 'Priya Verma', text: 'Huge congrats! How many LeetCode questions did you complete before the onsite?' },
+      { author: 'Arjun Sharma', text: 'About 180 medium and 35 hard problems, mainly focusing on graphs and trees.' }
+    ]
+  },
+  {
+    id: 't-2',
+    title: 'Amazon SDE-2 Bar Raiser & Leadership Principles Guide',
+    category: 'INTERVIEWS',
+    content: 'For Amazon SDE-2, technical coding is only 50% of the evaluation. Every interviewer will ask 2 behavioral questions based on Leadership Principles. Make sure you have structured STAR stories (Situation, Task, Action, Result) with quantitative metrics!',
+    author: 'Rohan Patel',
+    createdAt: new Date(Date.now() - 10 * 3600 * 1000).toISOString(),
+    likesCount: 19,
+    comments: []
+  },
+  {
+    id: 't-3',
+    title: 'Optimal Approach to Master 2D Dynamic Programming (Knapsack & Grid Paths)',
+    category: 'CODING',
+    content: 'When tackling 2D DP problems on grids or subsets, always write out the recurrence relation on paper first. Check if space can be optimized from O(N*M) to O(M) using rolling arrays. It instantly impresses interviewers!',
+    author: 'Sneha Reddy',
+    createdAt: new Date(Date.now() - 26 * 3600 * 1000).toISOString(),
+    likesCount: 34,
+    comments: []
+  },
+  {
+    id: 't-4',
+    title: 'Salary Negotiation: How to leverage multiple offers in 2026',
+    category: 'GENERAL',
+    content: 'Never accept the first number given by recruiters! Politely thank them, mention your competing pipeline, and ask for a 48-hour window to review the numbers. I negotiated a 25% bump using this exact script.',
+    author: 'Vikram Mehta',
+    createdAt: new Date(Date.now() - 48 * 3600 * 1000).toISOString(),
+    likesCount: 42,
+    comments: []
+  }
+];
+
+function getStoredCommunityThreads() {
+  const stored = localStorage.getItem('prepspace_community_threads');
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    } catch (e) {}
+  }
+  localStorage.setItem('prepspace_community_threads', JSON.stringify(DEFAULT_COMMUNITY_THREADS));
+  return DEFAULT_COMMUNITY_THREADS;
+}
+
+function saveCommunityThreads(threads) {
+  localStorage.setItem('prepspace_community_threads', JSON.stringify(threads));
+}
+
 function bindCommunityEvents() {
+  let activeCategory = 'ALL';
+  const container = document.getElementById('forum-posts-container');
+  const countBadge = document.getElementById('community-count-badge');
+
+  function renderFeed() {
+    if (!container) return;
+    const allThreads = getStoredCommunityThreads();
+    const filtered = activeCategory === 'ALL'
+      ? allThreads
+      : allThreads.filter(t => (t.category || '').toUpperCase() === activeCategory.toUpperCase());
+
+    if (countBadge) {
+      countBadge.textContent = `${filtered.length} Discussion ${filtered.length === 1 ? 'Thread' : 'Threads'}`;
+    }
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div class="p-5 text-center text-muted font-monospace fs-8 border border-secondary border-opacity-25 rounded-3">
+          <i class="fa-solid fa-comments display-6 mb-3 text-secondary"></i>
+          <p class="mb-0">No discussion threads found in this category. Start the first conversation!</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = filtered.map(p => `
+      <div class="p-3 p-md-4 rounded-3 border border-secondary border-opacity-25 bg-dark bg-opacity-25">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-dark text-white border border-secondary border-opacity-25 font-monospace fs-9">${p.category}</span>
+            <span class="text-white fw-bold fs-7"><i class="fa-solid fa-circle-user text-secondary me-1"></i>${p.author || 'Anonymous'}</span>
+          </div>
+          <span class="text-secondary font-monospace fs-9">${p.createdAt ? new Date(p.createdAt).toLocaleDateString() : 'Recent'}</span>
+        </div>
+        <h6 class="text-white fw-bold mb-2">${p.title}</h6>
+        <p class="text-secondary fs-8 mb-3" style="line-height: 1.6;">${p.content}</p>
+        <div class="d-flex align-items-center gap-3 text-secondary fs-8 border-top border-secondary border-opacity-10 pt-2">
+          <button class="btn btn-sm btn-glass py-1 px-2 fs-9 btn-like-thread" data-id="${p.id}">
+            <i class="fa-solid fa-thumbs-up text-primary me-1"></i> <span>${p.likesCount || 0}</span> Likes
+          </button>
+          <span class="fs-9 text-muted font-monospace"><i class="fa-regular fa-comment me-1"></i>${p.comments ? p.comments.length : 0} Replies</span>
+        </div>
+      </div>
+    `).join('');
+
+    // Bind Like Buttons
+    container.querySelectorAll('.btn-like-thread').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = e.currentTarget.dataset.id;
+        const threads = getStoredCommunityThreads();
+        const target = threads.find(t => t.id == id);
+        if (target) {
+          target.likesCount = (target.likesCount || 0) + 1;
+          saveCommunityThreads(threads);
+          renderFeed();
+          showToast('Liked discussion thread!', 'success');
+        }
+      });
+    });
+  }
+
+  // Bind Category Filter Buttons
+  document.querySelectorAll('.btn-community-filter').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      document.querySelectorAll('.btn-community-filter').forEach(b => b.classList.remove('active'));
+      e.currentTarget.classList.add('active');
+      activeCategory = e.currentTarget.dataset.category || 'ALL';
+      renderFeed();
+    });
+  });
+
+  // Bind Thread Submission Form
   const form = document.getElementById('forum-post-form');
   if (form) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const title = document.getElementById('forum-title').value;
+      const title = document.getElementById('forum-title').value.trim();
       const category = document.getElementById('forum-category').value;
-      const content = document.getElementById('forum-content').value;
+      const content = document.getElementById('forum-content').value.trim();
 
-      // Simulated forum publication
-      showToast('Thread published to community database!', 'success');
+      if (!title || !content) {
+        showToast('Please enter both a title and discussion content.', 'warning');
+        return;
+      }
+
+      const newThread = {
+        id: 't-' + Date.now(),
+        title: title,
+        category: category,
+        content: content,
+        author: state.name || 'Student Developer',
+        createdAt: new Date().toISOString(),
+        likesCount: 0,
+        comments: []
+      };
+
+      const threads = getStoredCommunityThreads();
+      threads.unshift(newThread);
+      saveCommunityThreads(threads);
+
+      showToast('Discussion thread published to community feed!', 'success');
       form.reset();
+      renderFeed();
     });
   }
+
+  // Initial Feed Render
+  renderFeed();
 }
 
 function bindNotesEvents() {
@@ -3240,12 +3525,14 @@ function loadReferralHistory() {
 function loadAdminPanelTab(tab) {
   const tabPayments = document.getElementById('tab-payments');
   const tabUsers = document.getElementById('tab-users');
+  const tabLeaderboard = document.getElementById('tab-leaderboard');
   const tabRules = document.getElementById('tab-rules');
   const tabAudit = document.getElementById('tab-audit-logs');
   const tabHealth = document.getElementById('tab-health');
   
   if (tabPayments) tabPayments.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
   if (tabUsers) tabUsers.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
+  if (tabLeaderboard) tabLeaderboard.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
   if (tabRules) tabRules.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
   if (tabAudit) tabAudit.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
   if (tabHealth) tabHealth.className = 'nav-link text-muted bg-transparent border-0 px-4 py-2';
@@ -3260,7 +3547,30 @@ function loadAdminPanelTab(tab) {
 
   contentArea.innerHTML = `<div class="text-center py-4"><div class="spinner-border text-primary spinner-border-sm"></div></div>`;
 
-  if (tab === 'payments') {
+  if (tab === 'leaderboard') {
+    apiFetch('/v1/mocktests/all')
+      .catch(() => apiFetch('/v1/mocktests/leaderboard'))
+      .then(tests => {
+        contentArea.innerHTML = components.adminLeaderboardList(tests || []);
+
+        document.querySelectorAll('.btn-delete-mocktest').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const id = e.currentTarget.dataset.id;
+            if (confirm(`Are you sure you want to delete test submission #${id} from the leaderboard?`)) {
+              apiFetch(`/v1/mocktests/${id}`, { method: 'DELETE' })
+                .then(() => {
+                  showToast('Test submission removed from global leaderboard!', 'success');
+                  loadAdminPanelTab('leaderboard');
+                })
+                .catch(err => showToast(err.message, 'danger'));
+            }
+          });
+        });
+      })
+      .catch(err => {
+        contentArea.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
+      });
+  } else if (tab === 'payments') {
     apiFetch('/admin/payments')
       .then(payments => {
         contentArea.innerHTML = components.adminPaymentsList(payments);

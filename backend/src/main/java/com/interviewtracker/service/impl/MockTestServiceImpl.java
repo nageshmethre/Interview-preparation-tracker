@@ -110,6 +110,17 @@ public class MockTestServiceImpl implements MockTestService {
 
     @Override
     public List<MockTest> getLeaderboard() {
-        return mockTestRepository.findTop10ByOrderByScoreDescCompletedAtAsc();
+        return mockTestRepository.findAllByOrderByScoreDescCompletedAtAsc();
+    }
+
+    @Override
+    public List<MockTest> getAllMockTests() {
+        return mockTestRepository.findAllByOrderByCompletedAtDesc();
+    }
+
+    @Override
+    @Transactional
+    public void deleteMockTest(Integer testId) {
+        mockTestRepository.deleteById(testId);
     }
 }

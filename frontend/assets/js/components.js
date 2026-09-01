@@ -714,30 +714,32 @@ const components = {
     </div>
 
     <!-- Analytics & Gamification Row -->
-    <div class="row g-4">
+    <div class="row g-3">
       <!-- Left Analytics Column -->
       <div class="col-lg-8">
-        <div class="bento-card p-4 mb-4">
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <h5 class="text-white fw-bold m-0"><i class="fa-solid fa-chart-area text-primary me-2"></i>Weekly Preparation Velocity</h5>
-            <span class="badge bg-indigo-subtle text-primary border border-primary-subtle px-2 py-1 fs-8">HOURS LOGGED</span>
+        <div class="bento-card p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="text-white fw-bold m-0"><i class="fa-solid fa-chart-area text-primary me-2"></i>Weekly Preparation Velocity</h6>
+            <span class="badge bg-dark text-white border border-secondary border-opacity-25 px-2 py-1 fs-9 font-monospace">HOURS LOGGED</span>
           </div>
-          <canvas id="weeklyHoursChart" height="200"></canvas>
+          <div style="position: relative; height: 175px;">
+            <canvas id="weeklyHoursChart"></canvas>
+          </div>
         </div>
         
-        <div class="row g-4">
+        <div class="row g-3">
           <!-- Streak & XP Bento -->
           <div class="col-md-6">
-            <div class="bento-card p-4">
-              <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-trophy text-warning me-2"></i>Gamification & Streaks</h5>
-              <div class="d-flex align-items-center justify-content-around py-3">
+            <div class="bento-card p-3">
+              <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-trophy text-warning me-2"></i>Gamification & Streaks</h6>
+              <div class="d-flex align-items-center justify-content-around py-2">
                 <div class="text-center">
-                  <div class="streak-badge fs-5 mb-2"><i class="fa-solid fa-fire me-1 text-warning"></i> ${stats.streak} Days</div>
-                  <span class="text-muted fs-8">Daily Problem Streak</span>
+                  <div class="streak-badge fs-5 fw-bold text-white mb-1"><i class="fa-solid fa-fire me-1 text-warning"></i> ${stats.streak} Days</div>
+                  <span class="text-secondary fs-9 font-monospace">Daily Problem Streak</span>
                 </div>
                 <div class="text-center">
-                  <div class="xp-badge fs-5 mb-2"><i class="fa-solid fa-gem me-1 text-primary"></i> ${stats.xpPoints} XP</div>
-                  <span class="text-muted fs-8">Total Platform Points</span>
+                  <div class="xp-badge fs-5 fw-bold text-white mb-1"><i class="fa-solid fa-gem me-1 text-primary"></i> ${stats.xpPoints} XP</div>
+                  <span class="text-secondary fs-9 font-monospace">Total Platform Points</span>
                 </div>
               </div>
             </div>
@@ -745,20 +747,20 @@ const components = {
 
           <!-- Platform Solves Bento -->
           <div class="col-md-6">
-            <div class="bento-card p-4">
-              <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-code text-cyan me-2"></i>External Platform Solves</h5>
+            <div class="bento-card p-3">
+              <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-code text-cyan me-2"></i>External Platform Solves</h6>
               <ul class="list-group list-group-flush bg-transparent">
-                <li class="list-group-item bg-transparent text-white border-secondary border-opacity-25 d-flex justify-content-between align-items-center px-0">
-                  <span><i class="fa-solid fa-circle-nodes text-warning me-2"></i>LeetCode</span>
-                  <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle rounded-pill">${stats.codingPlatformsSolved.LeetCode || 0} Solved</span>
+                <li class="list-group-item bg-transparent text-white border-secondary border-opacity-25 d-flex justify-content-between align-items-center px-0 py-1">
+                  <span class="fs-8"><i class="fa-solid fa-circle-nodes text-warning me-2"></i>LeetCode</span>
+                  <span class="badge bg-dark text-white border border-secondary border-opacity-25 rounded-pill fs-9">${stats.codingPlatformsSolved.LeetCode || 0} Solved</span>
                 </li>
-                <li class="list-group-item bg-transparent text-white border-secondary border-opacity-25 d-flex justify-content-between align-items-center px-0">
-                  <span><i class="fa-solid fa-code text-primary me-2"></i>CodeChef</span>
-                  <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle rounded-pill">${stats.codingPlatformsSolved.CodeChef || 0} Solved</span>
+                <li class="list-group-item bg-transparent text-white border-secondary border-opacity-25 d-flex justify-content-between align-items-center px-0 py-1">
+                  <span class="fs-8"><i class="fa-solid fa-code text-primary me-2"></i>CodeChef</span>
+                  <span class="badge bg-dark text-white border border-secondary border-opacity-25 rounded-pill fs-9">${stats.codingPlatformsSolved.CodeChef || 0} Solved</span>
                 </li>
-                <li class="list-group-item bg-transparent text-white border-0 d-flex justify-content-between align-items-center px-0">
-                  <span><i class="fa-solid fa-terminal text-info me-2"></i>Codeforces</span>
-                  <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle rounded-pill">${stats.codingPlatformsSolved.Codeforces || 0} Solved</span>
+                <li class="list-group-item bg-transparent text-white border-0 d-flex justify-content-between align-items-center px-0 py-1">
+                  <span class="fs-8"><i class="fa-solid fa-terminal text-info me-2"></i>Codeforces</span>
+                  <span class="badge bg-dark text-white border border-secondary border-opacity-25 rounded-pill fs-9">${stats.codingPlatformsSolved.Codeforces || 0} Solved</span>
                 </li>
               </ul>
             </div>
@@ -769,22 +771,24 @@ const components = {
       <!-- Right Telemetry Widgets Column -->
       <div class="col-lg-4">
         <!-- Readiness Ring Card -->
-        <div class="bento-card p-4 text-center mb-4">
-          <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-circle-notch text-secondary me-2"></i>Interview Readiness Score</h5>
-          <div class="readiness-ring mb-3">
-            <div class="readiness-value fw-extrabold gradient-text-stripe">${stats.readinessScore}%</div>
+        <div class="bento-card p-3 text-center mb-3">
+          <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-circle-notch text-secondary me-2"></i>Interview Readiness Score</h6>
+          <div class="readiness-ring my-2" style="width: 88px; height: 88px; margin: 0 auto; position: relative;">
+            <div class="readiness-value fw-extrabold text-white fs-4" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">${stats.readinessScore}%</div>
             <svg class="w-100 h-100" viewBox="0 0 36 36">
-              <path class="circle-bg" stroke="rgba(255,255,255,0.06)" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              <path class="circle" stroke="url(#primaryBeam)" stroke-width="3.5" stroke-dasharray="${stats.readinessScore}, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <path class="circle-bg" stroke="rgba(255,255,255,0.08)" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <path class="circle" stroke="#ffffff" stroke-width="3.5" stroke-dasharray="${stats.readinessScore}, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
             </svg>
           </div>
-          <p class="text-muted fs-8 mb-0">Calculated from your completed topics, problem solving consistency, and 50-MCQ mock examination grades.</p>
+          <p class="text-secondary fs-9 font-monospace mb-0">Based on solved DSA problems, consistency & mock grades.</p>
         </div>
 
         <!-- Pipeline Funnel Card -->
-        <div class="bento-card p-4">
-          <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-filter text-success me-2"></i>Recruitment Pipeline</h5>
-          <canvas id="pipelineStatusChart" height="220"></canvas>
+        <div class="bento-card p-3">
+          <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-filter text-success me-2"></i>Recruitment Pipeline</h6>
+          <div style="position: relative; height: 145px;">
+            <canvas id="pipelineStatusChart"></canvas>
+          </div>
         </div>
       </div>
     </div>
@@ -1883,121 +1887,6 @@ const components = {
     </div>
   `,
 
-
-  // Admin Dashboard View
-  admin: () => `
-    <div class="row g-4">
-      <!-- Users list -->
-      <div class="col-lg-7">
-        <div class="glass-panel p-4">
-          <h5 class="text-white fw-bold mb-4"><i class="fa-solid fa-users text-primary me-2"></i>Users Database</h5>
-          <div class="table-responsive">
-            <table class="table table-dark table-hover align-middle m-0">
-              <thead>
-                <tr class="text-muted border-secondary-subtle">
-                  <th scope="col">Name</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">Role</th>
-                  <th scope="col" class="text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody id="admin-users-container">
-                <!-- User rows injected dynamically -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Add Questions -->
-      <div class="col-lg-5">
-        <div class="glass-panel p-4">
-          <h5 class="text-white fw-bold mb-4"><i class="fa-solid fa-plus text-success me-2"></i>Add Official Question</h5>
-          <form id="admin-question-form">
-            <div class="mb-3">
-              <label class="form-label text-muted fs-7">QUESTION TITLE</label>
-              <input type="text" id="admin-q-title" class="form-control glass-input" placeholder="e.g. Reverse a String" required>
-            </div>
-            <div class="row mb-3">
-              <div class="col-6">
-                <label class="form-label text-muted fs-7">COMPANY</label>
-                <input type="text" id="admin-q-company" class="form-control glass-input" placeholder="e.g. Netflix" required>
-              </div>
-              <div class="col-6">
-                <label class="form-label text-muted fs-7">TOPIC CATEGORY</label>
-                <input type="text" id="admin-q-category" class="form-control glass-input" placeholder="e.g. Recursion" required>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label text-muted fs-7">DIFFICULTY</label>
-              <select id="admin-q-difficulty" class="form-select glass-input">
-                <option value="EASY">EASY</option>
-                <option value="MEDIUM">MEDIUM</option>
-                <option value="HARD">HARD</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label class="form-label text-muted fs-7">QUESTION DESCRIPTION</label>
-              <textarea id="admin-q-desc" class="form-control glass-input" rows="3" placeholder="Write question details..." required></textarea>
-            </div>
-            <div class="mb-3">
-              <label class="form-label text-muted fs-7">ANSWER GUIDELINES / OPTIMAL SOLUTION</label>
-              <textarea id="admin-q-answer" class="form-control glass-input" rows="3" placeholder="Write answers or pseudocodes..." required></textarea>
-            </div>
-            <div class="mb-4">
-              <label class="form-label text-muted fs-7">TAGS (Comma separated)</label>
-              <input type="text" id="admin-q-tags" class="form-control glass-input" placeholder="String,Algorithms">
-            </div>
-            <button type="submit" class="btn btn-premium w-100">Publish Question</button>
-          </form>
-        </div>
-
-        <div class="glass-panel p-4 mt-4">
-          <h5 class="text-white fw-bold mb-4"><i class="fa-solid fa-graduation-cap text-indigo me-2"></i>Add Course by Link</h5>
-          <form id="admin-course-form">
-            <div class="mb-3">
-              <label class="form-label text-muted fs-7">COURSE TITLE</label>
-              <input type="text" id="admin-c-title" class="form-control glass-input" placeholder="e.g. Master System Design" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label text-muted fs-7">COURSE / PLAYLIST LINK</label>
-              <input type="url" id="admin-c-link" class="form-control glass-input" placeholder="https://youtube.com/... or playlist URL" required>
-            </div>
-            <div class="row mb-3">
-              <div class="col-6">
-                <label class="form-label text-muted fs-7">INSTRUCTOR</label>
-                <input type="text" id="admin-c-instructor" class="form-control glass-input" placeholder="e.g. John Doe" required>
-              </div>
-              <div class="col-6">
-                <label class="form-label text-muted fs-7">DURATION</label>
-                <input type="text" id="admin-c-duration" class="form-control glass-input" placeholder="e.g. 5h 45m" required>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-6">
-                <label class="form-label text-muted fs-7">DIFFICULTY</label>
-                <select id="admin-c-difficulty" class="form-select glass-input">
-                  <option value="BEGINNER">BEGINNER</option>
-                  <option value="INTERMEDIATE">INTERMEDIATE</option>
-                  <option value="ADVANCED">ADVANCED</option>
-                </select>
-              </div>
-              <div class="col-6">
-                <label class="form-label text-muted fs-7">THUMBNAIL URL (OPTIONAL)</label>
-                <input type="text" id="admin-c-thumbnail" class="form-control glass-input" placeholder="https://...">
-              </div>
-            </div>
-            <div class="mb-4">
-              <label class="form-label text-muted fs-7">DESCRIPTION</label>
-              <textarea id="admin-c-desc" class="form-control glass-input" rows="3" placeholder="Briefly describe the course content..." required></textarea>
-            </div>
-            <button type="submit" class="btn btn-premium w-100">Publish Course</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  `,
-
   // 1. Learning Platform (LMS)
   courses: (list) => {
     return `
@@ -2366,31 +2255,54 @@ const components = {
       <!-- Leaderboard & Past attempts -->
       <div class="col-lg-8">
         <div class="glass-panel p-4 mb-4">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="text-white fw-bold mb-0"><i class="fa-solid fa-trophy text-warning me-2"></i>Global Assessment Leaderboard</h5>
-            <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-8">Live Ranks</span>
+          <!-- Header & Controls -->
+          <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+            <div>
+              <h5 class="text-white fw-bold mb-0"><i class="fa-solid fa-trophy text-warning me-2"></i>Global Assessment Leaderboard</h5>
+              <small class="text-muted fs-9">Unique top candidates ranked by performance</small>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <select id="leaderboard-subject-filter" class="form-select form-select-sm glass-input py-1 px-2 fs-8" style="width: auto;">
+                <option value="ALL">All Subjects</option>
+                <option value="DSA">DSA</option>
+                <option value="Java">Java</option>
+                <option value="SQL">SQL</option>
+                <option value="OS">OS</option>
+                <option value="CN">CN</option>
+                <option value="Python">Python</option>
+              </select>
+            </div>
           </div>
+
+          <!-- Timeframe Tabs -->
+          <ul class="nav nav-pills nav-fill bg-dark bg-opacity-50 p-1 rounded-3 mb-3 border border-secondary border-opacity-25" id="leaderboard-time-tabs">
+            <li class="nav-item">
+              <button class="nav-link active py-1 fs-8 btn-leaderboard-time" data-timeframe="all">All-Time</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link py-1 fs-8 text-muted btn-leaderboard-time" data-timeframe="daily">Today</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link py-1 fs-8 text-muted btn-leaderboard-time" data-timeframe="weekly">This Week</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link py-1 fs-8 text-muted btn-leaderboard-time" data-timeframe="monthly">This Month</button>
+            </li>
+          </ul>
+
           <div class="table-responsive">
-            <table class="table table-dark table-hover align-middle m-0">
+            <table class="table table-dark table-hover align-middle m-0" id="leaderboard-table">
               <thead>
                 <tr class="text-muted border-secondary-subtle fs-8">
-                  <th scope="col">Rank</th>
+                  <th scope="col" style="width: 70px;">Rank</th>
                   <th scope="col">Candidate</th>
-                  <th scope="col">Topic</th>
-                  <th scope="col" class="text-end">Score</th>
+                  <th scope="col">Best Topic</th>
+                  <th scope="col" class="text-center">Tests Taken</th>
+                  <th scope="col" class="text-end">Top Score</th>
                 </tr>
               </thead>
-              <tbody>
-                ${leaderboard && leaderboard.length > 0 ? leaderboard.map((l, idx) => `
-                  <tr class="border-secondary-subtle fs-7">
-                    <td><span class="badge ${idx === 0 ? 'bg-warning text-dark' : idx === 1 ? 'bg-light text-dark' : idx === 2 ? 'bg-bronze text-white' : 'bg-secondary'} rounded-circle px-2 py-1">${idx + 1}</span></td>
-                    <td class="fw-semibold text-white">${l.user ? l.user.name : 'Anonymous Candidate'}</td>
-                    <td><span class="badge bg-dark border border-secondary text-primary-subtle">${l.category}</span></td>
-                    <td class="text-end fw-bold text-success">${l.score} pts</td>
-                  </tr>
-                `).join('') : `
-                  <tr><td colspan="4" class="text-center text-muted py-4">No examination scores logged yet. Be the first to take the test!</td></tr>
-                `}
+              <tbody id="leaderboard-table-body">
+                <!-- Populated dynamically and de-duplicated by app.js -->
               </tbody>
             </table>
           </div>
@@ -2591,14 +2503,18 @@ const components = {
     <div class="row g-4">
       <div class="col-lg-4">
         <div class="glass-panel p-4">
-          <h5 class="text-white fw-bold mb-4">Start Discussion Thread</h5>
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fa-solid fa-comments text-primary fs-4"></i>
+            <h5 class="text-white fw-bold mb-0">Start Discussion Thread</h5>
+          </div>
+          <p class="text-muted fs-8 mb-4">Share interview experiences, ask technical questions, and discuss compensation with peers.</p>
           <form id="forum-post-form">
             <div class="mb-3">
-              <label class="form-label text-muted fs-7">TOPIC TITLE</label>
+              <label class="form-label text-muted fs-7 fw-semibold">TOPIC TITLE</label>
               <input type="text" id="forum-title" class="form-control glass-input" placeholder="e.g. My Meta E5 Interview Experience" required>
             </div>
             <div class="mb-3">
-              <label class="form-label text-muted fs-7">FORUM CATEGORY</label>
+              <label class="form-label text-muted fs-7 fw-semibold">FORUM CATEGORY</label>
               <select id="forum-category" class="form-select glass-input">
                 <option value="GENERAL">General Discussions</option>
                 <option value="INTERVIEWS">Interview Experiences</option>
@@ -2607,30 +2523,31 @@ const components = {
               </select>
             </div>
             <div class="mb-4">
-              <label class="form-label text-muted fs-7">CONTENT BODY</label>
+              <label class="form-label text-muted fs-7 fw-semibold">CONTENT BODY</label>
               <textarea id="forum-content" class="form-control glass-input" rows="4" placeholder="Write discussion details..." required></textarea>
             </div>
-            <button type="submit" class="btn btn-premium w-100 py-3">Publish Thread</button>
+            <button type="submit" class="btn btn-premium w-100 py-3 fw-bold"><i class="fa-solid fa-paper-plane me-2"></i>Publish Thread</button>
           </form>
         </div>
       </div>
       <!-- Threads List -->
       <div class="col-lg-8">
-        <div class="glass-panel p-4 d-flex flex-column gap-3 overflow-y-auto" style="max-height: 80vh;" id="forum-posts-container">
-          ${posts.map(p => `
-            <div class="p-4 rounded border border-secondary">
-              <div class="d-flex align-items-center justify-content-between mb-2">
-                <span class="badge bg-indigo-subtle text-primary fs-8">${p.category}</span>
-                <span class="text-muted fs-8">${p.createdAt.substring(0, 10)}</span>
-              </div>
-              <h5 class="text-white fw-bold mb-2">${p.title}</h5>
-              <p class="text-muted fs-7 mb-3">${p.content}</p>
-              <div class="d-flex align-items-center gap-3 text-muted fs-8">
-                <span><i class="fa-regular fa-thumbs-up me-1"></i>${p.likesCount} Likes</span>
-                <span><i class="fa-regular fa-comment me-1"></i>${p.comments ? p.comments.length : 0} Replies</span>
-              </div>
+        <div class="glass-panel p-4 d-flex flex-column gap-3">
+          <!-- Feed Controls -->
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pb-3 border-bottom border-secondary border-opacity-25">
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn btn-sm btn-glass btn-community-filter active" data-category="ALL">All Topics</button>
+              <button class="btn btn-sm btn-glass btn-community-filter" data-category="INTERVIEWS">Interviews</button>
+              <button class="btn btn-sm btn-glass btn-community-filter" data-category="CODING">Coding</button>
+              <button class="btn btn-sm btn-glass btn-community-filter" data-category="GENERAL">General</button>
             </div>
-          `).join('')}
+            <span class="text-muted fs-8" id="community-count-badge">Live Community Feed</span>
+          </div>
+
+          <!-- Dynamic Threads Container -->
+          <div class="d-flex flex-column gap-3 overflow-y-auto" style="max-height: 70vh;" id="forum-posts-container">
+            <!-- Rendered by app.js -->
+          </div>
         </div>
       </div>
     </div>
@@ -3297,6 +3214,52 @@ const components = {
     `;
   },
 
+  adminLeaderboardList: (tests) => `
+    <div class="glass-panel p-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+        <div>
+          <h5 class="text-white fw-bold mb-0"><i class="fa-solid fa-trophy text-warning me-2"></i>Global Assessment Submissions Moderation</h5>
+          <small class="text-muted fs-8">Admins can remove test submissions, spam entries, or reset corrupted scores.</small>
+        </div>
+        <span class="badge bg-dark text-white border border-secondary border-opacity-25 px-3 py-2 font-monospace">${tests.length} Total Submissions</span>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-dark table-hover fs-7 align-middle mb-0">
+          <thead>
+            <tr class="text-muted border-secondary">
+              <th>ID</th>
+              <th>Candidate Name</th>
+              <th>Candidate Email</th>
+              <th>Subject / Category</th>
+              <th>Score</th>
+              <th>Date Completed</th>
+              <th class="text-end">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${tests.length === 0 ? '<tr><td colspan="7" class="text-center text-muted py-4 font-monospace">No assessment test records found.</td></tr>' : 
+              tests.map(t => `
+                <tr class="border-secondary">
+                  <td class="font-monospace text-muted">#${t.id}</td>
+                  <td class="fw-bold text-white">${t.user ? t.user.name : '<span class="text-muted">Anonymous</span>'}</td>
+                  <td class="text-secondary font-monospace fs-8">${t.user ? t.user.email : 'N/A'}</td>
+                  <td><span class="badge bg-dark text-white border border-secondary border-opacity-25 font-monospace">${t.category}</span></td>
+                  <td class="fw-bold text-success font-monospace">${t.score} pts</td>
+                  <td class="text-muted fs-8">${t.completedAt ? new Date(t.completedAt).toLocaleString() : 'N/A'}</td>
+                  <td class="text-end">
+                    <button class="btn btn-outline-danger btn-sm px-2 py-1 btn-delete-mocktest" data-id="${t.id}" title="Remove entry from leaderboard">
+                      <i class="fa-solid fa-trash-can me-1"></i> Remove
+                    </button>
+                  </td>
+                </tr>
+              `).join('')
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `,
+
   admin: (stats) => `
     <div class="container-fluid py-4">
       <div class="border-bottom border-secondary border-opacity-10 pb-4 mb-4 d-flex justify-content-between align-items-center">
@@ -3338,6 +3301,9 @@ const components = {
       <ul class="nav nav-tabs border-secondary border-opacity-25 mb-4">
         <li class="nav-item">
           <button class="nav-link active text-white bg-transparent border-0 border-bottom border-primary border-2 px-4 py-2" id="tab-users">Users</button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link text-muted bg-transparent border-0 px-4 py-2" id="tab-leaderboard"><i class="fa-solid fa-trophy text-warning me-1"></i> Leaderboard</button>
         </li>
         <li class="nav-item">
           <button class="nav-link text-muted bg-transparent border-0 px-4 py-2" id="tab-payments">Payment Logs</button>
