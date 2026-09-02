@@ -441,19 +441,22 @@ public class PaymentController {
             userRepository.save(user);
 
             // Trigger referral reward
-            if (user.getReferredBy() != null) {
+            if (user.getReferredById() != null) {
                 try {
-                    double rewardAmt = 30.0;
-                    Optional<com.interviewtracker.entity.SystemSetting> rewardSetting = systemSettingRepository.findById("REFERRAL_REWARD_INR");
-                    if (rewardSetting.isPresent()) {
-                        rewardAmt = Double.parseDouble(rewardSetting.get().getValue());
-                    }
-                    ReferralReward reward = ReferralReward.builder()
-                            .referrer(user.getReferredBy())
-                            .referee(user)
-                            .rewardAmount(rewardAmt)
-                            .build();
-                    referralRewardRepository.save(reward);
+                    userRepository.findById(user.getReferredById()).ifPresent(referrer -> {
+                        double rewardAmt = 30.0;
+                        Optional<com.interviewtracker.entity.SystemSetting> rewardSetting = systemSettingRepository.findById("REFERRAL_REWARD_INR");
+                        if (rewardSetting.isPresent()) {
+                            rewardAmt = Double.parseDouble(rewardSetting.get().getValue());
+                        }
+                        ReferralReward reward = ReferralReward.builder()
+                                .referrer(referrer)
+                                .referred(user)
+                                .payment(payment)
+                                .amount(rewardAmt)
+                                .build();
+                        referralRewardRepository.save(reward);
+                    });
                 } catch (Exception ex) {
                     logger.warn("Referral reward assignment notice", ex);
                 }
