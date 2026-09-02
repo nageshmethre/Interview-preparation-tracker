@@ -49,16 +49,12 @@ jobs:
       run: |
         cd frontend/android
         chmod +x gradlew
-        ./gradlew assemble --no-daemon --stacktrace
-        echo "=== LOCATING GENERATED APK FILES ==="
-        find . -name "*.apk" -ls || true
-        find app/build -name "*.apk" -ls || true
-
-    - name: Prepare APK for Release
-      run: |
-        mkdir -p release-assets
-        find frontend/android -name "*.apk" -exec cp {} release-assets/PrepSpace.apk \;
-        ls -la release-assets/
+        ./gradlew :app:assembleDebug --no-daemon -x test
+        echo "=== APP BUILD CONTENTS ==="
+        find app -name "*.apk" -ls || true
+        mkdir -p ../../release-assets
+        find . -name "*.apk" -exec cp {} ../../release-assets/PrepSpace.apk \;
+        ls -la ../../release-assets/ || true
 
     - name: Upload Debug APK Artifact
       uses: actions/upload-artifact@v4
