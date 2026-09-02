@@ -41,7 +41,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/index.html", "/favicon.ico", "/assets/**", "/static/**").permitAll()
                 .requestMatchers("/api/auth/**", "/api/v1/auth/**").permitAll()
-                .requestMatchers("/api/payments/webhook").permitAll()
+                .requestMatchers("/api/payments/webhook", "/api/payments/cashfree/webhook").permitAll()
                 .requestMatchers("/api/v1/certificates/verify/**").permitAll()
                 .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "ADMIN_SUPER", "ADMIN_FINANCE", "ADMIN_SUPPORT", "ADMIN_CONTENT", "ADMIN_MARKETING")
                 .anyRequest().authenticated()

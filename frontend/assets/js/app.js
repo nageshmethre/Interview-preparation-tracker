@@ -34,9 +34,39 @@ function getReferralCodeFromUrl() {
   return ref || localStorage.getItem('referral_code') || '';
 }
 
+function checkCashfreeRedirectReturn() {
+  const hash = window.location.hash || '';
+  const search = window.location.search || '';
+  let cfOrderId = null;
+
+  if (hash.includes('cf_order_id=')) {
+    const parts = hash.split('?');
+    if (parts.length > 1) {
+      cfOrderId = new URLSearchParams(parts[1]).get('cf_order_id');
+    }
+  } else if (search.includes('cf_order_id=')) {
+    cfOrderId = new URLSearchParams(search).get('cf_order_id');
+  }
+
+  if (cfOrderId && state.token && !state.isPaid) {
+    apiFetch('/payments/cashfree/verify', {
+      method: 'POST',
+      body: JSON.stringify({ order_id: cfOrderId })
+    }).then(res => {
+      if (res.status === 'SUCCESS') {
+        showToast('Payment verified! Welcome to PrepSpace Pro.', 'success');
+        state.isPaid = true;
+        localStorage.setItem('isPaid', 'true');
+        fetchUserProfile();
+      }
+    }).catch(() => {});
+  }
+}
+
 // Application Init
 document.addEventListener('DOMContentLoaded', () => {
   getReferralCodeFromUrl();
+  checkCashfreeRedirectReturn();
   initTheme();
   window.addEventListener('hashchange', router);
   router();
@@ -3373,62 +3403,112 @@ function bindBillingEvents() {
   if (!upgradeBtn) return;
   upgradeBtn.addEventListener('click', () => {
     upgradeBtn.disabled = true;
-    upgradeBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Processing...`;
-    
-    apiFetch('/payments/order', { method: 'POST' })
-      .then(orderData => {
-        loadRazorpayScript().then(loaded => {
-          if (!loaded) {
-            showToast('Failed to load Razorpay SDK. Are you offline?', 'danger');
-            upgradeBtn.disabled = false;
-            upgradeBtn.textContent = 'Buy PrepPro Access';
-            return;
-          }
-          
-          const options = {
-            key: orderData.keyId,
-            amount: orderData.amount,
-            currency: orderData.currency,
-            name: 'PrepSpace Premium',
-            description: 'Upgrade your workspace to PrepSpace PrepPro lifetime access',
-            order_id: orderData.orderId,
-            handler: function (response) {
-              apiFetch('/payments/verify', {
+    upgradeBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Securing Checkout...`;
+
+    // Primary: Cashfree Payment Gateway
+    apiFetch('/payments/cashfree/order', { method: 'POST' })
+      .then(cfData => {
+        if (typeof window.Cashfree === 'function' && cfData.paymentSessionId) {
+          const cashfree = window.Cashfree({ mode: cfData.environment || "production" });
+          cashfree.checkout({
+            paymentSessionId: cfData.paymentSessionId,
+            redirectTarget: "_modal"
+          }).then((result) => {
+            if (result.error) {
+              showToast(result.error.message || 'Payment window closed.', 'warning');
+              upgradeBtn.disabled = false;
+              upgradeBtn.textContent = 'Buy PrepPro Access';
+              return;
+            }
+            if (result.paymentDetails) {
+              apiFetch('/payments/cashfree/verify', {
                 method: 'POST',
-                body: JSON.stringify({
-                  razorpay_order_id: response.razorpay_order_id,
-                  razorpay_payment_id: response.razorpay_payment_id,
-                  razorpay_signature: response.razorpay_signature
-                })
+                body: JSON.stringify({ order_id: cfData.orderId })
               }).then(verifyRes => {
                 if (verifyRes.status === 'SUCCESS') {
                   showToast('Payment verified! Welcome to PrepSpace Pro.', 'success');
-                  fetchUserProfile().then(() => {
-                    redirectTo('#/referral');
-                  });
+                  state.isPaid = true;
+                  localStorage.setItem('isPaid', 'true');
+                  fetchUserProfile().then(() => redirectTo('#/referral'));
+                } else {
+                  showToast('Payment verification pending. Please refresh.', 'warning');
+                  upgradeBtn.disabled = false;
+                  upgradeBtn.textContent = 'Buy PrepPro Access';
                 }
               }).catch(err => {
-                showToast('Payment verification failed: ' + err.message, 'danger');
+                showToast(err.message, 'danger');
                 upgradeBtn.disabled = false;
                 upgradeBtn.textContent = 'Buy PrepPro Access';
               });
-            },
-            prefill: {
-              name: state.name || '',
-              email: state.email || ''
-            },
-            theme: { color: '#6366f1' }
-          };
-          
-          const rzp = new window.Razorpay(options);
-          rzp.open();
-        });
+            }
+          });
+        } else {
+          fallbackRazorpay();
+        }
       })
-      .catch(err => {
-        showToast(err.message, 'danger');
-        upgradeBtn.disabled = false;
-        upgradeBtn.textContent = 'Buy PrepPro Access';
+      .catch(cfErr => {
+        console.warn('Cashfree initiation notice, switching to secondary gateway:', cfErr);
+        fallbackRazorpay();
       });
+
+    function fallbackRazorpay() {
+      apiFetch('/payments/order', { method: 'POST' })
+        .then(orderData => {
+          loadRazorpayScript().then(loaded => {
+            if (!loaded) {
+              showToast('Failed to load payment gateway SDK.', 'danger');
+              upgradeBtn.disabled = false;
+              upgradeBtn.textContent = 'Buy PrepPro Access';
+              return;
+            }
+            
+            const options = {
+              key: orderData.keyId,
+              amount: orderData.amount,
+              currency: orderData.currency,
+              name: 'PrepSpace Premium',
+              description: 'Upgrade your workspace to PrepSpace PrepPro lifetime access',
+              order_id: orderData.orderId,
+              handler: function (response) {
+                apiFetch('/payments/verify', {
+                  method: 'POST',
+                  body: JSON.stringify({
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_signature: response.razorpay_signature
+                  })
+                }).then(verifyRes => {
+                  if (verifyRes.status === 'SUCCESS') {
+                    showToast('Payment verified! Welcome to PrepSpace Pro.', 'success');
+                    state.isPaid = true;
+                    localStorage.setItem('isPaid', 'true');
+                    fetchUserProfile().then(() => {
+                      redirectTo('#/referral');
+                    });
+                  }
+                }).catch(err => {
+                  showToast('Payment verification failed: ' + err.message, 'danger');
+                  upgradeBtn.disabled = false;
+                  upgradeBtn.textContent = 'Buy PrepPro Access';
+                });
+              },
+              prefill: {
+                name: state.name || '',
+                email: state.email || ''
+              },
+              theme: { color: '#000000' }
+            };
+            
+            const rzp = new window.Razorpay(options);
+            rzp.open();
+          });
+        })
+        .catch(err => {
+          showToast(err.message, 'danger');
+          upgradeBtn.disabled = false;
+          upgradeBtn.textContent = 'Buy PrepPro Access';
+        });
+    }
   });
 }
 
