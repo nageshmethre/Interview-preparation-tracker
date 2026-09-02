@@ -49,15 +49,10 @@ jobs:
       run: |
         cd frontend/android
         chmod +x gradlew
-        ./gradlew :app:assembleDebug --no-daemon --stacktrace 2>&1 | tee gradle-build.log || {
-          echo "=== BUILD FAILED ==="
-          grep -i -E "(error|fail|exception|caused by)" gradle-build.log | tail -n 20 | while IFS= read -r line; do
-            echo "::error title=Gradle::$line"
-          done
-          exit 1
-        }
+        ./gradlew assemble --no-daemon --stacktrace
         echo "=== LOCATING GENERATED APK FILES ==="
         find . -name "*.apk" -ls || true
+        find app/build -name "*.apk" -ls || true
 
     - name: Prepare APK for Release
       run: |
