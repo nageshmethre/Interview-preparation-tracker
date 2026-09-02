@@ -50,12 +50,12 @@ jobs:
         cd frontend/android
         chmod +x gradlew
         ./gradlew :app:assembleDebug --no-daemon
-        find app/build -type f | while IFS= read -r f; do
-          echo "::warning title=BuildFile::$f"
-        done
-        mkdir -p ../../release-assets
-        find . -name "*.apk" -exec cp -v {} ../../release-assets/PrepSpace.apk \; || true
-        ls -la ../../release-assets/ || true
+
+    - name: Prepare APK for Release
+      run: |
+        mkdir -p release-assets
+        find /home/runner/work -name "*.apk" -exec cp -v {} release-assets/PrepSpace.apk \; || true
+        ls -la release-assets/
 
     - name: Upload Debug APK Artifact
       uses: actions/upload-artifact@v4
