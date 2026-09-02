@@ -49,7 +49,12 @@ jobs:
       run: |
         cd frontend/android
         chmod +x gradlew
-        ./gradlew :app:assembleDebug --no-daemon
+        ./gradlew :app:assembleDebug --no-daemon --stacktrace > build.log 2>&1 || {
+          grep -i -C 2 -E "(error|exception|caused by|failed)" build.log | tail -n 35 | while IFS= read -r line; do
+            echo "::error title=Gradle::$line"
+          done
+          exit 1
+        }
 
     - name: Prepare APK for Release
       run: |
