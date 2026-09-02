@@ -8,7 +8,7 @@ const components = {
       <nav class="navbar navbar-expand-lg navbar-dark bg-black py-3 sticky-top border-bottom border-secondary border-opacity-25">
         <div class="container">
           <a class="navbar-brand d-flex align-items-center gap-2 text-decoration-none" href="#/">
-            <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" class="brand-logo-img" style="width: 36px; height: 36px; object-fit: contain;">
+            <img src="assets/prepspace_icon.png?v=2.4.1" alt="PrepSpace Logo" class="brand-logo-img" style="width: 36px; height: 36px; object-fit: contain;">
             <div class="d-flex flex-column text-start">
               <span class="fw-bold fs-5 text-white lh-1">PrepSpace</span>
               <span class="text-secondary" style="font-size: 0.65rem; letter-spacing: 0.8px; margin-top: 2px; font-family: 'Geist Mono', monospace;">(stream-in)</span>
@@ -421,7 +421,7 @@ const components = {
         <div class="row g-4 justify-content-between mb-5">
           <div class="col-lg-4 text-start">
             <div class="d-flex align-items-center gap-2 mb-3">
-              <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" style="width: 38px; height: 38px; object-fit: contain;">
+              <img src="assets/prepspace_icon.png?v=2.4.1" alt="PrepSpace Logo" style="width: 38px; height: 38px; object-fit: contain;">
               <div class="d-flex flex-column text-start">
                 <span class="text-white fw-bold fs-5 lh-1">PrepSpace</span>
                 <span class="text-primary fw-semibold" style="font-size: 0.65rem; letter-spacing: 0.5px;">(stream-in)</span>
@@ -475,6 +475,7 @@ const components = {
       <div class="row justify-content-center align-items-center min-vh-100">
         <div class="col-md-6 col-lg-5 col-xl-4">
           <div class="glass-panel p-5 text-center">
+            <img src="assets/prepspace_icon.png?v=2.4.1" alt="PrepSpace" style="width: 52px; height: 52px; object-fit: contain;" class="mb-3">
             <h2 class="text-white fw-bold mb-2">Welcome Back</h2>
             <p class="text-muted mb-4">Enter credentials to initialize space</p>
             
@@ -510,6 +511,7 @@ const components = {
       <div class="row justify-content-center align-items-center min-vh-100">
         <div class="col-md-6 col-lg-5 col-xl-4">
           <div class="glass-panel p-5 text-center">
+            <img src="assets/prepspace_icon.png?v=2.4.1" alt="PrepSpace" style="width: 52px; height: 52px; object-fit: contain;" class="mb-3">
             <h2 class="text-white fw-bold mb-2">Create Space</h2>
             <p class="text-muted mb-4">Start your preparation tracking lifecycle</p>
             
@@ -552,7 +554,7 @@ const components = {
         <!-- Brand Header -->
         <div class="p-3 border-bottom border-secondary-subtle d-flex align-items-center justify-content-between brand-header-box">
           <a class="navbar-brand d-flex align-items-center brand-text text-decoration-none" href="#/dashboard">
-            <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" class="me-2 brand-logo-img" style="width: 36px; height: 36px; object-fit: contain;">
+            <img src="assets/prepspace_icon.png?v=2.4.1" alt="PrepSpace Logo" class="me-2 brand-logo-img" style="width: 36px; height: 36px; object-fit: contain;">
             <div class="d-flex flex-column text-start brand-name">
               <span class="fw-extrabold fs-5 text-white lh-1">PrepSpace</span>
               <span class="text-primary fw-bold" style="font-size: 0.65rem; letter-spacing: 0.8px; margin-top: 2px;">(stream-in)</span>
@@ -1880,10 +1882,10 @@ const components = {
 
   settingsAbout: () => `
     <div class="text-center py-4">
-      <img src="assets/prepspace_logo.svg" alt="PrepSpace Logo" class="mb-3" style="width: 54px; height: 54px; object-fit: contain;">
+      <img src="assets/prepspace_icon.png?v=2.4.1" alt="PrepSpace Logo" class="mb-3" style="width: 64px; height: 64px; object-fit: contain;">
       <h4 class="text-white fw-bold mb-1">PrepSpace Enterprise</h4>
-      <p class="text-muted fs-7 mb-4">Version 2.1.5 (Stateless Zero-Trust Edition)</p>
-      <p class="text-muted fs-8">Designed by Nagesh Methre. All rights reserved.</p>
+      <p class="text-muted fs-7 mb-4">Version 2.4.1 (Stateless Zero-Trust Edition)</p>
+      <p class="text-muted fs-8">Developed by Nagesh Methre. All rights reserved.</p>
     </div>
   `,
 
