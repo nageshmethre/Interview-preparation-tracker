@@ -28,3 +28,16 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 .DS_Store
+
+# Secrets and Environment configs
+.env
+.env.*
+*.pem
+*.key
+*.cert
+
+# Node / Frontend / Deployments
+node_modules/
+.vercel/
+www/
+
