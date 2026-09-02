@@ -8,6 +8,8 @@ on:
 jobs:
   build-apk:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
     - name: Checkout Source Code
@@ -47,18 +49,40 @@ jobs:
       run: |
         cd frontend/android
         chmod +x gradlew
-        ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee gradle-build.log || {
+        ./gradlew :app:assembleDebug --no-daemon --stacktrace 2>&1 | tee gradle-build.log || {
           echo "=== BUILD FAILED ==="
           grep -i -E "(error|fail|exception|caused by)" gradle-build.log | tail -n 20 | while IFS= read -r line; do
             echo "::error title=Gradle::$line"
           done
           exit 1
         }
+        echo "=== LOCATING GENERATED APK FILES ==="
+        find . -name "*.apk" -ls || true
 
-    - name: Upload Debug APK
+    - name: Prepare APK for Release
+      run: |
+        mkdir -p release-assets
+        find frontend/android -name "*.apk" -exec cp {} release-assets/PrepSpace.apk \;
+        ls -la release-assets/
+
+    - name: Upload Debug APK Artifact
       uses: actions/upload-artifact@v4
       with:
         name: PrepSpace-Android-App
-        path: frontend/android/app/build/outputs/apk/**/*.apk
+        path: release-assets/PrepSpace.apk
         if-no-files-found: warn
+
+    - name: Publish Direct Download APK Release
+      uses: softprops/action-gh-release@v2
+      if: success()
+      with:
+        tag_name: app-latest
+        name: PrepSpace Android App
+        body: |
+          ### PrepSpace Mobile Application (.apk)
+          Official Android application for PrepSpace Placement & Interview Preparation Tracker.
+          Direct download and instant installation on any Android phone.
+        files: release-assets/PrepSpace.apk
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
