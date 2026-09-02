@@ -47,7 +47,13 @@ jobs:
       run: |
         cd frontend/android
         chmod +x gradlew
-        ./gradlew assembleDebug --no-daemon
+        ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee gradle-build.log || {
+          echo "=== BUILD FAILED ==="
+          grep -i -E "(error|fail|exception|caused by)" gradle-build.log | tail -n 20 | while IFS= read -r line; do
+            echo "::error title=Gradle::$line"
+          done
+          exit 1
+        }
 
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4
