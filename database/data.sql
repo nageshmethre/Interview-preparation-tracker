@@ -67,8 +67,9 @@ INSERT INTO dsa_topics (name, sequence_number)
 SELECT 'Dynamic Programming', 7 WHERE NOT EXISTS (SELECT 1 FROM dsa_topics WHERE name = 'Dynamic Programming');
 
 -- 5. Initialize DSA Roadmap Subtopics
+-- Topic 1: Arrays
 INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
-SELECT 1, 'Two Pointer Technique', 'The two-pointer technique uses two markers (indices) scanning through an array concurrently to optimize searching from O(N^2) to O(N). Commonly applied to sorted arrays.', '{"nodes":[{"id":"L","label":"Left Pointer (start)"},{"id":"R","label":"Right Pointer (end)"}]}', '{"examples":["Container With Most Water","Two Sum II","Valid Palindrome"]}', 'Time Complexity: O(N), Space Complexity: O(1)', 'Always sort the array first if relative ordering is not critical.', 1
+SELECT 1, 'Two Pointer Technique', 'The two-pointer technique uses two markers scanning through an array concurrently to optimize searching from O(N^2) to O(N). Optimal for sorted arrays, palindrome checking, and target sum pairs (2Sum, 3Sum, Container With Most Water).', '{"nodes":[{"id":"L","label":"Left Pointer (start)"},{"id":"R","label":"Right Pointer (end)"}]}', '{"examples":["Container With Most Water","Two Sum II","Valid Palindrome"]}', 'Time Complexity: O(N), Space Complexity: O(1)', 'Always sort the array first if relative ordering is not critical. Skip duplicate values in 3Sum/4Sum.', 1
 WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'Two Pointer Technique');
 
 INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
@@ -76,12 +77,90 @@ SELECT 1, 'Sliding Window', 'A sliding window maintains a contiguous subsegment 
 WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'Sliding Window');
 
 INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
+SELECT 1, 'Prefix Sums & Kadane''s Algorithm', 'Prefix sums precompute cumulative totals to answer range sum queries in O(1) time. Kadane''s algorithm finds the maximum contiguous subarray sum in a single linear pass by discarding negative prefix accumulations.', '{"nodes":[{"id":"P","label":"Prefix Table"},{"id":"K","label":"Kadane Running Sum"}]}', '{"examples":["Maximum Subarray Sum","Subarray Sum Equals K"]}', 'Time Complexity: O(N), Space Complexity: O(1) for Kadane / O(N) for prefix table', 'For maximum subarray product, remember negative numbers can flip parity—track both running min and max.', 3
+WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'Prefix Sums & Kadane''s Algorithm');
+
+-- Topic 2: Strings
+INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
+SELECT 2, 'String Hashing & Rabin-Karp', 'Computes rolling polynomial hashes H = sum(c_i * p^i mod M) to verify substring equality and locate pattern occurrences in O(1) amortized time per window slide, avoiding quadratic string comparisons.', '{"nodes":[{"id":"H","label":"Rolling Hash Window"}]}', '{"examples":["Find the Index of the First Occurrence in a String","Repeated Substring Pattern"]}', 'Time Complexity: O(N + M) average, Space Complexity: O(1)', 'Use large prime moduli (like 10^9 + 7) and double hashing to avoid spurious collisions.', 1
+WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'String Hashing & Rabin-Karp');
+
+INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
+SELECT 2, 'KMP Algorithm & LPS Array', 'Knuth-Morris-Pratt searches for pattern occurrences without backtracking the text index by preprocessing an LPS (Longest Proper Prefix which is also a Suffix) array. When a mismatch occurs, it skips redundant comparisons.', '{"nodes":[{"id":"LPS","label":"Longest Prefix Suffix Table"}]}', '{"examples":["KMP Pattern Matching","Shortest Palindrome"]}', 'Time Complexity: O(N + M), Space Complexity: O(M)', 'Understanding LPS construction is critical for finding repeated substrings and shortest palindrome extensions.', 2
+WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'KMP Algorithm & LPS Array');
+
+INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
+SELECT 2, 'Trie (Prefix Tree) Architecture', 'A tree data structure where each node represents a character along string paths. Allows O(L) time insertion, exact match searching, and prefix queries where L is the maximum string length.', '{"nodes":[{"id":"Root","label":"Empty Root"},{"id":"Node","label":"Char Child Pointers"}]}', '{"examples":["Implement Trie (Prefix Tree)","Word Search II","Maximum XOR of Two Numbers"]}', 'Time Complexity: O(L) per search/insert, Space Complexity: O(N * L * AlphabetSize)', 'Store a boolean isEndOfWord at each node. Tries are the gold standard for autocomplete search engines.', 3
+WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'Trie (Prefix Tree) Architecture');
+
+-- Topic 3: Linked Lists
+INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
 SELECT 3, 'Fast and Slow Pointer', 'Also known as Floyds Cycle-Finding Algorithm. By moving one pointer twice as fast as the other, cycle check and midpoint resolution runs in linear time.', '{"nodes":[{"id":"S","label":"Slow (1 step)"},{"id":"F","label":"Fast (2 steps)"}]}', '{"examples":["LinkedList Cycle Detection","Find Midpoint of Linked List"]}', 'Time Complexity: O(N), Space Complexity: O(1)', 'If the fast pointer reaches null, there is no cycle in the linked list.', 1
 WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'Fast and Slow Pointer');
 
 INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
-SELECT 7, 'Memoization vs Tabulation', 'Dynamic programming divides complex tasks into overlapping subproblems. Memoization is top-down (caching recursion), whereas Tabulation is bottom-up (iterative table filling).', '{"nodes":[{"id":"R","label":"Recursive Call Stack"},{"id":"T","label":"DP Table Matrix"}]}', '{"examples":["0/1 Knapsack Problem","Longest Common Subsequence"]}', 'Time Complexity: O(N*W), Space Complexity: O(N*W) or optimized O(W)', 'Start with the recursive relations before constructing the table.', 1
+SELECT 3, 'In-Place Linked List Reversal', 'Iteratively reverses node link directions using three pointer references (prev, curr, nextTemp) without allocating new heap memory. Also generalized to reverse sub-lists and k-node groups.', '{"nodes":[{"id":"Prev","label":"Previous Node"},{"id":"Curr","label":"Current Node"}]}', '{"examples":["Reverse Linked List","Reverse Nodes in k-Group"]}', 'Time Complexity: O(N), Space Complexity: O(1)', 'Always use a dummy head node (dummy.next = head) to eliminate edge cases where the initial head node is shifted or reversed.', 2
+WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'In-Place Linked List Reversal');
+
+INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
+SELECT 3, 'Merge & Sort Linked Lists', 'Merges two or K sorted linked lists by comparing head values or using a min-heap. Because linked lists allow O(1) pointer redirection without element shifting, MergeSort is the optimal O(N log N) sorting algorithm for linked lists.', '{"nodes":[{"id":"M1","label":"List 1 Head"},{"id":"M2","label":"List 2 Head"}]}', '{"examples":["Merge Two Sorted Lists","Merge k Sorted Lists","Sort List"]}', 'Time Complexity: O(N log N) for sorting, O(N log K) for K-way merge, Space Complexity: O(log N) recursion stack', 'Use Floyd slow/fast pointer to split the list into two halves before recursing in MergeSort.', 3
+WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'Merge & Sort Linked Lists');
+
+-- Topic 4: Stacks & Queues
+INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
+SELECT 4, 'Monotonic Stack Pattern', 'Maintains elements in strictly increasing or decreasing order. As new elements are processed, stack elements that violate monotonicity are popped, resolving the Next Greater Element, Previous Greater Element, or boundary spans in amortized linear time.', '{"nodes":[{"id":"Stack","label":"Monotonic Decreasing LIFO"}]}', '{"examples":["Daily Temperatures","Largest Rectangle in Histogram","Trapping Rain Water"]}', 'Time Complexity: O(N) amortized, Space Complexity: O(N)', 'Master this pattern for Daily Temperatures and Largest Rectangle in Histogram.', 1
+WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'Monotonic Stack Pattern');
+
+INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
+SELECT 4, 'Two-Stack / Min-Max Stack', 'Augments standard LIFO stacks to track running minimum and maximum values in O(1) time without compromising push and pop operations, using either parallel min-tracking stacks or node-value pairs.', '{"nodes":[{"id":"MainStack","label":"Value Stack"},{"id":"MinStack","label":"Running Minimums"}]}', '{"examples":["Min Stack","Implement Queue using Stacks"]}', 'Time Complexity: O(1) for push, pop, and getMin, Space Complexity: O(N)', 'Can also be adapted to implement a FIFO Queue using two LIFO stacks with amortized O(1) enqueue and dequeue.', 2
+WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'Two-Stack / Min-Max Stack');
+
+INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
+SELECT 4, 'Monotonic Deque for Sliding Window Max', 'A double-ended queue that maintains candidate maximum indices for a sliding window of size K. Smaller elements at the tail are evicted before pushing the new element, keeping the head as the current window maximum.', '{"nodes":[{"id":"Deque","label":"Monotonic Index Deque"}]}', '{"examples":["Sliding Window Maximum","Constrained Subsequence Sum"]}', 'Time Complexity: O(N) overall (O(1) amortized per window shift), Space Complexity: O(K)', 'Always check if the index at the head of the deque has fallen outside the left window boundary (idx < i - K + 1).', 3
+WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'Monotonic Deque for Sliding Window Max');
+
+-- Topic 5: Trees & BST
+INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
+SELECT 5, 'Tree Traversals (BFS, DFS & Morris)', 'Systematically visits all tree nodes using Depth-First Search (Preorder, Inorder, Postorder via recursion or explicit stack) and Breadth-First Search (Level-Order via FIFO queue). Morris Traversal achieves O(1) space by threading predecessor null pointers.', '{"nodes":[{"id":"DFS","label":"Recursion Stack"},{"id":"BFS","label":"FIFO Queue"}]}', '{"examples":["Binary Tree Level Order Traversal","Binary Tree Zigzag","Morris Inorder Traversal"]}', 'Time Complexity: O(N), Space Complexity: O(H) where H is tree height, O(1) for Morris', 'Inorder traversal of a Binary Search Tree (BST) produces strictly ascending values.', 1
+WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'Tree Traversals (BFS, DFS & Morris)');
+
+INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
+SELECT 5, 'Lowest Common Ancestor (LCA)', 'Locates the deepest node in a tree that has both nodes p and q as descendants. In a BST, LCA is found in O(H) by evaluating key intervals; in general binary trees, postorder recursion bubbles up matches from left and right subtrees.', '{"nodes":[{"id":"Root","label":"Root Evaluator"},{"id":"L","label":"Left Subtree Match"},{"id":"R","label":"Right Subtree Match"}]}', '{"examples":["Lowest Common Ancestor of a Binary Tree","LCA of Binary Search Tree"]}', 'Time Complexity: O(N) for general trees, O(H) for BST, Space Complexity: O(H)', 'If the left and right recursive calls both return non-null pointers, the current node is the LCA.', 2
+WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'Lowest Common Ancestor (LCA)');
+
+INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
+SELECT 5, 'BST Validation & Balancing', 'A valid BST requires every node to be strictly greater than all left-subtree descendants and smaller than all right-subtree descendants. Self-balancing trees enforce height balance factors using single and double tree rotations to guarantee O(log N) operations.', '{"nodes":[{"id":"Min","label":"Lower Bound"},{"id":"Val","label":"Node Value"},{"id":"Max","label":"Upper Bound"}]}', '{"examples":["Validate Binary Search Tree","Convert Sorted Array to Binary Search Tree"]}', 'Time Complexity: O(N) for validation, O(log N) for balanced search/insert, Space Complexity: O(H)', 'When validating a BST, pass allowable min and max bounds down the recursion: isValid(node, min, max).', 3
+WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'BST Validation & Balancing');
+
+-- Topic 6: Graphs
+INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
+SELECT 6, 'Breadth-First & Depth-First Graph Search', 'The two fundamental graph traversal algorithms. BFS uses a FIFO queue to discover shortest paths in unweighted graphs layer-by-layer. DFS uses recursion or a stack to explore connectivity, cycle detection, and connected components.', '{"nodes":[{"id":"Queue","label":"BFS FIFO Queue"},{"id":"Visited","label":"Visited Set"}]}', '{"examples":["Number of Islands","Word Ladder","Clone Graph"]}', 'Time Complexity: O(V + E), Space Complexity: O(V) for visited set and queue/stack', 'Use a three-state visited array (0 = unvisited, 1 = visiting/in stack, 2 = visited) to detect cycles in directed graphs.', 1
+WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'Breadth-First & Depth-First Graph Search');
+
+INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
+SELECT 6, 'Dijkstra & Bellman-Ford Shortest Path', 'Dijkstra algorithm uses a min-heap priority queue to greedily find single-source shortest paths on graphs with non-negative edge weights. Bellman-Ford relaxes all edges V-1 times and can detect negative-weight cycles.', '{"nodes":[{"id":"PQ","label":"Min-Heap Priority Queue (dist, node)"}]}', '{"examples":["Network Delay Time","Cheapest Flights Within K Stops"]}', 'Time Complexity: O((V + E) log V) for Dijkstra, O(V * E) for Bellman-Ford, Space Complexity: O(V)', 'Dijkstra fails on negative edge weights. Always store (distance, node) pairs in the PriorityQueue.', 2
+WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'Dijkstra & Bellman-Ford Shortest Path');
+
+INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
+SELECT 6, 'Topological Sort & Kahn Algorithm', 'Generates a linear ordering of vertices in a Directed Acyclic Graph (DAG) such that for every directed edge u -> v, vertex u comes before v. Kahn algorithm implements this using in-degree arrays and a zero-indegree queue.', '{"nodes":[{"id":"InDegree","label":"In-degree Array"},{"id":"ZeroQueue","label":"Zero In-degree Queue"}]}', '{"examples":["Course Schedule I","Course Schedule II","Alien Dictionary"]}', 'Time Complexity: O(V + E), Space Complexity: O(V)', 'If the number of processed nodes in Kahn algorithm is less than V, the graph contains a cycle!', 3
+WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'Topological Sort & Kahn Algorithm');
+
+INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
+SELECT 6, 'Disjoint Set Union (Union-Find / DSU)', 'Maintains partitioned sets of elements with near O(1) Find and Union operations using Path Compression and Union by Rank/Size. Widely used for dynamic connectivity and Kruskals Minimum Spanning Tree.', '{"nodes":[{"id":"Parent","label":"Parent Array"},{"id":"Rank","label":"Rank Array"}]}', '{"examples":["Number of Provinces","Redundant Connection","Accounts Merge"]}', 'Time Complexity: O(alpha(N)) amortized per operation (~O(1)), Space Complexity: O(N)', 'Path compression flattens the tree during find(x): parent[x] = find(parent[x]).', 4
+WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'Disjoint Set Union (Union-Find / DSU)');
+
+-- Topic 7: Dynamic Programming
+INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
+SELECT 7, 'Memoization vs Tabulation', 'Dynamic programming divides complex tasks into overlapping subproblems. Memoization is top-down (caching recursion), whereas Tabulation is bottom-up (iterative table filling).', '{"nodes":[{"id":"R","label":"Recursive Call Stack"},{"id":"T","label":"DP Table Matrix"}]}', '{"examples":["Climbing Stairs","Fibonacci Number"]}', 'Time Complexity: O(N*W), Space Complexity: O(N*W) or optimized O(W)', 'Start with the recursive relations before constructing the table.', 1
 WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'Memoization vs Tabulation');
+
+INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
+SELECT 7, '0/1 Knapsack & Unbounded Knapsack', 'The archetype of decision-tree DP choosing whether to take or skip items within weight constraints. In 0/1 knapsack, iterate capacity backward in 1D array to avoid reusing items; in unbounded knapsack (Coin Change), iterate forward.', '{"nodes":[{"id":"DP1D","label":"1D Rolling Array Capacity [W...0]"}]}', '{"examples":["0/1 Knapsack Problem","Coin Change","Partition Equal Subset Sum"]}', 'Time Complexity: O(N * Capacity), Space Complexity: O(Capacity) with 1D optimization', 'Mastering the 1D space reduction backward loop (for w = W down to weight[i]) is a frequent interview differentiator.', 2
+WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = '0/1 Knapsack & Unbounded Knapsack');
+
+INSERT INTO dsa_subtopics (topic_id, name, theory, visualization, examples, complexity_analysis, interview_tips, sequence_number)
+SELECT 7, 'Longest Common Subsequence & Edit Distance', '2D matrix DP comparing prefixes of two sequences. If characters match, DP[i][j] = 1 + DP[i-1][j-1]; otherwise take max(DP[i-1][j], DP[i][j-1]). Edit Distance generalizes this to insertion, deletion, and substitution operations.', '{"nodes":[{"id":"LCS_Table","label":"2D DP Matrix [s1_len][s2_len]"}]}', '{"examples":["Longest Common Subsequence","Edit Distance","Distinct Subsequences"]}', 'Time Complexity: O(N * M), Space Complexity: O(min(N, M)) with two-row rolling arrays', 'Forms the basis of git diff tools, spellcheckers, and bioinformatics sequence alignment.', 3
+WHERE NOT EXISTS (SELECT 1 FROM dsa_subtopics WHERE name = 'Longest Common Subsequence & Edit Distance');
 
 -- 6. Insert Default Platform Courses
 INSERT INTO courses (title, thumbnail_url, description, instructor, duration, difficulty, prerequisites, rating, enrollment_count)

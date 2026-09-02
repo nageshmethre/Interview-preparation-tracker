@@ -397,35 +397,40 @@ function router() {
       });
   } else if (hash === '#/dsa-roadmap') {
     viewTitle.textContent = 'Interactive DSA Roadmap';
-    const freshRoadmap = getCachedData('cached_roadmap_v2', 180000);
+    const freshRoadmap = getCachedData('cached_roadmap_v3', 180000);
     if (freshRoadmap) {
-      pageMount.innerHTML = components.dsaRoadmap(freshRoadmap);
-      bindDsaRoadmapEvents();
+      const enriched = getEnrichedDsaRoadmap(freshRoadmap);
+      pageMount.innerHTML = components.dsaRoadmap(enriched);
+      bindDsaRoadmapEvents(enriched);
       return;
     }
-    const cachedRoadmapStr = localStorage.getItem('cached_roadmap_v2');
+    const cachedRoadmapStr = localStorage.getItem('cached_roadmap_v3');
     let hasCache = false;
     if (cachedRoadmapStr) {
       try {
-        const roadmap = JSON.parse(cachedRoadmapStr).data;
-        pageMount.innerHTML = components.dsaRoadmap(roadmap);
-        bindDsaRoadmapEvents();
+        const parsed = JSON.parse(cachedRoadmapStr).data;
+        const enriched = getEnrichedDsaRoadmap(parsed);
+        pageMount.innerHTML = components.dsaRoadmap(enriched);
+        bindDsaRoadmapEvents(enriched);
         hasCache = true;
       } catch (e) {}
     }
     if (!hasCache) {
-      pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
+      // Instantly mount complete syllabus without blocking spinner
+      pageMount.innerHTML = components.dsaRoadmap(COMPREHENSIVE_DSA_ROADMAP);
+      bindDsaRoadmapEvents(COMPREHENSIVE_DSA_ROADMAP);
     }
     apiFetch('/v1/dsa/roadmap')
       .then(roadmap => {
-        setCachedData('cached_roadmap_v2', roadmap);
-        pageMount.innerHTML = components.dsaRoadmap(roadmap);
-        bindDsaRoadmapEvents();
+        const enriched = getEnrichedDsaRoadmap(roadmap);
+        setCachedData('cached_roadmap_v3', enriched);
+        pageMount.innerHTML = components.dsaRoadmap(enriched);
+        bindDsaRoadmapEvents(enriched);
       })
       .catch(err => {
-        if (!hasCache) {
-          pageMount.innerHTML = `<div class="alert alert-danger">Failed to load roadmap: ${err.message}</div>`;
-        }
+        const enriched = COMPREHENSIVE_DSA_ROADMAP;
+        pageMount.innerHTML = components.dsaRoadmap(enriched);
+        bindDsaRoadmapEvents(enriched);
       });
   } else if (hash === '#/coding-practice') {
     viewTitle.textContent = 'LeetCode Coding Workspace';
@@ -2155,19 +2160,261 @@ function bindCertificatesEvents() {
   });
 }
 
-function bindDsaRoadmapEvents() {
-  document.querySelectorAll('.roadmap-node-card').forEach(card => {
+const COMPREHENSIVE_DSA_ROADMAP = [
+  {
+    id: 1,
+    name: 'Arrays',
+    sequenceNumber: 1,
+    subtopics: [
+      {
+        id: 101,
+        name: 'Two Pointer Technique',
+        theory: 'The two-pointer technique uses two markers (indices) scanning through an array concurrently to optimize searching from O(N^2) to O(N). Optimal for sorted arrays, palindrome checking, and target sum pairs (2Sum, 3Sum, Container With Most Water).',
+        complexityAnalysis: 'Time Complexity: O(N), Space Complexity: O(1)',
+        interviewTips: 'Always check if sorting the array first (O(N log N)) enables two-pointer convergence. Watch out for duplicate elements when skipping values in 3Sum/4Sum.'
+      },
+      {
+        id: 102,
+        name: 'Sliding Window Technique',
+        theory: 'A sliding window maintains a contiguous subsegment of elements, dynamically expanding to incorporate new elements and contracting when boundaries or constraints are violated. Essential for finding contiguous subarray aggregates, maximum sums, and substring conditions.',
+        complexityAnalysis: 'Time Complexity: O(N), Space Complexity: O(1) or O(K) for character frequency maps',
+        interviewTips: 'Distinguish between fixed-size (e.g. max sum subarray of size K) and dynamic-size (e.g. smallest subarray with sum >= S) windows. Keep an auxiliary frequency map to check validity in O(1).'
+      },
+      {
+        id: 103,
+        name: 'Prefix Sums & Kadane\'s Algorithm',
+        theory: 'Prefix sums precompute cumulative totals to answer range sum queries in O(1) time. Kadane\'s algorithm finds the maximum contiguous subarray sum in a single linear pass by discarding negative prefix accumulations.',
+        complexityAnalysis: 'Time Complexity: O(N), Space Complexity: O(1) for Kadane / O(N) for prefix sum table',
+        interviewTips: 'For maximum subarray product, remember negative numbers can flip parity—track both running minimum and maximum values concurrently.'
+      }
+    ]
+  },
+  {
+    id: 2,
+    name: 'Strings',
+    sequenceNumber: 2,
+    subtopics: [
+      {
+        id: 201,
+        name: 'String Hashing & Rabin-Karp Algorithm',
+        theory: 'Computes rolling polynomial hashes H = sum(c_i * p^i mod M) to verify substring equality and locate pattern occurrences in O(1) amortized time per window slide, avoiding quadratic string comparisons.',
+        complexityAnalysis: 'Time Complexity: O(N + M) average, O(N * M) worst-case collision, Space Complexity: O(1)',
+        interviewTips: 'Use large prime moduli (like 10^9 + 7) and double hashing to avoid spurious collisions. Always verify characters explicitly if hashes match.'
+      },
+      {
+        id: 202,
+        name: 'KMP Algorithm & Longest Prefix Suffix (LPS)',
+        theory: 'Knuth-Morris-Pratt searches for pattern occurrences without backtracking the text index by preprocessing an LPS (Longest Proper Prefix which is also a Suffix) array. When a mismatch occurs, it skips redundant comparisons.',
+        complexityAnalysis: 'Time Complexity: O(N + M), Space Complexity: O(M) for LPS array',
+        interviewTips: 'Understanding LPS construction is critical for solving problems like repeated substring detection, shortest palindrome additions, and string rotations.'
+      },
+      {
+        id: 203,
+        name: 'Trie (Prefix Tree) Architecture',
+        theory: 'A tree data structure where each node represents a character along string paths. Allows O(L) time insertion, exact match searching, and prefix queries where L is the maximum string length.',
+        complexityAnalysis: 'Time Complexity: O(L) for Insert, Search, and StartsWith, Space Complexity: O(N * L * AlphabetSize)',
+        interviewTips: 'Store a boolean isEndOfWord at each node. Tries are the gold standard for autocomplete search engines, Boggle solvers, and bitwise XOR maximum queries.'
+      }
+    ]
+  },
+  {
+    id: 3,
+    name: 'Linked Lists',
+    sequenceNumber: 3,
+    subtopics: [
+      {
+        id: 301,
+        name: 'Fast and Slow Pointer (Floyd\'s Cycle Detection)',
+        theory: 'Traverses linked list nodes using two pointers moving at 1x and 2x speeds. Solves cycle presence detection, exact cycle entry node identification, and middle node retrieval in a single pass without extra memory.',
+        complexityAnalysis: 'Time Complexity: O(N), Space Complexity: O(1)',
+        interviewTips: 'When a cycle is detected, reset the slow pointer to head while keeping fast at meeting point; moving both at 1x will intersect precisely at the cycle entrance.'
+      },
+      {
+        id: 302,
+        name: 'In-Place Linked List Reversal',
+        theory: 'Iteratively reverses node link directions using three pointer references (prev, curr, nextTemp) without allocating new heap memory. Also generalized to reverse sub-lists and k-node groups.',
+        complexityAnalysis: 'Time Complexity: O(N), Space Complexity: O(1)',
+        interviewTips: 'Always use a dummy head node (dummy.next = head) to eliminate edge cases where the initial head node is shifted or reversed.'
+      },
+      {
+        id: 303,
+        name: 'Merge & Sort Linked Lists (MergeSort)',
+        theory: 'Merges two or K sorted linked lists by comparing head values or using a min-heap. Because linked lists allow O(1) pointer redirection without element shifting, MergeSort is the optimal O(N log N) sorting algorithm for linked lists.',
+        complexityAnalysis: 'Time Complexity: O(N log N) for sorting, O(N log K) for K-way merge, Space Complexity: O(log N) recursion stack',
+        interviewTips: 'Use Floyd\'s slow/fast pointer to split the list into two halves before recursing in MergeSort.'
+      }
+    ]
+  },
+  {
+    id: 4,
+    name: 'Stacks & Queues',
+    sequenceNumber: 4,
+    subtopics: [
+      {
+        id: 401,
+        name: 'Monotonic Stack Pattern',
+        theory: 'Maintains elements in strictly increasing or decreasing order. As new elements are processed, stack elements that violate monotonicity are popped, resolving the Next Greater Element, Previous Greater Element, or boundary spans in amortized linear time.',
+        complexityAnalysis: 'Time Complexity: O(N) amortized (each element pushed and popped at most once), Space Complexity: O(N)',
+        interviewTips: 'Master this pattern for Daily Temperatures, Largest Rectangle in Histogram, Trapping Rain Water, and Stock Span problems.'
+      },
+      {
+        id: 402,
+        name: 'Two-Stack / Min-Max Stack Architecture',
+        theory: 'Augments standard LIFO stacks to track running minimum and maximum values in O(1) time without compromising push and pop operations, using either parallel min-tracking stacks or node-value pairs.',
+        complexityAnalysis: 'Time Complexity: O(1) for push, pop, top, and getMin, Space Complexity: O(N)',
+        interviewTips: 'Can also be adapted to implement a FIFO Queue using two LIFO stacks with amortized O(1) enqueue and dequeue.'
+      },
+      {
+        id: 403,
+        name: 'Monotonic Deque for Sliding Window Maximum',
+        theory: 'A double-ended queue that maintains candidate maximum indices for a sliding window of size K. Smaller elements at the tail are evicted before pushing the new element, keeping the head as the current window maximum.',
+        complexityAnalysis: 'Time Complexity: O(N) overall (O(1) amortized per window shift), Space Complexity: O(K)',
+        interviewTips: 'Always check if the index at the head of the deque has fallen outside the left window boundary (idx < i - K + 1) and evict it before reading.'
+      }
+    ]
+  },
+  {
+    id: 5,
+    name: 'Trees & BST',
+    sequenceNumber: 5,
+    subtopics: [
+      {
+        id: 501,
+        name: 'Tree Traversals (BFS, DFS & Morris Inorder)',
+        theory: 'Systematically visits all tree nodes using Depth-First Search (Preorder, Inorder, Postorder via recursion or explicit stack) and Breadth-First Search (Level-Order via FIFO queue). Morris Traversal achieves O(1) space by threading predecessor null pointers.',
+        complexityAnalysis: 'Time Complexity: O(N), Space Complexity: O(H) call stack where H is tree height, O(1) for Morris',
+        interviewTips: 'Inorder traversal of a Binary Search Tree (BST) produces strictly ascending values. Level-order BFS is essential for shortest path in unweighted trees and zigzag views.'
+      },
+      {
+        id: 502,
+        name: 'Lowest Common Ancestor (LCA)',
+        theory: 'Locates the deepest node in a tree that has both nodes p and q as descendants. In a BST, LCA is found in O(H) by evaluating key intervals; in general binary trees, postorder recursion bubbles up matches from left and right subtrees.',
+        complexityAnalysis: 'Time Complexity: O(N) for general trees, O(H) for BST, Space Complexity: O(H)',
+        interviewTips: 'If the left and right recursive calls both return non-null pointers, the current node is the LCA. If only one subtree returns a match, bubble that match upward.'
+      },
+      {
+        id: 503,
+        name: 'BST Validation & Balancing (AVL / Red-Black)',
+        theory: 'A valid BST requires every node to be strictly greater than all left-subtree descendants and smaller than all right-subtree descendants. Self-balancing trees enforce height balance factors using single and double tree rotations to guarantee O(log N) operations.',
+        complexityAnalysis: 'Time Complexity: O(N) for validation, O(log N) for balanced search/insert, Space Complexity: O(H)',
+        interviewTips: 'When validating a BST, pass allowable min and max bounds down the recursion: isValid(node, min, max). Comparing only direct children is a common rookie bug!'
+      }
+    ]
+  },
+  {
+    id: 6,
+    name: 'Graphs',
+    sequenceNumber: 6,
+    subtopics: [
+      {
+        id: 601,
+        name: 'Breadth-First Search (BFS) & Depth-First Search (DFS)',
+        theory: 'The two fundamental graph traversal algorithms. BFS uses a FIFO queue to discover shortest paths in unweighted graphs layer-by-layer. DFS uses recursion or a stack to explore connectivity, cycle detection, and connected components.',
+        complexityAnalysis: 'Time Complexity: O(V + E), Space Complexity: O(V) for visited set and queue/stack',
+        interviewTips: 'Use a three-state visited array (0 = unvisited, 1 = visiting/in stack, 2 = visited) to detect cycles in directed graphs.'
+      },
+      {
+        id: 602,
+        name: 'Dijkstra\'s & Bellman-Ford Shortest Path',
+        theory: 'Dijkstra\'s algorithm uses a min-heap priority queue to greedily find single-source shortest paths on graphs with non-negative edge weights. Bellman-Ford relaxes all edges V-1 times and can detect negative-weight cycles.',
+        complexityAnalysis: 'Time Complexity: O((V + E) log V) for Dijkstra, O(V * E) for Bellman-Ford, Space Complexity: O(V)',
+        interviewTips: 'Dijkstra fails on negative edge weights. Always store (distance, node) pairs in the PriorityQueue and skip stale popped entries if dist > distances[u].'
+      },
+      {
+        id: 603,
+        name: 'Topological Sort & Kahn\'s Algorithm',
+        theory: 'Generates a linear ordering of vertices in a Directed Acyclic Graph (DAG) such that for every directed edge u -> v, vertex u comes before v. Kahn\'s algorithm implements this using in-degree arrays and a zero-indegree queue.',
+        complexityAnalysis: 'Time Complexity: O(V + E), Space Complexity: O(V)',
+        interviewTips: 'If the number of processed nodes in Kahn\'s algorithm is less than V, the graph contains a cycle! Classic FAANG interview problem: Course Schedule I & II.'
+      },
+      {
+        id: 604,
+        name: 'Disjoint Set Union (Union-Find / DSU)',
+        theory: 'Maintains partitioned sets of elements with near O(1) Find and Union operations using Path Compression and Union by Rank/Size. Widely used for dynamic connectivity and Kruskal\'s Minimum Spanning Tree.',
+        complexityAnalysis: 'Time Complexity: O(alpha(N)) amortized per operation (~O(1)), Space Complexity: O(N)',
+        interviewTips: 'Path compression flattens the tree during find(x): parent[x] = find(parent[x]). Essential for detecting cycles in undirected graphs in O(E).'
+      }
+    ]
+  },
+  {
+    id: 7,
+    name: 'Dynamic Programming',
+    sequenceNumber: 7,
+    subtopics: [
+      {
+        id: 701,
+        name: 'Memoization vs Tabulation',
+        theory: 'Dynamic programming breaks complex problems into overlapping subproblems with optimal substructure. Memoization caches recursive return values (top-down), while Tabulation fills a state matrix iteratively (bottom-up).',
+        complexityAnalysis: 'Time Complexity: O(N * W), Space Complexity: O(N * W) or O(W) with rolling array space optimization',
+        interviewTips: 'Always start with the recursive state definition and recurrence relation on paper before converting to iterative loops.'
+      },
+      {
+        id: 702,
+        name: '0/1 Knapsack & Unbounded Knapsack Patterns',
+        theory: 'The archetype of decision-tree DP choosing whether to take or skip items within weight constraints. In 0/1 knapsack, iterate capacity backward in 1D array to avoid reusing items; in unbounded knapsack (Coin Change), iterate forward.',
+        complexityAnalysis: 'Time Complexity: O(N * Capacity), Space Complexity: O(Capacity) with 1D optimization',
+        interviewTips: 'Mastering the 1D space reduction backward loop (for w = W down to weight[i]) is a frequent interview differentiator.'
+      },
+      {
+        id: 703,
+        name: 'Longest Common Subsequence (LCS) & Edit Distance',
+        theory: '2D matrix DP comparing prefixes of two sequences. If characters match, DP[i][j] = 1 + DP[i-1][j-1]; otherwise take max(DP[i-1][j], DP[i][j-1]). Edit Distance generalizes this to insertion, deletion, and substitution operations.',
+        complexityAnalysis: 'Time Complexity: O(N * M), Space Complexity: O(min(N, M)) with two-row rolling arrays',
+        interviewTips: 'Forms the basis of git diff tools, spellcheckers, and bioinformatics sequence alignment. Practice tracing the optimal solution path backward through the DP table.'
+      }
+    ]
+  }
+];
+
+function getEnrichedDsaRoadmap(apiRoadmap) {
+  if (!Array.isArray(apiRoadmap) || apiRoadmap.length === 0) {
+    return COMPREHENSIVE_DSA_ROADMAP;
+  }
+  return COMPREHENSIVE_DSA_ROADMAP.map(defaultTopic => {
+    const fromApi = apiRoadmap.find(t => (t.name || '').toLowerCase() === defaultTopic.name.toLowerCase() || t.id == defaultTopic.id);
+    if (fromApi && Array.isArray(fromApi.subtopics) && fromApi.subtopics.length >= defaultTopic.subtopics.length) {
+      return fromApi;
+    }
+    return defaultTopic;
+  });
+}
+
+let activeRoadmapStore = null;
+
+function bindDsaRoadmapEvents(roadmapData) {
+  if (roadmapData) {
+    activeRoadmapStore = roadmapData;
+  }
+  const nodes = document.querySelectorAll('.roadmap-node-card');
+  nodes.forEach(card => {
     card.addEventListener('click', (e) => {
       const topicId = e.currentTarget.dataset.topicId;
-      apiFetch(`/v1/dsa/roadmap`)
-        .then(roadmap => {
-          const topic = roadmap.find(t => t.id == topicId);
-          if (topic) {
-            document.getElementById('dsa-detail-panel').innerHTML = components.dsaTopicDetail(topic);
-          }
-        });
+      nodes.forEach(n => {
+        n.classList.remove('border-primary', 'bg-dark', 'shadow-sm');
+        n.classList.add('border-secondary');
+      });
+      e.currentTarget.classList.remove('border-secondary');
+      e.currentTarget.classList.add('border-primary', 'bg-dark', 'shadow-sm');
+
+      const data = activeRoadmapStore || COMPREHENSIVE_DSA_ROADMAP;
+      const topic = data.find(t => t.id == topicId) || COMPREHENSIVE_DSA_ROADMAP.find(t => t.id == topicId);
+      if (topic) {
+        document.getElementById('dsa-detail-panel').innerHTML = components.dsaTopicDetail(topic);
+      }
     });
   });
+
+  // Automatically open Topic 1 on load
+  if (nodes.length > 0) {
+    const firstCard = nodes[0];
+    firstCard.classList.remove('border-secondary');
+    firstCard.classList.add('border-primary', 'bg-dark', 'shadow-sm');
+    const data = activeRoadmapStore || COMPREHENSIVE_DSA_ROADMAP;
+    const firstTopic = data[0];
+    if (firstTopic) {
+      document.getElementById('dsa-detail-panel').innerHTML = components.dsaTopicDetail(firstTopic);
+    }
+  }
 }
 
 function bindCodingPracticeEvents() {
@@ -2733,11 +2980,22 @@ function getStoredCommunityThreads() {
   if (stored) {
     try {
       const parsed = JSON.parse(stored);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        // Ensure all threads have likedBy array
+        return parsed.map(t => ({
+          ...t,
+          likedBy: Array.isArray(t.likedBy) ? t.likedBy : [],
+          likesCount: typeof t.likesCount === 'number' ? t.likesCount : 0
+        }));
+      }
     } catch (e) {}
   }
-  localStorage.setItem('prepspace_community_threads', JSON.stringify(DEFAULT_COMMUNITY_THREADS));
-  return DEFAULT_COMMUNITY_THREADS;
+  const defaults = DEFAULT_COMMUNITY_THREADS.map(t => ({
+    ...t,
+    likedBy: Array.isArray(t.likedBy) ? t.likedBy : []
+  }));
+  localStorage.setItem('prepspace_community_threads', JSON.stringify(defaults));
+  return defaults;
 }
 
 function saveCommunityThreads(threads) {
@@ -2748,6 +3006,7 @@ function bindCommunityEvents() {
   let activeCategory = 'ALL';
   const container = document.getElementById('forum-posts-container');
   const countBadge = document.getElementById('community-count-badge');
+  const currentUser = (state && (state.email || state.name)) || localStorage.getItem('prepspace_user_email') || 'current_user';
 
   function renderFeed() {
     if (!container) return;
@@ -2770,7 +3029,9 @@ function bindCommunityEvents() {
       return;
     }
 
-    container.innerHTML = filtered.map(p => `
+    container.innerHTML = filtered.map(p => {
+      const isLiked = Array.isArray(p.likedBy) && p.likedBy.includes(currentUser);
+      return `
       <div class="p-3 p-md-4 rounded-3 border border-secondary border-opacity-25 bg-dark bg-opacity-25">
         <div class="d-flex align-items-center justify-content-between mb-2">
           <div class="d-flex align-items-center gap-2">
@@ -2782,25 +3043,41 @@ function bindCommunityEvents() {
         <h6 class="text-white fw-bold mb-2">${p.title}</h6>
         <p class="text-secondary fs-8 mb-3" style="line-height: 1.6;">${p.content}</p>
         <div class="d-flex align-items-center gap-3 text-secondary fs-8 border-top border-secondary border-opacity-10 pt-2">
-          <button class="btn btn-sm btn-glass py-1 px-2 fs-9 btn-like-thread" data-id="${p.id}">
-            <i class="fa-solid fa-thumbs-up text-primary me-1"></i> <span>${p.likesCount || 0}</span> Likes
+          <button class="btn btn-sm ${isLiked ? 'btn-primary text-white shadow-sm' : 'btn-glass text-secondary'} py-1 px-2 fs-9 btn-like-thread" data-id="${p.id}" title="${isLiked ? 'Click to unlike (1 like per user)' : 'Like this post (1 like per user)'}">
+            <i class="fa-solid fa-thumbs-up ${isLiked ? 'text-white' : 'text-primary'} me-1"></i> <span>${p.likesCount || 0}</span> ${isLiked ? 'Liked' : 'Likes'}
           </button>
           <span class="fs-9 text-muted font-monospace"><i class="fa-regular fa-comment me-1"></i>${p.comments ? p.comments.length : 0} Replies</span>
         </div>
       </div>
-    `).join('');
+    `;
+    }).join('');
 
-    // Bind Like Buttons
+    // Bind Like Buttons (Strict 1 User = 1 Like)
     container.querySelectorAll('.btn-like-thread').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const id = e.currentTarget.dataset.id;
         const threads = getStoredCommunityThreads();
         const target = threads.find(t => t.id == id);
         if (target) {
-          target.likesCount = (target.likesCount || 0) + 1;
-          saveCommunityThreads(threads);
-          renderFeed();
-          showToast('Liked discussion thread!', 'success');
+          if (!Array.isArray(target.likedBy)) {
+            target.likedBy = [];
+          }
+          const userIdx = target.likedBy.indexOf(currentUser);
+          if (userIdx === -1) {
+            // User gives their 1 like
+            target.likedBy.push(currentUser);
+            target.likesCount = (target.likesCount || 0) + 1;
+            saveCommunityThreads(threads);
+            renderFeed();
+            showToast('Liked discussion thread!', 'success');
+          } else {
+            // User toggles/removes their 1 like
+            target.likedBy.splice(userIdx, 1);
+            target.likesCount = Math.max(0, (target.likesCount || 1) - 1);
+            saveCommunityThreads(threads);
+            renderFeed();
+            showToast('Removed like from discussion thread.', 'info');
+          }
         }
       });
     });
@@ -2838,6 +3115,7 @@ function bindCommunityEvents() {
         author: state.name || 'Student Developer',
         createdAt: new Date().toISOString(),
         likesCount: 0,
+        likedBy: [],
         comments: []
       };
 
