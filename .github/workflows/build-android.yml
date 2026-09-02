@@ -49,15 +49,13 @@ jobs:
       run: |
         cd frontend/android
         chmod +x gradlew
-        ./gradlew :app:assembleDebug --no-daemon 2>&1 | tee build.log || {
-          tail -n 35 build.log | while IFS= read -r line; do
-            echo "::error title=Gradle::$line"
-          done
-          exit 1
-        }
+        ./gradlew :app:assembleDebug --no-daemon
+        find app/build -type f | while IFS= read -r f; do
+          echo "::warning title=BuildFile::$f"
+        done
         mkdir -p ../../release-assets
-        find . -name "*.apk" -exec cp -v {} ../../release-assets/PrepSpace.apk \;
-        ls -la ../../release-assets/
+        find . -name "*.apk" -exec cp -v {} ../../release-assets/PrepSpace.apk \; || true
+        ls -la ../../release-assets/ || true
 
     - name: Upload Debug APK Artifact
       uses: actions/upload-artifact@v4
