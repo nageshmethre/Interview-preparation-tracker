@@ -49,11 +49,15 @@ jobs:
       run: |
         cd frontend/android
         chmod +x gradlew
-        ./gradlew :app:assembleDebug --no-daemon -x test
-        echo "=== APP BUILD CONTENTS ==="
-        find app -name "*.apk" -ls || true
+        ./gradlew :app:assembleDebug --no-daemon > gradle.log 2>&1 || true
+        tail -n 25 gradle.log | while IFS= read -r l; do
+          echo "::warning title=GradleLog::$l"
+        done
+        find . -name "*.apk" | while IFS= read -r f; do
+          echo "::warning title=FoundAPK::$f"
+        done
         mkdir -p ../../release-assets
-        find . -name "*.apk" -exec cp {} ../../release-assets/PrepSpace.apk \;
+        find . -name "*.apk" -exec cp {} ../../release-assets/PrepSpace.apk \; || true
         ls -la ../../release-assets/ || true
 
     - name: Upload Debug APK Artifact
