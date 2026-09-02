@@ -49,7 +49,12 @@ jobs:
       run: |
         cd frontend/android
         chmod +x gradlew
-        ./gradlew :app:assembleDebug --no-daemon
+        ./gradlew :app:assembleDebug --no-daemon 2>&1 | tee build.log || {
+          tail -n 35 build.log | while IFS= read -r line; do
+            echo "::error title=Gradle::$line"
+          done
+          exit 1
+        }
         mkdir -p ../../release-assets
         find . -name "*.apk" -exec cp -v {} ../../release-assets/PrepSpace.apk \;
         ls -la ../../release-assets/
