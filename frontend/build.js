@@ -46,6 +46,11 @@ if (fs.existsSync(path.join(srcDir, 'assets'))) {
     console.log('Copied assets folder recursively');
 }
 
+if (fs.existsSync(path.join(srcDir, 'downloads'))) {
+    copyFolderSync(path.join(srcDir, 'downloads'), path.join(destDir, 'downloads'));
+    console.log('Copied downloads folder');
+}
+
 // 4. Also bundle into Android app assets directory
 const androidAssetsDir = path.join(srcDir, 'android', 'app', 'src', 'main', 'assets');
 const androidPublicDir = path.join(androidAssetsDir, 'public');
