@@ -43,10 +43,10 @@ jobs:
       run: |
         yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
-    - name: Sync Capacitor to Android Project
+    - name: Copy Web Assets to Android Project
       run: |
         cd frontend
-        npx @capacitor/cli sync android --inline
+        npx @capacitor/cli copy android
 
     - name: Build Android APK
       run: |
