@@ -46,4 +46,31 @@ if (fs.existsSync(path.join(srcDir, 'assets'))) {
     console.log('Copied assets folder recursively');
 }
 
-console.log('Build completed successfully! Web assets are in the "www" folder.');
+// 4. Also bundle into Android app assets directory
+const androidAssetsDir = path.join(srcDir, 'android', 'app', 'src', 'main', 'assets');
+const androidPublicDir = path.join(androidAssetsDir, 'public');
+
+if (fs.existsSync(path.join(srcDir, 'android'))) {
+    console.log('Bundling assets for Android APK project...');
+    if (fs.existsSync(androidPublicDir)) {
+        fs.rmSync(androidPublicDir, { recursive: true, force: true });
+    }
+    fs.mkdirSync(androidPublicDir, { recursive: true });
+    copyFolderSync(destDir, androidPublicDir);
+
+    // Write capacitor.config.json
+    const configPath = path.join(androidAssetsDir, 'capacitor.config.json');
+    const configData = JSON.stringify({
+        appId: "com.interviewtracker.prepspace",
+        appName: "PrepSpace",
+        webDir: "www"
+    }, null, 2);
+    fs.writeFileSync(configPath, configData, 'utf-8');
+
+    // Write capacitor.plugins.json
+    const pluginsPath = path.join(androidAssetsDir, 'capacitor.plugins.json');
+    fs.writeFileSync(pluginsPath, '[]', 'utf-8');
+    console.log('Android assets synced successfully!');
+}
+
+console.log('Build completed successfully!');

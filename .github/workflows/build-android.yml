@@ -27,7 +27,7 @@ jobs:
         cd frontend
         npm install --include=dev
 
-    - name: Build Web Assets
+    - name: Build and Bundle Web Assets
       run: |
         cd frontend
         npm run build-mobile
@@ -42,11 +42,6 @@ jobs:
     - name: Accept Android SDK Licenses
       run: |
         yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-
-    - name: Copy Web Assets to Android Project
-      run: |
-        cd frontend
-        npx @capacitor/cli copy android
 
     - name: Build Android APK
       run: |
