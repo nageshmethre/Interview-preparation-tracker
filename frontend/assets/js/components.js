@@ -25,6 +25,9 @@ const components = {
               <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="#pricing">Pricing</a></li>
               <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="/about">About</a></li>
               <li class="nav-item ms-lg-3 d-flex align-items-center gap-2">
+                <a class="btn btn-glass px-3 py-1 fs-7 text-success border-success-subtle d-inline-flex align-items-center gap-1" href="https://github.com/nageshmethre/Interview-preparation-tracker/releases/download/app-latest/PrepSpace.apk" download="PrepSpace.apk" title="Direct Android APK Download">
+                  <i class="fa-brands fa-android text-success"></i> <span class="d-none d-sm-inline">App</span>
+                </a>
                 <a class="btn btn-glass px-3 py-1 fs-7" href="#/login">Log In</a>
                 <a class="btn btn-premium px-3 py-1 fs-7 fw-bold" href="#/register">Sign Up Free</a>
               </li>
@@ -55,6 +58,10 @@ const components = {
             <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap mb-5">
               <a href="#/register" class="btn btn-premium btn-lg px-5 py-3 fs-5 fw-bold shadow-lg">
                 <i class="fa-solid fa-rocket me-2"></i>Initialize Space Free
+              </a>
+              <a href="https://github.com/nageshmethre/Interview-preparation-tracker/releases/download/app-latest/PrepSpace.apk" download="PrepSpace.apk" class="btn btn-glass btn-lg px-4 py-3 fs-5 text-success border-success-subtle d-inline-flex align-items-center gap-2 shadow-sm">
+                <i class="fa-brands fa-android text-success fs-4"></i>
+                <span>Download Android App</span>
               </a>
               <a href="#showcase" class="btn btn-glass btn-lg px-4 py-3 fs-5 text-white">
                 <i class="fa-solid fa-layer-group me-2 text-cyan"></i>Explore Live Platform
@@ -610,7 +617,7 @@ const components = {
           <a href="#/ai-assistant" class="sidebar-link"><i class="fa-solid fa-robot text-primary"></i> <span>AI ATS Assistant</span></a>
           <a href="#/calendar" class="sidebar-link"><i class="fa-solid fa-calendar-days text-muted"></i> <span>Interview Calendar</span></a>
           <a href="#/reports" class="sidebar-link"><i class="fa-solid fa-file-invoice text-muted"></i> <span>Progress Reports</span></a>
-          <a href="#/desktop-client" class="sidebar-link"><i class="fa-solid fa-desktop text-indigo"></i> <span>Desktop Client</span></a>
+          <a href="#/desktop-client" class="sidebar-link"><i class="fa-brands fa-android text-success"></i> <span>Download App</span></a>
 
           <div class="sidebar-section-title px-4 mt-3 mb-2 text-muted fs-8 uppercase fw-bold tracking-wider">Account</div>
           <a href="#/profile" class="sidebar-link"><i class="fa-solid fa-user-gear text-secondary"></i> <span>Settings</span></a>
@@ -645,6 +652,10 @@ const components = {
           </div>
           
           <div class="d-flex align-items-center gap-2 gap-md-3">
+            <a href="https://github.com/nageshmethre/Interview-preparation-tracker/releases/download/app-latest/PrepSpace.apk" download="PrepSpace.apk" class="btn btn-glass btn-sm d-flex align-items-center gap-2 text-success border-success-subtle py-1 px-2 px-md-3" title="Download PrepSpace Android APK directly in browser">
+              <i class="fa-brands fa-android text-success"></i>
+              <span class="d-none d-sm-inline fw-semibold">Download App</span>
+            </a>
             <a href="#/mock-exams" class="btn btn-glass btn-sm d-none d-md-flex align-items-center gap-2 text-white">
               <i class="fa-solid fa-stopwatch text-danger"></i>
               <span>Mock Exam</span>
@@ -2707,24 +2718,76 @@ const components = {
   `,
 
   desktopClient: () => `
-    <div class="glass-panel p-5 text-center">
-      <i class="fa-solid fa-desktop display-4 text-indigo mb-4"></i>
-      <h3 class="text-white fw-bold mb-2">Java Swing Desktop Client</h3>
-      <p class="text-muted fs-7 max-w-md mx-auto mb-4" style="max-width: 450px;">
-        PrepSpace provides a complete, high-performance Java Swing desktop application that integrates directly with the MySQL database via JDBC for ultra-fast, local placement tracking.
-      </p>
-      
-      <div class="card bg-dark bg-opacity-25 border-secondary text-start mx-auto p-4 mb-4 text-muted fs-7" style="max-width: 550px;">
-        <h6 class="text-white fw-bold mb-3"><i class="fa-solid fa-terminal text-indigo me-2"></i> How to Compile and Run Locally</h6>
-        <p class="mb-2">1. Open your terminal and navigate to the project desktop folder:</p>
-        <pre class="bg-black text-success p-2 rounded mb-3">cd desktop-app</pre>
-        <p class="mb-2">2. Clean, compile and start the Swing application GUI:</p>
-        <pre class="bg-black text-success p-2 rounded mb-0">mvn clean compile exec:java</pre>
+    <div class="container-fluid py-2">
+      <!-- Android App Hero Download Card -->
+      <div class="glass-panel p-4 p-md-5 text-center mb-4 border-success border-opacity-25" style="box-shadow: 0 0 35px rgba(16, 185, 129, 0.08);">
+        <div class="mb-3">
+          <span class="badge bg-success bg-opacity-25 text-success border border-success-subtle px-3 py-2 rounded-pill font-monospace fs-7">
+            <i class="fa-brands fa-android me-1"></i> OFFICIAL ANDROID APK RELEASE
+          </span>
+        </div>
+        <h2 class="text-white fw-extrabold mb-2 display-6">Download PrepSpace for Android</h2>
+        <p class="text-muted fs-6 max-w-md mx-auto mb-4" style="max-width: 520px;">
+          Experience fast, native mobile performance. Practice DSA questions, complete timed 50-MCQ mock exams, track your placement applications, and access study notes directly on your phone.
+        </p>
+
+        <!-- Primary Direct Browser Download Button -->
+        <div class="mb-4">
+          <a href="https://github.com/nageshmethre/Interview-preparation-tracker/releases/download/app-latest/PrepSpace.apk" download="PrepSpace.apk" class="btn btn-success btn-lg px-4 py-3 fw-bold d-inline-flex align-items-center gap-3 shadow-lg rounded-pill hover-lift" id="direct-apk-download-btn">
+            <i class="fa-brands fa-android fs-2"></i>
+            <div class="text-start">
+              <div class="fs-8 text-uppercase opacity-75 fw-normal font-monospace">DIRECT BROWSER DOWNLOAD</div>
+              <div class="fs-5">Download Android APK (v1.0.0)</div>
+            </div>
+            <i class="fa-solid fa-download ms-2 fs-5"></i>
+          </a>
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-center gap-4 text-muted fs-8 font-monospace">
+          <div><i class="fa-solid fa-shield-halved text-success me-1"></i> 100% Virus-Free & Verified</div>
+          <div><i class="fa-solid fa-mobile-screen text-info me-1"></i> Android 7.0 to 15+ Compatible</div>
+          <div><i class="fa-solid fa-bolt text-warning me-1"></i> Instant Browser Download</div>
+        </div>
       </div>
 
-      <div class="alert alert-indigo-subtle border-indigo text-start d-inline-block px-4 py-3 fs-7 text-muted" style="max-width: 550px;">
-        <i class="fa-solid fa-circle-info text-indigo me-2"></i> 
-        <strong>Author Note:</strong> Build requirements include Java SDK 17+ and Maven. Direct database configs can be adjusted under the app settings panel.
+      <!-- Quick Installation Guide -->
+      <div class="row g-4 mb-4">
+        <div class="col-md-4">
+          <div class="glass-panel p-4 h-100">
+            <div class="fs-4 text-success fw-bold font-monospace mb-2">01</div>
+            <h5 class="text-white fw-bold mb-2">Download APK</h5>
+            <p class="text-muted fs-7 mb-0">Click the green download button above to download the <code class="text-success">PrepSpace.apk</code> package directly in your mobile browser.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="glass-panel p-4 h-100">
+            <div class="fs-4 text-primary fw-bold font-monospace mb-2">02</div>
+            <h5 class="text-white fw-bold mb-2">Allow Unknown Apps</h5>
+            <p class="text-muted fs-7 mb-0">When opening the APK on your device, tap <strong>Settings</strong> and allow your browser (Chrome/Edge) to <em>"Install unknown apps"</em> if prompted.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="glass-panel p-4 h-100">
+            <div class="fs-4 text-warning fw-bold font-monospace mb-2">03</div>
+            <h5 class="text-white fw-bold mb-2">Install & Practice</h5>
+            <p class="text-muted fs-7 mb-0">Tap <strong>Install</strong> to complete setup. Open PrepSpace from your home screen and log in with your email or Google account!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Java Swing Desktop Client Section -->
+      <div class="glass-panel p-4 text-center">
+        <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
+          <i class="fa-solid fa-desktop text-indigo fs-5"></i>
+          <h5 class="text-white fw-bold mb-0">Java Swing Desktop Client</h5>
+        </div>
+        <p class="text-muted fs-7 max-w-md mx-auto mb-3" style="max-width: 500px;">
+          For offline desktop tracking, PrepSpace also includes a native Java Swing application that connects directly to MySQL via JDBC.
+        </p>
+        <div class="card bg-dark bg-opacity-25 border-secondary text-start mx-auto p-3 mb-2 text-muted fs-7" style="max-width: 520px;">
+          <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-terminal text-indigo me-2"></i> Run Locally via Terminal</h6>
+          <pre class="bg-black text-success p-2 rounded mb-1 font-monospace">cd desktop-app && mvn clean compile exec:java</pre>
+        </div>
       </div>
     </div>
   `,
