@@ -547,7 +547,7 @@ const components = {
   `,
 
   // Application Layout Wrapper - Style 2: Stripe / Supabase Enterprise Gradient Workspace
-  appLayout: (userName, isAdmin) => `
+  appLayout: (userName, isAdmin, isPaid = false) => `
     <div id="app-container" class="d-flex w-100 position-relative">
       <!-- Sidebar -->
       <div class="sidebar glass-panel border-top-0 border-bottom-0 border-start-0 rounded-0 d-flex flex-column">
@@ -569,18 +569,23 @@ const components = {
         </div>
 
         <!-- User Profile Micro Card -->
-        <div class="user-micro-card px-3 py-2 mx-3 my-2 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 d-flex align-items-center justify-content-between">
-          <div class="d-flex align-items-center gap-2 overflow-hidden">
-            <div class="position-relative user-avatar-dot">
-              <i class="fa-solid fa-circle-user fs-4 text-primary"></i>
-              <span class="position-absolute bottom-0 end-0 bg-success border border-dark rounded-circle" style="width: 8px; height: 8px;"></span>
+        <div class="user-micro-card px-2 py-2 mx-2 my-2 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 d-flex align-items-center justify-content-between" id="sidebar-user-card">
+          <div class="d-flex align-items-center gap-2 overflow-hidden me-1">
+            <div class="position-relative flex-shrink-0 user-avatar-dot">
+              <i class="fa-solid fa-circle-user fs-4 ${isPaid ? 'text-primary' : 'text-secondary'}"></i>
+              <span class="position-absolute bottom-0 end-0 ${isPaid ? 'bg-success' : 'bg-secondary'} border border-dark rounded-circle" style="width: 8px; height: 8px;"></span>
             </div>
             <div class="d-flex flex-column text-start text-truncate user-profile-text">
-              <span class="text-white fw-bold fs-7 text-truncate" id="sidebar-user-name">${userName}</span>
-              <span class="text-muted fs-8">Pro Workspace</span>
+              <span class="text-white fw-bold fs-7 text-truncate" id="sidebar-user-name">${userName || 'Candidate'}</span>
+              <span class="text-muted fs-8 text-truncate" id="sidebar-user-plan">${isPaid ? 'Pro Workspace' : 'Free Plan'}</span>
             </div>
           </div>
-          <a href="#/billing" class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle text-decoration-none">PRO</a>
+          <div id="sidebar-user-badge" class="flex-shrink-0">
+            ${isPaid 
+              ? `<span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle font-monospace">PRO</span>`
+              : `<a href="#/billing" class="badge bg-secondary bg-opacity-25 text-muted border border-secondary text-decoration-none font-monospace">FREE</a>`
+            }
+          </div>
         </div>
         
         <!-- Categorized Nav Links -->
@@ -650,8 +655,16 @@ const components = {
                 <span class="d-none d-md-inline" id="user-display-name">${userName}</span>
               </button>
               <ul class="dropdown-menu dropdown-menu-end glass-panel" aria-labelledby="userDropdown">
+                <li class="px-3 py-1 border-bottom border-secondary border-opacity-25 mb-1" id="dropdown-plan-info">
+                  <div class="fs-8 text-muted font-monospace">MEMBERSHIP</div>
+                  <div class="fw-bold ${isPaid ? 'text-primary' : 'text-secondary'} fs-7 d-flex align-items-center gap-1">
+                    ${isPaid 
+                      ? '<span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle font-monospace me-1">PRO</span> PrepPro Active' 
+                      : '<span class="badge bg-secondary bg-opacity-25 text-muted border border-secondary font-monospace me-1">FREE</span> Starter Workspace'}
+                  </div>
+                </li>
                 <li><a class="dropdown-item text-white" href="#/profile"><i class="fa-solid fa-gear me-2 text-secondary"></i>Settings</a></li>
-                <li><a class="dropdown-item text-white" href="#/billing"><i class="fa-solid fa-gem me-2 text-primary"></i>Upgrade Plan</a></li>
+                ${!isPaid ? `<li><a class="dropdown-item text-primary fw-semibold" href="#/billing"><i class="fa-solid fa-gem me-2"></i>Upgrade to Pro</a></li>` : ''}
                 <li><hr class="dropdown-divider border-secondary border-opacity-25"></li>
                 <li><button class="dropdown-item text-danger" id="dropdown-logout"><i class="fa-solid fa-right-from-bracket me-2 text-danger"></i>Logout</button></li>
               </ul>

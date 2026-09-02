@@ -282,12 +282,13 @@ function router() {
 
   // Inject workspace layout if not already rendered
   if (!document.getElementById('app-container')) {
-    appRoot.innerHTML = components.appLayout(state.name, state.role && state.role.startsWith('ADMIN'));
+    appRoot.innerHTML = components.appLayout(state.name, state.role && state.role.startsWith('ADMIN'), state.isPaid);
     bindLayoutEvents();
   }
 
-  // Sync sidebar active status
+  // Sync sidebar active status and plan badge
   updateSidebarSelection(hash);
+  updateSidebarPlanBadge(state.isPaid);
 
   // Mount targeted page views
   const pageMount = document.getElementById('page-mount');
@@ -793,14 +794,49 @@ function fetchUserProfile() {
   if (!state.token) return Promise.resolve();
   return apiFetch('/users/profile')
     .then(profile => {
-      const isPaidUser = profile.isPaid || (state.role && (state.role.startsWith('ROLE_ADMIN') || state.role.startsWith('ADMIN')));
+      const isPaidUser = Boolean(profile.isPaid) || (state.role && (state.role.startsWith('ROLE_ADMIN') || state.role.startsWith('ADMIN')));
       localStorage.setItem('isPaid', isPaidUser ? 'true' : 'false');
       localStorage.setItem('referralCode', profile.referralCode || '');
       localStorage.setItem('referralEarnings', profile.referralEarnings || '0');
       
       state.isPaid = isPaidUser;
       state.referralCode = profile.referralCode;
+
+      updateSidebarPlanBadge(isPaidUser);
     });
+}
+
+function updateSidebarPlanBadge(isPaid) {
+  const planEl = document.getElementById('sidebar-user-plan');
+  const badgeEl = document.getElementById('sidebar-user-badge');
+  const avatarDot = document.querySelector('.user-avatar-dot i');
+  const statusDot = document.querySelector('.user-avatar-dot span');
+  const dropdownPlan = document.getElementById('dropdown-plan-info');
+
+  if (planEl) {
+    planEl.textContent = isPaid ? 'Pro Workspace' : 'Free Plan';
+  }
+  if (badgeEl) {
+    badgeEl.innerHTML = isPaid 
+      ? `<span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle font-monospace">PRO</span>`
+      : `<a href="#/billing" class="badge bg-secondary bg-opacity-25 text-muted border border-secondary text-decoration-none font-monospace">FREE</a>`;
+  }
+  if (avatarDot) {
+    avatarDot.className = `fa-solid fa-circle-user fs-4 ${isPaid ? 'text-primary' : 'text-secondary'}`;
+  }
+  if (statusDot) {
+    statusDot.className = `position-absolute bottom-0 end-0 ${isPaid ? 'bg-success' : 'bg-secondary'} border border-dark rounded-circle`;
+  }
+  if (dropdownPlan) {
+    dropdownPlan.innerHTML = `
+      <div class="fs-8 text-muted font-monospace">MEMBERSHIP</div>
+      <div class="fw-bold ${isPaid ? 'text-primary' : 'text-secondary'} fs-7 d-flex align-items-center gap-1">
+        ${isPaid 
+          ? '<span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle font-monospace me-1">PRO</span> PrepPro Active' 
+          : '<span class="badge bg-secondary bg-opacity-25 text-muted border border-secondary font-monospace me-1">FREE</span> Starter Workspace'}
+      </div>
+    `;
+  }
 }
 
 function initGoogleSignIn() {
