@@ -485,111 +485,149 @@ const components = {
     </footer>
   `,
 
-  // Authentication: Login Page
+  // Authentication: Login Page (Vercel UI/UX)
   login: () => `
-    <div class="container">
-      <div class="row justify-content-center align-items-center min-vh-100 py-4">
-        <div class="col-md-6 col-lg-5 col-xl-4">
-          <div class="glass-panel p-4 p-md-5 text-center">
-            <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace" style="width: 52px; height: 52px; object-fit: contain;" class="mb-3">
-            <h2 class="text-white fw-bold mb-1">Welcome Back</h2>
-            <p class="text-muted mb-4 fs-7">Enter credentials to initialize your space</p>
-            
-            <form id="login-form">
-              <div class="mb-3 text-start">
-                <label class="form-label text-muted fs-7">GMAIL ADDRESS</label>
-                <div class="input-group">
-                  <span class="input-group-text bg-dark border-secondary border-opacity-25 text-danger"><i class="fa-brands fa-google"></i></span>
-                  <input type="email" id="login-email" class="form-control glass-input" placeholder="candidate@gmail.com" pattern=".+@gmail\\.com$" title="Only @gmail.com addresses are allowed" required>
-                </div>
-                <div class="form-text text-muted font-monospace" style="font-size:0.7rem;">Must be a valid @gmail.com address</div>
-              </div>
-              <div class="mb-4 text-start">
-                <label class="form-label text-muted fs-7">PASSWORD</label>
-                <input type="password" id="login-password" class="form-control glass-input" placeholder="••••••••" required>
-              </div>
-              <button type="submit" class="btn btn-premium w-100 py-2 fs-6 mb-3">Authenticate</button>
-            </form>
-
-            <div class="my-3 d-flex align-items-center">
-              <hr class="flex-grow-1 border-secondary-subtle">
-              <span class="px-2 text-muted small">OR</span>
-              <hr class="flex-grow-1 border-secondary-subtle">
-            </div>
-            <div id="google-login-btn" class="w-100 d-flex justify-content-center mb-3"></div>
-            
-            <p class="text-muted fs-7">Don't have an account? <a href="#/register" class="text-indigo text-decoration-none">Register with Gmail</a></p>
+    <div class="vercel-auth-wrapper">
+      <div class="vercel-auth-card text-center">
+        <a href="#/" class="d-inline-block mb-3 text-decoration-none">
+          <img src="assets/prepspace_icon.png?v=2.4.6" alt="PrepSpace" style="width: 44px; height: 44px; object-fit: contain;">
+        </a>
+        <h1 class="vercel-auth-title">Welcome Back</h1>
+        <p class="vercel-auth-sub">Enter your credentials to access your workspace</p>
+        
+        <form id="login-form">
+          <div class="mb-3 text-start">
+            <label class="vercel-input-label" for="login-email">GMAIL ADDRESS</label>
+            <input type="email" id="login-email" class="vercel-input" placeholder="candidate@gmail.com" pattern=".+@gmail\\.com$" title="Only @gmail.com addresses are allowed" required autocomplete="email">
           </div>
+          <div class="mb-4 text-start">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label class="vercel-input-label mb-0" for="login-password">PASSWORD</label>
+              <a href="#/forgot-password" class="text-muted text-decoration-none" style="font-size: 0.72rem;">Forgot?</a>
+            </div>
+            <div class="position-relative">
+              <input type="password" id="login-password" class="vercel-input pe-5" placeholder="••••••••" required autocomplete="current-password">
+              <button type="button" class="vercel-pass-toggle" data-target="login-password" aria-label="Toggle password visibility">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+          </div>
+          <button type="submit" class="vercel-btn-primary mb-3">Sign In</button>
+        </form>
+
+        <div class="my-3 d-flex align-items-center">
+          <hr class="flex-grow-1 border-secondary border-opacity-25 my-0">
+          <span class="px-3 text-muted" style="font-size: 0.72rem; letter-spacing: 0.06em;">OR</span>
+          <hr class="flex-grow-1 border-secondary border-opacity-25 my-0">
         </div>
+        
+        <div id="google-login-btn" class="w-100 d-flex justify-content-center mb-3"></div>
+        
+        <p class="text-muted mb-0" style="font-size: 0.8125rem;">
+          Don't have an account? <a href="#/register" class="text-white text-decoration-underline fw-medium">Create Space</a>
+        </p>
       </div>
     </div>
   `,
 
-  // Authentication: Register Page
+  // Authentication: Register Page (Vercel UI/UX)
   register: () => `
-    <div class="container">
-      <div class="row justify-content-center align-items-center min-vh-100 py-4">
-        <div class="col-md-6 col-lg-5 col-xl-4">
-          <div class="glass-panel p-4 p-md-5 text-center">
-            <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace" style="width: 52px; height: 52px; object-fit: contain;" class="mb-3">
-            <h2 class="text-white fw-bold mb-1">Create Space</h2>
-            <p class="text-muted mb-4 fs-7">Start your preparation tracking lifecycle</p>
-            
-            <!-- Registration Step 1: Account Details Form -->
-            <form id="register-form">
-              <div class="mb-3 text-start">
-                <label class="form-label text-muted fs-7">FULL NAME</label>
-                <input type="text" id="register-name" class="form-control glass-input" placeholder="Nagesh Methre" required>
-              </div>
-              <div class="mb-3 text-start">
-                <label class="form-label text-muted fs-7">GMAIL ADDRESS</label>
-                <div class="input-group">
-                  <span class="input-group-text bg-dark border-secondary border-opacity-25 text-danger"><i class="fa-brands fa-google"></i></span>
-                  <input type="email" id="register-email" class="form-control glass-input" placeholder="nagesh@gmail.com" pattern=".+@gmail\\.com$" title="Only @gmail.com addresses are allowed" required>
-                </div>
-                <div class="form-text text-muted font-monospace" style="font-size:0.7rem;">Confirmation OTP will be sent to this Gmail</div>
-              </div>
-              <div class="mb-4 text-start">
-                <label class="form-label text-muted fs-7">PASSWORD (Min. 6 chars, A-Z, a-z, 0-9)</label>
-                <input type="password" id="register-password" class="form-control glass-input" placeholder="••••••••" minlength="6" required>
-                <div class="form-text text-muted" style="font-size:0.7rem;">Must include uppercase, lowercase, and a number</div>
-              </div>
-              <button type="submit" class="btn btn-premium w-100 py-2 fs-6 mb-3">Continue to Gmail Verification</button>
-            </form>
+    <div class="vercel-auth-wrapper">
+      <div class="vercel-auth-card text-center">
+        <a href="#/" class="d-inline-block mb-3 text-decoration-none">
+          <img src="assets/prepspace_icon.png?v=2.4.6" alt="PrepSpace" style="width: 44px; height: 44px; object-fit: contain;">
+        </a>
+        <h1 class="vercel-auth-title" id="auth-card-title">Create Space</h1>
+        <p class="vercel-auth-sub" id="auth-card-subtitle">Start your technical interview preparation journey</p>
+        
+        <!-- Registration Step 1: Account Details Form -->
+        <form id="register-form">
+          <div class="mb-3 text-start">
+            <label class="vercel-input-label" for="register-name">FULL NAME</label>
+            <input type="text" id="register-name" class="vercel-input" placeholder="Nagesh Methre" required autocomplete="name">
+          </div>
 
-            <!-- Registration Step 2: 6-Digit Gmail OTP Verification Modal/Box -->
-            <div id="otp-verification-card" class="d-none text-start">
-              <div class="alert alert-dark border-primary border-opacity-50 p-3 mb-3 rounded-3" style="background: rgba(99, 102, 241, 0.08);">
-                <div class="d-flex align-items-center gap-2 mb-1 text-primary fw-bold fs-7">
-                  <i class="fa-solid fa-envelope-circle-check"></i>
-                  <span>Gmail Verification Code</span>
-                </div>
-                <p class="text-secondary fs-8 mb-0">We generated a 6-digit confirmation OTP for <span id="otp-target-email" class="text-white font-monospace fw-bold"></span>. Enter the code below:</p>
-              </div>
-              <div class="mb-3">
-                <label class="form-label text-muted fs-7 font-monospace">ENTER 6-DIGIT OTP</label>
-                <input type="text" id="register-otp-input" class="form-control glass-input text-center font-monospace fs-3 fw-bold text-primary tracking-widest" placeholder="• • • • • •" maxlength="6" pattern="[0-9]{6}">
-              </div>
-              <button type="button" id="btn-confirm-otp" class="btn btn-premium w-100 py-2 fs-6 mb-2">Verify & Create Account</button>
-              <div class="d-flex justify-content-between align-items-center text-muted fs-8 font-monospace mt-2">
-                <span id="otp-timer-display">Resend in 45s</span>
-                <button type="button" id="btn-resend-otp" class="btn btn-link text-indigo p-0 fs-8 text-decoration-none" disabled>Resend Code</button>
-              </div>
-              <div class="text-center mt-3">
-                <button type="button" id="btn-back-to-register" class="btn btn-link text-muted p-0 fs-8 text-decoration-none">← Edit Gmail Address</button>
-              </div>
-            </div>
+          <div class="mb-3 text-start">
+            <label class="vercel-input-label" for="register-email">GMAIL ADDRESS</label>
+            <input type="email" id="register-email" class="vercel-input" placeholder="nagesh@gmail.com" pattern=".+@gmail\\.com$" title="Only @gmail.com addresses are allowed" required autocomplete="email">
+          </div>
 
-            <div class="my-3 d-flex align-items-center" id="register-or-divider">
-              <hr class="flex-grow-1 border-secondary-subtle">
-              <span class="px-2 text-muted small">OR</span>
-              <hr class="flex-grow-1 border-secondary-subtle">
+          <div class="mb-3 text-start">
+            <label class="vercel-input-label" for="register-password">PASSWORD</label>
+            <div class="position-relative">
+              <input type="password" id="register-password" class="vercel-input pe-5" placeholder="Create password" minlength="6" required autocomplete="new-password">
+              <button type="button" class="vercel-pass-toggle" data-target="register-password" aria-label="Toggle password visibility">
+                <i class="fa-regular fa-eye"></i>
+              </button>
             </div>
-            <div id="google-login-btn" class="w-100 d-flex justify-content-center mb-3"></div>
-            
-            <p class="text-muted fs-7 mb-0">Already registered? <a href="#/login" class="text-indigo text-decoration-none">Login here</a></p>
+          </div>
+
+          <div class="mb-4 text-start">
+            <label class="vercel-input-label" for="register-confirm-password">CONFIRM PASSWORD</label>
+            <div class="position-relative">
+              <input type="password" id="register-confirm-password" class="vercel-input pe-5" placeholder="Confirm password" minlength="6" required autocomplete="new-password">
+              <button type="button" class="vercel-pass-toggle" data-target="register-confirm-password" aria-label="Toggle confirm password visibility">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="vercel-btn-primary mb-3">Continue to Verification</button>
+        </form>
+
+        <!-- Registration Step 2: Vercel Segmented 6-Digit OTP Verification Card -->
+        <div id="otp-verification-card" class="d-none text-start">
+          <div class="mb-3 p-3 rounded-3" style="background: rgba(255, 255, 255, 0.04); border: 1px dashed rgba(255, 255, 255, 0.18);">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <div class="text-muted" style="font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase;">Instant Verification Passcode</div>
+                <div class="font-monospace fw-bold fs-4 text-white" id="displayed-otp-code">------</div>
+              </div>
+              <button type="button" id="btn-autofill-otp" class="btn btn-sm btn-outline-light rounded-2 px-3 py-1 font-monospace" style="font-size: 0.75rem;">
+                <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Auto-Fill
+              </button>
+            </div>
+            <div class="text-secondary mt-2" style="font-size: 0.75rem;">
+              Target Gmail: <span id="otp-target-email" class="text-white font-monospace fw-semibold"></span>
+            </div>
+          </div>
+
+          <div class="mb-4 text-center">
+            <label class="vercel-input-label text-start mb-2">ENTER 6-DIGIT VERIFICATION CODE</label>
+            <div class="d-flex justify-content-between gap-2" id="otp-inputs-container">
+              <input type="text" maxlength="1" inputmode="numeric" class="vercel-otp-box" id="otp-box-1" autocomplete="one-time-code" autofocus>
+              <input type="text" maxlength="1" inputmode="numeric" class="vercel-otp-box" id="otp-box-2">
+              <input type="text" maxlength="1" inputmode="numeric" class="vercel-otp-box" id="otp-box-3">
+              <input type="text" maxlength="1" inputmode="numeric" class="vercel-otp-box" id="otp-box-4">
+              <input type="text" maxlength="1" inputmode="numeric" class="vercel-otp-box" id="otp-box-5">
+              <input type="text" maxlength="1" inputmode="numeric" class="vercel-otp-box" id="otp-box-6">
+            </div>
+            <input type="hidden" id="register-otp-input" value="">
+          </div>
+
+          <button type="button" id="btn-confirm-otp" class="vercel-btn-primary mb-3">Verify & Create Space</button>
+
+          <div class="d-flex justify-content-between align-items-center text-muted fs-8 font-monospace mt-2">
+            <span id="otp-timer-display">Resend in 45s</span>
+            <button type="button" id="btn-resend-otp" class="btn btn-link text-white p-0 fs-8 text-decoration-none" disabled>Resend Code</button>
+          </div>
+
+          <div class="text-center mt-3 pt-2 border-top border-secondary border-opacity-25">
+            <button type="button" id="btn-back-to-register" class="btn btn-link text-muted p-0 fs-8 text-decoration-none">← Change Email or Details</button>
           </div>
         </div>
+
+        <div class="my-3 d-flex align-items-center" id="register-or-divider">
+          <hr class="flex-grow-1 border-secondary border-opacity-25 my-0">
+          <span class="px-3 text-muted" style="font-size: 0.72rem; letter-spacing: 0.06em;">OR</span>
+          <hr class="flex-grow-1 border-secondary border-opacity-25 my-0">
+        </div>
+        
+        <div id="google-login-btn" class="w-100 d-flex justify-content-center mb-3"></div>
+        
+        <p class="text-muted mb-0" style="font-size: 0.8125rem;">
+          Already have an account? <a href="#/login" class="text-white text-decoration-underline fw-medium">Sign In</a>
+        </p>
       </div>
     </div>
   `,

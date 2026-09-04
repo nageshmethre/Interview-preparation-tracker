@@ -732,3 +732,169 @@ body {
   position: relative;
   overflow: hidden;
 }
+
+/* ====================================================
+   VERCEL AUTHENTICATION & VERIFICATION DESIGN SYSTEM
+   ==================================================== */
+.vercel-auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 8%, rgba(120, 119, 198, 0.12) 0%, rgba(0, 0, 0, 0) 65%), #000000;
+  padding: 32px 16px;
+}
+
+.vercel-auth-card {
+  max-width: 440px;
+  width: 100%;
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 38px 32px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 32px 64px -16px rgba(0, 0, 0, 0.9);
+  transition: all 0.2s ease;
+}
+
+.vercel-auth-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: #ffffff;
+  margin-bottom: 6px;
+}
+
+.vercel-auth-sub {
+  font-size: 0.875rem;
+  color: #888888;
+  margin-bottom: 24px;
+  line-height: 1.45;
+}
+
+.vercel-input-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #a1a1aa;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.vercel-input {
+  background: #000000 !important;
+  border: 1px solid #27272a !important;
+  color: #ededed !important;
+  border-radius: 8px !important;
+  padding: 10px 14px !important;
+  font-size: 0.88rem !important;
+  height: 44px;
+  width: 100%;
+  transition: all 0.15s ease;
+}
+
+.vercel-input:focus {
+  background: #050505 !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 0 0 1px #ffffff !important;
+  outline: none !important;
+}
+
+/* Chrome / Edge autofill fix - strictly prevents white or light-blue background */
+.vercel-input:-webkit-autofill,
+.vercel-input:-webkit-autofill:hover,
+.vercel-input:-webkit-autofill:focus,
+input:-webkit-autofill {
+  -webkit-text-fill-color: #ededed !important;
+  -webkit-box-shadow: 0 0 0px 1000px #000000 inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.vercel-btn-primary {
+  background: #ffffff !important;
+  color: #000000 !important;
+  font-weight: 600 !important;
+  font-size: 0.88rem !important;
+  border: 1px solid #ffffff !important;
+  border-radius: 8px !important;
+  height: 44px;
+  width: 100%;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.vercel-btn-primary:hover {
+  background: #eaeaea !important;
+  border-color: #eaeaea !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.18);
+}
+
+.vercel-btn-secondary {
+  background: #111111 !important;
+  color: #ededed !important;
+  border: 1px solid #27272a !important;
+  border-radius: 8px !important;
+  height: 44px;
+  font-size: 0.88rem !important;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.vercel-btn-secondary:hover {
+  background: #18181b !important;
+  border-color: #3f3f46 !important;
+  color: #ffffff !important;
+}
+
+/* 6-box Segmented OTP Digit Inputs */
+.vercel-otp-box {
+  width: 46px;
+  height: 54px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  background: #000000;
+  border: 1px solid #27272a;
+  border-radius: 8px;
+  color: #ffffff;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.vercel-otp-box:focus {
+  border-color: #ffffff;
+  box-shadow: 0 0 0 1px #ffffff;
+  outline: none;
+  background: #080808;
+}
+
+.vercel-pass-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #71717a;
+  padding: 4px;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.vercel-pass-toggle:hover {
+  color: #ffffff;
+}

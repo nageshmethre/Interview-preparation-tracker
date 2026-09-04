@@ -908,6 +908,18 @@ function handleGoogleCredentialResponse(response) {
 // ----------------------------------------------------
 
 function bindAuthEvents(mode) {
+  // Bind password visibility toggles
+  document.querySelectorAll('.vercel-pass-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.getAttribute('data-target');
+      const input = document.getElementById(targetId);
+      if (!input) return;
+      const isPassword = input.type === 'password';
+      input.type = isPassword ? 'text' : 'password';
+      btn.innerHTML = isPassword ? '<i class="fa-regular fa-eye-slash"></i>' : '<i class="fa-regular fa-eye"></i>';
+    });
+  });
+
   if (mode === 'login') {
     const form = document.getElementById('login-form');
     form.addEventListener('submit', (e) => {
@@ -951,14 +963,75 @@ function bindAuthEvents(mode) {
     const otpInput = document.getElementById('register-otp-input');
     const btnConfirmOtp = document.getElementById('btn-confirm-otp');
     const btnResendOtp = document.getElementById('btn-resend-otp');
+    const btnAutoFillOtp = document.getElementById('btn-autofill-otp');
     const timerDisplay = document.getElementById('otp-timer-display');
     const btnBack = document.getElementById('btn-back-to-register');
     const orDivider = document.getElementById('register-or-divider');
     const googleBtn = document.getElementById('google-login-btn');
+    const titleEl = document.getElementById('auth-card-title');
+    const subEl = document.getElementById('auth-card-subtitle');
+    const displayedOtpEl = document.getElementById('displayed-otp-code');
 
     let pendingRegistration = null;
     let currentOtp = null;
     let resendInterval = null;
+
+    function getEnteredOtp() {
+      let code = '';
+      for (let i = 1; i <= 6; i++) {
+        const box = document.getElementById(`otp-box-${i}`);
+        if (box) code += box.value.trim();
+      }
+      return code || (otpInput ? otpInput.value.trim() : '');
+    }
+
+    function syncOtpInputs(code) {
+      for (let i = 1; i <= 6; i++) {
+        const box = document.getElementById(`otp-box-${i}`);
+        if (box) box.value = code[i - 1] || '';
+      }
+      if (otpInput) otpInput.value = code;
+    }
+
+    function initSegmentedOtpInputs() {
+      for (let i = 1; i <= 6; i++) {
+        const box = document.getElementById(`otp-box-${i}`);
+        if (!box) continue;
+
+        box.addEventListener('input', (e) => {
+          const val = box.value.replace(/[^0-9]/g, '');
+          box.value = val.slice(-1);
+          if (box.value && i < 6) {
+            const nextBox = document.getElementById(`otp-box-${i + 1}`);
+            if (nextBox) nextBox.focus();
+          }
+          if (otpInput) otpInput.value = getEnteredOtp();
+        });
+
+        box.addEventListener('keydown', (e) => {
+          if (e.key === 'Backspace' && !box.value && i > 1) {
+            const prevBox = document.getElementById(`otp-box-${i - 1}`);
+            if (prevBox) {
+              prevBox.focus();
+              prevBox.value = '';
+            }
+          }
+        });
+
+        box.addEventListener('paste', (e) => {
+          e.preventDefault();
+          const pasteData = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
+          if (pasteData) {
+            syncOtpInputs(pasteData.slice(0, 6));
+            const lastIdx = Math.min(pasteData.length, 6);
+            const focusTarget = document.getElementById(`otp-box-${lastIdx}`) || btnConfirmOtp;
+            if (focusTarget) focusTarget.focus();
+          }
+        });
+      }
+    }
+
+    initSegmentedOtpInputs();
 
     function startResendTimer() {
       let secondsLeft = 45;
@@ -982,6 +1055,7 @@ function bindAuthEvents(mode) {
       const name = document.getElementById('register-name').value.trim();
       const email = document.getElementById('register-email').value.trim();
       const password = document.getElementById('register-password').value;
+      const confirmPassword = document.getElementById('register-confirm-password').value;
       const referralCode = localStorage.getItem('referral_code') || '';
 
       if (!email.toLowerCase().endsWith('@gmail.com')) {
@@ -989,31 +1063,60 @@ function bindAuthEvents(mode) {
         return;
       }
 
+      if (password !== confirmPassword) {
+        showToast('Passwords do not match. Please verify your confirm password.', 'warning');
+        document.getElementById('register-confirm-password').focus();
+        return;
+      }
+
       // Generate 6-digit Confirmation OTP
       currentOtp = Math.floor(100000 + Math.random() * 900000).toString();
       pendingRegistration = { name, email, password, referralCode };
 
-      // Switch to Confirmation OTP view
+      // Switch to Vercel Confirmation OTP view
       form.classList.add('d-none');
       if (orDivider) orDivider.classList.add('d-none');
       if (googleBtn) googleBtn.classList.add('d-none');
       if (otpCard) otpCard.classList.remove('d-none');
+
+      if (titleEl) titleEl.textContent = 'Verify Email';
+      if (subEl) subEl.textContent = 'Enter the 6-digit confirmation passcode';
+
       const targetEmailEl = document.getElementById('otp-target-email');
       if (targetEmailEl) targetEmailEl.textContent = email;
-      if (otpInput) {
-        otpInput.value = '';
-        otpInput.focus();
+
+      if (displayedOtpEl) {
+        displayedOtpEl.textContent = `${currentOtp.slice(0, 3)} ${currentOtp.slice(3)}`;
       }
 
+      syncOtpInputs('');
+      const firstBox = document.getElementById('otp-box-1');
+      if (firstBox) firstBox.focus();
+
       startResendTimer();
-      showToast(`Gmail Confirmation OTP: ${currentOtp} (Check your Gmail inbox)`, 'info', 12000);
+      showToast(`Verification Passcode: ${currentOtp} (Click Auto-Fill or enter code)`, 'info', 15000);
     });
+
+    if (btnAutoFillOtp) {
+      btnAutoFillOtp.addEventListener('click', () => {
+        if (!currentOtp) return;
+        syncOtpInputs(currentOtp);
+        showToast('Verification code auto-filled!', 'success');
+        if (btnConfirmOtp) btnConfirmOtp.focus();
+      });
+    }
 
     if (btnResendOtp) {
       btnResendOtp.addEventListener('click', () => {
         currentOtp = Math.floor(100000 + Math.random() * 900000).toString();
+        if (displayedOtpEl) {
+          displayedOtpEl.textContent = `${currentOtp.slice(0, 3)} ${currentOtp.slice(3)}`;
+        }
+        syncOtpInputs('');
+        const firstBox = document.getElementById('otp-box-1');
+        if (firstBox) firstBox.focus();
         startResendTimer();
-        showToast(`New Gmail Confirmation OTP: ${currentOtp}`, 'info', 12000);
+        showToast(`New verification code: ${currentOtp}`, 'info', 15000);
       });
     }
 
@@ -1023,19 +1126,21 @@ function bindAuthEvents(mode) {
         form.classList.remove('d-none');
         if (orDivider) orDivider.classList.remove('d-none');
         if (googleBtn) googleBtn.classList.remove('d-none');
+        if (titleEl) titleEl.textContent = 'Create Space';
+        if (subEl) subEl.textContent = 'Start your technical interview preparation journey';
         clearInterval(resendInterval);
       });
     }
 
     if (btnConfirmOtp) {
       btnConfirmOtp.addEventListener('click', () => {
-        const enteredOtp = (otpInput ? otpInput.value : '').trim();
+        const enteredOtp = getEnteredOtp();
         if (!enteredOtp || enteredOtp.length !== 6) {
-          showToast('Please enter the full 6-digit confirmation code.', 'warning');
+          showToast('Please enter the complete 6-digit confirmation code.', 'warning');
           return;
         }
         if (enteredOtp !== currentOtp) {
-          showToast('Invalid confirmation OTP. Please check your code and try again.', 'danger');
+          showToast('Invalid confirmation code. Please check your passcode and try again.', 'danger');
           return;
         }
 
@@ -1044,7 +1149,7 @@ function bindAuthEvents(mode) {
           method: 'POST',
           body: JSON.stringify(pendingRegistration)
         }).then(res => {
-          showToast('Gmail confirmed & registration complete! Initializing space...', 'success');
+          showToast('Email verified & account created! Initializing space...', 'success');
           // Auto login upon successful verification
           apiFetch('/auth/login', {
             method: 'POST',
