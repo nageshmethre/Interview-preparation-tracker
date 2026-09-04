@@ -71,8 +71,8 @@ public class QuestionDataLoader implements ApplicationRunner {
         }
 
         // 2. Seed Default Settings & Adsense/SEO
-        seedSetting("PRODUCT_PRICE_INR", "99");
-        seedSetting("REFERRAL_REWARD_INR", "49");
+        seedOrUpdateSetting("PRODUCT_PRICE_INR", "399", "99");
+        seedOrUpdateSetting("REFERRAL_REWARD_INR", "199", "49");
         seedSetting("MIN_WITHDRAWAL_INR", "100");
         seedSetting("ADSENSE_PUBLISHER_ID", "ca-pub-4662205173096609");
         seedSetting("SEO_META_TITLE", "PrepSpace - Premium Interview Preparation Tracker SaaS");
@@ -225,6 +225,18 @@ public class QuestionDataLoader implements ApplicationRunner {
         if (!systemSettingRepository.existsById(key)) {
             systemSettingRepository.save(new SystemSetting(key, defaultValue));
             logger.info("Seeded setting: {} = {}", key, defaultValue);
+        }
+    }
+
+    private void seedOrUpdateSetting(String key, String defaultValue, String oldDefaultValue) {
+        Optional<SystemSetting> opt = systemSettingRepository.findById(key);
+        if (opt.isEmpty()) {
+            systemSettingRepository.save(new SystemSetting(key, defaultValue));
+            logger.info("Seeded setting: {} = {}", key, defaultValue);
+        } else if (oldDefaultValue != null && oldDefaultValue.equals(opt.get().getValue())) {
+            opt.get().setValue(defaultValue);
+            systemSettingRepository.save(opt.get());
+            logger.info("Updated setting {} from {} to {}", key, oldDefaultValue, defaultValue);
         }
     }
 }

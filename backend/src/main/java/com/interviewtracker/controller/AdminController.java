@@ -256,8 +256,8 @@ public class AdminController {
         Map<String, String> map = new HashMap<>();
         systemSettingRepository.findAll().forEach(s -> map.put(s.getKey(), s.getValue()));
 
-        if (!map.containsKey("PRODUCT_PRICE_INR")) map.put("PRODUCT_PRICE_INR", "99");
-        if (!map.containsKey("REFERRAL_REWARD_INR")) map.put("REFERRAL_REWARD_INR", "49");
+        if (!map.containsKey("PRODUCT_PRICE_INR")) map.put("PRODUCT_PRICE_INR", "399");
+        if (!map.containsKey("REFERRAL_REWARD_INR")) map.put("REFERRAL_REWARD_INR", "199");
         if (!map.containsKey("MIN_WITHDRAWAL_INR")) map.put("MIN_WITHDRAWAL_INR", "100");
 
         return ResponseEntity.ok(map);

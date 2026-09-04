@@ -366,7 +366,7 @@ const components = {
               <div>
                 <h3 class="text-white h5 fw-bold mb-1 mt-1">PrepPro</h3>
                 <p class="text-indigo fs-8 mb-3">Recommended for Active Jobseekers & Students</p>
-                <div class="my-3"><span class="display-6 fw-extrabold text-white">₹99</span><span class="text-muted fs-8"> / one-time lifetime</span></div>
+                <div class="my-3"><span class="display-6 fw-extrabold text-white">₹399</span><span class="text-muted fs-8"> / one-time lifetime</span></div>
                 <ul class="list-unstyled text-start mb-4 text-muted fs-8 d-flex flex-column gap-2">
                   <li><i class="fa-solid fa-check text-success me-2"></i> <strong>Unlimited 50-MCQ Timed Exams</strong></li>
                   <li><i class="fa-solid fa-check text-success me-2"></i> <strong>AI ATS Resume & Keyword Audit</strong></li>
@@ -396,8 +396,8 @@ const components = {
                 <p class="text-muted fs-7 mb-0 mt-2">PrepSpace generates a balanced 50-question examination covering Data Structures, Algorithms, Core Java, OOP, and Database concepts. The system auto-grades your submission instantly, calculates exact percentile marks, and awards XP to your profile.</p>
               </div>
               <div class="glass-panel p-3">
-                <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-circle-question text-primary me-2"></i>Is the ₹99 PrepPro payment a recurring subscription?</h6>
-                <p class="text-muted fs-7 mb-0 mt-2">No. PrepPro is a single one-time payment of ₹99 with lifetime access. You will never be billed again.</p>
+                <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-circle-question text-primary me-2"></i>Is the ₹399 PrepPro payment a recurring subscription?</h6>
+                <p class="text-muted fs-7 mb-0 mt-2">No. PrepPro is a single one-time payment of ₹399 with lifetime access. You will never be billed again.</p>
               </div>
               <div class="glass-panel p-3">
                 <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-circle-question text-primary me-2"></i>Can I use PrepSpace offline or on desktop?</h6>
@@ -3078,7 +3078,7 @@ const components = {
               <h3 class="text-white h4 mb-1">PrepPro</h3>
               <p class="text-indigo fs-8 mb-4">Complete AI career suite for active jobseekers</p>
               <div class="my-4">
-                <span class="display-5 fw-bold text-white">₹99</span>
+                <span class="display-5 fw-bold text-white">₹399</span>
                 <span class="text-muted fs-8 ms-1">/ one-time payment</span>
               </div>
               <ul class="list-unstyled text-start mb-4 text-muted fs-8">
@@ -3092,7 +3092,7 @@ const components = {
             </div>
             <div>
               <button id="btn-upgrade-pro" class="btn btn-premium w-100 py-3 fw-bold fs-7" ${isPaid ? 'disabled' : ''}>
-                ${isPaid ? '✓ Active Premium Access' : '<i class="fa-solid fa-gem me-1"></i> Unlock PrepPro Access (₹99)'}
+                ${isPaid ? '✓ Active Premium Access' : '<i class="fa-solid fa-gem me-1"></i> Unlock PrepPro Access (₹399)'}
               </button>
             </div>
           </div>
@@ -3120,10 +3120,10 @@ const components = {
           <div class="col-md-9">
             <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-3 font-mono fs-8">AFFILIATE PARTNER BOUNTY</span>
             <h2 class="text-white fw-bold mb-2">Share PrepSpace, Earn Cash Payouts!</h2>
-            <p class="text-muted mb-0">Invite classmates, friends, and peers. You earn <strong class="text-success">₹49 direct cash bounty</strong> on every user who upgrades their tracker space to PrepPro (₹99). Withdrawable instantly to your UPI ID!</p>
+            <p class="text-muted mb-0">Invite classmates, friends, and peers. You earn <strong class="text-success">₹199 direct cash bounty</strong> on every user who upgrades their tracker space to PrepPro (₹399). Withdrawable instantly to your UPI ID!</p>
           </div>
           <div class="col-md-3 text-md-end mt-3 mt-md-0 d-none d-md-block">
-            <div class="stat-num text-success display-6 mb-0">₹49</div>
+            <div class="stat-num text-success display-6 mb-0">₹199</div>
             <div class="stat-label text-muted">CASH PER UPGRADE</div>
           </div>
         </div>
@@ -4010,7 +4010,7 @@ const components = {
               <label class="form-label text-muted fs-8 uppercase">Product Premium Access Price (INR)</label>
               <div class="input-group input-group-sm">
                 <span class="input-group-text bg-secondary border-0 text-white font-monospace">₹</span>
-                <input type="number" id="setting-PRODUCT_PRICE_INR" class="form-control admin-input" value="${settings.PRODUCT_PRICE_INR || 99}">
+                <input type="number" id="setting-PRODUCT_PRICE_INR" class="form-control admin-input" value="${settings.PRODUCT_PRICE_INR || 399}">
                 <button class="btn btn-primary btn-save-setting" data-key="PRODUCT_PRICE_INR">Update</button>
               </div>
               <small class="text-muted fs-9">Current live charge on Cashfree gateway.</small>
@@ -4020,7 +4020,7 @@ const components = {
               <label class="form-label text-muted fs-8 uppercase">Referral Reward Bounty (INR per Invite)</label>
               <div class="input-group input-group-sm">
                 <span class="input-group-text bg-secondary border-0 text-white font-monospace">₹</span>
-                <input type="number" id="setting-REFERRAL_REWARD_INR" class="form-control admin-input" value="${settings.REFERRAL_REWARD_INR || 49}">
+                <input type="number" id="setting-REFERRAL_REWARD_INR" class="form-control admin-input" value="${settings.REFERRAL_REWARD_INR || 199}">
                 <button class="btn btn-primary btn-save-setting" data-key="REFERRAL_REWARD_INR">Update</button>
               </div>
               <small class="text-muted fs-9">Credited to referrer upon successful candidate upgrade.</small>
@@ -4182,7 +4182,7 @@ const components = {
           <div class="admin-box admin-box-accent-amber admin-kpi-tile p-3">
             <div class="admin-kpi-label mb-1">Referral Bounties</div>
             <div class="admin-kpi-num text-warning">₹${stats.totalReferralPayouts || 0}</div>
-            <div class="admin-kpi-caption mt-1">₹49 per verified invite</div>
+            <div class="admin-kpi-caption mt-1">₹199 per verified invite</div>
           </div>
         </div>
 
@@ -4287,7 +4287,7 @@ const components = {
           <p class="text-muted mb-4 fs-8">The <strong>${featureName}</strong> suite is exclusive to PrepPro members. Upgrade today to unlock full AI diagnostics, unlimited mock exams, and personalized guides.</p>
           
           <div class="bg-dark bg-opacity-50 p-3 rounded mb-4 text-start border border-secondary border-opacity-25 fs-8 text-muted">
-            <h6 class="text-white fw-bold fs-8 mb-2"><i class="fa-solid fa-gem text-primary me-2"></i>Included with PrepPro (₹99 one-time):</h6>
+            <h6 class="text-white fw-bold fs-8 mb-2"><i class="fa-solid fa-gem text-primary me-2"></i>Included with PrepPro (₹399 one-time):</h6>
             <ul class="list-unstyled m-0">
               <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i> Unlimited AI ATS Resume Compliance Audits</li>
               <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i> Custom AI Study Planner & Weak Topic Diagnostic</li>
@@ -4297,7 +4297,7 @@ const components = {
             </ul>
           </div>
 
-          <a href="#/billing" class="btn btn-premium w-100 py-3 fs-7 fw-bold"><i class="fa-solid fa-bolt me-1"></i> Upgrade to PrepPro for ₹99</a>
+          <a href="#/billing" class="btn btn-premium w-100 py-3 fs-7 fw-bold"><i class="fa-solid fa-bolt me-1"></i> Upgrade to PrepPro for ₹399</a>
         </div>
       </div>
     </div>

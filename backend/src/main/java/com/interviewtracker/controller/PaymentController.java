@@ -74,7 +74,7 @@ public class PaymentController {
             }
 
             // Get product price from settings or default
-            double price = 99.0;
+            double price = 399.0;
             Optional<com.interviewtracker.entity.SystemSetting> priceSetting = systemSettingRepository.findById("PRODUCT_PRICE_INR");
             if (priceSetting.isPresent()) {
                 price = Double.parseDouble(priceSetting.get().getValue());
@@ -298,7 +298,7 @@ public class PaymentController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
             }
 
-            double price = 99.0;
+            double price = 399.0;
             Optional<com.interviewtracker.entity.SystemSetting> priceSetting = systemSettingRepository.findById("PRODUCT_PRICE_INR");
             if (priceSetting.isPresent()) {
                 price = Double.parseDouble(priceSetting.get().getValue());
@@ -444,7 +444,7 @@ public class PaymentController {
             if (user.getReferredById() != null) {
                 try {
                     userRepository.findById(user.getReferredById()).ifPresent(referrer -> {
-                        double rewardAmt = 30.0;
+                        double rewardAmt = 199.0;
                         Optional<com.interviewtracker.entity.SystemSetting> rewardSetting = systemSettingRepository.findById("REFERRAL_REWARD_INR");
                         if (rewardSetting.isPresent()) {
                             rewardAmt = Double.parseDouble(rewardSetting.get().getValue());
