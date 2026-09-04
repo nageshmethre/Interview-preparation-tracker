@@ -764,6 +764,7 @@ const components = {
         <div id="admin-broadcast-portal-container" class="mb-3" style="display: none;"></div>
 
         <!-- Sitewide Workspace Promo Announcement Bar -->
+        ${!isAdmin ? `
         <div class="sitewide-promo-banner py-2 px-3 mb-3 border border-primary border-opacity-25 rounded-3 d-flex flex-wrap align-items-center justify-content-between gap-2" style="background: linear-gradient(90deg, rgba(30, 27, 75, 0.7) 0%, rgba(49, 46, 129, 0.7) 50%, rgba(67, 56, 202, 0.7) 100%);">
           <div class="d-flex align-items-center gap-2 text-white fs-8">
             <span class="badge bg-warning text-dark font-monospace fw-bold"><i class="fa-solid fa-trophy me-1"></i> TOP 50 PRO PERK</span>
@@ -771,6 +772,7 @@ const components = {
           </div>
           <a href="#/mock-exams" class="btn btn-sm btn-light py-0 px-2 fw-bold fs-9 text-dark rounded-pill text-nowrap text-decoration-none">Take Mock Exam →</a>
         </div>
+        ` : ''}
 
         <!-- Dynamic Sub-view Mounting Port -->
         <div id="page-mount" class="flex-grow-1 overflow-y-auto"></div>
@@ -3183,11 +3185,11 @@ const components = {
       return `<div class="text-center py-5 text-muted"><i class="fa-solid fa-hourglass-empty fa-2x mb-3"></i><p>No withdrawal claims found in the queue.</p></div>`;
     }
     return `
-      <div class="table-responsive">
-        <table class="table table-dark table-hover fs-7 align-middle mb-0">
+      <div class="table-responsive" style="overflow-x: auto;">
+        <table class="admin-table">
           <thead>
-            <tr class="text-muted border-secondary">
-              <th>ID</th>
+            <tr>
+              <th style="width: 40px;">ID</th>
               <th>User Email</th>
               <th>UPI ID (Payout Details)</th>
               <th>Request Date</th>
@@ -3198,12 +3200,12 @@ const components = {
           </thead>
           <tbody>
             ${claims.map(c => `
-              <tr class="border-secondary">
-                <td class="text-white">${c.id}</td>
-                <td>${c.userEmail}</td>
-                <td class="text-info">${c.payoutDetails}</td>
-                <td>${new Date(c.createdAt).toLocaleString()}</td>
-                <td class="text-success fw-bold">₹${c.amount}</td>
+              <tr>
+                <td class="text-white">#${c.id}</td>
+                <td><div class="text-truncate" style="max-width: 180px;" title="${c.userEmail}">${c.userEmail}</div></td>
+                <td class="text-info font-monospace fs-8">${c.payoutDetails}</td>
+                <td class="text-muted fs-8">${new Date(c.createdAt).toLocaleString()}</td>
+                <td class="text-success fw-bold font-monospace">₹${c.amount}</td>
                 <td>
                   <span class="badge ${c.status === 'PAID' ? 'bg-success-subtle text-success' : c.status === 'REJECTED' ? 'bg-danger-subtle text-danger' : c.status === 'PROCESSING' ? 'bg-warning-subtle text-warning' : 'bg-secondary-subtle text-muted'}">
                     ${c.status}
@@ -3211,7 +3213,7 @@ const components = {
                 </td>
                 <td class="text-end">
                   ${c.status === 'PENDING' || c.status === 'PROCESSING' ? `
-                    <button class="btn btn-sm btn-success btn-claim-action px-2 py-1 me-1" data-id="${c.id}" data-action="PAID"><i class="fa-solid fa-check"></i> Approve & Paid</button>
+                    <button class="btn btn-sm btn-success btn-claim-action px-2 py-1 me-1" data-id="${c.id}" data-action="PAID"><i class="fa-solid fa-check"></i> Paid</button>
                     <button class="btn btn-sm btn-danger btn-claim-action px-2 py-1" data-id="${c.id}" data-action="REJECTED"><i class="fa-solid fa-times"></i> Reject</button>
                   ` : '<span class="text-muted fs-8">No actions</span>'}
                 </td>
@@ -3232,26 +3234,26 @@ const components = {
     const successRate = payments.length ? Math.round((successPayments.length / payments.length) * 100) : 0;
 
     return `
-      <div class="glass-panel p-4 mb-4">
+      <div class="admin-box p-3 mb-4">
         <!-- Summary Cards -->
-        <div class="row g-3 mb-4">
+        <div class="row g-3 mb-3">
           <div class="col-md-4">
-            <div class="p-3 bg-dark bg-opacity-50 rounded border border-secondary border-opacity-25">
-              <span class="text-muted fs-8 uppercase">Audited Volume</span>
+            <div class="admin-box admin-box-accent-emerald p-3">
+              <span class="admin-kpi-label">Audited Volume</span>
               <h4 class="text-success fw-bold mb-0 mt-1 font-monospace">₹${totalGross}</h4>
-              <small class="text-muted fs-9">Processed via Cashfree / UPI Gateway</small>
+              <small class="text-muted fs-9">Processed via Cashfree Gateway</small>
             </div>
           </div>
           <div class="col-md-4">
-            <div class="p-3 bg-dark bg-opacity-50 rounded border border-secondary border-opacity-25">
-              <span class="text-muted fs-8 uppercase">Successful Charges</span>
+            <div class="admin-box admin-box-accent-primary p-3">
+              <span class="admin-kpi-label">Successful Charges</span>
               <h4 class="text-white fw-bold mb-0 mt-1 font-monospace">${successPayments.length} <span class="text-muted fs-7">/ ${payments.length}</span></h4>
               <small class="text-emerald fs-9"><i class="fa-solid fa-circle-check me-1"></i>${successRate}% Settlement Rate</small>
             </div>
           </div>
           <div class="col-md-4">
-            <div class="p-3 bg-dark bg-opacity-50 rounded border border-secondary border-opacity-25">
-              <span class="text-muted fs-8 uppercase">Gateway Verification</span>
+            <div class="admin-box admin-box-accent-cyan p-3">
+              <span class="admin-kpi-label">Gateway Verification</span>
               <h4 class="text-info fw-bold mb-0 mt-1">Cashfree PG</h4>
               <small class="text-muted fs-9">Webhook signature validated</small>
             </div>
@@ -3263,18 +3265,18 @@ const components = {
           <div class="flex-grow-1" style="max-width: 400px;">
             <div class="input-group input-group-sm">
               <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-              <input type="text" id="admin-payment-search-input" class="form-control glass-input" placeholder="Search by email, order ID, or payment ID...">
+              <input type="text" id="admin-payment-search-input" class="form-control admin-input" placeholder="Search by email, order ID, or payment ID...">
             </div>
           </div>
           <a href="/api/admin/reports/payments" class="btn btn-outline-success btn-sm"><i class="fa-solid fa-file-csv me-1"></i> Export Transactions CSV</a>
         </div>
 
         <!-- Table -->
-        <div class="table-responsive">
-          <table class="table table-dark table-hover fs-7 align-middle mb-0" id="admin-payments-table">
+        <div class="table-responsive" style="overflow-x: auto;">
+          <table class="admin-table" id="admin-payments-table">
             <thead>
-              <tr class="text-muted border-secondary">
-                <th>#</th>
+              <tr>
+                <th style="width: 40px;">#</th>
                 <th>Candidate Email</th>
                 <th>Order Reference</th>
                 <th>Gateway Txn ID</th>
@@ -3285,11 +3287,17 @@ const components = {
             </thead>
             <tbody id="admin-payments-table-body">
               ${payments.map(p => `
-                <tr class="border-secondary payment-table-row" data-email="${(p.userEmail || '').toLowerCase()}" data-order="${(p.orderId || '').toLowerCase()}" data-payid="${(p.paymentId || '').toLowerCase()}">
+                <tr class="payment-table-row" data-email="${(p.userEmail || '').toLowerCase()}" data-order="${(p.orderId || '').toLowerCase()}" data-payid="${(p.paymentId || '').toLowerCase()}">
                   <td class="text-muted font-monospace fs-8">#${p.id}</td>
-                  <td class="text-white fw-semibold">${p.userEmail}</td>
-                  <td class="font-monospace fs-8 text-secondary">${p.orderId}</td>
-                  <td class="font-monospace fs-8">${p.paymentId ? `<span class="text-info">${p.paymentId}</span>` : '<span class="text-muted">N/A</span>'}</td>
+                  <td class="text-white fw-semibold">
+                    <div class="text-truncate" style="max-width: 180px;" title="${p.userEmail}">${p.userEmail}</div>
+                  </td>
+                  <td class="font-monospace fs-8 text-secondary">
+                    <div class="text-truncate" style="max-width: 140px;" title="${p.orderId}">${p.orderId}</div>
+                  </td>
+                  <td class="font-monospace fs-8">
+                    ${p.paymentId ? `<div class="text-info text-truncate" style="max-width: 140px;" title="${p.paymentId}">${p.paymentId}</div>` : '<span class="text-muted">N/A</span>'}
+                  </td>
                   <td class="text-success fw-bold font-monospace">₹${p.amount}</td>
                   <td>
                     <span class="badge ${p.status === 'SUCCESS' ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-warning-subtle text-warning border border-warning-subtle'}">
@@ -3315,12 +3323,12 @@ const components = {
     const suspendedCount = users.filter(u => u.isSuspended).length;
 
     return `
-      <div class="glass-panel p-4 mb-4">
+      <div class="admin-box p-3 mb-4">
         <!-- Directory Header & Controls -->
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
           <div>
             <h5 class="text-white fw-bold mb-1"><i class="fa-solid fa-users text-primary me-2"></i>Candidate & Account Directory</h5>
-            <small class="text-muted fs-8">Total Registered: <strong class="text-white">${users.length}</strong> | Pro Members: <strong class="text-emerald">${paidCount}</strong> | Admins: <strong class="text-warning">${adminCount}</strong></small>
+            <small class="text-muted fs-8">Total: <strong class="text-white">${users.length}</strong> | Pro: <strong class="text-emerald">${paidCount}</strong> | Admins: <strong class="text-warning">${adminCount}</strong></small>
           </div>
           <div class="d-flex gap-2">
             <a href="/api/admin/reports/users" class="btn btn-sm btn-glass"><i class="fa-solid fa-file-csv me-1 text-success"></i> Export CSV</a>
@@ -3333,11 +3341,11 @@ const components = {
           <div class="col-md-6">
             <div class="input-group input-group-sm">
               <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-              <input type="text" id="admin-user-search-input" class="form-control glass-input" placeholder="Search by name, email, role, or referral code...">
+              <input type="text" id="admin-user-search-input" class="form-control admin-input" placeholder="Search by name, email, role, or referral code...">
             </div>
           </div>
           <div class="col-md-6">
-            <div class="d-flex flex-wrap gap-2 justify-content-md-end" id="admin-user-filter-chips">
+            <div class="d-flex flex-wrap gap-1 justify-content-md-end" id="admin-user-filter-chips">
               <span class="admin-filter-pill active" data-filter="all">All (${users.length})</span>
               <span class="admin-filter-pill" data-filter="pro">Pro (${paidCount})</span>
               <span class="admin-filter-pill" data-filter="free">Free (${users.length - paidCount})</span>
@@ -3348,18 +3356,16 @@ const components = {
         </div>
 
         <!-- User Table -->
-        <div class="table-responsive">
-          <table class="table table-dark table-hover fs-7 align-middle mb-0" id="admin-users-table">
+        <div class="table-responsive" style="overflow-x: auto;">
+          <table class="admin-table" id="admin-users-table">
             <thead>
-              <tr class="text-muted border-secondary">
-                <th>#</th>
-                <th>Candidate</th>
-                <th>Contact</th>
-                <th>Role</th>
-                <th>Access Level</th>
-                <th>Referral Bounty</th>
+              <tr>
+                <th style="width: 40px;">#</th>
+                <th>Candidate & Contact</th>
+                <th>Access & Role</th>
+                <th>Affiliate</th>
                 <th>Joined</th>
-                <th class="text-end">Administrative Actions</th>
+                <th class="text-end" style="min-width: 130px;">Actions</th>
               </tr>
             </thead>
             <tbody id="admin-users-table-body">
@@ -3367,65 +3373,65 @@ const components = {
                 const isAdmin = u.role && u.role.includes('ADMIN');
                 const isSuper = u.role === 'ADMIN_SUPER';
                 return `
-                <tr class="border-secondary user-table-row" data-id="${u.id}" data-name="${(u.name || '').toLowerCase()}" data-email="${(u.email || '').toLowerCase()}" data-role="${(u.role || '').toLowerCase()}" data-paid="${u.isPaid ? 'true' : 'false'}" data-suspended="${u.isSuspended ? 'true' : 'false'}">
+                <tr class="user-table-row" data-id="${u.id}" data-name="${(u.name || '').toLowerCase()}" data-email="${(u.email || '').toLowerCase()}" data-role="${(u.role || '').toLowerCase()}" data-paid="${u.isPaid ? 'true' : 'false'}" data-suspended="${u.isSuspended ? 'true' : 'false'}">
                   <td class="text-muted font-monospace fs-8">#${u.id}</td>
                   <td>
                     <div class="d-flex align-items-center gap-2">
-                      <div class="avatar-circle" style="width: 30px; height: 30px; border-radius: 50%; background: ${isSuper ? '#f59e0b' : isAdmin ? '#6366f1' : '#1e293b'}; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold;">
+                      <div class="avatar-circle flex-shrink-0" style="width: 28px; height: 28px; border-radius: 50%; background: ${isSuper ? '#f59e0b' : isAdmin ? '#6366f1' : '#1e293b'}; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: bold;">
                         ${(u.name || 'U').charAt(0).toUpperCase()}
                       </div>
-                      <div>
-                        <div class="text-white fw-bold">${u.name || 'Anonymous Candidate'}</div>
-                        <span class="text-muted fs-8 font-monospace">${u.referralCode ? 'Ref: ' + u.referralCode : 'Direct User'}</span>
+                      <div style="min-width: 0;">
+                        <div class="text-white fw-semibold text-truncate" style="max-width: 200px;">${u.name || 'Anonymous Candidate'}</div>
+                        <div class="text-muted fs-9 font-monospace text-truncate" style="max-width: 220px;">
+                          ${u.email}
+                          ${u.googleId ? '<span class="text-info ms-1"><i class="fa-brands fa-google"></i></span>' : ''}
+                        </div>
                       </div>
                     </div>
                   </td>
                   <td>
-                    <span class="text-secondary font-monospace fs-8">${u.email}</span>
-                    ${u.googleId ? '<span class="badge bg-dark text-info border border-secondary border-opacity-25 ms-1 fs-9"><i class="fa-brands fa-google"></i></span>' : ''}
+                    <div class="d-flex flex-wrap align-items-center gap-1">
+                      ${isSuper ? '<span class="badge badge-super-admin px-2 py-0.5 fs-9"><i class="fa-solid fa-crown me-1"></i>SUPER ADMIN</span>' :
+                        isAdmin ? '<span class="badge bg-primary px-2 py-0.5 fs-9"><i class="fa-solid fa-shield me-1"></i>ADMIN</span>' :
+                        '<span class="badge bg-secondary bg-opacity-50 text-light px-2 py-0.5 fs-9">STUDENT</span>'}
+                      ${u.isPaid ? '<span class="badge badge-pro-lifetime px-2 py-0.5 fs-9"><i class="fa-solid fa-gem me-1"></i>PRO</span>' : '<span class="badge bg-dark text-muted border border-secondary border-opacity-25 px-2 py-0.5 fs-9">FREE</span>'}
+                      ${u.isSuspended ? '<span class="badge bg-danger text-white px-2 py-0.5 fs-9">SUSPENDED</span>' : ''}
+                    </div>
                   </td>
                   <td>
-                    ${isSuper ? '<span class="badge badge-super-admin px-2 py-1"><i class="fa-solid fa-crown me-1"></i> SUPER ADMIN</span>' :
-                      isAdmin ? '<span class="badge bg-primary px-2 py-1"><i class="fa-solid fa-shield me-1"></i> ADMIN</span>' :
-                      '<span class="badge bg-secondary bg-opacity-50 text-light px-2 py-1">STUDENT</span>'}
-                  </td>
-                  <td>
-                    ${u.isPaid ? '<span class="badge badge-pro-lifetime px-2 py-1"><i class="fa-solid fa-gem me-1"></i> PRO LIFETIME</span>' : '<span class="badge bg-dark text-muted border border-secondary border-opacity-25 px-2 py-1">FREE TIER</span>'}
-                    ${u.isSuspended ? '<span class="badge bg-danger text-white ms-1 px-2 py-1">SUSPENDED</span>' : ''}
-                  </td>
-                  <td>
-                    <span class="text-success font-monospace fw-bold">₹${u.referralEarnings || 0}</span>
+                    <div class="text-success font-monospace fw-bold fs-8">₹${u.referralEarnings || 0}</div>
+                    <div class="text-muted fs-9 font-monospace">${u.referralCode ? 'Ref: ' + u.referralCode : 'Direct'}</div>
                   </td>
                   <td class="text-muted fs-8">${u.createdAt ? new Date(u.createdAt).toLocaleDateString() : 'N/A'}</td>
                   <td class="text-end">
-                    <div class="btn-group btn-group-sm">
+                    <div class="d-inline-flex align-items-center gap-1">
                       <!-- Pro Pass Toggle -->
-                      <button class="btn btn-sm btn-glass btn-toggle-pro px-2" data-id="${u.id}" data-current="${u.isPaid ? 'true' : 'false'}" title="${u.isPaid ? 'Revoke Pro Pass' : 'Grant Free Lifetime Pro Pass'}">
+                      <button class="btn btn-admin-action btn-glass btn-toggle-pro" data-id="${u.id}" data-current="${u.isPaid ? 'true' : 'false'}" title="${u.isPaid ? 'Revoke Pro Pass' : 'Grant Lifetime Pro Pass'}">
                         <i class="fa-solid fa-gem ${u.isPaid ? 'text-warning' : 'text-muted'}"></i>
                       </button>
 
                       <!-- Role Changer -->
                       ${!isSuper ? `
-                        <button class="btn btn-sm btn-glass btn-toggle-role px-2" data-id="${u.id}" data-role="${u.role}" title="${isAdmin ? 'Demote to Student' : 'Promote to Admin'}">
+                        <button class="btn btn-admin-action btn-glass btn-toggle-role" data-id="${u.id}" data-role="${u.role}" title="${isAdmin ? 'Demote to Student' : 'Promote to Admin'}">
                           <i class="fa-solid fa-user-shield ${isAdmin ? 'text-primary' : 'text-muted'}"></i>
                         </button>
                       ` : ''}
 
                       <!-- Direct Email -->
-                      <button class="btn btn-sm btn-glass btn-compose-user-email px-2" data-email="${u.email}" data-name="${u.name || 'Candidate'}" title="Send direct email to candidate">
+                      <button class="btn btn-admin-action btn-glass btn-compose-user-email" data-email="${u.email}" data-name="${u.name || 'Candidate'}" title="Send direct email to candidate">
                         <i class="fa-solid fa-envelope text-info"></i>
                       </button>
 
                       <!-- Suspend / Unsuspend -->
                       ${!isSuper ? (u.isSuspended ? `
-                        <button class="btn btn-sm btn-outline-success btn-user-action px-2" data-id="${u.id}" data-action="unsuspend" title="Unsuspend account"><i class="fa-solid fa-user-check"></i></button>
+                        <button class="btn btn-admin-action btn-outline-success btn-user-action" data-id="${u.id}" data-action="unsuspend" title="Unsuspend account"><i class="fa-solid fa-user-check"></i></button>
                       ` : `
-                        <button class="btn btn-sm btn-outline-warning btn-user-action px-2" data-id="${u.id}" data-action="suspend" title="Suspend account"><i class="fa-solid fa-user-slash"></i></button>
+                        <button class="btn btn-admin-action btn-outline-warning btn-user-action" data-id="${u.id}" data-action="suspend" title="Suspend account"><i class="fa-solid fa-user-slash"></i></button>
                       `) : ''}
 
                       <!-- Delete Account -->
                       ${!isSuper ? `
-                        <button class="btn btn-sm btn-outline-danger btn-delete-user px-2" data-id="${u.id}" data-email="${u.email}" title="Delete account"><i class="fa-solid fa-trash"></i></button>
+                        <button class="btn btn-admin-action btn-outline-danger btn-delete-user" data-id="${u.id}" data-email="${u.email}" title="Delete account"><i class="fa-solid fa-trash"></i></button>
                       ` : ''}
                     </div>
                   </td>
@@ -3443,12 +3449,12 @@ const components = {
       return `<div class="text-center py-5 text-success"><i class="fa-solid fa-circle-check fa-2x mb-3"></i><p>No suspicious referral activities detected. Risk level clear.</p></div>`;
     }
     return `
-      <div class="table-responsive">
-        <table class="table table-dark table-hover fs-7 align-middle mb-0">
+      <div class="table-responsive" style="overflow-x: auto;">
+        <table class="admin-table">
           <thead>
-            <tr class="text-muted border-secondary">
-              <th>Referrer User</th>
-              <th>Referred User</th>
+            <tr>
+              <th>Referrer Candidate</th>
+              <th>Referred Candidate</th>
               <th>Referral Bounty</th>
               <th>Bounty Status</th>
               <th>Risk Score</th>
@@ -3458,22 +3464,22 @@ const components = {
           </thead>
           <tbody>
             ${risks.map(r => `
-              <tr class="border-secondary">
-                <td class="text-white">${r.referrerEmail}</td>
-                <td class="text-white">${r.referredEmail}</td>
-                <td class="text-success">₹${r.amount}</td>
+              <tr>
+                <td><div class="text-truncate text-white" style="max-width: 180px;" title="${r.referrerEmail}">${r.referrerEmail}</div></td>
+                <td><div class="text-truncate text-white" style="max-width: 180px;" title="${r.referredEmail}">${r.referredEmail}</div></td>
+                <td class="text-success font-monospace fw-bold">₹${r.amount}</td>
                 <td>
                   <span class="badge ${r.status === 'APPROVED' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'}">
                     ${r.status}
                   </span>
                 </td>
-                <td class="fw-bold">${r.riskScore}%</td>
+                <td class="fw-bold font-monospace">${r.riskScore}%</td>
                 <td>
                   <span class="badge ${r.riskLevel === 'HIGH' ? 'bg-danger text-white' : r.riskLevel === 'MEDIUM' ? 'bg-warning text-dark' : 'bg-info text-dark'}">
                      ${r.riskLevel}
                   </span>
                 </td>
-                <td class="text-danger-emphasis">${r.reasons.join(', ')}</td>
+                <td class="text-danger-emphasis fs-8">${r.reasons.join(', ')}</td>
               </tr>
             `).join('')}
           </tbody>
@@ -3484,29 +3490,29 @@ const components = {
 
   adminAuditList: (logs) => {
     if (!logs || logs.length === 0) {
-      return `<div class="glass-panel p-5 text-center text-muted"><i class="fa-solid fa-clipboard-list fa-3x mb-3 text-secondary"></i><h5 class="text-white">Audit Trail Empty</h5><p class="fs-8">No administrative audits or configuration modifications have been logged yet.</p></div>`;
+      return `<div class="admin-box p-5 text-center text-muted"><i class="fa-solid fa-clipboard-list fa-3x mb-3 text-secondary"></i><h5 class="text-white">Audit Trail Empty</h5><p class="fs-8">No administrative audits or configuration modifications have been logged yet.</p></div>`;
     }
     return `
-      <div class="glass-panel p-4">
+      <div class="admin-box p-3">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
           <div>
             <h5 class="text-white fw-bold mb-1"><i class="fa-solid fa-shield-halved text-info me-2"></i>Administrative Security Audit Trail</h5>
             <small class="text-muted fs-8">Cryptographic record of admin logins, setting adjustments, and account moderation</small>
           </div>
-          <span class="badge bg-dark text-info border border-secondary border-opacity-25 px-3 py-2 font-monospace">${logs.length} Total Audit Records</span>
+          <span class="badge bg-dark text-info border border-secondary border-opacity-25 px-3 py-1 font-monospace">${logs.length} Total Audit Records</span>
         </div>
 
         <div class="mb-3" style="max-width: 380px;">
           <div class="input-group input-group-sm">
             <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-            <input type="text" id="admin-audit-search-input" class="form-control glass-input" placeholder="Search by admin email, action, or key...">
+            <input type="text" id="admin-audit-search-input" class="form-control admin-input" placeholder="Search by admin email, action, or key...">
           </div>
         </div>
 
-        <div class="table-responsive">
-          <table class="table table-dark table-hover fs-7 align-middle mb-0" id="admin-audit-table">
+        <div class="table-responsive" style="overflow-x: auto;">
+          <table class="admin-table" id="admin-audit-table">
             <thead>
-              <tr class="text-muted border-secondary">
+              <tr>
                 <th>Timestamp</th>
                 <th>Administrator</th>
                 <th>Action Executed</th>
@@ -3518,7 +3524,7 @@ const components = {
             </thead>
             <tbody id="admin-audit-table-body">
               ${logs.map(l => `
-                <tr class="border-secondary audit-table-row" data-admin="${(l.adminEmail || '').toLowerCase()}" data-action="${(l.action || '').toLowerCase()}" data-target="${(l.targetKey || '').toLowerCase()}">
+                <tr class="audit-table-row" data-admin="${(l.adminEmail || '').toLowerCase()}" data-action="${(l.action || '').toLowerCase()}" data-target="${(l.targetKey || '').toLowerCase()}">
                   <td class="text-muted fs-8 font-monospace">${new Date(l.createdAt).toLocaleString()}</td>
                   <td class="text-warning fw-semibold font-monospace fs-8">${l.adminEmail}</td>
                   <td class="text-white">${l.action}</td>
@@ -3546,63 +3552,63 @@ const components = {
       <div class="row g-3 mb-4">
         <!-- Application Server -->
         <div class="col-md-3">
-          <div class="glass-panel p-4 text-center border-top border-4 ${isAppUp ? 'border-success' : 'border-danger'}">
-            <div class="text-muted fs-8 uppercase mb-2">Backend Application</div>
-            <h4 class="fw-bold ${isAppUp ? 'text-success' : 'text-danger'} mb-0">
+          <div class="admin-box ${isAppUp ? 'admin-box-accent-emerald' : 'admin-box-accent-danger'} p-3 text-center">
+            <div class="admin-kpi-label mb-2">Backend Application</div>
+            <h5 class="fw-bold ${isAppUp ? 'text-success' : 'text-danger'} mb-0">
               <i class="fa-solid fa-circle-check me-2"></i>${isAppUp ? 'OPERATIONAL' : 'DEGRADED'}
-            </h4>
+            </h5>
             <small class="text-muted fs-9 mt-1 d-block">Render Linux Container</small>
           </div>
         </div>
 
         <!-- PostgreSQL Database -->
         <div class="col-md-3">
-          <div class="glass-panel p-4 text-center border-top border-4 ${isDbUp ? 'border-success' : 'border-danger'}">
-            <div class="text-muted fs-8 uppercase mb-2">PostgreSQL Database</div>
-            <h4 class="fw-bold ${isDbUp ? 'text-success' : 'text-danger'} mb-0">
+          <div class="admin-box ${isDbUp ? 'admin-box-accent-emerald' : 'admin-box-accent-danger'} p-3 text-center">
+            <div class="admin-kpi-label mb-2">PostgreSQL Database</div>
+            <h5 class="fw-bold ${isDbUp ? 'text-success' : 'text-danger'} mb-0">
                <i class="fa-solid fa-database me-2"></i>${isDbUp ? 'CONNECTED' : 'DISCONNECTED'}
-            </h4>
+            </h5>
             <small class="text-muted fs-9 mt-1 d-block">Neon Serverless Cluster</small>
           </div>
         </div>
 
         <!-- Cashfree Gateway -->
         <div class="col-md-3">
-          <div class="glass-panel p-4 text-center border-top border-4 ${isGwUp ? 'border-success' : 'border-danger'}">
-            <div class="text-muted fs-8 uppercase mb-2">Payment Gateway</div>
-            <h4 class="fw-bold ${isGwUp ? 'text-success' : 'text-danger'} mb-0">
+          <div class="admin-box ${isGwUp ? 'admin-box-accent-emerald' : 'admin-box-accent-danger'} p-3 text-center">
+            <div class="admin-kpi-label mb-2">Payment Gateway</div>
+            <h5 class="fw-bold ${isGwUp ? 'text-success' : 'text-danger'} mb-0">
               <i class="fa-solid fa-credit-card me-2"></i>${isGwUp ? 'ONLINE' : 'ERROR'}
-            </h4>
+            </h5>
             <small class="text-muted fs-9 mt-1 d-block">Cashfree v2023 PG</small>
           </div>
         </div>
 
         <!-- System Uptime -->
         <div class="col-md-3">
-          <div class="glass-panel p-4 text-center border-top border-4 border-info">
-            <div class="text-muted fs-8 uppercase mb-2">Runtime Uptime</div>
-            <h4 class="text-white fw-bold mb-0 font-monospace">
+          <div class="admin-box admin-box-accent-cyan p-3 text-center">
+            <div class="admin-kpi-label mb-2">Runtime Uptime</div>
+            <h5 class="text-white fw-bold mb-0 font-monospace">
               <i class="fa-solid fa-clock text-info me-2"></i>${uptimeHours}h ${uptimeMins}m
-            </h4>
+            </h5>
             <small class="text-muted fs-9 mt-1 d-block">Zero crash restarts</small>
           </div>
         </div>
       </div>
 
       <!-- Inbound Webhook Event Stream -->
-      <div class="glass-panel p-4">
+      <div class="admin-box p-3">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div>
             <h5 class="text-white fw-bold mb-1"><i class="fa-solid fa-network-wired text-info me-2"></i>Webhook Inbound Stream Audit</h5>
             <small class="text-muted fs-8">Idempotent signature validation for gateway and external notifications</small>
           </div>
-          <span class="badge bg-dark text-white border border-secondary border-opacity-25 px-3 py-2 font-monospace">${webhooks.length} Webhook Events</span>
+          <span class="badge bg-dark text-white border border-secondary border-opacity-25 px-3 py-1 font-monospace">${webhooks.length} Webhook Events</span>
         </div>
 
-        <div class="table-responsive">
-          <table class="table table-dark table-hover fs-7 align-middle mb-0">
+        <div class="table-responsive" style="overflow-x: auto;">
+          <table class="admin-table">
             <thead>
-              <tr class="text-muted border-secondary">
+              <tr>
                 <th>Received At</th>
                 <th>Event Reference ID</th>
                 <th>Event Type</th>
@@ -3613,7 +3619,7 @@ const components = {
             <tbody>
               ${webhooks.length === 0 ? '<tr><td colspan="5" class="text-center text-muted py-4">No webhook receipts recorded in this window.</td></tr>' : 
                 webhooks.map(w => `
-                  <tr class="border-secondary">
+                  <tr>
                     <td class="text-muted fs-8 font-monospace">${new Date(w.receivedAt).toLocaleString()}</td>
                     <td class="text-info font-monospace fs-8">${w.eventId}</td>
                     <td><code>${w.eventType}</code></td>
@@ -3635,13 +3641,13 @@ const components = {
 
   adminLeaderboardList: (tests = []) => {
     return `
-      <div class="glass-panel p-4">
+      <div class="admin-box p-3">
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
           <div>
             <h5 class="text-white fw-bold mb-1"><i class="fa-solid fa-trophy text-warning me-2"></i>Placement League & Assessment Moderation</h5>
             <small class="text-muted fs-8">Anti-cheat scoring oversight, test submission logs, and leaderboard integrity</small>
           </div>
-          <span class="badge bg-dark text-white border border-secondary border-opacity-25 px-3 py-2 font-monospace">${tests.length} Total Attempts</span>
+          <span class="badge bg-dark text-white border border-secondary border-opacity-25 px-3 py-1 font-monospace">${tests.length} Total Attempts</span>
         </div>
 
         <!-- Filter and Search -->
@@ -3649,11 +3655,11 @@ const components = {
           <div class="col-md-6">
             <div class="input-group input-group-sm">
               <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-              <input type="text" id="admin-leaderboard-search-input" class="form-control glass-input" placeholder="Search candidate name, email, or category...">
+              <input type="text" id="admin-leaderboard-search-input" class="form-control admin-input" placeholder="Search candidate name, email, or category...">
             </div>
           </div>
           <div class="col-md-6">
-            <div class="d-flex flex-wrap gap-2 justify-content-md-end" id="admin-leaderboard-chips">
+            <div class="d-flex flex-wrap gap-1 justify-content-md-end" id="admin-leaderboard-chips">
               <span class="admin-filter-pill active" data-cat="all">All Topics</span>
               <span class="admin-filter-pill" data-cat="dsa">DSA</span>
               <span class="admin-filter-pill" data-cat="java">Java</span>
@@ -3665,17 +3671,17 @@ const components = {
           </div>
         </div>
 
-        <div class="table-responsive">
-          <table class="table table-dark table-hover fs-7 align-middle mb-0" id="admin-leaderboard-table">
+        <div class="table-responsive" style="overflow-x: auto;">
+          <table class="admin-table" id="admin-leaderboard-table">
             <thead>
-              <tr class="text-muted border-secondary">
-                <th>#</th>
+              <tr>
+                <th style="width: 40px;">#</th>
                 <th>Candidate</th>
-                <th>Assessment Category</th>
+                <th>Category</th>
                 <th>Score</th>
-                <th>Proctoring Status</th>
+                <th>Proctoring</th>
                 <th>Completed At</th>
-                <th class="text-end">Administrative Action</th>
+                <th class="text-end">Actions</th>
               </tr>
             </thead>
             <tbody id="admin-leaderboard-table-body">
@@ -3685,21 +3691,21 @@ const components = {
                   const candidateEmail = t.user ? t.user.email : 'N/A';
                   const cat = (t.category || 'DSA').toLowerCase();
                   return `
-                  <tr class="border-secondary leaderboard-table-row" data-name="${candidateName.toLowerCase()}" data-email="${candidateEmail.toLowerCase()}" data-cat="${cat}">
+                  <tr class="leaderboard-table-row" data-name="${candidateName.toLowerCase()}" data-email="${candidateEmail.toLowerCase()}" data-cat="${cat}">
                     <td class="font-monospace text-muted fs-8">#${t.id}</td>
                     <td>
-                      <div class="text-white fw-semibold">${candidateName}</div>
-                      <span class="text-secondary font-monospace fs-8">${candidateEmail}</span>
+                      <div class="text-white fw-semibold text-truncate" style="max-width: 180px;">${candidateName}</div>
+                      <div class="text-secondary font-monospace fs-9 text-truncate" style="max-width: 180px;">${candidateEmail}</div>
                     </td>
-                    <td><span class="badge bg-dark text-white border border-secondary border-opacity-25 font-monospace px-2 py-1">${t.category}</span></td>
-                    <td class="fw-bold text-success font-monospace fs-6">${t.score} pts</td>
+                    <td><span class="badge bg-dark text-white border border-secondary border-opacity-25 font-monospace px-2 py-0.5 fs-9">${t.category}</span></td>
+                    <td class="fw-bold text-success font-monospace">${t.score} pts</td>
                     <td>
-                      ${t.score >= 90 ? '<span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 fs-9"><i class="fa-solid fa-shield-check me-1"></i> High Rank</span>' : '<span class="badge bg-secondary-subtle text-muted px-2 py-1 fs-9">Standard</span>'}
+                      ${t.score >= 90 ? '<span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-0.5 fs-9"><i class="fa-solid fa-shield-check me-1"></i> High Rank</span>' : '<span class="badge bg-secondary-subtle text-muted px-2 py-0.5 fs-9">Standard</span>'}
                     </td>
-                    <td class="text-muted fs-8">${t.completedAt ? new Date(t.completedAt).toLocaleString() : 'N/A'}</td>
+                    <td class="text-muted fs-8">${t.completedAt ? new Date(t.completedAt).toLocaleDateString() : 'N/A'}</td>
                     <td class="text-end">
-                      <button class="btn btn-outline-danger btn-sm px-2 py-1 btn-delete-mocktest" data-id="${t.id}" title="Remove entry from leaderboard">
-                        <i class="fa-solid fa-trash-can me-1"></i> Remove
+                      <button class="btn btn-admin-action btn-outline-danger btn-delete-mocktest" data-id="${t.id}" title="Remove entry from leaderboard">
+                        <i class="fa-solid fa-trash-can"></i>
                       </button>
                     </td>
                   </tr>
@@ -3715,16 +3721,16 @@ const components = {
   adminOverviewTab: (stats) => {
     return `
       <!-- Charts & Visual Analytics Grid -->
-      <div class="row g-4 mb-4">
+      <div class="row g-3 mb-4">
         <!-- Revenue & Registration Trend -->
         <div class="col-lg-8">
-          <div class="glass-panel p-4 h-100">
+          <div class="admin-box p-3 h-100">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <div>
                 <h6 class="text-white fw-bold mb-0"><i class="fa-solid fa-chart-line text-emerald me-2"></i>Platform Revenue & Candidate Growth (30D)</h6>
                 <small class="text-muted fs-8">Visual telemetry of subscriber conversions and platform traffic</small>
               </div>
-              <span class="badge bg-emerald-subtle text-emerald border border-emerald-subtle px-2 py-1 fs-9">Real-Time</span>
+              <span class="badge bg-emerald-subtle text-emerald border border-emerald-subtle px-2 py-0.5 fs-9">Real-Time</span>
             </div>
             <div style="height: 250px; position: relative;">
               <canvas id="adminRevenueChart"></canvas>
@@ -3734,7 +3740,7 @@ const components = {
 
         <!-- Assessment Category Distribution -->
         <div class="col-lg-4">
-          <div class="glass-panel p-4 h-100">
+          <div class="admin-box p-3 h-100">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <div>
                 <h6 class="text-white fw-bold mb-0"><i class="fa-solid fa-chart-pie text-cyan me-2"></i>Exam Submissions</h6>
@@ -3749,47 +3755,47 @@ const components = {
       </div>
 
       <!-- Tactical Telemetry & Quick Action Cards -->
-      <div class="row g-4 mb-4">
+      <div class="row g-3 mb-4">
         <div class="col-md-4">
-          <div class="glass-panel p-3 border-start border-primary border-3">
+          <div class="admin-box admin-box-accent-primary p-3">
             <div class="d-flex align-items-center justify-content-between">
               <div>
-                <span class="text-muted fs-8 uppercase fw-semibold">Pro Pass Conversion Rate</span>
+                <div class="admin-kpi-label">Pro Conversion Rate</div>
                 <h4 class="text-white fw-bold mb-0 mt-1">${stats.totalUsers ? Math.round(((stats.paidUsers || 0) / stats.totalUsers) * 100) : 0}%</h4>
                 <small class="text-info fs-8"><i class="fa-solid fa-arrow-trend-up me-1"></i>${stats.paidUsers || 0} of ${stats.totalUsers || 0} candidates</small>
               </div>
-              <div class="p-3 bg-primary bg-opacity-10 rounded-circle text-primary fs-4"><i class="fa-solid fa-crown"></i></div>
+              <div class="p-2 bg-primary bg-opacity-10 rounded-circle text-primary fs-5"><i class="fa-solid fa-crown"></i></div>
             </div>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="glass-panel p-3 border-start border-success border-3">
+          <div class="admin-box admin-box-accent-emerald p-3">
             <div class="d-flex align-items-center justify-content-between">
               <div>
-                <span class="text-muted fs-8 uppercase fw-semibold">Affiliate Bounties Paid</span>
+                <div class="admin-kpi-label">Affiliate Bounties Paid</div>
                 <h4 class="text-success fw-bold mb-0 mt-1">₹${stats.totalReferralPayouts || 0}</h4>
                 <small class="text-muted fs-8">Disbursed via automated UPI payouts</small>
               </div>
-              <div class="p-3 bg-success bg-opacity-10 rounded-circle text-success fs-4"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+              <div class="p-2 bg-success bg-opacity-10 rounded-circle text-success fs-5"><i class="fa-solid fa-hand-holding-dollar"></i></div>
             </div>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="glass-panel p-3 border-start border-warning border-3">
+          <div class="admin-box admin-box-accent-amber p-3">
             <div class="d-flex align-items-center justify-content-between">
               <div>
-                <span class="text-muted fs-8 uppercase fw-semibold">Pending Withdrawal Claims</span>
+                <div class="admin-kpi-label">Pending Claims</div>
                 <h4 class="text-warning fw-bold mb-0 mt-1">₹${stats.totalPendingWithdrawalAmount || 0}</h4>
                 <small class="text-muted fs-8">Awaiting super admin disbursement</small>
               </div>
-              <div class="p-3 bg-warning bg-opacity-10 rounded-circle text-warning fs-4"><i class="fa-solid fa-clock-rotate-left"></i></div>
+              <div class="p-2 bg-warning bg-opacity-10 rounded-circle text-warning fs-5"><i class="fa-solid fa-clock-rotate-left"></i></div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Quick Platform Operations Links -->
-      <div class="glass-panel p-4">
+      <div class="admin-box p-3">
         <h6 class="text-white fw-bold mb-3"><i class="fa-solid fa-bolt text-warning me-2"></i>Executive Operational Short-Cuts</h6>
         <div class="row g-3">
           <div class="col-md-3">
@@ -3827,16 +3833,16 @@ const components = {
     const bannerLevel = settings.GLOBAL_ANNOUNCEMENT_LEVEL || 'info';
 
     return `
-      <div class="row g-4">
+      <div class="row g-3">
         <!-- Direct Candidate Email Dispatcher -->
         <div class="col-lg-7">
-          <div class="glass-panel p-4">
+          <div class="admin-box p-3 h-100">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <div>
-                <h5 class="text-white fw-bold mb-1"><i class="fa-solid fa-envelope-open-text text-info me-2"></i>Official Candidate Email Dispatcher</h5>
+                <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-envelope-open-text text-info me-2"></i>Official Candidate Email Dispatcher</h6>
                 <small class="text-muted fs-8">Sends verified emails directly from <code class="text-emerald">verify@stream-in.app</code> via Resend API</small>
               </div>
-              <span class="badge bg-purple text-white px-2 py-1 fs-9"><i class="fa-solid fa-paper-plane me-1"></i> Resend Engine</span>
+              <span class="badge bg-purple text-white px-2 py-0.5 fs-9"><i class="fa-solid fa-paper-plane me-1"></i> Resend Engine</span>
             </div>
 
             <form id="admin-broadcast-email-form">
@@ -3844,25 +3850,25 @@ const components = {
                 <label class="form-label text-muted fs-8 uppercase">Candidate Recipient Email</label>
                 <div class="input-group input-group-sm">
                   <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-solid fa-at"></i></span>
-                  <input type="email" id="broadcast-email-to" class="form-control glass-input" placeholder="e.g. candidate@gmail.com or admin@tracker.com" required>
+                  <input type="email" id="broadcast-email-to" class="form-control admin-input" placeholder="e.g. candidate@gmail.com or admin@tracker.com" required>
                 </div>
               </div>
 
               <div class="row g-3 mb-3">
                 <div class="col-md-6">
                   <label class="form-label text-muted fs-8 uppercase">Recipient Name</label>
-                  <input type="text" id="broadcast-email-name" class="form-control form-control-sm glass-input" placeholder="e.g. Rahul Sharma" value="Candidate">
+                  <input type="text" id="broadcast-email-name" class="form-control form-control-sm admin-input" placeholder="e.g. Rahul Sharma" value="Candidate">
                 </div>
                 <div class="col-md-6">
                   <label class="form-label text-muted fs-8 uppercase">Email Subject</label>
-                  <input type="text" id="broadcast-email-subject" class="form-control form-control-sm glass-input" placeholder="e.g. Important Update Regarding Your Placement Drive" required>
+                  <input type="text" id="broadcast-email-subject" class="form-control form-control-sm admin-input" placeholder="e.g. Important Update Regarding Your Placement Drive" required>
                 </div>
               </div>
 
               <div class="mb-3">
                 <label class="form-label text-muted fs-8 uppercase">Official Message Content</label>
-                <textarea id="broadcast-email-body" class="form-control glass-input" rows="5" placeholder="Write your announcement or direct instructions to the candidate here..." required></textarea>
-                <small class="text-muted fs-9">Supports multiline formatting. Will be wrapped in PrepSpace's responsive luxury email template.</small>
+                <textarea id="broadcast-email-body" class="form-control admin-input" rows="5" placeholder="Write your announcement or direct instructions to the candidate here..." required></textarea>
+                <small class="text-muted fs-9">Supports multiline formatting. Dispatched with responsive luxury email template.</small>
               </div>
 
               <div class="d-flex justify-content-between align-items-center pt-2">
@@ -3875,8 +3881,8 @@ const components = {
 
         <!-- Sitewide Announcement Banner Controls -->
         <div class="col-lg-5">
-          <div class="glass-panel p-4 h-100">
-            <h5 class="text-white fw-bold mb-1"><i class="fa-solid fa-bullhorn text-warning me-2"></i>Global Platform Banner</h5>
+          <div class="admin-box p-3 h-100">
+            <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-bullhorn text-warning me-2"></i>Global Platform Banner</h6>
             <small class="text-muted fs-8">Broadcasts an alert across all user dashboards in real-time</small>
 
             <div class="my-3 p-3 bg-dark bg-opacity-50 rounded border border-secondary border-opacity-25">
@@ -3896,7 +3902,7 @@ const components = {
 
             <div class="mb-3">
               <label class="form-label text-muted fs-8 uppercase">Banner Severity Level</label>
-              <select id="admin-banner-level" class="form-select form-select-sm glass-input">
+              <select id="admin-banner-level" class="form-select form-select-sm admin-input">
                 <option value="info" ${bannerLevel === 'info' ? 'selected' : ''}>Info (Cyan / Informative)</option>
                 <option value="warning" ${bannerLevel === 'warning' ? 'selected' : ''}>Warning (Amber / Action Needed)</option>
                 <option value="danger" ${bannerLevel === 'danger' ? 'selected' : ''}>Critical (Red / Urgent Alert)</option>
@@ -3906,10 +3912,10 @@ const components = {
 
             <div class="mb-3">
               <label class="form-label text-muted fs-8 uppercase">Announcement Text</label>
-              <textarea id="admin-banner-text" class="form-control glass-input" rows="3" placeholder="e.g. Maintenance scheduled for 2:00 AM IST or 50% discount on Pro Pass!">${bannerText}</textarea>
+              <textarea id="admin-banner-text" class="form-control admin-input" rows="3" placeholder="e.g. Maintenance scheduled for 2:00 AM IST or 50% discount on Pro Pass!">${bannerText}</textarea>
             </div>
 
-            <button class="btn btn-warning w-100 fw-bold" id="btn-save-banner-settings"><i class="fa-solid fa-floppy-disk me-2"></i>Publish Banner to All Users</button>
+            <button class="btn btn-premium w-100 fw-semibold" id="btn-save-banner-settings"><i class="fa-solid fa-floppy-disk me-2"></i>Publish Banner to All Users</button>
           </div>
         </div>
       </div>
@@ -3918,17 +3924,17 @@ const components = {
 
   adminSettingsForm: (settings) => {
     return `
-      <div class="row g-4">
+      <div class="row g-3">
         <!-- Financial Configurations -->
         <div class="col-md-6">
-          <div class="glass-panel p-4 h-100">
-            <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-coins text-warning me-2"></i>Monetization & Bounties</h5>
+          <div class="admin-box p-3 h-100">
+            <h6 class="text-white fw-bold mb-3"><i class="fa-solid fa-coins text-warning me-2"></i>Monetization & Bounties</h6>
             
             <div class="mb-3">
               <label class="form-label text-muted fs-8 uppercase">Product Premium Access Price (INR)</label>
               <div class="input-group input-group-sm">
                 <span class="input-group-text bg-secondary border-0 text-white font-monospace">₹</span>
-                <input type="number" id="setting-PRODUCT_PRICE_INR" class="form-control glass-input" value="${settings.PRODUCT_PRICE_INR || 99}">
+                <input type="number" id="setting-PRODUCT_PRICE_INR" class="form-control admin-input" value="${settings.PRODUCT_PRICE_INR || 99}">
                 <button class="btn btn-primary btn-save-setting" data-key="PRODUCT_PRICE_INR">Update</button>
               </div>
               <small class="text-muted fs-9">Current live charge on Cashfree gateway.</small>
@@ -3938,7 +3944,7 @@ const components = {
               <label class="form-label text-muted fs-8 uppercase">Referral Reward Bounty (INR per Invite)</label>
               <div class="input-group input-group-sm">
                 <span class="input-group-text bg-secondary border-0 text-white font-monospace">₹</span>
-                <input type="number" id="setting-REFERRAL_REWARD_INR" class="form-control glass-input" value="${settings.REFERRAL_REWARD_INR || 49}">
+                <input type="number" id="setting-REFERRAL_REWARD_INR" class="form-control admin-input" value="${settings.REFERRAL_REWARD_INR || 49}">
                 <button class="btn btn-primary btn-save-setting" data-key="REFERRAL_REWARD_INR">Update</button>
               </div>
               <small class="text-muted fs-9">Credited to referrer upon successful candidate upgrade.</small>
@@ -3948,7 +3954,7 @@ const components = {
               <label class="form-label text-muted fs-8 uppercase">Minimum Withdrawal Threshold (INR)</label>
               <div class="input-group input-group-sm">
                 <span class="input-group-text bg-secondary border-0 text-white font-monospace">₹</span>
-                <input type="number" id="setting-MIN_WITHDRAWAL_INR" class="form-control glass-input" value="${settings.MIN_WITHDRAWAL_INR || 100}">
+                <input type="number" id="setting-MIN_WITHDRAWAL_INR" class="form-control admin-input" value="${settings.MIN_WITHDRAWAL_INR || 100}">
                 <button class="btn btn-primary btn-save-setting" data-key="MIN_WITHDRAWAL_INR">Update</button>
               </div>
               <small class="text-muted fs-9">Minimum wallet balance required to request UPI cashout.</small>
@@ -3958,13 +3964,13 @@ const components = {
 
         <!-- Assessment Rules & Proctoring Thresholds -->
         <div class="col-md-6">
-          <div class="glass-panel p-4 h-100">
-            <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-graduation-cap text-cyan me-2"></i>Assessment & Proctoring Rules</h5>
+          <div class="admin-box p-3 h-100">
+            <h6 class="text-white fw-bold mb-3"><i class="fa-solid fa-graduation-cap text-cyan me-2"></i>Assessment & Proctoring Rules</h6>
             
             <div class="mb-3">
               <label class="form-label text-muted fs-8 uppercase">Technical Assessment Passing Cutoff (%)</label>
               <div class="input-group input-group-sm">
-                <input type="number" id="setting-MOCKTEST_PASSING_PERCENT" class="form-control glass-input" value="${settings.MOCKTEST_PASSING_PERCENT || 70}" min="40" max="100">
+                <input type="number" id="setting-MOCKTEST_PASSING_PERCENT" class="form-control admin-input" value="${settings.MOCKTEST_PASSING_PERCENT || 70}" min="40" max="100">
                 <span class="input-group-text bg-secondary border-0 text-white font-monospace">%</span>
                 <button class="btn btn-primary btn-save-setting" data-key="MOCKTEST_PASSING_PERCENT">Update</button>
               </div>
@@ -3974,7 +3980,7 @@ const components = {
             <div class="mb-3">
               <label class="form-label text-muted fs-8 uppercase">Exam Anti-Cheat Max Tab Switches Allowed</label>
               <div class="input-group input-group-sm">
-                <input type="number" id="setting-PROCTORING_MAX_TAB_SWITCHES" class="form-control glass-input" value="${settings.PROCTORING_MAX_TAB_SWITCHES || 3}" min="1" max="10">
+                <input type="number" id="setting-PROCTORING_MAX_TAB_SWITCHES" class="form-control admin-input" value="${settings.PROCTORING_MAX_TAB_SWITCHES || 3}" min="1" max="10">
                 <button class="btn btn-primary btn-save-setting" data-key="PROCTORING_MAX_TAB_SWITCHES">Update</button>
               </div>
               <small class="text-muted fs-9">Exceeding this auto-disqualifies the mock test attempt.</small>
@@ -3983,7 +3989,7 @@ const components = {
             <div class="mb-3">
               <label class="form-label text-muted fs-8 uppercase">Google AdSense Publisher ID</label>
               <div class="input-group input-group-sm">
-                <input type="text" id="setting-ADSENSE_PUBLISHER_ID" class="form-control glass-input" value="${settings.ADSENSE_PUBLISHER_ID || 'ca-pub-4662205173096609'}">
+                <input type="text" id="setting-ADSENSE_PUBLISHER_ID" class="form-control admin-input" value="${settings.ADSENSE_PUBLISHER_ID || 'ca-pub-4662205173096609'}">
                 <button class="btn btn-primary btn-save-setting" data-key="ADSENSE_PUBLISHER_ID">Update</button>
               </div>
             </div>
@@ -3992,20 +3998,20 @@ const components = {
 
         <!-- SEO & Platform Branding -->
         <div class="col-12">
-          <div class="glass-panel p-4">
-            <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-globe text-primary me-2"></i>SEO & Portal Metadata</h5>
+          <div class="admin-box p-3">
+            <h6 class="text-white fw-bold mb-3"><i class="fa-solid fa-globe text-primary me-2"></i>SEO & Portal Metadata</h6>
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="form-label text-muted fs-8 uppercase">SEO Portal Global Meta Title</label>
                 <div class="input-group input-group-sm">
-                  <input type="text" id="setting-SEO_META_TITLE" class="form-control glass-input" value="${settings.SEO_META_TITLE || 'PrepSpace - Premium Interview Preparation Tracker SaaS'}">
+                  <input type="text" id="setting-SEO_META_TITLE" class="form-control admin-input" value="${settings.SEO_META_TITLE || 'PrepSpace - Premium Interview Preparation Tracker SaaS'}">
                   <button class="btn btn-primary btn-save-setting" data-key="SEO_META_TITLE">Update</button>
                 </div>
               </div>
               <div class="col-md-6">
                 <label class="form-label text-muted fs-8 uppercase">SEO Portal Global Meta Description</label>
                 <div class="input-group input-group-sm">
-                  <input type="text" id="setting-SEO_META_DESCRIPTION" class="form-control glass-input" value="${settings.SEO_META_DESCRIPTION || 'Master technical interviews with full-fidelity simulation, AI ATS analysis, and placement leagues.'}">
+                  <input type="text" id="setting-SEO_META_DESCRIPTION" class="form-control admin-input" value="${settings.SEO_META_DESCRIPTION || 'Master technical interviews with full-fidelity simulation, AI ATS analysis, and placement leagues.'}">
                   <button class="btn btn-primary btn-save-setting" data-key="SEO_META_DESCRIPTION">Update</button>
                 </div>
               </div>
@@ -4017,32 +4023,32 @@ const components = {
   },
 
   admin: (stats) => `
-    <div class="container-fluid py-4">
+    <div class="container-fluid py-3 px-3 px-md-4">
       <!-- Executive Telemetry & Global Actions Header -->
-      <div class="border-bottom border-secondary border-opacity-10 pb-3 mb-4">
+      <div class="border-bottom border-secondary border-opacity-10 pb-3 mb-3">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
           <div>
             <div class="d-flex align-items-center gap-2 mb-1">
-              <span class="badge badge-super-admin px-3 py-1 fs-9"><i class="fa-solid fa-crown me-1"></i> SUPER ADMIN COMMAND CENTER v3.0</span>
-              <span id="admin-live-clock" class="font-monospace text-emerald fs-8"></span>
+              <span class="badge badge-super-admin px-2 py-0.5 fs-9"><i class="fa-solid fa-crown me-1"></i> SUPER ADMIN COMMAND CENTER</span>
+              <span id="admin-live-clock" class="font-monospace text-emerald fs-9"></span>
             </div>
-            <h2 class="text-white fw-bold mb-0">Global Operations & Enterprise Control</h2>
+            <h4 class="text-white fw-bold mb-0">Global Operations & Enterprise Control</h4>
           </div>
 
           <!-- Quick Actions & Global Controls -->
           <div class="d-flex flex-wrap align-items-center gap-2">
             <!-- Telemetry Indicator Badges -->
-            <div class="d-none d-lg-flex align-items-center gap-2 me-2">
-              <span class="admin-telemetry-badge"><span class="admin-pulse-dot emerald"></span> API 200 OK</span>
-              <span class="admin-telemetry-badge"><span class="admin-pulse-dot cyan"></span> Neon PostgreSQL</span>
-              <span class="admin-telemetry-badge"><span class="admin-pulse-dot purple"></span> Resend Active</span>
-              <span class="admin-telemetry-badge"><span class="admin-pulse-dot amber"></span> CF Proxied</span>
+            <div class="d-none d-xl-flex align-items-center gap-1 me-2">
+              <span class="admin-pill-status emerald"><span class="admin-pulse-dot emerald"></span> API 200</span>
+              <span class="admin-pill-status cyan"><span class="admin-pulse-dot cyan"></span> Neon PG</span>
+              <span class="admin-pill-status purple"><span class="admin-pulse-dot purple"></span> Resend Active</span>
+              <span class="admin-pill-status amber"><span class="admin-pulse-dot amber"></span> CF Proxied</span>
             </div>
 
             <!-- Export Dropdown -->
             <div class="dropdown">
               <button class="btn btn-glass btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                <i class="fa-solid fa-download me-1 text-success"></i> Export Reports
+                <i class="fa-solid fa-download me-1 text-success"></i> Reports
               </button>
               <ul class="dropdown-menu dropdown-menu-dark">
                 <li><a class="dropdown-item fs-8" href="/api/admin/reports/users"><i class="fa-solid fa-users me-2 text-primary"></i>Candidates CSV</a></li>
@@ -4065,22 +4071,22 @@ const components = {
       </div>
 
       <!-- High-Density Executive KPI Metrics Row -->
-      <div class="row g-3 mb-4">
+      <div class="row g-2 g-md-3 mb-3">
         <!-- Total Registered Candidates -->
         <div class="col-6 col-md-4 col-xl-2">
-          <div class="glass-panel p-3 admin-stat-card border-start border-primary border-3">
-            <div class="text-muted fs-9 uppercase fw-semibold mb-1">Total Candidates</div>
-            <h3 class="text-white fw-bold mb-0 font-monospace">${stats.totalUsers || 0}</h3>
-            <div class="text-muted fs-9 mt-1"><i class="fa-solid fa-user-check text-primary me-1"></i>Registered profiles</div>
+          <div class="admin-box admin-box-accent-primary admin-kpi-tile p-3">
+            <div class="admin-kpi-label mb-1">Total Candidates</div>
+            <div class="admin-kpi-num">${stats.totalUsers || 0}</div>
+            <div class="admin-kpi-caption mt-1"><i class="fa-solid fa-user-check text-primary me-1"></i>Registered profiles</div>
           </div>
         </div>
 
         <!-- Pro Subscribers -->
         <div class="col-6 col-md-4 col-xl-2">
-          <div class="glass-panel p-3 admin-stat-card border-start border-emerald border-3">
-            <div class="text-muted fs-9 uppercase fw-semibold mb-1">Pro Pass Members</div>
-            <h3 class="text-emerald fw-bold mb-0 font-monospace">${stats.paidUsers || 0}</h3>
-            <div class="text-emerald fs-9 mt-1">
+          <div class="admin-box admin-box-accent-emerald admin-kpi-tile p-3">
+            <div class="admin-kpi-label mb-1">Pro Pass Members</div>
+            <div class="admin-kpi-num text-emerald">${stats.paidUsers || 0}</div>
+            <div class="admin-kpi-caption text-emerald mt-1">
               ${stats.totalUsers ? Math.round(((stats.paidUsers || 0) / stats.totalUsers) * 100) : 0}% conversion rate
             </div>
           </div>
@@ -4088,90 +4094,70 @@ const components = {
 
         <!-- Gross Platform Sales -->
         <div class="col-6 col-md-4 col-xl-2">
-          <div class="glass-panel p-3 admin-stat-card border-start border-success border-3">
-            <div class="text-muted fs-9 uppercase fw-semibold mb-1">Gross Revenue</div>
-            <h3 class="text-success fw-bold mb-0 font-monospace">₹${stats.totalRevenue || 0}</h3>
-            <div class="text-muted fs-9 mt-1">Cashfree lifetime sales</div>
+          <div class="admin-box admin-box-accent-emerald admin-kpi-tile p-3">
+            <div class="admin-kpi-label mb-1">Gross Revenue</div>
+            <div class="admin-kpi-num text-success">₹${stats.totalRevenue || 0}</div>
+            <div class="admin-kpi-caption mt-1">Cashfree sales</div>
           </div>
         </div>
 
         <!-- Referral Bounties Ledger -->
         <div class="col-6 col-md-4 col-xl-2">
-          <div class="glass-panel p-3 admin-stat-card border-start border-warning border-3">
-            <div class="text-muted fs-9 uppercase fw-semibold mb-1">Referral Bounties</div>
-            <h3 class="text-warning fw-bold mb-0 font-monospace">₹${stats.totalReferralPayouts || 0}</h3>
-            <div class="text-muted fs-9 mt-1">₹49 per verified invite</div>
+          <div class="admin-box admin-box-accent-amber admin-kpi-tile p-3">
+            <div class="admin-kpi-label mb-1">Referral Bounties</div>
+            <div class="admin-kpi-num text-warning">₹${stats.totalReferralPayouts || 0}</div>
+            <div class="admin-kpi-caption mt-1">₹49 per verified invite</div>
           </div>
         </div>
 
         <!-- Cloudflare Edge & Anti-Cheat -->
         <div class="col-6 col-md-4 col-xl-2">
-          <div class="glass-panel p-3 admin-stat-card border-start border-info border-3">
-            <div class="text-muted fs-9 uppercase fw-semibold mb-1">Threat Defense</div>
-            <h3 class="text-info fw-bold mb-0 font-monospace">ACTIVE</h3>
-            <div class="text-muted fs-9 mt-1">Cloudflare WAF / Anti-Shodan</div>
+          <div class="admin-box admin-box-accent-cyan admin-kpi-tile p-3">
+            <div class="admin-kpi-label mb-1">Threat Defense</div>
+            <div class="admin-kpi-num text-info">ACTIVE</div>
+            <div class="admin-kpi-caption mt-1">Cloudflare WAF / Anti-Shodan</div>
           </div>
         </div>
 
         <!-- System Uptime / Health -->
         <div class="col-6 col-md-4 col-xl-2">
-          <div class="glass-panel p-3 admin-stat-card border-start border-purple border-3">
-            <div class="text-muted fs-9 uppercase fw-semibold mb-1">Cluster Health</div>
-            <h3 class="text-purple fw-bold mb-0 font-monospace">99.98%</h3>
-            <div class="text-muted fs-9 mt-1">Zero critical outages</div>
+          <div class="admin-box admin-box-accent-purple admin-kpi-tile p-3">
+            <div class="admin-kpi-label mb-1">Cluster Health</div>
+            <div class="admin-kpi-num text-purple">99.98%</div>
+            <div class="admin-kpi-caption mt-1">Zero critical outages</div>
           </div>
         </div>
       </div>
 
       <!-- 9 Super Admin Navigation Tabs -->
-      <div class="d-flex overflow-auto border-bottom border-secondary border-opacity-25 mb-4 pb-1">
-        <ul class="nav nav-pills flex-nowrap gap-1" id="admin-tabs-nav">
-          <li class="nav-item">
-            <button class="nav-link active text-white px-3 py-2 fs-8 fw-semibold" id="tab-overview">
-              <i class="fa-solid fa-chart-line text-info me-1"></i> Overview
-            </button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link text-muted px-3 py-2 fs-8 fw-semibold" id="tab-users">
-              <i class="fa-solid fa-users text-primary me-1"></i> Candidates & Roles
-            </button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link text-muted px-3 py-2 fs-8 fw-semibold" id="tab-leaderboard">
-              <i class="fa-solid fa-trophy text-warning me-1"></i> Placement League
-            </button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link text-muted px-3 py-2 fs-8 fw-semibold" id="tab-payments">
-              <i class="fa-solid fa-receipt text-emerald me-1"></i> Transactions
-            </button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link text-muted px-3 py-2 fs-8 fw-semibold" id="tab-referrals">
-              <i class="fa-solid fa-network-wired text-purple me-1"></i> Referral Risk
-            </button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link text-muted px-3 py-2 fs-8 fw-semibold" id="tab-rules">
-              <i class="fa-solid fa-sliders text-warning me-1"></i> Dynamic Flags
-            </button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link text-muted px-3 py-2 fs-8 fw-semibold" id="tab-broadcast">
-              <i class="fa-solid fa-bullhorn text-danger me-1"></i> Communicator
-            </button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link text-muted px-3 py-2 fs-8 fw-semibold" id="tab-audit-logs">
-              <i class="fa-solid fa-shield-halved text-info me-1"></i> Security Trail
-            </button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link text-muted px-3 py-2 fs-8 fw-semibold" id="tab-health">
-              <i class="fa-solid fa-server text-success me-1"></i> Health & Webhooks
-            </button>
-          </li>
-        </ul>
+      <div class="admin-tab-bar mb-3" id="admin-tabs-nav">
+        <button class="admin-tab-btn active" id="tab-overview" onclick="loadAdminPanelTab('overview')">
+          <i class="fa-solid fa-chart-line text-info me-1"></i> Overview
+        </button>
+        <button class="admin-tab-btn" id="tab-users" onclick="loadAdminPanelTab('users')">
+          <i class="fa-solid fa-users text-primary me-1"></i> Candidates
+        </button>
+        <button class="admin-tab-btn" id="tab-leaderboard" onclick="loadAdminPanelTab('leaderboard')">
+          <i class="fa-solid fa-trophy text-warning me-1"></i> Leaderboard
+        </button>
+        <button class="admin-tab-btn" id="tab-payments" onclick="loadAdminPanelTab('payments')">
+          <i class="fa-solid fa-receipt text-emerald me-1"></i> Transactions
+        </button>
+        <button class="admin-tab-btn" id="tab-referrals" onclick="loadAdminPanelTab('referrals')">
+          <i class="fa-solid fa-network-wired text-purple me-1"></i> Affiliates & Risk
+        </button>
+        <button class="admin-tab-btn" id="tab-rules" onclick="loadAdminPanelTab('rules')">
+          <i class="fa-solid fa-sliders text-warning me-1"></i> Rules & Flags
+        </button>
+        <button class="admin-tab-btn" id="tab-broadcast" onclick="loadAdminPanelTab('broadcast')">
+          <i class="fa-solid fa-bullhorn text-danger me-1"></i> Communicator
+        </button>
+        <button class="admin-tab-btn" id="tab-audit-logs" onclick="loadAdminPanelTab('audit-logs')">
+          <i class="fa-solid fa-shield-halved text-info me-1"></i> Audit Trail
+        </button>
+        <button class="admin-tab-btn" id="tab-health" onclick="loadAdminPanelTab('health')">
+          <i class="fa-solid fa-server text-success me-1"></i> Infrastructure
+        </button>
       </div>
 
       <!-- Tab Content Area -->
@@ -4183,25 +4169,25 @@ const components = {
     <!-- Admin Direct Email Compose Modal -->
     <div class="modal fade" id="adminEmailModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content glass-panel border-secondary border-opacity-25">
+        <div class="modal-content admin-box">
           <div class="modal-header border-secondary border-opacity-25">
-            <h5 class="modal-title text-white fw-bold"><i class="fa-solid fa-paper-plane text-primary me-2"></i>Send Direct Message to Candidate</h5>
+            <h6 class="modal-title text-white fw-bold"><i class="fa-solid fa-paper-plane text-primary me-2"></i>Send Direct Message to Candidate</h6>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
           </div>
           <form id="admin-direct-email-modal-form">
             <div class="modal-body text-start">
               <div class="mb-3">
                 <label class="form-label text-muted fs-8 uppercase">Recipient Candidate</label>
-                <input type="text" id="modal-email-recipient-name" class="form-control glass-input mb-1" readonly>
-                <input type="email" id="modal-email-recipient-email" class="form-control glass-input font-monospace fs-8" readonly>
+                <input type="text" id="modal-email-recipient-name" class="form-control admin-input mb-1" readonly>
+                <input type="email" id="modal-email-recipient-email" class="form-control admin-input font-monospace fs-8" readonly>
               </div>
               <div class="mb-3">
                 <label class="form-label text-muted fs-8 uppercase">Subject Line</label>
-                <input type="text" id="modal-email-subject" class="form-control glass-input" placeholder="e.g. Action Required: Verification of Placement Credentials" required>
+                <input type="text" id="modal-email-subject" class="form-control admin-input" placeholder="e.g. Action Required: Verification of Placement Credentials" required>
               </div>
               <div class="mb-3">
                 <label class="form-label text-muted fs-8 uppercase">Official Message Content</label>
-                <textarea id="modal-email-message" class="form-control glass-input" rows="4" placeholder="Type your personal message to this candidate..." required></textarea>
+                <textarea id="modal-email-message" class="form-control admin-input" rows="4" placeholder="Type your personal message to this candidate..." required></textarea>
                 <small class="text-muted fs-9">Dispatched with official PrepSpace signature from verify@stream-in.app</small>
               </div>
             </div>

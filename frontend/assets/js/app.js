@@ -4370,9 +4370,9 @@ function loadAdminPanelTab(tab) {
     const btn = document.getElementById(`tab-${t}`);
     if (btn) {
       if (t === tab) {
-        btn.className = 'nav-link active text-white px-3 py-2 fs-8 fw-semibold';
+        btn.className = 'admin-tab-btn active';
       } else {
-        btn.className = 'nav-link text-muted px-3 py-2 fs-8 fw-semibold';
+        btn.className = 'admin-tab-btn';
       }
     }
   });
@@ -4713,7 +4713,7 @@ function loadAdminPanelTab(tab) {
               <small class="text-muted fs-8">Review and disburse affiliate earnings payouts to candidates</small>
             </div>
           </div>
-          <div class="glass-panel p-3">${components.adminClaimsList(claims || [])}</div>
+          <div class="admin-box p-3">${components.adminClaimsList(claims || [])}</div>
         </div>
 
         <div>
@@ -4724,7 +4724,7 @@ function loadAdminPanelTab(tab) {
             </div>
             <a href="/api/admin/reports/referrals" class="btn btn-outline-warning btn-sm"><i class="fa-solid fa-file-csv me-1"></i> Export Affiliates CSV</a>
           </div>
-          <div class="glass-panel p-3">${components.adminRiskList(risks || [])}</div>
+          <div class="admin-box p-3">${components.adminRiskList(risks || [])}</div>
         </div>
       `;
 
