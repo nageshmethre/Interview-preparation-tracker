@@ -474,7 +474,7 @@ const components = {
             <h6 class="text-white fw-bold mb-3 fs-7 uppercase">Security & Verification</h6>
             <p class="text-muted fs-8 mb-2"><i class="fa-solid fa-lock text-primary me-2"></i>256-Bit SSL Secured</p>
             <p class="text-muted fs-8 mb-2"><i class="fa-solid fa-shield-check text-success me-2"></i>Stateless JWT Authentication</p>
-            <p class="text-muted fs-8 mb-0"><i class="fa-solid fa-bolt text-warning me-2"></i>Razorpay Encrypted Gateway</p>
+            <p class="text-muted fs-8 mb-0"><i class="fa-solid fa-bolt text-warning me-2"></i>Cashfree Encrypted Gateway</p>
           </div>
         </div>
 
@@ -3104,7 +3104,7 @@ const components = {
         <div class="col-lg-8">
           <div class="d-flex flex-wrap justify-content-center gap-4 text-muted fs-8 text-center border-top border-secondary border-opacity-10 pt-4">
             <div><i class="fa-solid fa-bolt text-primary me-1"></i> Instant Activation</div>
-            <div><i class="fa-solid fa-shield-halved text-success me-1"></i> 256-bit Secure Razorpay & UPI</div>
+            <div><i class="fa-solid fa-shield-halved text-success me-1"></i> 256-bit Secure Cashfree & UPI</div>
             <div><i class="fa-solid fa-infinity text-info me-1"></i> Lifetime Validity (Zero Recurring Fees)</div>
           </div>
         </div>
@@ -3275,11 +3275,25 @@ const components = {
             </tr>
           </thead>
           <tbody>
-            ${claims.map(c => `
+            ${claims.map(c => {
+              const rawUpi = (c.payoutDetails || '').replace(/^UPI ID:\s*/i, '').trim();
+              return `
               <tr>
                 <td class="text-white">#${c.id}</td>
                 <td><div class="text-truncate" style="max-width: 180px;" title="${c.userEmail}">${c.userEmail}</div></td>
-                <td class="text-info font-monospace fs-8">${c.payoutDetails}</td>
+                <td class="text-info font-monospace fs-8">
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="text-truncate" style="max-width: 180px;">${c.payoutDetails}</span>
+                    ${rawUpi ? `
+                      <button type="button" class="btn btn-sm btn-glass py-0 px-2 fs-9 text-muted hover-white" title="Copy UPI ID" onclick="navigator.clipboard.writeText('${rawUpi}'); showToast('UPI ID copied: ${rawUpi}', 'success');">
+                        <i class="fa-regular fa-copy"></i>
+                      </button>
+                      <a href="upi://pay?pa=${encodeURIComponent(rawUpi)}&pn=Candidate&am=${c.amount}&cu=INR&tn=PrepSpace+Affiliate+Reward" class="btn btn-sm btn-glass py-0 px-2 fs-9 text-success" title="Open in UPI App (PhonePe/GPay/Paytm)">
+                        <i class="fa-solid fa-bolt"></i> Pay
+                      </a>
+                    ` : ''}
+                  </div>
+                </td>
                 <td class="text-muted fs-8">${new Date(c.createdAt).toLocaleString()}</td>
                 <td class="text-success fw-bold font-monospace">₹${c.amount}</td>
                 <td>
@@ -3291,10 +3305,10 @@ const components = {
                   ${c.status === 'PENDING' || c.status === 'PROCESSING' ? `
                     <button class="btn btn-sm btn-success btn-claim-action px-2 py-1 me-1" data-id="${c.id}" data-action="PAID"><i class="fa-solid fa-check"></i> Paid</button>
                     <button class="btn btn-sm btn-danger btn-claim-action px-2 py-1" data-id="${c.id}" data-action="REJECTED"><i class="fa-solid fa-times"></i> Reject</button>
-                  ` : '<span class="text-muted fs-8">No actions</span>'}
+                  ` : '<span class="text-muted fs-8">Completed</span>'}
                 </td>
               </tr>
-            `).join('')}
+            `;}).join('')}
           </tbody>
         </table>
       </div>
