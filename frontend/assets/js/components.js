@@ -498,7 +498,7 @@ const components = {
         <form id="login-form">
           <div class="mb-3 text-start">
             <label class="vercel-input-label" for="login-email">GMAIL ADDRESS</label>
-            <input type="email" id="login-email" class="vercel-input" placeholder="candidate@gmail.com" pattern=".+@gmail\\.com$" title="Only @gmail.com addresses are allowed" required autocomplete="email">
+            <input type="email" id="login-email" class="vercel-input" placeholder="yourname@gmail.com" pattern=".+@gmail\\.com$" title="Only @gmail.com addresses are allowed" required autocomplete="email">
           </div>
           <div class="mb-4 text-start">
             <div class="d-flex justify-content-between align-items-center mb-1">
@@ -544,12 +544,12 @@ const components = {
         <form id="register-form">
           <div class="mb-3 text-start">
             <label class="vercel-input-label" for="register-name">FULL NAME</label>
-            <input type="text" id="register-name" class="vercel-input" placeholder="Nagesh Methre" required autocomplete="name">
+            <input type="text" id="register-name" class="vercel-input" placeholder="Full Name" required autocomplete="name">
           </div>
 
           <div class="mb-3 text-start">
             <label class="vercel-input-label" for="register-email">GMAIL ADDRESS</label>
-            <input type="email" id="register-email" class="vercel-input" placeholder="nagesh@gmail.com" pattern=".+@gmail\\.com$" title="Only @gmail.com addresses are allowed" required autocomplete="email">
+            <input type="email" id="register-email" class="vercel-input" placeholder="yourname@gmail.com" pattern=".+@gmail\\.com$" title="Only @gmail.com addresses are allowed" required autocomplete="email">
           </div>
 
           <div class="mb-3 text-start">
