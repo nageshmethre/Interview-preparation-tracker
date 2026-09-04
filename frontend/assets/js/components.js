@@ -34,7 +34,7 @@ const components = {
               <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="#pricing">Pricing</a></li>
               <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="/about">About</a></li>
               <li class="nav-item ms-lg-3 d-flex align-items-center gap-2">
-                <a class="btn btn-glass px-3 py-1 fs-7 text-success border-success-subtle d-inline-flex align-items-center gap-1" href="https://github.com/nageshmethre/Interview-preparation-tracker/releases/download/app-latest/PrepSpace.apk" download="PrepSpace.apk" title="Direct Android APK Download">
+                <a class="btn btn-glass px-3 py-1 fs-7 text-success border-success-subtle d-inline-flex align-items-center gap-1" href="https://stream-in.app/downloads/PrepSpace.apk" download="PrepSpace.apk" title="Direct Android APK Download">
                   <i class="fa-brands fa-android text-success"></i> <span class="d-none d-sm-inline">App</span>
                 </a>
                 <a class="btn btn-glass px-3 py-1 fs-7" href="#/login">Log In</a>
@@ -68,7 +68,7 @@ const components = {
               <a href="#/register" class="btn btn-premium btn-lg px-5 py-3 fs-5 fw-bold shadow-lg">
                 <i class="fa-solid fa-rocket me-2"></i>Initialize Space Free
               </a>
-              <a href="https://github.com/nageshmethre/Interview-preparation-tracker/releases/download/app-latest/PrepSpace.apk" download="PrepSpace.apk" class="btn btn-glass btn-lg px-4 py-3 fs-5 text-success border-success-subtle d-inline-flex align-items-center gap-2 shadow-sm">
+              <a href="https://stream-in.app/downloads/PrepSpace.apk" download="PrepSpace.apk" class="btn btn-glass btn-lg px-4 py-3 fs-5 text-success border-success-subtle d-inline-flex align-items-center gap-2 shadow-sm">
                 <i class="fa-brands fa-android text-success fs-4"></i>
                 <span>Download Android App</span>
               </a>
