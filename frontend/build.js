@@ -32,12 +32,19 @@ if (fs.existsSync(destDir)) {
 fs.mkdirSync(destDir);
 
 // 3. Copy files and folders
-const filesToCopy = ['index.html', 'robots.txt', 'sitemap.xml'];
+const filesToCopy = ['index.html', 'robots.txt', 'sitemap.xml', 'ads.txt'];
 filesToCopy.forEach(file => {
     const srcFile = path.join(srcDir, file);
     if (fs.existsSync(srcFile)) {
         fs.copyFileSync(srcFile, path.join(destDir, file));
         console.log(`Copied ${file}`);
+    }
+});
+
+['about', 'privacy', 'terms'].forEach(folder => {
+    if (fs.existsSync(path.join(srcDir, folder))) {
+        copyFolderSync(path.join(srcDir, folder), path.join(destDir, folder));
+        console.log(`Copied ${folder} folder`);
     }
 });
 
