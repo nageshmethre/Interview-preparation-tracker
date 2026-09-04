@@ -89,8 +89,13 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         from: 'PrepSpace <verify@stream-in.app>',
         to: [email],
-        subject: `${otp} is your PrepSpace verification code`,
-        html: htmlContent
+        reply_to: 'verify@stream-in.app',
+        subject: `Your PrepSpace Verification Code: ${otp}`,
+        text: `Hello ${recipientName},\n\nYour PrepSpace verification code is: ${otp}\n\nThis code will expire in 5 minutes. For your security, never share this code with anyone.\n\nIf you did not request this verification code, you can safely ignore this email.\n\n— The PrepSpace Team\nhttps://stream-in.app`,
+        html: htmlContent,
+        headers: {
+          'X-Entity-Ref-ID': `${Date.now()}-${otp}`
+        }
       })
     });
 
