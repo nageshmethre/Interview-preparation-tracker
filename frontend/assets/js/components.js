@@ -497,8 +497,8 @@ const components = {
         
         <form id="login-form">
           <div class="mb-3 text-start">
-            <label class="vercel-input-label" for="login-email">GMAIL ADDRESS</label>
-            <input type="email" id="login-email" class="vercel-input" placeholder="yourname@gmail.com" pattern=".+@gmail\\.com$" title="Only @gmail.com addresses are allowed" required autocomplete="email">
+            <label class="vercel-input-label" for="login-email">EMAIL ADDRESS</label>
+            <input type="email" id="login-email" class="vercel-input" placeholder="name@gmail.com or admin@tracker.com" required autocomplete="email">
           </div>
           <div class="mb-4 text-start">
             <div class="d-flex justify-content-between align-items-center mb-1">

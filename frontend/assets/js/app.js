@@ -10,7 +10,7 @@ const state = {
   name: localStorage.getItem('name'),
   email: localStorage.getItem('email'),
   role: localStorage.getItem('role'),
-  isPaid: localStorage.getItem('isPaid') === 'true' || localStorage.getItem('role') === 'ROLE_ADMIN' || localStorage.getItem('role') === 'ADMIN',
+  isPaid: localStorage.getItem('isPaid') === 'true' || Boolean(localStorage.getItem('role') && (localStorage.getItem('role').includes('ADMIN') || localStorage.getItem('role').startsWith('ROLE_ADMIN'))),
   activePomodoroInterval: null,
   pomodoroTimeLeft: 25 * 60,
   pomodoroRunning: false,
@@ -283,7 +283,8 @@ function router() {
 
   // Inject workspace layout if not already rendered
   if (!document.getElementById('app-container')) {
-    appRoot.innerHTML = components.appLayout(state.name, state.role && state.role.startsWith('ADMIN'), state.isPaid);
+    const isAdminUser = Boolean(state.role && (state.role.includes('ADMIN') || state.role.startsWith('ROLE_ADMIN')));
+    appRoot.innerHTML = components.appLayout(state.name, isAdminUser, state.isPaid);
     bindLayoutEvents();
   }
 
@@ -557,7 +558,8 @@ function router() {
     pageMount.innerHTML = components.desktopClient();
     bindDesktopClientEvents();
   } else if (hash === '#/admin') {
-    if (!state.role || !state.role.startsWith('ADMIN')) {
+    const isAdminUser = Boolean(state.role && (state.role.includes('ADMIN') || state.role.startsWith('ROLE_ADMIN')));
+    if (!isAdminUser) {
       redirectTo('#/dashboard');
       return;
     }
@@ -927,8 +929,10 @@ function bindAuthEvents(mode) {
       const email = document.getElementById('login-email').value.trim();
       const password = document.getElementById('login-password').value;
 
-      if (!email.toLowerCase().endsWith('@gmail.com')) {
-        showToast('Only @gmail.com email addresses are permitted for PrepSpace login.', 'warning');
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showToast('Please enter a valid email address.', 'warning');
         return;
       }
 
