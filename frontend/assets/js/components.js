@@ -1449,59 +1449,69 @@ const components = {
 
   // Settings / Profile View
   profile: () => `
-    <div class="row g-4">
-      <!-- Settings Tabs Navigation -->
-      <div class="col-md-4 col-lg-3">
+    <div class="settings-container">
+      <!-- Settings Tabs Sidebar (Sticky, Single Unified Scroll) -->
+      <div class="settings-sidebar-wrapper">
         <div class="glass-panel p-3">
-          <div class="list-group list-group-flush" id="settings-tabs-list" style="max-height: 550px; overflow-y: auto;">
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab active" data-tab="profile">
-              <i class="fa-solid fa-circle-user me-2 text-indigo"></i> Profile Settings
+          <div class="settings-nav-group">
+            <div class="settings-nav-header">Account</div>
+            <button class="settings-nav-btn btn-settings-tab active" data-tab="profile">
+              <i class="fa-solid fa-circle-user text-indigo"></i> <span>Profile Settings</span>
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="security">
-              <i class="fa-solid fa-key me-2 text-success"></i> Security Settings
+            <button class="settings-nav-btn btn-settings-tab" data-tab="security">
+              <i class="fa-solid fa-shield-halved text-success"></i> <span>Security & Access</span>
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="appearance">
-              <i class="fa-solid fa-palette me-2 text-warning"></i> Appearance Theme
+          </div>
+
+          <div class="settings-nav-group">
+            <div class="settings-nav-header">Preferences</div>
+            <button class="settings-nav-btn btn-settings-tab" data-tab="appearance">
+              <i class="fa-solid fa-palette text-warning"></i> <span>Appearance & Theme</span>
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="notifications">
-              <i class="fa-solid fa-bell me-2 text-danger"></i> Notification Settings
+            <button class="settings-nav-btn btn-settings-tab" data-tab="notifications">
+              <i class="fa-solid fa-bell text-danger"></i> <span>Notifications</span>
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="language">
-              <i class="fa-solid fa-globe me-2 text-info"></i> Language & Region
+            <button class="settings-nav-btn btn-settings-tab" data-tab="language">
+              <i class="fa-solid fa-globe text-info"></i> <span>Language & Region</span>
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="learning">
-              <i class="fa-solid fa-book-open me-2 text-primary"></i> Learning Preferences
+            <button class="settings-nav-btn btn-settings-tab" data-tab="learning">
+              <i class="fa-solid fa-book-open text-primary"></i> <span>Learning Goals</span>
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="career">
-              <i class="fa-solid fa-briefcase me-2 text-success"></i> Career Preferences
+            <button class="settings-nav-btn btn-settings-tab" data-tab="career">
+              <i class="fa-solid fa-briefcase text-success"></i> <span>Career Focus</span>
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="dashboard">
-              <i class="fa-solid fa-chart-line me-2 text-indigo"></i> Dashboard Widgets
+          </div>
+
+          <div class="settings-nav-group mb-0">
+            <div class="settings-nav-header">Workspace & Privacy</div>
+            <button class="settings-nav-btn btn-settings-tab" data-tab="dashboard">
+              <i class="fa-solid fa-chart-line text-indigo"></i> <span>Dashboard Widgets</span>
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="connected">
-              <i class="fa-solid fa-link me-2 text-primary"></i> Connected Accounts
+            <button class="settings-nav-btn btn-settings-tab" data-tab="connected">
+              <i class="fa-solid fa-link text-primary"></i> <span>Connected Accounts</span>
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="privacy">
-              <i class="fa-solid fa-shield-halved me-2 text-danger"></i> Data & Privacy
+            <button class="settings-nav-btn btn-settings-tab" data-tab="privacy">
+              <i class="fa-solid fa-user-shield text-danger"></i> <span>Data & Privacy</span>
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="devices">
-              <i class="fa-solid fa-desktop me-2 text-info"></i> Devices & Sessions
+            <button class="settings-nav-btn btn-settings-tab" data-tab="devices">
+              <i class="fa-solid fa-desktop text-info"></i> <span>Devices & Sessions</span>
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="importexport">
-              <i class="fa-solid fa-file-export me-2 text-muted"></i> Import / Export
+            <button class="settings-nav-btn btn-settings-tab" data-tab="importexport">
+              <i class="fa-solid fa-file-export text-muted"></i> <span>Data Export</span>
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="developer">
-              <i class="fa-solid fa-code me-2 text-muted"></i> Developer Options
+            <button class="settings-nav-btn btn-settings-tab" data-tab="developer">
+              <i class="fa-solid fa-code text-muted"></i> <span>Developer API</span>
             </button>
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-2 btn-settings-tab" data-tab="about">
-              <i class="fa-solid fa-circle-info me-2 text-muted"></i> About Platform
+            <button class="settings-nav-btn btn-settings-tab" data-tab="about">
+              <i class="fa-solid fa-circle-info text-muted"></i> <span>About Platform</span>
             </button>
           </div>
         </div>
       </div>
-      <!-- Form Workspace Mount -->
-      <div class="col-md-8 col-lg-9">
-        <div class="glass-panel p-4" id="settings-workspace-mount" style="min-height: 450px;">
+
+      <!-- Settings Content Workspace -->
+      <div class="settings-content-wrapper">
+        <div class="glass-panel p-4" id="settings-workspace-mount" style="min-height: 520px;">
           <!-- Loaded dynamically via js -->
           <div class="text-center py-5"><div class="spinner-border text-primary"></div></div>
         </div>
@@ -1509,17 +1519,47 @@ const components = {
     </div>
   `,
 
-  settingsProfile: (s, user) => `
-    <h5 class="text-white fw-bold mb-3">👤 Profile Information</h5>
-    <div class="mb-4 text-center position-relative rounded overflow-hidden" style="height: 120px; background: linear-gradient(135deg, var(--primary-color, #6366f1), #818cf8); border: 1px solid rgba(255,255,255,0.1);">
-      ${s.coverImageUrl ? `<img src="${s.coverImageUrl}" class="w-100 h-100 object-fit-cover">` : ''}
-      <div class="position-absolute bottom-0 start-0 p-3 text-start d-flex align-items-center gap-3 w-100 bg-dark bg-opacity-50">
-        <div class="rounded-circle border border-2 border-white overflow-hidden bg-secondary d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-          <i class="fa-solid fa-user text-white fs-4"></i>
+  settingsProfile: (s, user) => {
+    user = user || {};
+    const userName = user.name || s.name || 'Candidate';
+    const userEmail = user.email || s.email || '';
+    const initials = userName.split(' ').filter(Boolean).map(n => n[0]).slice(0, 2).join('').toUpperCase() || 'US';
+    const username = userEmail ? userEmail.split('@')[0] : 'user';
+    const isPro = Boolean(user.isPaid || s.isPaid);
+
+    return `
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h5 class="text-white fw-bold mb-0"><i class="fa-solid fa-user-pen text-indigo me-2"></i>Profile Information</h5>
+        <small class="text-muted fs-8">Personal details, academic credentials, and developer profiles</small>
+      </div>
+      <span class="badge ${isPro ? 'bg-primary-subtle text-primary border border-primary-subtle' : 'bg-secondary-subtle text-muted'} font-monospace fs-9 px-2 py-1">
+        <i class="fa-solid ${isPro ? 'fa-crown' : 'fa-user'} me-1"></i>${isPro ? 'PRO TIER' : 'STARTER'}
+      </span>
+    </div>
+
+    <!-- Modern Dark Profile Hero Card -->
+    <div class="profile-hero-card">
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <div class="d-flex align-items-center gap-3">
+          <div class="profile-avatar-circle">
+            ${s.avatarUrl ? `<img src="${s.avatarUrl}" class="w-100 h-100 rounded-circle object-fit-cover">` : initials}
+          </div>
+          <div>
+            <div class="d-flex align-items-center gap-2">
+              <h5 class="text-white fw-bold mb-0">${userName}</h5>
+              <span class="badge bg-success-subtle text-success border border-success-subtle fs-9 py-0 px-1 font-monospace">VERIFIED</span>
+            </div>
+            <div class="d-flex align-items-center gap-2 text-muted fs-8 mt-1">
+              <span>@${username}</span>
+              ${userEmail ? `<span>•</span><span class="text-truncate" style="max-width: 200px;">${userEmail}</span>` : ''}
+            </div>
+          </div>
         </div>
-        <div>
-          <h6 class="text-white fw-bold m-0">${user.name}</h6>
-          <small class="text-white-50 fs-8">@${user.email.split('@')[0]}</small>
+
+        <div class="d-flex align-items-center gap-2">
+          ${s.location ? `<span class="badge bg-dark text-muted border border-secondary border-opacity-25 fs-8"><i class="fa-solid fa-location-dot me-1 text-danger"></i>${s.location}</span>` : ''}
+          ${s.college ? `<span class="badge bg-dark text-muted border border-secondary border-opacity-25 fs-8"><i class="fa-solid fa-building-columns me-1 text-info"></i>${s.college}</span>` : ''}
         </div>
       </div>
     </div>
@@ -1527,71 +1567,86 @@ const components = {
     <form id="settings-profile-form">
       <div class="row g-3 mb-3">
         <div class="col-md-6">
-          <label class="form-label text-muted fs-7">FULL NAME</label>
-          <input type="text" id="set-name" class="form-control glass-input" value="${user.name}" required>
+          <label class="form-label text-muted fs-8 fw-semibold uppercase tracking-wider">FULL NAME</label>
+          <input type="text" id="set-name" class="form-control glass-input" value="${userName}" required>
         </div>
         <div class="col-md-6">
-          <label class="form-label text-muted fs-7">USERNAME / HANDLE</label>
-          <input type="text" id="set-username" class="form-control glass-input" value="${user.email.split('@')[0]}" disabled>
+          <label class="form-label text-muted fs-8 fw-semibold uppercase tracking-wider">USERNAME / HANDLE</label>
+          <div class="input-group">
+            <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted">@</span>
+            <input type="text" id="set-username" class="form-control glass-input" value="${username}" disabled>
+          </div>
         </div>
       </div>
       <div class="row g-3 mb-3">
         <div class="col-md-6">
-          <label class="form-label text-muted fs-7">EMAIL ADDRESS</label>
-          <input type="email" id="set-email" class="form-control glass-input" value="${user.email}" disabled>
+          <label class="form-label text-muted fs-8 fw-semibold uppercase tracking-wider">EMAIL ADDRESS</label>
+          <input type="email" id="set-email" class="form-control glass-input" value="${userEmail}" disabled>
         </div>
         <div class="col-md-6">
-          <label class="form-label text-muted fs-7">BIOGRAPHY / MOTTO</label>
+          <label class="form-label text-muted fs-8 fw-semibold uppercase tracking-wider">BIOGRAPHY / MOTTO</label>
           <input type="text" id="set-bio" class="form-control glass-input" value="${s.bio || ''}" placeholder="Short bio...">
         </div>
       </div>
       <div class="row g-3 mb-3">
         <div class="col-md-6">
-          <label class="form-label text-muted fs-7">COLLEGE / ACADEMY</label>
+          <label class="form-label text-muted fs-8 fw-semibold uppercase tracking-wider">COLLEGE / ACADEMY</label>
           <input type="text" id="set-college" class="form-control glass-input" value="${s.college || ''}">
         </div>
         <div class="col-md-6">
-          <label class="form-label text-muted fs-7">DEGREE</label>
+          <label class="form-label text-muted fs-8 fw-semibold uppercase tracking-wider">DEGREE</label>
           <input type="text" id="set-degree" class="form-control glass-input" value="${s.degree || ''}">
         </div>
       </div>
       <div class="row g-3 mb-3">
         <div class="col-md-6">
-          <label class="form-label text-muted fs-7">BRANCH / SPECIALIZATION</label>
+          <label class="form-label text-muted fs-8 fw-semibold uppercase tracking-wider">BRANCH / SPECIALIZATION</label>
           <input type="text" id="set-branch" class="form-control glass-input" value="${s.branch || ''}">
         </div>
         <div class="col-md-6">
-          <label class="form-label text-muted fs-7">GRADUATION YEAR</label>
+          <label class="form-label text-muted fs-8 fw-semibold uppercase tracking-wider">GRADUATION YEAR</label>
           <input type="number" id="set-gradyear" class="form-control glass-input" value="${s.graduationYear || 2026}">
         </div>
       </div>
       <div class="row g-3 mb-3">
         <div class="col-md-6">
-          <label class="form-label text-muted fs-7">LOCATION</label>
-          <input type="text" id="set-location" class="form-control glass-input" value="${s.location || ''}" placeholder="e.g. San Francisco, CA">
+          <label class="form-label text-muted fs-8 fw-semibold uppercase tracking-wider">LOCATION</label>
+          <input type="text" id="set-location" class="form-control glass-input" value="${s.location || ''}" placeholder="e.g. Bengaluru, India">
         </div>
         <div class="col-md-6">
-          <label class="form-label text-muted fs-7">TIMEZONE</label>
+          <label class="form-label text-muted fs-8 fw-semibold uppercase tracking-wider">TIMEZONE</label>
           <input type="text" id="set-timezone" class="form-control glass-input" value="${s.timezone || 'UTC+5:30'}">
         </div>
       </div>
       <div class="row g-3 mb-4">
         <div class="col-md-4">
-          <label class="form-label text-muted fs-7">GITHUB LINK</label>
-          <input type="text" id="set-github" class="form-control glass-input fs-7" value="${s.githubUrl || ''}">
+          <label class="form-label text-muted fs-8 fw-semibold uppercase tracking-wider">GITHUB PROFILE</label>
+          <div class="input-group input-group-sm">
+            <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-brands fa-github"></i></span>
+            <input type="text" id="set-github" class="form-control glass-input fs-7" value="${s.githubUrl || ''}" placeholder="https://github.com/...">
+          </div>
         </div>
         <div class="col-md-4">
-          <label class="form-label text-muted fs-7">LINKEDIN LINK</label>
-          <input type="text" id="set-linkedin" class="form-control glass-input fs-7" value="${s.linkedinUrl || ''}">
+          <label class="form-label text-muted fs-8 fw-semibold uppercase tracking-wider">LINKEDIN PROFILE</label>
+          <div class="input-group input-group-sm">
+            <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-brands fa-linkedin"></i></span>
+            <input type="text" id="set-linkedin" class="form-control glass-input fs-7" value="${s.linkedinUrl || ''}" placeholder="https://linkedin.com/in/...">
+          </div>
         </div>
         <div class="col-md-4">
-          <label class="form-label text-muted fs-7">PORTFOLIO URL</label>
-          <input type="text" id="set-portfolio" class="form-control glass-input fs-7" value="${s.portfolioUrl || ''}">
+          <label class="form-label text-muted fs-8 fw-semibold uppercase tracking-wider">PORTFOLIO URL</label>
+          <div class="input-group input-group-sm">
+            <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-solid fa-globe"></i></span>
+            <input type="text" id="set-portfolio" class="form-control glass-input fs-7" value="${s.portfolioUrl || ''}" placeholder="https://yourportfolio.dev">
+          </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-premium w-100 py-2 fs-6">Update Profile Metrics</button>
+      <div class="d-flex justify-content-end">
+        <button type="submit" class="btn btn-premium px-4 py-2 fs-7 fw-semibold"><i class="fa-solid fa-floppy-disk me-2"></i>Save Changes</button>
+      </div>
     </form>
-  `,
+    `;
+  },
 
   settingsSecurity: (s) => `
     <h5 class="text-white fw-bold mb-4">🔐 Access & Security Controls</h5>
