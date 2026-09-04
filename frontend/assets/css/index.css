@@ -898,3 +898,180 @@ input:-webkit-autofill {
 .vercel-pass-toggle:hover {
   color: #ffffff;
 }
+
+/* ==========================================================================
+   PrepSpace Enterprise Admin Command Center (v3.0) Styles
+   ========================================================================== */
+
+.admin-telemetry-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.admin-telemetry-badge {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  font-size: 0.72rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  animation: adminPulse 2s infinite ease-in-out;
+}
+
+.admin-pulse-dot.emerald {
+  background-color: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
+.admin-pulse-dot.cyan {
+  background-color: #06b6d4;
+  box-shadow: 0 0 8px #06b6d4;
+}
+
+.admin-pulse-dot.purple {
+  background-color: #a855f7;
+  box-shadow: 0 0 8px #a855f7;
+}
+
+.admin-pulse-dot.amber {
+  background-color: #f59e0b;
+  box-shadow: 0 0 8px #f59e0b;
+}
+
+@keyframes adminPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.85); }
+}
+
+.admin-stat-card {
+  background: #0a0a0a;
+  border: 1px solid #222222;
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.admin-stat-card:hover {
+  border-color: #444444;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+.admin-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+}
+
+.admin-stat-card.glow-primary::before {
+  background: linear-gradient(90deg, transparent, #6366f1, transparent);
+}
+
+.admin-stat-card.glow-emerald::before {
+  background: linear-gradient(90deg, transparent, #10b981, transparent);
+}
+
+.admin-stat-card.glow-amber::before {
+  background: linear-gradient(90deg, transparent, #f59e0b, transparent);
+}
+
+.admin-stat-card.glow-cyan::before {
+  background: linear-gradient(90deg, transparent, #06b6d4, transparent);
+}
+
+.admin-filter-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.admin-filter-pill:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.admin-filter-pill.active {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+  font-weight: 600;
+}
+
+.badge-super-admin {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #000000 !important;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.25);
+}
+
+.badge-pro-lifetime {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff !important;
+  font-weight: 600;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.badge-risk-high {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  font-weight: 700;
+}
+
+.badge-risk-medium {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  font-weight: 600;
+}
+
+.badge-risk-low {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+/* Sitewide Announcement Banner */
+.admin-broadcast-banner {
+  background: linear-gradient(90deg, #4338ca 0%, #6366f1 50%, #7c3aed 100%);
+  color: #ffffff;
+  padding: 8px 16px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-align: center;
+  position: relative;
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+

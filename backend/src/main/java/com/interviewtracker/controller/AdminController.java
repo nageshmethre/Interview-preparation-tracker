@@ -125,6 +125,37 @@ public class AdminController {
         return ResponseEntity.ok(Map.of("message", "User account deleted successfully"));
     }
 
+    @PostMapping("/users/{id}/toggle-pro")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ADMIN_SUPER')")
+    public ResponseEntity<?> toggleUserProPass(@PathVariable Integer id, Principal principal, HttpServletRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        boolean newStatus = !Boolean.TRUE.equals(user.getIsPaid());
+        user.setIsPaid(newStatus);
+        userRepository.save(user);
+        saveAuditLog(principal.getName(), "Toggled Pro Pass: " + user.getEmail(), "PRO_PASS", String.valueOf(!newStatus), String.valueOf(newStatus), request.getRemoteAddr());
+        return ResponseEntity.ok(Map.of("message", "User Pro status updated to " + (newStatus ? "ACTIVE" : "REVOKED"), "isPaid", newStatus, "userId", id));
+    }
+
+    @PostMapping("/users/{id}/role")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ADMIN_SUPER')")
+    public ResponseEntity<?> updateUserRole(@PathVariable Integer id, @RequestBody Map<String, String> body, Principal principal, HttpServletRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        String newRole = body.get("role");
+        if (newRole == null || newRole.trim().isEmpty()) {
+            throw new BadRequestException("Role parameter is required");
+        }
+        String oldRole = user.getRole();
+        if ("ADMIN_SUPER".equals(oldRole) && !"ADMIN_SUPER".equals(newRole)) {
+            throw new BadRequestException("Super Administrator role cannot be demoted.");
+        }
+        user.setRole(newRole);
+        userRepository.save(user);
+        saveAuditLog(principal.getName(), "Updated User Role: " + user.getEmail(), "USER_ROLE", oldRole, newRole, request.getRemoteAddr());
+        return ResponseEntity.ok(Map.of("message", "User role updated successfully", "role", newRole, "userId", id));
+    }
+
     @PostMapping("/questions")
     @PreAuthorize("hasAnyRole('ADMIN', 'ADMIN_SUPER', 'ADMIN_CONTENT')")
     public ResponseEntity<QuestionDto> addQuestion(@RequestBody QuestionDto dto) {

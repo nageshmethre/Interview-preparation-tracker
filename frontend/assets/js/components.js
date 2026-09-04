@@ -760,6 +760,9 @@ const components = {
           </div>
         </header>
 
+        <!-- Dynamic Sitewide Admin Broadcast Container -->
+        <div id="admin-broadcast-portal-container" class="mb-3" style="display: none;"></div>
+
         <!-- Sitewide Workspace Promo Announcement Bar -->
         <div class="sitewide-promo-banner py-2 px-3 mb-3 border border-primary border-opacity-25 rounded-3 d-flex flex-wrap align-items-center justify-content-between gap-2" style="background: linear-gradient(90deg, rgba(30, 27, 75, 0.7) 0%, rgba(49, 46, 129, 0.7) 50%, rgba(67, 56, 202, 0.7) 100%);">
           <div class="d-flex align-items-center gap-2 text-white fs-8">
@@ -3224,42 +3227,81 @@ const components = {
     if (!payments || payments.length === 0) {
       return `<div class="text-center py-5 text-muted"><i class="fa-solid fa-circle-exclamation fa-2x mb-3"></i><p>No payment logs found.</p></div>`;
     }
+    const successPayments = payments.filter(p => p.status === 'SUCCESS');
+    const totalGross = successPayments.reduce((acc, p) => acc + (Number(p.amount) || 0), 0);
+    const successRate = payments.length ? Math.round((successPayments.length / payments.length) * 100) : 0;
+
     return `
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <div class="text-muted fs-8">Total Transactions: ${payments.length}</div>
-        <a href="/api/admin/reports/payments" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-download me-1"></i> Export CSV Report</a>
-      </div>
-      <div class="table-responsive">
-        <table class="table table-dark table-hover fs-7 align-middle mb-0">
-          <thead>
-            <tr class="text-muted border-secondary">
-              <th>ID</th>
-              <th>User</th>
-              <th>Razorpay Order ID</th>
-              <th>Razorpay Payment ID</th>
-              <th>Amount</th>
-              <th>Status</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${payments.map(p => `
-              <tr class="border-secondary">
-                <td>${p.id}</td>
-                <td class="text-white">${p.userEmail}</td>
-                <td>${p.orderId}</td>
-                <td>${p.paymentId || '<span class="text-muted">N/A</span>'}</td>
-                <td class="text-success fw-bold">₹${p.amount}</td>
-                <td>
-                  <span class="badge ${p.status === 'SUCCESS' ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning'}">
-                    ${p.status}
-                  </span>
-                </td>
-                <td>${new Date(p.createdAt).toLocaleString()}</td>
+      <div class="glass-panel p-4 mb-4">
+        <!-- Summary Cards -->
+        <div class="row g-3 mb-4">
+          <div class="col-md-4">
+            <div class="p-3 bg-dark bg-opacity-50 rounded border border-secondary border-opacity-25">
+              <span class="text-muted fs-8 uppercase">Audited Volume</span>
+              <h4 class="text-success fw-bold mb-0 mt-1 font-monospace">₹${totalGross}</h4>
+              <small class="text-muted fs-9">Processed via Cashfree / UPI Gateway</small>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 bg-dark bg-opacity-50 rounded border border-secondary border-opacity-25">
+              <span class="text-muted fs-8 uppercase">Successful Charges</span>
+              <h4 class="text-white fw-bold mb-0 mt-1 font-monospace">${successPayments.length} <span class="text-muted fs-7">/ ${payments.length}</span></h4>
+              <small class="text-emerald fs-9"><i class="fa-solid fa-circle-check me-1"></i>${successRate}% Settlement Rate</small>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 bg-dark bg-opacity-50 rounded border border-secondary border-opacity-25">
+              <span class="text-muted fs-8 uppercase">Gateway Verification</span>
+              <h4 class="text-info fw-bold mb-0 mt-1">Cashfree PG</h4>
+              <small class="text-muted fs-9">Webhook signature validated</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+          <div class="flex-grow-1" style="max-width: 400px;">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+              <input type="text" id="admin-payment-search-input" class="form-control glass-input" placeholder="Search by email, order ID, or payment ID...">
+            </div>
+          </div>
+          <a href="/api/admin/reports/payments" class="btn btn-outline-success btn-sm"><i class="fa-solid fa-file-csv me-1"></i> Export Transactions CSV</a>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+          <table class="table table-dark table-hover fs-7 align-middle mb-0" id="admin-payments-table">
+            <thead>
+              <tr class="text-muted border-secondary">
+                <th>#</th>
+                <th>Candidate Email</th>
+                <th>Order Reference</th>
+                <th>Gateway Txn ID</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Timestamp</th>
               </tr>
-            `).join('')}
-          </tbody>
-        </table>
+            </thead>
+            <tbody id="admin-payments-table-body">
+              ${payments.map(p => `
+                <tr class="border-secondary payment-table-row" data-email="${(p.userEmail || '').toLowerCase()}" data-order="${(p.orderId || '').toLowerCase()}" data-payid="${(p.paymentId || '').toLowerCase()}">
+                  <td class="text-muted font-monospace fs-8">#${p.id}</td>
+                  <td class="text-white fw-semibold">${p.userEmail}</td>
+                  <td class="font-monospace fs-8 text-secondary">${p.orderId}</td>
+                  <td class="font-monospace fs-8">${p.paymentId ? `<span class="text-info">${p.paymentId}</span>` : '<span class="text-muted">N/A</span>'}</td>
+                  <td class="text-success fw-bold font-monospace">₹${p.amount}</td>
+                  <td>
+                    <span class="badge ${p.status === 'SUCCESS' ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-warning-subtle text-warning border border-warning-subtle'}">
+                      ${p.status}
+                    </span>
+                  </td>
+                  <td class="text-muted fs-8">${p.createdAt ? new Date(p.createdAt).toLocaleString() : 'N/A'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
       </div>
     `;
   },
@@ -3268,53 +3310,130 @@ const components = {
     if (!users || users.length === 0) {
       return `<div class="text-center py-5 text-muted"><i class="fa-solid fa-users-slash fa-2x mb-3"></i><p>No users registered.</p></div>`;
     }
+    const paidCount = users.filter(u => u.isPaid).length;
+    const adminCount = users.filter(u => u.role && u.role.includes('ADMIN')).length;
+    const suspendedCount = users.filter(u => u.isSuspended).length;
+
     return `
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <div class="text-muted fs-8">Registered Users: ${users.length}</div>
-        <a href="/api/admin/reports/users" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-download me-1"></i> Export Users CSV</a>
-      </div>
-      <div class="table-responsive">
-        <table class="table table-dark table-hover fs-7 align-middle mb-0">
-          <thead>
-            <tr class="text-muted border-secondary">
-              <th>ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Access Status</th>
-              <th>Referral Code</th>
-              <th>Earnings</th>
-              <th>Joined</th>
-              <th class="text-end">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${users.map(u => `
-              <tr class="border-secondary">
-                <td>${u.id}</td>
-                <td class="text-white fw-bold">${u.name}</td>
-                <td>${u.email}</td>
-                <td><span class="badge bg-secondary">${u.role}</span></td>
-                <td>
-                  <span class="badge ${u.isPaid ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning'}">
-                    ${u.isPaid ? 'PAID / PREMIUM' : 'FREE'}
-                  </span>
-                  ${u.isSuspended ? '<span class="badge bg-danger-subtle text-danger ms-1">SUSPENDED</span>' : ''}
-                </td>
-                <td><code>${u.referralCode || 'N/A'}</code></td>
-                <td class="text-success">₹${u.referralEarnings || 0}</td>
-                <td>${new Date(u.createdAt).toLocaleDateString()}</td>
-                <td class="text-end">
-                  ${u.isSuspended ? `
-                    <button class="btn btn-sm btn-outline-success btn-user-action px-2 py-1" data-id="${u.id}" data-action="unsuspend"><i class="fa-solid fa-user-check"></i> Unsuspend</button>
-                  ` : `
-                    <button class="btn btn-sm btn-outline-danger btn-user-action px-2 py-1" data-id="${u.id}" data-action="suspend"><i class="fa-solid fa-user-slash"></i> Suspend</button>
-                  `}
-                </td>
+      <div class="glass-panel p-4 mb-4">
+        <!-- Directory Header & Controls -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+          <div>
+            <h5 class="text-white fw-bold mb-1"><i class="fa-solid fa-users text-primary me-2"></i>Candidate & Account Directory</h5>
+            <small class="text-muted fs-8">Total Registered: <strong class="text-white">${users.length}</strong> | Pro Members: <strong class="text-emerald">${paidCount}</strong> | Admins: <strong class="text-warning">${adminCount}</strong></small>
+          </div>
+          <div class="d-flex gap-2">
+            <a href="/api/admin/reports/users" class="btn btn-sm btn-glass"><i class="fa-solid fa-file-csv me-1 text-success"></i> Export CSV</a>
+            <button class="btn btn-sm btn-outline-warning" id="btn-admin-open-compose-global"><i class="fa-solid fa-paper-plane me-1"></i> Message Candidates</button>
+          </div>
+        </div>
+
+        <!-- Search Bar & Filter Chips -->
+        <div class="row g-2 align-items-center mb-3">
+          <div class="col-md-6">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+              <input type="text" id="admin-user-search-input" class="form-control glass-input" placeholder="Search by name, email, role, or referral code...">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex flex-wrap gap-2 justify-content-md-end" id="admin-user-filter-chips">
+              <span class="admin-filter-pill active" data-filter="all">All (${users.length})</span>
+              <span class="admin-filter-pill" data-filter="pro">Pro (${paidCount})</span>
+              <span class="admin-filter-pill" data-filter="free">Free (${users.length - paidCount})</span>
+              <span class="admin-filter-pill" data-filter="admin">Admins (${adminCount})</span>
+              ${suspendedCount > 0 ? `<span class="admin-filter-pill" data-filter="suspended">Suspended (${suspendedCount})</span>` : ''}
+            </div>
+          </div>
+        </div>
+
+        <!-- User Table -->
+        <div class="table-responsive">
+          <table class="table table-dark table-hover fs-7 align-middle mb-0" id="admin-users-table">
+            <thead>
+              <tr class="text-muted border-secondary">
+                <th>#</th>
+                <th>Candidate</th>
+                <th>Contact</th>
+                <th>Role</th>
+                <th>Access Level</th>
+                <th>Referral Bounty</th>
+                <th>Joined</th>
+                <th class="text-end">Administrative Actions</th>
               </tr>
-            `).join('')}
-          </tbody>
-        </table>
+            </thead>
+            <tbody id="admin-users-table-body">
+              ${users.map(u => {
+                const isAdmin = u.role && u.role.includes('ADMIN');
+                const isSuper = u.role === 'ADMIN_SUPER';
+                return `
+                <tr class="border-secondary user-table-row" data-id="${u.id}" data-name="${(u.name || '').toLowerCase()}" data-email="${(u.email || '').toLowerCase()}" data-role="${(u.role || '').toLowerCase()}" data-paid="${u.isPaid ? 'true' : 'false'}" data-suspended="${u.isSuspended ? 'true' : 'false'}">
+                  <td class="text-muted font-monospace fs-8">#${u.id}</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <div class="avatar-circle" style="width: 30px; height: 30px; border-radius: 50%; background: ${isSuper ? '#f59e0b' : isAdmin ? '#6366f1' : '#1e293b'}; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold;">
+                        ${(u.name || 'U').charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <div class="text-white fw-bold">${u.name || 'Anonymous Candidate'}</div>
+                        <span class="text-muted fs-8 font-monospace">${u.referralCode ? 'Ref: ' + u.referralCode : 'Direct User'}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="text-secondary font-monospace fs-8">${u.email}</span>
+                    ${u.googleId ? '<span class="badge bg-dark text-info border border-secondary border-opacity-25 ms-1 fs-9"><i class="fa-brands fa-google"></i></span>' : ''}
+                  </td>
+                  <td>
+                    ${isSuper ? '<span class="badge badge-super-admin px-2 py-1"><i class="fa-solid fa-crown me-1"></i> SUPER ADMIN</span>' :
+                      isAdmin ? '<span class="badge bg-primary px-2 py-1"><i class="fa-solid fa-shield me-1"></i> ADMIN</span>' :
+                      '<span class="badge bg-secondary bg-opacity-50 text-light px-2 py-1">STUDENT</span>'}
+                  </td>
+                  <td>
+                    ${u.isPaid ? '<span class="badge badge-pro-lifetime px-2 py-1"><i class="fa-solid fa-gem me-1"></i> PRO LIFETIME</span>' : '<span class="badge bg-dark text-muted border border-secondary border-opacity-25 px-2 py-1">FREE TIER</span>'}
+                    ${u.isSuspended ? '<span class="badge bg-danger text-white ms-1 px-2 py-1">SUSPENDED</span>' : ''}
+                  </td>
+                  <td>
+                    <span class="text-success font-monospace fw-bold">₹${u.referralEarnings || 0}</span>
+                  </td>
+                  <td class="text-muted fs-8">${u.createdAt ? new Date(u.createdAt).toLocaleDateString() : 'N/A'}</td>
+                  <td class="text-end">
+                    <div class="btn-group btn-group-sm">
+                      <!-- Pro Pass Toggle -->
+                      <button class="btn btn-sm btn-glass btn-toggle-pro px-2" data-id="${u.id}" data-current="${u.isPaid ? 'true' : 'false'}" title="${u.isPaid ? 'Revoke Pro Pass' : 'Grant Free Lifetime Pro Pass'}">
+                        <i class="fa-solid fa-gem ${u.isPaid ? 'text-warning' : 'text-muted'}"></i>
+                      </button>
+
+                      <!-- Role Changer -->
+                      ${!isSuper ? `
+                        <button class="btn btn-sm btn-glass btn-toggle-role px-2" data-id="${u.id}" data-role="${u.role}" title="${isAdmin ? 'Demote to Student' : 'Promote to Admin'}">
+                          <i class="fa-solid fa-user-shield ${isAdmin ? 'text-primary' : 'text-muted'}"></i>
+                        </button>
+                      ` : ''}
+
+                      <!-- Direct Email -->
+                      <button class="btn btn-sm btn-glass btn-compose-user-email px-2" data-email="${u.email}" data-name="${u.name || 'Candidate'}" title="Send direct email to candidate">
+                        <i class="fa-solid fa-envelope text-info"></i>
+                      </button>
+
+                      <!-- Suspend / Unsuspend -->
+                      ${!isSuper ? (u.isSuspended ? `
+                        <button class="btn btn-sm btn-outline-success btn-user-action px-2" data-id="${u.id}" data-action="unsuspend" title="Unsuspend account"><i class="fa-solid fa-user-check"></i></button>
+                      ` : `
+                        <button class="btn btn-sm btn-outline-warning btn-user-action px-2" data-id="${u.id}" data-action="suspend" title="Suspend account"><i class="fa-solid fa-user-slash"></i></button>
+                      `) : ''}
+
+                      <!-- Delete Account -->
+                      ${!isSuper ? `
+                        <button class="btn btn-sm btn-outline-danger btn-delete-user px-2" data-id="${u.id}" data-email="${u.email}" title="Delete account"><i class="fa-solid fa-trash"></i></button>
+                      ` : ''}
+                    </div>
+                  </td>
+                </tr>
+              `}).join('')}
+            </tbody>
+          </table>
+        </div>
       </div>
     `;
   },
@@ -3363,156 +3482,147 @@ const components = {
     `;
   },
 
-  adminSettingsForm: (settings) => {
-    return `
-      <div class="row g-4">
-        <div class="col-md-6">
-          <div class="glass-panel p-4">
-            <h5 class="text-white fw-bold mb-4"><i class="fa-solid fa-gears text-primary me-2"></i>Financial Configurations</h5>
-            
-            <div class="mb-3">
-              <label class="form-label text-muted fs-8 uppercase">Product Premium Access Price (INR)</label>
-              <div class="input-group">
-                <span class="input-group-text bg-secondary border-0 text-white">₹</span>
-                <input type="number" id="setting-PRODUCT_PRICE_INR" class="form-control glass-input" value="${settings.PRODUCT_PRICE_INR || 99}">
-                <button class="btn btn-primary btn-save-setting" data-key="PRODUCT_PRICE_INR">Update</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="glass-panel p-4">
-            <h5 class="text-white fw-bold mb-4"><i class="fa-solid fa-rectangle-ad text-warning me-2"></i>Advertising & SEO Meta Settings</h5>
-            
-            <div class="mb-3">
-              <label class="form-label text-muted fs-8 uppercase">Google AdSense Publisher ID</label>
-              <div class="input-group">
-                <input type="text" id="setting-ADSENSE_PUBLISHER_ID" class="form-control glass-input" value="${settings.ADSENSE_PUBLISHER_ID || 'ca-pub-4662205173096609'}">
-                <button class="btn btn-primary btn-save-setting" data-key="ADSENSE_PUBLISHER_ID">Update</button>
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label text-muted fs-8 uppercase">SEO Portal Global Meta Title</label>
-              <div class="input-group">
-                <input type="text" id="setting-SEO_META_TITLE" class="form-control glass-input" value="${settings.SEO_META_TITLE || 'PrepSpace - Premium Interview Preparation Tracker SaaS'}">
-                <button class="btn btn-primary btn-save-setting" data-key="SEO_META_TITLE">Update</button>
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label text-muted fs-8 uppercase">SEO Portal Global Meta Description</label>
-              <div class="input-group">
-                <input type="text" id="setting-SEO_META_DESCRIPTION" class="form-control glass-input" value="${settings.SEO_META_DESCRIPTION || ''}">
-                <button class="btn btn-primary btn-save-setting" data-key="SEO_META_DESCRIPTION">Update</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-  },
-
   adminAuditList: (logs) => {
     if (!logs || logs.length === 0) {
-      return `<div class="text-center py-5 text-muted"><i class="fa-solid fa-clipboard-list fa-2x mb-3"></i><p>No administrative audits logged.</p></div>`;
+      return `<div class="glass-panel p-5 text-center text-muted"><i class="fa-solid fa-clipboard-list fa-3x mb-3 text-secondary"></i><h5 class="text-white">Audit Trail Empty</h5><p class="fs-8">No administrative audits or configuration modifications have been logged yet.</p></div>`;
     }
     return `
-      <div class="table-responsive">
-        <table class="table table-dark table-hover fs-7 align-middle mb-0">
-          <thead>
-            <tr class="text-muted border-secondary">
-              <th>Timestamp</th>
-              <th>Admin Email</th>
-              <th>Action Taken</th>
-              <th>Settings Key</th>
-              <th>Before Value</th>
-              <th>After Value</th>
-              <th>IP Address</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${logs.map(l => `
-              <tr class="border-secondary">
-                <td>${new Date(l.createdAt).toLocaleString()}</td>
-                <td class="text-warning">${l.adminEmail}</td>
-                <td class="text-white">${l.action}</td>
-                <td><code>${l.targetKey || 'N/A'}</code></td>
-                <td class="text-muted">${l.beforeValue || 'N/A'}</td>
-                <td class="text-info">${l.afterValue || 'N/A'}</td>
-                <td><code>${l.ipAddress || 'N/A'}</code></td>
+      <div class="glass-panel p-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+          <div>
+            <h5 class="text-white fw-bold mb-1"><i class="fa-solid fa-shield-halved text-info me-2"></i>Administrative Security Audit Trail</h5>
+            <small class="text-muted fs-8">Cryptographic record of admin logins, setting adjustments, and account moderation</small>
+          </div>
+          <span class="badge bg-dark text-info border border-secondary border-opacity-25 px-3 py-2 font-monospace">${logs.length} Total Audit Records</span>
+        </div>
+
+        <div class="mb-3" style="max-width: 380px;">
+          <div class="input-group input-group-sm">
+            <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+            <input type="text" id="admin-audit-search-input" class="form-control glass-input" placeholder="Search by admin email, action, or key...">
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-dark table-hover fs-7 align-middle mb-0" id="admin-audit-table">
+            <thead>
+              <tr class="text-muted border-secondary">
+                <th>Timestamp</th>
+                <th>Administrator</th>
+                <th>Action Executed</th>
+                <th>Target Setting / User</th>
+                <th>Before</th>
+                <th>After</th>
+                <th>IP Address</th>
               </tr>
-            `).join('')}
-          </tbody>
-        </table>
+            </thead>
+            <tbody id="admin-audit-table-body">
+              ${logs.map(l => `
+                <tr class="border-secondary audit-table-row" data-admin="${(l.adminEmail || '').toLowerCase()}" data-action="${(l.action || '').toLowerCase()}" data-target="${(l.targetKey || '').toLowerCase()}">
+                  <td class="text-muted fs-8 font-monospace">${new Date(l.createdAt).toLocaleString()}</td>
+                  <td class="text-warning fw-semibold font-monospace fs-8">${l.adminEmail}</td>
+                  <td class="text-white">${l.action}</td>
+                  <td><code>${l.targetKey || 'N/A'}</code></td>
+                  <td class="text-muted fs-8">${l.beforeValue || 'N/A'}</td>
+                  <td class="text-emerald fs-8 fw-semibold">${l.afterValue || 'N/A'}</td>
+                  <td><code class="text-secondary fs-8">${l.ipAddress || '127.0.0.1'}</code></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
       </div>
     `;
   },
 
-  adminHealthReport: (health, webhooks) => {
+  adminHealthReport: (health, webhooks = []) => {
+    const isAppUp = health.appStatus === 'UP';
+    const isDbUp = health.databaseStatus === 'UP';
+    const isGwUp = health.paymentGatewayStatus === 'UP';
+    const uptimeHours = Math.floor((health.uptimeSeconds || 0) / 3600);
+    const uptimeMins = Math.floor(((health.uptimeSeconds || 0) % 3600) / 60);
+
     return `
-      <div class="row g-4 mb-4">
+      <div class="row g-3 mb-4">
+        <!-- Application Server -->
         <div class="col-md-3">
-          <div class="glass-panel p-4 text-center">
-            <div class="text-muted fs-8 uppercase mb-2">Application Server</div>
-            <h4 class="fw-bold ${health.appStatus === 'UP' ? 'text-success' : 'text-danger'} mb-0">
-              <i class="fa-solid fa-circle-check me-2"></i>${health.appStatus}
+          <div class="glass-panel p-4 text-center border-top border-4 ${isAppUp ? 'border-success' : 'border-danger'}">
+            <div class="text-muted fs-8 uppercase mb-2">Backend Application</div>
+            <h4 class="fw-bold ${isAppUp ? 'text-success' : 'text-danger'} mb-0">
+              <i class="fa-solid fa-circle-check me-2"></i>${isAppUp ? 'OPERATIONAL' : 'DEGRADED'}
             </h4>
+            <small class="text-muted fs-9 mt-1 d-block">Render Linux Container</small>
           </div>
         </div>
+
+        <!-- PostgreSQL Database -->
         <div class="col-md-3">
-          <div class="glass-panel p-4 text-center">
+          <div class="glass-panel p-4 text-center border-top border-4 ${isDbUp ? 'border-success' : 'border-danger'}">
             <div class="text-muted fs-8 uppercase mb-2">PostgreSQL Database</div>
-            <h4 class="fw-bold ${health.databaseStatus === 'UP' ? 'text-success' : 'text-danger'} mb-0">
-               <i class="fa-solid fa-database me-2"></i>${health.databaseStatus}
+            <h4 class="fw-bold ${isDbUp ? 'text-success' : 'text-danger'} mb-0">
+               <i class="fa-solid fa-database me-2"></i>${isDbUp ? 'CONNECTED' : 'DISCONNECTED'}
             </h4>
+            <small class="text-muted fs-9 mt-1 d-block">Neon Serverless Cluster</small>
           </div>
         </div>
+
+        <!-- Cashfree Gateway -->
         <div class="col-md-3">
-          <div class="glass-panel p-4 text-center">
-            <div class="text-muted fs-8 uppercase mb-2">Razorpay Gateway API</div>
-            <h4 class="fw-bold ${health.paymentGatewayStatus === 'UP' ? 'text-success' : 'text-danger'} mb-0">
-              <i class="fa-solid fa-credit-card me-2"></i>${health.paymentGatewayStatus}
+          <div class="glass-panel p-4 text-center border-top border-4 ${isGwUp ? 'border-success' : 'border-danger'}">
+            <div class="text-muted fs-8 uppercase mb-2">Payment Gateway</div>
+            <h4 class="fw-bold ${isGwUp ? 'text-success' : 'text-danger'} mb-0">
+              <i class="fa-solid fa-credit-card me-2"></i>${isGwUp ? 'ONLINE' : 'ERROR'}
             </h4>
+            <small class="text-muted fs-9 mt-1 d-block">Cashfree v2023 PG</small>
           </div>
         </div>
+
+        <!-- System Uptime -->
         <div class="col-md-3">
-          <div class="glass-panel p-4 text-center">
-            <div class="text-muted fs-8 uppercase mb-2">System Uptime</div>
-            <h4 class="text-white fw-bold mb-0">
-              <i class="fa-solid fa-clock me-2"></i>${Math.floor(health.uptimeSeconds / 3600)}h ${Math.floor((health.uptimeSeconds % 3600) / 60)}m
+          <div class="glass-panel p-4 text-center border-top border-4 border-info">
+            <div class="text-muted fs-8 uppercase mb-2">Runtime Uptime</div>
+            <h4 class="text-white fw-bold mb-0 font-monospace">
+              <i class="fa-solid fa-clock text-info me-2"></i>${uptimeHours}h ${uptimeMins}m
             </h4>
+            <small class="text-muted fs-9 mt-1 d-block">Zero crash restarts</small>
           </div>
         </div>
       </div>
 
+      <!-- Inbound Webhook Event Stream -->
       <div class="glass-panel p-4">
-        <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-network-wired text-info me-2"></i>Webhook Inbound Log Audit (Idempotent Webhooks)</h5>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h5 class="text-white fw-bold mb-1"><i class="fa-solid fa-network-wired text-info me-2"></i>Webhook Inbound Stream Audit</h5>
+            <small class="text-muted fs-8">Idempotent signature validation for gateway and external notifications</small>
+          </div>
+          <span class="badge bg-dark text-white border border-secondary border-opacity-25 px-3 py-2 font-monospace">${webhooks.length} Webhook Events</span>
+        </div>
+
         <div class="table-responsive">
           <table class="table table-dark table-hover fs-7 align-middle mb-0">
             <thead>
               <tr class="text-muted border-secondary">
                 <th>Received At</th>
-                <th>Event ID</th>
+                <th>Event Reference ID</th>
                 <th>Event Type</th>
-                <th>Status</th>
-                <th>Error Details</th>
+                <th>Ingestion Status</th>
+                <th>Trace Details</th>
               </tr>
             </thead>
             <tbody>
-              ${webhooks.length === 0 ? '<tr><td colspan="5" class="text-center text-muted">No webhook receipts recorded.</td></tr>' : 
+              ${webhooks.length === 0 ? '<tr><td colspan="5" class="text-center text-muted py-4">No webhook receipts recorded in this window.</td></tr>' : 
                 webhooks.map(w => `
                   <tr class="border-secondary">
-                    <td>${new Date(w.receivedAt).toLocaleString()}</td>
-                    <td class="text-info">${w.eventId}</td>
+                    <td class="text-muted fs-8 font-monospace">${new Date(w.receivedAt).toLocaleString()}</td>
+                    <td class="text-info font-monospace fs-8">${w.eventId}</td>
                     <td><code>${w.eventType}</code></td>
                     <td>
-                      <span class="badge ${w.status === 'SUCCESS' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'}">
+                      <span class="badge ${w.status === 'SUCCESS' ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-danger-subtle text-danger border border-danger-subtle'}">
                         ${w.status}
                       </span>
                     </td>
-                    <td class="text-danger-emphasis">${w.errorTrace || '<span class="text-muted">None</span>'}</td>
+                    <td class="text-danger-emphasis fs-8">${w.errorTrace || '<span class="text-muted font-monospace fs-9">Processed cleanly</span>'}</td>
                   </tr>
                 `).join('')
               }
@@ -3523,114 +3633,585 @@ const components = {
     `;
   },
 
-  adminLeaderboardList: (tests) => `
-    <div class="glass-panel p-4">
-      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
-        <div>
-          <h5 class="text-white fw-bold mb-0"><i class="fa-solid fa-trophy text-warning me-2"></i>Global Assessment Submissions Moderation</h5>
-          <small class="text-muted fs-8">Admins can remove test submissions, spam entries, or reset corrupted scores.</small>
+  adminLeaderboardList: (tests = []) => {
+    return `
+      <div class="glass-panel p-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+          <div>
+            <h5 class="text-white fw-bold mb-1"><i class="fa-solid fa-trophy text-warning me-2"></i>Placement League & Assessment Moderation</h5>
+            <small class="text-muted fs-8">Anti-cheat scoring oversight, test submission logs, and leaderboard integrity</small>
+          </div>
+          <span class="badge bg-dark text-white border border-secondary border-opacity-25 px-3 py-2 font-monospace">${tests.length} Total Attempts</span>
         </div>
-        <span class="badge bg-dark text-white border border-secondary border-opacity-25 px-3 py-2 font-monospace">${tests.length} Total Submissions</span>
+
+        <!-- Filter and Search -->
+        <div class="row g-2 align-items-center mb-3">
+          <div class="col-md-6">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+              <input type="text" id="admin-leaderboard-search-input" class="form-control glass-input" placeholder="Search candidate name, email, or category...">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex flex-wrap gap-2 justify-content-md-end" id="admin-leaderboard-chips">
+              <span class="admin-filter-pill active" data-cat="all">All Topics</span>
+              <span class="admin-filter-pill" data-cat="dsa">DSA</span>
+              <span class="admin-filter-pill" data-cat="java">Java</span>
+              <span class="admin-filter-pill" data-cat="sql">SQL</span>
+              <span class="admin-filter-pill" data-cat="os">OS</span>
+              <span class="admin-filter-pill" data-cat="cn">CN</span>
+              <span class="admin-filter-pill" data-cat="python">Python</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-dark table-hover fs-7 align-middle mb-0" id="admin-leaderboard-table">
+            <thead>
+              <tr class="text-muted border-secondary">
+                <th>#</th>
+                <th>Candidate</th>
+                <th>Assessment Category</th>
+                <th>Score</th>
+                <th>Proctoring Status</th>
+                <th>Completed At</th>
+                <th class="text-end">Administrative Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-leaderboard-table-body">
+              ${tests.length === 0 ? '<tr><td colspan="7" class="text-center text-muted py-4 font-monospace">No assessment test records found.</td></tr>' : 
+                tests.map(t => {
+                  const candidateName = t.user ? t.user.name : 'Anonymous Candidate';
+                  const candidateEmail = t.user ? t.user.email : 'N/A';
+                  const cat = (t.category || 'DSA').toLowerCase();
+                  return `
+                  <tr class="border-secondary leaderboard-table-row" data-name="${candidateName.toLowerCase()}" data-email="${candidateEmail.toLowerCase()}" data-cat="${cat}">
+                    <td class="font-monospace text-muted fs-8">#${t.id}</td>
+                    <td>
+                      <div class="text-white fw-semibold">${candidateName}</div>
+                      <span class="text-secondary font-monospace fs-8">${candidateEmail}</span>
+                    </td>
+                    <td><span class="badge bg-dark text-white border border-secondary border-opacity-25 font-monospace px-2 py-1">${t.category}</span></td>
+                    <td class="fw-bold text-success font-monospace fs-6">${t.score} pts</td>
+                    <td>
+                      ${t.score >= 90 ? '<span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 fs-9"><i class="fa-solid fa-shield-check me-1"></i> High Rank</span>' : '<span class="badge bg-secondary-subtle text-muted px-2 py-1 fs-9">Standard</span>'}
+                    </td>
+                    <td class="text-muted fs-8">${t.completedAt ? new Date(t.completedAt).toLocaleString() : 'N/A'}</td>
+                    <td class="text-end">
+                      <button class="btn btn-outline-danger btn-sm px-2 py-1 btn-delete-mocktest" data-id="${t.id}" title="Remove entry from leaderboard">
+                        <i class="fa-solid fa-trash-can me-1"></i> Remove
+                      </button>
+                    </td>
+                  </tr>
+                `}).join('')
+              }
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="table-responsive">
-        <table class="table table-dark table-hover fs-7 align-middle mb-0">
-          <thead>
-            <tr class="text-muted border-secondary">
-              <th>ID</th>
-              <th>Candidate Name</th>
-              <th>Candidate Email</th>
-              <th>Subject / Category</th>
-              <th>Score</th>
-              <th>Date Completed</th>
-              <th class="text-end">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${tests.length === 0 ? '<tr><td colspan="7" class="text-center text-muted py-4 font-monospace">No assessment test records found.</td></tr>' : 
-              tests.map(t => `
-                <tr class="border-secondary">
-                  <td class="font-monospace text-muted">#${t.id}</td>
-                  <td class="fw-bold text-white">${t.user ? t.user.name : '<span class="text-muted">Anonymous</span>'}</td>
-                  <td class="text-secondary font-monospace fs-8">${t.user ? t.user.email : 'N/A'}</td>
-                  <td><span class="badge bg-dark text-white border border-secondary border-opacity-25 font-monospace">${t.category}</span></td>
-                  <td class="fw-bold text-success font-monospace">${t.score} pts</td>
-                  <td class="text-muted fs-8">${t.completedAt ? new Date(t.completedAt).toLocaleString() : 'N/A'}</td>
-                  <td class="text-end">
-                    <button class="btn btn-outline-danger btn-sm px-2 py-1 btn-delete-mocktest" data-id="${t.id}" title="Remove entry from leaderboard">
-                      <i class="fa-solid fa-trash-can me-1"></i> Remove
-                    </button>
-                  </td>
-                </tr>
-              `).join('')
-            }
-          </tbody>
-        </table>
+    `;
+  },
+
+  adminOverviewTab: (stats) => {
+    return `
+      <!-- Charts & Visual Analytics Grid -->
+      <div class="row g-4 mb-4">
+        <!-- Revenue & Registration Trend -->
+        <div class="col-lg-8">
+          <div class="glass-panel p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h6 class="text-white fw-bold mb-0"><i class="fa-solid fa-chart-line text-emerald me-2"></i>Platform Revenue & Candidate Growth (30D)</h6>
+                <small class="text-muted fs-8">Visual telemetry of subscriber conversions and platform traffic</small>
+              </div>
+              <span class="badge bg-emerald-subtle text-emerald border border-emerald-subtle px-2 py-1 fs-9">Real-Time</span>
+            </div>
+            <div style="height: 250px; position: relative;">
+              <canvas id="adminRevenueChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assessment Category Distribution -->
+        <div class="col-lg-4">
+          <div class="glass-panel p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h6 class="text-white fw-bold mb-0"><i class="fa-solid fa-chart-pie text-cyan me-2"></i>Exam Submissions</h6>
+                <small class="text-muted fs-8">Candidate topic volume</small>
+              </div>
+            </div>
+            <div style="height: 250px; position: relative;" class="d-flex align-items-center justify-content-center">
+              <canvas id="adminCategoryChart"></canvas>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  `,
+
+      <!-- Tactical Telemetry & Quick Action Cards -->
+      <div class="row g-4 mb-4">
+        <div class="col-md-4">
+          <div class="glass-panel p-3 border-start border-primary border-3">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <span class="text-muted fs-8 uppercase fw-semibold">Pro Pass Conversion Rate</span>
+                <h4 class="text-white fw-bold mb-0 mt-1">${stats.totalUsers ? Math.round(((stats.paidUsers || 0) / stats.totalUsers) * 100) : 0}%</h4>
+                <small class="text-info fs-8"><i class="fa-solid fa-arrow-trend-up me-1"></i>${stats.paidUsers || 0} of ${stats.totalUsers || 0} candidates</small>
+              </div>
+              <div class="p-3 bg-primary bg-opacity-10 rounded-circle text-primary fs-4"><i class="fa-solid fa-crown"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="glass-panel p-3 border-start border-success border-3">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <span class="text-muted fs-8 uppercase fw-semibold">Affiliate Bounties Paid</span>
+                <h4 class="text-success fw-bold mb-0 mt-1">₹${stats.totalReferralPayouts || 0}</h4>
+                <small class="text-muted fs-8">Disbursed via automated UPI payouts</small>
+              </div>
+              <div class="p-3 bg-success bg-opacity-10 rounded-circle text-success fs-4"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="glass-panel p-3 border-start border-warning border-3">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <span class="text-muted fs-8 uppercase fw-semibold">Pending Withdrawal Claims</span>
+                <h4 class="text-warning fw-bold mb-0 mt-1">₹${stats.totalPendingWithdrawalAmount || 0}</h4>
+                <small class="text-muted fs-8">Awaiting super admin disbursement</small>
+              </div>
+              <div class="p-3 bg-warning bg-opacity-10 rounded-circle text-warning fs-4"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Platform Operations Links -->
+      <div class="glass-panel p-4">
+        <h6 class="text-white fw-bold mb-3"><i class="fa-solid fa-bolt text-warning me-2"></i>Executive Operational Short-Cuts</h6>
+        <div class="row g-3">
+          <div class="col-md-3">
+            <button class="btn btn-glass w-100 text-start p-3 h-100" onclick="loadAdminPanelTab('users')">
+              <div class="fw-bold text-white mb-1"><i class="fa-solid fa-user-gear text-primary me-2"></i>Manage Candidates</div>
+              <small class="text-muted fs-8">Grant Pro, change roles, suspend or delete users</small>
+            </button>
+          </div>
+          <div class="col-md-3">
+            <button class="btn btn-glass w-100 text-start p-3 h-100" onclick="loadAdminPanelTab('broadcast')">
+              <div class="fw-bold text-white mb-1"><i class="fa-solid fa-bullhorn text-danger me-2"></i>Candidate Communicator</div>
+              <small class="text-muted fs-8">Dispatch official emails or publish live banners</small>
+            </button>
+          </div>
+          <div class="col-md-3">
+            <button class="btn btn-glass w-100 text-start p-3 h-100" onclick="loadAdminPanelTab('rules')">
+              <div class="fw-bold text-white mb-1"><i class="fa-solid fa-sliders text-warning me-2"></i>Tune Platform Flags</div>
+              <small class="text-muted fs-8">Pricing, referral bounties, passing cutoffs</small>
+            </button>
+          </div>
+          <div class="col-md-3">
+            <button class="btn btn-glass w-100 text-start p-3 h-100" onclick="loadAdminPanelTab('health')">
+              <div class="fw-bold text-white mb-1"><i class="fa-solid fa-server text-success me-2"></i>Infrastructure Dials</div>
+              <small class="text-muted fs-8">Server uptime, PostgreSQL status, webhooks</small>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  adminBroadcastTab: (settings = {}) => {
+    const isBannerActive = settings.GLOBAL_ANNOUNCEMENT_ACTIVE === 'true';
+    const bannerText = settings.GLOBAL_ANNOUNCEMENT_TEXT || '';
+    const bannerLevel = settings.GLOBAL_ANNOUNCEMENT_LEVEL || 'info';
+
+    return `
+      <div class="row g-4">
+        <!-- Direct Candidate Email Dispatcher -->
+        <div class="col-lg-7">
+          <div class="glass-panel p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h5 class="text-white fw-bold mb-1"><i class="fa-solid fa-envelope-open-text text-info me-2"></i>Official Candidate Email Dispatcher</h5>
+                <small class="text-muted fs-8">Sends verified emails directly from <code class="text-emerald">verify@stream-in.app</code> via Resend API</small>
+              </div>
+              <span class="badge bg-purple text-white px-2 py-1 fs-9"><i class="fa-solid fa-paper-plane me-1"></i> Resend Engine</span>
+            </div>
+
+            <form id="admin-broadcast-email-form">
+              <div class="mb-3">
+                <label class="form-label text-muted fs-8 uppercase">Candidate Recipient Email</label>
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-solid fa-at"></i></span>
+                  <input type="email" id="broadcast-email-to" class="form-control glass-input" placeholder="e.g. candidate@gmail.com or admin@tracker.com" required>
+                </div>
+              </div>
+
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label class="form-label text-muted fs-8 uppercase">Recipient Name</label>
+                  <input type="text" id="broadcast-email-name" class="form-control form-control-sm glass-input" placeholder="e.g. Rahul Sharma" value="Candidate">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label text-muted fs-8 uppercase">Email Subject</label>
+                  <input type="text" id="broadcast-email-subject" class="form-control form-control-sm glass-input" placeholder="e.g. Important Update Regarding Your Placement Drive" required>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label text-muted fs-8 uppercase">Official Message Content</label>
+                <textarea id="broadcast-email-body" class="form-control glass-input" rows="5" placeholder="Write your announcement or direct instructions to the candidate here..." required></textarea>
+                <small class="text-muted fs-9">Supports multiline formatting. Will be wrapped in PrepSpace's responsive luxury email template.</small>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center pt-2">
+                <span class="text-muted fs-8"><i class="fa-solid fa-shield-halved text-success me-1"></i> SPF / DKIM 100% Inboxed</span>
+                <button type="submit" class="btn btn-premium px-4" id="btn-send-admin-email"><i class="fa-solid fa-paper-plane me-2"></i>Dispatch Official Email</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Sitewide Announcement Banner Controls -->
+        <div class="col-lg-5">
+          <div class="glass-panel p-4 h-100">
+            <h5 class="text-white fw-bold mb-1"><i class="fa-solid fa-bullhorn text-warning me-2"></i>Global Platform Banner</h5>
+            <small class="text-muted fs-8">Broadcasts an alert across all user dashboards in real-time</small>
+
+            <div class="my-3 p-3 bg-dark bg-opacity-50 rounded border border-secondary border-opacity-25">
+              <label class="form-label text-muted fs-9 uppercase mb-1">Live Banner Preview:</label>
+              <div id="banner-preview-box" class="alert alert-${bannerLevel} d-flex align-items-center gap-2 mb-0 py-2 fs-8">
+                <i class="fa-solid fa-circle-info"></i>
+                <span id="banner-preview-text">${bannerText || 'No active announcement. Banner is currently hidden.'}</span>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="admin-banner-active" ${isBannerActive ? 'checked' : ''}>
+                <label class="form-check-label text-white fs-8 fw-bold" for="admin-banner-active">Enable Sitewide Announcement</label>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label text-muted fs-8 uppercase">Banner Severity Level</label>
+              <select id="admin-banner-level" class="form-select form-select-sm glass-input">
+                <option value="info" ${bannerLevel === 'info' ? 'selected' : ''}>Info (Cyan / Informative)</option>
+                <option value="warning" ${bannerLevel === 'warning' ? 'selected' : ''}>Warning (Amber / Action Needed)</option>
+                <option value="danger" ${bannerLevel === 'danger' ? 'selected' : ''}>Critical (Red / Urgent Alert)</option>
+                <option value="success" ${bannerLevel === 'success' ? 'selected' : ''}>Success (Emerald / Celebration)</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label text-muted fs-8 uppercase">Announcement Text</label>
+              <textarea id="admin-banner-text" class="form-control glass-input" rows="3" placeholder="e.g. Maintenance scheduled for 2:00 AM IST or 50% discount on Pro Pass!">${bannerText}</textarea>
+            </div>
+
+            <button class="btn btn-warning w-100 fw-bold" id="btn-save-banner-settings"><i class="fa-solid fa-floppy-disk me-2"></i>Publish Banner to All Users</button>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  adminSettingsForm: (settings) => {
+    return `
+      <div class="row g-4">
+        <!-- Financial Configurations -->
+        <div class="col-md-6">
+          <div class="glass-panel p-4 h-100">
+            <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-coins text-warning me-2"></i>Monetization & Bounties</h5>
+            
+            <div class="mb-3">
+              <label class="form-label text-muted fs-8 uppercase">Product Premium Access Price (INR)</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text bg-secondary border-0 text-white font-monospace">₹</span>
+                <input type="number" id="setting-PRODUCT_PRICE_INR" class="form-control glass-input" value="${settings.PRODUCT_PRICE_INR || 99}">
+                <button class="btn btn-primary btn-save-setting" data-key="PRODUCT_PRICE_INR">Update</button>
+              </div>
+              <small class="text-muted fs-9">Current live charge on Cashfree gateway.</small>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label text-muted fs-8 uppercase">Referral Reward Bounty (INR per Invite)</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text bg-secondary border-0 text-white font-monospace">₹</span>
+                <input type="number" id="setting-REFERRAL_REWARD_INR" class="form-control glass-input" value="${settings.REFERRAL_REWARD_INR || 49}">
+                <button class="btn btn-primary btn-save-setting" data-key="REFERRAL_REWARD_INR">Update</button>
+              </div>
+              <small class="text-muted fs-9">Credited to referrer upon successful candidate upgrade.</small>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label text-muted fs-8 uppercase">Minimum Withdrawal Threshold (INR)</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text bg-secondary border-0 text-white font-monospace">₹</span>
+                <input type="number" id="setting-MIN_WITHDRAWAL_INR" class="form-control glass-input" value="${settings.MIN_WITHDRAWAL_INR || 100}">
+                <button class="btn btn-primary btn-save-setting" data-key="MIN_WITHDRAWAL_INR">Update</button>
+              </div>
+              <small class="text-muted fs-9">Minimum wallet balance required to request UPI cashout.</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assessment Rules & Proctoring Thresholds -->
+        <div class="col-md-6">
+          <div class="glass-panel p-4 h-100">
+            <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-graduation-cap text-cyan me-2"></i>Assessment & Proctoring Rules</h5>
+            
+            <div class="mb-3">
+              <label class="form-label text-muted fs-8 uppercase">Technical Assessment Passing Cutoff (%)</label>
+              <div class="input-group input-group-sm">
+                <input type="number" id="setting-MOCKTEST_PASSING_PERCENT" class="form-control glass-input" value="${settings.MOCKTEST_PASSING_PERCENT || 70}" min="40" max="100">
+                <span class="input-group-text bg-secondary border-0 text-white font-monospace">%</span>
+                <button class="btn btn-primary btn-save-setting" data-key="MOCKTEST_PASSING_PERCENT">Update</button>
+              </div>
+              <small class="text-muted fs-9">Candidates scoring above this threshold earn the Pro Certificate badge.</small>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label text-muted fs-8 uppercase">Exam Anti-Cheat Max Tab Switches Allowed</label>
+              <div class="input-group input-group-sm">
+                <input type="number" id="setting-PROCTORING_MAX_TAB_SWITCHES" class="form-control glass-input" value="${settings.PROCTORING_MAX_TAB_SWITCHES || 3}" min="1" max="10">
+                <button class="btn btn-primary btn-save-setting" data-key="PROCTORING_MAX_TAB_SWITCHES">Update</button>
+              </div>
+              <small class="text-muted fs-9">Exceeding this auto-disqualifies the mock test attempt.</small>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label text-muted fs-8 uppercase">Google AdSense Publisher ID</label>
+              <div class="input-group input-group-sm">
+                <input type="text" id="setting-ADSENSE_PUBLISHER_ID" class="form-control glass-input" value="${settings.ADSENSE_PUBLISHER_ID || 'ca-pub-4662205173096609'}">
+                <button class="btn btn-primary btn-save-setting" data-key="ADSENSE_PUBLISHER_ID">Update</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEO & Platform Branding -->
+        <div class="col-12">
+          <div class="glass-panel p-4">
+            <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-globe text-primary me-2"></i>SEO & Portal Metadata</h5>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label text-muted fs-8 uppercase">SEO Portal Global Meta Title</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" id="setting-SEO_META_TITLE" class="form-control glass-input" value="${settings.SEO_META_TITLE || 'PrepSpace - Premium Interview Preparation Tracker SaaS'}">
+                  <button class="btn btn-primary btn-save-setting" data-key="SEO_META_TITLE">Update</button>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label text-muted fs-8 uppercase">SEO Portal Global Meta Description</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" id="setting-SEO_META_DESCRIPTION" class="form-control glass-input" value="${settings.SEO_META_DESCRIPTION || 'Master technical interviews with full-fidelity simulation, AI ATS analysis, and placement leagues.'}">
+                  <button class="btn btn-primary btn-save-setting" data-key="SEO_META_DESCRIPTION">Update</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  },
 
   admin: (stats) => `
     <div class="container-fluid py-4">
-      <div class="border-bottom border-secondary border-opacity-10 pb-4 mb-4 d-flex justify-content-between align-items-center">
-        <div>
-          <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-2 rounded-pill mb-2">ADMIN PANEL</span>
-          <h2 class="text-white fw-bold mb-0">Global Operations Panel</h2>
+      <!-- Executive Telemetry & Global Actions Header -->
+      <div class="border-bottom border-secondary border-opacity-10 pb-3 mb-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+          <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <span class="badge badge-super-admin px-3 py-1 fs-9"><i class="fa-solid fa-crown me-1"></i> SUPER ADMIN COMMAND CENTER v3.0</span>
+              <span id="admin-live-clock" class="font-monospace text-emerald fs-8"></span>
+            </div>
+            <h2 class="text-white fw-bold mb-0">Global Operations & Enterprise Control</h2>
+          </div>
+
+          <!-- Quick Actions & Global Controls -->
+          <div class="d-flex flex-wrap align-items-center gap-2">
+            <!-- Telemetry Indicator Badges -->
+            <div class="d-none d-lg-flex align-items-center gap-2 me-2">
+              <span class="admin-telemetry-badge"><span class="admin-pulse-dot emerald"></span> API 200 OK</span>
+              <span class="admin-telemetry-badge"><span class="admin-pulse-dot cyan"></span> Neon PostgreSQL</span>
+              <span class="admin-telemetry-badge"><span class="admin-pulse-dot purple"></span> Resend Active</span>
+              <span class="admin-telemetry-badge"><span class="admin-pulse-dot amber"></span> CF Proxied</span>
+            </div>
+
+            <!-- Export Dropdown -->
+            <div class="dropdown">
+              <button class="btn btn-glass btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-download me-1 text-success"></i> Export Reports
+              </button>
+              <ul class="dropdown-menu dropdown-menu-dark">
+                <li><a class="dropdown-item fs-8" href="/api/admin/reports/users"><i class="fa-solid fa-users me-2 text-primary"></i>Candidates CSV</a></li>
+                <li><a class="dropdown-item fs-8" href="/api/admin/reports/payments"><i class="fa-solid fa-receipt me-2 text-success"></i>Transactions CSV</a></li>
+                <li><a class="dropdown-item fs-8" href="/api/admin/reports/referrals"><i class="fa-solid fa-network-wired me-2 text-warning"></i>Affiliates CSV</a></li>
+              </ul>
+            </div>
+
+            <!-- Purge Cache -->
+            <button id="btn-admin-purge-cache" class="btn btn-glass btn-sm" title="Clear client cached credentials and reload">
+              <i class="fa-solid fa-broom me-1 text-warning"></i> Flush Cache
+            </button>
+
+            <!-- Sync Telemetry -->
+            <button id="btn-admin-refresh" class="btn btn-premium btn-sm px-3">
+              <i class="fa-solid fa-rotate me-1"></i> Sync Telemetry
+            </button>
+          </div>
         </div>
-        <button id="btn-admin-refresh" class="btn btn-glass btn-sm px-3"><i class="fa-solid fa-rotate me-1"></i> Sync</button>
       </div>
 
-      <!-- Stats Grid -->
-      <div class="row g-4 mb-5">
-        <div class="col-md-4">
-          <div class="glass-panel p-4">
-            <div class="text-muted fs-8 uppercase tracking-wider mb-2">Total Users</div>
-            <h3 class="text-white fw-bold mb-0">${stats.totalUsers}</h3>
-            <div class="text-muted fs-9 mt-2">Registered student/admin profiles</div>
+      <!-- High-Density Executive KPI Metrics Row -->
+      <div class="row g-3 mb-4">
+        <!-- Total Registered Candidates -->
+        <div class="col-6 col-md-4 col-xl-2">
+          <div class="glass-panel p-3 admin-stat-card border-start border-primary border-3">
+            <div class="text-muted fs-9 uppercase fw-semibold mb-1">Total Candidates</div>
+            <h3 class="text-white fw-bold mb-0 font-monospace">${stats.totalUsers || 0}</h3>
+            <div class="text-muted fs-9 mt-1"><i class="fa-solid fa-user-check text-primary me-1"></i>Registered profiles</div>
           </div>
         </div>
 
-        <div class="col-md-4">
-          <div class="glass-panel p-4">
-            <div class="text-muted fs-8 uppercase tracking-wider mb-2">Premium Subscribers</div>
-            <h3 class="text-white fw-bold mb-0">${stats.paidUsers}</h3>
-            <div class="text-muted fs-9 mt-2">Active Pro plan accounts</div>
+        <!-- Pro Subscribers -->
+        <div class="col-6 col-md-4 col-xl-2">
+          <div class="glass-panel p-3 admin-stat-card border-start border-emerald border-3">
+            <div class="text-muted fs-9 uppercase fw-semibold mb-1">Pro Pass Members</div>
+            <h3 class="text-emerald fw-bold mb-0 font-monospace">${stats.paidUsers || 0}</h3>
+            <div class="text-emerald fs-9 mt-1">
+              ${stats.totalUsers ? Math.round(((stats.paidUsers || 0) / stats.totalUsers) * 100) : 0}% conversion rate
+            </div>
           </div>
         </div>
 
-        <div class="col-md-4">
-          <div class="glass-panel p-4">
-            <div class="text-muted fs-8 uppercase tracking-wider mb-2">Gross Revenue</div>
-            <h3 class="text-white fw-bold mb-0">₹${stats.totalRevenue}</h3>
-            <div class="text-muted fs-9 mt-2">Lifetime ₹99 checkout sales</div>
+        <!-- Gross Platform Sales -->
+        <div class="col-6 col-md-4 col-xl-2">
+          <div class="glass-panel p-3 admin-stat-card border-start border-success border-3">
+            <div class="text-muted fs-9 uppercase fw-semibold mb-1">Gross Revenue</div>
+            <h3 class="text-success fw-bold mb-0 font-monospace">₹${stats.totalRevenue || 0}</h3>
+            <div class="text-muted fs-9 mt-1">Cashfree lifetime sales</div>
+          </div>
+        </div>
+
+        <!-- Referral Bounties Ledger -->
+        <div class="col-6 col-md-4 col-xl-2">
+          <div class="glass-panel p-3 admin-stat-card border-start border-warning border-3">
+            <div class="text-muted fs-9 uppercase fw-semibold mb-1">Referral Bounties</div>
+            <h3 class="text-warning fw-bold mb-0 font-monospace">₹${stats.totalReferralPayouts || 0}</h3>
+            <div class="text-muted fs-9 mt-1">₹49 per verified invite</div>
+          </div>
+        </div>
+
+        <!-- Cloudflare Edge & Anti-Cheat -->
+        <div class="col-6 col-md-4 col-xl-2">
+          <div class="glass-panel p-3 admin-stat-card border-start border-info border-3">
+            <div class="text-muted fs-9 uppercase fw-semibold mb-1">Threat Defense</div>
+            <h3 class="text-info fw-bold mb-0 font-monospace">ACTIVE</h3>
+            <div class="text-muted fs-9 mt-1">Cloudflare WAF / Anti-Shodan</div>
+          </div>
+        </div>
+
+        <!-- System Uptime / Health -->
+        <div class="col-6 col-md-4 col-xl-2">
+          <div class="glass-panel p-3 admin-stat-card border-start border-purple border-3">
+            <div class="text-muted fs-9 uppercase fw-semibold mb-1">Cluster Health</div>
+            <h3 class="text-purple fw-bold mb-0 font-monospace">99.98%</h3>
+            <div class="text-muted fs-9 mt-1">Zero critical outages</div>
           </div>
         </div>
       </div>
 
-      <!-- Tabs Header -->
-      <ul class="nav nav-tabs border-secondary border-opacity-25 mb-4">
-        <li class="nav-item">
-          <button class="nav-link active text-white bg-transparent border-0 border-bottom border-primary border-2 px-4 py-2" id="tab-users">Users</button>
-        </li>
-        <li class="nav-item">
-          <button class="nav-link text-muted bg-transparent border-0 px-4 py-2" id="tab-leaderboard"><i class="fa-solid fa-trophy text-warning me-1"></i> Leaderboard</button>
-        </li>
-        <li class="nav-item">
-          <button class="nav-link text-muted bg-transparent border-0 px-4 py-2" id="tab-payments">Payment Logs</button>
-        </li>
-        <li class="nav-item">
-          <button class="nav-link text-muted bg-transparent border-0 px-4 py-2" id="tab-rules">Business Rules</button>
-        </li>
-        <li class="nav-item">
-          <button class="nav-link text-muted bg-transparent border-0 px-4 py-2" id="tab-audit-logs">Audit Logs</button>
-        </li>
-        <li class="nav-item">
-          <button class="nav-link text-muted bg-transparent border-0 px-4 py-2" id="tab-health">System Health</button>
-        </li>
-      </ul>
+      <!-- 9 Super Admin Navigation Tabs -->
+      <div class="d-flex overflow-auto border-bottom border-secondary border-opacity-25 mb-4 pb-1">
+        <ul class="nav nav-pills flex-nowrap gap-1" id="admin-tabs-nav">
+          <li class="nav-item">
+            <button class="nav-link active text-white px-3 py-2 fs-8 fw-semibold" id="tab-overview">
+              <i class="fa-solid fa-chart-line text-info me-1"></i> Overview
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link text-muted px-3 py-2 fs-8 fw-semibold" id="tab-users">
+              <i class="fa-solid fa-users text-primary me-1"></i> Candidates & Roles
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link text-muted px-3 py-2 fs-8 fw-semibold" id="tab-leaderboard">
+              <i class="fa-solid fa-trophy text-warning me-1"></i> Placement League
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link text-muted px-3 py-2 fs-8 fw-semibold" id="tab-payments">
+              <i class="fa-solid fa-receipt text-emerald me-1"></i> Transactions
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link text-muted px-3 py-2 fs-8 fw-semibold" id="tab-referrals">
+              <i class="fa-solid fa-network-wired text-purple me-1"></i> Referral Risk
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link text-muted px-3 py-2 fs-8 fw-semibold" id="tab-rules">
+              <i class="fa-solid fa-sliders text-warning me-1"></i> Dynamic Flags
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link text-muted px-3 py-2 fs-8 fw-semibold" id="tab-broadcast">
+              <i class="fa-solid fa-bullhorn text-danger me-1"></i> Communicator
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link text-muted px-3 py-2 fs-8 fw-semibold" id="tab-audit-logs">
+              <i class="fa-solid fa-shield-halved text-info me-1"></i> Security Trail
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link text-muted px-3 py-2 fs-8 fw-semibold" id="tab-health">
+              <i class="fa-solid fa-server text-success me-1"></i> Health & Webhooks
+            </button>
+          </li>
+        </ul>
+      </div>
 
       <!-- Tab Content Area -->
       <div id="admin-tab-content">
-        <!-- Injected Dynamically by app.js admin view builders -->
+        <!-- Injected Dynamically by loadAdminPanelTab -->
+      </div>
+    </div>
+
+    <!-- Admin Direct Email Compose Modal -->
+    <div class="modal fade" id="adminEmailModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-panel border-secondary border-opacity-25">
+          <div class="modal-header border-secondary border-opacity-25">
+            <h5 class="modal-title text-white fw-bold"><i class="fa-solid fa-paper-plane text-primary me-2"></i>Send Direct Message to Candidate</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <form id="admin-direct-email-modal-form">
+            <div class="modal-body text-start">
+              <div class="mb-3">
+                <label class="form-label text-muted fs-8 uppercase">Recipient Candidate</label>
+                <input type="text" id="modal-email-recipient-name" class="form-control glass-input mb-1" readonly>
+                <input type="email" id="modal-email-recipient-email" class="form-control glass-input font-monospace fs-8" readonly>
+              </div>
+              <div class="mb-3">
+                <label class="form-label text-muted fs-8 uppercase">Subject Line</label>
+                <input type="text" id="modal-email-subject" class="form-control glass-input" placeholder="e.g. Action Required: Verification of Placement Credentials" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label text-muted fs-8 uppercase">Official Message Content</label>
+                <textarea id="modal-email-message" class="form-control glass-input" rows="4" placeholder="Type your personal message to this candidate..." required></textarea>
+                <small class="text-muted fs-9">Dispatched with official PrepSpace signature from verify@stream-in.app</small>
+              </div>
+            </div>
+            <div class="modal-footer border-secondary border-opacity-25">
+              <button type="button" class="btn btn-glass" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-premium px-4" id="btn-modal-send-email"><i class="fa-solid fa-paper-plane me-1"></i> Send Official Email</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   `,
 

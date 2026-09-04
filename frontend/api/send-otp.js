@@ -19,10 +19,12 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed. Only POST is supported.' });
   }
 
-  const { email, name, otp } = req.body || {};
+  const { email, name, otp, type, subject, message } = req.body || {};
 
-  if (!email || !otp) {
-    return res.status(400).json({ error: 'Missing email or otp parameter.' });
+  const isAdminMsg = type === 'admin_message' || (subject && message);
+
+  if (!email || (!otp && !isAdminMsg)) {
+    return res.status(400).json({ error: 'Missing required email, otp, or message parameters.' });
   }
 
   const RESEND_API_KEY = process.env.RESEND_API_KEY;
@@ -32,7 +34,60 @@ export default async function handler(req, res) {
   }
   const recipientName = name && name.trim() ? name.trim() : 'Candidate';
 
-  const htmlContent = `
+  let emailSubject = '';
+  let emailText = '';
+  let htmlContent = '';
+
+  if (isAdminMsg) {
+    emailSubject = subject || 'Official Message from PrepSpace Administration';
+    emailText = `Hello ${recipientName},\n\n${message}\n\n— The PrepSpace Executive Team\nhttps://stream-in.app`;
+    htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>${emailSubject}</title>
+      <style>
+        body { margin: 0; padding: 0; background-color: #000000; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .wrapper { width: 100%; background-color: #000000; padding: 30px 10px; }
+        .container { max-width: 520px; margin: 0 auto; background-color: #0a0a0a; border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 36px 30px; color: #ededed; }
+        .brand { font-size: 20px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px; margin-bottom: 24px; display: inline-flex; align-items: center; gap: 8px; }
+        .badge { display: inline-block; background: rgba(99, 102, 241, 0.2); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.4); padding: 4px 10px; border-radius: 9999px; font-size: 11px; font-weight: 600; text-transform: uppercase; margin-bottom: 16px; }
+        .heading { font-size: 22px; font-weight: 600; color: #ffffff; letter-spacing: -0.3px; margin: 0 0 12px 0; }
+        .body-card { background-color: #111111; border: 1px solid #27272a; border-radius: 12px; padding: 22px; margin: 20px 0; font-size: 14px; line-height: 1.6; color: #e4e4e7; white-space: pre-line; }
+        .cta-btn { display: inline-block; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; margin: 16px 0; }
+        .footer { font-size: 11px; color: #52525b; line-height: 1.5; border-top: 1px solid #1f1f1f; padding-top: 20px; text-align: center; }
+      </style>
+    </head>
+    <body>
+      <div class="wrapper">
+        <div class="container">
+          <div class="brand">
+            ▲ PrepSpace
+          </div>
+          <div><span class="badge">Official Notice</span></div>
+          <h1 class="heading">${emailSubject}</h1>
+          <p style="font-size: 14px; color: #a1a1aa; margin: 0 0 10px 0;">Hello <strong>${recipientName}</strong>,</p>
+          <div class="body-card">
+            ${message}
+          </div>
+          <div style="text-align: center;">
+            <a href="https://stream-in.app" class="cta-btn" style="color: #ffffff;">Launch PrepSpace Portal &rarr;</a>
+          </div>
+          <div class="footer">
+            &copy; 2026 PrepSpace (stream-in.app) &bull; Global Operations Team.<br>
+            Technical Interview Preparation & Career Readiness Platform.
+          </div>
+        </div>
+      </div>
+    </body>
+    </html>
+    `;
+  } else {
+    emailSubject = `Your PrepSpace Verification Code: ${otp}`;
+    emailText = `Hello ${recipientName},\n\nYour PrepSpace verification code is: ${otp}\n\nThis code will expire in 5 minutes. For your security, never share this code with anyone.\n\nIf you did not request this verification code, you can safely ignore this email.\n\n— The PrepSpace Team\nhttps://stream-in.app`;
+    htmlContent = `
     <!DOCTYPE html>
     <html>
     <head>
@@ -90,11 +145,11 @@ export default async function handler(req, res) {
         from: 'PrepSpace <verify@stream-in.app>',
         to: [email],
         reply_to: 'verify@stream-in.app',
-        subject: `Your PrepSpace Verification Code: ${otp}`,
-        text: `Hello ${recipientName},\n\nYour PrepSpace verification code is: ${otp}\n\nThis code will expire in 5 minutes. For your security, never share this code with anyone.\n\nIf you did not request this verification code, you can safely ignore this email.\n\n— The PrepSpace Team\nhttps://stream-in.app`,
+        subject: emailSubject,
+        text: emailText,
         html: htmlContent,
         headers: {
-          'X-Entity-Ref-ID': `${Date.now()}-${otp}`
+          'X-Entity-Ref-ID': `${Date.now()}-${otp || 'admin'}`
         }
       })
     });
