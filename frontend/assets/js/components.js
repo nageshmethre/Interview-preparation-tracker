@@ -3303,8 +3303,9 @@ const components = {
                 </td>
                 <td class="text-end">
                   ${c.status === 'PENDING' || c.status === 'PROCESSING' ? `
-                    <button class="btn btn-sm btn-success btn-claim-action px-2 py-1 me-1" data-id="${c.id}" data-action="PAID"><i class="fa-solid fa-check"></i> Paid</button>
-                    <button class="btn btn-sm btn-danger btn-claim-action px-2 py-1" data-id="${c.id}" data-action="REJECTED"><i class="fa-solid fa-times"></i> Reject</button>
+                    <button class="btn btn-sm btn-outline-warning btn-claim-action px-2 py-1 me-1" data-id="${c.id}" data-action="AUTO_PAYOUT" data-amount="${c.amount}" data-upi="${rawUpi}" title="Automated Instant UPI Transfer via Cashfree API"><i class="fa-solid fa-robot"></i> Auto Pay</button>
+                    <button class="btn btn-sm btn-success btn-claim-action px-2 py-1 me-1" data-id="${c.id}" data-action="PAID" title="Mark as Paid"><i class="fa-solid fa-check"></i> Paid</button>
+                    <button class="btn btn-sm btn-danger btn-claim-action px-2 py-1" data-id="${c.id}" data-action="REJECTED" title="Reject Claim"><i class="fa-solid fa-times"></i> Reject</button>
                   ` : '<span class="text-muted fs-8">Completed</span>'}
                 </td>
               </tr>
@@ -4104,6 +4105,25 @@ const components = {
                   <input type="text" id="setting-SEO_META_DESCRIPTION" class="form-control admin-input" value="${settings.SEO_META_DESCRIPTION || 'Master technical interviews with full-fidelity simulation, AI ATS analysis, and placement leagues.'}">
                   <button class="btn btn-primary btn-save-setting" data-key="SEO_META_DESCRIPTION">Update</button>
                 </div>
+              </div>
+            </div>
+        <!-- Cashfree Automated Payouts Gateway Status -->
+        <div class="col-12">
+          <div class="admin-box p-3 border border-warning border-opacity-25">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-2">
+              <div>
+                <h6 class="text-white fw-bold mb-0"><i class="fa-solid fa-bolt text-warning me-2"></i>Cashfree Automated Payouts Integration</h6>
+                <small class="text-muted fs-8">Direct bank & UPI disbursements from Cashfree merchant balance</small>
+              </div>
+              <span class="badge ${settings.CASHFREE_PAYOUT_CONFIGURED === 'true' ? 'bg-success text-white' : 'bg-secondary text-muted'}">
+                <i class="fa-solid ${settings.CASHFREE_PAYOUT_CONFIGURED === 'true' ? 'fa-circle-check' : 'fa-circle-pause'} me-1"></i>
+                ${settings.CASHFREE_PAYOUT_CONFIGURED === 'true' ? 'API Configured (' + (settings.CASHFREE_PAYOUT_ENV || 'PRODUCTION') + ')' : 'Credentials Not Set'}
+              </span>
+            </div>
+            <div class="p-2 rounded bg-black bg-opacity-30 border border-secondary border-opacity-10 fs-8 text-secondary">
+              <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                <span><strong>Render Environment Variables:</strong> <code>CASHFREE_PAYOUT_CLIENT_ID</code>, <code>CASHFREE_PAYOUT_CLIENT_SECRET</code>, <code>CASHFREE_PAYOUT_ENV</code> (PRODUCTION / SANDBOX)</span>
+                <span class="${settings.CASHFREE_PAYOUT_CONFIGURED === 'true' ? 'text-emerald' : 'text-muted'} font-monospace">${settings.CASHFREE_PAYOUT_CONFIGURED === 'true' ? '✓ Auto-Payout Active in Queue' : 'Manual UPI fallback active'}</span>
               </div>
             </div>
           </div>

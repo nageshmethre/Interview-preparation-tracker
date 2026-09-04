@@ -4743,18 +4743,35 @@ function loadAdminPanelTab(tab) {
       // Claim Payout Actions
       document.querySelectorAll('.btn-claim-action').forEach(btn => {
         btn.addEventListener('click', (e) => {
-          const id = e.currentTarget.dataset.id;
-          const action = e.currentTarget.dataset.action;
-          if (confirm(`Confirm status transition of payout claim #${id} to ${action}?`)) {
+          const targetBtn = e.currentTarget;
+          const id = targetBtn.dataset.id;
+          const action = targetBtn.dataset.action;
+          const amount = targetBtn.dataset.amount;
+          const upi = targetBtn.dataset.upi;
+
+          let promptText = `Confirm status transition of payout claim #${id} to ${action}?`;
+          if (action === 'AUTO_PAYOUT') {
+            promptText = `⚡ Initiate AUTOMATED Cashfree Payout of ₹${amount || ''} directly to UPI ID: ${upi || ''}?\n\nThis will instantly transfer funds from your Cashfree merchant balance.`;
+          }
+
+          if (confirm(promptText)) {
+            const originalHtml = targetBtn.innerHTML;
+            targetBtn.disabled = true;
+            targetBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Processing...`;
+
             apiFetch('/admin/withdrawals/action', {
               method: 'POST',
               body: JSON.stringify({ withdrawalId: id, action })
             })
-            .then(() => {
-              showToast(`Withdrawal claim #${id} marked as ${action}!`, 'success');
+            .then((res) => {
+              showToast(res.message || `Withdrawal claim #${id} marked as ${action}!`, 'success');
               loadAdminPanelTab('referrals');
             })
-            .catch(err => showToast(err.message, 'danger'));
+            .catch(err => {
+              targetBtn.disabled = false;
+              targetBtn.innerHTML = originalHtml;
+              showToast(err.message, 'danger');
+            });
           }
         });
       });

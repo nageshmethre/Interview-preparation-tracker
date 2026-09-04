@@ -15,7 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.json.JSONObject;
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -234,8 +239,121 @@ public class AdminController {
                 .orElseThrow(() -> new BadRequestException("Withdrawal claim not found"));
 
         String beforeStatus = w.getStatus();
-        if (!List.of("PAID", "REJECTED", "PROCESSING").contains(action)) {
+        if (!List.of("PAID", "REJECTED", "PROCESSING", "AUTO_PAYOUT").contains(action)) {
             throw new BadRequestException("Invalid withdrawal status target.");
+        }
+
+        if ("AUTO_PAYOUT".equals(action)) {
+            if ("PAID".equals(w.getStatus())) {
+                throw new BadRequestException("This withdrawal has already been marked as PAID.");
+            }
+
+            String clientId = System.getenv("CASHFREE_PAYOUT_CLIENT_ID");
+            String clientSecret = System.getenv("CASHFREE_PAYOUT_CLIENT_SECRET");
+            if (clientId == null || clientId.isBlank() || clientSecret == null || clientSecret.isBlank()) {
+                throw new BadRequestException("Cashfree Payout credentials (CASHFREE_PAYOUT_CLIENT_ID and CASHFREE_PAYOUT_CLIENT_SECRET) are not configured in backend environment variables. Please add them in Render or disburse manually via UPI.");
+            }
+
+            String rawUpi = (w.getPayoutDetails() != null) ? w.getPayoutDetails().replaceAll("(?i)^upi\\s*(id)?:?\\s*", "").trim() : "";
+            if (rawUpi.isEmpty() || !rawUpi.contains("@")) {
+                throw new BadRequestException("Invalid recipient UPI address: " + w.getPayoutDetails());
+            }
+
+            String env = System.getenv("CASHFREE_PAYOUT_ENV");
+            boolean isSandbox = "SANDBOX".equalsIgnoreCase(env) || "TEST".equalsIgnoreCase(env) || "GAMMA".equalsIgnoreCase(env);
+            String baseUrl = isSandbox ? "https://sandbox.cashfree.com/payout" : "https://api.cashfree.com/payout";
+
+            String candidateName = (w.getUser() != null && w.getUser().getName() != null && !w.getUser().getName().isBlank())
+                    ? w.getUser().getName().trim() : "PrepSpace Candidate";
+            String candidateEmail = (w.getUser() != null && w.getUser().getEmail() != null)
+                    ? w.getUser().getEmail().trim() : "candidate@stream-in.app";
+            String beneId = "bene_usr_" + (w.getUser() != null ? w.getUser().getId() : withdrawalId);
+
+            HttpClient httpClient = HttpClient.newHttpClient();
+
+            // 1. Ensure beneficiary exists
+            try {
+                JSONObject beneObj = new JSONObject();
+                beneObj.put("beneficiary_id", beneId);
+                beneObj.put("beneficiary_name", candidateName);
+
+                JSONObject instObj = new JSONObject();
+                instObj.put("vpa", rawUpi);
+                beneObj.put("beneficiary_instrument_details", instObj);
+
+                JSONObject contactObj = new JSONObject();
+                contactObj.put("beneficiary_email", candidateEmail);
+                contactObj.put("beneficiary_phone", "9876543210");
+                beneObj.put("beneficiary_contact_details", contactObj);
+
+                HttpRequest beneReq = HttpRequest.newBuilder()
+                        .uri(URI.create(baseUrl + "/beneficiary"))
+                        .header("x-client-id", clientId.trim())
+                        .header("x-client-secret", clientSecret.trim())
+                        .header("x-api-version", "2024-01-01")
+                        .header("Content-Type", "application/json")
+                        .POST(HttpRequest.BodyPublishers.ofString(beneObj.toString()))
+                        .build();
+
+                httpClient.send(beneReq, HttpResponse.BodyHandlers.ofString());
+            } catch (Exception ignored) {
+            }
+
+            // 2. Dispatch Transfer
+            String transferId = "cf_tr_" + w.getId() + "_" + System.currentTimeMillis();
+            try {
+                JSONObject transferObj = new JSONObject();
+                transferObj.put("transfer_id", transferId);
+                transferObj.put("transfer_amount", w.getAmount());
+                transferObj.put("transfer_currency", "INR");
+                transferObj.put("transfer_mode", "upi");
+
+                JSONObject beneDetails = new JSONObject();
+                beneDetails.put("beneficiary_id", beneId);
+                transferObj.put("beneficiary_details", beneDetails);
+                transferObj.put("transfer_remarks", "PrepSpace Affiliate Bounty #" + w.getId());
+
+                HttpRequest transferReq = HttpRequest.newBuilder()
+                        .uri(URI.create(baseUrl + "/transfers"))
+                        .header("x-client-id", clientId.trim())
+                        .header("x-client-secret", clientSecret.trim())
+                        .header("x-api-version", "2024-01-01")
+                        .header("Content-Type", "application/json")
+                        .POST(HttpRequest.BodyPublishers.ofString(transferObj.toString()))
+                        .build();
+
+                HttpResponse<String> transferRes = httpClient.send(transferReq, HttpResponse.BodyHandlers.ofString());
+                if (transferRes.statusCode() >= 400) {
+                    String errMsg = transferRes.body();
+                    try {
+                        JSONObject errJson = new JSONObject(transferRes.body());
+                        errMsg = errJson.optString("message", transferRes.body());
+                    } catch (Exception ignored) {}
+                    throw new BadRequestException("Cashfree Payout Error (" + transferRes.statusCode() + "): " + errMsg);
+                }
+
+                JSONObject resJson = new JSONObject(transferRes.body());
+                String cfStatus = resJson.optString("status", "RECEIVED");
+                String refId = resJson.optString("transfer_id", transferId);
+
+                w.setStatus("PAID");
+                w.setProcessedAt(LocalDateTime.now());
+                withdrawalRepository.save(w);
+
+                saveAuditLog(principal.getName(), "Auto-Disbursed Payout via Cashfree (Ref: " + refId + ") to " + rawUpi, "WITHDRAWAL_AUTO_PAYOUT", beforeStatus, "PAID", req.getRemoteAddr());
+
+                return ResponseEntity.ok(Map.of(
+                        "message", "₹" + w.getAmount() + " successfully dispatched to " + rawUpi + " via Cashfree! (Ref: " + refId + ", Status: " + cfStatus + ")",
+                        "withdrawal", w,
+                        "transferId", refId,
+                        "status", cfStatus
+                ));
+
+            } catch (BadRequestException bre) {
+                throw bre;
+            } catch (Exception ex) {
+                throw new BadRequestException("Failed to complete Cashfree automated transfer: " + ex.getMessage());
+            }
         }
 
         w.setStatus(action);
@@ -259,6 +377,8 @@ public class AdminController {
         if (!map.containsKey("PRODUCT_PRICE_INR")) map.put("PRODUCT_PRICE_INR", "399");
         if (!map.containsKey("REFERRAL_REWARD_INR")) map.put("REFERRAL_REWARD_INR", "199");
         if (!map.containsKey("MIN_WITHDRAWAL_INR")) map.put("MIN_WITHDRAWAL_INR", "100");
+        map.put("CASHFREE_PAYOUT_CONFIGURED", String.valueOf(System.getenv("CASHFREE_PAYOUT_CLIENT_ID") != null && !System.getenv("CASHFREE_PAYOUT_CLIENT_ID").isBlank()));
+        map.put("CASHFREE_PAYOUT_ENV", System.getenv("CASHFREE_PAYOUT_ENV") != null ? System.getenv("CASHFREE_PAYOUT_ENV") : "PRODUCTION");
 
         return ResponseEntity.ok(map);
     }
