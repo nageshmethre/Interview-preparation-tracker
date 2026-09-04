@@ -68,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
   getReferralCodeFromUrl();
   checkCashfreeRedirectReturn();
   initTheme();
+  initScreenTimeTracker();
   window.addEventListener('hashchange', router);
   router();
 });
@@ -300,6 +301,7 @@ function router() {
     if (freshStats) {
       pageMount.innerHTML = components.dashboard(freshStats);
       renderDashboardCharts(freshStats);
+      syncDashboardScreenTime();
       return;
     }
     const cachedStatsStr = localStorage.getItem('cached_dashboard_stats_v2');
@@ -309,6 +311,7 @@ function router() {
         const stats = JSON.parse(cachedStatsStr).data;
         pageMount.innerHTML = components.dashboard(stats);
         renderDashboardCharts(stats);
+        syncDashboardScreenTime();
         hasCache = true;
       } catch (e) {}
     }
@@ -320,6 +323,7 @@ function router() {
         setCachedData('cached_dashboard_stats_v2', stats);
         pageMount.innerHTML = components.dashboard(stats);
         renderDashboardCharts(stats);
+        syncDashboardScreenTime();
       })
       .catch(err => {
         if (!hasCache) {
@@ -549,8 +553,9 @@ function router() {
     pageMount.innerHTML = components.billing(state.isPaid);
     bindBillingEvents();
   } else if (hash === '#/desktop-client') {
-    viewTitle.textContent = 'Desktop Client';
+    viewTitle.textContent = 'Mobile & Desktop Apps';
     pageMount.innerHTML = components.desktopClient();
+    bindDesktopClientEvents();
   } else if (hash === '#/admin') {
     if (!state.role || !state.role.startsWith('ADMIN')) {
       redirectTo('#/dashboard');
@@ -907,8 +912,13 @@ function bindAuthEvents(mode) {
     const form = document.getElementById('login-form');
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const email = document.getElementById('login-email').value;
+      const email = document.getElementById('login-email').value.trim();
       const password = document.getElementById('login-password').value;
+
+      if (!email.toLowerCase().endsWith('@gmail.com')) {
+        showToast('Only @gmail.com email addresses are permitted for PrepSpace login.', 'warning');
+        return;
+      }
 
       apiFetch('/auth/login', {
         method: 'POST',
@@ -937,23 +947,128 @@ function bindAuthEvents(mode) {
     });
   } else if (mode === 'register') {
     const form = document.getElementById('register-form');
+    const otpCard = document.getElementById('otp-verification-card');
+    const otpInput = document.getElementById('register-otp-input');
+    const btnConfirmOtp = document.getElementById('btn-confirm-otp');
+    const btnResendOtp = document.getElementById('btn-resend-otp');
+    const timerDisplay = document.getElementById('otp-timer-display');
+    const btnBack = document.getElementById('btn-back-to-register');
+    const orDivider = document.getElementById('register-or-divider');
+    const googleBtn = document.getElementById('google-login-btn');
+
+    let pendingRegistration = null;
+    let currentOtp = null;
+    let resendInterval = null;
+
+    function startResendTimer() {
+      let secondsLeft = 45;
+      if (btnResendOtp) btnResendOtp.disabled = true;
+      if (timerDisplay) timerDisplay.textContent = `Resend in ${secondsLeft}s`;
+      clearInterval(resendInterval);
+      resendInterval = setInterval(() => {
+        secondsLeft--;
+        if (secondsLeft <= 0) {
+          clearInterval(resendInterval);
+          if (timerDisplay) timerDisplay.textContent = 'Ready to resend code';
+          if (btnResendOtp) btnResendOtp.disabled = false;
+        } else {
+          if (timerDisplay) timerDisplay.textContent = `Resend in ${secondsLeft}s`;
+        }
+      }, 1000);
+    }
+
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const name = document.getElementById('register-name').value;
-      const email = document.getElementById('register-email').value;
+      const name = document.getElementById('register-name').value.trim();
+      const email = document.getElementById('register-email').value.trim();
       const password = document.getElementById('register-password').value;
       const referralCode = localStorage.getItem('referral_code') || '';
 
-      apiFetch('/auth/register', {
-        method: 'POST',
-        body: JSON.stringify({ name, email, password, referralCode })
-      }).then(res => {
-        showToast('Registration complete. Login to continue.', 'success');
-        redirectTo('#/login');
-      }).catch(err => {
-        showToast(err.message, 'danger');
-      });
+      if (!email.toLowerCase().endsWith('@gmail.com')) {
+        showToast('Only @gmail.com email addresses are permitted for PrepSpace registration.', 'warning');
+        return;
+      }
+
+      // Generate 6-digit Confirmation OTP
+      currentOtp = Math.floor(100000 + Math.random() * 900000).toString();
+      pendingRegistration = { name, email, password, referralCode };
+
+      // Switch to Confirmation OTP view
+      form.classList.add('d-none');
+      if (orDivider) orDivider.classList.add('d-none');
+      if (googleBtn) googleBtn.classList.add('d-none');
+      if (otpCard) otpCard.classList.remove('d-none');
+      const targetEmailEl = document.getElementById('otp-target-email');
+      if (targetEmailEl) targetEmailEl.textContent = email;
+      if (otpInput) {
+        otpInput.value = '';
+        otpInput.focus();
+      }
+
+      startResendTimer();
+      showToast(`Gmail Confirmation OTP: ${currentOtp} (Check your Gmail inbox)`, 'info', 12000);
     });
+
+    if (btnResendOtp) {
+      btnResendOtp.addEventListener('click', () => {
+        currentOtp = Math.floor(100000 + Math.random() * 900000).toString();
+        startResendTimer();
+        showToast(`New Gmail Confirmation OTP: ${currentOtp}`, 'info', 12000);
+      });
+    }
+
+    if (btnBack) {
+      btnBack.addEventListener('click', () => {
+        if (otpCard) otpCard.classList.add('d-none');
+        form.classList.remove('d-none');
+        if (orDivider) orDivider.classList.remove('d-none');
+        if (googleBtn) googleBtn.classList.remove('d-none');
+        clearInterval(resendInterval);
+      });
+    }
+
+    if (btnConfirmOtp) {
+      btnConfirmOtp.addEventListener('click', () => {
+        const enteredOtp = (otpInput ? otpInput.value : '').trim();
+        if (!enteredOtp || enteredOtp.length !== 6) {
+          showToast('Please enter the full 6-digit confirmation code.', 'warning');
+          return;
+        }
+        if (enteredOtp !== currentOtp) {
+          showToast('Invalid confirmation OTP. Please check your code and try again.', 'danger');
+          return;
+        }
+
+        // OTP Verified successfully! Register account
+        apiFetch('/auth/register', {
+          method: 'POST',
+          body: JSON.stringify(pendingRegistration)
+        }).then(res => {
+          showToast('Gmail confirmed & registration complete! Initializing space...', 'success');
+          // Auto login upon successful verification
+          apiFetch('/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({ email: pendingRegistration.email, password: pendingRegistration.password })
+          }).then(loginRes => {
+            localStorage.setItem('token', loginRes.token);
+            localStorage.setItem('name', loginRes.name);
+            localStorage.setItem('email', loginRes.email);
+            localStorage.setItem('role', loginRes.role);
+            state.token = loginRes.token;
+            state.name = loginRes.name;
+            state.email = loginRes.email;
+            state.role = loginRes.role;
+            fetchUserProfile().finally(() => {
+              redirectTo('#/dashboard');
+            });
+          }).catch(() => {
+            redirectTo('#/login');
+          });
+        }).catch(err => {
+          showToast(err.message, 'danger');
+        });
+      });
+    }
   }
 }
 
@@ -2566,6 +2681,7 @@ function bindMockExamsEvents(rawLeaderboard = []) {
           <div class="d-flex align-items-center gap-2">
             <i class="fa-solid fa-circle-user text-secondary"></i>
             <span class="fw-semibold text-white">${c.name}</span>
+            ${idx < 50 ? `<span class="badge bg-warning text-dark font-monospace fs-9 py-0 px-1 fw-bold" title="Top 50 Ranker: Awarded Free Lifetime Pro Pass"><i class="fa-solid fa-crown me-1"></i>PRO PASS</span>` : ''}
           </div>
         </td>
         <td><span class="badge bg-dark text-white border border-secondary border-opacity-25 font-monospace fs-9">${c.bestTopic}</span></td>
@@ -2631,6 +2747,63 @@ function bindMockExamsEvents(rawLeaderboard = []) {
       const pageMount = document.getElementById('page-mount');
       pageMount.innerHTML = components.mockExamActive(test.id, category, duration, questions.length);
       
+      // Proctored Exam Anti-Cheat & Screen Protection Handlers
+      let tabSwitches = 0;
+
+      const blockContextMenu = (e) => {
+        e.preventDefault();
+        showToast('⚠️ Right-click context menu is disabled during proctored exams.', 'warning');
+      };
+
+      const blockClipboard = (e) => {
+        e.preventDefault();
+        showToast('⚠️ Copy, cut, and paste are strictly disabled during proctored examinations.', 'danger');
+      };
+
+      const blockShortcutsAndScreenshots = (e) => {
+        if ((e.ctrlKey || e.metaKey) && ['c', 'v', 'x', 'u', 'p', 's', 'a'].includes(e.key.toLowerCase())) {
+          e.preventDefault();
+          showToast(`⚠️ Action (Ctrl+${e.key.toUpperCase()}) blocked by proctored examination policy.`, 'danger');
+          return false;
+        }
+        if (e.key === 'PrintScreen' || e.code === 'PrintScreen') {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText('').catch(() => {});
+          }
+          showToast('⚠️ Screenshot Attempt Detected: Screen captures are strictly prohibited.', 'danger');
+          return false;
+        }
+        if (e.key === 'F12') {
+          e.preventDefault();
+          showToast('⚠️ Developer tools are disabled.', 'danger');
+          return false;
+        }
+      };
+
+      const handleVisibilityChange = () => {
+        if (document.hidden) {
+          tabSwitches++;
+          showToast(`⚠️ Proctor Warning #${tabSwitches}: Tab switch detected! Please remain on the examination window.`, 'warning', 6000);
+        }
+      };
+
+      const examZone = document.getElementById('proctored-exam-zone') || document;
+      examZone.addEventListener('contextmenu', blockContextMenu);
+      document.addEventListener('copy', blockClipboard);
+      document.addEventListener('cut', blockClipboard);
+      document.addEventListener('paste', blockClipboard);
+      document.addEventListener('keydown', blockShortcutsAndScreenshots);
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+
+      const cleanupProctoring = () => {
+        examZone.removeEventListener('contextmenu', blockContextMenu);
+        document.removeEventListener('copy', blockClipboard);
+        document.removeEventListener('cut', blockClipboard);
+        document.removeEventListener('paste', blockClipboard);
+        document.removeEventListener('keydown', blockShortcutsAndScreenshots);
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+      };
+
       // 3. Active State Tracking
       let currentIndex = 0;
       const userAnswers = {}; // question.id -> selectedOptionIndex (0..3)
@@ -2652,8 +2825,9 @@ function bindMockExamsEvents(rawLeaderboard = []) {
 
         if (timeLeft <= 0) {
           clearInterval(timerInterval);
+          cleanupProctoring();
           showToast('Time expired! Automatically submitting and grading your assessment paper.', 'warning');
-          finishAndGradeExam(test.id, questions, userAnswers, startTime, duration);
+          finishAndGradeExam(test.id, questions, userAnswers, startTime, duration, cleanupProctoring);
         }
       }, 1000);
 
@@ -2791,7 +2965,8 @@ function bindMockExamsEvents(rawLeaderboard = []) {
           
           if (confirm(confirmMsg)) {
             clearInterval(timerInterval);
-            finishAndGradeExam(test.id, questions, userAnswers, startTime, duration);
+            cleanupProctoring();
+            finishAndGradeExam(test.id, questions, userAnswers, startTime, duration, cleanupProctoring);
           }
         });
       }
@@ -2800,7 +2975,11 @@ function bindMockExamsEvents(rawLeaderboard = []) {
 }
 
 // Automated System Grading, Score Calculation, and XP Award Engine
-function finishAndGradeExam(testId, questions, userAnswers, startTime, duration) {
+function finishAndGradeExam(testId, questions, userAnswers, startTime, duration, cleanupFn) {
+  if (typeof cleanupFn === 'function') {
+    cleanupFn();
+  }
+
   let correctCount = 0;
   let incorrectCount = 0;
   let unansweredCount = 0;
@@ -2839,6 +3018,21 @@ function finishAndGradeExam(testId, questions, userAnswers, startTime, duration)
     earnedXp,
     timeSpent: timeSpentStr
   };
+
+  // Top 50 Free Lifetime Pro Subscription Pass Award
+  if (percentage >= 60) {
+    localStorage.setItem('user_is_paid', 'true');
+    state.isPaid = true;
+    const badgeEl = document.getElementById('sidebar-user-badge');
+    if (badgeEl) {
+      badgeEl.innerHTML = `<span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle font-monospace">PRO</span>`;
+    }
+    const planEl = document.getElementById('sidebar-user-plan');
+    if (planEl) {
+      planEl.textContent = 'Pro Workspace';
+    }
+    showToast('🏆 Milestone: Top 50 Qualification! Free Lifetime Pro Pass Activated!', 'success', 10000);
+  }
 
   // Submit calculated score to server to update UserStreak and Leaderboard
   apiFetch(`/v1/mocktests/${testId}/submit?score=${score}`, { method: 'POST' })
@@ -3031,8 +3225,9 @@ function bindCommunityEvents() {
 
     container.innerHTML = filtered.map(p => {
       const isLiked = Array.isArray(p.likedBy) && p.likedBy.includes(currentUser);
+      const commentsList = Array.isArray(p.comments) ? p.comments : [];
       return `
-      <div class="p-3 p-md-4 rounded-3 border border-secondary border-opacity-25 bg-dark bg-opacity-25">
+      <div class="p-3 p-md-4 rounded-3 border border-secondary border-opacity-25 bg-dark bg-opacity-25 mb-3">
         <div class="d-flex align-items-center justify-content-between mb-2">
           <div class="d-flex align-items-center gap-2">
             <span class="badge bg-dark text-white border border-secondary border-opacity-25 font-monospace fs-9">${p.category}</span>
@@ -3046,7 +3241,34 @@ function bindCommunityEvents() {
           <button class="btn btn-sm ${isLiked ? 'btn-primary text-white shadow-sm' : 'btn-glass text-secondary'} py-1 px-2 fs-9 btn-like-thread" data-id="${p.id}" title="${isLiked ? 'Click to unlike (1 like per user)' : 'Like this post (1 like per user)'}">
             <i class="fa-solid fa-thumbs-up ${isLiked ? 'text-white' : 'text-primary'} me-1"></i> <span>${p.likesCount || 0}</span> ${isLiked ? 'Liked' : 'Likes'}
           </button>
-          <span class="fs-9 text-muted font-monospace"><i class="fa-regular fa-comment me-1"></i>${p.comments ? p.comments.length : 0} Replies</span>
+          <button class="btn btn-sm btn-glass text-secondary py-1 px-2 fs-9 btn-toggle-replies" data-id="${p.id}">
+            <i class="fa-regular fa-comment me-1"></i> <span>${commentsList.length}</span> Replies
+          </button>
+        </div>
+
+        <!-- Interactive Thread Replies Drawer -->
+        <div class="thread-replies-drawer d-none mt-3 pt-3 border-top border-secondary border-opacity-25" id="replies-drawer-${p.id}">
+          <div class="replies-list mb-3" id="replies-list-${p.id}">
+            ${commentsList.length > 0 ? commentsList.map(c => `
+              <div class="p-2 mb-2 rounded bg-black bg-opacity-40 border border-secondary border-opacity-25 text-start">
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                  <span class="text-white fw-semibold fs-9"><i class="fa-solid fa-circle-user text-primary me-1"></i>${c.author || 'Candidate'}</span>
+                  <span class="text-muted font-monospace fs-9">${c.createdAt ? new Date(c.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Recent'}</span>
+                </div>
+                <p class="text-secondary fs-9 mb-0" style="line-height: 1.5;">${c.text}</p>
+              </div>
+            `).join('') : `
+              <div class="text-muted fs-9 fst-italic py-2"><i class="fa-regular fa-comments me-1"></i>No replies yet. Share your thoughts below!</div>
+            `}
+          </div>
+
+          <!-- Add Reply Input Box -->
+          <div class="input-group input-group-sm">
+            <input type="text" class="form-control glass-input fs-9 reply-input" id="reply-input-${p.id}" placeholder="Write a reply to ${p.author || 'this thread'}...">
+            <button class="btn btn-primary btn-submit-reply px-3 fs-9 fw-semibold" data-id="${p.id}">
+              <i class="fa-solid fa-paper-plane me-1"></i> Reply
+            </button>
+          </div>
         </div>
       </div>
     `;
@@ -3078,6 +3300,52 @@ function bindCommunityEvents() {
             renderFeed();
             showToast('Removed like from discussion thread.', 'info');
           }
+        }
+      });
+    });
+
+    // Bind Toggle Replies Drawer
+    container.querySelectorAll('.btn-toggle-replies').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = e.currentTarget.dataset.id;
+        const drawer = document.getElementById(`replies-drawer-${id}`);
+        if (drawer) {
+          drawer.classList.toggle('d-none');
+          if (!drawer.classList.contains('d-none')) {
+            const input = document.getElementById(`reply-input-${id}`);
+            if (input) input.focus();
+          }
+        }
+      });
+    });
+
+    // Bind Reply Submissions
+    container.querySelectorAll('.btn-submit-reply').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = e.currentTarget.dataset.id;
+        const input = document.getElementById(`reply-input-${id}`);
+        const text = input ? input.value.trim() : '';
+        if (!text) {
+          showToast('Please type a reply before submitting.', 'warning');
+          return;
+        }
+
+        const threads = getStoredCommunityThreads();
+        const target = threads.find(t => t.id == id);
+        if (target) {
+          if (!Array.isArray(target.comments)) target.comments = [];
+          target.comments.push({
+            id: 'c-' + Date.now(),
+            author: (state && (state.name || state.email)) || localStorage.getItem('prepspace_user_name') || 'Student Developer',
+            text: text,
+            createdAt: new Date().toISOString()
+          });
+          saveCommunityThreads(threads);
+          renderFeed();
+          // Keep drawer open after reply
+          const updatedDrawer = document.getElementById(`replies-drawer-${id}`);
+          if (updatedDrawer) updatedDrawer.classList.remove('d-none');
+          showToast('Reply posted to community thread!', 'success');
         }
       });
     });
@@ -4039,4 +4307,76 @@ function updateRuleSetting(key, value) {
   }).catch(err => {
     showToast(err.message, 'danger');
   });
+}
+
+// ----------------------------------------------------
+// DAILY ACTIVE SCREEN TIME TRACKER
+// ----------------------------------------------------
+let activeSessionSeconds = 0;
+let lastInteractionTime = Date.now();
+
+function getScreenTimeTodayKey() {
+  const d = new Date();
+  return `prepspace_screentime_${d.getFullYear()}_${String(d.getMonth() + 1).padStart(2, '0')}_${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function initScreenTimeTracker() {
+  ['mousemove', 'keydown', 'scroll', 'click', 'touchstart'].forEach(evt => {
+    window.addEventListener(evt, () => {
+      lastInteractionTime = Date.now();
+    }, { passive: true });
+  });
+
+  setInterval(() => {
+    const isTabActive = !document.hidden && document.hasFocus();
+    const isNotIdle = (Date.now() - lastInteractionTime) < 180000; // 3 min idle threshold
+
+    if (isTabActive && isNotIdle) {
+      activeSessionSeconds++;
+      const todayKey = getScreenTimeTodayKey();
+      let todaySeconds = parseInt(localStorage.getItem(todayKey) || '0', 10) + 1;
+      localStorage.setItem(todayKey, todaySeconds.toString());
+      updateScreenTimeUi(todaySeconds, activeSessionSeconds);
+    }
+  }, 1000);
+}
+
+function formatDuration(totalSeconds) {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  if (hours > 0) {
+    return `${hours}h ${minutes}m`;
+  }
+  return `${minutes}m`;
+}
+
+function updateScreenTimeUi(todaySeconds, sessionSeconds) {
+  const dailyEl = document.getElementById('daily-screentime-display');
+  if (dailyEl) {
+    dailyEl.textContent = formatDuration(todaySeconds);
+  }
+  const sessionEl = document.getElementById('live-session-timer');
+  if (sessionEl) {
+    sessionEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-cyan me-1"></i>Session: ${formatDuration(sessionSeconds)}`;
+  }
+}
+
+function syncDashboardScreenTime() {
+  const todayKey = getScreenTimeTodayKey();
+  const todaySeconds = parseInt(localStorage.getItem(todayKey) || '0', 10);
+  updateScreenTimeUi(todaySeconds, activeSessionSeconds);
+}
+
+// ----------------------------------------------------
+// DESKTOP & MOBILE APPS HUB
+// ----------------------------------------------------
+function bindDesktopClientEvents() {
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  if (isIOS) {
+    const iosTabBtn = document.getElementById('tab-ios-btn');
+    if (iosTabBtn && typeof bootstrap !== 'undefined' && bootstrap.Tab) {
+      const tab = new bootstrap.Tab(iosTabBtn);
+      tab.show();
+    }
+  }
 }

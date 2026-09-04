@@ -4,6 +4,15 @@ const components = {
   // Public SaaS Landing Page - Style 2: Stripe / Supabase Enterprise Gradient Look
   landing: () => `
     <header class="stripe-hero-mesh pb-5">
+      <!-- Sitewide Promotional Banner Ad -->
+      <div class="py-2 px-3 text-center border-bottom border-primary border-opacity-25" style="background: linear-gradient(90deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);">
+        <div class="container d-flex flex-wrap align-items-center justify-content-center gap-2 fs-8 text-white">
+          <span class="badge bg-warning text-dark font-monospace fw-bold px-2 py-1"><i class="fa-solid fa-trophy me-1"></i> TOP 50 PERK</span>
+          <span>Rank in the <strong>Top 50</strong> of any Mock Exam (Java, Python, C++, React, DSA) & win a <strong>100% Free Lifetime Pro Subscription!</strong></span>
+          <a href="#/mock-exams" class="btn btn-sm btn-light py-0 px-2 fw-bold fs-9 text-dark rounded-pill ms-2 text-decoration-none">Take Mock Exam Now →</a>
+        </div>
+      </div>
+
       <!-- Vercel Minimalist Glass Navigation -->
       <nav class="navbar navbar-expand-lg navbar-dark bg-black py-3 sticky-top border-bottom border-secondary border-opacity-25">
         <div class="container">
@@ -479,17 +488,27 @@ const components = {
   // Authentication: Login Page
   login: () => `
     <div class="container">
-      <div class="row justify-content-center align-items-center min-vh-100">
+      <div class="row justify-content-center align-items-center min-vh-100 py-4">
         <div class="col-md-6 col-lg-5 col-xl-4">
-          <div class="glass-panel p-5 text-center">
+          <div class="glass-panel p-4 p-md-5 text-center">
             <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace" style="width: 52px; height: 52px; object-fit: contain;" class="mb-3">
-            <h2 class="text-white fw-bold mb-2">Welcome Back</h2>
-            <p class="text-muted mb-4">Enter credentials to initialize space</p>
+            <h2 class="text-white fw-bold mb-1">Welcome Back</h2>
+            <p class="text-muted mb-3 fs-7">Enter credentials to initialize your space</p>
+
+            <div class="mb-3">
+              <span class="badge bg-danger bg-opacity-25 text-danger border border-danger-subtle font-monospace fs-9 py-1 px-2">
+                <i class="fa-brands fa-google me-1"></i> ONLY GMAIL (@gmail.com) ACCEPTED
+              </span>
+            </div>
             
             <form id="login-form">
               <div class="mb-3 text-start">
-                <label class="form-label text-muted fs-7">EMAIL ADDRESS</label>
-                <input type="email" id="login-email" class="form-control glass-input" placeholder="name@tracker.com" required>
+                <label class="form-label text-muted fs-7">GMAIL ADDRESS</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-dark border-secondary border-opacity-25 text-danger"><i class="fa-brands fa-google"></i></span>
+                  <input type="email" id="login-email" class="form-control glass-input" placeholder="candidate@gmail.com" pattern=".+@gmail\\.com$" title="Only @gmail.com addresses are allowed" required>
+                </div>
+                <div class="form-text text-muted font-monospace" style="font-size:0.7rem;">Must be a valid @gmail.com address</div>
               </div>
               <div class="mb-4 text-start">
                 <label class="form-label text-muted fs-7">PASSWORD</label>
@@ -505,7 +524,7 @@ const components = {
             </div>
             <div id="google-login-btn" class="w-100 d-flex justify-content-center mb-3"></div>
             
-            <p class="text-muted fs-7">Don't have an account? <a href="#/register" class="text-indigo text-decoration-none">Register here</a></p>
+            <p class="text-muted fs-7">Don't have an account? <a href="#/register" class="text-indigo text-decoration-none">Register with Gmail</a></p>
           </div>
         </div>
       </div>
@@ -515,38 +534,72 @@ const components = {
   // Authentication: Register Page
   register: () => `
     <div class="container">
-      <div class="row justify-content-center align-items-center min-vh-100">
+      <div class="row justify-content-center align-items-center min-vh-100 py-4">
         <div class="col-md-6 col-lg-5 col-xl-4">
-          <div class="glass-panel p-5 text-center">
+          <div class="glass-panel p-4 p-md-5 text-center">
             <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace" style="width: 52px; height: 52px; object-fit: contain;" class="mb-3">
-            <h2 class="text-white fw-bold mb-2">Create Space</h2>
-            <p class="text-muted mb-4">Start your preparation tracking lifecycle</p>
+            <h2 class="text-white fw-bold mb-1">Create Space</h2>
+            <p class="text-muted mb-3 fs-7">Start your preparation tracking lifecycle</p>
+
+            <div class="mb-3">
+              <span class="badge bg-danger bg-opacity-25 text-danger border border-danger-subtle font-monospace fs-9 py-1 px-2">
+                <i class="fa-brands fa-google me-1"></i> ONLY GMAIL (@gmail.com) ACCEPTED
+              </span>
+            </div>
             
+            <!-- Registration Step 1: Account Details Form -->
             <form id="register-form">
               <div class="mb-3 text-start">
                 <label class="form-label text-muted fs-7">FULL NAME</label>
                 <input type="text" id="register-name" class="form-control glass-input" placeholder="Nagesh Methre" required>
               </div>
               <div class="mb-3 text-start">
-                <label class="form-label text-muted fs-7">EMAIL ADDRESS</label>
-                <input type="email" id="register-email" class="form-control glass-input" placeholder="nagesh@tracker.com" required>
+                <label class="form-label text-muted fs-7">GMAIL ADDRESS</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-dark border-secondary border-opacity-25 text-danger"><i class="fa-brands fa-google"></i></span>
+                  <input type="email" id="register-email" class="form-control glass-input" placeholder="nagesh@gmail.com" pattern=".+@gmail\\.com$" title="Only @gmail.com addresses are allowed" required>
+                </div>
+                <div class="form-text text-muted font-monospace" style="font-size:0.7rem;">Confirmation OTP will be sent to this Gmail</div>
               </div>
               <div class="mb-4 text-start">
                 <label class="form-label text-muted fs-7">PASSWORD (Min. 6 chars, A-Z, a-z, 0-9)</label>
                 <input type="password" id="register-password" class="form-control glass-input" placeholder="••••••••" minlength="6" required>
                 <div class="form-text text-muted" style="font-size:0.7rem;">Must include uppercase, lowercase, and a number</div>
               </div>
-              <button type="submit" class="btn btn-premium w-100 py-2 fs-6 mb-3">Create Account</button>
+              <button type="submit" class="btn btn-premium w-100 py-2 fs-6 mb-3">Continue to Gmail Verification</button>
             </form>
 
-            <div class="my-3 d-flex align-items-center">
+            <!-- Registration Step 2: 6-Digit Gmail OTP Verification Modal/Box -->
+            <div id="otp-verification-card" class="d-none text-start">
+              <div class="alert alert-dark border-primary border-opacity-50 p-3 mb-3 rounded-3" style="background: rgba(99, 102, 241, 0.08);">
+                <div class="d-flex align-items-center gap-2 mb-1 text-primary fw-bold fs-7">
+                  <i class="fa-solid fa-envelope-circle-check"></i>
+                  <span>Gmail Verification Code</span>
+                </div>
+                <p class="text-secondary fs-8 mb-0">We generated a 6-digit confirmation OTP for <span id="otp-target-email" class="text-white font-monospace fw-bold"></span>. Enter the code below:</p>
+              </div>
+              <div class="mb-3">
+                <label class="form-label text-muted fs-7 font-monospace">ENTER 6-DIGIT OTP</label>
+                <input type="text" id="register-otp-input" class="form-control glass-input text-center font-monospace fs-3 fw-bold text-primary tracking-widest" placeholder="• • • • • •" maxlength="6" pattern="[0-9]{6}">
+              </div>
+              <button type="button" id="btn-confirm-otp" class="btn btn-premium w-100 py-2 fs-6 mb-2">Verify & Create Account</button>
+              <div class="d-flex justify-content-between align-items-center text-muted fs-8 font-monospace mt-2">
+                <span id="otp-timer-display">Resend in 45s</span>
+                <button type="button" id="btn-resend-otp" class="btn btn-link text-indigo p-0 fs-8 text-decoration-none" disabled>Resend Code</button>
+              </div>
+              <div class="text-center mt-3">
+                <button type="button" id="btn-back-to-register" class="btn btn-link text-muted p-0 fs-8 text-decoration-none">← Edit Gmail Address</button>
+              </div>
+            </div>
+
+            <div class="my-3 d-flex align-items-center" id="register-or-divider">
               <hr class="flex-grow-1 border-secondary-subtle">
               <span class="px-2 text-muted small">OR</span>
               <hr class="flex-grow-1 border-secondary-subtle">
             </div>
             <div id="google-login-btn" class="w-100 d-flex justify-content-center mb-3"></div>
             
-            <p class="text-muted fs-7">Already registered? <a href="#/login" class="text-indigo text-decoration-none">Login here</a></p>
+            <p class="text-muted fs-7 mb-0">Already registered? <a href="#/login" class="text-indigo text-decoration-none">Login here</a></p>
           </div>
         </div>
       </div>
@@ -652,9 +705,12 @@ const components = {
           </div>
           
           <div class="d-flex align-items-center gap-2 gap-md-3">
-            <a href="https://github.com/nageshmethre/Interview-preparation-tracker/releases/download/app-latest/PrepSpace.apk" download="PrepSpace.apk" class="btn btn-glass btn-sm d-flex align-items-center gap-2 text-success border-success-subtle py-1 px-2 px-md-3" title="Download PrepSpace Android APK directly in browser">
-              <i class="fa-brands fa-android text-success"></i>
-              <span class="d-none d-sm-inline fw-semibold">Download App</span>
+            <a href="#/desktop-client" class="btn btn-glass btn-sm d-flex align-items-center gap-2 text-success border-success-subtle py-1 px-2 px-md-3" title="Get PrepSpace for Android (APK) or Apple iOS (iPhone)">
+              <div class="d-flex align-items-center gap-1">
+                <i class="fa-brands fa-android text-success"></i>
+                <i class="fa-brands fa-apple text-white fs-8"></i>
+              </div>
+              <span class="d-none d-sm-inline fw-semibold">Get Mobile App</span>
             </a>
             <a href="#/mock-exams" class="btn btn-glass btn-sm d-none d-md-flex align-items-center gap-2 text-white">
               <i class="fa-solid fa-stopwatch text-danger"></i>
@@ -683,6 +739,15 @@ const components = {
           </div>
         </header>
 
+        <!-- Sitewide Workspace Promo Announcement Bar -->
+        <div class="sitewide-promo-banner py-2 px-3 mb-3 border border-primary border-opacity-25 rounded-3 d-flex flex-wrap align-items-center justify-content-between gap-2" style="background: linear-gradient(90deg, rgba(30, 27, 75, 0.7) 0%, rgba(49, 46, 129, 0.7) 50%, rgba(67, 56, 202, 0.7) 100%);">
+          <div class="d-flex align-items-center gap-2 text-white fs-8">
+            <span class="badge bg-warning text-dark font-monospace fw-bold"><i class="fa-solid fa-trophy me-1"></i> TOP 50 PRO PERK</span>
+            <span>Score in the <strong>Top 50</strong> of any Mock Exam (Java, Python, C++, React, DSA) & win a <strong>100% Free Lifetime Pro Subscription!</strong></span>
+          </div>
+          <a href="#/mock-exams" class="btn btn-sm btn-light py-0 px-2 fw-bold fs-9 text-dark rounded-pill text-nowrap text-decoration-none">Take Mock Exam →</a>
+        </div>
+
         <!-- Dynamic Sub-view Mounting Port -->
         <div id="page-mount" class="flex-grow-1 overflow-y-auto"></div>
       </div>
@@ -707,30 +772,40 @@ const components = {
       </div>
     </div>
 
-    <!-- Vercel Telemetry Metrics Strip (4-Column Bento) -->
+    <!-- Vercel Telemetry Metrics Strip (5-Column Responsive Bento) -->
     <div class="row g-3 mb-4">
-      <div class="col-6 col-md-3">
+      <div class="col-12 col-sm-6 col-md-4 col-xl">
+        <div class="bento-card p-3 text-start border-cyan border-opacity-25" id="dashboard-screentime-card">
+          <div class="d-flex align-items-center justify-content-between">
+            <span class="text-secondary fs-8 font-monospace uppercase">Daily Screen Time</span>
+            <span class="badge bg-dark text-cyan border border-secondary border-opacity-25 font-monospace fs-9"><i class="fa-solid fa-clock me-1"></i>ACTIVE</span>
+          </div>
+          <div class="fs-2 fw-bold text-white mt-1 mb-0" id="daily-screentime-display">0h 0m</div>
+          <small class="text-cyan fs-9 font-monospace" id="live-session-timer"><i class="fa-solid fa-spinner fa-spin me-1"></i>Session: 0m</small>
+        </div>
+      </div>
+      <div class="col-6 col-sm-6 col-md-4 col-xl">
         <div class="bento-card p-3 text-start">
           <span class="text-secondary fs-8 font-monospace uppercase">Total Study Time</span>
           <div class="fs-2 fw-bold text-white mt-1 mb-0">${stats.totalStudyHours}h</div>
           <small class="text-success fs-9 font-monospace"><i class="fa-solid fa-circle text-success me-1" style="font-size: 6px;"></i>Active Pace</small>
         </div>
       </div>
-      <div class="col-6 col-md-3">
+      <div class="col-6 col-sm-6 col-md-4 col-xl">
         <div class="bento-card p-3 text-start">
           <span class="text-secondary fs-8 font-monospace uppercase">Completed Topics</span>
           <div class="fs-2 fw-bold text-white mt-1 mb-0">${stats.completedTopics}</div>
           <small class="text-secondary fs-9 font-monospace">Core Matrix</small>
         </div>
       </div>
-      <div class="col-6 col-md-3">
+      <div class="col-6 col-sm-6 col-md-4 col-xl">
         <div class="bento-card p-3 text-start">
           <span class="text-secondary fs-8 font-monospace uppercase">Upcoming Screens</span>
           <div class="fs-2 fw-bold text-white mt-1 mb-0">${stats.upcomingInterviewsCount}</div>
           <small class="text-warning fs-9 font-monospace">Scheduled</small>
         </div>
       </div>
-      <div class="col-6 col-md-3">
+      <div class="col-6 col-sm-6 col-md-4 col-xl">
         <div class="bento-card p-3 text-start">
           <span class="text-secondary fs-8 font-monospace uppercase">Active Pipeline</span>
           <div class="fs-2 fw-bold text-white mt-1 mb-0">${stats.applicationsCount}</div>
@@ -2284,8 +2359,11 @@ const components = {
           <!-- Header & Controls -->
           <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
             <div>
-              <h5 class="text-white fw-bold mb-0"><i class="fa-solid fa-trophy text-warning me-2"></i>Global Assessment Leaderboard</h5>
-              <small class="text-muted fs-9">Unique top candidates ranked by performance</small>
+              <div class="d-flex align-items-center gap-2">
+                <h5 class="text-white fw-bold mb-0"><i class="fa-solid fa-trophy text-warning me-2"></i>Global Assessment Leaderboard</h5>
+                <span class="badge bg-warning text-dark font-monospace fs-9 py-1 px-2 fw-bold"><i class="fa-solid fa-crown me-1"></i>TOP 50 WIN FREE PRO</span>
+              </div>
+              <small class="text-muted fs-9">Rank in Top 50 across any topic to unlock 100% Free Lifetime Pro Workspace</small>
             </div>
             <div class="d-flex align-items-center gap-2">
               <select id="leaderboard-subject-filter" class="form-select form-select-sm glass-input py-1 px-2 fs-8" style="width: auto;">
@@ -2338,52 +2416,65 @@ const components = {
   `,
 
   mockExamActive: (testId, category, duration, questionCount) => `
-    <div class="row g-4">
-      <!-- Left Info & Question Palette Drawer -->
-      <div class="col-lg-4">
-        <div class="glass-panel p-4 mb-4">
-          <div class="d-flex align-items-center justify-content-between mb-3">
-            <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-7 px-3 py-2">${category}</span>
-            <div class="text-danger fw-bold fs-5 font-monospace d-flex align-items-center gap-2" id="mock-timer-box">
-              <i class="fa-solid fa-stopwatch fa-spin-pulse"></i>
-              <span id="mock-timer-display">${duration}:00</span>
-            </div>
-          </div>
-          
-          <div class="border-top border-secondary border-opacity-25 pt-3 mb-4">
-            <div class="d-flex justify-content-between text-muted fs-8 mb-2">
-              <span id="mock-progress-text">Progress: 1 of ${questionCount}</span>
-              <span id="mock-answered-count" class="text-success fw-bold">Answered: 0/${questionCount}</span>
-            </div>
-            <div class="progress bg-dark bg-opacity-75" style="height: 8px; border-radius: 4px;">
-              <div id="mock-progress-bar" class="progress-bar bg-primary" role="progressbar" style="width: ${(1 / questionCount) * 100}%"></div>
-            </div>
-          </div>
-
-          <!-- 50-Question Quick Jump Palette -->
-          <div class="mb-4">
-            <label class="form-label text-muted fs-8 fw-semibold uppercase mb-2">Question Navigation Grid</label>
-            <div class="d-flex flex-wrap gap-2 overflow-y-auto p-2 rounded bg-dark bg-opacity-50 border border-secondary" id="mock-question-palette" style="max-height: 220px;">
-              ${Array.from({ length: questionCount }, (_, i) => `
-                <button type="button" class="btn btn-sm btn-glass btn-jump-q py-1 px-2 fs-8 text-white ${i === 0 ? 'border-primary bg-primary bg-opacity-25' : ''}" data-q-index="${i}" id="palette-btn-${i}" style="min-width: 34px;">
-                  ${i + 1}
-                </button>
-              `).join('')}
-            </div>
-          </div>
-          
-          <button class="btn btn-premium w-100 py-3 fw-bold fs-6" id="btn-submit-mock-exam" data-test-id="${testId}">
-            <i class="fa-solid fa-paper-plane me-2"></i> Submit & Grade Exam
-          </button>
+    <div class="proctored-exam-container position-relative" id="proctored-exam-zone" style="user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;">
+      <!-- Security & Anti-Cheat Active Strip -->
+      <div class="alert alert-dark border-danger border-opacity-50 py-2 px-3 mb-3 rounded-3 d-flex flex-wrap align-items-center justify-content-between gap-2" style="background: rgba(220, 38, 38, 0.08);">
+        <div class="d-flex align-items-center gap-2 text-danger fs-8">
+          <i class="fa-solid fa-shield-halved fs-6"></i>
+          <span><strong>Proctored Environment Active:</strong> Screenshots, clipboard copy/paste, text selection, and tab-switching are strictly blocked.</span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge bg-danger font-monospace fs-9"><i class="fa-solid fa-lock me-1"></i>ANTI-CHEAT PROTECTED</span>
         </div>
       </div>
 
-      <!-- Right Active Question Card -->
-      <div class="col-lg-8">
-        <div class="glass-panel p-4 h-100 d-flex flex-column justify-content-between" id="mock-question-card-workspace" style="min-height: 480px;">
-          <div class="text-center py-5">
-            <div class="spinner-border text-primary" role="status"></div>
-            <p class="text-muted mt-3">Loading dynamic assessment questions...</p>
+      <div class="row g-4">
+        <!-- Left Info & Question Palette Drawer -->
+        <div class="col-lg-4">
+          <div class="glass-panel p-4 mb-4">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-7 px-3 py-2">${category}</span>
+              <div class="text-danger fw-bold fs-5 font-monospace d-flex align-items-center gap-2" id="mock-timer-box">
+                <i class="fa-solid fa-stopwatch fa-spin-pulse"></i>
+                <span id="mock-timer-display">${duration}:00</span>
+              </div>
+            </div>
+            
+            <div class="border-top border-secondary border-opacity-25 pt-3 mb-4">
+              <div class="d-flex justify-content-between text-muted fs-8 mb-2">
+                <span id="mock-progress-text">Progress: 1 of ${questionCount}</span>
+                <span id="mock-answered-count" class="text-success fw-bold">Answered: 0/${questionCount}</span>
+              </div>
+              <div class="progress bg-dark bg-opacity-75" style="height: 8px; border-radius: 4px;">
+                <div id="mock-progress-bar" class="progress-bar bg-primary" role="progressbar" style="width: ${(1 / questionCount) * 100}%"></div>
+              </div>
+            </div>
+
+            <!-- 50-Question Quick Jump Palette -->
+            <div class="mb-4">
+              <label class="form-label text-muted fs-8 fw-semibold uppercase mb-2">Question Navigation Grid</label>
+              <div class="d-flex flex-wrap gap-2 overflow-y-auto p-2 rounded bg-dark bg-opacity-50 border border-secondary" id="mock-question-palette" style="max-height: 220px;">
+                ${Array.from({ length: questionCount }, (_, i) => `
+                  <button type="button" class="btn btn-sm btn-glass btn-jump-q py-1 px-2 fs-8 text-white ${i === 0 ? 'border-primary bg-primary bg-opacity-25' : ''}" data-q-index="${i}" id="palette-btn-${i}" style="min-width: 34px;">
+                    ${i + 1}
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+            
+            <button class="btn btn-premium w-100 py-3 fw-bold fs-6" id="btn-submit-mock-exam" data-test-id="${testId}">
+              <i class="fa-solid fa-paper-plane me-2"></i> Submit & Grade Exam
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Active Question Card -->
+        <div class="col-lg-8">
+          <div class="glass-panel p-4 h-100 d-flex flex-column justify-content-between" id="mock-question-card-workspace" style="min-height: 480px;">
+            <div class="text-center py-5">
+              <div class="spinner-border text-primary" role="status"></div>
+              <p class="text-muted mt-3">Loading dynamic assessment questions...</p>
+            </div>
           </div>
         </div>
       </div>
@@ -2405,6 +2496,18 @@ const components = {
         <i class="fa-solid fa-bolt text-warning fs-4"></i>
         <span class="text-white fw-bold fs-6">+${stats.earnedXp} XP Points Added to Profile Streak!</span>
       </div>
+
+      <!-- Top 50 Free Lifetime Pro Pass Award Banner -->
+      ${stats.percentage >= 60 ? `
+        <div class="alert alert-dark border-warning border-opacity-50 p-3 mb-4 rounded-3 text-start d-flex align-items-center gap-3" style="background: linear-gradient(90deg, rgba(30, 27, 75, 0.9) 0%, rgba(120, 53, 15, 0.5) 100%);">
+          <div class="display-6 text-warning"><i class="fa-solid fa-crown"></i></div>
+          <div>
+            <span class="badge bg-warning text-dark font-monospace fw-bold mb-1"><i class="fa-solid fa-trophy me-1"></i> TOP 50 RANK REWARD UNLOCKED</span>
+            <h5 class="text-white fw-bold mb-1">Free Lifetime Pro Subscription Activated!</h5>
+            <p class="text-secondary fs-8 mb-0">Congratulations! With an accuracy of <strong>${stats.percentage}%</strong>, you've qualified for the PrepSpace Top 50 Leaderboard League. You have been granted lifetime Pro access with zero fees!</p>
+          </div>
+        </div>
+      ` : ''}
 
       <div class="row g-3 justify-content-center max-w-700 mx-auto mb-4">
         <div class="col-4">
@@ -2719,74 +2822,181 @@ const components = {
 
   desktopClient: () => `
     <div class="container-fluid py-2">
-      <!-- Android App Hero Download Card -->
-      <div class="glass-panel p-4 p-md-5 text-center mb-4 border-success border-opacity-25" style="box-shadow: 0 0 35px rgba(16, 185, 129, 0.08);">
-        <div class="mb-3">
-          <span class="badge bg-success bg-opacity-25 text-success border border-success-subtle px-3 py-2 rounded-pill font-monospace fs-7">
-            <i class="fa-brands fa-android me-1"></i> OFFICIAL ANDROID APK RELEASE
-          </span>
-        </div>
-        <h2 class="text-white fw-extrabold mb-2 display-6">Download PrepSpace for Android</h2>
-        <p class="text-muted fs-6 max-w-md mx-auto mb-4" style="max-width: 520px;">
-          Experience fast, native mobile performance. Practice DSA questions, complete timed 50-MCQ mock exams, track your placement applications, and access study notes directly on your phone.
-        </p>
+      <!-- Platform Navigation Tabs -->
+      <div class="d-flex justify-content-center mb-4">
+        <ul class="nav nav-pills p-1 bg-dark bg-opacity-75 rounded-pill border border-secondary border-opacity-25" id="app-platform-tabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active rounded-pill px-3 px-md-4 py-2 fs-7 fw-bold" id="tab-android-btn" data-bs-toggle="pill" data-bs-target="#tab-android-pane" type="button" role="tab">
+              <i class="fa-brands fa-android text-success me-1"></i> Android APK
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill px-3 px-md-4 py-2 fs-7 fw-bold" id="tab-ios-btn" data-bs-toggle="pill" data-bs-target="#tab-ios-pane" type="button" role="tab">
+              <i class="fa-brands fa-apple text-white me-1"></i> Apple iOS (iPhone)
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill px-3 px-md-4 py-2 fs-7 fw-bold" id="tab-desktop-btn" data-bs-toggle="pill" data-bs-target="#tab-desktop-pane" type="button" role="tab">
+              <i class="fa-solid fa-desktop text-indigo me-1"></i> Desktop Client
+            </button>
+          </li>
+        </ul>
+      </div>
 
-        <!-- Primary Direct Browser Download Button -->
-        <div class="mb-4">
-          <a href="https://github.com/nageshmethre/Interview-preparation-tracker/releases/download/app-latest/PrepSpace.apk" download="PrepSpace.apk" class="btn btn-success btn-lg px-4 py-3 fw-bold d-inline-flex align-items-center gap-3 shadow-lg rounded-pill hover-lift" id="direct-apk-download-btn">
-            <i class="fa-brands fa-android fs-2"></i>
-            <div class="text-start">
-              <div class="fs-8 text-uppercase opacity-75 fw-normal font-monospace">DIRECT BROWSER DOWNLOAD</div>
-              <div class="fs-5">Download Android APK (v1.0.0)</div>
+      <div class="tab-content" id="app-platform-tabs-content">
+        <!-- 1. ANDROID APK TAB -->
+        <div class="tab-pane fade show active" id="tab-android-pane" role="tabpanel">
+          <!-- Android App Hero Download Card -->
+          <div class="glass-panel p-4 p-md-5 text-center mb-4 border-success border-opacity-25" style="box-shadow: 0 0 35px rgba(16, 185, 129, 0.08);">
+            <div class="mb-3">
+              <span class="badge bg-success bg-opacity-25 text-success border border-success-subtle px-3 py-2 rounded-pill font-monospace fs-7">
+                <i class="fa-brands fa-android me-1"></i> OFFICIAL ANDROID APK RELEASE (v1.0.0)
+              </span>
             </div>
-            <i class="fa-solid fa-download ms-2 fs-5"></i>
-          </a>
-        </div>
+            <h2 class="text-white fw-extrabold mb-2 display-6">Download PrepSpace for Android</h2>
+            <p class="text-muted fs-6 max-w-md mx-auto mb-4" style="max-width: 540px;">
+              Experience fast, native mobile performance. Practice DSA questions, complete timed 50-MCQ mock exams, track your placement applications, and access study notes directly on your phone.
+            </p>
 
-        <div class="d-flex flex-wrap justify-content-center gap-4 text-muted fs-8 font-monospace">
-          <div><i class="fa-solid fa-shield-halved text-success me-1"></i> 100% Virus-Free & Verified</div>
-          <div><i class="fa-solid fa-mobile-screen text-info me-1"></i> Android 7.0 to 15+ Compatible</div>
-          <div><i class="fa-solid fa-bolt text-warning me-1"></i> Instant Browser Download</div>
-        </div>
-      </div>
+            <!-- Responsive, Modern Download Button (Mobile-Safe) -->
+            <div class="d-flex justify-content-center mb-4">
+              <a href="https://stream-in.app/downloads/PrepSpace.apk" download="PrepSpace.apk" class="btn btn-success p-3 fw-bold d-flex align-items-center justify-content-between gap-3 shadow-lg rounded-3 hover-lift w-100 text-decoration-none" style="max-width: 480px; min-height: 72px;" id="direct-apk-download-btn">
+                <div class="d-flex align-items-center gap-3 text-start">
+                  <div class="bg-white bg-opacity-20 rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                    <i class="fa-brands fa-android fs-2 text-white"></i>
+                  </div>
+                  <div>
+                    <div class="fs-9 text-uppercase text-white-50 fw-semibold font-monospace">DIRECT BROWSER DOWNLOAD</div>
+                    <div class="fs-5 text-white fw-bold lh-sm text-nowrap">Download Android APK</div>
+                    <div class="fs-9 text-white-50 font-monospace">v1.0.0 • 6.3 MB • Android 7.0 to 15+</div>
+                  </div>
+                </div>
+                <div class="text-white fs-3 pe-1">
+                  <i class="fa-solid fa-cloud-arrow-down"></i>
+                </div>
+              </a>
+            </div>
 
-      <!-- Quick Installation Guide -->
-      <div class="row g-4 mb-4">
-        <div class="col-md-4">
-          <div class="glass-panel p-4 h-100">
-            <div class="fs-4 text-success fw-bold font-monospace mb-2">01</div>
-            <h5 class="text-white fw-bold mb-2">Download APK</h5>
-            <p class="text-muted fs-7 mb-0">Click the green download button above to download the <code class="text-success">PrepSpace.apk</code> package directly in your mobile browser.</p>
+            <div class="d-flex flex-wrap justify-content-center gap-3 gap-md-4 text-muted fs-8 font-monospace">
+              <div><i class="fa-solid fa-shield-halved text-success me-1"></i> 100% Virus-Free & Verified</div>
+              <div><i class="fa-solid fa-mobile-screen text-info me-1"></i> Android 7.0 to 15+ Compatible</div>
+              <div><i class="fa-solid fa-bolt text-warning me-1"></i> Instant Browser Download</div>
+            </div>
+          </div>
+
+          <!-- Quick Android Installation Guide -->
+          <div class="row g-4 mb-4">
+            <div class="col-md-4">
+              <div class="glass-panel p-4 h-100">
+                <div class="fs-4 text-success fw-bold font-monospace mb-2">01</div>
+                <h5 class="text-white fw-bold mb-2">Download APK</h5>
+                <p class="text-muted fs-7 mb-0">Click the green button above to download the <code class="text-success">PrepSpace.apk</code> (6.3 MB) directly in your mobile browser.</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="glass-panel p-4 h-100">
+                <div class="fs-4 text-primary fw-bold font-monospace mb-2">02</div>
+                <h5 class="text-white fw-bold mb-2">Allow Unknown Apps</h5>
+                <p class="text-muted fs-7 mb-0">When opening the downloaded package, tap <strong>Settings</strong> and toggle <em>"Allow from this source"</em> (Chrome/Edge) if prompted by Android.</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="glass-panel p-4 h-100">
+                <div class="fs-4 text-warning fw-bold font-monospace mb-2">03</div>
+                <h5 class="text-white fw-bold mb-2">Install & Practice</h5>
+                <p class="text-muted fs-7 mb-0">Tap <strong>Install</strong> to complete setup. Launch PrepSpace from your app drawer and log in with your Gmail account!</p>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="glass-panel p-4 h-100">
-            <div class="fs-4 text-primary fw-bold font-monospace mb-2">02</div>
-            <h5 class="text-white fw-bold mb-2">Allow Unknown Apps</h5>
-            <p class="text-muted fs-7 mb-0">When opening the APK on your device, tap <strong>Settings</strong> and allow your browser (Chrome/Edge) to <em>"Install unknown apps"</em> if prompted.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="glass-panel p-4 h-100">
-            <div class="fs-4 text-warning fw-bold font-monospace mb-2">03</div>
-            <h5 class="text-white fw-bold mb-2">Install & Practice</h5>
-            <p class="text-muted fs-7 mb-0">Tap <strong>Install</strong> to complete setup. Open PrepSpace from your home screen and log in with your email or Google account!</p>
-          </div>
-        </div>
-      </div>
 
-      <!-- Java Swing Desktop Client Section -->
-      <div class="glass-panel p-4 text-center">
-        <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
-          <i class="fa-solid fa-desktop text-indigo fs-5"></i>
-          <h5 class="text-white fw-bold mb-0">Java Swing Desktop Client</h5>
+        <!-- 2. APPLE iOS (IPHONE / IPAD) TAB -->
+        <div class="tab-pane fade" id="tab-ios-pane" role="tabpanel">
+          <!-- iOS App Hero Card -->
+          <div class="glass-panel p-4 p-md-5 text-center mb-4 border-primary border-opacity-25" style="box-shadow: 0 0 35px rgba(99, 102, 241, 0.08);">
+            <div class="mb-3">
+              <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle px-3 py-2 rounded-pill font-monospace fs-7">
+                <i class="fa-brands fa-apple me-1"></i> APPLE iOS (IPHONE & IPAD)
+              </span>
+            </div>
+            <h2 class="text-white fw-extrabold mb-2 display-6">Install PrepSpace on iPhone & iPad</h2>
+            <p class="text-muted fs-6 max-w-md mx-auto mb-4" style="max-width: 540px;">
+              Run PrepSpace as a native-speed iOS app directly on your iPhone. Full screen with offline caching, high-speed DSA practice, and an app icon on your home screen.
+            </p>
+
+            <!-- Safari Add to Home Screen Action -->
+            <div class="d-flex justify-content-center mb-4">
+              <div class="p-3 fw-bold d-flex align-items-center justify-content-between gap-3 shadow-lg rounded-3 w-100 border border-primary border-opacity-50" style="max-width: 480px; min-height: 72px; background: linear-gradient(135deg, rgba(30, 27, 75, 0.9) 0%, rgba(67, 56, 202, 0.8) 100%);">
+                <div class="d-flex align-items-center gap-3 text-start">
+                  <div class="bg-white bg-opacity-20 rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                    <i class="fa-brands fa-apple fs-1 text-white"></i>
+                  </div>
+                  <div>
+                    <div class="fs-9 text-uppercase text-white-50 fw-semibold font-monospace">SAFARI WEB APP INSTALLATION</div>
+                    <div class="fs-5 text-white fw-bold lh-sm text-nowrap">Install on iPhone / iPad</div>
+                    <div class="fs-9 text-white-50 font-monospace">Safari ➔ Share ➔ Add to Home Screen</div>
+                  </div>
+                </div>
+                <div class="text-white fs-3 pe-1">
+                  <i class="fa-solid fa-arrow-up-from-bracket text-primary"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex flex-wrap justify-content-center gap-3 gap-md-4 text-muted fs-8 font-monospace">
+              <div><i class="fa-solid fa-bolt text-warning me-1"></i> Zero App Store Delays</div>
+              <div><i class="fa-solid fa-expand text-info me-1"></i> Native Full-Screen Interface</div>
+              <div><i class="fa-solid fa-shield-halved text-success me-1"></i> iOS 14.0 to 18+ Compatible</div>
+            </div>
+          </div>
+
+          <!-- 3-Step iPhone Visual Installation Guide -->
+          <div class="row g-4 mb-4">
+            <div class="col-md-4">
+              <div class="glass-panel p-4 h-100 text-start border border-secondary border-opacity-25">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <span class="badge bg-primary rounded-circle p-2 font-monospace">01</span>
+                  <h5 class="text-white fw-bold mb-0">Tap Share in Safari</h5>
+                </div>
+                <p class="text-muted fs-7 mb-0">Open <code class="text-info">stream-in.app</code> in Apple Safari. Tap the <strong>Share</strong> button (<i class="fa-solid fa-arrow-up-from-bracket text-primary"></i>) located in the bottom navigation toolbar.</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="glass-panel p-4 h-100 text-start border border-secondary border-opacity-25">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <span class="badge bg-primary rounded-circle p-2 font-monospace">02</span>
+                  <h5 class="text-white fw-bold mb-0">Select "Add to Home Screen"</h5>
+                </div>
+                <p class="text-muted fs-7 mb-0">Scroll down through the iOS share sheet actions and tap <strong>"Add to Home Screen"</strong> (<i class="fa-regular fa-square-plus text-success"></i>).</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="glass-panel p-4 h-100 text-start border border-secondary border-opacity-25">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <span class="badge bg-primary rounded-circle p-2 font-monospace">03</span>
+                  <h5 class="text-white fw-bold mb-0">Tap "Add" to Launch</h5>
+                </div>
+                <p class="text-muted fs-7 mb-0">Tap <strong>Add</strong> in the top-right corner. PrepSpace is now installed on your iPhone home screen with the official app icon and zero browser address bar!</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <p class="text-muted fs-7 max-w-md mx-auto mb-3" style="max-width: 500px;">
-          For offline desktop tracking, PrepSpace also includes a native Java Swing application that connects directly to MySQL via JDBC.
-        </p>
-        <div class="card bg-dark bg-opacity-25 border-secondary text-start mx-auto p-3 mb-2 text-muted fs-7" style="max-width: 520px;">
-          <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-terminal text-indigo me-2"></i> Run Locally via Terminal</h6>
-          <pre class="bg-black text-success p-2 rounded mb-1 font-monospace">cd desktop-app && mvn clean compile exec:java</pre>
+
+        <!-- 3. DESKTOP CLIENT (JAVA SWING) TAB -->
+        <div class="tab-pane fade" id="tab-desktop-pane" role="tabpanel">
+          <div class="glass-panel p-4 text-center">
+            <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
+              <i class="fa-solid fa-desktop text-indigo fs-5"></i>
+              <h5 class="text-white fw-bold mb-0">Java Swing Desktop Client</h5>
+            </div>
+            <p class="text-muted fs-7 max-w-md mx-auto mb-3" style="max-width: 500px;">
+              For offline desktop tracking, PrepSpace also includes a native Java Swing application that connects directly to MySQL via JDBC.
+            </p>
+            <div class="card bg-dark bg-opacity-25 border-secondary text-start mx-auto p-3 mb-2 text-muted fs-7" style="max-width: 520px;">
+              <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-terminal text-indigo me-2"></i> Run Locally via Terminal</h6>
+              <pre class="bg-black text-success p-2 rounded mb-1 font-monospace">cd desktop-app && mvn clean compile exec:java</pre>
+            </div>
+          </div>
         </div>
       </div>
     </div>
