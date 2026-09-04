@@ -553,6 +553,18 @@ function router() {
     viewTitle.textContent = 'Billing & Upgrade';
     pageMount.innerHTML = components.billing(state.isPaid);
     bindBillingEvents();
+  } else if (hash === '#/referral') {
+    viewTitle.textContent = 'Affiliate & Referral Bounties';
+    pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div><div class="text-muted fs-8 mt-2">Loading affiliate wallet & earnings...</div></div>`;
+    apiFetch('/referrals/stats')
+      .then(stats => {
+        pageMount.innerHTML = components.referral(stats || {});
+        bindReferralEvents();
+        loadReferralHistory();
+      })
+      .catch(err => {
+        pageMount.innerHTML = `<div class="alert alert-danger">Failed to load referral stats: ${err.message}</div>`;
+      });
   } else if (hash === '#/desktop-client') {
     viewTitle.textContent = 'Mobile & Desktop Apps';
     pageMount.innerHTML = components.desktopClient();

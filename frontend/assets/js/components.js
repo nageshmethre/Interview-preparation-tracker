@@ -696,6 +696,7 @@ const components = {
           <div class="sidebar-section-title px-4 mt-3 mb-2 text-muted fs-8 uppercase fw-bold tracking-wider">Account</div>
           <a href="#/profile" class="sidebar-link"><i class="fa-solid fa-user-gear text-secondary"></i> <span>Settings</span></a>
           <a href="#/billing" class="sidebar-link"><i class="fa-solid fa-credit-card text-success"></i> <span>Upgrade Space</span></a>
+          <a href="#/referral" class="sidebar-link"><i class="fa-solid fa-gift text-primary"></i> <span>Referral & Earn</span></a>
           ${isAdmin ? `<a href="#/admin" class="sidebar-link text-warning-emphasis"><i class="fa-solid fa-shield-halved text-warning"></i> <span>Admin Panel</span></a>` : ''}
         </div>
         
@@ -783,58 +784,58 @@ const components = {
   // Dashboard Page Sub-view - Vercel Geist Template Look
   dashboard: (stats) => `
     <!-- Vercel Project Header -->
-    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary border-opacity-25 gap-3">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-3 border-bottom border-secondary border-opacity-10 gap-3">
       <div>
         <div class="d-flex align-items-center gap-2 mb-1">
-          <span class="badge bg-dark text-white border border-secondary border-opacity-25 font-monospace fs-8">PRODUCTION</span>
-          <span class="text-secondary fs-8 font-monospace">stream-in.app</span>
+          <span class="badge bg-dark text-white border border-secondary border-opacity-25 font-monospace fs-9 px-2 py-0.5">PRODUCTION</span>
+          <span class="text-secondary fs-9 font-monospace">stream-in.app</span>
         </div>
-        <h2 class="display-6 fw-bold text-white mb-0">Interview Readiness Engine</h2>
+        <h4 class="text-white fw-bold mb-0">Interview Readiness Engine</h4>
       </div>
       <div class="d-flex gap-2 flex-wrap">
-        <a href="#/mock-exams" class="btn btn-premium fs-7"><i class="fa-solid fa-play me-1"></i> Start 50-MCQ Mock</a>
-        <a href="#/coding-practice" class="btn btn-glass fs-7">+ Log DSA Solve</a>
-        <a href="#/ai-assistant" class="btn btn-glass fs-7"><i class="fa-solid fa-robot me-1 text-secondary"></i> AI Audit</a>
+        <a href="#/mock-exams" class="btn btn-premium btn-sm"><i class="fa-solid fa-play me-1"></i> Start Mock Exam</a>
+        <a href="#/coding-practice" class="btn btn-glass btn-sm">+ Log DSA Solve</a>
+        <a href="#/ai-assistant" class="btn btn-glass btn-sm"><i class="fa-solid fa-robot me-1 text-secondary"></i> AI Audit</a>
       </div>
     </div>
 
-    <!-- Vercel Telemetry Metrics Strip (5-Column Responsive Bento) -->
-    <div class="row g-3 mb-4">
+    <!-- Telemetry Metrics Strip (5-Column Responsive Bento) -->
+    <div class="row g-2 g-md-3 mb-3">
       <div class="col-12 col-sm-6 col-md-4 col-xl">
-        <div class="bento-card p-3 text-start border-cyan border-opacity-25" id="dashboard-screentime-card">
-          <div class="d-flex align-items-center justify-content-between">
-            <span class="text-secondary fs-8 font-monospace uppercase">Daily Screen Time</span>
+        <div class="bento-card box-accent-cyan p-3 text-start" id="dashboard-screentime-card">
+          <div class="d-flex align-items-center justify-content-between mb-1">
+            <span class="stat-label mb-0">Daily Screen Time</span>
             <span class="badge bg-dark text-cyan border border-secondary border-opacity-25 font-monospace fs-9"><i class="fa-solid fa-clock me-1"></i>ACTIVE</span>
           </div>
-          <div class="fs-2 fw-bold text-white mt-1 mb-0" id="daily-screentime-display">0h 0m</div>
+          <div class="stat-num text-white mt-1 mb-0" id="daily-screentime-display">0h 0m</div>
           <small class="text-cyan fs-9 font-monospace" id="live-session-timer"><i class="fa-solid fa-spinner fa-spin me-1"></i>Session: 0m</small>
         </div>
       </div>
       <div class="col-6 col-sm-6 col-md-4 col-xl">
-        <div class="bento-card p-3 text-start">
-          <span class="text-secondary fs-8 font-monospace uppercase">Total Study Time</span>
-          <div class="fs-2 fw-bold text-white mt-1 mb-0">${stats.totalStudyHours}h</div>
+        <div class="bento-card box-accent-emerald p-3 text-start">
+          <span class="stat-label mb-1">Total Study Time</span>
+          <div class="stat-num text-emerald mt-1 mb-0">${stats.totalStudyHours}h</div>
           <small class="text-success fs-9 font-monospace"><i class="fa-solid fa-circle text-success me-1" style="font-size: 6px;"></i>Active Pace</small>
         </div>
       </div>
       <div class="col-6 col-sm-6 col-md-4 col-xl">
-        <div class="bento-card p-3 text-start">
-          <span class="text-secondary fs-8 font-monospace uppercase">Completed Topics</span>
-          <div class="fs-2 fw-bold text-white mt-1 mb-0">${stats.completedTopics}</div>
+        <div class="bento-card box-accent-primary p-3 text-start">
+          <span class="stat-label mb-1">Completed Topics</span>
+          <div class="stat-num text-white mt-1 mb-0">${stats.completedTopics}</div>
           <small class="text-secondary fs-9 font-monospace">Core Matrix</small>
         </div>
       </div>
       <div class="col-6 col-sm-6 col-md-4 col-xl">
-        <div class="bento-card p-3 text-start">
-          <span class="text-secondary fs-8 font-monospace uppercase">Upcoming Screens</span>
-          <div class="fs-2 fw-bold text-white mt-1 mb-0">${stats.upcomingInterviewsCount}</div>
+        <div class="bento-card box-accent-amber p-3 text-start">
+          <span class="stat-label mb-1">Upcoming Screens</span>
+          <div class="stat-num text-warning mt-1 mb-0">${stats.upcomingInterviewsCount}</div>
           <small class="text-warning fs-9 font-monospace">Scheduled</small>
         </div>
       </div>
       <div class="col-6 col-sm-6 col-md-4 col-xl">
-        <div class="bento-card p-3 text-start">
-          <span class="text-secondary fs-8 font-monospace uppercase">Active Pipeline</span>
-          <div class="fs-2 fw-bold text-white mt-1 mb-0">${stats.applicationsCount}</div>
+        <div class="bento-card box-accent-purple p-3 text-start">
+          <span class="stat-label mb-1">Active Pipeline</span>
+          <div class="stat-num text-purple mt-1 mb-0">${stats.applicationsCount}</div>
           <small class="text-success fs-9 font-monospace">In Evaluation</small>
         </div>
       </div>
@@ -844,10 +845,10 @@ const components = {
     <div class="row g-3">
       <!-- Left Analytics Column -->
       <div class="col-lg-8">
-        <div class="bento-card p-3 mb-3">
+        <div class="bento-card box-accent-primary p-3 mb-3">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <h6 class="text-white fw-bold m-0"><i class="fa-solid fa-chart-area text-primary me-2"></i>Weekly Preparation Velocity</h6>
-            <span class="badge bg-dark text-white border border-secondary border-opacity-25 px-2 py-1 fs-9 font-monospace">HOURS LOGGED</span>
+            <span class="badge bg-dark text-white border border-secondary border-opacity-25 px-2 py-0.5 fs-9 font-monospace">HOURS LOGGED</span>
           </div>
           <div style="position: relative; height: 175px;">
             <canvas id="weeklyHoursChart"></canvas>
@@ -857,7 +858,7 @@ const components = {
         <div class="row g-3">
           <!-- Streak & XP Bento -->
           <div class="col-md-6">
-            <div class="bento-card p-3">
+            <div class="bento-card box-accent-amber p-3 h-100">
               <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-trophy text-warning me-2"></i>Gamification & Streaks</h6>
               <div class="d-flex align-items-center justify-content-around py-2">
                 <div class="text-center">
@@ -874,7 +875,7 @@ const components = {
 
           <!-- Platform Solves Bento -->
           <div class="col-md-6">
-            <div class="bento-card p-3">
+            <div class="bento-card box-accent-cyan p-3 h-100">
               <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-code text-cyan me-2"></i>External Platform Solves</h6>
               <ul class="list-group list-group-flush bg-transparent">
                 <li class="list-group-item bg-transparent text-white border-secondary border-opacity-25 d-flex justify-content-between align-items-center px-0 py-1">
@@ -898,21 +899,21 @@ const components = {
       <!-- Right Telemetry Widgets Column -->
       <div class="col-lg-4">
         <!-- Readiness Ring Card -->
-        <div class="bento-card p-3 text-center mb-3">
-          <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-circle-notch text-secondary me-2"></i>Interview Readiness Score</h6>
+        <div class="bento-card box-accent-emerald p-3 text-center mb-3">
+          <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-circle-notch text-emerald me-2"></i>Interview Readiness Score</h6>
           <div class="readiness-ring my-2" style="width: 88px; height: 88px; margin: 0 auto; position: relative;">
             <div class="readiness-value fw-extrabold text-white fs-4" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">${stats.readinessScore}%</div>
             <svg class="w-100 h-100" viewBox="0 0 36 36">
               <path class="circle-bg" stroke="rgba(255,255,255,0.08)" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              <path class="circle" stroke="#ffffff" stroke-width="3.5" stroke-dasharray="${stats.readinessScore}, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <path class="circle" stroke="#10b981" stroke-width="3.5" stroke-dasharray="${stats.readinessScore}, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
             </svg>
           </div>
           <p class="text-secondary fs-9 font-monospace mb-0">Based on solved DSA problems, consistency & mock grades.</p>
         </div>
 
         <!-- Pipeline Funnel Card -->
-        <div class="bento-card p-3">
-          <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-filter text-success me-2"></i>Recruitment Pipeline</h6>
+        <div class="bento-card box-accent-purple p-3">
+          <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-filter text-purple me-2"></i>Recruitment Pipeline</h6>
           <div style="position: relative; height: 145px;">
             <canvas id="pipelineStatusChart"></canvas>
           </div>
@@ -938,10 +939,13 @@ const components = {
   studyPlanner: () => `
     <div class="row g-4">
       <div class="col-lg-8">
-        <div class="glass-panel p-4 mb-4">
+        <div class="glass-panel p-4 mb-4 box-accent-primary">
           <div class="d-flex align-items-center justify-content-between mb-4">
-            <h5 class="text-white fw-bold m-0">My Milestones</h5>
-            <button class="btn btn-premium btn-sm" id="create-plan-btn"><i class="fa-solid fa-plus me-1"></i> Add Goal</button>
+            <div>
+              <h5 class="text-white fw-bold m-0"><i class="fa-solid fa-bullseye text-primary me-2"></i>Preparation Milestones</h5>
+              <div class="text-muted fs-8 mt-1">Track target milestones, deadlines, and company goals</div>
+            </div>
+            <button class="btn btn-premium btn-sm px-3" id="create-plan-btn"><i class="fa-solid fa-plus me-1"></i> Add Goal</button>
           </div>
           <div id="plans-list-container" class="row g-3">
             <!-- Filled dynamically by API -->
@@ -952,19 +956,22 @@ const components = {
 
       <div class="col-lg-4">
         <!-- Pomodoro Study Timer -->
-        <div class="glass-panel p-4 text-center">
-          <h5 class="text-white fw-bold mb-3"><i class="fa-regular fa-clock text-indigo me-2"></i>Pomodoro Study Block</h5>
-          <div class="timer-display my-4" id="pomodoro-time">25:00</div>
+        <div class="glass-panel p-4 text-center box-accent-cyan">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <h5 class="text-white fw-bold mb-0 fs-6"><i class="fa-regular fa-clock text-cyan me-2"></i>Focus Timer</h5>
+            <span class="badge bg-dark border border-secondary text-cyan font-mono fs-9">POMODORO</span>
+          </div>
+          <div class="timer-display my-4 font-mono fw-bold text-white fs-1" id="pomodoro-time" style="letter-spacing: 2px;">25:00</div>
           
-          <div class="d-flex justify-content-center gap-2 mb-3">
-            <button class="btn btn-glass px-4" id="timer-mode-pomodoro">Study</button>
-            <button class="btn btn-glass px-4" id="timer-mode-break">Break</button>
+          <div class="d-flex justify-content-center gap-2 mb-4">
+            <button class="btn btn-glass px-3 py-1 fs-8 active" id="timer-mode-pomodoro">Deep Study (25m)</button>
+            <button class="btn btn-glass px-3 py-1 fs-8" id="timer-mode-break">Break (5m)</button>
           </div>
           
-          <div class="d-flex justify-content-center gap-3">
-            <button class="btn btn-premium px-4 py-2" id="timer-start"><i class="fa-solid fa-play"></i> Start</button>
-            <button class="btn btn-glass px-4 py-2" id="timer-pause"><i class="fa-solid fa-pause"></i> Pause</button>
-            <button class="btn btn-glass p-2" id="timer-reset" style="width: 40px;"><i class="fa-solid fa-rotate-left"></i></button>
+          <div class="d-flex justify-content-center gap-2">
+            <button class="btn btn-premium px-4 py-2" id="timer-start"><i class="fa-solid fa-play me-1"></i> Start</button>
+            <button class="btn btn-glass px-3 py-2" id="timer-pause"><i class="fa-solid fa-pause me-1"></i> Pause</button>
+            <button class="btn btn-glass p-2" id="timer-reset" style="width: 40px;" title="Reset"><i class="fa-solid fa-rotate-left"></i></button>
           </div>
         </div>
       </div>
@@ -1010,7 +1017,7 @@ const components = {
             </div>
             <div class="modal-footer border-secondary-subtle">
               <button type="button" class="btn btn-glass" data-bs-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-premium">Save Goal</button>
+              <button type="submit" class="btn btn-premium px-4">Save Goal</button>
             </div>
           </form>
         </div>
@@ -2338,7 +2345,7 @@ const components = {
     <div class="row g-4">
       <!-- Create Exam form -->
       <div class="col-lg-4">
-        <div class="glass-panel p-4 h-100">
+        <div class="glass-panel p-4 h-100 box-accent-primary">
           <div class="d-flex align-items-center gap-2 mb-3">
             <i class="fa-solid fa-brain text-primary fs-4"></i>
             <h5 class="text-white fw-bold mb-0">Start Mock Assessment</h5>
@@ -2381,7 +2388,7 @@ const components = {
       </div>
       <!-- Leaderboard & Past attempts -->
       <div class="col-lg-8">
-        <div class="glass-panel p-4 mb-4">
+        <div class="glass-panel p-4 mb-4 box-accent-amber">
           <!-- Header & Controls -->
           <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
             <div>
@@ -2405,18 +2412,18 @@ const components = {
           </div>
 
           <!-- Timeframe Tabs -->
-          <ul class="nav nav-pills nav-fill bg-dark bg-opacity-50 p-1 rounded-3 mb-3 border border-secondary border-opacity-25" id="leaderboard-time-tabs">
+          <ul class="nav nav-pills nav-fill p-1 mb-3" id="leaderboard-time-tabs">
             <li class="nav-item">
               <button class="nav-link active py-1 fs-8 btn-leaderboard-time" data-timeframe="all">All-Time</button>
             </li>
             <li class="nav-item">
-              <button class="nav-link py-1 fs-8 text-muted btn-leaderboard-time" data-timeframe="daily">Today</button>
+              <button class="nav-link py-1 fs-8 btn-leaderboard-time" data-timeframe="daily">Today</button>
             </li>
             <li class="nav-item">
-              <button class="nav-link py-1 fs-8 text-muted btn-leaderboard-time" data-timeframe="weekly">This Week</button>
+              <button class="nav-link py-1 fs-8 btn-leaderboard-time" data-timeframe="weekly">This Week</button>
             </li>
             <li class="nav-item">
-              <button class="nav-link py-1 fs-8 text-muted btn-leaderboard-time" data-timeframe="monthly">This Month</button>
+              <button class="nav-link py-1 fs-8 btn-leaderboard-time" data-timeframe="monthly">This Month</button>
             </li>
           </ul>
 
@@ -2457,7 +2464,7 @@ const components = {
       <div class="row g-4">
         <!-- Left Info & Question Palette Drawer -->
         <div class="col-lg-4">
-          <div class="glass-panel p-4 mb-4">
+          <div class="glass-panel p-4 mb-4 box-accent-danger">
             <div class="d-flex align-items-center justify-content-between mb-3">
               <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-7 px-3 py-2">${category}</span>
               <div class="text-danger fw-bold fs-5 font-monospace d-flex align-items-center gap-2" id="mock-timer-box">
@@ -2496,7 +2503,7 @@ const components = {
 
         <!-- Right Active Question Card -->
         <div class="col-lg-8">
-          <div class="glass-panel p-4 h-100 d-flex flex-column justify-content-between" id="mock-question-card-workspace" style="min-height: 480px;">
+          <div class="glass-panel p-4 h-100 d-flex flex-column justify-content-between box-accent-primary" id="mock-question-card-workspace" style="min-height: 480px;">
             <div class="text-center py-5">
               <div class="spinner-border text-primary" role="status"></div>
               <p class="text-muted mt-3">Loading dynamic assessment questions...</p>
@@ -2508,7 +2515,7 @@ const components = {
   `,
 
   mockExamResult: (stats, questions, userAnswers) => `
-    <div class="glass-panel p-4 p-md-5 mb-4 text-center position-relative overflow-hidden">
+    <div class="glass-panel p-4 p-md-5 mb-4 text-center position-relative overflow-hidden ${stats.percentage >= 50 ? 'box-accent-emerald' : 'box-accent-danger'}">
       <div class="mb-3">
         <span class="badge ${stats.percentage >= 80 ? 'bg-success' : stats.percentage >= 50 ? 'bg-warning text-dark' : 'bg-danger'} fs-6 px-4 py-2 text-uppercase">
           ${stats.percentage >= 80 ? '🌟 Assessment Passed with Distinction' : stats.percentage >= 50 ? '👍 Assessment Cleared' : '📚 Needs Further Study'}
@@ -2537,21 +2544,21 @@ const components = {
 
       <div class="row g-3 justify-content-center max-w-700 mx-auto mb-4">
         <div class="col-4">
-          <div class="p-3 bg-dark bg-opacity-50 rounded border border-success">
-            <div class="text-success fw-bold display-7">${stats.correctCount}</div>
-            <div class="text-muted fs-8">CORRECT</div>
+          <div class="stat-card box-accent-emerald p-3 text-center">
+            <div class="stat-num text-success">${stats.correctCount}</div>
+            <div class="stat-label text-muted">CORRECT</div>
           </div>
         </div>
         <div class="col-4">
-          <div class="p-3 bg-dark bg-opacity-50 rounded border border-danger">
-            <div class="text-danger fw-bold display-7">${stats.incorrectCount}</div>
-            <div class="text-muted fs-8">INCORRECT</div>
+          <div class="stat-card box-accent-danger p-3 text-center">
+            <div class="stat-num text-danger">${stats.incorrectCount}</div>
+            <div class="stat-label text-muted">INCORRECT</div>
           </div>
         </div>
         <div class="col-4">
-          <div class="p-3 bg-dark bg-opacity-50 rounded border border-secondary">
-            <div class="text-white fw-bold display-7">${stats.unansweredCount}</div>
-            <div class="text-muted fs-8">SKIPPED</div>
+          <div class="stat-card box-accent-purple p-3 text-center">
+            <div class="stat-num text-white">${stats.unansweredCount}</div>
+            <div class="stat-label text-muted">SKIPPED</div>
           </div>
         </div>
       </div>
@@ -3031,42 +3038,74 @@ const components = {
   billing: (isPaid) => `
     <div class="container-fluid py-4">
       <div class="row justify-content-center text-center mb-5">
-        <div class="col-lg-6">
+        <div class="col-lg-7">
+          <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle px-3 py-1 mb-2 font-mono fs-8">TRANSPARENT & FAIR</span>
           <h2 class="text-white fw-bold mb-2">Upgrade Space Metrics</h2>
-          <p class="text-muted">Level up your placement preparation and unlock premium tools</p>
+          <p class="text-muted">Accelerate your technical preparation journey with unlimited AI diagnostics and premium tools.</p>
         </div>
       </div>
 
-      <div class="row g-4 justify-content-center">
-        <div class="col-md-5 col-lg-4">
-          <div class="glass-panel p-4 h-100 text-center">
-            <h3 class="text-white h4">PrepFree</h3>
-            <p class="text-muted">Perfect for getting started</p>
-            <div class="my-4"><span class="display-4 fw-bold text-white">₹0</span></div>
-            <ul class="list-unstyled text-start mb-5 text-muted">
-              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Access to Question Bank</li>
-              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Log Solved Problems</li>
-              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Standard Kanban Placements</li>
-            </ul>
-            <button class="btn btn-glass w-100 py-3 disabled">${!isPaid ? 'Current Active Plan' : 'Basic Tier'}</button>
+      <div class="row g-4 justify-content-center align-items-stretch">
+        <div class="col-md-6 col-lg-4">
+          <div class="glass-panel p-4 p-md-5 h-100 text-center d-flex flex-column justify-content-between">
+            <div>
+              <span class="badge bg-dark border border-secondary text-muted px-3 py-1 mb-3 font-mono fs-8">FOUNDATION TIER</span>
+              <h3 class="text-white h4 mb-1">PrepFree</h3>
+              <p class="text-muted fs-8 mb-4">Core tracker tools for personal preparation</p>
+              <div class="my-4">
+                <span class="display-5 fw-bold text-white">₹0</span>
+                <span class="text-muted fs-8 ms-1">/ free forever</span>
+              </div>
+              <ul class="list-unstyled text-start mb-4 text-muted fs-8">
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Access to Core Question Bank</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Log Solved Algorithmic Problems</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Standard Placement Application Kanban</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Public Peer Community & Discussions</li>
+                <li class="mb-2 text-muted opacity-50"><i class="fa-solid fa-xmark text-secondary me-2"></i> AI ATS Resume Compliance Audits</li>
+                <li class="mb-2 text-muted opacity-50"><i class="fa-solid fa-xmark text-secondary me-2"></i> Custom AI Study Planners & Diagnostics</li>
+              </ul>
+            </div>
+            <div>
+              <button class="btn btn-glass w-100 py-3 disabled fs-8">${!isPaid ? 'Current Active Plan' : 'Basic Tier'}</button>
+            </div>
           </div>
         </div>
         
-        <div class="col-md-5 col-lg-4">
-          <div class="glass-panel p-4 h-100 text-center border-primary" style="box-shadow: 0 0 25px var(--accent-glow);">
-            <h3 class="text-white h4">PrepPro</h3>
-            <p class="text-indigo">Recommended for Active Jobseekers</p>
-            <div class="my-4"><span class="display-4 fw-bold text-white">₹99</span><span class="text-muted">/one-time</span></div>
-            <ul class="list-unstyled text-start mb-5 text-muted">
-              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>AI Career Assistant</strong> (ATS Audit, Planner)</li>
-              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>AI Custom Study Planners</strong></li>
-              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Company Interview Guides</strong> (Prompts)</li>
-              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Export Excel/PDF Progress reports</strong></li>
-              <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Mock AI Feedback Logs & Leaderboard</li>
-            </ul>
-            <button id="btn-upgrade-pro" class="btn btn-premium w-100 py-3" ${isPaid ? 'disabled' : ''}>
-              ${isPaid ? 'Active Premium Access' : 'Buy PrepPro Access'}
-            </button>
+        <div class="col-md-6 col-lg-4">
+          <div class="glass-panel p-4 p-md-5 h-100 text-center d-flex flex-column justify-content-between box-accent-primary" style="box-shadow: 0 10px 30px rgba(99, 102, 241, 0.15);">
+            <div>
+              <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle px-3 py-1 mb-3 font-mono fs-8">RECOMMENDED • LIFETIME ACCESS</span>
+              <h3 class="text-white h4 mb-1">PrepPro</h3>
+              <p class="text-indigo fs-8 mb-4">Complete AI career suite for active jobseekers</p>
+              <div class="my-4">
+                <span class="display-5 fw-bold text-white">₹99</span>
+                <span class="text-muted fs-8 ms-1">/ one-time payment</span>
+              </div>
+              <ul class="list-unstyled text-start mb-4 text-muted fs-8">
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>AI Career Assistant</strong> (ATS Audit, Planner)</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>AI Custom Study Planners</strong> & Weakness Diagnostics</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Company Interview Guides</strong> & Prompts</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Export Excel & PDF Progress reports</strong></li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Full 50-MCQ Timed Mock Exams</strong> & XP Leaderboard</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Top 50 Global Leaderboard Ranking Eligibility</li>
+              </ul>
+            </div>
+            <div>
+              <button id="btn-upgrade-pro" class="btn btn-premium w-100 py-3 fw-bold fs-7" ${isPaid ? 'disabled' : ''}>
+                ${isPaid ? '✓ Active Premium Access' : '<i class="fa-solid fa-gem me-1"></i> Unlock PrepPro Access (₹99)'}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trust Bar -->
+      <div class="row justify-content-center mt-5">
+        <div class="col-lg-8">
+          <div class="d-flex flex-wrap justify-content-center gap-4 text-muted fs-8 text-center border-top border-secondary border-opacity-10 pt-4">
+            <div><i class="fa-solid fa-bolt text-primary me-1"></i> Instant Activation</div>
+            <div><i class="fa-solid fa-shield-halved text-success me-1"></i> 256-bit Secure Razorpay & UPI</div>
+            <div><i class="fa-solid fa-infinity text-info me-1"></i> Lifetime Validity (Zero Recurring Fees)</div>
           </div>
         </div>
       </div>
@@ -3075,58 +3114,89 @@ const components = {
 
   referral: (stats) => `
     <div class="container-fluid py-4">
-      <div class="glass-panel p-5 mb-5 bg-gradient-to-r" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(168, 85, 247, 0.05));">
+      <!-- Program Hero Banner -->
+      <div class="glass-panel p-4 p-md-5 mb-4 box-accent-primary position-relative overflow-hidden">
         <div class="row align-items-center">
-          <div class="col-md-8">
-            <span class="badge bg-indigo-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill mb-3">AFFILIATE PROGRAM</span>
+          <div class="col-md-9">
+            <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-3 font-mono fs-8">AFFILIATE PARTNER BOUNTY</span>
             <h2 class="text-white fw-bold mb-2">Share PrepSpace, Earn Cash Payouts!</h2>
-            <p class="text-muted mb-0">Invite your classmates and friends. You earn <strong class="text-primary">₹49</strong> on every user who upgrades their tracker space to premium (₹99)!</p>
+            <p class="text-muted mb-0">Invite classmates, friends, and peers. You earn <strong class="text-success">₹49 direct cash bounty</strong> on every user who upgrades their tracker space to PrepPro (₹99). Withdrawable instantly to your UPI ID!</p>
+          </div>
+          <div class="col-md-3 text-md-end mt-3 mt-md-0 d-none d-md-block">
+            <div class="stat-num text-success display-6 mb-0">₹49</div>
+            <div class="stat-label text-muted">CASH PER UPGRADE</div>
           </div>
         </div>
       </div>
 
-      <!-- Stats Grid -->
-      <div class="row g-4 mb-5">
-        <div class="col-sm-6 col-lg-3">
-          <div class="glass-panel p-4">
-            <div class="text-muted fs-8 uppercase tracking-wider mb-2">Total Referrals</div>
-            <div class="d-flex justify-content-between align-items-center">
-              <h3 class="text-white fw-bold mb-0">${stats.totalReferrals}</h3>
-              <i class="fa-solid fa-users text-primary fs-4"></i>
-            </div>
+      <!-- 4-Metric Bento Grid -->
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-3">
+          <div class="stat-card box-accent-primary p-3">
+            <div class="stat-label">TOTAL REFERRALS</div>
+            <div class="stat-num text-white">${stats.totalReferrals || 0}</div>
+            <div class="stat-caption text-muted"><i class="fa-solid fa-users text-primary me-1"></i>Peers registered</div>
           </div>
         </div>
-        <div class="col-sm-6 col-lg-3">
-          <div class="glass-panel p-4">
-            <div class="text-muted fs-8 uppercase tracking-wider mb-2">Total Earnings</div>
-            <div class="d-flex justify-content-between align-items-center">
+        <div class="col-6 col-lg-3">
+          <div class="stat-card box-accent-emerald p-3">
+            <div class="stat-label">TOTAL COMMISSIONS</div>
+            <div class="stat-num text-success">₹${stats.totalEarnings || 0}</div>
+            <div class="stat-caption text-muted"><i class="fa-solid fa-coins text-success me-1"></i>Lifetime earned</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="stat-card box-accent-cyan p-3">
+            <div class="stat-label">AVAILABLE BALANCE</div>
+            <div class="stat-num text-cyan">₹${stats.availableBalance || 0}</div>
+            <div class="stat-caption text-muted"><i class="fa-solid fa-wallet text-cyan me-1"></i>Ready for claim</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="stat-card box-accent-purple p-3">
+            <div class="stat-label">MINIMUM PAYOUT</div>
+            <div class="stat-num text-white">₹${stats.minWithdrawal || 99}</div>
+            <div class="stat-caption text-muted"><i class="fa-solid fa-bolt text-purple me-1"></i>Instant UPI claim</div>
+          </div>
         </div>
       </div>
 
       <div class="row g-4">
         <!-- Payout Request and Links -->
         <div class="col-lg-4">
-          <div class="glass-panel p-4 mb-4">
-            <h5 class="text-white fw-bold mb-3">Copy Referral link</h5>
-            <div class="d-flex gap-2">
-              <input type="text" readonly id="ref-link-val" class="form-control glass-input fs-7 font-mono" value="https://stream-in.app/#/register?ref=${stats.referralCode}">
-              <button id="btn-copy-ref-link" class="btn btn-glass px-3"><i class="fa-regular fa-copy"></i></button>
+          <div class="glass-panel p-4 mb-4 box-accent-primary">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <h5 class="text-white fw-bold m-0 fs-6"><i class="fa-solid fa-link text-primary me-2"></i>Your Referral Link</h5>
+              <span class="badge bg-dark border border-secondary text-muted font-mono fs-9">SHARE</span>
             </div>
+            <p class="text-muted fs-8 mb-3">Share your personalized link with your college cohorts, Discord groups, and friends.</p>
+            <div class="d-flex gap-2 mb-2">
+              <input type="text" readonly id="ref-link-val" class="form-control glass-input fs-8 font-mono text-truncate" value="https://stream-in.app/#/register?ref=${stats.referralCode || ''}">
+              <button id="btn-copy-ref-link" class="btn btn-premium px-3 flex-shrink-0" title="Copy to Clipboard"><i class="fa-regular fa-copy"></i></button>
+            </div>
+            <div class="text-muted fs-9">Your unique referral code is: <strong class="text-white font-mono">${stats.referralCode || 'N/A'}</strong></div>
           </div>
 
-          <div class="glass-panel p-4">
-            <h5 class="text-white fw-bold mb-3">Request Withdrawal</h5>
+          <div class="glass-panel p-4 box-accent-emerald">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <h5 class="text-white fw-bold m-0 fs-6"><i class="fa-solid fa-hand-holding-dollar text-success me-2"></i>Request Withdrawal</h5>
+              <span class="badge ${stats.availableBalance >= (stats.minWithdrawal || 99) ? 'bg-success' : 'bg-secondary'} font-mono fs-9">
+                ${stats.availableBalance >= (stats.minWithdrawal || 99) ? 'ELIGIBLE' : 'MIN ₹' + (stats.minWithdrawal || 99)}
+              </span>
+            </div>
             <form id="ref-withdraw-form">
               <div class="mb-3">
-                <label class="form-label text-muted fs-7">AMOUNT (INR)</label>
-                <input type="number" id="withdraw-amount" class="form-control glass-input" placeholder="Min. ₹${stats.minWithdrawal}" required>
+                <label class="form-label text-muted fs-8 uppercase tracking-wider mb-1">CLAIM AMOUNT (INR)</label>
+                <input type="number" id="withdraw-amount" class="form-control glass-input" placeholder="Min. ₹${stats.minWithdrawal || 99}" min="${stats.minWithdrawal || 99}" max="${stats.availableBalance || 0}" required>
+                <div class="form-text text-muted fs-9">Available: ₹${stats.availableBalance || 0}</div>
               </div>
               <div class="mb-4">
-                <label class="form-label text-muted fs-7">UPI ID FOR INSTANT PAYOUT</label>
-                <input type="text" id="withdraw-upi" class="form-control glass-input" placeholder="username@okaxis" required>
+                <label class="form-label text-muted fs-8 uppercase tracking-wider mb-1">UPI ID FOR INSTANT PAYOUT</label>
+                <input type="text" id="withdraw-upi" class="form-control glass-input font-mono" placeholder="username@upi" required>
+                <div class="form-text text-muted fs-9">Supports GPay, PhonePe, Paytm, BHIM</div>
               </div>
-              <button type="submit" id="btn-submit-withdraw" class="btn btn-premium w-100 py-2" ${stats.availableBalance < stats.minWithdrawal ? 'disabled' : ''}>
-                File Payout Claim
+              <button type="submit" id="btn-submit-withdraw" class="btn btn-premium w-100 py-3 fw-bold fs-7" ${(stats.availableBalance || 0) < (stats.minWithdrawal || 99) ? 'disabled' : ''}>
+                <i class="fa-solid fa-paper-plane me-1"></i> File Payout Claim
               </button>
             </form>
           </div>
@@ -3134,15 +3204,18 @@ const components = {
 
         <!-- History Tables -->
         <div class="col-lg-8">
-          <div class="glass-panel p-4 mb-4">
-            <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-list-check text-primary me-2"></i>Referral Audit Trail</h5>
+          <div class="glass-panel p-4 mb-4 box-accent-primary">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <h5 class="text-white fw-bold m-0 fs-6"><i class="fa-solid fa-list-check text-primary me-2"></i>Referral Audit Trail</h5>
+              <span class="badge bg-dark border border-secondary text-muted font-mono fs-9">ACTIVITY</span>
+            </div>
             <div class="table-responsive">
-              <table class="table table-dark table-hover fs-7 align-middle mb-0">
+              <table class="table table-dark table-hover align-middle mb-0">
                 <thead>
                   <tr class="text-muted border-secondary">
                     <th>Referred Email</th>
                     <th>Date Registered</th>
-                    <th>Upgrade status</th>
+                    <th>Upgrade Status</th>
                     <th class="text-end">My Commission</th>
                   </tr>
                 </thead>
@@ -3155,10 +3228,13 @@ const components = {
             </div>
           </div>
 
-          <div class="glass-panel p-4">
-            <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-arrow-right-arrow-left text-success me-2"></i>Withdrawal Claims</h5>
+          <div class="glass-panel p-4 box-accent-amber">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <h5 class="text-white fw-bold m-0 fs-6"><i class="fa-solid fa-arrow-right-arrow-left text-warning me-2"></i>Withdrawal Claims</h5>
+              <span class="badge bg-dark border border-secondary text-muted font-mono fs-9">PAYOUTS</span>
+            </div>
             <div class="table-responsive">
-              <table class="table table-dark table-hover fs-7 align-middle mb-0">
+              <table class="table table-dark table-hover align-middle mb-0">
                 <thead>
                   <tr class="text-muted border-secondary">
                     <th>Claim Amount</th>
@@ -4204,22 +4280,24 @@ const components = {
   premiumLock: (featureName) => `
     <div class="row justify-content-center align-items-center py-5">
       <div class="col-md-8 col-lg-6 text-center">
-        <div class="glass-panel p-5">
-          <div class="text-warning mb-4"><i class="fa-solid fa-lock display-3"></i></div>
-          <h4 class="text-white fw-bold mb-2">PrepPro Premium Feature</h4>
-          <p class="text-muted mb-4">The <strong>${featureName}</strong> tool is exclusive to PrepPro members. Upgrade today to unlock full AI diagnostics, unlimited mock exams, and personalized guides.</p>
+        <div class="glass-panel p-5 box-accent-amber">
+          <div class="text-warning mb-3"><i class="fa-solid fa-lock display-4"></i></div>
+          <span class="badge bg-warning bg-opacity-25 text-warning border border-warning-subtle px-3 py-1 rounded-pill mb-3 font-mono fs-8">PREPPRO EXCLUSIVE</span>
+          <h4 class="text-white fw-bold mb-2">Unlock ${featureName}</h4>
+          <p class="text-muted mb-4 fs-8">The <strong>${featureName}</strong> suite is exclusive to PrepPro members. Upgrade today to unlock full AI diagnostics, unlimited mock exams, and personalized guides.</p>
           
-          <div class="bg-dark bg-opacity-25 p-3 rounded mb-4 text-start border border-secondary fs-8 text-muted">
-            <h6 class="text-white fw-bold fs-7 mb-2"><i class="fa-solid fa-gem text-primary me-2"></i>What you get with PrepPro (₹99 one-time):</h6>
+          <div class="bg-dark bg-opacity-50 p-3 rounded mb-4 text-start border border-secondary border-opacity-25 fs-8 text-muted">
+            <h6 class="text-white fw-bold fs-8 mb-2"><i class="fa-solid fa-gem text-primary me-2"></i>Included with PrepPro (₹99 one-time):</h6>
             <ul class="list-unstyled m-0">
-              <li class="mb-1"><i class="fa-solid fa-check text-success me-1"></i> Unlimited AI ATS Resume Compliance Audits</li>
-              <li class="mb-1"><i class="fa-solid fa-check text-success me-1"></i> Custom AI Study Planner & Weak Topic Diagnostic</li>
-              <li class="mb-1"><i class="fa-solid fa-check text-success me-1"></i> Company-Specific AI Interview Guide Generator</li>
-              <li class="mb-1"><i class="fa-solid fa-check text-success me-1"></i> Export candidate progress logs as PDF / Excel</li>
+              <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i> Unlimited AI ATS Resume Compliance Audits</li>
+              <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i> Custom AI Study Planner & Weak Topic Diagnostic</li>
+              <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i> Company-Specific AI Interview Guide Generator</li>
+              <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i> Export candidate progress logs as PDF / Excel</li>
+              <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i> 50-MCQ Timed Proctored Assessment Suite</li>
             </ul>
           </div>
 
-          <a href="#/billing" class="btn btn-premium w-100 py-3 fs-6"><i class="fa-solid fa-circle-arrow-up me-1"></i> Upgrade to PrepPro Now</a>
+          <a href="#/billing" class="btn btn-premium w-100 py-3 fs-7 fw-bold"><i class="fa-solid fa-bolt me-1"></i> Upgrade to PrepPro for ₹99</a>
         </div>
       </div>
     </div>
