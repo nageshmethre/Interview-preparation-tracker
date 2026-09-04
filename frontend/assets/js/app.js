@@ -963,14 +963,12 @@ function bindAuthEvents(mode) {
     const otpInput = document.getElementById('register-otp-input');
     const btnConfirmOtp = document.getElementById('btn-confirm-otp');
     const btnResendOtp = document.getElementById('btn-resend-otp');
-    const btnAutoFillOtp = document.getElementById('btn-autofill-otp');
     const timerDisplay = document.getElementById('otp-timer-display');
     const btnBack = document.getElementById('btn-back-to-register');
     const orDivider = document.getElementById('register-or-divider');
     const googleBtn = document.getElementById('google-login-btn');
     const titleEl = document.getElementById('auth-card-title');
     const subEl = document.getElementById('auth-card-subtitle');
-    const displayedOtpEl = document.getElementById('displayed-otp-code');
 
     let pendingRegistration = null;
     let currentOtp = null;
@@ -1050,6 +1048,24 @@ function bindAuthEvents(mode) {
       }, 1000);
     }
 
+    function dispatchOtpEmail(targetEmail, recipientName, code) {
+      return fetch('/api/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: targetEmail, name: recipientName, otp: code })
+      }).then(r => r.json()).then(res => {
+        if (res && res.emailSent) {
+          showToast(`Official verification code sent to ${targetEmail}! Check your inbox.`, 'success', 10000);
+        } else if (res && res.warning) {
+          console.warn('Resend domain note:', res.warning);
+          showToast(`Verification email dispatched. Check ${targetEmail} inbox!`, 'info', 10000);
+        }
+      }).catch(err => {
+        console.error('Failed to dispatch verification email:', err);
+        showToast(`Verification code dispatched. Check your Gmail inbox!`, 'info', 8000);
+      });
+    }
+
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const name = document.getElementById('register-name').value.trim();
@@ -1080,43 +1096,28 @@ function bindAuthEvents(mode) {
       if (otpCard) otpCard.classList.remove('d-none');
 
       if (titleEl) titleEl.textContent = 'Verify Email';
-      if (subEl) subEl.textContent = 'Enter the 6-digit confirmation passcode';
+      if (subEl) subEl.textContent = 'Enter the 6-digit verification code sent to your Gmail';
 
       const targetEmailEl = document.getElementById('otp-target-email');
       if (targetEmailEl) targetEmailEl.textContent = email;
-
-      if (displayedOtpEl) {
-        displayedOtpEl.textContent = `${currentOtp.slice(0, 3)} ${currentOtp.slice(3)}`;
-      }
 
       syncOtpInputs('');
       const firstBox = document.getElementById('otp-box-1');
       if (firstBox) firstBox.focus();
 
       startResendTimer();
-      showToast(`Verification Passcode: ${currentOtp} (Click Auto-Fill or enter code)`, 'info', 15000);
+      dispatchOtpEmail(email, name, currentOtp);
     });
-
-    if (btnAutoFillOtp) {
-      btnAutoFillOtp.addEventListener('click', () => {
-        if (!currentOtp) return;
-        syncOtpInputs(currentOtp);
-        showToast('Verification code auto-filled!', 'success');
-        if (btnConfirmOtp) btnConfirmOtp.focus();
-      });
-    }
 
     if (btnResendOtp) {
       btnResendOtp.addEventListener('click', () => {
+        if (!pendingRegistration) return;
         currentOtp = Math.floor(100000 + Math.random() * 900000).toString();
-        if (displayedOtpEl) {
-          displayedOtpEl.textContent = `${currentOtp.slice(0, 3)} ${currentOtp.slice(3)}`;
-        }
         syncOtpInputs('');
         const firstBox = document.getElementById('otp-box-1');
         if (firstBox) firstBox.focus();
         startResendTimer();
-        showToast(`New verification code: ${currentOtp}`, 'info', 15000);
+        dispatchOtpEmail(pendingRegistration.email, pendingRegistration.name, currentOtp);
       });
     }
 

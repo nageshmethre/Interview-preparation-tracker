@@ -577,19 +577,14 @@ const components = {
 
         <!-- Registration Step 2: Vercel Segmented 6-Digit OTP Verification Card -->
         <div id="otp-verification-card" class="d-none text-start">
-          <div class="mb-3 p-3 rounded-3" style="background: rgba(255, 255, 255, 0.04); border: 1px dashed rgba(255, 255, 255, 0.18);">
-            <div class="d-flex align-items-center justify-content-between">
-              <div>
-                <div class="text-muted" style="font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase;">Instant Verification Passcode</div>
-                <div class="font-monospace fw-bold fs-4 text-white" id="displayed-otp-code">------</div>
-              </div>
-              <button type="button" id="btn-autofill-otp" class="btn btn-sm btn-outline-light rounded-2 px-3 py-1 font-monospace" style="font-size: 0.75rem;">
-                <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Auto-Fill
-              </button>
+          <div class="mb-4 p-3 rounded-3 text-start" style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1);">
+            <div class="d-flex align-items-center gap-2 mb-2 text-white fw-semibold" style="font-size: 0.85rem;">
+              <i class="fa-solid fa-envelope-circle-check text-success"></i>
+              <span>Verification Email Dispatched</span>
             </div>
-            <div class="text-secondary mt-2" style="font-size: 0.75rem;">
-              Target Gmail: <span id="otp-target-email" class="text-white font-monospace fw-semibold"></span>
-            </div>
+            <p class="text-secondary mb-0" style="font-size: 0.8rem; line-height: 1.5;">
+              We sent an official 6-digit verification code to <span id="otp-target-email" class="text-white font-monospace fw-semibold"></span>. Check your Gmail inbox and enter the code below.
+            </p>
           </div>
 
           <div class="mb-4 text-center">
