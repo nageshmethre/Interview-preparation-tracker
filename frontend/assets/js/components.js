@@ -493,13 +493,7 @@ const components = {
           <div class="glass-panel p-4 p-md-5 text-center">
             <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace" style="width: 52px; height: 52px; object-fit: contain;" class="mb-3">
             <h2 class="text-white fw-bold mb-1">Welcome Back</h2>
-            <p class="text-muted mb-3 fs-7">Enter credentials to initialize your space</p>
-
-            <div class="mb-3">
-              <span class="badge bg-danger bg-opacity-25 text-danger border border-danger-subtle font-monospace fs-9 py-1 px-2">
-                <i class="fa-brands fa-google me-1"></i> ONLY GMAIL (@gmail.com) ACCEPTED
-              </span>
-            </div>
+            <p class="text-muted mb-4 fs-7">Enter credentials to initialize your space</p>
             
             <form id="login-form">
               <div class="mb-3 text-start">
@@ -539,13 +533,7 @@ const components = {
           <div class="glass-panel p-4 p-md-5 text-center">
             <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace" style="width: 52px; height: 52px; object-fit: contain;" class="mb-3">
             <h2 class="text-white fw-bold mb-1">Create Space</h2>
-            <p class="text-muted mb-3 fs-7">Start your preparation tracking lifecycle</p>
-
-            <div class="mb-3">
-              <span class="badge bg-danger bg-opacity-25 text-danger border border-danger-subtle font-monospace fs-9 py-1 px-2">
-                <i class="fa-brands fa-google me-1"></i> ONLY GMAIL (@gmail.com) ACCEPTED
-              </span>
-            </div>
+            <p class="text-muted mb-4 fs-7">Start your preparation tracking lifecycle</p>
             
             <!-- Registration Step 1: Account Details Form -->
             <form id="register-form">
