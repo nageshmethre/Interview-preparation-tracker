@@ -38,6 +38,20 @@
   color: #888888 !important;
 }
 
+html {
+  font-size: 13.5px !important; /* Scaled down 2.5px from default 16px (high-density SaaS layout) */
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 13px !important; /* Compact & crisp for mobile screens */
+  }
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -48,9 +62,70 @@ body {
   font-family: 'Geist', 'Inter', system-ui, -apple-system, sans-serif;
   background-color: #000000 !important;
   color: #ededed !important;
+  font-size: 0.95rem;
   min-height: 100vh;
   overflow-x: hidden;
   letter-spacing: -0.01em;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   Typography Overhaul - High-Density Precision Scale (-2 to -3px reduction)
+   ========================================================================== */
+
+/* Extended & Refined Font Utility Scale (Fixes unstyled fs-7, fs-8, fs-9) */
+.fs-1 { font-size: 1.65rem !important; }
+.fs-2 { font-size: 1.35rem !important; }
+.fs-3 { font-size: 1.18rem !important; }
+.fs-4 { font-size: 1.05rem !important; }
+.fs-5 { font-size: 0.92rem !important; }
+.fs-6 { font-size: 0.84rem !important; }
+.fs-7 { font-size: 0.80rem !important; }
+.fs-8 { font-size: 0.72rem !important; }
+.fs-9 { font-size: 0.65rem !important; }
+
+/* Display Headings: Tame giant marketing titles to sleek SaaS proportions */
+.display-1 { font-size: 2.5rem !important; letter-spacing: -0.03em; }
+.display-2 { font-size: 2.2rem !important; letter-spacing: -0.03em; }
+.display-3 { font-size: 1.95rem !important; letter-spacing: -0.025em; }
+.display-4 { font-size: 1.7rem !important; letter-spacing: -0.02em; }
+.display-5 { font-size: 1.45rem !important; letter-spacing: -0.02em; }
+.display-6 { font-size: 1.25rem !important; letter-spacing: -0.015em; }
+
+h1, .h1 { font-size: 1.65rem !important; letter-spacing: -0.02em; }
+h2, .h2 { font-size: 1.35rem !important; letter-spacing: -0.015em; }
+h3, .h3 { font-size: 1.18rem !important; letter-spacing: -0.01em; }
+h4, .h4 { font-size: 1.05rem !important; }
+h5, .h5 { font-size: 0.95rem !important; }
+h6, .h6 { font-size: 0.85rem !important; }
+
+p, .lead, body {
+  letter-spacing: -0.01em;
+}
+
+.lead {
+  font-size: 0.98rem !important;
+  line-height: 1.55;
+}
+
+small, .small {
+  font-size: 0.78rem !important;
+}
+
+/* Button & Badge Proportions */
+.btn-lg {
+  padding: 8px 20px !important;
+  font-size: 0.92rem !important;
+}
+
+.btn-sm {
+  padding: 3px 8px !important;
+  font-size: 0.75rem !important;
+}
+
+.badge {
+  font-size: 0.72rem !important;
+  padding: 3px 7px !important;
 }
 
 /* Scrollbar Styles */
