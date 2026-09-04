@@ -87,7 +87,7 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        from: 'PrepSpace <onboarding@resend.dev>',
+        from: 'PrepSpace <verify@stream-in.app>',
         to: [email],
         subject: `${otp} is your PrepSpace verification code`,
         html: htmlContent
