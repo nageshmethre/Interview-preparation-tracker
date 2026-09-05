@@ -854,6 +854,9 @@ input:-webkit-autofill:focus,
 }
 .feature-tab-btn.active {
   background: #171717;
+  border-color: #f59e0b;
+  color: #f4f4f5;
+}
 .bento-card:hover, .vercel-card:hover {
   border-color: rgba(255, 255, 255, 0.16) !important;
   transform: translateY(-2px);
