@@ -1,5 +1,52 @@
-// frontend/api/send-otp.js
-// Vercel Serverless Function for PrepSpace Email Verification via Resend
+function buildAdminEmailPayload(recipientName, subject, message) {
+  const emailSubject = subject || 'Official Message from PrepSpace Administration';
+  const emailText = `Hello ${recipientName},\n\n${message}\n\n— The PrepSpace Executive Team\nhttps://stream-in.app\n\nYou are receiving this official update as a registered candidate on PrepSpace (stream-in.app). Support: support@stream-in.app`;
+  const htmlContent = `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${emailSubject}</title>
+    <style>
+      body { margin: 0; padding: 0; background-color: #000000; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+      .wrapper { width: 100%; background-color: #000000; padding: 30px 10px; }
+      .container { max-width: 520px; margin: 0 auto; background-color: #0a0a0a; border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 36px 30px; color: #ededed; }
+      .brand { font-size: 20px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px; margin-bottom: 24px; display: inline-flex; align-items: center; gap: 8px; }
+      .badge { display: inline-block; background: rgba(99, 102, 241, 0.2); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.4); padding: 4px 10px; border-radius: 9999px; font-size: 11px; font-weight: 600; text-transform: uppercase; margin-bottom: 16px; }
+      .heading { font-size: 22px; font-weight: 600; color: #ffffff; letter-spacing: -0.3px; margin: 0 0 12px 0; }
+      .body-card { background-color: #111111; border: 1px solid #27272a; border-radius: 12px; padding: 22px; margin: 20px 0; font-size: 14px; line-height: 1.6; color: #e4e4e7; white-space: pre-line; }
+      .cta-btn { display: inline-block; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; margin: 16px 0; }
+      .footer { font-size: 11px; color: #52525b; line-height: 1.5; border-top: 1px solid #1f1f1f; padding-top: 20px; text-align: center; }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="container">
+        <div class="brand">
+          ▲ PrepSpace
+        </div>
+        <div><span class="badge">Official Notice</span></div>
+        <h1 class="heading">${emailSubject}</h1>
+        <p style="font-size: 14px; color: #a1a1aa; margin: 0 0 10px 0;">Hello <strong>${recipientName}</strong>,</p>
+        <div class="body-card">
+          ${message}
+        </div>
+        <div style="text-align: center;">
+          <a href="https://stream-in.app" class="cta-btn" style="color: #ffffff;">Launch PrepSpace Portal &rarr;</a>
+        </div>
+        <div class="footer">
+          &copy; 2026 PrepSpace (stream-in.app) &bull; Global Operations Team.<br>
+          Technical Interview Preparation & Career Readiness Platform.<br>
+          <span style="color: #3f3f46;">Registered candidate dispatch &bull; Inquiries: support@stream-in.app</span>
+        </div>
+      </div>
+    </div>
+  </body>
+  </html>
+  `;
+  return { emailSubject, emailText, htmlContent };
+}
 
 module.exports = async function handler(req, res) {
   // CORS configuration
@@ -19,11 +66,12 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed. Only POST is supported.' });
   }
 
-  const { email, name, otp, type, subject, message } = req.body || {};
+  const { email, name, otp, type, subject, message, recipients } = req.body || {};
 
-  const isAdminMsg = type === 'admin_message' || (subject && message);
+  const isBatch = Array.isArray(recipients) && recipients.length > 0;
+  const isAdminMsg = type === 'admin_message' || (subject && message) || isBatch;
 
-  if (!email || (!otp && !isAdminMsg)) {
+  if ((!email && !isBatch) || (!otp && !isAdminMsg)) {
     return res.status(400).json({ error: 'Missing required email, otp, or message parameters.' });
   }
 
@@ -32,6 +80,73 @@ module.exports = async function handler(req, res) {
     console.error('RESEND_API_KEY environment variable is not configured.');
     return res.status(500).json({ error: 'Email service configuration error.' });
   }
+
+  // 1. Handle Bulk Batch Dispatches
+  if (isBatch) {
+    if (!message || !message.trim()) {
+      return res.status(400).json({ error: 'Message body is required for broadcast.' });
+    }
+
+    const validRecipients = recipients
+      .filter(r => r && r.email && typeof r.email === 'string' && r.email.includes('@'))
+      .slice(0, 100);
+
+    if (validRecipients.length === 0) {
+      return res.status(400).json({ error: 'No valid recipient email addresses provided.' });
+    }
+
+    const batchPayload = validRecipients.map((r, idx) => {
+      const rName = r.name && r.name.trim() ? r.name.trim() : 'Candidate';
+      const { emailSubject, emailText, htmlContent } = buildAdminEmailPayload(rName, subject, message);
+      return {
+        from: 'PrepSpace <verify@stream-in.app>',
+        to: [r.email.trim()],
+        reply_to: 'verify@stream-in.app',
+        subject: emailSubject,
+        text: emailText,
+        html: htmlContent,
+        headers: {
+          'X-Entity-Ref-ID': `${Date.now()}-batch-${idx}`
+        }
+      };
+    });
+
+    try {
+      const response = await fetch('https://api.resend.com/emails/batch', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${RESEND_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(batchPayload)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.warn('Resend batch API returned non-200:', data);
+        return res.status(response.status || 400).json({
+          success: false,
+          error: data.message || 'Batch email delivery failed.'
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        batchSent: true,
+        count: validRecipients.length,
+        data: data.data || []
+      });
+    } catch (err) {
+      console.error('Batch email dispatch error:', err);
+      return res.status(500).json({
+        success: false,
+        error: err.message || 'Internal batch email error.'
+      });
+    }
+  }
+
+  // 2. Handle Single Email Dispatches
   const recipientName = name && name.trim() ? name.trim() : 'Candidate';
 
   let emailSubject = '';
@@ -39,51 +154,10 @@ module.exports = async function handler(req, res) {
   let htmlContent = '';
 
   if (isAdminMsg) {
-    emailSubject = subject || 'Official Message from PrepSpace Administration';
-    emailText = `Hello ${recipientName},\n\n${message}\n\n— The PrepSpace Executive Team\nhttps://stream-in.app`;
-    htmlContent = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>${emailSubject}</title>
-      <style>
-        body { margin: 0; padding: 0; background-color: #000000; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-        .wrapper { width: 100%; background-color: #000000; padding: 30px 10px; }
-        .container { max-width: 520px; margin: 0 auto; background-color: #0a0a0a; border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 36px 30px; color: #ededed; }
-        .brand { font-size: 20px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px; margin-bottom: 24px; display: inline-flex; align-items: center; gap: 8px; }
-        .badge { display: inline-block; background: rgba(99, 102, 241, 0.2); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.4); padding: 4px 10px; border-radius: 9999px; font-size: 11px; font-weight: 600; text-transform: uppercase; margin-bottom: 16px; }
-        .heading { font-size: 22px; font-weight: 600; color: #ffffff; letter-spacing: -0.3px; margin: 0 0 12px 0; }
-        .body-card { background-color: #111111; border: 1px solid #27272a; border-radius: 12px; padding: 22px; margin: 20px 0; font-size: 14px; line-height: 1.6; color: #e4e4e7; white-space: pre-line; }
-        .cta-btn { display: inline-block; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; margin: 16px 0; }
-        .footer { font-size: 11px; color: #52525b; line-height: 1.5; border-top: 1px solid #1f1f1f; padding-top: 20px; text-align: center; }
-      </style>
-    </head>
-    <body>
-      <div class="wrapper">
-        <div class="container">
-          <div class="brand">
-            ▲ PrepSpace
-          </div>
-          <div><span class="badge">Official Notice</span></div>
-          <h1 class="heading">${emailSubject}</h1>
-          <p style="font-size: 14px; color: #a1a1aa; margin: 0 0 10px 0;">Hello <strong>${recipientName}</strong>,</p>
-          <div class="body-card">
-            ${message}
-          </div>
-          <div style="text-align: center;">
-            <a href="https://stream-in.app" class="cta-btn" style="color: #ffffff;">Launch PrepSpace Portal &rarr;</a>
-          </div>
-          <div class="footer">
-            &copy; 2026 PrepSpace (stream-in.app) &bull; Global Operations Team.<br>
-            Technical Interview Preparation & Career Readiness Platform.
-          </div>
-        </div>
-      </div>
-    </body>
-    </html>
-    `;
+    const generated = buildAdminEmailPayload(recipientName, subject, message);
+    emailSubject = generated.emailSubject;
+    emailText = generated.emailText;
+    htmlContent = generated.htmlContent;
   } else {
     emailSubject = `Your PrepSpace Verification Code: ${otp}`;
     emailText = `Hello ${recipientName},\n\nYour PrepSpace verification code is: ${otp}\n\nThis code will expire in 5 minutes. For your security, never share this code with anyone.\n\nIf you did not request this verification code, you can safely ignore this email.\n\n— The PrepSpace Team\nhttps://stream-in.app`;

@@ -3973,53 +3973,110 @@ const components = {
     `;
   },
 
-  adminBroadcastTab: (settings = {}) => {
+  adminBroadcastTab: (settings = {}, users = []) => {
     const isBannerActive = settings.GLOBAL_ANNOUNCEMENT_ACTIVE === 'true';
     const bannerText = settings.GLOBAL_ANNOUNCEMENT_TEXT || '';
     const bannerLevel = settings.GLOBAL_ANNOUNCEMENT_LEVEL || 'info';
 
+    const allCount = users ? users.filter(u => !u.isSuspended).length : 0;
+    const proCount = users ? users.filter(u => u.isPaid && !u.isSuspended).length : 0;
+    const freeCount = users ? users.filter(u => !u.isPaid && !u.isSuspended).length : 0;
+
     return `
       <div class="row g-3">
-        <!-- Direct Candidate Email Dispatcher -->
+        <!-- Official Email & Bulk Broadcast Dispatcher -->
         <div class="col-lg-7">
           <div class="admin-box p-3 h-100">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <div>
-                <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-envelope-open-text text-info me-2"></i>Official Candidate Email Dispatcher</h6>
-                <small class="text-muted fs-8">Sends verified emails directly from <code class="text-emerald">verify@stream-in.app</code> via Resend API</small>
+                <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-envelope-open-text text-info me-2"></i>Official Communicator & Bulk Broadcast</h6>
+                <small class="text-muted fs-8">Verified dispatch via <code class="text-emerald">verify@stream-in.app</code> &bull; Resend Engine</small>
               </div>
-              <span class="badge bg-purple text-white px-2 py-0.5 fs-9"><i class="fa-solid fa-paper-plane me-1"></i> Resend Engine</span>
+              <span class="badge bg-purple text-white px-2 py-0.5 fs-9"><i class="fa-solid fa-bolt me-1"></i> 1-Click Broadcast</span>
             </div>
 
-            <form id="admin-broadcast-email-form">
+            <!-- Audience Selector Pills -->
+            <div class="mb-3">
+              <label class="form-label text-muted fs-8 uppercase fw-bold mb-2">Target Audience</label>
+              <div class="d-flex flex-wrap gap-1" id="broadcast-audience-pills">
+                <button type="button" class="btn btn-xs btn-glass broadcast-audience-pill active" data-audience="all">
+                  <i class="fa-solid fa-users me-1 text-primary"></i> All Candidates (<span id="pill-count-all">${allCount}</span>)
+                </button>
+                <button type="button" class="btn btn-xs btn-glass broadcast-audience-pill" data-audience="pro">
+                  <i class="fa-solid fa-crown me-1 text-warning"></i> Pro Members (<span id="pill-count-pro">${proCount}</span>)
+                </button>
+                <button type="button" class="btn btn-xs btn-glass broadcast-audience-pill" data-audience="free">
+                  <i class="fa-solid fa-graduation-cap me-1 text-emerald"></i> Free Users (<span id="pill-count-free">${freeCount}</span>)
+                </button>
+                <button type="button" class="btn btn-xs btn-glass broadcast-audience-pill" data-audience="single">
+                  <i class="fa-solid fa-user me-1 text-info"></i> Single Candidate
+                </button>
+              </div>
+            </div>
+
+            <!-- Single Candidate Recipient Inputs (Visible only when audience is 'single') -->
+            <div id="broadcast-single-inputs" class="d-none">
               <div class="mb-3">
                 <label class="form-label text-muted fs-8 uppercase">Candidate Recipient Email</label>
                 <div class="input-group input-group-sm">
                   <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-solid fa-at"></i></span>
-                  <input type="email" id="broadcast-email-to" class="form-control admin-input" placeholder="e.g. candidate@gmail.com or admin@tracker.com" required>
+                  <input type="email" id="broadcast-email-to" class="form-control admin-input" placeholder="e.g. candidate@gmail.com">
                 </div>
               </div>
+              <div class="mb-3">
+                <label class="form-label text-muted fs-8 uppercase">Recipient Name</label>
+                <input type="text" id="broadcast-email-name" class="form-control form-control-sm admin-input" placeholder="e.g. Rahul Sharma" value="Candidate">
+              </div>
+            </div>
 
-              <div class="row g-3 mb-3">
-                <div class="col-md-6">
-                  <label class="form-label text-muted fs-8 uppercase">Recipient Name</label>
-                  <input type="text" id="broadcast-email-name" class="form-control form-control-sm admin-input" placeholder="e.g. Rahul Sharma" value="Candidate">
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label text-muted fs-8 uppercase">Email Subject</label>
-                  <input type="text" id="broadcast-email-subject" class="form-control form-control-sm admin-input" placeholder="e.g. Important Update Regarding Your Placement Drive" required>
-                </div>
+            <!-- Bulk Audience Summary Card (Visible when audience is 'all', 'pro', or 'free') -->
+            <div id="broadcast-bulk-info-card" class="mb-3 p-2.5 rounded bg-dark bg-opacity-50 border border-secondary border-opacity-25">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="text-white fw-bold fs-8" id="bulk-info-title"><i class="fa-solid fa-users text-primary me-2"></i>Broadcasting to All Active Candidates</span>
+                <span class="badge bg-primary text-white fs-9" id="bulk-info-count-badge">${allCount} Candidates</span>
+              </div>
+              <p class="text-muted fs-9 mb-1" id="bulk-info-desc">
+                Dispatched individually with personalized greetings (<code>Hello {Name}</code>) and authenticated with SPF/DKIM from <code>verify@stream-in.app</code>.
+              </p>
+              <div class="text-emerald fs-9"><i class="fa-solid fa-shield-halved me-1"></i> Privacy guaranteed: No recipient can see any other candidate's email address.</div>
+            </div>
+
+            <!-- Quick Template Presets -->
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <label class="form-label text-muted fs-9 uppercase mb-0">Quick Announcement Presets</label>
+                <span class="text-muted fs-9">Click to insert template</span>
+              </div>
+              <div class="d-flex flex-wrap gap-1">
+                <button type="button" class="btn btn-xs btn-glass text-warning broadcast-preset-btn" data-preset="top50">
+                  <i class="fa-solid fa-trophy me-1"></i> Top 50 Pro & Global Icon
+                </button>
+                <button type="button" class="btn btn-xs btn-glass text-info broadcast-preset-btn" data-preset="mocktest">
+                  <i class="fa-solid fa-laptop-code me-1"></i> Placement Drive Mock Tests
+                </button>
+                <button type="button" class="btn btn-xs btn-glass text-emerald broadcast-preset-btn" data-preset="referral">
+                  <i class="fa-solid fa-hand-holding-dollar me-1"></i> ₹199 Referral Bonus
+                </button>
+              </div>
+            </div>
+
+            <form id="admin-broadcast-email-form">
+              <div class="mb-3">
+                <label class="form-label text-muted fs-8 uppercase">Email Subject</label>
+                <input type="text" id="broadcast-email-subject" class="form-control form-control-sm admin-input" placeholder="e.g. Important Update Regarding Your Placement Drive" required>
               </div>
 
               <div class="mb-3">
                 <label class="form-label text-muted fs-8 uppercase">Official Message Content</label>
-                <textarea id="broadcast-email-body" class="form-control admin-input" rows="5" placeholder="Write your announcement or direct instructions to the candidate here..." required></textarea>
-                <small class="text-muted fs-9">Supports multiline formatting. Dispatched with responsive luxury email template.</small>
+                <textarea id="broadcast-email-body" class="form-control admin-input" rows="5" placeholder="Write your announcement or direct instructions to candidates here..." required></textarea>
+                <small class="text-muted fs-9">Supports multiline formatting. Dispatched with responsive dark-mode luxury email template.</small>
               </div>
 
               <div class="d-flex justify-content-between align-items-center pt-2">
-                <span class="text-muted fs-8"><i class="fa-solid fa-shield-halved text-success me-1"></i> SPF / DKIM 100% Inboxed</span>
-                <button type="submit" class="btn btn-premium px-4" id="btn-send-admin-email"><i class="fa-solid fa-paper-plane me-2"></i>Dispatch Official Email</button>
+                <span class="text-muted fs-8"><i class="fa-solid fa-shield-halved text-success me-1"></i> SPF / DKIM Inboxed</span>
+                <button type="submit" class="btn btn-premium px-4" id="btn-send-admin-email">
+                  <i class="fa-solid fa-paper-plane me-2"></i><span id="btn-send-label">Dispatch Bulk Broadcast (${allCount} Candidates)</span>
+                </button>
               </div>
             </form>
           </div>
@@ -4361,6 +4418,95 @@ const components = {
               <button type="submit" class="btn btn-premium px-4" id="btn-modal-send-email"><i class="fa-solid fa-paper-plane me-1"></i> Send Official Email</button>
             </div>
           </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Bulk Email Confirm Modal -->
+    <div class="modal fade" id="adminBulkEmailConfirmModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content admin-box border border-warning border-opacity-50">
+          <div class="modal-header border-secondary border-opacity-25">
+            <h6 class="modal-title text-white fw-bold">
+              <i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>Confirm Bulk Email Broadcast
+            </h6>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body text-start">
+            <p class="text-white fs-8 mb-3">
+              You are about to dispatch an official email broadcast to:
+            </p>
+            <div class="p-3 bg-dark bg-opacity-75 rounded border border-secondary border-opacity-25 mb-3">
+              <div class="d-flex justify-content-between mb-1">
+                <span class="text-muted fs-8">Target Audience:</span>
+                <strong class="text-info fs-8" id="confirm-cohort-name">All Active Candidates</strong>
+              </div>
+              <div class="d-flex justify-content-between mb-1">
+                <span class="text-muted fs-8">Total Recipients:</span>
+                <strong class="text-emerald fs-8" id="confirm-recipient-count">0 candidates</strong>
+              </div>
+              <div class="d-flex justify-content-between mb-0">
+                <span class="text-muted fs-8">Subject:</span>
+                <span class="text-white fs-8 text-truncate ms-2 text-end" style="max-width: 240px;" id="confirm-email-subject">Subject</span>
+              </div>
+            </div>
+            <div class="alert alert-warning py-2 fs-9 mb-0">
+              <i class="fa-solid fa-circle-info me-1"></i>
+              Emails are sent individually via <code>verify@stream-in.app</code> with personalized recipient greetings. This action cannot be undone.
+            </div>
+          </div>
+          <div class="modal-footer border-secondary border-opacity-25">
+            <button type="button" class="btn btn-glass btn-sm" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-premium btn-sm px-4" id="btn-confirm-start-broadcast">
+              <i class="fa-solid fa-paper-plane me-1"></i> Confirm & Send Broadcast
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Bulk Email Progress Modal -->
+    <div class="modal fade" id="adminBulkEmailProgressModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content admin-box border border-primary border-opacity-25">
+          <div class="modal-header border-0 pb-0">
+            <h6 class="modal-title text-white fw-bold">
+              <i class="fa-solid fa-paper-plane text-primary me-2"></i>Official Broadcast In Progress
+            </h6>
+          </div>
+          <div class="modal-body py-4 text-center">
+            <div class="mb-3">
+              <div class="spinner-border text-primary mb-3" id="bulk-progress-spinner" role="status"></div>
+              <div class="display-6 fw-bold text-white mb-1" id="bulk-progress-pct">0%</div>
+              <div class="text-muted fs-8" id="bulk-progress-status">Preparing recipient queue...</div>
+            </div>
+
+            <!-- Progress bar -->
+            <div class="progress mb-3 bg-dark" style="height: 8px; border-radius: 9999px;">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" id="bulk-progress-bar" role="progressbar" style="width: 0%; background: linear-gradient(90deg, #6366f1, #8b5cf6);"></div>
+            </div>
+
+            <!-- Counters -->
+            <div class="row g-2 text-center fs-8 pt-2 border-top border-secondary border-opacity-25">
+              <div class="col-4">
+                <span class="text-muted d-block fs-9 uppercase">Target Queue</span>
+                <strong class="text-white fs-7" id="bulk-counter-total">0</strong>
+              </div>
+              <div class="col-4">
+                <span class="text-muted d-block fs-9 uppercase">Dispatched</span>
+                <strong class="text-emerald fs-7" id="bulk-counter-success">0</strong>
+              </div>
+              <div class="col-4">
+                <span class="text-muted d-block fs-9 uppercase">Failed</span>
+                <strong class="text-danger fs-7" id="bulk-counter-failed">0</strong>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer border-0 pt-0 justify-content-center">
+            <button type="button" class="btn btn-sm btn-glass px-4 d-none" id="btn-close-bulk-progress" data-bs-dismiss="modal">
+              Done & Close
+            </button>
+          </div>
         </div>
       </div>
     </div>

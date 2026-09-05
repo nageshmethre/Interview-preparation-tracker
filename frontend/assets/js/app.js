@@ -4806,9 +4806,86 @@ function loadAdminPanelTab(tab) {
       });
 
   } else if (tab === 'broadcast') {
-    apiFetch('/admin/settings')
-      .then(settings => {
-        contentArea.innerHTML = components.adminBroadcastTab(settings || {});
+    Promise.all([
+      apiFetch('/admin/settings'),
+      apiFetch('/admin/users').catch(() => [])
+    ])
+      .then(([settings, users]) => {
+        const userList = Array.isArray(users) ? users : [];
+        contentArea.innerHTML = components.adminBroadcastTab(settings || {}, userList);
+
+        // State for selected audience
+        let selectedAudience = 'all'; // 'all', 'pro', 'free', 'single'
+
+        const audiencePills = document.querySelectorAll('.broadcast-audience-pill');
+        const singleInputs = document.getElementById('broadcast-single-inputs');
+        const bulkCard = document.getElementById('broadcast-bulk-info-card');
+        const bulkTitle = document.getElementById('bulk-info-title');
+        const bulkBadge = document.getElementById('bulk-info-count-badge');
+        const sendBtnLabel = document.getElementById('btn-send-label');
+        const emailToInput = document.getElementById('broadcast-email-to');
+
+        function getTargetUsers(audience) {
+          const activeUsers = userList.filter(u => !u.isSuspended && u.email && u.email.includes('@'));
+          if (audience === 'pro') return activeUsers.filter(u => u.isPaid);
+          if (audience === 'free') return activeUsers.filter(u => !u.isPaid);
+          if (audience === 'all') return activeUsers;
+          return [];
+        }
+
+        function updateAudienceUI(target) {
+          selectedAudience = target;
+          audiencePills.forEach(p => p.classList.toggle('active', p.dataset.audience === target));
+
+          if (target === 'single') {
+            if (singleInputs) singleInputs.classList.remove('d-none');
+            if (bulkCard) bulkCard.classList.add('d-none');
+            if (emailToInput) emailToInput.required = true;
+            if (sendBtnLabel) sendBtnLabel.textContent = 'Dispatch Official Email';
+          } else {
+            if (singleInputs) singleInputs.classList.add('d-none');
+            if (bulkCard) bulkCard.classList.remove('d-none');
+            if (emailToInput) emailToInput.required = false;
+
+            const targets = getTargetUsers(target);
+            const count = targets.length;
+
+            let titleText = 'Broadcasting to All Active Candidates';
+            if (target === 'pro') titleText = 'Broadcasting to Pro Members Only';
+            if (target === 'free') titleText = 'Broadcasting to Free Candidates Only';
+
+            if (bulkTitle) bulkTitle.innerHTML = `<i class="fa-solid fa-users text-primary me-2"></i>${titleText}`;
+            if (bulkBadge) bulkBadge.textContent = `${count} Candidates`;
+            if (sendBtnLabel) sendBtnLabel.textContent = `Dispatch Bulk Broadcast (${count} Candidates)`;
+          }
+        }
+
+        audiencePills.forEach(pill => {
+          pill.addEventListener('click', () => {
+            updateAudienceUI(pill.dataset.audience);
+          });
+        });
+
+        // Quick Preset Announcement Templates
+        const subjectInput = document.getElementById('broadcast-email-subject');
+        const bodyInput = document.getElementById('broadcast-email-body');
+
+        document.querySelectorAll('.broadcast-preset-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const preset = btn.dataset.preset;
+            if (preset === 'top50') {
+              if (subjectInput) subjectInput.value = '🏆 Announcement: Top 50 Students Win Free PrepPro & Global Icon!';
+              if (bodyInput) bodyInput.value = `We are excited to announce our exclusive Merit Challenge for all aspiring engineers and candidates on PrepSpace!\n\nThe Top 50 Students on the PrepSpace Placement Leaderboard will receive:\n🌟 100% Free Lifetime PrepPro Upgrade\n🌟 Prestigious "Global Icon" Candidate Badge on their verified portfolio\n🌟 Direct exposure to partner hiring tech recruiters\n\nTake mock tests, solve daily code challenges, and climb the ranks today!\n\nCheck your rank on the leaderboard now: https://stream-in.app/#/leaderboard`;
+            } else if (preset === 'mocktest') {
+              if (subjectInput) subjectInput.value = '🚀 New Placement Drive Mock Exams & Coding Arena are Live!';
+              if (bodyInput) bodyInput.value = `A brand new set of company-specific mock interviews and coding problems (TCS, Infosys, Wipro, Amazon, Google patterns) have been published to your PrepSpace dashboard.\n\nPractice with real-time timed assessments, in-depth algorithmic diagnostics, and instant scorecards.\n\nStart practicing now: https://stream-in.app/#/mock-test`;
+            } else if (preset === 'referral') {
+              if (subjectInput) subjectInput.value = '⚡ Earn ₹199 per Friend: PrepSpace Ambassador Program is Live!';
+              if (bodyInput) bodyInput.value = `Did you know you can earn real cash rewards by inviting your college peers to PrepSpace?\n\nEarn a flat ₹199 referral reward directly to your UPI for every peer who upgrades to PrepPro using your exclusive link.\n\nGet your unique referral link from your profile dashboard: https://stream-in.app/#/profile`;
+            }
+            showToast('Announcement template inserted!', 'info');
+          });
+        });
 
         // Real-Time Live Preview of Sitewide Banner
         const bannerInput = document.getElementById('admin-banner-text');
@@ -4850,51 +4927,189 @@ function loadAdminPanelTab(tab) {
           });
         }
 
+        // Chunked Bulk Broadcast Execution with Progress Bar & Safe Rate-Limiting
+        async function startBulkBroadcastExecution(targets, subject, message) {
+          const progressModalEl = document.getElementById('adminBulkEmailProgressModal');
+          let progressModal = null;
+          if (progressModalEl && window.bootstrap) {
+            progressModal = bootstrap.Modal.getInstance(progressModalEl) || new bootstrap.Modal(progressModalEl);
+            progressModal.show();
+          }
+
+          const progressBar = document.getElementById('bulk-progress-bar');
+          const progressPct = document.getElementById('bulk-progress-pct');
+          const progressStatus = document.getElementById('bulk-progress-status');
+          const counterTotal = document.getElementById('bulk-counter-total');
+          const counterSuccess = document.getElementById('bulk-counter-success');
+          const counterFailed = document.getElementById('bulk-counter-failed');
+          const closeBtn = document.getElementById('btn-close-bulk-progress');
+          const spinner = document.getElementById('bulk-progress-spinner');
+
+          if (counterTotal) counterTotal.textContent = targets.length;
+          if (counterSuccess) counterSuccess.textContent = '0';
+          if (counterFailed) counterFailed.textContent = '0';
+          if (closeBtn) closeBtn.classList.add('d-none');
+          if (spinner) spinner.classList.remove('d-none');
+          if (progressBar) progressBar.style.width = '0%';
+          if (progressPct) progressPct.textContent = '0%';
+
+          const BATCH_SIZE = 20; // Chunks of 20 to strictly respect Vercel function timeouts & Resend batch limits
+          let successCount = 0;
+          let failedCount = 0;
+          const total = targets.length;
+
+          for (let i = 0; i < total; i += BATCH_SIZE) {
+            const chunk = targets.slice(i, i + BATCH_SIZE);
+            const chunkIndex = Math.floor(i / BATCH_SIZE) + 1;
+            const totalChunks = Math.ceil(total / BATCH_SIZE);
+
+            if (progressStatus) {
+              progressStatus.textContent = `Dispatching batch ${chunkIndex} of ${totalChunks} (${chunk.length} recipients)...`;
+            }
+
+            try {
+              const res = await fetch('/api/send-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  recipients: chunk.map(u => ({ email: u.email, name: u.name })),
+                  subject,
+                  message,
+                  type: 'admin_message'
+                })
+              });
+
+              const text = await res.text();
+              let data;
+              try { data = JSON.parse(text); } catch (e) { throw new Error(text || 'Server error.'); }
+
+              if (data.success) {
+                successCount += (data.count || chunk.length);
+              } else {
+                console.warn('Batch chunk failed:', data.error);
+                failedCount += chunk.length;
+              }
+            } catch (err) {
+              console.error('Batch error:', err);
+              failedCount += chunk.length;
+            }
+
+            const dispatchedSoFar = Math.min(i + chunk.length, total);
+            const pct = Math.round((dispatchedSoFar / total) * 100);
+
+            if (progressBar) progressBar.style.width = `${pct}%`;
+            if (progressPct) progressPct.textContent = `${pct}%`;
+            if (counterSuccess) counterSuccess.textContent = successCount;
+            if (counterFailed) counterFailed.textContent = failedCount;
+
+            // 600ms throttle between batches to strictly prevent 429 Too Many Requests
+            if (i + BATCH_SIZE < total) {
+              await new Promise(r => setTimeout(r, 600));
+            }
+          }
+
+          if (spinner) spinner.classList.add('d-none');
+          if (progressStatus) {
+            progressStatus.innerHTML = `<span class="text-emerald fw-bold"><i class="fa-solid fa-circle-check me-1"></i> Broadcast Finished!</span> ${successCount} emails delivered.`;
+          }
+          if (closeBtn) closeBtn.classList.remove('d-none');
+
+          showToast(`Bulk broadcast completed: ${successCount} sent, ${failedCount} failed.`, successCount > 0 ? 'success' : 'warning');
+        }
+
         // Broadcast Email Dispatch Form
         const broadcastEmailForm = document.getElementById('admin-broadcast-email-form');
         if (broadcastEmailForm) {
-          broadcastEmailForm.addEventListener('submit', (e) => {
+          broadcastEmailForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const sendBtn = document.getElementById('btn-send-admin-email');
-            sendBtn.disabled = true;
-            sendBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Dispatching Official Email...';
 
-            const payload = {
-              email: document.getElementById('broadcast-email-to').value,
-              name: document.getElementById('broadcast-email-name').value,
-              subject: document.getElementById('broadcast-email-subject').value,
-              message: document.getElementById('broadcast-email-body').value,
-              type: 'admin_message'
-            };
+            const subject = subjectInput.value.trim();
+            const message = bodyInput.value.trim();
+            if (!subject || !message) {
+              showToast('Please provide both an email subject and message content.', 'warning');
+              return;
+            }
 
-            fetch('/api/send-otp', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(payload)
-            })
-            .then(async (r) => {
-              const text = await r.text();
+            // A. Single Email Dispatch
+            if (selectedAudience === 'single') {
+              const toEmail = document.getElementById('broadcast-email-to').value.trim();
+              const toName = document.getElementById('broadcast-email-name').value.trim() || 'Candidate';
+              if (!toEmail) {
+                showToast('Please specify the recipient email address.', 'warning');
+                return;
+              }
+
+              const sendBtn = document.getElementById('btn-send-admin-email');
+              sendBtn.disabled = true;
+              sendBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Dispatching...';
+
               try {
-                return JSON.parse(text);
-              } catch (e) {
-                throw new Error(text || 'Server error occurred while sending email.');
+                const res = await fetch('/api/send-otp', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    email: toEmail,
+                    name: toName,
+                    subject,
+                    message,
+                    type: 'admin_message'
+                  })
+                });
+                const text = await res.text();
+                let data;
+                try { data = JSON.parse(text); } catch (err) { throw new Error(text || 'Server error.'); }
+
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>Dispatch Official Email';
+
+                if (data.success) {
+                  showToast(`Official email successfully sent to ${toEmail}!`, 'success');
+                  broadcastEmailForm.reset();
+                  updateAudienceUI('single');
+                } else {
+                  showToast(data.error || 'Failed to dispatch email.', 'danger');
+                }
+              } catch (err) {
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>Dispatch Official Email';
+                showToast(err.message, 'danger');
               }
-            })
-            .then(res => {
-              sendBtn.disabled = false;
-              sendBtn.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>Dispatch Official Email';
-              if (res.success) {
-                showToast('Official email successfully sent to ' + payload.email + ' via verify@stream-in.app!', 'success');
-                broadcastEmailForm.reset();
-              } else {
-                showToast(res.error || 'Failed to dispatch email.', 'danger');
-              }
-            })
-            .catch(err => {
-              sendBtn.disabled = false;
-              sendBtn.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>Dispatch Official Email';
-              showToast(err.message, 'danger');
-            });
+              return;
+            }
+
+            // B. Bulk Broadcast Dispatch
+            const targets = getTargetUsers(selectedAudience);
+            if (targets.length === 0) {
+              showToast('No active candidates found in selected cohort.', 'warning');
+              return;
+            }
+
+            // Show Confirmation Modal
+            const confirmModalEl = document.getElementById('adminBulkEmailConfirmModal');
+            if (!confirmModalEl || !window.bootstrap) {
+              if (!confirm(`Broadcast official email to ${targets.length} candidates?`)) return;
+              startBulkBroadcastExecution(targets, subject, message);
+              return;
+            }
+
+            let cohortLabel = 'All Active Candidates';
+            if (selectedAudience === 'pro') cohortLabel = 'Pro Members Only';
+            if (selectedAudience === 'free') cohortLabel = 'Free Candidates Only';
+
+            document.getElementById('confirm-cohort-name').textContent = cohortLabel;
+            document.getElementById('confirm-recipient-count').textContent = `${targets.length} candidates`;
+            document.getElementById('confirm-email-subject').textContent = subject;
+
+            const confirmModal = bootstrap.Modal.getInstance(confirmModalEl) || new bootstrap.Modal(confirmModalEl);
+            confirmModal.show();
+
+            const startBroadcastBtn = document.getElementById('btn-confirm-start-broadcast');
+            const handleConfirm = () => {
+              startBroadcastBtn.removeEventListener('click', handleConfirm);
+              confirmModal.hide();
+              startBulkBroadcastExecution(targets, subject, message);
+            };
+            startBroadcastBtn.onclick = handleConfirm;
           });
         }
       })
