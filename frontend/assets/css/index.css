@@ -1577,5 +1577,186 @@ input:-webkit-autofill {
   }
 }
 
+/* ==========================================================================
+   Google-Inspired Material Design & Glassy SaaS Design System
+   ========================================================================== */
 
+/* Glassy Surface Cards */
+.google-glass-card {
+  background: rgba(14, 18, 27, 0.78) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
 
+.google-glass-card:hover {
+  border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+/* Clean Google-Style Search-First Pill */
+.google-search-pill-wrapper {
+  position: relative;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.google-search-pill {
+  width: 100%;
+  border-radius: 9999px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  padding: 14px 24px 14px 48px !important;
+  color: #ffffff !important;
+  font-size: 0.95rem !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.google-search-pill:focus {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: #4285F4 !important;
+  box-shadow: 0 0 0 4px rgba(66, 133, 244, 0.2), 0 12px 30px rgba(0, 0, 0, 0.4) !important;
+  outline: none;
+}
+
+.google-search-icon {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9aa0a6;
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+/* Google Four-Color Material Pill Badges */
+.google-badge-blue {
+  background: rgba(66, 133, 244, 0.15);
+  color: #8ab4f8;
+  border: 1px solid rgba(66, 133, 244, 0.3);
+}
+
+.google-badge-green {
+  background: rgba(52, 168, 83, 0.15);
+  color: #81c995;
+  border: 1px solid rgba(52, 168, 83, 0.3);
+}
+
+.google-badge-yellow {
+  background: rgba(251, 188, 5, 0.15);
+  color: #fdd663;
+  border: 1px solid rgba(251, 188, 5, 0.3);
+}
+
+.google-badge-red {
+  background: rgba(234, 67, 53, 0.15);
+  color: #f28b82;
+  border: 1px solid rgba(234, 67, 53, 0.3);
+}
+
+/* Rounded Navigation Pill Tabs */
+.google-nav-pill {
+  border-radius: 9999px !important;
+  padding: 8px 18px !important;
+  font-size: 0.85rem !important;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: #9aa0a6;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+
+.google-nav-pill:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.google-nav-pill.active {
+  background: #ffffff !important;
+  color: #111111 !important;
+  font-weight: 600;
+  border-color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.25);
+}
+
+/* Sticky Offline Warning Banner */
+.offline-banner-sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99999;
+  background: linear-gradient(90deg, #b06000, #ea8600);
+  color: #ffffff;
+  font-size: 0.84rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 8px 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+/* Floating Cookie Consent Banner */
+.cookie-consent-banner {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  max-width: 580px;
+  margin: 0 auto;
+  z-index: 1050;
+  background: rgba(14, 18, 27, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 20px 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Reusable Empty State Box */
+.google-empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.google-empty-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  color: #9aa0a6;
+  margin-bottom: 16px;
+}

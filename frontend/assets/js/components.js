@@ -431,55 +431,97 @@ const components = {
       </div>
     </main>
 
-    <!-- Multi-Column Enterprise Footer -->
-    <footer class="py-5 border-top border-secondary-subtle border-opacity-10 mt-5">
-      <div class="container">
+    <!-- Google-Inspired Production Enterprise Footer -->
+    <footer class="py-5 border-top border-secondary-subtle border-opacity-10 mt-5 position-relative">
+      <div class="google-four-color-bar position-absolute top-0 start-0 end-0" style="height: 2px; background: linear-gradient(90deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);"></div>
+      <div class="container pt-3">
         <div class="row g-4 justify-content-between mb-5">
-          <div class="col-lg-4 text-start">
+          <!-- Brand & Mission Column -->
+          <div class="col-lg-3 text-start">
             <div class="d-flex align-items-center gap-2 mb-3">
               <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace Logo" style="width: 38px; height: 38px; object-fit: contain;">
               <div class="d-flex flex-column text-start">
                 <span class="text-white fw-bold fs-5 lh-1">PrepSpace</span>
-                <span class="text-primary fw-semibold" style="font-size: 0.65rem; letter-spacing: 0.5px;">(stream-in)</span>
+                <span class="text-primary fw-semibold" style="font-size: 0.65rem; letter-spacing: 0.5px;">(stream-in.app)</span>
               </div>
             </div>
-            <p class="text-muted fs-7 mb-3" style="max-width: 320px;">The unified career intelligence and interview preparation tracker SaaS for developers worldwide.</p>
+            <p class="text-muted fs-7 mb-3" style="max-width: 300px;">The unified career intelligence, technical interview preparation & AI mock assessment SaaS for developers worldwide.</p>
+            <div class="google-dots d-flex gap-1 mb-2">
+              <span style="width: 8px; height: 8px; border-radius: 50%; background: #4285F4;"></span>
+              <span style="width: 8px; height: 8px; border-radius: 50%; background: #EA4335;"></span>
+              <span style="width: 8px; height: 8px; border-radius: 50%; background: #FBBC05;"></span>
+              <span style="width: 8px; height: 8px; border-radius: 50%; background: #34A853;"></span>
+            </div>
             <div class="d-flex align-items-center gap-2 text-success fs-8">
               <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981;"></span>
               <span>All Systems Operational (Zero-Trust)</span>
             </div>
           </div>
 
-          <div class="col-6 col-lg-2 text-start">
-            <h6 class="text-white fw-bold mb-3 fs-7 uppercase">Platform</h6>
+          <!-- Column 2: Platform & Learning -->
+          <div class="col-6 col-md-3 col-lg-2 text-start">
+            <h6 class="text-white fw-bold mb-3 fs-7 uppercase" style="letter-spacing: 0.6px;"><i class="fa-solid fa-layer-group text-primary me-1.5"></i> Platform</h6>
             <ul class="list-unstyled fs-7 d-flex flex-column gap-2 text-muted">
               <li><a href="#showcase" class="text-muted text-decoration-none hover-white">Mock Exams</a></li>
               <li><a href="#features" class="text-muted text-decoration-none hover-white">DSA Matrix</a></li>
               <li><a href="#features" class="text-muted text-decoration-none hover-white">ATS Resume AI</a></li>
-              <li><a href="#pricing" class="text-muted text-decoration-none hover-white">Pricing</a></li>
+              <li><a href="#pricing" class="text-muted text-decoration-none hover-white">Pro Pricing</a></li>
+              <li><a href="#/courses" class="text-muted text-decoration-none hover-white">LMS Courses</a></li>
+              <li><a href="#/onboarding" class="text-muted text-decoration-none hover-white">Onboarding Tour</a></li>
             </ul>
           </div>
 
-          <div class="col-6 col-lg-2 text-start">
-            <h6 class="text-white fw-bold mb-3 fs-7 uppercase">Company</h6>
+          <!-- Column 3: Legal & Governance -->
+          <div class="col-6 col-md-3 col-lg-2 text-start">
+            <h6 class="text-white fw-bold mb-3 fs-7 uppercase" style="letter-spacing: 0.6px;"><i class="fa-solid fa-scale-balanced text-primary me-1.5"></i> Legal</h6>
             <ul class="list-unstyled fs-7 d-flex flex-column gap-2 text-muted">
-              <li><a href="/about" class="text-muted text-decoration-none hover-white">About PrepSpace</a></li>
-              <li><a href="/privacy" class="text-muted text-decoration-none hover-white">Privacy Policy</a></li>
-              <li><a href="/terms" class="text-muted text-decoration-none hover-white">Terms of Service</a></li>
-              <li><a href="mailto:support@stream-in.app" class="text-muted text-decoration-none hover-white">Direct Support</a></li>
+              <li><a href="#/privacy" class="text-muted text-decoration-none hover-white">Privacy Policy</a></li>
+              <li><a href="#/terms" class="text-muted text-decoration-none hover-white">Terms of Service</a></li>
+              <li><a href="#/cookies" class="text-muted text-decoration-none hover-white">Cookie Policy</a></li>
+              <li><a href="javascript:void(0)" onclick="openCookiePreferencesModal()" class="text-muted text-decoration-none hover-white">Cookie Preferences</a></li>
+              <li><a href="#/dpa" class="text-muted text-decoration-none hover-white">Data Processing (DPA)</a></li>
+              <li><a href="#/disclaimer" class="text-muted text-decoration-none hover-white">Legal Disclaimer</a></li>
+              <li><a href="#/accessibility" class="text-muted text-decoration-none hover-white">Accessibility</a></li>
             </ul>
           </div>
 
-          <div class="col-lg-3 text-start">
-            <h6 class="text-white fw-bold mb-3 fs-7 uppercase">Security & Verification</h6>
-            <p class="text-muted fs-8 mb-2"><i class="fa-solid fa-lock text-primary me-2"></i>256-Bit SSL Secured</p>
-            <p class="text-muted fs-8 mb-2"><i class="fa-solid fa-shield-check text-success me-2"></i>Stateless JWT Authentication</p>
-            <p class="text-muted fs-8 mb-0"><i class="fa-solid fa-bolt text-warning me-2"></i>Cashfree Encrypted Gateway</p>
+          <!-- Column 4: Billing & Consumer Rights -->
+          <div class="col-6 col-md-3 col-lg-2 text-start">
+            <h6 class="text-white fw-bold mb-3 fs-7 uppercase" style="letter-spacing: 0.6px;"><i class="fa-solid fa-credit-card text-success me-1.5"></i> Billing & Rights</h6>
+            <ul class="list-unstyled fs-7 d-flex flex-column gap-2 text-muted">
+              <li><a href="#/refund-policy" class="text-muted text-decoration-none hover-white">7-Day Refund Policy</a></li>
+              <li><a href="#/cancellation-policy" class="text-muted text-decoration-none hover-white">Cancellation Policy</a></li>
+              <li><a href="#/shipping-policy" class="text-muted text-decoration-none hover-white">Digital Delivery</a></li>
+              <li><a href="#/return-policy" class="text-muted text-decoration-none hover-white">Return & Exchange</a></li>
+              <li><a href="javascript:void(0)" onclick="openCancelSubscriptionModal()" class="text-muted text-decoration-none hover-white">Cancel Subscription</a></li>
+            </ul>
+          </div>
+
+          <!-- Column 5: Trust, Security & Support -->
+          <div class="col-6 col-md-3 col-lg-3 text-start">
+            <h6 class="text-white fw-bold mb-3 fs-7 uppercase" style="letter-spacing: 0.6px;"><i class="fa-solid fa-shield-halved text-warning me-1.5"></i> Trust & Security</h6>
+            <ul class="list-unstyled fs-7 d-flex flex-column gap-2 text-muted mb-3">
+              <li><a href="#/security" class="text-muted text-decoration-none hover-white">Security Architecture</a></li>
+              <li><a href="#/acceptable-use" class="text-muted text-decoration-none hover-white">Acceptable Use Policy</a></li>
+              <li><a href="#/responsible-disclosure" class="text-muted text-decoration-none hover-white">Responsible Disclosure</a></li>
+              <li><a href="#/community-guidelines" class="text-muted text-decoration-none hover-white">Community Guidelines</a></li>
+              <li><a href="#/help" class="text-muted text-decoration-none hover-white">Help Center & FAQs</a></li>
+              <li><a href="#/support" class="text-muted text-decoration-none hover-white">Priority Support</a></li>
+            </ul>
+            <div class="p-2.5 rounded-3 bg-black bg-opacity-30 border border-secondary border-opacity-15 fs-8 text-secondary">
+              <div><i class="fa-solid fa-lock text-primary me-1.5"></i> 256-Bit TLS 1.3 Encryption</div>
+              <div><i class="fa-solid fa-bolt text-warning me-1.5"></i> Cashfree PCI-DSS Compliant</div>
+            </div>
           </div>
         </div>
 
-        <div class="border-top border-secondary border-opacity-10 pt-4 text-center text-muted fs-8">
-          <p class="mb-0">&copy; 2026 PrepSpace (stream-in). Developed with excellence by Nagesh Methre. All rights reserved.</p>
+        <div class="border-top border-secondary border-opacity-10 pt-4 d-flex flex-wrap justify-content-between align-items-center gap-2 text-muted fs-8">
+          <p class="mb-0">&copy; 2026 PrepSpace (stream-in.app). Developed with excellence by Nagesh Methre. All rights reserved.</p>
+          <div class="d-flex align-items-center gap-3">
+            <span class="badge bg-secondary bg-opacity-20 text-muted rounded-pill fs-9">WCAG 2.1 AA Compliant</span>
+            <span class="badge bg-secondary bg-opacity-20 text-muted rounded-pill fs-9">GDPR / DPA Certified</span>
+            <span class="badge bg-secondary bg-opacity-20 text-muted rounded-pill fs-9">Zero-Trust SLA</span>
+          </div>
         </div>
       </div>
     </footer>
@@ -498,7 +540,7 @@ const components = {
         <form id="login-form">
           <div class="mb-3 text-start">
             <label class="vercel-input-label" for="login-email">EMAIL ADDRESS</label>
-            <input type="email" id="login-email" class="vercel-input" placeholder="name@gmail.com or admin@tracker.com" required autocomplete="email">
+            <input type="email" id="login-email" class="vercel-input" placeholder="name@gmail.com" required autocomplete="email">
           </div>
           <div class="mb-4 text-start">
             <div class="d-flex justify-content-between align-items-center mb-1">
@@ -2018,7 +2060,7 @@ const components = {
   `,
 
   settingsDeveloper: (s) => `
-    <h5 class="text-white fw-bold mb-4">🛠 Developer Credentials & AI Models</h5>
+    <h5 class="text-white fw-bold mb-4">🤖 AI Model Engine & Interview Tuning</h5>
     <form id="settings-developer-form" class="mb-4">
       <div class="mb-3">
         <label class="form-label text-muted fs-7">AI MODEL ENGINE</label>
@@ -2046,33 +2088,55 @@ const components = {
           </select>
         </div>
       </div>
-      <div class="form-check form-switch mb-3">
+      <div class="form-check form-switch mb-4">
         <input class="form-check-input" type="checkbox" id="set-suggestions" ${s.autoSuggestions ? 'checked' : ''}>
         <label class="form-check-label text-muted fs-7" for="set-suggestions">Enable AI Auto-suggestions on coding screens</label>
       </div>
-      <div class="form-check form-switch mb-4">
-        <input class="form-check-input" type="checkbox" id="set-devmode" ${s.developerMode ? 'checked' : ''}>
-        <label class="form-check-label text-muted fs-7" for="set-devmode">Enable Developer Options API Playgrounds</label>
-      </div>
-      <button type="submit" class="btn btn-premium w-100 py-2">Apply Engine Customizations</button>
+      <button type="submit" class="btn btn-premium w-100 py-2.5 rounded-3">Apply Engine Customizations</button>
     </form>
-
-    <div class="p-4 rounded border border-secondary bg-dark-subtle ${s.developerMode ? '' : 'd-none'}" id="dev-api-keys-box">
-      <h6 class="text-white fw-bold mb-3 fs-7">Developer API Authentication Keys</h6>
-      <div class="bg-dark p-3 rounded mb-3 text-start border border-secondary d-flex align-items-center justify-content-between">
-        <span class="font-monospace text-indigo fs-7">${s.apiKey || 'No key generated.'}</span>
-        <button class="btn btn-glass btn-sm py-1" id="btn-rotate-apikey"><i class="fa-solid fa-arrows-rotate"></i> Rotate</button>
-      </div>
-      <small class="text-muted fs-8">Use this API key inside requests header: <code>Authorization: Bearer [key]</code> to automate solutions uploads externally.</small>
-    </div>
   `,
 
   settingsAbout: () => `
     <div class="text-center py-4">
       <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace Logo" class="mb-3" style="width: 64px; height: 64px; object-fit: contain;">
       <h4 class="text-white fw-bold mb-1">PrepSpace Enterprise</h4>
-      <p class="text-muted fs-7 mb-4">Version 2.4.1 (Stateless Zero-Trust Edition)</p>
-      <p class="text-muted fs-8">Developed by Nagesh Methre. All rights reserved.</p>
+      <p class="text-muted fs-7 mb-2">Version 2.6.7 (Production SaaS Edition)</p>
+      
+      <div class="google-dots d-inline-flex gap-1 mb-4">
+        <span style="width: 8px; height: 8px; border-radius: 50%; background: #4285F4;"></span>
+        <span style="width: 8px; height: 8px; border-radius: 50%; background: #EA4335;"></span>
+        <span style="width: 8px; height: 8px; border-radius: 50%; background: #FBBC05;"></span>
+        <span style="width: 8px; height: 8px; border-radius: 50%; background: #34A853;"></span>
+      </div>
+
+      <div class="row g-2 justify-content-center mb-4" style="max-width: 540px; margin: 0 auto;">
+        <div class="col-6">
+          <a href="#/privacy" class="btn btn-glass w-100 py-2 fs-8 text-start d-flex align-items-center justify-content-between">
+            <span><i class="fa-solid fa-scale-balanced text-primary me-2"></i>Legal Policies</span>
+            <i class="fa-solid fa-arrow-up-right-from-square text-muted fs-9"></i>
+          </a>
+        </div>
+        <div class="col-6">
+          <button class="btn btn-glass w-100 py-2 fs-8 text-start d-flex align-items-center justify-content-between" onclick="openCookiePreferencesModal()">
+            <span><i class="fa-solid fa-sliders text-warning me-2"></i>Cookie Prefs</span>
+            <i class="fa-solid fa-gear text-muted fs-9"></i>
+          </button>
+        </div>
+        <div class="col-6">
+          <a href="#/help" class="btn btn-glass w-100 py-2 fs-8 text-start d-flex align-items-center justify-content-between">
+            <span><i class="fa-solid fa-headset text-info me-2"></i>Help & Support</span>
+            <i class="fa-solid fa-arrow-up-right-from-square text-muted fs-9"></i>
+          </a>
+        </div>
+        <div class="col-6">
+          <button class="btn btn-glass w-100 py-2 fs-8 text-start d-flex align-items-center justify-content-between text-danger" onclick="openCancelSubscriptionModal()">
+            <span><i class="fa-solid fa-ban text-danger me-2"></i>Cancel Pro Plan</span>
+            <i class="fa-solid fa-chevron-right text-muted fs-9"></i>
+          </button>
+        </div>
+      </div>
+
+      <p class="text-muted fs-8 mb-0">&copy; 2026 PrepSpace (stream-in.app). Developed with excellence by Nagesh Methre. All rights reserved.</p>
     </div>
   `,
 
@@ -4219,27 +4283,6 @@ const components = {
                 </div>
               </div>
             </div>
-        <!-- Cashfree Automated Payouts Gateway Status -->
-        <div class="col-12">
-          <div class="admin-box p-3 border border-warning border-opacity-25">
-            <div class="d-flex flex-wrap justify-content-between align-items-center mb-2">
-              <div>
-                <h6 class="text-white fw-bold mb-0"><i class="fa-solid fa-bolt text-warning me-2"></i>Cashfree Automated Payouts Integration</h6>
-                <small class="text-muted fs-8">Direct bank & UPI disbursements from Cashfree merchant balance</small>
-              </div>
-              <span class="badge ${settings.CASHFREE_PAYOUT_CONFIGURED === 'true' ? 'bg-success text-white' : 'bg-secondary text-muted'}">
-                <i class="fa-solid ${settings.CASHFREE_PAYOUT_CONFIGURED === 'true' ? 'fa-circle-check' : 'fa-circle-pause'} me-1"></i>
-                ${settings.CASHFREE_PAYOUT_CONFIGURED === 'true' ? 'API Configured (' + (settings.CASHFREE_PAYOUT_ENV || 'PRODUCTION') + ')' : 'Credentials Not Set'}
-              </span>
-            </div>
-            <div class="p-2 rounded bg-black bg-opacity-30 border border-secondary border-opacity-10 fs-8 text-secondary">
-              <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
-                <span><strong>Render Environment Variables:</strong> <code>CASHFREE_PAYOUT_CLIENT_ID</code>, <code>CASHFREE_PAYOUT_CLIENT_SECRET</code>, <code>CASHFREE_PAYOUT_ENV</code> (PRODUCTION / SANDBOX)</span>
-                <span class="${settings.CASHFREE_PAYOUT_CONFIGURED === 'true' ? 'text-emerald' : 'text-muted'} font-monospace">${settings.CASHFREE_PAYOUT_CONFIGURED === 'true' ? '✓ Auto-Payout Active in Queue' : 'Manual UPI fallback active'}</span>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     `;
   },

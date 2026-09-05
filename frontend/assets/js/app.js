@@ -265,12 +265,98 @@ function router() {
     window.location.href = '/about';
     return;
   }
-  if (hash === '#/privacy') {
-    window.location.href = '/privacy';
+
+  // Legal & Compliance Hub public routes (14 official policies)
+  const legalSlugs = [
+    'privacy', 'terms', 'cookies', 'refund-policy', 'cancellation-policy',
+    'shipping-policy', 'return-policy', 'disclaimer', 'accessibility',
+    'dpa', 'acceptable-use', 'security', 'responsible-disclosure', 'community-guidelines'
+  ];
+  const matchedLegalSlug = legalSlugs.find(slug => hash === `#/${slug}` || hash.startsWith(`#/${slug}?`));
+  if (matchedLegalSlug) {
+    appRoot.innerHTML = components.legalHub(matchedLegalSlug);
+    if (window.bindLegalHubEvents) window.bindLegalHubEvents();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     return;
   }
-  if (hash === '#/terms') {
-    window.location.href = '/terms';
+  if (hash.startsWith('#/legal')) {
+    const urlParams = new URLSearchParams(hash.includes('?') ? hash.split('?')[1] : '');
+    const docSlug = urlParams.get('doc') || 'privacy';
+    appRoot.innerHTML = components.legalHub(docSlug);
+    if (window.bindLegalHubEvents) window.bindLegalHubEvents();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+  if (hash === '#/cookie-preferences') {
+    appRoot.innerHTML = components.legalHub('cookies');
+    if (window.bindLegalHubEvents) window.bindLegalHubEvents();
+    if (window.openCookiePreferencesModal) window.openCookiePreferencesModal();
+    return;
+  }
+
+  // Customer Lifecycle Public Routes
+  if (hash.startsWith('#/onboarding')) {
+    appRoot.innerHTML = components.onboardingTour();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+  if (hash.startsWith('#/payment-success')) {
+    let orderId = null;
+    if (hash.includes('?')) {
+      const q = new URLSearchParams(hash.split('?')[1]);
+      orderId = q.get('cf_order_id') || q.get('order_id');
+    }
+    state.isPaid = true;
+    localStorage.setItem('isPaid', 'true');
+    appRoot.innerHTML = components.paymentSuccess(orderId);
+    return;
+  }
+  if (hash.startsWith('#/payment-failed')) {
+    appRoot.innerHTML = components.paymentFailed();
+    return;
+  }
+  if (hash.startsWith('#/payment-pending')) {
+    let pOrderId = null;
+    if (hash.includes('?')) {
+      const q = new URLSearchParams(hash.split('?')[1]);
+      pOrderId = q.get('cf_order_id') || q.get('order_id');
+    }
+    appRoot.innerHTML = components.paymentPending(pOrderId);
+    return;
+  }
+  if (hash.startsWith('#/verify-email')) {
+    appRoot.innerHTML = components.emailVerification(state.email || 'developer@example.com');
+    return;
+  }
+  if (hash.startsWith('#/forgot-password')) {
+    appRoot.innerHTML = components.forgotPassword();
+    return;
+  }
+  if (hash.startsWith('#/reset-password')) {
+    appRoot.innerHTML = components.resetPassword();
+    return;
+  }
+  if (hash.startsWith('#/help') || hash.startsWith('#/support')) {
+    appRoot.innerHTML = components.helpCenter();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  // Production UX State Routes
+  if (hash.startsWith('#/404')) {
+    appRoot.innerHTML = components.error404();
+    return;
+  }
+  if (hash.startsWith('#/403')) {
+    appRoot.innerHTML = components.error403();
+    return;
+  }
+  if (hash.startsWith('#/500')) {
+    appRoot.innerHTML = components.error500();
+    return;
+  }
+  if (hash.startsWith('#/maintenance')) {
+    appRoot.innerHTML = components.maintenancePage();
     return;
   }
 
@@ -680,8 +766,10 @@ function router() {
         pageMount.innerHTML = `<div class="alert alert-danger">Failed to load admin stats: ${err.message}</div>`;
       });
   } else {
-    viewTitle.textContent = 'Not Found';
-    pageMount.innerHTML = `<div class="text-center py-5"><h3 class="text-white">Page Not Found</h3><a href="#/dashboard" class="btn btn-premium mt-3">Back to Dashboard</a></div>`;
+    viewTitle.textContent = '404 - Page Not Found';
+    pageMount.innerHTML = typeof components.error404 === 'function' 
+      ? components.error404() 
+      : `<div class="text-center py-5"><h3 class="text-white">Page Not Found</h3><a href="#/dashboard" class="btn btn-premium mt-3">Back to Dashboard</a></div>`;
   }
 }
 
@@ -4062,26 +4150,8 @@ function bindSettingsDeveloperEvents() {
         body: JSON.stringify(updated)
       }).then(res => {
         currentSettings = res;
-        showToast('Developer & AI customizations updated.', 'success');
-        
-        const keyBox = document.getElementById('dev-api-keys-box');
-        if (keyBox) {
-          if (developerMode) keyBox.classList.remove('d-none');
-          else keyBox.classList.add('d-none');
-        }
+        showToast('AI Model engine customizations saved successfully.', 'success');
       }).catch(err => showToast(err.message, 'danger'));
-    });
-  }
-
-  const rotateBtn = document.getElementById('btn-rotate-apikey');
-  if (rotateBtn) {
-    rotateBtn.addEventListener('click', () => {
-      apiFetch('/v1/settings/apikey/rotate', { method: 'POST' })
-        .then(res => {
-          currentSettings = res;
-          showToast('Developer API Key rotated!', 'success');
-          switchSettingsTab('developer');
-        }).catch(err => showToast(err.message, 'danger'));
     });
   }
 }
@@ -4574,7 +4644,13 @@ function loadAdminPanelTab(tab) {
                   showToast(`Candidate Pro status updated successfully!`, 'success');
                   loadAdminPanelTab('users');
                 })
-                .catch(err => showToast(err.message, 'danger'));
+                .catch(err => {
+                  if (err.message && err.message.includes('No static resource')) {
+                    showToast('Backend update pending on Render: Please deploy latest commit in Render Dashboard to activate toggle-pro.', 'warning');
+                  } else {
+                    showToast(err.message, 'danger');
+                  }
+                });
             }
           });
         });
