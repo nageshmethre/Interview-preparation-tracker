@@ -689,7 +689,7 @@ const components = {
       <!-- Sidebar -->
       <div class="sidebar glass-panel border-top-0 border-bottom-0 border-start-0 rounded-0 d-flex flex-column">
         <!-- Brand Header -->
-        <div class="p-3 border-bottom border-secondary-subtle d-flex align-items-center justify-content-between brand-header-box">
+        <div class="p-3 border-bottom border-secondary-subtle d-flex align-items-center justify-content-between brand-header-box flex-shrink-0">
           <a class="navbar-brand d-flex align-items-center brand-text text-decoration-none" href="#/dashboard">
             <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace Logo" class="me-2 brand-logo-img" style="width: 36px; height: 36px; object-fit: contain;">
             <div class="d-flex flex-column text-start brand-name">
@@ -706,7 +706,7 @@ const components = {
         </div>
 
         <!-- User Profile Micro Card -->
-        <div class="user-micro-card px-2 py-2 mx-2 my-2 rounded-3 border border-secondary border-opacity-20" style="background: #222226; border-color: #323238; d-flex align-items-center justify-content-between" id="sidebar-user-card">
+        <div class="user-micro-card px-2 py-2 mx-2 my-2 rounded-3 border border-secondary border-opacity-20 flex-shrink-0" style="background: #222226; border-color: #323238; d-flex align-items-center justify-content-between" id="sidebar-user-card">
           <div class="d-flex align-items-center gap-2 overflow-hidden me-1">
             <div class="position-relative flex-shrink-0 user-avatar-dot">
               <i class="fa-solid fa-circle-user fs-4 ${isPaid ? 'text-primary' : 'text-secondary'}"></i>
@@ -726,7 +726,7 @@ const components = {
         </div>
         
         <!-- Categorized Nav Links -->
-        <div class="flex-grow-1 py-2 overflow-y-auto">
+        <div class="flex-grow-1 py-2 overflow-y-auto sidebar-scroll-content" id="sidebar-nav-container">
           <div class="sidebar-section-title px-4 mb-2">Core Tracker</div>
           <a href="#/dashboard" class="sidebar-link active"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
           <a href="#/coding-practice" class="sidebar-link"><i class="fa-solid fa-code"></i> <span>Coding Practice</span></a>
@@ -757,7 +757,7 @@ const components = {
         </div>
         
         <!-- Sidebar Bottom Actions -->
-        <div class="p-3 border-top border-secondary-subtle mt-auto">
+        <div class="p-3 border-top border-secondary-subtle mt-auto flex-shrink-0 sidebar-footer-box">
           <button id="logout-btn" class="btn btn-glass w-100 py-2 mb-2"><i class="fa-solid fa-right-from-bracket me-2 text-danger"></i> <span>Logout</span></button>
           <div class="sidebar-footer-links d-flex justify-content-center gap-2 text-center" style="font-size: 0.7rem; opacity: 0.6;">
             <a href="/about" target="_blank" class="text-muted text-decoration-none">About</a>
@@ -770,9 +770,9 @@ const components = {
       </div>
 
       <!-- Main Content Area -->
-      <div class="main-content d-flex flex-column flex-grow-1 overflow-hidden">
+      <div class="main-content d-flex flex-column flex-grow-1 overflow-hidden" style="height: 100vh;">
         <!-- Top Nav Header (Vercel Style) -->
-        <header class="d-flex align-items-center justify-content-between pb-3 border-bottom border-secondary border-opacity-25 mb-3">
+        <header class="d-flex align-items-center justify-content-between pb-3 border-bottom border-secondary border-opacity-25 mb-3 flex-shrink-0">
           <div class="d-flex align-items-center gap-2 overflow-hidden">
             <button class="btn btn-glass d-lg-none me-1" id="sidebar-toggle-btn"><i class="fa-solid fa-bars"></i></button>
             <div class="d-flex align-items-center gap-2 overflow-hidden">

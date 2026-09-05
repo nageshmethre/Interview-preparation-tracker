@@ -473,10 +473,10 @@
     const docKeys = Object.keys(LEGAL_DOCS);
 
     return `
-      <div class="google-legal-hub min-vh-100 pb-5" style="background: var(--bg-body, #f8fafd);">
-        <!-- Top Google-Style Header with 4-Color Accent Line -->
-        <div class="border-bottom border-secondary border-opacity-10 bg-white bg-opacity-80 sticky-top" style="backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 100;">
-          <div class="google-four-color-bar" style="height: 2px; background: #e2e8f0;"></div>
+      <div class="google-legal-hub d-flex flex-column" style="background: #18181b !important; height: 100vh; max-height: 100vh; overflow: hidden;">
+        <!-- Top Google-Style Header with Dark Grey Background & White Text -->
+        <div class="border-bottom border-secondary border-opacity-10 sticky-top flex-shrink-0" style="background: #1c1c20 !important; border-bottom: 1px solid #323238 !important; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 100;">
+          <div class="google-four-color-bar" style="height: 2px; background: #323238;"></div>
           <div class="container py-3">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
               <div class="d-flex align-items-center gap-3">
@@ -484,18 +484,18 @@
                   <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace" style="width: 32px; height: 32px; object-fit: contain;">
                   <span class="text-white fw-bold fs-6">PrepSpace</span>
                 </a>
-                <span class="text-muted fs-7">/</span>
-                <span class="text-secondary fs-7 fw-semibold">Legal & Compliance Hub</span>
+                <span class="text-secondary fs-7">/</span>
+                <span class="text-white fs-7 fw-semibold">Legal & Compliance Hub</span>
               </div>
 
               <!-- Search Bar: Search-First Experience -->
               <div class="google-search-pill-wrapper flex-grow-1" style="max-width: 460px;">
-                <i class="fa-solid fa-magnifying-glass google-search-pill-icon text-muted"></i>
-                <input type="text" id="legal-search-input" class="google-search-pill" placeholder="Search across policies, DPA, security, refund terms..." autocomplete="off">
+                <i class="fa-solid fa-magnifying-glass google-search-icon text-muted"></i>
+                <input type="text" id="legal-search-input" class="google-search-pill" placeholder="Search across policies, DPA, security, refund terms..." autocomplete="off" style="background: #222226 !important; border: 1px solid #323238 !important; color: #f4f4f5 !important; padding-left: 42px !important;">
               </div>
 
               <div class="d-flex align-items-center gap-2">
-                <button class="btn btn-sm btn-glass rounded-pill px-3" onclick="window.print()"><i class="fa-solid fa-print me-1"></i> Print</button>
+                <button class="btn btn-sm btn-glass rounded-pill px-3 text-white" style="background: #27272a; border: 1px solid #3f3f46; color: #f4f4f5;" onclick="window.print()"><i class="fa-solid fa-print me-1"></i> Print</button>
                 ${(typeof state !== 'undefined' && state && state.token)
                   ? `<a href="#/dashboard" class="btn btn-sm btn-premium rounded-2 px-3">Dashboard <i class="fa-solid fa-arrow-right ms-1"></i></a>`
                   : `<a href="#/login" class="btn btn-sm btn-premium rounded-2 px-3">Sign In <i class="fa-solid fa-arrow-right ms-1"></i></a>`}
@@ -511,20 +511,20 @@
           </div>
         </div>
 
-        <!-- Main Body: Two-Column Material Layout -->
-        <div class="container my-4">
-          <div class="row g-4">
-            <!-- Mobile Policy Selector (Dropdown Pill to prevent sticky overlap on small screens) -->
-            <div class="col-12 d-lg-none mb-2">
-              <div class="google-glass-card p-3 d-flex align-items-center justify-content-between gap-2">
+        <!-- Main Body: Two-Column Layout (Header & Navigator Fixed, Only Document Moves) -->
+        <div class="container my-3 flex-grow-1 overflow-hidden d-flex flex-column" style="min-height: 0;">
+          <div class="row g-3 flex-grow-1 overflow-hidden" style="min-height: 0;">
+            <!-- Mobile Policy Selector -->
+            <div class="col-12 d-lg-none mb-2 flex-shrink-0">
+              <div class="google-glass-card p-3 d-flex align-items-center justify-content-between gap-2" style="background: #222226; border: 1px solid #323238;">
                 <div class="d-flex align-items-center gap-2 flex-grow-1 min-w-0">
                   <i class="fa-solid fa-book-open text-primary fs-6 ms-1"></i>
                   <div class="flex-grow-1 min-w-0">
-                    <label for="mobile-policy-select" class="text-muted fs-8 fw-semibold text-uppercase d-block mb-1">Select Policy</label>
-                    <select id="mobile-policy-select" class="form-select form-select-sm border-0 bg-transparent fw-bold text-dark px-0 py-0" style="box-shadow: none; font-size: 0.92rem;" onchange="if(this.value) window.location.hash = this.value">
+                    <label for="mobile-policy-select" class="text-white-50 fs-8 fw-semibold text-uppercase d-block mb-1">Select Policy</label>
+                    <select id="mobile-policy-select" class="form-select form-select-sm border-0 bg-transparent fw-bold text-white px-0 py-0" style="box-shadow: none; font-size: 0.92rem; color: #f4f4f5 !important; background: #222226 !important;" onchange="if(this.value) window.location.hash = this.value">
                       ${docKeys.map(key => {
                         const doc = LEGAL_DOCS[key];
-                        return `<option value="#/${doc.slug}" ${key === activeSlug ? 'selected' : ''}>${doc.title} (${doc.category})</option>`;
+                        return `<option value="#/${doc.slug}" ${key === activeSlug ? 'selected' : ''} style="background: #222226; color: #f4f4f5;">${doc.title} (${doc.category})</option>`;
                       }).join('')}
                     </select>
                   </div>
@@ -533,19 +533,19 @@
               </div>
             </div>
 
-            <!-- Desktop Sidebar Navigation Navigator -->
-            <div class="col-lg-4 col-xl-3 d-none d-lg-block">
-              <div class="google-glass-card p-3 sticky-top" style="top: 140px; max-height: calc(100vh - 160px); overflow-y: auto;">
-                <div class="d-flex align-items-center justify-content-between mb-3 px-2">
-                  <span class="text-uppercase text-muted fs-8 fw-bold" style="letter-spacing: 0.8px;">Documentation</span>
+            <!-- Desktop Sidebar Navigation Navigator (Fixed) -->
+            <div class="col-lg-4 col-xl-3 d-none d-lg-flex flex-column h-100" style="min-height: 0;">
+              <div class="google-glass-card p-3 h-100 legal-doc-sidebar d-flex flex-column" style="background: #222226; border: 1px solid #323238;">
+                <div class="d-flex align-items-center justify-content-between mb-3 px-2 flex-shrink-0">
+                  <span class="text-uppercase text-white-50 fs-8 fw-bold" style="letter-spacing: 0.8px;">Documentation</span>
                   <span class="badge bg-primary bg-opacity-15 text-primary rounded-pill fs-8">${docKeys.length} Policies</span>
                 </div>
-                <div class="d-flex flex-column gap-1" id="legal-doc-nav-list">
+                <div class="d-flex flex-column gap-1 flex-grow-1 overflow-y-auto" id="legal-doc-nav-list" style="scrollbar-width: thin; scrollbar-color: #3f3f46 #1c1c20;">
                   ${docKeys.map(key => {
                     const doc = LEGAL_DOCS[key];
                     const isActive = key === activeSlug;
                     return `
-                      <a href="#/${doc.slug}" class="d-flex align-items-center justify-content-between p-2.5 rounded-3 text-decoration-none legal-nav-item ${isActive ? 'bg-primary bg-opacity-20 text-primary fw-bold border border-primary border-opacity-30' : 'text-secondary hover-bg-light'}" data-slug="${doc.slug}" data-category="${doc.category}" data-title="${doc.title}">
+                      <a href="#/${doc.slug}" class="d-flex align-items-center justify-content-between p-2.5 rounded-3 text-decoration-none legal-nav-item ${isActive ? 'bg-primary bg-opacity-20 text-primary fw-bold border border-primary border-opacity-30 active-nav-item' : 'text-secondary hover-bg-light'}" data-slug="${doc.slug}" data-category="${doc.category}" data-title="${doc.title}">
                         <div class="d-flex align-items-center gap-2 text-truncate">
                           <i class="fa-solid ${doc.icon} fs-7 ${isActive ? 'text-primary' : 'text-muted'}" style="width: 18px;"></i>
                           <span class="fs-7 text-truncate">${doc.title}</span>
@@ -558,23 +558,23 @@
               </div>
             </div>
 
-            <!-- Document Content Viewer -->
-            <div class="col-lg-8 col-xl-9">
-              <div class="google-glass-card p-4 p-md-5 position-relative" id="legal-content-card">
+            <!-- Document Content Viewer: Only this page moves with its own grey slider -->
+            <div class="col-lg-8 col-xl-9 h-100 d-flex flex-column" style="min-height: 0;">
+              <div class="google-glass-card p-4 p-md-5 position-relative legal-doc-viewer flex-grow-1 overflow-y-auto" id="legal-content-card" style="background: #222226; border: 1px solid #323238;">
                 <!-- Document Header -->
                 <div class="border-bottom border-secondary border-opacity-10 pb-4 mb-4">
                   <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
                     <span class="badge bg-${activeDoc.badgeColor === 'green' ? 'success' : activeDoc.badgeColor === 'yellow' ? 'warning' : activeDoc.badgeColor === 'red' ? 'danger' : 'primary'} bg-opacity-15 text-${activeDoc.badgeColor === 'green' ? 'success' : activeDoc.badgeColor === 'yellow' ? 'warning' : activeDoc.badgeColor === 'red' ? 'danger' : 'primary'} px-3 py-1 rounded-pill fs-8">
                       <i class="fa-solid ${activeDoc.icon} me-1"></i> ${activeDoc.category}
                     </span>
-                    <span class="text-muted fs-8 font-monospace"><i class="fa-solid fa-clock-rotate-left me-1"></i> Last Revised: ${activeDoc.lastUpdated}</span>
+                    <span class="text-white-50 fs-8 font-monospace"><i class="fa-solid fa-clock-rotate-left me-1"></i> Last Revised: ${activeDoc.lastUpdated}</span>
                   </div>
-                  <h1 class="text-dark fw-bold display-6 mb-2" id="legal-doc-title">${activeDoc.title}</h1>
-                  <p class="text-secondary fs-6 mb-0" id="legal-doc-summary">${activeDoc.summary}</p>
+                  <h1 class="text-white fw-bold display-6 mb-2" id="legal-doc-title">${activeDoc.title}</h1>
+                  <p class="text-white-50 fs-6 mb-0" id="legal-doc-summary">${activeDoc.summary}</p>
                 </div>
 
                 <!-- Document Body Content -->
-                <div class="legal-doc-content fs-6 text-secondary lh-lg" id="legal-doc-body" style="color: #cbd5e1;">
+                <div class="legal-doc-content fs-6 lh-lg" id="legal-doc-body">
                   ${activeDoc.content}
                 </div>
 
@@ -590,10 +590,10 @@
                     <span class="text-muted fs-8">PrepSpace Trust & Legal Verification Division &bull; stream-in.app</span>
                   </div>
                   <div class="d-flex gap-2">
-                    <button class="btn btn-sm btn-glass rounded-pill px-3 fs-8" onclick="navigator.clipboard.writeText(window.location.href); showToast('Document link copied to clipboard!', 'success');">
+                    <button class="btn btn-sm btn-glass rounded-pill px-3 fs-8 text-white" style="background: #27272a; border: 1px solid #3f3f46;" onclick="navigator.clipboard.writeText(window.location.href); showToast('Document link copied to clipboard!', 'success');">
                       <i class="fa-solid fa-share-nodes me-1"></i> Share Policy
                     </button>
-                    <a href="mailto:legal@stream-in.app" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fs-8 text-white">
+                    <a href="mailto:legal@stream-in.app" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fs-8 text-white" style="border-color: #3f3f46;">
                       <i class="fa-solid fa-envelope me-1"></i> Contact Legal
                     </a>
                   </div>

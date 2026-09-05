@@ -341,6 +341,7 @@ input:-webkit-autofill:focus,
   min-width: 250px !important;
   max-width: 250px !important;
   height: 100vh !important;
+  max-height: 100vh !important;
   position: sticky !important;
   top: 0 !important;
   left: 0 !important;
@@ -353,9 +354,49 @@ input:-webkit-autofill:focus,
   border-bottom: none !important;
   border-left: none !important;
   z-index: 100 !important;
-  overflow-y: auto !important;
+  overflow: hidden !important;
+  overflow-y: hidden !important;
   overflow-x: hidden !important;
   transition: width 0.2s cubic-bezier(0.16, 1, 0.3, 1), min-width 0.2s cubic-bezier(0.16, 1, 0.3, 1), max-width 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Fixed Elements inside Sidebar */
+.sidebar .brand-header-box,
+.sidebar #sidebar-user-card,
+.sidebar .sidebar-footer-box,
+.sidebar > div:last-child {
+  flex-shrink: 0 !important;
+}
+
+/* Only the Nav Links list scrolls inside the sidebar, with grey slider */
+.sidebar > .flex-grow-1,
+.sidebar-scroll-content {
+  flex-grow: 1 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scrollbar-width: thin;
+  scrollbar-color: #3f3f46 #1c1c20;
+}
+
+.sidebar > .flex-grow-1::-webkit-scrollbar,
+.sidebar-scroll-content::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebar > .flex-grow-1::-webkit-scrollbar-track,
+.sidebar-scroll-content::-webkit-scrollbar-track {
+  background: #1c1c20;
+}
+
+.sidebar > .flex-grow-1::-webkit-scrollbar-thumb,
+.sidebar-scroll-content::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 4px;
+}
+
+.sidebar > .flex-grow-1::-webkit-scrollbar-thumb:hover,
+.sidebar-scroll-content::-webkit-scrollbar-thumb:hover {
+  background: #52525b;
 }
 
 /* Collapsed Sidebar: Sleek Icon-Only Mode */
@@ -1959,3 +2000,134 @@ input:-webkit-autofill {
   border-color: #323238 !important;
   background: #1c1c20 !important;
 }
+
+/* Fixed Layout Containers & Isolated Scrolling */
+#app-container {
+  height: 100vh !important;
+  max-height: 100vh !important;
+  overflow: hidden !important;
+}
+
+#page-mount {
+  overflow-y: auto !important;
+  scrollbar-width: thin;
+  scrollbar-color: #3f3f46 #1c1c20;
+}
+
+#page-mount::-webkit-scrollbar {
+  width: 6px;
+}
+
+#page-mount::-webkit-scrollbar-track {
+  background: #1c1c20;
+}
+
+#page-mount::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 4px;
+}
+
+#page-mount::-webkit-scrollbar-thumb:hover {
+  background: #52525b;
+}
+
+/* Documentation & Legal Hub Dark Theme + Fixed Slider */
+.google-legal-hub {
+  background: #18181b !important;
+  color: #f4f4f5 !important;
+}
+
+.legal-doc-viewer {
+  background: #222226 !important;
+  border: 1px solid #323238 !important;
+  border-radius: 12px;
+  overflow-y: auto !important;
+  scrollbar-width: thin;
+  scrollbar-color: #3f3f46 #1c1c20;
+}
+
+.legal-doc-viewer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.legal-doc-viewer::-webkit-scrollbar-track {
+  background: #1c1c20;
+  border-radius: 4px;
+}
+
+.legal-doc-viewer::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 4px;
+}
+
+.legal-doc-viewer::-webkit-scrollbar-thumb:hover {
+  background: #52525b;
+}
+
+.legal-doc-sidebar {
+  background: #222226 !important;
+  border: 1px solid #323238 !important;
+  border-radius: 12px;
+  overflow-y: auto !important;
+  scrollbar-width: thin;
+  scrollbar-color: #3f3f46 #1c1c20;
+}
+
+.legal-doc-sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.legal-doc-sidebar::-webkit-scrollbar-track {
+  background: #1c1c20;
+}
+
+.legal-doc-sidebar::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 4px;
+}
+
+.legal-doc-content {
+  color: #d4d4d8 !important;
+}
+
+.legal-doc-content h4 {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  margin-top: 1.75rem !important;
+  margin-bottom: 0.75rem !important;
+  font-size: 1.15rem !important;
+}
+
+.legal-doc-content p, 
+.legal-doc-content li {
+  color: #d4d4d8 !important;
+  line-height: 1.7 !important;
+}
+
+.legal-doc-content strong {
+  color: #ffffff !important;
+}
+
+.legal-doc-content a {
+  color: #f59e0b !important;
+  text-decoration: underline;
+}
+
+.legal-nav-item {
+  color: #a1a1aa !important;
+  transition: all 0.15s ease;
+}
+
+.legal-nav-item:hover {
+  background: #27272a !important;
+  color: #ffffff !important;
+}
+
+.legal-nav-item.active-nav-item,
+.legal-nav-item.active {
+  background: rgba(245, 158, 11, 0.12) !important;
+  border: 1px solid rgba(245, 158, 11, 0.35) !important;
+  color: #f59e0b !important;
+  font-weight: 600;
+}
+
