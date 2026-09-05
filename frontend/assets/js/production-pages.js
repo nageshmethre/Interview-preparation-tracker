@@ -114,7 +114,7 @@
         <h4>2. Categories of Cookies We Use</h4>
         <div class="table-responsive my-3">
           <table class="table table-bordered border-secondary border-opacity-25 fs-8 text-white">
-            <thead class="bg-black bg-opacity-40">
+            <thead class="bg-white bg-opacity-80">
               <tr>
                 <th>Category</th>
                 <th>Purpose</th>
@@ -473,9 +473,9 @@
     const docKeys = Object.keys(LEGAL_DOCS);
 
     return `
-      <div class="google-legal-hub min-vh-100 pb-5" style="background: var(--bg-body, #0a0d14);">
+      <div class="google-legal-hub min-vh-100 pb-5" style="background: var(--bg-body, #f8fafd);">
         <!-- Top Google-Style Header with 4-Color Accent Line -->
-        <div class="border-bottom border-secondary border-opacity-15 bg-black bg-opacity-40 sticky-top" style="backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 100;">
+        <div class="border-bottom border-secondary border-opacity-15 bg-white bg-opacity-80 sticky-top" style="backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 100;">
           <div class="google-four-color-bar" style="height: 3px; background: linear-gradient(90deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);"></div>
           <div class="container py-3">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
@@ -513,8 +513,27 @@
         <!-- Main Body: Two-Column Material Layout -->
         <div class="container my-4">
           <div class="row g-4">
-            <!-- Sidebar Navigation Navigator -->
-            <div class="col-lg-4 col-xl-3">
+            <!-- Mobile Policy Selector (Dropdown Pill to prevent sticky overlap on small screens) -->
+            <div class="col-12 d-lg-none mb-2">
+              <div class="google-glass-card p-3 d-flex align-items-center justify-content-between gap-2">
+                <div class="d-flex align-items-center gap-2 flex-grow-1 min-w-0">
+                  <i class="fa-solid fa-book-open text-primary fs-6 ms-1"></i>
+                  <div class="flex-grow-1 min-w-0">
+                    <label for="mobile-policy-select" class="text-muted fs-8 fw-semibold text-uppercase d-block mb-1">Select Policy</label>
+                    <select id="mobile-policy-select" class="form-select form-select-sm border-0 bg-transparent fw-bold text-dark px-0 py-0" style="box-shadow: none; font-size: 0.92rem;" onchange="if(this.value) window.location.hash = this.value">
+                      ${docKeys.map(key => {
+                        const doc = LEGAL_DOCS[key];
+                        return `<option value="#/${doc.slug}" ${key === activeSlug ? 'selected' : ''}>${doc.title} (${doc.category})</option>`;
+                      }).join('')}
+                    </select>
+                  </div>
+                </div>
+                <span class="badge bg-primary bg-opacity-15 text-primary rounded-pill fs-8 flex-shrink-0">${docKeys.length} Docs</span>
+              </div>
+            </div>
+
+            <!-- Desktop Sidebar Navigation Navigator -->
+            <div class="col-lg-4 col-xl-3 d-none d-lg-block">
               <div class="google-glass-card p-3 sticky-top" style="top: 140px; max-height: calc(100vh - 160px); overflow-y: auto;">
                 <div class="d-flex align-items-center justify-content-between mb-3 px-2">
                   <span class="text-uppercase text-muted fs-8 fw-bold" style="letter-spacing: 0.8px;">Documentation</span>
@@ -525,7 +544,7 @@
                     const doc = LEGAL_DOCS[key];
                     const isActive = key === activeSlug;
                     return `
-                      <a href="#/${doc.slug}" class="d-flex align-items-center justify-content-between p-2.5 rounded-3 text-decoration-none legal-nav-item ${isActive ? 'bg-primary bg-opacity-20 text-white fw-bold border border-primary border-opacity-30' : 'text-secondary hover-bg-dark'}" data-slug="${doc.slug}" data-category="${doc.category}" data-title="${doc.title}">
+                      <a href="#/${doc.slug}" class="d-flex align-items-center justify-content-between p-2.5 rounded-3 text-decoration-none legal-nav-item ${isActive ? 'bg-primary bg-opacity-20 text-primary fw-bold border border-primary border-opacity-30' : 'text-secondary hover-bg-light'}" data-slug="${doc.slug}" data-category="${doc.category}" data-title="${doc.title}">
                         <div class="d-flex align-items-center gap-2 text-truncate">
                           <i class="fa-solid ${doc.icon} fs-7 ${isActive ? 'text-primary' : 'text-muted'}" style="width: 18px;"></i>
                           <span class="fs-7 text-truncate">${doc.title}</span>
@@ -607,7 +626,7 @@
     return `
       <div class="modal fade" id="cookie-preferences-modal" tabindex="-1" aria-labelledby="cookieModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content google-glass-card border-secondary border-opacity-25" style="background: rgba(14, 18, 27, 0.95); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
+          <div class="modal-content google-glass-card border-secondary border-opacity-25" style="background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
             <div class="modal-header border-bottom border-secondary border-opacity-15 px-4 pt-4">
               <div class="d-flex align-items-center gap-3">
                 <div class="p-2 rounded-circle bg-primary bg-opacity-15 text-primary">
@@ -624,7 +643,7 @@
               <p class="mb-4">We respect your privacy preferences. While strictly necessary cookies are required for authentication, CSRF security, and compiler sandbox access, you can toggle optional preferences below.</p>
 
               <!-- Strictly Necessary -->
-              <div class="p-3 rounded-4 bg-black bg-opacity-30 border border-secondary border-opacity-15 mb-3">
+              <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15 mb-3">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                   <div class="d-flex align-items-center gap-2">
                     <span class="text-white fw-bold fs-7">1. Strictly Necessary & Security Tokens</span>
@@ -636,7 +655,7 @@
               </div>
 
               <!-- Functional -->
-              <div class="p-3 rounded-4 bg-black bg-opacity-30 border border-secondary border-opacity-15 mb-3">
+              <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15 mb-3">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                   <span class="text-white fw-bold fs-7">2. Functional & IDE Preferences</span>
                   <div class="form-check form-switch">
@@ -647,7 +666,7 @@
               </div>
 
               <!-- Performance & Analytics -->
-              <div class="p-3 rounded-4 bg-black bg-opacity-30 border border-secondary border-opacity-15 mb-3">
+              <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15 mb-3">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                   <span class="text-white fw-bold fs-7">3. Performance & System Analytics</span>
                   <div class="form-check form-switch">
@@ -658,7 +677,7 @@
               </div>
 
               <!-- Marketing & Referrals -->
-              <div class="p-3 rounded-4 bg-black bg-opacity-30 border border-secondary border-opacity-15">
+              <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                   <span class="text-white fw-bold fs-7">4. Referral Tracking & Attribution</span>
                   <div class="form-check form-switch">
@@ -717,9 +736,18 @@
 
           <!-- Right: Action Buttons Inline -->
           <div class="cookie-consent-actions">
-            <button class="btn btn-sm btn-premium rounded-pill px-3 py-1.5 fs-8 fw-semibold" onclick="acceptAllCookies()">Accept All</button>
-            <button class="btn btn-sm btn-glass rounded-pill px-3 py-1.5 fs-8 text-white" onclick="acceptEssentialCookies()">Essential Only</button>
-            <button class="btn btn-sm btn-link text-muted fs-8 text-decoration-none px-2" onclick="openCookiePreferencesModal()">Preferences</button>
+            <button class="btn btn-sm btn-premium rounded-pill px-3 py-1.5 fs-8 fw-semibold d-inline-flex align-items-center gap-1.5" onclick="acceptAllCookies()">
+              <i class="fa-solid fa-check fs-9"></i>
+              <span>Accept All</span>
+            </button>
+            <button class="btn btn-sm btn-glass rounded-pill px-3 py-1.5 fs-8 d-inline-flex align-items-center gap-1.5 text-dark" onclick="acceptEssentialCookies()">
+              <i class="fa-solid fa-shield-halved fs-9"></i>
+              <span>Essential Only</span>
+            </button>
+            <button class="btn btn-sm btn-link text-muted fs-8 text-decoration-none px-2 d-inline-flex align-items-center gap-1.5" onclick="openCookiePreferencesModal()">
+              <i class="fa-solid fa-sliders fs-9"></i>
+              <span>Preferences</span>
+            </button>
           </div>
         </div>
       </div>
@@ -747,7 +775,7 @@
   // =========================================================================
   components.onboardingTour = function() {
     return `
-      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #0a0d14);">
+      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #f8fafd);">
         <div class="container" style="max-width: 820px;">
           <div class="google-glass-card p-4 p-md-5" style="border-radius: 28px;">
             <!-- Four-Color Google Accent Line -->
@@ -782,7 +810,7 @@
                     { id: 'campus', icon: 'fa-graduation-cap', title: 'Campus / Junior Grad', desc: 'Foundation DSA, Aptitude, Core CS & Mock Rounds' }
                   ].map((role, idx) => `
                     <div class="col-md-6">
-                      <div class="p-3 rounded-4 bg-black bg-opacity-30 border border-secondary border-opacity-15 h-100 cursor-pointer role-card ${idx === 0 ? 'border-primary' : ''}" onclick="selectOnboardingRole('${role.id}', this)">
+                      <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15 h-100 cursor-pointer role-card ${idx === 0 ? 'border-primary' : ''}" onclick="selectOnboardingRole('${role.id}', this)">
                         <div class="d-flex align-items-center gap-3">
                           <div class="p-2.5 rounded-3 bg-primary bg-opacity-15 text-primary">
                             <i class="fa-solid ${role.icon} fs-5"></i>
@@ -809,7 +837,7 @@
                     { id: 'product', title: 'Established Product Giants', desc: 'Atlassian, Adobe, Salesforce, Oracle, Cisco' }
                   ].map((tier, idx) => `
                     <div class="col-md-6">
-                      <div class="p-3 rounded-4 bg-black bg-opacity-30 border border-secondary border-opacity-15 h-100 cursor-pointer tier-card ${idx === 0 ? 'border-primary' : ''}" onclick="selectOnboardingTier('${tier.id}', this)">
+                      <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15 h-100 cursor-pointer tier-card ${idx === 0 ? 'border-primary' : ''}" onclick="selectOnboardingTier('${tier.id}', this)">
                         <h6 class="text-white fw-bold mb-1 fs-7">${tier.title}</h6>
                         <p class="text-muted fs-8 mb-0">${tier.desc}</p>
                       </div>
@@ -829,7 +857,7 @@
                     { min: 'weekend', title: 'Weekend Marathon', desc: 'Focused 8-hour weekend problem-solving blocks' }
                   ].map((pace, idx) => `
                     <div class="col-md-6">
-                      <div class="p-3 rounded-4 bg-black bg-opacity-30 border border-secondary border-opacity-15 h-100 cursor-pointer pace-card ${idx === 1 ? 'border-primary' : ''}" onclick="selectOnboardingPace('${pace.min}', this)">
+                      <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15 h-100 cursor-pointer pace-card ${idx === 1 ? 'border-primary' : ''}" onclick="selectOnboardingPace('${pace.min}', this)">
                         <h6 class="text-white fw-bold mb-1 fs-7">${pace.title}</h6>
                         <p class="text-muted fs-8 mb-0">${pace.desc}</p>
                       </div>
@@ -847,7 +875,7 @@
                   <h4 class="text-white fw-bold mb-2">You are all set for interview mastery!</h4>
                   <p class="text-muted fs-7 mb-4" style="max-width: 480px; margin: 0 auto;">Your personalized study tracks, DSA Matrix, and AI Mock Interview Coach have been configured according to your goals.</p>
 
-                  <div class="p-3 rounded-4 bg-black bg-opacity-30 border border-secondary border-opacity-15 text-start mb-4" style="max-width: 480px; margin: 0 auto;">
+                  <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15 text-start mb-4" style="max-width: 480px; margin: 0 auto;">
                     <div class="d-flex align-items-center justify-content-between mb-2">
                       <span class="text-muted fs-8">AI Copilot Real-Time Hints</span>
                       <span class="text-emerald fs-8 fw-bold">Active</span>
@@ -963,7 +991,7 @@
   components.paymentSuccess = function(orderId) {
     if (!orderId) orderId = 'CF_ORDER_' + Math.floor(100000 + Math.random() * 900000);
     return `
-      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #0a0d14);">
+      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #f8fafd);">
         <div class="container" style="max-width: 580px;">
           <div class="google-glass-card p-4 p-md-5 text-center position-relative" style="border-radius: 28px;">
             <div class="google-four-color-bar mb-4 rounded-pill" style="height: 4px; background: linear-gradient(90deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);"></div>
@@ -976,7 +1004,7 @@
             <h2 class="text-white fw-bold mb-2">Welcome to PrepSpace Pro!</h2>
             <p class="text-muted fs-7 mb-4">Your transaction was verified successfully. All Pro features, AI code evaluations, and full question archives have been unlocked for your account.</p>
 
-            <div class="p-3 rounded-4 bg-black bg-opacity-30 border border-secondary border-opacity-15 text-start mb-4 fs-7">
+            <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15 text-start mb-4 fs-7">
               <div class="d-flex justify-content-between py-1 border-bottom border-secondary border-opacity-10">
                 <span class="text-muted">Order Reference:</span>
                 <span class="text-white font-monospace fw-bold">${orderId}</span>
@@ -1008,7 +1036,7 @@
   components.paymentFailed = function(reason) {
     if (!reason) reason = 'Payment authorization was declined by your issuing bank or UPI application.';
     return `
-      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #0a0d14);">
+      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #f8fafd);">
         <div class="container" style="max-width: 580px;">
           <div class="google-glass-card p-4 p-md-5 text-center position-relative" style="border-radius: 28px;">
             <div class="google-four-color-bar mb-4 rounded-pill" style="height: 4px; background: linear-gradient(90deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);"></div>
@@ -1039,7 +1067,7 @@
   components.paymentPending = function(orderId) {
     if (!orderId) orderId = 'CF_PENDING_SYNC';
     return `
-      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #0a0d14);">
+      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #f8fafd);">
         <div class="container" style="max-width: 580px;">
           <div class="google-glass-card p-4 p-md-5 text-center position-relative" style="border-radius: 28px;">
             <div class="google-four-color-bar mb-4 rounded-pill" style="height: 4px; background: linear-gradient(90deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);"></div>
@@ -1052,7 +1080,7 @@
             <h2 class="text-white fw-bold mb-2">Confirming Payment...</h2>
             <p class="text-muted fs-7 mb-4">We are awaiting final webhook confirmation from Cashfree and your issuing bank. UPI settlements typically settle within 30-60 seconds.</p>
 
-            <div class="p-3 rounded-4 bg-black bg-opacity-30 border border-secondary border-opacity-15 text-start mb-4 fs-7">
+            <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15 text-start mb-4 fs-7">
               <div class="d-flex justify-content-between py-1">
                 <span class="text-muted">Order Tracking ID:</span>
                 <span class="text-white font-monospace fw-bold">${orderId}</span>
@@ -1081,7 +1109,7 @@
   components.emailVerification = function(email) {
     if (!email) email = 'user@example.com';
     return `
-      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #0a0d14);">
+      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #f8fafd);">
         <div class="container" style="max-width: 520px;">
           <div class="google-glass-card p-4 p-md-5 text-center position-relative" style="border-radius: 28px;">
             <div class="google-four-color-bar mb-4 rounded-pill" style="height: 4px; background: linear-gradient(90deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);"></div>
@@ -1092,7 +1120,7 @@
 
             <h3 class="text-white fw-bold mb-2">Check Your Email</h3>
             <p class="text-muted fs-7 mb-3">We have dispatched a verification link to your inbox:</p>
-            <div class="p-2.5 rounded-3 bg-black bg-opacity-40 border border-secondary border-opacity-20 text-white font-monospace fs-7 mb-4">
+            <div class="p-2.5 rounded-3 bg-white bg-opacity-80 border border-secondary border-opacity-20 text-white font-monospace fs-7 mb-4">
               ${email}
             </div>
 
@@ -1112,7 +1140,7 @@
 
   components.forgotPassword = function() {
     return `
-      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #0a0d14);">
+      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #f8fafd);">
         <div class="container" style="max-width: 480px;">
           <div class="google-glass-card p-4 p-md-5 text-center position-relative" style="border-radius: 28px;">
             <div class="google-four-color-bar mb-4 rounded-pill" style="height: 4px; background: linear-gradient(90deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);"></div>
@@ -1127,7 +1155,7 @@
             <form id="forgot-password-form" onsubmit="event.preventDefault(); showToast('Password reset link sent to ' + document.getElementById('forgot-email').value, 'success'); setTimeout(() => window.location.hash = '#/login', 1500);">
               <div class="mb-3 text-start">
                 <label class="form-label text-muted fs-8 fw-bold">REGISTERED EMAIL ADDRESS</label>
-                <input type="email" id="forgot-email" class="form-control bg-dark border-secondary border-opacity-25 text-white py-2.5 rounded-3" placeholder="name@domain.com" required autocomplete="email">
+                <input type="email" id="forgot-email" class="form-control bg-white border-secondary border-opacity-25 text-dark py-2.5 rounded-3" placeholder="name@domain.com" required autocomplete="email">
               </div>
               <button type="submit" class="btn btn-premium w-100 rounded-pill py-2.5 fw-bold mb-3">Send Recovery Link</button>
               <a href="#/login" class="text-secondary text-decoration-none fs-8"><i class="fa-solid fa-arrow-left me-1"></i> Back to sign in</a>
@@ -1140,7 +1168,7 @@
 
   components.resetPassword = function() {
     return `
-      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #0a0d14);">
+      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #f8fafd);">
         <div class="container" style="max-width: 480px;">
           <div class="google-glass-card p-4 p-md-5 text-center position-relative" style="border-radius: 28px;">
             <div class="google-four-color-bar mb-4 rounded-pill" style="height: 4px; background: linear-gradient(90deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);"></div>
@@ -1155,11 +1183,11 @@
             <form id="reset-password-form" onsubmit="event.preventDefault(); showToast('Password updated successfully! Redirecting to login...', 'success'); setTimeout(() => window.location.hash = '#/login', 1200);">
               <div class="mb-3 text-start">
                 <label class="form-label text-muted fs-8 fw-bold">NEW PASSWORD</label>
-                <input type="password" id="reset-new-pass" class="form-control bg-dark border-secondary border-opacity-25 text-white py-2.5 rounded-3" placeholder="••••••••" required minlength="8">
+                <input type="password" id="reset-new-pass" class="form-control bg-white border-secondary border-opacity-25 text-dark py-2.5 rounded-3" placeholder="••••••••" required minlength="8">
               </div>
               <div class="mb-4 text-start">
                 <label class="form-label text-muted fs-8 fw-bold">CONFIRM NEW PASSWORD</label>
-                <input type="password" id="reset-confirm-pass" class="form-control bg-dark border-secondary border-opacity-25 text-white py-2.5 rounded-3" placeholder="••••••••" required minlength="8">
+                <input type="password" id="reset-confirm-pass" class="form-control bg-white border-secondary border-opacity-25 text-dark py-2.5 rounded-3" placeholder="••••••••" required minlength="8">
               </div>
               <button type="submit" class="btn btn-premium w-100 rounded-pill py-2.5 fw-bold mb-3">Update Password & Sign In</button>
             </form>
@@ -1191,9 +1219,9 @@
     ];
 
     return `
-      <div class="min-vh-100 pb-5" style="background: var(--bg-body, #0a0d14);">
+      <div class="min-vh-100 pb-5" style="background: var(--bg-body, #f8fafd);">
         <!-- Top Google-Style Help Header -->
-        <div class="border-bottom border-secondary border-opacity-15 bg-black bg-opacity-40 py-5">
+        <div class="border-bottom border-secondary border-opacity-15 bg-white bg-opacity-80 py-5">
           <div class="container text-center" style="max-width: 760px;">
             <div class="google-dots d-inline-flex gap-1 mb-2">
               <span style="width: 10px; height: 10px; border-radius: 50%; background: #4285F4;"></span>
@@ -1267,15 +1295,15 @@
                 <form onsubmit="event.preventDefault(); showToast('Support ticket #PS-' + Math.floor(1000 + Math.random() * 9000) + ' created! We will reply via email.', 'success'); this.reset();">
                   <div class="mb-3">
                     <label class="form-label text-muted fs-8 fw-bold">YOUR NAME</label>
-                    <input type="text" class="form-control bg-dark border-secondary border-opacity-25 text-white rounded-3 fs-7" placeholder="Nagesh" required>
+                    <input type="text" class="form-control bg-white border-secondary border-opacity-25 text-dark rounded-3 fs-7" placeholder="Nagesh" required>
                   </div>
                   <div class="mb-3">
                     <label class="form-label text-muted fs-8 fw-bold">EMAIL ADDRESS</label>
-                    <input type="email" class="form-control bg-dark border-secondary border-opacity-25 text-white rounded-3 fs-7" placeholder="name@domain.com" required>
+                    <input type="email" class="form-control bg-white border-secondary border-opacity-25 text-dark rounded-3 fs-7" placeholder="name@domain.com" required>
                   </div>
                   <div class="mb-3">
                     <label class="form-label text-muted fs-8 fw-bold">TOPIC</label>
-                    <select class="form-select bg-dark border-secondary border-opacity-25 text-white rounded-3 fs-7">
+                    <select class="form-select bg-white border-secondary border-opacity-25 text-dark rounded-3 fs-7">
                       <option>Billing & Payment Query</option>
                       <option>Technical Bug in Compiler</option>
                       <option>AI Mock Interview Feedback</option>
@@ -1285,7 +1313,7 @@
                   </div>
                   <div class="mb-3">
                     <label class="form-label text-muted fs-8 fw-bold">HOW CAN WE HELP?</label>
-                    <textarea class="form-control bg-dark border-secondary border-opacity-25 text-white rounded-3 fs-7" rows="3" placeholder="Describe what occurred..." required></textarea>
+                    <textarea class="form-control bg-white border-secondary border-opacity-25 text-dark rounded-3 fs-7" rows="3" placeholder="Describe what occurred..." required></textarea>
                   </div>
                   <button type="submit" class="btn btn-premium w-100 rounded-pill py-2.5 fw-bold">Submit Priority Ticket</button>
                 </form>
@@ -1314,7 +1342,7 @@
   // =========================================================================
   components.error404 = function() {
     return `
-      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #0a0d14);">
+      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #f8fafd);">
         <div class="container text-center" style="max-width: 580px;">
           <div class="google-glass-card p-4 p-md-5 position-relative" style="border-radius: 28px;">
             <div class="google-dots d-inline-flex gap-2 mb-3">
@@ -1345,7 +1373,7 @@
 
   components.error403 = function() {
     return `
-      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #0a0d14);">
+      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #f8fafd);">
         <div class="container text-center" style="max-width: 580px;">
           <div class="google-glass-card p-4 p-md-5 position-relative" style="border-radius: 28px;">
             <div class="google-empty-icon mb-3" style="background: rgba(234, 67, 53, 0.15); width: 68px; height: 68px;">
@@ -1369,7 +1397,7 @@
   components.error500 = function(incidentId) {
     if (!incidentId) incidentId = 'ERR_PS_' + Date.now().toString(36).toUpperCase();
     return `
-      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #0a0d14);">
+      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #f8fafd);">
         <div class="container text-center" style="max-width: 580px;">
           <div class="google-glass-card p-4 p-md-5 position-relative" style="border-radius: 28px;">
             <div class="google-empty-icon mb-3" style="background: rgba(234, 67, 53, 0.15); width: 68px; height: 68px;">
@@ -1380,7 +1408,7 @@
             <h4 class="text-white fw-bold mb-2">Server Error / System Hiccup</h4>
             <p class="text-muted fs-7 mb-3">Our distributed microservices experienced an unexpected exception. Our reliability engineering team has been automatically alerted.</p>
 
-            <div class="p-2 rounded bg-black bg-opacity-30 border border-secondary border-opacity-15 font-monospace text-muted fs-8 mb-4">
+            <div class="p-2 rounded bg-light bg-opacity-60 border border-secondary border-opacity-15 font-monospace text-muted fs-8 mb-4">
               Incident Trace ID: ${incidentId}
             </div>
 
@@ -1396,7 +1424,7 @@
 
   components.maintenancePage = function() {
     return `
-      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #0a0d14);">
+      <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #f8fafd);">
         <div class="container text-center" style="max-width: 580px;">
           <div class="google-glass-card p-4 p-md-5 position-relative" style="border-radius: 28px;">
             <div class="google-four-color-bar mb-4 rounded-pill" style="height: 4px; background: linear-gradient(90deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);"></div>
@@ -1409,7 +1437,7 @@
             <h2 class="text-white fw-bold mb-2">Upgrading AI Clusters</h2>
             <p class="text-muted fs-7 mb-4">PrepSpace is currently undergoing scheduled infrastructure upgrades to deploy enhanced AI mock evaluation models and speed up code compilation.</p>
 
-            <div class="p-3 rounded-4 bg-black bg-opacity-30 border border-secondary border-opacity-15 text-start mb-4 fs-7">
+            <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15 text-start mb-4 fs-7">
               <div class="d-flex justify-content-between mb-1">
                 <span class="text-muted">Expected Completion:</span>
                 <span class="text-white fw-bold">~25 Minutes</span>
@@ -1572,7 +1600,7 @@
     return `
       <div class="modal fade" id="cancel-subscription-modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content google-glass-card border-secondary border-opacity-25" style="background: rgba(14, 18, 27, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
+          <div class="modal-content google-glass-card border-secondary border-opacity-25" style="background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
             <div class="modal-header border-bottom border-secondary border-opacity-15 px-4 pt-4">
               <div class="d-flex align-items-center gap-3">
                 <div class="p-2 rounded-circle bg-danger bg-opacity-15 text-danger">
@@ -1586,7 +1614,7 @@
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4 text-secondary fs-7">
-              <div class="p-3 rounded-3 bg-black bg-opacity-30 border border-secondary border-opacity-15 mb-3">
+              <div class="p-3 rounded-3 bg-light bg-opacity-60 border border-secondary border-opacity-15 mb-3">
                 <span class="text-white fw-bold fs-7 d-block mb-1">What you will lose upon term end:</span>
                 <ul class="text-muted fs-8 mb-0 ps-3">
                   <li>Unlimited AI Mock Interview speech evaluations & feedback</li>
@@ -1597,7 +1625,7 @@
 
               <div class="mb-3">
                 <label class="form-label text-muted fs-8 fw-bold">REASON FOR CANCELLATION</label>
-                <select class="form-select bg-dark border-secondary border-opacity-25 text-white rounded-3 fs-7" id="cancel-reason-select">
+                <select class="form-select bg-white border-secondary border-opacity-25 text-dark rounded-3 fs-7" id="cancel-reason-select">
                   <option>🎉 I landed my target software engineering role!</option>
                   <option>PrepSpace is currently outside my preparation budget</option>
                   <option>Taking a temporary break from interview prep</option>
@@ -1655,7 +1683,7 @@
     return `
       <div class="modal fade" id="session-expired-modal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content google-glass-card border-secondary border-opacity-25" style="background: rgba(14, 18, 27, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
+          <div class="modal-content google-glass-card border-secondary border-opacity-25" style="background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
             <div class="modal-header border-bottom border-secondary border-opacity-15 px-4 pt-4">
               <div class="d-flex align-items-center gap-3">
                 <div class="p-2 rounded-circle bg-warning bg-opacity-15 text-warning">
@@ -1672,11 +1700,11 @@
               <form onsubmit="event.preventDefault(); showToast('Session renewed successfully!', 'success'); bootstrap.Modal.getInstance(document.getElementById('session-expired-modal')).hide();">
                 <div class="mb-3">
                   <label class="form-label text-muted fs-8 fw-bold">EMAIL</label>
-                  <input type="email" class="form-control bg-dark border-secondary border-opacity-25 text-white rounded-3 fs-7" id="session-refresh-email" value="${emailVal}" required>
+                  <input type="email" class="form-control bg-white border-secondary border-opacity-25 text-dark rounded-3 fs-7" id="session-refresh-email" value="${emailVal}" required>
                 </div>
                 <div class="mb-4">
                   <label class="form-label text-muted fs-8 fw-bold">PASSWORD</label>
-                  <input type="password" class="form-control bg-dark border-secondary border-opacity-25 text-white rounded-3 fs-7" id="session-refresh-password" placeholder="••••••••" required>
+                  <input type="password" class="form-control bg-white border-secondary border-opacity-25 text-dark rounded-3 fs-7" id="session-refresh-password" placeholder="••••••••" required>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <a href="#/login" class="text-secondary text-decoration-none fs-8" onclick="bootstrap.Modal.getInstance(document.getElementById('session-expired-modal')).hide();">Sign in with different account</a>
@@ -1753,7 +1781,7 @@
     return `
       <div class="modal fade" id="cancel-subscription-modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content google-glass-card border-secondary border-opacity-25" style="background: rgba(14, 18, 27, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
+          <div class="modal-content google-glass-card border-secondary border-opacity-25" style="background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
             <div class="modal-header border-bottom border-secondary border-opacity-15 px-4 pt-4">
               <div class="d-flex align-items-center gap-3">
                 <div class="p-2 rounded-circle bg-danger bg-opacity-15 text-danger">
@@ -1767,7 +1795,7 @@
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4 text-secondary fs-7">
-              <div class="p-3 rounded-3 bg-black bg-opacity-30 border border-secondary border-opacity-15 mb-3">
+              <div class="p-3 rounded-3 bg-light bg-opacity-60 border border-secondary border-opacity-15 mb-3">
                 <span class="text-white fw-bold fs-7 d-block mb-1">What you will lose upon term end:</span>
                 <ul class="text-muted fs-8 mb-0 ps-3">
                   <li>Unlimited AI Mock Interview speech evaluations & feedback</li>
@@ -1778,7 +1806,7 @@
 
               <div class="mb-3">
                 <label class="form-label text-muted fs-8 fw-bold">REASON FOR CANCELLATION</label>
-                <select class="form-select bg-dark border-secondary border-opacity-25 text-white rounded-3 fs-7" id="cancel-reason-select">
+                <select class="form-select bg-white border-secondary border-opacity-25 text-dark rounded-3 fs-7" id="cancel-reason-select">
                   <option>🎉 I landed my target software engineering role!</option>
                   <option>PrepSpace is currently outside my preparation budget</option>
                   <option>Taking a temporary break from interview prep</option>
@@ -1836,7 +1864,7 @@
     return `
       <div class="modal fade" id="session-expired-modal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content google-glass-card border-secondary border-opacity-25" style="background: rgba(14, 18, 27, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
+          <div class="modal-content google-glass-card border-secondary border-opacity-25" style="background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
             <div class="modal-header border-bottom border-secondary border-opacity-15 px-4 pt-4">
               <div class="d-flex align-items-center gap-3">
                 <div class="p-2 rounded-circle bg-warning bg-opacity-15 text-warning">
@@ -1853,11 +1881,11 @@
               <form onsubmit="event.preventDefault(); showToast('Session renewed successfully!', 'success'); bootstrap.Modal.getInstance(document.getElementById('session-expired-modal')).hide();">
                 <div class="mb-3">
                   <label class="form-label text-muted fs-8 fw-bold">EMAIL</label>
-                  <input type="email" class="form-control bg-dark border-secondary border-opacity-25 text-white rounded-3 fs-7" id="session-refresh-email" value="${emailVal}" required>
+                  <input type="email" class="form-control bg-white border-secondary border-opacity-25 text-dark rounded-3 fs-7" id="session-refresh-email" value="${emailVal}" required>
                 </div>
                 <div class="mb-4">
                   <label class="form-label text-muted fs-8 fw-bold">PASSWORD</label>
-                  <input type="password" class="form-control bg-dark border-secondary border-opacity-25 text-white rounded-3 fs-7" id="session-refresh-password" placeholder="••••••••" required>
+                  <input type="password" class="form-control bg-white border-secondary border-opacity-25 text-dark rounded-3 fs-7" id="session-refresh-password" placeholder="••••••••" required>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <a href="#/login" class="text-secondary text-decoration-none fs-8" onclick="bootstrap.Modal.getInstance(document.getElementById('session-expired-modal')).hide();">Sign in with different account</a>

@@ -974,19 +974,6 @@ const components = {
         </div>
       </div>
     </div>
-
-    <!-- AdSense Dashboard Multiplex Ad Unit -->
-    <div class="row g-4 mt-2">
-      <div class="col-12">
-        <div class="glass-panel p-3">
-          <ins class="adsbygoogle"
-               style="display:block"
-               data-ad-format="autorelaxed"
-               data-ad-client="ca-pub-4662205173096609"
-               data-ad-slot="3928140249"></ins>
-        </div>
-      </div>
-    </div>
   `,
 
   // Study Planner Page Sub-view (milestones tracker + Pomodoro timer widget)

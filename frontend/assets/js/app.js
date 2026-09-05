@@ -15,7 +15,7 @@ const state = {
   pomodoroTimeLeft: 25 * 60,
   pomodoroRunning: false,
   pomodoroMode: 'study', // study, break
-  theme: localStorage.getItem('theme') || 'dark'
+  theme: localStorage.getItem('theme') || 'light'
 };
 
 function getReferralCodeFromUrl() {
@@ -213,16 +213,29 @@ window.updateRoiCalculator = function() {
   }
 };
 
-// Vercel Design System Theme Initialization
+// Google Material Design System Theme Initialization
 function initTheme() {
-  state.theme = 'dark';
-  localStorage.setItem('theme', 'dark');
-  document.documentElement.setAttribute('data-theme', 'dark');
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  state.theme = savedTheme;
+  document.documentElement.setAttribute('data-theme', savedTheme);
+}
+
+function toggleTheme() {
+  const newTheme = state.theme === 'light' ? 'dark' : 'light';
+  state.theme = newTheme;
+  localStorage.setItem('theme', newTheme);
+  document.documentElement.setAttribute('data-theme', newTheme);
+  showToast(`Theme switched to ${newTheme} mode`, 'info');
 }
 
 // Router
 function router() {
-  const hash = window.location.hash || '#/';
+  let hash = window.location.hash;
+  if (!hash && window.location.pathname && window.location.pathname !== '/' && window.location.pathname !== '/index.html') {
+    hash = '#' + window.location.pathname;
+    window.location.hash = hash;
+  }
+  hash = hash || '#/';
   const appRoot = document.getElementById('app-root');
 
   // Cancel any active Pomodoro timer intervals when navigating away
@@ -1033,24 +1046,45 @@ function initGoogleSignIn() {
     const btnContainer = document.getElementById('google-login-btn');
     if (!btnContainer) return;
 
-    if (typeof google === 'undefined') {
-      console.error('Google client library not loaded.');
+    if (typeof google === 'undefined' || !google.accounts || !google.accounts.id) {
+      console.warn('Google client library not ready yet, retrying...');
+      setTimeout(initGoogleSignIn, 500);
       return;
     }
 
-    google.accounts.id.initialize({
-      client_id: '816067230361-5kubovquvkbnir34ann5qj54lp98kvt0.apps.googleusercontent.com',
-      callback: handleGoogleCredentialResponse
-    });
+    try {
+      google.accounts.id.initialize({
+        client_id: '816067230361-5kubovquvkbnir34ann5qj54lp98kvt0.apps.googleusercontent.com',
+        callback: handleGoogleCredentialResponse,
+        auto_select: false,
+        cancel_on_tap_outside: true,
+        ux_mode: 'popup'
+      });
 
-    google.accounts.id.renderButton(
-      btnContainer,
-      { theme: 'filled_black', size: 'large', shape: 'pill', width: '250' }
-    );
-  }, 200);
+      btnContainer.innerHTML = '';
+      google.accounts.id.renderButton(
+        btnContainer,
+        {
+          type: 'standard',
+          theme: 'outline',
+          size: 'large',
+          text: 'signin_with',
+          shape: 'pill',
+          logo_alignment: 'left',
+          width: 280
+        }
+      );
+    } catch (err) {
+      console.error('Google Sign In initialization error:', err);
+    }
+  }, 250);
 }
 
 function handleGoogleCredentialResponse(response) {
+  if (!response || !response.credential) {
+    showToast('Google sign-in was cancelled or encountered an error.', 'danger');
+    return;
+  }
   const referralCode = localStorage.getItem('referral_code') || '';
   
   apiFetch('/auth/google', {
@@ -1078,7 +1112,8 @@ function handleGoogleCredentialResponse(response) {
       redirectTo('#/dashboard');
     });
   }).catch(err => {
-    showToast(err.message, 'danger');
+    console.error('Google Auth backend error:', err);
+    showToast(err.message || 'Google sign-in failed. Please try standard sign-in.', 'danger');
   });
 }
 

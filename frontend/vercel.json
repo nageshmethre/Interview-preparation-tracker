@@ -4,7 +4,8 @@
   "framework": null,
   "outputDirectory": ".",
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/api/send-otp", "dest": "/api/send-otp.js" },
+    { "src": "/api/(.*)", "dest": "https://api.stream-in.app/api/$1" },
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
