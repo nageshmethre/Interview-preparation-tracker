@@ -642,7 +642,14 @@ function router() {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(payload)
             })
-            .then(r => r.json())
+            .then(async (r) => {
+              const text = await r.text();
+              try {
+                return JSON.parse(text);
+              } catch (e) {
+                throw new Error(text || 'Server error occurred while sending email.');
+              }
+            })
             .then(res => {
               sendBtn.disabled = false;
               sendBtn.innerHTML = '<i class="fa-solid fa-paper-plane me-1"></i> Send Official Email';
@@ -4865,7 +4872,14 @@ function loadAdminPanelTab(tab) {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(payload)
             })
-            .then(r => r.json())
+            .then(async (r) => {
+              const text = await r.text();
+              try {
+                return JSON.parse(text);
+              } catch (e) {
+                throw new Error(text || 'Server error occurred while sending email.');
+              }
+            })
             .then(res => {
               sendBtn.disabled = false;
               sendBtn.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>Dispatch Official Email';

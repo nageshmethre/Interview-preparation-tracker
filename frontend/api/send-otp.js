@@ -1,7 +1,7 @@
 // frontend/api/send-otp.js
 // Vercel Serverless Function for PrepSpace Email Verification via Resend
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // CORS configuration
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -133,6 +133,7 @@ export default async function handler(req, res) {
     </body>
     </html>
   `;
+  }
 
   try {
     const response = await fetch('https://api.resend.com/emails', {
