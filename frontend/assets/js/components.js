@@ -508,19 +508,31 @@ const components = {
               <li><a href="#/help" class="text-muted text-decoration-none hover-white">Help Center & FAQs</a></li>
               <li><a href="#/support" class="text-muted text-decoration-none hover-white">Priority Support</a></li>
             </ul>
-            <div class="p-2.5 rounded-3 bg-black bg-opacity-30 border border-secondary border-opacity-15 fs-8 text-secondary">
-              <div><i class="fa-solid fa-lock text-primary me-1.5"></i> 256-Bit TLS 1.3 Encryption</div>
-              <div><i class="fa-solid fa-bolt text-warning me-1.5"></i> Cashfree PCI-DSS Compliant</div>
+            <div class="pt-1 d-flex flex-column gap-2 text-muted fs-8">
+              <div class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-lock text-primary"></i>
+                <span class="text-secondary">256-Bit TLS 1.3 Encryption</span>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-shield-check text-success"></i>
+                <span class="text-secondary">Cashfree PCI-DSS Compliant</span>
+              </div>
             </div>
           </div>
         </div>
 
         <div class="border-top border-secondary border-opacity-10 pt-4 d-flex flex-wrap justify-content-between align-items-center gap-2 text-muted fs-8">
           <p class="mb-0">&copy; 2026 PrepSpace (stream-in.app). Developed with excellence by Nagesh Methre. All rights reserved.</p>
-          <div class="d-flex align-items-center gap-3">
-            <span class="badge bg-secondary bg-opacity-20 text-muted rounded-pill fs-9">WCAG 2.1 AA Compliant</span>
-            <span class="badge bg-secondary bg-opacity-20 text-muted rounded-pill fs-9">GDPR / DPA Certified</span>
-            <span class="badge bg-secondary bg-opacity-20 text-muted rounded-pill fs-9">Zero-Trust SLA</span>
+          <div class="d-flex flex-wrap align-items-center gap-2.5">
+            <span class="google-badge-pill google-badge-blue">
+              <i class="fa-solid fa-universal-access me-1.5"></i> WCAG 2.1 AA Compliant
+            </span>
+            <span class="google-badge-pill google-badge-green">
+              <i class="fa-solid fa-shield-halved me-1.5"></i> GDPR / DPA Certified
+            </span>
+            <span class="google-badge-pill google-badge-yellow">
+              <i class="fa-solid fa-certificate me-1.5"></i> Zero-Trust SLA
+            </span>
           </div>
         </div>
       </div>

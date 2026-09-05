@@ -701,18 +701,25 @@
   components.cookieConsentBanner = function() {
     return `
       <div id="cookie-consent-banner" class="cookie-consent-banner">
-        <div class="d-flex align-items-start gap-3">
-          <div class="p-2 rounded-circle bg-primary bg-opacity-15 text-primary mt-1">
-            <i class="fa-solid fa-cookie-bite fs-6"></i>
-          </div>
-          <div class="flex-grow-1">
-            <h6 class="text-white fw-bold mb-1 fs-7">We prioritize your privacy</h6>
-            <p class="text-muted fs-8 mb-3">We use essential cookies to maintain secure sessions and optional telemetry to improve your interview preparation. View our <a href="#/cookies" class="text-primary text-decoration-none">Cookie Policy</a>.</p>
-            <div class="d-flex flex-wrap align-items-center gap-2">
-              <button class="btn btn-sm btn-premium rounded-pill px-3 py-1 fs-8" onclick="acceptAllCookies()">Accept All</button>
-              <button class="btn btn-sm btn-glass rounded-pill px-3 py-1 fs-8" onclick="acceptEssentialCookies()">Essential Only</button>
-              <button class="btn btn-sm btn-link text-muted fs-8 text-decoration-none px-2" onclick="openCookiePreferencesModal()">Preferences</button>
+        <div class="cookie-consent-container">
+          <!-- Left: Privacy Icon & Descriptive Text -->
+          <div class="cookie-consent-content">
+            <div class="cookie-consent-icon-box">
+              <i class="fa-solid fa-cookie-bite"></i>
             </div>
+            <div class="cookie-consent-text">
+              <span class="cookie-consent-title">We prioritize your privacy</span>
+              <span class="cookie-consent-desc">
+                We use essential cookies to maintain secure sessions and optional telemetry to improve your interview preparation. View our <a href="#/cookies" class="text-primary text-decoration-none">Cookie Policy</a>.
+              </span>
+            </div>
+          </div>
+
+          <!-- Right: Action Buttons Inline -->
+          <div class="cookie-consent-actions">
+            <button class="btn btn-sm btn-premium rounded-pill px-3 py-1.5 fs-8 fw-semibold" onclick="acceptAllCookies()">Accept All</button>
+            <button class="btn btn-sm btn-glass rounded-pill px-3 py-1.5 fs-8 text-white" onclick="acceptEssentialCookies()">Essential Only</button>
+            <button class="btn btn-sm btn-link text-muted fs-8 text-decoration-none px-2" onclick="openCookiePreferencesModal()">Preferences</button>
           </div>
         </div>
       </div>

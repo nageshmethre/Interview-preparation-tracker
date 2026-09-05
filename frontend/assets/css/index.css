@@ -1715,28 +1715,141 @@ input:-webkit-autofill {
   to { transform: translateY(0); }
 }
 
-/* Floating Cookie Consent Banner */
+/* Fixed Full-Width Horizontal Bottom Bar for Cookie Consent */
 .cookie-consent-banner {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  right: 20px;
-  max-width: 580px;
-  margin: 0 auto;
-  z-index: 1050;
-  background: rgba(14, 18, 27, 0.92);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 20px;
-  padding: 20px 24px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
-  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  background: rgba(14, 18, 27, 0.96) !important;
+  backdrop-filter: blur(28px) !important;
+  -webkit-backdrop-filter: blur(28px) !important;
+  border: none !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 0 !important;
+  padding: 14px 28px !important;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.6) !important;
+  animation: slideUpBottomBar 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-@keyframes slideUp {
-  from { transform: translateY(100px); opacity: 0; }
+@keyframes slideUpBottomBar {
+  from { transform: translateY(100%); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
+}
+
+.cookie-consent-container {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  gap: 20px !important;
+}
+
+.cookie-consent-content {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 14px !important;
+  flex: 1 1 auto !important;
+  text-align: left !important;
+}
+
+.cookie-consent-icon-box {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  background: rgba(66, 133, 244, 0.15) !important;
+  color: #4285F4 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0.95rem !important;
+  flex-shrink: 0 !important;
+}
+
+.cookie-consent-text {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-wrap: wrap !important;
+}
+
+.cookie-consent-title {
+  font-size: 0.88rem !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+  white-space: nowrap !important;
+}
+
+.cookie-consent-desc {
+  color: #94a3b8 !important;
+  font-size: 0.815rem !important;
+  margin: 0 !important;
+}
+
+.cookie-consent-actions {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex-shrink: 0 !important;
+}
+
+@media (max-width: 991px) {
+  .cookie-consent-container {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+  .cookie-consent-text {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 2px !important;
+  }
+  .cookie-consent-actions {
+    width: 100% !important;
+    justify-content: flex-end !important;
+  }
+}
+
+/* High-Contrast Google Material Badge Pills */
+.google-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 5px 14px;
+  border-radius: 9999px;
+  letter-spacing: 0.2px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.2s ease;
+}
+
+.google-badge-blue {
+  background: rgba(66, 133, 244, 0.15) !important;
+  border: 1px solid rgba(66, 133, 244, 0.45) !important;
+  color: #8ab4f8 !important;
+}
+
+.google-badge-green {
+  background: rgba(52, 168, 83, 0.15) !important;
+  border: 1px solid rgba(52, 168, 83, 0.45) !important;
+  color: #81c995 !important;
+}
+
+.google-badge-yellow {
+  background: rgba(251, 188, 5, 0.15) !important;
+  border: 1px solid rgba(251, 188, 5, 0.45) !important;
+  color: #fdd663 !important;
 }
 
 /* Reusable Empty State Box */
