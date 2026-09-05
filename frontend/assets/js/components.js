@@ -783,15 +783,10 @@ const components = {
           </div>
           
           <div class="d-flex align-items-center gap-2 gap-md-3">
-            <a href="#/desktop-client" class="btn btn-glass btn-sm d-flex align-items-center gap-2 text-success border-success-subtle py-1 px-2 px-md-3" title="Get PrepSpace for Android (APK) or Apple iOS (iPhone)">
-              <div class="d-flex align-items-center gap-1">
-                <i class="fa-brands fa-android text-success"></i>
-                <i class="fa-brands fa-apple text-white fs-8"></i>
-              </div>
+            <a href="#/desktop-client" class="btn btn-glass btn-sm d-flex align-items-center py-1 px-2 px-md-3 text-white" title="Get PrepSpace for Android & iOS">
               <span class="d-none d-sm-inline fw-semibold">Get Mobile App</span>
             </a>
-            <a href="#/mock-exams" class="btn btn-glass btn-sm d-none d-md-flex align-items-center gap-2 text-white">
-              <i class="fa-solid fa-stopwatch text-danger"></i>
+            <a href="#/mock-exams" class="btn btn-glass btn-sm d-none d-md-flex align-items-center py-1 px-3 text-white">
               <span>Mock Exam</span>
             </a>
             <div class="dropdown">
@@ -2144,13 +2139,13 @@ const components = {
   // 1. Learning Platform (LMS)
   courses: (list) => {
     return `
-      <!-- Hero section -->
-      <div class="glass-panel p-5 mb-5 text-center relative overflow-hidden" style="background: linear-gradient(135deg, rgba(99,102,241,0.06) 0%, rgba(168,85,247,0.06) 100%);">
-        <h1 class="display-4 fw-extrabold text-white mb-3">Learn. Build. Master.</h1>
-        <p class="text-muted fs-6 max-w-2xl mx-auto mb-4" style="max-width: 650px;">
-          Master programming, AI, web development, computer science and the skills you need to build real-world projects and crack technical interviews.
-        </p>
-        <button id="btn-explore-scroll" class="btn btn-premium px-5 py-3 fs-6"><i class="fa-solid fa-compass me-2"></i> Explore Courses →</button>
+      <!-- Compact Header (Replaces Huge Hero Area) -->
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom border-secondary border-opacity-15">
+        <div>
+          <h5 class="fw-bold text-white mb-0">Learn. Build. Master.</h5>
+          <small class="text-muted fs-8">Master programming, AI, web development, and computer science skills.</small>
+        </div>
+        <span class="badge border border-secondary border-opacity-30 text-white font-monospace fs-9 px-2.5 py-1">COURSE CATALOG</span>
       </div>
 
       <!-- Filters & Search Toolbar -->
