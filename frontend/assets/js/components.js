@@ -1,30 +1,79 @@
 // components.js - View Templates for PrepSpace SaaS Application
 
 const components = {
-  // Public SaaS Landing Page - Style 2: Stripe / Supabase Enterprise Gradient Look
-  landing: () => `
-    <header class="stripe-hero-mesh pb-5">
-      <!-- Modern Top Announcement Alert Bar (Vercel / Stripe Style) -->
-      <div id="top-promo-banner" class="promo-announcement-bar py-2 px-3 position-relative" style="background: linear-gradient(90deg, #18181b 0%, #1f1f24 50%, #18181b 100%); border-bottom: 1px solid rgba(245, 158, 11, 0.22); z-index: 1050;">
-        <div class="container position-relative d-flex align-items-center justify-content-center">
-          <div class="d-inline-flex flex-wrap align-items-center justify-content-center gap-2 text-center text-white-50">
-            <span class="d-inline-flex align-items-center gap-1 px-2.5 py-0.5 rounded-pill font-monospace fw-bold" style="background: rgba(245, 158, 11, 0.12); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 0.72rem;">
-              <i class="fa-solid fa-trophy" style="font-size: 0.7rem;"></i> TOP 50 PERK
+  // Moving Announcement Ticker (Top Banner) - Configurable dynamically from Admin Panel
+  renderTopPromoTicker: (customConfig) => {
+    let config = customConfig;
+    if (!config) {
+      try {
+        const raw = localStorage.getItem('admin_announcement_ticker');
+        if (raw) config = JSON.parse(raw);
+      } catch (e) {}
+    }
+    const isActive = config ? config.active !== 'false' : true;
+    if (!isActive) return '';
+
+    const badge1 = (config && config.badge1) || 'TOP 50 PERK';
+    const text1 = (config && config.text1) || 'Rank in the <strong class=\"text-white\">Top 50</strong> of any Mock Exam (Java, Python, C++, React, DSA) & win a <strong style=\"color: #fbbf24;\">100% Free Lifetime Pro Subscription!</strong>';
+    const btn1 = (config && config.btn1) || 'Take Mock Exam →';
+    const link1 = (config && config.link1) || '#/mock-exams';
+
+    const badge2 = (config && config.badge2) || 'LEADERBOARD CHALLENGE';
+    const text2 = (config && config.text2) || 'Compete with 2,400+ developers globally in real-time timed technical evaluations';
+    const btn2 = (config && config.btn2) || 'Join Leaderboard →';
+    const link2 = (config && config.link2) || '#/mock-exams';
+
+    return `
+      <div id="top-promo-banner" class="promo-ticker-wrapper" title="Hover to pause ticker">
+        <div class="promo-ticker-track">
+          <!-- Slide 1 -->
+          <a href="${link1}" class="promo-ticker-item">
+            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(245, 158, 11, 0.18); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.35); font-size: 0.72rem;">
+              <i class="fa-solid fa-trophy me-1"></i> ${badge1}
             </span>
-            <span class="text-light" style="font-size: 0.82rem;">
-              Rank in the <strong class="text-white">Top 50</strong> of any Mock Exam to win a <strong style="color: #fbbf24;">100% Free Lifetime Pro</strong> membership.
+            <span>${text1}</span>
+            <span class="badge rounded-pill fw-bold text-dark px-2.5 py-1" style="background: #f59e0b; font-size: 0.75rem;">${btn1}</span>
+          </a>
+
+          <!-- Slide 2 -->
+          <a href="${link2}" class="promo-ticker-item">
+            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); font-size: 0.72rem;">
+              <i class="fa-solid fa-fire me-1"></i> ${badge2}
             </span>
-            <a href="#/mock-exams" class="d-inline-flex align-items-center gap-1 fw-bold text-decoration-none ms-1 px-3 py-1 rounded-pill text-dark" style="background: #f59e0b; font-size: 0.76rem; transition: all 0.2s ease;">
-              <span>Start Mock Exam</span>
-              <i class="fa-solid fa-arrow-right" style="font-size: 0.7rem;"></i>
-            </a>
-          </div>
-          <button type="button" class="btn-close btn-close-white position-absolute end-0 top-50 translate-middle-y me-2 d-none d-md-block" style="font-size: 0.65rem; opacity: 0.6;" onclick="document.getElementById('top-promo-banner').style.display='none';" aria-label="Dismiss banner"></button>
+            <span>${text2}</span>
+            <span class="badge rounded-pill fw-bold text-dark px-2.5 py-1" style="background: #10b981; font-size: 0.75rem;">${btn2}</span>
+          </a>
+
+          <!-- Slide 3 (Seamless Repeat) -->
+          <a href="${link1}" class="promo-ticker-item">
+            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(245, 158, 11, 0.18); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.35); font-size: 0.72rem;">
+              <i class="fa-solid fa-trophy me-1"></i> ${badge1}
+            </span>
+            <span>${text1}</span>
+            <span class="badge rounded-pill fw-bold text-dark px-2.5 py-1" style="background: #f59e0b; font-size: 0.75rem;">${btn1}</span>
+          </a>
+
+          <!-- Slide 4 (Seamless Repeat) -->
+          <a href="${link2}" class="promo-ticker-item">
+            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); font-size: 0.72rem;">
+              <i class="fa-solid fa-fire me-1"></i> ${badge2}
+            </span>
+            <span>${text2}</span>
+            <span class="badge rounded-pill fw-bold text-dark px-2.5 py-1" style="background: #10b981; font-size: 0.75rem;">${btn2}</span>
+          </a>
         </div>
       </div>
+    `;
+  },
+
+  // Public SaaS Landing Page - Full Developer Grid Mesh Layout
+  landing: () => `
+    <div class="landing-page-mesh">
+      <!-- Animated Moving Announcement Ticker (Side by Side) -->
+      ${components.renderTopPromoTicker()}
 
       <!-- Vercel Minimalist Glass Navigation -->
-      <nav class="navbar navbar-expand-lg navbar-dark py-3 sticky-top border-bottom border-secondary border-opacity-20" style="background: #1c1c20;">
+      <nav class="navbar navbar-expand-lg navbar-dark py-3 sticky-top border-bottom border-secondary border-opacity-20">
         <div class="container">
           <a class="navbar-brand d-flex align-items-center gap-2 text-decoration-none" href="#/">
             <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace Logo" class="brand-logo-img" style="width: 36px; height: 36px; object-fit: contain;">
@@ -58,7 +107,8 @@ const components = {
       </nav>
 
       <!-- Hero Banner Section -->
-      <div class="container text-center pt-5 pb-4">
+      <header class="landing-hero-section pb-5">
+        <div class="container text-center pt-5 pb-4">
         <div class="row justify-content-center">
           <div class="col-lg-10 col-xl-9">
             <a href="#features" class="announcement-pill mb-4">
@@ -549,6 +599,7 @@ const components = {
         </div>
       </div>
     </footer>
+  </div>
   `,
 
   // Authentication: Login Page (Vercel UI/UX)
@@ -1497,10 +1548,10 @@ const components = {
 
   // Settings / Profile View
   profile: () => `
-    <div class="settings-container">
-      <!-- Settings Tabs Sidebar (Sticky, Single Unified Scroll) -->
+    <div class="settings-container h-100">
+      <!-- Settings Tabs Sidebar (Fixed Navigator with dedicated subtle scroll) -->
       <div class="settings-sidebar-wrapper">
-        <div class="glass-panel p-3">
+        <div class="glass-panel p-3 h-100 overflow-y-auto" style="scrollbar-width: thin; scrollbar-color: #3f3f46 #1c1c20;">
           <div class="settings-nav-group">
             <div class="settings-nav-header">Account</div>
             <button class="settings-nav-btn btn-settings-tab active" data-tab="profile">
@@ -1557,9 +1608,9 @@ const components = {
         </div>
       </div>
 
-      <!-- Settings Content Workspace -->
-      <div class="settings-content-wrapper">
-        <div class="glass-panel p-4" id="settings-workspace-mount" style="min-height: 520px;">
+      <!-- Settings Content Workspace: Only this page moves with its own grey slider -->
+      <div class="settings-content-wrapper h-100">
+        <div class="glass-panel p-4 h-100 overflow-y-auto legal-doc-viewer" id="settings-workspace-mount">
           <!-- Loaded dynamically via js -->
           <div class="text-center py-5"><div class="spinner-border text-primary"></div></div>
         </div>
@@ -4055,6 +4106,24 @@ const components = {
     const bannerText = settings.GLOBAL_ANNOUNCEMENT_TEXT || '';
     const bannerLevel = settings.GLOBAL_ANNOUNCEMENT_LEVEL || 'info';
 
+    // Ticker settings from backend or local fallback
+    let localTicker = null;
+    try {
+      const raw = localStorage.getItem('admin_announcement_ticker');
+      if (raw) localTicker = JSON.parse(raw);
+    } catch (e) {}
+
+    const tickerActive = settings.TICKER_ACTIVE !== undefined ? settings.TICKER_ACTIVE === 'true' : (localTicker ? localTicker.active !== 'false' : true);
+    const tickerBadge1 = settings.TICKER_BADGE_1 || (localTicker && localTicker.badge1) || 'TOP 50 PERK';
+    const tickerText1 = settings.TICKER_TEXT_1 || (localTicker && localTicker.text1) || 'Rank in the Top 50 of any Mock Exam (Java, Python, C++, React, DSA) & win a 100% Free Lifetime Pro Subscription!';
+    const tickerBtn1 = settings.TICKER_BTN_1 || (localTicker && localTicker.btn1) || 'Take Mock Exam →';
+    const tickerLink1 = settings.TICKER_LINK_1 || (localTicker && localTicker.link1) || '#/mock-exams';
+
+    const tickerBadge2 = settings.TICKER_BADGE_2 || (localTicker && localTicker.badge2) || 'LEADERBOARD CHALLENGE';
+    const tickerText2 = settings.TICKER_TEXT_2 || (localTicker && localTicker.text2) || 'Compete with 2,400+ developers globally in real-time timed technical evaluations';
+    const tickerBtn2 = settings.TICKER_BTN_2 || (localTicker && localTicker.btn2) || 'Join Leaderboard →';
+    const tickerLink2 = settings.TICKER_LINK_2 || (localTicker && localTicker.link2) || '#/mock-exams';
+
     const allCount = users ? users.filter(u => !u.isSuspended).length : 0;
     const proCount = users ? users.filter(u => u.isPaid && !u.isSuspended).length : 0;
     const freeCount = users ? users.filter(u => !u.isPaid && !u.isSuspended).length : 0;
@@ -4126,27 +4195,41 @@ const components = {
               </div>
               <div class="d-flex flex-wrap gap-1">
                 <button type="button" class="btn btn-xs btn-glass text-warning broadcast-preset-btn" data-preset="top50">
-                  <i class="fa-solid fa-trophy me-1"></i> Top 50 Pro & Global Icon
+                  <i class="fa-solid fa-trophy me-1"></i> Top 50 Perk Free Pro
                 </button>
-                <button type="button" class="btn btn-xs btn-glass text-info broadcast-preset-btn" data-preset="mocktest">
-                  <i class="fa-solid fa-laptop-code me-1"></i> Placement Drive Mock Tests
+                <button type="button" class="btn btn-xs btn-glass text-cyan broadcast-preset-btn" data-preset="exam">
+                  <i class="fa-solid fa-stopwatch me-1"></i> 50-MCQ Timed Exam
                 </button>
-                <button type="button" class="btn btn-xs btn-glass text-emerald broadcast-preset-btn" data-preset="referral">
-                  <i class="fa-solid fa-hand-holding-dollar me-1"></i> ₹199 Referral Bonus
+                <button type="button" class="btn btn-xs btn-glass text-emerald broadcast-preset-btn" data-preset="interview">
+                  <i class="fa-solid fa-brain me-1"></i> AI Interview Drill
+                </button>
+                <button type="button" class="btn btn-xs btn-glass text-info broadcast-preset-btn" data-preset="maintenance">
+                  <i class="fa-solid fa-wrench me-1"></i> Platform Maintenance
                 </button>
               </div>
             </div>
 
+            <!-- Email Dispatch Form -->
             <form id="admin-broadcast-email-form">
               <div class="mb-3">
-                <label class="form-label text-muted fs-8 uppercase">Email Subject</label>
-                <input type="text" id="broadcast-email-subject" class="form-control form-control-sm admin-input" placeholder="e.g. Important Update Regarding Your Placement Drive" required>
+                <label class="form-label text-muted fs-8 uppercase">Broadcast Subject</label>
+                <input type="text" id="broadcast-email-subject" class="form-control admin-input" placeholder="e.g. Special Opportunity: Claim Free Lifetime PrepPro Pass" required>
               </div>
 
               <div class="mb-3">
-                <label class="form-label text-muted fs-8 uppercase">Official Message Content</label>
-                <textarea id="broadcast-email-body" class="form-control admin-input" rows="5" placeholder="Write your announcement or direct instructions to candidates here..." required></textarea>
-                <small class="text-muted fs-9">Supports multiline formatting. Dispatched with responsive dark-mode luxury email template.</small>
+                <label class="form-label text-muted fs-8 uppercase">Broadcast Content (Markdown / Text)</label>
+                <textarea id="broadcast-email-body" class="form-control admin-input" rows="8" placeholder="Type your broadcast message here. Use {Name} for personal name tag." required></textarea>
+              </div>
+
+              <!-- Dispatch Progress Bar (Active only during execution) -->
+              <div id="broadcast-progress-panel" class="mb-3 p-3 rounded bg-dark bg-opacity-75 border border-primary border-opacity-25 d-none">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="text-white fs-8 fw-bold" id="broadcast-progress-status"><i class="fa-solid fa-spinner fa-spin me-1 text-primary"></i> Dispatching emails...</span>
+                  <span class="badge bg-primary text-white fs-9" id="broadcast-progress-counter">0 / 0</span>
+                </div>
+                <div class="progress progress-xs bg-dark">
+                  <div id="broadcast-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated bg-primary" style="width: 0%;"></div>
+                </div>
               </div>
 
               <div class="d-flex justify-content-between align-items-center pt-2">
@@ -4159,14 +4242,94 @@ const components = {
           </div>
         </div>
 
-        <!-- Sitewide Announcement Banner Controls -->
-        <div class="col-lg-5">
-          <div class="admin-box p-3 h-100">
-            <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-bullhorn text-warning me-2"></i>Global Platform Banner</h6>
-            <small class="text-muted fs-8">Broadcasts an alert across all user dashboards in real-time</small>
+        <!-- Announcement & Ticker Controls Column -->
+        <div class="col-lg-5 d-flex flex-column gap-3">
+          <!-- Card 1: Top Moving Announcement Ticker (Public Home Page Marquee) -->
+          <div class="admin-box p-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <h6 class="text-white fw-bold mb-0">
+                <i class="fa-solid fa-bullhorn text-warning me-2"></i>Top Moving Announcement Ticker
+              </h6>
+              <span class="badge bg-warning text-dark px-2 py-0.5 fs-9 fw-bold">Live on Home Page</span>
+            </div>
+            <small class="text-muted fs-8">Modify moving side-by-side alert advertisements, perks & buttons</small>
+
+            <div class="mt-3 mb-2 p-2 bg-dark bg-opacity-50 rounded border border-secondary border-opacity-25">
+              <label class="form-label text-muted fs-9 uppercase mb-1">Live Moving Ticker Preview:</label>
+              <div id="admin-ticker-preview-container" class="overflow-hidden rounded border border-secondary border-opacity-20" style="background: #18181b;">
+                ${components.renderTopPromoTicker({
+                  active: tickerActive ? 'true' : 'false',
+                  badge1: tickerBadge1, text1: tickerText1, btn1: tickerBtn1, link1: tickerLink1,
+                  badge2: tickerBadge2, text2: tickerText2, btn2: tickerBtn2, link2: tickerLink2
+                })}
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="admin-ticker-active" ${tickerActive ? 'checked' : ''}>
+                <label class="form-check-label text-white fs-8 fw-bold" for="admin-ticker-active">Enable Top Moving Announcement Ticker</label>
+              </div>
+            </div>
+
+            <!-- Slide 1 Configuration -->
+            <div class="p-2.5 rounded bg-dark bg-opacity-40 border border-secondary border-opacity-20 mb-3">
+              <span class="text-warning fw-bold fs-8 d-block mb-2"><i class="fa-solid fa-circle-1 me-1"></i> Announcement Slide 1 (Primary Perk)</span>
+              <div class="row g-2 mb-2">
+                <div class="col-6">
+                  <label class="form-label text-muted fs-9 uppercase mb-1">Badge Tag</label>
+                  <input type="text" id="admin-ticker-badge-1" class="form-control form-control-sm admin-input" value="${tickerBadge1}" placeholder="e.g. TOP 50 PERK">
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-muted fs-9 uppercase mb-1">Button Text</label>
+                  <input type="text" id="admin-ticker-btn-1" class="form-control form-control-sm admin-input" value="${tickerBtn1}" placeholder="e.g. Take Mock Exam →">
+                </div>
+              </div>
+              <div class="mb-2">
+                <label class="form-label text-muted fs-9 uppercase mb-1">Slide 1 Message</label>
+                <textarea id="admin-ticker-text-1" class="form-control form-control-sm admin-input" rows="2" placeholder="Headline text...">${tickerText1}</textarea>
+              </div>
+              <div>
+                <label class="form-label text-muted fs-9 uppercase mb-1">Button Target Link</label>
+                <input type="text" id="admin-ticker-link-1" class="form-control form-control-sm admin-input font-monospace" value="${tickerLink1}" placeholder="#/mock-exams">
+              </div>
+            </div>
+
+            <!-- Slide 2 Configuration -->
+            <div class="p-2.5 rounded bg-dark bg-opacity-40 border border-secondary border-opacity-20 mb-3">
+              <span class="text-emerald fw-bold fs-8 d-block mb-2"><i class="fa-solid fa-circle-2 me-1"></i> Announcement Slide 2 (Feature / Challenge)</span>
+              <div class="row g-2 mb-2">
+                <div class="col-6">
+                  <label class="form-label text-muted fs-9 uppercase mb-1">Badge Tag</label>
+                  <input type="text" id="admin-ticker-badge-2" class="form-control form-control-sm admin-input" value="${tickerBadge2}" placeholder="e.g. LEADERBOARD CHALLENGE">
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-muted fs-9 uppercase mb-1">Button Text</label>
+                  <input type="text" id="admin-ticker-btn-2" class="form-control form-control-sm admin-input" value="${tickerBtn2}" placeholder="e.g. Join Leaderboard →">
+                </div>
+              </div>
+              <div class="mb-2">
+                <label class="form-label text-muted fs-9 uppercase mb-1">Slide 2 Message</label>
+                <textarea id="admin-ticker-text-2" class="form-control form-control-sm admin-input" rows="2" placeholder="Secondary headline text...">${tickerText2}</textarea>
+              </div>
+              <div>
+                <label class="form-label text-muted fs-9 uppercase mb-1">Button Target Link</label>
+                <input type="text" id="admin-ticker-link-2" class="form-control form-control-sm admin-input font-monospace" value="${tickerLink2}" placeholder="#/mock-exams">
+              </div>
+            </div>
+
+            <button class="btn btn-warning w-100 fw-bold text-dark" id="btn-save-ticker-settings">
+              <i class="fa-solid fa-floppy-disk me-2"></i>Save & Publish Moving Ticker
+            </button>
+          </div>
+
+          <!-- Card 2: Global Platform Banner (Dashboard In-App Alert) -->
+          <div class="admin-box p-3">
+            <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-shield-halved text-info me-2"></i>Portal Alert Banner</h6>
+            <small class="text-muted fs-8">Broadcasts an alert box across logged-in user dashboards</small>
 
             <div class="my-3 p-3 bg-dark bg-opacity-50 rounded border border-secondary border-opacity-25">
-              <label class="form-label text-muted fs-9 uppercase mb-1">Live Banner Preview:</label>
+              <label class="form-label text-muted fs-9 uppercase mb-1">Live In-Portal Banner Preview:</label>
               <div id="banner-preview-box" class="alert alert-${bannerLevel} d-flex align-items-center gap-2 mb-0 py-2 fs-8">
                 <i class="fa-solid fa-circle-info"></i>
                 <span id="banner-preview-text">${bannerText || 'No active announcement. Banner is currently hidden.'}</span>
@@ -4176,7 +4339,7 @@ const components = {
             <div class="mb-3">
               <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" id="admin-banner-active" ${isBannerActive ? 'checked' : ''}>
-                <label class="form-check-label text-white fs-8 fw-bold" for="admin-banner-active">Enable Sitewide Announcement</label>
+                <label class="form-check-label text-white fs-8 fw-bold" for="admin-banner-active">Enable Dashboard Alert Banner</label>
               </div>
             </div>
 
@@ -4192,10 +4355,10 @@ const components = {
 
             <div class="mb-3">
               <label class="form-label text-muted fs-8 uppercase">Announcement Text</label>
-              <textarea id="admin-banner-text" class="form-control admin-input" rows="3" placeholder="e.g. Maintenance scheduled for 2:00 AM IST or 50% discount on Pro Pass!">${bannerText}</textarea>
+              <textarea id="admin-banner-text" class="form-control admin-input" rows="2" placeholder="e.g. Maintenance scheduled for 2:00 AM IST or 50% discount on Pro Pass!">${bannerText}</textarea>
             </div>
 
-            <button class="btn btn-premium w-100 fw-semibold" id="btn-save-banner-settings"><i class="fa-solid fa-floppy-disk me-2"></i>Publish Banner to All Users</button>
+            <button class="btn btn-premium w-100 fw-semibold" id="btn-save-banner-settings"><i class="fa-solid fa-floppy-disk me-2"></i>Publish Alert to All Users</button>
           </div>
         </div>
       </div>

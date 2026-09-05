@@ -732,26 +732,67 @@ input:-webkit-autofill:focus,
    VERCEL GEIST TEMPLATE STYLING
    ========================================================================== */
 
-/* Vercel Linear Grid Mesh Background */
-.stripe-hero-mesh, .vercel-hero-mesh {
+/* Vercel / Linear Developer Grid Mesh Background for Entire Home Page */
+.landing-page-mesh,
+.stripe-hero-mesh,
+.vercel-hero-mesh {
   position: relative;
-  overflow: hidden;
-  background-color: #000000;
+  background-color: #000000 !important;
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-  background-size: 48px 48px;
+    linear-gradient(to right, rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.055) 1px, transparent 1px) !important;
+  background-size: 72px 72px !important;
+  background-repeat: repeat !important;
+  color: #d4d4d8 !important;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-.stripe-hero-mesh::before, .vercel-hero-mesh::before {
+.landing-page-mesh::before,
+.stripe-hero-mesh::before,
+.vercel-hero-mesh::before {
   content: '';
   position: absolute;
-  top: 0; left: 50%;
+  top: 0;
+  left: 50%;
   transform: translateX(-50%);
-  width: 700px;
-  height: 280px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  width: 100%;
+  max-width: 1400px;
+  height: 560px;
+  background: radial-gradient(circle 500px at 50% 120px, rgba(245, 158, 11, 0.08) 0%, rgba(16, 185, 129, 0.03) 50%, transparent 75%);
   pointer-events: none;
+  z-index: 0;
+}
+
+.landing-page-mesh > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Landing Glass Cards with subtle translucency over the developer grid */
+.landing-page-mesh .glass-panel,
+.landing-page-mesh .bento-card {
+  background: rgba(28, 28, 32, 0.88) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.landing-page-mesh .glass-panel:hover,
+.landing-page-mesh .bento-card:hover {
+  border-color: rgba(245, 158, 11, 0.4) !important;
+}
+
+.landing-page-mesh .navbar {
+  background: rgba(18, 18, 21, 0.85) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+.landing-page-mesh footer {
+  background: rgba(14, 14, 17, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
 }
 
 /* Radiant Typography */
@@ -1608,22 +1649,46 @@ input:-webkit-autofill {
 }
 
 /* ==========================================================================
-   SETTINGS & PROFILE MODERN SAAS LAYOUT (COHESIVE SCROLL & NO TEXT WRAPPING)
+   SETTINGS & PROFILE MODERN SAAS LAYOUT (ISOLATED WORKSPACE SCROLL)
    ========================================================================== */
 .settings-container {
   display: flex;
-  gap: 1.5rem;
-  align-items: flex-start;
+  gap: 1.25rem;
+  align-items: stretch;
   width: 100%;
+  height: calc(100vh - 120px) !important;
+  max-height: calc(100vh - 120px) !important;
+  overflow: hidden !important;
 }
 
 .settings-sidebar-wrapper {
-  position: sticky;
-  top: 0.5rem;
-  z-index: 5;
-  width: 280px;
-  min-width: 280px;
+  position: static !important;
+  width: 270px;
+  min-width: 270px;
+  height: 100% !important;
+  max-height: 100% !important;
   flex-shrink: 0;
+}
+
+.settings-sidebar-wrapper > .glass-panel {
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow-y: auto !important;
+  scrollbar-width: thin;
+  scrollbar-color: #3f3f46 #1c1c20;
+}
+
+.settings-sidebar-wrapper > .glass-panel::-webkit-scrollbar {
+  width: 5px;
+}
+
+.settings-sidebar-wrapper > .glass-panel::-webkit-scrollbar-track {
+  background: #1c1c20;
+}
+
+.settings-sidebar-wrapper > .glass-panel::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 4px;
 }
 
 .settings-nav-group {
@@ -1683,6 +1748,38 @@ input:-webkit-autofill {
 .settings-content-wrapper {
   flex-grow: 1;
   min-width: 0;
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+}
+
+#settings-workspace-mount {
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow-y: auto !important;
+  scrollbar-width: thin;
+  scrollbar-color: #3f3f46 #1c1c20;
+  background: #222226 !important;
+  border: 1px solid #323238 !important;
+  border-radius: 12px;
+}
+
+#settings-workspace-mount::-webkit-scrollbar {
+  width: 6px;
+}
+
+#settings-workspace-mount::-webkit-scrollbar-track {
+  background: #1c1c20;
+  border-radius: 4px;
+}
+
+#settings-workspace-mount::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 4px;
+}
+
+#settings-workspace-mount::-webkit-scrollbar-thumb:hover {
+  background: #52525b;
 }
 
 /* Profile Hero Card */
@@ -2131,15 +2228,62 @@ input:-webkit-autofill {
   font-weight: 600;
 }
 
-/* Top Announcement Bar (Vercel / Stripe Style) */
-.promo-announcement-bar {
-  font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-  letter-spacing: -0.01em;
+/* Animated Moving Announcement Ticker (Side by Side) */
+@keyframes tickerScroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
-.promo-announcement-bar a:hover {
-  background: #fbbf24 !important;
-  transform: translateY(-1px);
+.promo-ticker-wrapper {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  width: 100%;
+  height: 38px;
+  background: linear-gradient(90deg, #18181b 0%, #1f1f25 50%, #18181b 100%) !important;
+  border-bottom: 1px solid rgba(245, 158, 11, 0.25) !important;
+  display: flex;
+  align-items: center;
+  z-index: 1050;
+  user-select: none;
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
 }
+
+.promo-ticker-track {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  animation: tickerScroll 30s linear infinite;
+  will-change: transform;
+}
+
+.promo-ticker-wrapper:hover .promo-ticker-track {
+  animation-play-state: paused;
+}
+
+.promo-ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 35px;
+  font-size: 0.82rem;
+  color: #d4d4d8;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.promo-ticker-item:hover {
+  color: #ffffff;
+}
+
+.promo-ticker-item:hover .badge:last-child {
+  filter: brightness(1.15);
+  transform: scale(1.05);
+}
+
 
 

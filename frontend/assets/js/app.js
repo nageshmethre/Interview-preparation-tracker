@@ -661,7 +661,7 @@ function router() {
       pageMount.innerHTML = components.reports();
       bindReportsEvents();
     }
-  } else if (hash === '#/profile') {
+  } else if (hash === '#/profile' || hash === '#/settings') {
     viewTitle.textContent = 'Settings & Profile';
     pageMount.innerHTML = components.profile();
     loadProfileDetails();
@@ -2333,6 +2333,7 @@ function bindProfileEvents() {
 function switchSettingsTab(tab) {
   const mount = document.getElementById('settings-workspace-mount');
   if (!mount) return;
+  mount.scrollTop = 0;
 
   if (tab === 'profile') {
     mount.innerHTML = components.settingsProfile(currentSettings, state);
@@ -5073,6 +5074,93 @@ function loadAdminPanelTab(tab) {
               saveBannerBtn.disabled = false;
               saveBannerBtn.innerHTML = '<i class="fa-solid fa-floppy-disk me-2"></i>Publish Banner to All Users';
               showToast(err.message, 'danger');
+            });
+          });
+        }
+        // Moving Announcement Ticker (Top Banner) Admin Form Handlers
+        const saveTickerBtn = document.getElementById('btn-save-ticker-settings');
+        if (saveTickerBtn) {
+          const tickerActiveCheck = document.getElementById('admin-ticker-active');
+          const tickerBadge1Input = document.getElementById('admin-ticker-badge-1');
+          const tickerText1Input = document.getElementById('admin-ticker-text-1');
+          const tickerBtn1Input = document.getElementById('admin-ticker-btn-1');
+          const tickerLink1Input = document.getElementById('admin-ticker-link-1');
+
+          const tickerBadge2Input = document.getElementById('admin-ticker-badge-2');
+          const tickerText2Input = document.getElementById('admin-ticker-text-2');
+          const tickerBtn2Input = document.getElementById('admin-ticker-btn-2');
+          const tickerLink2Input = document.getElementById('admin-ticker-link-2');
+
+          function refreshTickerPreview() {
+            const previewContainer = document.getElementById('admin-ticker-preview-container');
+            if (previewContainer && window.components && window.components.renderTopPromoTicker) {
+              const previewConfig = {
+                active: tickerActiveCheck ? (tickerActiveCheck.checked ? 'true' : 'false') : 'true',
+                badge1: tickerBadge1Input ? tickerBadge1Input.value : 'TOP 50 PERK',
+                text1: tickerText1Input ? tickerText1Input.value : '',
+                btn1: tickerBtn1Input ? tickerBtn1Input.value : 'Take Mock Exam →',
+                link1: tickerLink1Input ? tickerLink1Input.value : '#/mock-exams',
+                badge2: tickerBadge2Input ? tickerBadge2Input.value : 'LEADERBOARD CHALLENGE',
+                text2: tickerText2Input ? tickerText2Input.value : '',
+                btn2: tickerBtn2Input ? tickerBtn2Input.value : 'Join Leaderboard →',
+                link2: tickerLink2Input ? tickerLink2Input.value : '#/mock-exams'
+              };
+              previewContainer.innerHTML = window.components.renderTopPromoTicker(previewConfig);
+            }
+          }
+
+          [tickerActiveCheck, tickerBadge1Input, tickerText1Input, tickerBtn1Input, tickerLink1Input,
+           tickerBadge2Input, tickerText2Input, tickerBtn2Input, tickerLink2Input].forEach(el => {
+            if (el) {
+              el.addEventListener('input', refreshTickerPreview);
+              el.addEventListener('change', refreshTickerPreview);
+            }
+          });
+
+          saveTickerBtn.addEventListener('click', () => {
+            const active = tickerActiveCheck ? tickerActiveCheck.checked : true;
+            const badge1 = tickerBadge1Input ? tickerBadge1Input.value.trim() : 'TOP 50 PERK';
+            const text1 = tickerText1Input ? tickerText1Input.value.trim() : '';
+            const btn1 = tickerBtn1Input ? tickerBtn1Input.value.trim() : 'Take Mock Exam →';
+            const link1 = tickerLink1Input ? tickerLink1Input.value.trim() : '#/mock-exams';
+
+            const badge2 = tickerBadge2Input ? tickerBadge2Input.value.trim() : 'LEADERBOARD CHALLENGE';
+            const text2 = tickerText2Input ? tickerText2Input.value.trim() : '';
+            const btn2 = tickerBtn2Input ? tickerBtn2Input.value.trim() : 'Join Leaderboard →';
+            const link2 = tickerLink2Input ? tickerLink2Input.value.trim() : '#/mock-exams';
+
+            const config = {
+              active: String(active),
+              badge1, text1, btn1, link1,
+              badge2, text2, btn2, link2
+            };
+
+            // Immediately persist to localStorage for instant reflection
+            localStorage.setItem('admin_announcement_ticker', JSON.stringify(config));
+
+            saveTickerBtn.disabled = true;
+            saveTickerBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Saving Ticker...';
+
+            Promise.all([
+              apiFetch('/admin/settings', { method: 'POST', body: JSON.stringify({ key: 'TICKER_ACTIVE', value: String(active) }) }),
+              apiFetch('/admin/settings', { method: 'POST', body: JSON.stringify({ key: 'TICKER_BADGE_1', value: badge1 }) }),
+              apiFetch('/admin/settings', { method: 'POST', body: JSON.stringify({ key: 'TICKER_TEXT_1', value: text1 }) }),
+              apiFetch('/admin/settings', { method: 'POST', body: JSON.stringify({ key: 'TICKER_BTN_1', value: btn1 }) }),
+              apiFetch('/admin/settings', { method: 'POST', body: JSON.stringify({ key: 'TICKER_LINK_1', value: link1 }) }),
+              apiFetch('/admin/settings', { method: 'POST', body: JSON.stringify({ key: 'TICKER_BADGE_2', value: badge2 }) }),
+              apiFetch('/admin/settings', { method: 'POST', body: JSON.stringify({ key: 'TICKER_TEXT_2', value: text2 }) }),
+              apiFetch('/admin/settings', { method: 'POST', body: JSON.stringify({ key: 'TICKER_BTN_2', value: btn2 }) }),
+              apiFetch('/admin/settings', { method: 'POST', body: JSON.stringify({ key: 'TICKER_LINK_2', value: link2 }) })
+            ]).then(() => {
+              saveTickerBtn.disabled = false;
+              saveTickerBtn.innerHTML = '<i class="fa-solid fa-floppy-disk me-2"></i>Save & Publish Moving Ticker';
+              showToast('Moving announcement ticker updated and published live!', 'success');
+              refreshTickerPreview();
+            }).catch(err => {
+              saveTickerBtn.disabled = false;
+              saveTickerBtn.innerHTML = '<i class="fa-solid fa-floppy-disk me-2"></i>Save & Publish Moving Ticker';
+              showToast('Saved locally: ' + err.message, 'warning');
+              refreshTickerPreview();
             });
           });
         }
