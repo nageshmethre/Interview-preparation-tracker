@@ -113,7 +113,7 @@
 
         <h4>2. Categories of Cookies We Use</h4>
         <div class="table-responsive my-3">
-          <table class="table table-bordered border-secondary border-opacity-25 fs-8 text-white">
+          <table class="table table-bordered border-secondary border-opacity-15 fs-8 text-white">
             <thead class="bg-white bg-opacity-80">
               <tr>
                 <th>Category</th>
@@ -475,8 +475,8 @@
     return `
       <div class="google-legal-hub min-vh-100 pb-5" style="background: var(--bg-body, #f8fafd);">
         <!-- Top Google-Style Header with 4-Color Accent Line -->
-        <div class="border-bottom border-secondary border-opacity-15 bg-white bg-opacity-80 sticky-top" style="backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 100;">
-          <div class="google-four-color-bar" style="height: 3px; background: linear-gradient(90deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);"></div>
+        <div class="border-bottom border-secondary border-opacity-10 bg-white bg-opacity-80 sticky-top" style="backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 100;">
+          <div class="google-four-color-bar" style="height: 2px; background: #e2e8f0;"></div>
           <div class="container py-3">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
               <div class="d-flex align-items-center gap-3">
@@ -497,7 +497,7 @@
               <div class="d-flex align-items-center gap-2">
                 <button class="btn btn-sm btn-glass rounded-pill px-3" onclick="window.print()"><i class="fa-solid fa-print me-1"></i> Print</button>
                 <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 text-white" onclick="openCookiePreferencesModal()"><i class="fa-solid fa-sliders me-1"></i> Cookies</button>
-                <a href="#/dashboard" class="btn btn-sm btn-premium rounded-pill px-3">Dashboard <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                <a href="#/dashboard" class="btn btn-sm btn-dark rounded-2 px-3">Dashboard <i class="fa-solid fa-arrow-right ms-1"></i></a>
               </div>
             </div>
 
@@ -561,14 +561,14 @@
             <div class="col-lg-8 col-xl-9">
               <div class="google-glass-card p-4 p-md-5 position-relative" id="legal-content-card">
                 <!-- Document Header -->
-                <div class="border-bottom border-secondary border-opacity-15 pb-4 mb-4">
+                <div class="border-bottom border-secondary border-opacity-10 pb-4 mb-4">
                   <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
                     <span class="badge bg-${activeDoc.badgeColor === 'green' ? 'success' : activeDoc.badgeColor === 'yellow' ? 'warning' : activeDoc.badgeColor === 'red' ? 'danger' : 'primary'} bg-opacity-15 text-${activeDoc.badgeColor === 'green' ? 'success' : activeDoc.badgeColor === 'yellow' ? 'warning' : activeDoc.badgeColor === 'red' ? 'danger' : 'primary'} px-3 py-1 rounded-pill fs-8">
                       <i class="fa-solid ${activeDoc.icon} me-1"></i> ${activeDoc.category}
                     </span>
                     <span class="text-muted fs-8 font-monospace"><i class="fa-solid fa-clock-rotate-left me-1"></i> Last Revised: ${activeDoc.lastUpdated}</span>
                   </div>
-                  <h1 class="text-white fw-bold display-6 mb-2" id="legal-doc-title">${activeDoc.title}</h1>
+                  <h1 class="text-dark fw-bold display-6 mb-2" id="legal-doc-title">${activeDoc.title}</h1>
                   <p class="text-secondary fs-6 mb-0" id="legal-doc-summary">${activeDoc.summary}</p>
                 </div>
 
@@ -578,7 +578,7 @@
                 </div>
 
                 <!-- Document Footer & Verification Stamp -->
-                <div class="mt-5 pt-4 border-top border-secondary border-opacity-15 d-flex flex-wrap align-items-center justify-content-between gap-3">
+                <div class="mt-5 pt-4 border-top border-secondary border-opacity-10 d-flex flex-wrap align-items-center justify-content-between gap-3">
                   <div class="d-flex align-items-center gap-3">
                     <div class="google-dots d-flex gap-1">
                       <span style="width: 8px; height: 8px; border-radius: 50%; background: #4285F4;"></span>
@@ -626,8 +626,8 @@
     return `
       <div class="modal fade" id="cookie-preferences-modal" tabindex="-1" aria-labelledby="cookieModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content google-glass-card border-secondary border-opacity-25" style="background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
-            <div class="modal-header border-bottom border-secondary border-opacity-15 px-4 pt-4">
+          <div class="modal-content google-glass-card border-secondary border-opacity-15" style="background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
+            <div class="modal-header border-bottom border-secondary border-opacity-10 px-4 pt-4">
               <div class="d-flex align-items-center gap-3">
                 <div class="p-2 rounded-circle bg-primary bg-opacity-15 text-primary">
                   <i class="fa-solid fa-cookie-bite fs-5"></i>
@@ -643,7 +643,7 @@
               <p class="mb-4">We respect your privacy preferences. While strictly necessary cookies are required for authentication, CSRF security, and compiler sandbox access, you can toggle optional preferences below.</p>
 
               <!-- Strictly Necessary -->
-              <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15 mb-3">
+              <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-10 mb-3">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                   <div class="d-flex align-items-center gap-2">
                     <span class="text-white fw-bold fs-7">1. Strictly Necessary & Security Tokens</span>
@@ -655,7 +655,7 @@
               </div>
 
               <!-- Functional -->
-              <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15 mb-3">
+              <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-10 mb-3">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                   <span class="text-white fw-bold fs-7">2. Functional & IDE Preferences</span>
                   <div class="form-check form-switch">
@@ -666,7 +666,7 @@
               </div>
 
               <!-- Performance & Analytics -->
-              <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15 mb-3">
+              <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-10 mb-3">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                   <span class="text-white fw-bold fs-7">3. Performance & System Analytics</span>
                   <div class="form-check form-switch">
@@ -677,7 +677,7 @@
               </div>
 
               <!-- Marketing & Referrals -->
-              <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15">
+              <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-10">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                   <span class="text-white fw-bold fs-7">4. Referral Tracking & Attribution</span>
                   <div class="form-check form-switch">
@@ -687,9 +687,9 @@
                 <p class="text-muted fs-8 mb-0">Ensures peer referral credits and educational campus ambassador discounts are correctly credited to your account.</p>
               </div>
             </div>
-            <div class="modal-footer border-top border-secondary border-opacity-15 px-4 pb-4">
+            <div class="modal-footer border-top border-secondary border-opacity-10 px-4 pb-4">
               <button type="button" class="btn btn-sm btn-glass rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
-              <button type="button" class="btn btn-sm btn-premium rounded-pill px-4" onclick="saveCookiePreferences()">Save Preferences</button>
+              <button type="button" class="btn btn-sm btn-dark rounded-2 px-4" onclick="saveCookiePreferences()">Save Preferences</button>
             </div>
           </div>
         </div>
@@ -736,11 +736,11 @@
 
           <!-- Right: Action Buttons Inline -->
           <div class="cookie-consent-actions">
-            <button class="btn btn-sm btn-premium rounded-pill px-3 py-1.5 fs-8 fw-semibold d-inline-flex align-items-center gap-1.5" onclick="acceptAllCookies()">
+            <button class="btn btn-sm btn-dark rounded-2 px-3 py-1.5 fs-8 fw-semibold d-inline-flex align-items-center gap-1.5" onclick="acceptAllCookies()">
               <i class="fa-solid fa-check fs-9"></i>
               <span>Accept All</span>
             </button>
-            <button class="btn btn-sm btn-glass rounded-pill px-3 py-1.5 fs-8 d-inline-flex align-items-center gap-1.5 text-dark" onclick="acceptEssentialCookies()">
+            <button class="btn btn-sm btn-outline-secondary rounded-2 px-3 py-1.5 fs-8 d-inline-flex align-items-center gap-1.5 text-dark" onclick="acceptEssentialCookies()">
               <i class="fa-solid fa-shield-halved fs-9"></i>
               <span>Essential Only</span>
             </button>
@@ -779,13 +779,13 @@
         <div class="container" style="max-width: 820px;">
           <div class="google-glass-card p-4 p-md-5" style="border-radius: 28px;">
             <!-- Four-Color Google Accent Line -->
-            <div class="google-four-color-bar mb-4 rounded-pill" style="height: 4px; background: linear-gradient(90deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);"></div>
+            <div class="google-four-color-bar mb-4 rounded-pill" style="height: 2px; background: #e2e8f0;"></div>
 
             <!-- Stepper Progress Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
               <div>
                 <span class="badge bg-primary bg-opacity-15 text-primary rounded-pill px-3 py-1 fs-8 mb-2">Welcome to PrepSpace</span>
-                <h2 class="text-white fw-bold mb-1" id="onboarding-step-title">Step 1: Choose Your Primary Focus</h2>
+                <h2 class="text-dark fw-bold mb-1" id="onboarding-step-title">Step 1: Choose Your Primary Focus</h2>
                 <p class="text-muted fs-7 mb-0" id="onboarding-step-subtitle">Customize your personalized technical interview curriculum and practice schedule.</p>
               </div>
               <div class="d-flex align-items-center gap-2" id="onboarding-step-indicators">
@@ -810,13 +810,13 @@
                     { id: 'campus', icon: 'fa-graduation-cap', title: 'Campus / Junior Grad', desc: 'Foundation DSA, Aptitude, Core CS & Mock Rounds' }
                   ].map((role, idx) => `
                     <div class="col-md-6">
-                      <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15 h-100 cursor-pointer role-card ${idx === 0 ? 'border-primary' : ''}" onclick="selectOnboardingRole('${role.id}', this)">
+                      <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-10 h-100 cursor-pointer role-card ${idx === 0 ? 'border-primary' : ''}" onclick="selectOnboardingRole('${role.id}', this)">
                         <div class="d-flex align-items-center gap-3">
                           <div class="p-2.5 rounded-3 bg-primary bg-opacity-15 text-primary">
                             <i class="fa-solid ${role.icon} fs-5"></i>
                           </div>
                           <div>
-                            <h6 class="text-white fw-bold mb-1 fs-7">${role.title}</h6>
+                            <h6 class="text-dark fw-bold mb-1 fs-7">${role.title}</h6>
                             <p class="text-muted fs-8 mb-0">${role.desc}</p>
                           </div>
                         </div>
@@ -837,8 +837,8 @@
                     { id: 'product', title: 'Established Product Giants', desc: 'Atlassian, Adobe, Salesforce, Oracle, Cisco' }
                   ].map((tier, idx) => `
                     <div class="col-md-6">
-                      <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15 h-100 cursor-pointer tier-card ${idx === 0 ? 'border-primary' : ''}" onclick="selectOnboardingTier('${tier.id}', this)">
-                        <h6 class="text-white fw-bold mb-1 fs-7">${tier.title}</h6>
+                      <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-10 h-100 cursor-pointer tier-card ${idx === 0 ? 'border-primary' : ''}" onclick="selectOnboardingTier('${tier.id}', this)">
+                        <h6 class="text-dark fw-bold mb-1 fs-7">${tier.title}</h6>
                         <p class="text-muted fs-8 mb-0">${tier.desc}</p>
                       </div>
                     </div>
@@ -857,8 +857,8 @@
                     { min: 'weekend', title: 'Weekend Marathon', desc: 'Focused 8-hour weekend problem-solving blocks' }
                   ].map((pace, idx) => `
                     <div class="col-md-6">
-                      <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15 h-100 cursor-pointer pace-card ${idx === 1 ? 'border-primary' : ''}" onclick="selectOnboardingPace('${pace.min}', this)">
-                        <h6 class="text-white fw-bold mb-1 fs-7">${pace.title}</h6>
+                      <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-10 h-100 cursor-pointer pace-card ${idx === 1 ? 'border-primary' : ''}" onclick="selectOnboardingPace('${pace.min}', this)">
+                        <h6 class="text-dark fw-bold mb-1 fs-7">${pace.title}</h6>
                         <p class="text-muted fs-8 mb-0">${pace.desc}</p>
                       </div>
                     </div>
@@ -872,10 +872,10 @@
                   <div class="google-empty-icon mb-3 text-success" style="background: rgba(52, 168, 83, 0.15);">
                     <i class="fa-solid fa-circle-check fs-2 text-success"></i>
                   </div>
-                  <h4 class="text-white fw-bold mb-2">You are all set for interview mastery!</h4>
+                  <h4 class="text-dark fw-bold mb-2">You are all set for interview mastery!</h4>
                   <p class="text-muted fs-7 mb-4" style="max-width: 480px; margin: 0 auto;">Your personalized study tracks, DSA Matrix, and AI Mock Interview Coach have been configured according to your goals.</p>
 
-                  <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15 text-start mb-4" style="max-width: 480px; margin: 0 auto;">
+                  <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-10 text-start mb-4" style="max-width: 480px; margin: 0 auto;">
                     <div class="d-flex align-items-center justify-content-between mb-2">
                       <span class="text-muted fs-8">AI Copilot Real-Time Hints</span>
                       <span class="text-emerald fs-8 fw-bold">Active</span>
@@ -894,7 +894,7 @@
             </div>
 
             <!-- Stepper Actions -->
-            <div class="d-flex justify-content-between align-items-center mt-5 pt-3 border-top border-secondary border-opacity-15">
+            <div class="d-flex justify-content-between align-items-center mt-5 pt-3 border-top border-secondary border-opacity-10">
               <button class="btn btn-sm btn-glass rounded-pill px-4" id="onboarding-btn-prev" onclick="navOnboarding(-1)" style="visibility: hidden;">
                 <i class="fa-solid fa-arrow-left me-1"></i> Previous
               </button>
@@ -994,17 +994,17 @@
       <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #f8fafd);">
         <div class="container" style="max-width: 580px;">
           <div class="google-glass-card p-4 p-md-5 text-center position-relative" style="border-radius: 28px;">
-            <div class="google-four-color-bar mb-4 rounded-pill" style="height: 4px; background: linear-gradient(90deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);"></div>
+            <div class="google-four-color-bar mb-4 rounded-pill" style="height: 2px; background: #e2e8f0;"></div>
 
             <div class="google-empty-icon mb-3" style="background: rgba(52, 168, 83, 0.15); width: 72px; height: 72px;">
               <i class="fa-solid fa-circle-check fs-1 text-success"></i>
             </div>
 
             <span class="badge bg-success bg-opacity-20 text-success rounded-pill px-3 py-1 fs-8 mb-2">Payment Confirmed</span>
-            <h2 class="text-white fw-bold mb-2">Welcome to PrepSpace Pro!</h2>
+            <h2 class="text-dark fw-bold mb-2">Welcome to PrepSpace Pro!</h2>
             <p class="text-muted fs-7 mb-4">Your transaction was verified successfully. All Pro features, AI code evaluations, and full question archives have been unlocked for your account.</p>
 
-            <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15 text-start mb-4 fs-7">
+            <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-10 text-start mb-4 fs-7">
               <div class="d-flex justify-content-between py-1 border-bottom border-secondary border-opacity-10">
                 <span class="text-muted">Order Reference:</span>
                 <span class="text-white font-monospace fw-bold">${orderId}</span>
@@ -1039,14 +1039,14 @@
       <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #f8fafd);">
         <div class="container" style="max-width: 580px;">
           <div class="google-glass-card p-4 p-md-5 text-center position-relative" style="border-radius: 28px;">
-            <div class="google-four-color-bar mb-4 rounded-pill" style="height: 4px; background: linear-gradient(90deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);"></div>
+            <div class="google-four-color-bar mb-4 rounded-pill" style="height: 2px; background: #e2e8f0;"></div>
 
             <div class="google-empty-icon mb-3" style="background: rgba(234, 67, 53, 0.15); width: 72px; height: 72px;">
               <i class="fa-solid fa-circle-exclamation fs-1 text-danger"></i>
             </div>
 
             <span class="badge bg-danger bg-opacity-20 text-danger rounded-pill px-3 py-1 fs-8 mb-2">Transaction Incomplete</span>
-            <h2 class="text-white fw-bold mb-2">Payment Was Not Completed</h2>
+            <h2 class="text-dark fw-bold mb-2">Payment Was Not Completed</h2>
             <p class="text-muted fs-7 mb-4">No funds were deducted from your account. If any amount was debited by your bank, it will be automatically reversed within 2-4 business days.</p>
 
             <div class="p-3 rounded-4 bg-danger bg-opacity-10 border border-danger border-opacity-25 text-start mb-4 fs-7">
@@ -1070,17 +1070,17 @@
       <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #f8fafd);">
         <div class="container" style="max-width: 580px;">
           <div class="google-glass-card p-4 p-md-5 text-center position-relative" style="border-radius: 28px;">
-            <div class="google-four-color-bar mb-4 rounded-pill" style="height: 4px; background: linear-gradient(90deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);"></div>
+            <div class="google-four-color-bar mb-4 rounded-pill" style="height: 2px; background: #e2e8f0;"></div>
 
             <div class="google-empty-icon mb-3" style="background: rgba(251, 188, 5, 0.15); width: 72px; height: 72px;">
               <div class="spinner-border text-warning" role="status" style="width: 2.2rem; height: 2.2rem;"></div>
             </div>
 
             <span class="badge bg-warning bg-opacity-20 text-warning rounded-pill px-3 py-1 fs-8 mb-2">Awaiting Settlement</span>
-            <h2 class="text-white fw-bold mb-2">Confirming Payment...</h2>
+            <h2 class="text-dark fw-bold mb-2">Confirming Payment...</h2>
             <p class="text-muted fs-7 mb-4">We are awaiting final webhook confirmation from Cashfree and your issuing bank. UPI settlements typically settle within 30-60 seconds.</p>
 
-            <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15 text-start mb-4 fs-7">
+            <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-10 text-start mb-4 fs-7">
               <div class="d-flex justify-content-between py-1">
                 <span class="text-muted">Order Tracking ID:</span>
                 <span class="text-white font-monospace fw-bold">${orderId}</span>
@@ -1112,13 +1112,13 @@
       <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #f8fafd);">
         <div class="container" style="max-width: 520px;">
           <div class="google-glass-card p-4 p-md-5 text-center position-relative" style="border-radius: 28px;">
-            <div class="google-four-color-bar mb-4 rounded-pill" style="height: 4px; background: linear-gradient(90deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);"></div>
+            <div class="google-four-color-bar mb-4 rounded-pill" style="height: 2px; background: #e2e8f0;"></div>
 
             <div class="google-empty-icon mb-3" style="background: rgba(66, 133, 244, 0.15); width: 68px; height: 68px;">
               <i class="fa-solid fa-envelope-open-text fs-2 text-primary"></i>
             </div>
 
-            <h3 class="text-white fw-bold mb-2">Check Your Email</h3>
+            <h3 class="text-dark fw-bold mb-2">Check Your Email</h3>
             <p class="text-muted fs-7 mb-3">We have dispatched a verification link to your inbox:</p>
             <div class="p-2.5 rounded-3 bg-white bg-opacity-80 border border-secondary border-opacity-20 text-white font-monospace fs-7 mb-4">
               ${email}
@@ -1143,19 +1143,19 @@
       <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #f8fafd);">
         <div class="container" style="max-width: 480px;">
           <div class="google-glass-card p-4 p-md-5 text-center position-relative" style="border-radius: 28px;">
-            <div class="google-four-color-bar mb-4 rounded-pill" style="height: 4px; background: linear-gradient(90deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);"></div>
+            <div class="google-four-color-bar mb-4 rounded-pill" style="height: 2px; background: #e2e8f0;"></div>
 
             <div class="google-empty-icon mb-3" style="background: rgba(66, 133, 244, 0.15); width: 64px; height: 64px;">
               <i class="fa-solid fa-key fs-3 text-primary"></i>
             </div>
 
-            <h3 class="text-white fw-bold mb-2">Forgot Password?</h3>
+            <h3 class="text-dark fw-bold mb-2">Forgot Password?</h3>
             <p class="text-muted fs-7 mb-4">No worries! Enter your registered account email and we'll dispatch password recovery instructions.</p>
 
             <form id="forgot-password-form" onsubmit="event.preventDefault(); showToast('Password reset link sent to ' + document.getElementById('forgot-email').value, 'success'); setTimeout(() => window.location.hash = '#/login', 1500);">
               <div class="mb-3 text-start">
                 <label class="form-label text-muted fs-8 fw-bold">REGISTERED EMAIL ADDRESS</label>
-                <input type="email" id="forgot-email" class="form-control bg-white border-secondary border-opacity-25 text-dark py-2.5 rounded-3" placeholder="name@domain.com" required autocomplete="email">
+                <input type="email" id="forgot-email" class="form-control bg-white border-secondary border-opacity-15 text-dark py-2.5 rounded-3" placeholder="name@domain.com" required autocomplete="email">
               </div>
               <button type="submit" class="btn btn-premium w-100 rounded-pill py-2.5 fw-bold mb-3">Send Recovery Link</button>
               <a href="#/login" class="text-secondary text-decoration-none fs-8"><i class="fa-solid fa-arrow-left me-1"></i> Back to sign in</a>
@@ -1171,23 +1171,23 @@
       <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #f8fafd);">
         <div class="container" style="max-width: 480px;">
           <div class="google-glass-card p-4 p-md-5 text-center position-relative" style="border-radius: 28px;">
-            <div class="google-four-color-bar mb-4 rounded-pill" style="height: 4px; background: linear-gradient(90deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);"></div>
+            <div class="google-four-color-bar mb-4 rounded-pill" style="height: 2px; background: #e2e8f0;"></div>
 
             <div class="google-empty-icon mb-3" style="background: rgba(52, 168, 83, 0.15); width: 64px; height: 64px;">
               <i class="fa-solid fa-lock-open fs-3 text-success"></i>
             </div>
 
-            <h3 class="text-white fw-bold mb-2">Create New Password</h3>
+            <h3 class="text-dark fw-bold mb-2">Create New Password</h3>
             <p class="text-muted fs-7 mb-4">Choose a strong, unique password with at least 8 characters.</p>
 
             <form id="reset-password-form" onsubmit="event.preventDefault(); showToast('Password updated successfully! Redirecting to login...', 'success'); setTimeout(() => window.location.hash = '#/login', 1200);">
               <div class="mb-3 text-start">
                 <label class="form-label text-muted fs-8 fw-bold">NEW PASSWORD</label>
-                <input type="password" id="reset-new-pass" class="form-control bg-white border-secondary border-opacity-25 text-dark py-2.5 rounded-3" placeholder="••••••••" required minlength="8">
+                <input type="password" id="reset-new-pass" class="form-control bg-white border-secondary border-opacity-15 text-dark py-2.5 rounded-3" placeholder="••••••••" required minlength="8">
               </div>
               <div class="mb-4 text-start">
                 <label class="form-label text-muted fs-8 fw-bold">CONFIRM NEW PASSWORD</label>
-                <input type="password" id="reset-confirm-pass" class="form-control bg-white border-secondary border-opacity-25 text-dark py-2.5 rounded-3" placeholder="••••••••" required minlength="8">
+                <input type="password" id="reset-confirm-pass" class="form-control bg-white border-secondary border-opacity-15 text-dark py-2.5 rounded-3" placeholder="••••••••" required minlength="8">
               </div>
               <button type="submit" class="btn btn-premium w-100 rounded-pill py-2.5 fw-bold mb-3">Update Password & Sign In</button>
             </form>
@@ -1221,7 +1221,7 @@
     return `
       <div class="min-vh-100 pb-5" style="background: var(--bg-body, #f8fafd);">
         <!-- Top Google-Style Help Header -->
-        <div class="border-bottom border-secondary border-opacity-15 bg-white bg-opacity-80 py-5">
+        <div class="border-bottom border-secondary border-opacity-10 bg-white bg-opacity-80 py-5">
           <div class="container text-center" style="max-width: 760px;">
             <div class="google-dots d-inline-flex gap-1 mb-2">
               <span style="width: 10px; height: 10px; border-radius: 50%; background: #4285F4;"></span>
@@ -1229,7 +1229,7 @@
               <span style="width: 10px; height: 10px; border-radius: 50%; background: #FBBC05;"></span>
               <span style="width: 10px; height: 10px; border-radius: 50%; background: #34A853;"></span>
             </div>
-            <h1 class="text-white fw-bold display-5 mb-2">How can we assist you?</h1>
+            <h1 class="text-dark fw-bold display-5 mb-2">How can we assist you?</h1>
             <p class="text-secondary fs-6 mb-4">Search our knowledge base, frequently asked questions, and developer guides.</p>
 
             <!-- Prominent Google Search Pill -->
@@ -1242,7 +1242,7 @@
 
         <div class="container my-5">
           <!-- 6 Category Cards -->
-          <h5 class="text-white fw-bold mb-3 fs-6 uppercase" style="letter-spacing: 0.5px;">Browse by Category</h5>
+          <h5 class="text-dark fw-bold mb-3 fs-6 uppercase" style="letter-spacing: 0.5px;">Browse by Category</h5>
           <div class="row g-4 mb-5">
             ${categories.map(cat => `
               <div class="col-md-6 col-lg-4">
@@ -1266,7 +1266,7 @@
                 <h4 class="text-white fw-bold mb-4"><i class="fa-solid fa-circle-question text-primary me-2"></i>Frequently Asked Questions</h4>
                 <div class="accordion accordion-flush" id="help-faq-accordion">
                   ${faqs.map((faq, i) => `
-                    <div class="accordion-item bg-transparent border-bottom border-secondary border-opacity-15 py-2 faq-item">
+                    <div class="accordion-item bg-transparent border-bottom border-secondary border-opacity-10 py-2 faq-item">
                       <h2 class="accordion-header">
                         <button class="accordion-button collapsed bg-transparent text-white fw-bold fs-7 shadow-none px-0" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-${i}">
                           ${faq.q}
@@ -1289,21 +1289,21 @@
                 <div class="p-2 rounded-3 bg-primary bg-opacity-15 text-primary d-inline-block mb-3">
                   <i class="fa-solid fa-headset fs-4"></i>
                 </div>
-                <h5 class="text-white fw-bold mb-2">Still need help?</h5>
+                <h5 class="text-dark fw-bold mb-2">Still need help?</h5>
                 <p class="text-muted fs-7 mb-4">Our support engineering desk answers 100% of candidate inquiries within 24 hours.</p>
 
                 <form onsubmit="event.preventDefault(); showToast('Support ticket #PS-' + Math.floor(1000 + Math.random() * 9000) + ' created! We will reply via email.', 'success'); this.reset();">
                   <div class="mb-3">
                     <label class="form-label text-muted fs-8 fw-bold">YOUR NAME</label>
-                    <input type="text" class="form-control bg-white border-secondary border-opacity-25 text-dark rounded-3 fs-7" placeholder="Nagesh" required>
+                    <input type="text" class="form-control bg-white border-secondary border-opacity-15 text-dark rounded-3 fs-7" placeholder="Nagesh" required>
                   </div>
                   <div class="mb-3">
                     <label class="form-label text-muted fs-8 fw-bold">EMAIL ADDRESS</label>
-                    <input type="email" class="form-control bg-white border-secondary border-opacity-25 text-dark rounded-3 fs-7" placeholder="name@domain.com" required>
+                    <input type="email" class="form-control bg-white border-secondary border-opacity-15 text-dark rounded-3 fs-7" placeholder="name@domain.com" required>
                   </div>
                   <div class="mb-3">
                     <label class="form-label text-muted fs-8 fw-bold">TOPIC</label>
-                    <select class="form-select bg-white border-secondary border-opacity-25 text-dark rounded-3 fs-7">
+                    <select class="form-select bg-white border-secondary border-opacity-15 text-dark rounded-3 fs-7">
                       <option>Billing & Payment Query</option>
                       <option>Technical Bug in Compiler</option>
                       <option>AI Mock Interview Feedback</option>
@@ -1313,7 +1313,7 @@
                   </div>
                   <div class="mb-3">
                     <label class="form-label text-muted fs-8 fw-bold">HOW CAN WE HELP?</label>
-                    <textarea class="form-control bg-white border-secondary border-opacity-25 text-dark rounded-3 fs-7" rows="3" placeholder="Describe what occurred..." required></textarea>
+                    <textarea class="form-control bg-white border-secondary border-opacity-15 text-dark rounded-3 fs-7" rows="3" placeholder="Describe what occurred..." required></textarea>
                   </div>
                   <button type="submit" class="btn btn-premium w-100 rounded-pill py-2.5 fw-bold">Submit Priority Ticket</button>
                 </form>
@@ -1352,8 +1352,8 @@
               <span style="width: 14px; height: 14px; border-radius: 50%; background: #34A853;"></span>
             </div>
 
-            <h1 class="text-white fw-bold display-3 mb-1" style="letter-spacing: -2px;">404</h1>
-            <h4 class="text-white fw-bold mb-2">Page Not Found</h4>
+            <h1 class="text-dark fw-bold display-3 mb-1" style="letter-spacing: -2px;">404</h1>
+            <h4 class="text-dark fw-bold mb-2">Page Not Found</h4>
             <p class="text-muted fs-7 mb-4">The route you requested was moved, renamed, or does not exist on PrepSpace.</p>
 
             <div class="google-search-pill-wrapper mb-4">
@@ -1381,7 +1381,7 @@
             </div>
 
             <span class="badge bg-danger bg-opacity-20 text-danger rounded-pill px-3 py-1 fs-8 mb-2">Access Forbidden</span>
-            <h2 class="text-white fw-bold mb-2">403: Pro Clearance Required</h2>
+            <h2 class="text-dark fw-bold mb-2">403: Pro Clearance Required</h2>
             <p class="text-muted fs-7 mb-4">This section of the platform is reserved for PrepSpace Pro candidates or authorized administrators.</p>
 
             <div class="d-flex justify-content-center gap-2">
@@ -1405,10 +1405,10 @@
             </div>
 
             <h1 class="text-white fw-bold display-4 mb-1">500</h1>
-            <h4 class="text-white fw-bold mb-2">Server Error / System Hiccup</h4>
+            <h4 class="text-dark fw-bold mb-2">Server Error / System Hiccup</h4>
             <p class="text-muted fs-7 mb-3">Our distributed microservices experienced an unexpected exception. Our reliability engineering team has been automatically alerted.</p>
 
-            <div class="p-2 rounded bg-light bg-opacity-60 border border-secondary border-opacity-15 font-monospace text-muted fs-8 mb-4">
+            <div class="p-2 rounded bg-light bg-opacity-60 border border-secondary border-opacity-10 font-monospace text-muted fs-8 mb-4">
               Incident Trace ID: ${incidentId}
             </div>
 
@@ -1427,17 +1427,17 @@
       <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: var(--bg-body, #f8fafd);">
         <div class="container text-center" style="max-width: 580px;">
           <div class="google-glass-card p-4 p-md-5 position-relative" style="border-radius: 28px;">
-            <div class="google-four-color-bar mb-4 rounded-pill" style="height: 4px; background: linear-gradient(90deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);"></div>
+            <div class="google-four-color-bar mb-4 rounded-pill" style="height: 2px; background: #e2e8f0;"></div>
 
             <div class="google-empty-icon mb-3" style="background: rgba(66, 133, 244, 0.15); width: 72px; height: 72px;">
               <i class="fa-solid fa-screwdriver-wrench fs-2 text-primary"></i>
             </div>
 
             <span class="badge bg-primary bg-opacity-20 text-primary rounded-pill px-3 py-1 fs-8 mb-2">Scheduled Maintenance</span>
-            <h2 class="text-white fw-bold mb-2">Upgrading AI Clusters</h2>
+            <h2 class="text-dark fw-bold mb-2">Upgrading AI Clusters</h2>
             <p class="text-muted fs-7 mb-4">PrepSpace is currently undergoing scheduled infrastructure upgrades to deploy enhanced AI mock evaluation models and speed up code compilation.</p>
 
-            <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-15 text-start mb-4 fs-7">
+            <div class="p-3 rounded-4 bg-light bg-opacity-60 border border-secondary border-opacity-10 text-start mb-4 fs-7">
               <div class="d-flex justify-content-between mb-1">
                 <span class="text-muted">Expected Completion:</span>
                 <span class="text-white fw-bold">~25 Minutes</span>
@@ -1466,10 +1466,10 @@
         <div class="google-empty-icon">
           <i class="fa-solid ${icon}"></i>
         </div>
-        <h5 class="text-white fw-bold mb-1 fs-6">${title}</h5>
+        <h5 class="text-dark fw-bold mb-1 fs-6">${title}</h5>
         <p class="text-muted fs-7 mb-3" style="max-width: 360px; margin: 0 auto;">${subtitle}</p>
         ${actionText && actionHash ? `
-          <a href="${actionHash}" class="btn btn-sm btn-premium rounded-pill px-4 py-2">${actionText}</a>
+          <a href="${actionHash}" class="btn btn-sm btn-dark rounded-2 px-4 py-2">${actionText}</a>
         ` : ''}
       </div>
     `;
@@ -1483,7 +1483,7 @@
         <div class="google-empty-icon">
           <i class="fa-solid fa-magnifying-glass"></i>
         </div>
-        <h5 class="text-white fw-bold mb-1 fs-6">No matching results</h5>
+        <h5 class="text-dark fw-bold mb-1 fs-6">No matching results</h5>
         <p class="text-muted fs-7 mb-3">We couldn't find anything matching "<span class="text-white fw-bold">${query}</span>". Try checking for typos or searching with broader keywords.</p>
         <button class="btn btn-sm btn-glass rounded-pill px-4 py-1.5 fs-8" onclick="${onClearAction}">Clear Search</button>
       </div>
@@ -1600,8 +1600,8 @@
     return `
       <div class="modal fade" id="cancel-subscription-modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content google-glass-card border-secondary border-opacity-25" style="background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
-            <div class="modal-header border-bottom border-secondary border-opacity-15 px-4 pt-4">
+          <div class="modal-content google-glass-card border-secondary border-opacity-15" style="background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
+            <div class="modal-header border-bottom border-secondary border-opacity-10 px-4 pt-4">
               <div class="d-flex align-items-center gap-3">
                 <div class="p-2 rounded-circle bg-danger bg-opacity-15 text-danger">
                   <i class="fa-solid fa-heart-crack fs-5"></i>
@@ -1614,7 +1614,7 @@
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4 text-secondary fs-7">
-              <div class="p-3 rounded-3 bg-light bg-opacity-60 border border-secondary border-opacity-15 mb-3">
+              <div class="p-3 rounded-3 bg-light bg-opacity-60 border border-secondary border-opacity-10 mb-3">
                 <span class="text-white fw-bold fs-7 d-block mb-1">What you will lose upon term end:</span>
                 <ul class="text-muted fs-8 mb-0 ps-3">
                   <li>Unlimited AI Mock Interview speech evaluations & feedback</li>
@@ -1625,7 +1625,7 @@
 
               <div class="mb-3">
                 <label class="form-label text-muted fs-8 fw-bold">REASON FOR CANCELLATION</label>
-                <select class="form-select bg-white border-secondary border-opacity-25 text-dark rounded-3 fs-7" id="cancel-reason-select">
+                <select class="form-select bg-white border-secondary border-opacity-15 text-dark rounded-3 fs-7" id="cancel-reason-select">
                   <option>🎉 I landed my target software engineering role!</option>
                   <option>PrepSpace is currently outside my preparation budget</option>
                   <option>Taking a temporary break from interview prep</option>
@@ -1644,7 +1644,7 @@
                 </div>
               </div>
             </div>
-            <div class="modal-footer border-top border-secondary border-opacity-15 px-4 pb-4">
+            <div class="modal-footer border-top border-secondary border-opacity-10 px-4 pb-4">
               <button type="button" class="btn btn-sm btn-glass rounded-pill px-4" data-bs-dismiss="modal">Keep Pro Subscription</button>
               <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-4" onclick="confirmSubscriptionCancellation()">Confirm Cancellation</button>
             </div>
@@ -1683,8 +1683,8 @@
     return `
       <div class="modal fade" id="session-expired-modal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content google-glass-card border-secondary border-opacity-25" style="background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
-            <div class="modal-header border-bottom border-secondary border-opacity-15 px-4 pt-4">
+          <div class="modal-content google-glass-card border-secondary border-opacity-15" style="background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
+            <div class="modal-header border-bottom border-secondary border-opacity-10 px-4 pt-4">
               <div class="d-flex align-items-center gap-3">
                 <div class="p-2 rounded-circle bg-warning bg-opacity-15 text-warning">
                   <i class="fa-solid fa-clock-rotate-left fs-5"></i>
@@ -1700,11 +1700,11 @@
               <form onsubmit="event.preventDefault(); showToast('Session renewed successfully!', 'success'); bootstrap.Modal.getInstance(document.getElementById('session-expired-modal')).hide();">
                 <div class="mb-3">
                   <label class="form-label text-muted fs-8 fw-bold">EMAIL</label>
-                  <input type="email" class="form-control bg-white border-secondary border-opacity-25 text-dark rounded-3 fs-7" id="session-refresh-email" value="${emailVal}" required>
+                  <input type="email" class="form-control bg-white border-secondary border-opacity-15 text-dark rounded-3 fs-7" id="session-refresh-email" value="${emailVal}" required>
                 </div>
                 <div class="mb-4">
                   <label class="form-label text-muted fs-8 fw-bold">PASSWORD</label>
-                  <input type="password" class="form-control bg-white border-secondary border-opacity-25 text-dark rounded-3 fs-7" id="session-refresh-password" placeholder="••••••••" required>
+                  <input type="password" class="form-control bg-white border-secondary border-opacity-15 text-dark rounded-3 fs-7" id="session-refresh-password" placeholder="••••••••" required>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <a href="#/login" class="text-secondary text-decoration-none fs-8" onclick="bootstrap.Modal.getInstance(document.getElementById('session-expired-modal')).hide();">Sign in with different account</a>
@@ -1781,8 +1781,8 @@
     return `
       <div class="modal fade" id="cancel-subscription-modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content google-glass-card border-secondary border-opacity-25" style="background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
-            <div class="modal-header border-bottom border-secondary border-opacity-15 px-4 pt-4">
+          <div class="modal-content google-glass-card border-secondary border-opacity-15" style="background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
+            <div class="modal-header border-bottom border-secondary border-opacity-10 px-4 pt-4">
               <div class="d-flex align-items-center gap-3">
                 <div class="p-2 rounded-circle bg-danger bg-opacity-15 text-danger">
                   <i class="fa-solid fa-heart-crack fs-5"></i>
@@ -1795,7 +1795,7 @@
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4 text-secondary fs-7">
-              <div class="p-3 rounded-3 bg-light bg-opacity-60 border border-secondary border-opacity-15 mb-3">
+              <div class="p-3 rounded-3 bg-light bg-opacity-60 border border-secondary border-opacity-10 mb-3">
                 <span class="text-white fw-bold fs-7 d-block mb-1">What you will lose upon term end:</span>
                 <ul class="text-muted fs-8 mb-0 ps-3">
                   <li>Unlimited AI Mock Interview speech evaluations & feedback</li>
@@ -1806,7 +1806,7 @@
 
               <div class="mb-3">
                 <label class="form-label text-muted fs-8 fw-bold">REASON FOR CANCELLATION</label>
-                <select class="form-select bg-white border-secondary border-opacity-25 text-dark rounded-3 fs-7" id="cancel-reason-select">
+                <select class="form-select bg-white border-secondary border-opacity-15 text-dark rounded-3 fs-7" id="cancel-reason-select">
                   <option>🎉 I landed my target software engineering role!</option>
                   <option>PrepSpace is currently outside my preparation budget</option>
                   <option>Taking a temporary break from interview prep</option>
@@ -1825,7 +1825,7 @@
                 </div>
               </div>
             </div>
-            <div class="modal-footer border-top border-secondary border-opacity-15 px-4 pb-4">
+            <div class="modal-footer border-top border-secondary border-opacity-10 px-4 pb-4">
               <button type="button" class="btn btn-sm btn-glass rounded-pill px-4" data-bs-dismiss="modal">Keep Pro Subscription</button>
               <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-4" onclick="confirmSubscriptionCancellation()">Confirm Cancellation</button>
             </div>
@@ -1864,8 +1864,8 @@
     return `
       <div class="modal fade" id="session-expired-modal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content google-glass-card border-secondary border-opacity-25" style="background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
-            <div class="modal-header border-bottom border-secondary border-opacity-15 px-4 pt-4">
+          <div class="modal-content google-glass-card border-secondary border-opacity-15" style="background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
+            <div class="modal-header border-bottom border-secondary border-opacity-10 px-4 pt-4">
               <div class="d-flex align-items-center gap-3">
                 <div class="p-2 rounded-circle bg-warning bg-opacity-15 text-warning">
                   <i class="fa-solid fa-clock-rotate-left fs-5"></i>
@@ -1881,11 +1881,11 @@
               <form onsubmit="event.preventDefault(); showToast('Session renewed successfully!', 'success'); bootstrap.Modal.getInstance(document.getElementById('session-expired-modal')).hide();">
                 <div class="mb-3">
                   <label class="form-label text-muted fs-8 fw-bold">EMAIL</label>
-                  <input type="email" class="form-control bg-white border-secondary border-opacity-25 text-dark rounded-3 fs-7" id="session-refresh-email" value="${emailVal}" required>
+                  <input type="email" class="form-control bg-white border-secondary border-opacity-15 text-dark rounded-3 fs-7" id="session-refresh-email" value="${emailVal}" required>
                 </div>
                 <div class="mb-4">
                   <label class="form-label text-muted fs-8 fw-bold">PASSWORD</label>
-                  <input type="password" class="form-control bg-white border-secondary border-opacity-25 text-dark rounded-3 fs-7" id="session-refresh-password" placeholder="••••••••" required>
+                  <input type="password" class="form-control bg-white border-secondary border-opacity-15 text-dark rounded-3 fs-7" id="session-refresh-password" placeholder="••••••••" required>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <a href="#/login" class="text-secondary text-decoration-none fs-8" onclick="bootstrap.Modal.getInstance(document.getElementById('session-expired-modal')).hide();">Sign in with different account</a>

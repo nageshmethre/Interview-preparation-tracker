@@ -15,7 +15,7 @@ const state = {
   pomodoroTimeLeft: 25 * 60,
   pomodoroRunning: false,
   pomodoroMode: 'study', // study, break
-  theme: localStorage.getItem('theme') || 'light'
+  theme: localStorage.getItem('theme') || 'dark'
 };
 
 function getReferralCodeFromUrl() {
@@ -215,7 +215,7 @@ window.updateRoiCalculator = function() {
 
 // Google Material Design System Theme Initialization
 function initTheme() {
-  const savedTheme = localStorage.getItem('theme') || 'light';
+  const savedTheme = localStorage.getItem('theme') || 'dark';
   state.theme = savedTheme;
   document.documentElement.setAttribute('data-theme', savedTheme);
 }

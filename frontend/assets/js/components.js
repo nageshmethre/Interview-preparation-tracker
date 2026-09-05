@@ -5,7 +5,7 @@ const components = {
   landing: () => `
     <header class="stripe-hero-mesh pb-5">
       <!-- Sitewide Promotional Banner Ad -->
-      <div class="py-2 px-3 text-center border-bottom border-primary border-opacity-25" style="background: linear-gradient(90deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);">
+      <div class="py-2 px-3 text-center border-bottom border-primary border-opacity-25" style="background: #1c1c20; border-bottom: 1px solid #323238;">
         <div class="container d-flex flex-wrap align-items-center justify-content-center gap-2 fs-8 text-white">
           <span class="badge bg-warning text-dark font-monospace fw-bold px-2 py-1"><i class="fa-solid fa-trophy me-1"></i> TOP 50 PERK</span>
           <span>Rank in the <strong>Top 50</strong> of any Mock Exam (Java, Python, C++, React, DSA) & win a <strong>100% Free Lifetime Pro Subscription!</strong></span>
@@ -14,7 +14,7 @@ const components = {
       </div>
 
       <!-- Vercel Minimalist Glass Navigation -->
-      <nav class="navbar navbar-expand-lg navbar-dark bg-black py-3 sticky-top border-bottom border-secondary border-opacity-25">
+      <nav class="navbar navbar-expand-lg navbar-dark py-3 sticky-top border-bottom border-secondary border-opacity-20" style="background: #1c1c20;">
         <div class="container">
           <a class="navbar-brand d-flex align-items-center gap-2 text-decoration-none" href="#/">
             <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace Logo" class="brand-logo-img" style="width: 36px; height: 36px; object-fit: contain;">
@@ -117,32 +117,32 @@ const components = {
             </div>
 
             <!-- Inside Mockup Viewport -->
-            <div class="p-4 p-md-5 bg-dark bg-opacity-75">
+            <div class="p-4 p-md-5" style="background: #222226;">
               <!-- Live Metrics Strip -->
               <div class="row g-3 mb-4">
                 <div class="col-6 col-md-3">
-                  <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 text-start">
+                  <div class="p-3 rounded-3 border border-secondary border-opacity-20" style="background: #1c1c20; border-color: #323238; text-start">
                     <span class="text-muted fs-8 uppercase">Readiness Score</span>
                     <h3 class="text-white fw-bold mt-1 mb-0 gradient-text-stripe">96.8%</h3>
                     <small class="text-success fs-8"><i class="fa-solid fa-arrow-trend-up me-1"></i>+12% this week</small>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
-                  <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 text-start">
+                  <div class="p-3 rounded-3 border border-secondary border-opacity-20" style="background: #1c1c20; border-color: #323238; text-start">
                     <span class="text-muted fs-8 uppercase">DSA Streaks</span>
                     <h3 class="text-warning fw-bold mt-1 mb-0"><i class="fa-solid fa-fire me-1"></i>18 Days</h3>
                     <small class="text-muted fs-8">240 Problems Solved</small>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
-                  <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 text-start">
+                  <div class="p-3 rounded-3 border border-secondary border-opacity-20" style="background: #1c1c20; border-color: #323238; text-start">
                     <span class="text-muted fs-8 uppercase">50-MCQ Exam Grade</span>
                     <h3 class="text-info fw-bold mt-1 mb-0">50 / 50</h3>
                     <small class="text-success fs-8">100% Top Percentile</small>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
-                  <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 text-start">
+                  <div class="p-3 rounded-3 border border-secondary border-opacity-20" style="background: #1c1c20; border-color: #323238; text-start">
                     <span class="text-muted fs-8 uppercase">Active Pipeline</span>
                     <h3 class="text-success fw-bold mt-1 mb-0">4 Offers</h3>
                     <small class="text-muted fs-8">8 Companies In Review</small>
@@ -275,7 +275,7 @@ const components = {
 
       <!-- Interactive Preparation ROI Calculator -->
       <section id="calculator" class="container py-5">
-        <div class="p-4 p-md-5 rounded-4 bg-dark bg-opacity-50 border border-secondary border-opacity-25">
+        <div class="p-4 p-md-5 rounded-4 border border-secondary border-opacity-20" style="background: #222226; border-color: #323238;">
           <div class="row align-items-center g-4">
             <div class="col-lg-6 text-start">
               <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-3">READINESS SIMULATOR</span>
@@ -316,7 +316,7 @@ const components = {
                   </div>
                 </div>
                 <div class="col-12">
-                  <div class="p-3 rounded-3 bg-black bg-opacity-40 border border-secondary border-opacity-25 text-start d-flex align-items-center justify-content-between">
+                  <div class="p-3 rounded-3 border border-secondary border-opacity-20" style="background: #1c1c20; border-color: #323238; text-start d-flex align-items-center justify-content-between">
                     <div>
                       <span class="text-white fw-bold fs-7">Estimated Offer Probability</span>
                       <p class="text-muted fs-8 mb-0" id="calc-odds-desc">Top 5% Placement Performance Group</p>
@@ -433,7 +433,7 @@ const components = {
 
     <!-- Google-Inspired Production Enterprise Footer -->
     <footer class="py-5 border-top border-secondary-subtle border-opacity-10 mt-5 position-relative">
-      <div class="google-four-color-bar position-absolute top-0 start-0 end-0" style="height: 2px; background: linear-gradient(90deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);"></div>
+      <div class="position-absolute top-0 start-0 end-0" style="height: 1px; background: #323238;"></div>
       <div class="container pt-3">
         <div class="row g-4 justify-content-between mb-5">
           <!-- Brand & Mission Column -->
@@ -704,7 +704,7 @@ const components = {
         </div>
 
         <!-- User Profile Micro Card -->
-        <div class="user-micro-card px-2 py-2 mx-2 my-2 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 d-flex align-items-center justify-content-between" id="sidebar-user-card">
+        <div class="user-micro-card px-2 py-2 mx-2 my-2 rounded-3 border border-secondary border-opacity-20" style="background: #222226; border-color: #323238; d-flex align-items-center justify-content-between" id="sidebar-user-card">
           <div class="d-flex align-items-center gap-2 overflow-hidden me-1">
             <div class="position-relative flex-shrink-0 user-avatar-dot">
               <i class="fa-solid fa-circle-user fs-4 ${isPaid ? 'text-primary' : 'text-secondary'}"></i>
@@ -774,7 +774,7 @@ const components = {
           <div class="d-flex align-items-center gap-2 overflow-hidden">
             <button class="btn btn-glass d-lg-none me-1" id="sidebar-toggle-btn"><i class="fa-solid fa-bars"></i></button>
             <div class="d-flex align-items-center gap-2 overflow-hidden">
-              <span class="badge bg-dark text-white border border-secondary border-opacity-25 px-2 py-1 fs-8 fw-bold d-none d-sm-inline-block font-monospace">WORKSPACE</span>
+              <span class="badge bg-light text-dark border border-secondary border-opacity-20 px-2 py-1 fs-8 fw-bold d-none d-sm-inline-block font-monospace">WORKSPACE</span>
               <span class="text-secondary fs-7 d-none d-sm-inline-block">/</span>
               <h4 class="text-white fw-bold m-0 fs-5 fs-md-4 text-truncate" id="current-view-title">Dashboard</h4>
             </div>
@@ -818,16 +818,7 @@ const components = {
         <!-- Dynamic Sitewide Admin Broadcast Container -->
         <div id="admin-broadcast-portal-container" class="mb-3" style="display: none;"></div>
 
-        <!-- Sitewide Workspace Promo Announcement Bar -->
-        ${!isAdmin ? `
-        <div class="sitewide-promo-banner py-2 px-3 mb-3 border border-primary border-opacity-25 rounded-3 d-flex flex-wrap align-items-center justify-content-between gap-2" style="background: linear-gradient(90deg, rgba(30, 27, 75, 0.7) 0%, rgba(49, 46, 129, 0.7) 50%, rgba(67, 56, 202, 0.7) 100%);">
-          <div class="d-flex align-items-center gap-2 text-white fs-8">
-            <span class="badge bg-warning text-dark font-monospace fw-bold"><i class="fa-solid fa-trophy me-1"></i> TOP 50 PRO PERK</span>
-            <span>Score in the <strong>Top 50</strong> of any Mock Exam (Java, Python, C++, React, DSA) & win a <strong>100% Free Lifetime Pro Subscription!</strong></span>
-          </div>
-          <a href="#/mock-exams" class="btn btn-sm btn-light py-0 px-2 fw-bold fs-9 text-dark rounded-pill text-nowrap text-decoration-none">Take Mock Exam →</a>
-        </div>
-        ` : ''}
+        <!-- Ads/Promo Banners kept strictly to Home Landing View only -->
 
         <!-- Dynamic Sub-view Mounting Port -->
         <div id="page-mount" class="flex-grow-1 overflow-y-auto"></div>
@@ -841,7 +832,7 @@ const components = {
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-3 border-bottom border-secondary border-opacity-10 gap-3">
       <div>
         <div class="d-flex align-items-center gap-2 mb-1">
-          <span class="badge bg-dark text-white border border-secondary border-opacity-25 font-monospace fs-9 px-2 py-0.5">PRODUCTION</span>
+          <span class="badge bg-light text-dark border border-secondary border-opacity-20 font-monospace fs-9 px-2 py-0.5">PRODUCTION</span>
           <span class="text-secondary fs-9 font-monospace">stream-in.app</span>
         </div>
         <h4 class="text-white fw-bold mb-0">Interview Readiness Engine</h4>
@@ -859,7 +850,7 @@ const components = {
         <div class="bento-card box-accent-cyan p-3 text-start" id="dashboard-screentime-card">
           <div class="d-flex align-items-center justify-content-between mb-1">
             <span class="stat-label mb-0">Daily Screen Time</span>
-            <span class="badge bg-dark text-cyan border border-secondary border-opacity-25 font-monospace fs-9"><i class="fa-solid fa-clock me-1"></i>ACTIVE</span>
+            <span class="badge bg-light text-dark border border-secondary border-opacity-20 font-monospace fs-9"><i class="fa-solid fa-clock me-1"></i>ACTIVE</span>
           </div>
           <div class="stat-num text-white mt-1 mb-0" id="daily-screentime-display">0h 0m</div>
           <small class="text-cyan fs-9 font-monospace" id="live-session-timer"><i class="fa-solid fa-spinner fa-spin me-1"></i>Session: 0m</small>
@@ -902,7 +893,7 @@ const components = {
         <div class="bento-card box-accent-primary p-3 mb-3">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <h6 class="text-white fw-bold m-0"><i class="fa-solid fa-chart-area text-primary me-2"></i>Weekly Preparation Velocity</h6>
-            <span class="badge bg-dark text-white border border-secondary border-opacity-25 px-2 py-0.5 fs-9 font-monospace">HOURS LOGGED</span>
+            <span class="badge bg-light text-dark border border-secondary border-opacity-20 px-2 py-0.5 fs-9 font-monospace">HOURS LOGGED</span>
           </div>
           <div style="position: relative; height: 175px;">
             <canvas id="weeklyHoursChart"></canvas>
@@ -934,15 +925,15 @@ const components = {
               <ul class="list-group list-group-flush bg-transparent">
                 <li class="list-group-item bg-transparent text-white border-secondary border-opacity-25 d-flex justify-content-between align-items-center px-0 py-1">
                   <span class="fs-8"><i class="fa-solid fa-circle-nodes text-warning me-2"></i>LeetCode</span>
-                  <span class="badge bg-dark text-white border border-secondary border-opacity-25 rounded-pill fs-9">${stats.codingPlatformsSolved.LeetCode || 0} Solved</span>
+                  <span class="badge bg-light text-dark border border-secondary border-opacity-20 rounded-pill fs-9">${stats.codingPlatformsSolved.LeetCode || 0} Solved</span>
                 </li>
                 <li class="list-group-item bg-transparent text-white border-secondary border-opacity-25 d-flex justify-content-between align-items-center px-0 py-1">
                   <span class="fs-8"><i class="fa-solid fa-code text-primary me-2"></i>CodeChef</span>
-                  <span class="badge bg-dark text-white border border-secondary border-opacity-25 rounded-pill fs-9">${stats.codingPlatformsSolved.CodeChef || 0} Solved</span>
+                  <span class="badge bg-light text-dark border border-secondary border-opacity-20 rounded-pill fs-9">${stats.codingPlatformsSolved.CodeChef || 0} Solved</span>
                 </li>
                 <li class="list-group-item bg-transparent text-white border-0 d-flex justify-content-between align-items-center px-0 py-1">
                   <span class="fs-8"><i class="fa-solid fa-terminal text-info me-2"></i>Codeforces</span>
-                  <span class="badge bg-dark text-white border border-secondary border-opacity-25 rounded-pill fs-9">${stats.codingPlatformsSolved.Codeforces || 0} Solved</span>
+                  <span class="badge bg-light text-dark border border-secondary border-opacity-20 rounded-pill fs-9">${stats.codingPlatformsSolved.Codeforces || 0} Solved</span>
                 </li>
               </ul>
             </div>
@@ -1000,7 +991,7 @@ const components = {
         <div class="glass-panel p-4 text-center box-accent-cyan">
           <div class="d-flex align-items-center justify-content-between mb-3">
             <h5 class="text-white fw-bold mb-0 fs-6"><i class="fa-regular fa-clock text-cyan me-2"></i>Focus Timer</h5>
-            <span class="badge bg-dark border border-secondary text-cyan font-mono fs-9">POMODORO</span>
+            <span class="badge bg-light border border-secondary border-opacity-20 text-dark font-mono fs-9">POMODORO</span>
           </div>
           <div class="timer-display my-4 font-mono fw-bold text-white fs-1" id="pomodoro-time" style="letter-spacing: 2px;">25:00</div>
           
@@ -1614,7 +1605,7 @@ const components = {
         <div class="col-md-6">
           <label class="form-label text-muted fs-8 fw-semibold uppercase tracking-wider">USERNAME / HANDLE</label>
           <div class="input-group">
-            <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted">@</span>
+            <span class="input-group-text bg-light border-secondary border-opacity-20 text-muted">@</span>
             <input type="text" id="set-username" class="form-control glass-input" value="${username}" disabled>
           </div>
         </div>
@@ -1663,21 +1654,21 @@ const components = {
         <div class="col-md-4">
           <label class="form-label text-muted fs-8 fw-semibold uppercase tracking-wider">GITHUB PROFILE</label>
           <div class="input-group input-group-sm">
-            <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-brands fa-github"></i></span>
+            <span class="input-group-text bg-light border-secondary border-opacity-20 text-muted"><i class="fa-brands fa-github"></i></span>
             <input type="text" id="set-github" class="form-control glass-input fs-7" value="${s.githubUrl || ''}" placeholder="https://github.com/...">
           </div>
         </div>
         <div class="col-md-4">
           <label class="form-label text-muted fs-8 fw-semibold uppercase tracking-wider">LINKEDIN PROFILE</label>
           <div class="input-group input-group-sm">
-            <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-brands fa-linkedin"></i></span>
+            <span class="input-group-text bg-light border-secondary border-opacity-20 text-muted"><i class="fa-brands fa-linkedin"></i></span>
             <input type="text" id="set-linkedin" class="form-control glass-input fs-7" value="${s.linkedinUrl || ''}" placeholder="https://linkedin.com/in/...">
           </div>
         </div>
         <div class="col-md-4">
           <label class="form-label text-muted fs-8 fw-semibold uppercase tracking-wider">PORTFOLIO URL</label>
           <div class="input-group input-group-sm">
-            <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-solid fa-globe"></i></span>
+            <span class="input-group-text bg-light border-secondary border-opacity-20 text-muted"><i class="fa-solid fa-globe"></i></span>
             <input type="text" id="set-portfolio" class="form-control glass-input fs-7" value="${s.portfolioUrl || ''}" placeholder="https://yourportfolio.dev">
           </div>
         </div>
@@ -2260,7 +2251,7 @@ const components = {
             <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-8">${course.difficulty || 'All Levels'}</span>
           </div>
           <div class="text-muted fs-8 mb-3">${course.title}</div>
-          <div class="progress mb-2 bg-dark" style="height: 8px;">
+          <div class="progress mb-2 bg-secondary bg-opacity-15" style="height: 8px;">
             <div class="progress-bar bg-indigo" role="progressbar" style="width: ${enrollment ? enrollment.progressPercentage : 0}%"></div>
           </div>
           <p class="text-muted fs-7 mb-4">${enrollment ? Math.round(enrollment.progressPercentage) : 0}% Completed</p>
@@ -2442,7 +2433,7 @@ const components = {
             <div class="glass-panel p-3 h-100 d-flex flex-column" style="max-height: 80vh;">
               <div class="d-flex align-items-center justify-content-between mb-2">
                 <h6 class="text-white fw-bold m-0 fs-7"><i class="fa-solid fa-code text-cyan me-2"></i>Java Compiler IDE</h6>
-                <span class="badge bg-dark border border-secondary text-muted fs-9">JDK 21</span>
+                <span class="badge bg-light border border-secondary border-opacity-20 text-dark fs-9">JDK 21</span>
               </div>
               <div class="flex-grow-1 mb-2">
                 <textarea id="code-editor-textarea" class="form-control font-monospace text-white bg-dark border-secondary p-2 h-100 fs-8" style="resize:none; min-height: 240px;" placeholder="public int solve(...) {\n    // Type code here...\n}"></textarea>
@@ -2596,7 +2587,7 @@ const components = {
                 <span id="mock-progress-text">Progress: 1 of ${questionCount}</span>
                 <span id="mock-answered-count" class="text-success fw-bold">Answered: 0/${questionCount}</span>
               </div>
-              <div class="progress bg-dark bg-opacity-75" style="height: 8px; border-radius: 4px;">
+              <div class="progress bg-secondary bg-opacity-15 bg-opacity-75" style="height: 8px; border-radius: 4px;">
                 <div id="mock-progress-bar" class="progress-bar bg-primary" role="progressbar" style="width: ${(1 / questionCount) * 100}%"></div>
               </div>
             </div>
@@ -3167,7 +3158,7 @@ const components = {
         <div class="col-md-6 col-lg-4">
           <div class="glass-panel p-4 p-md-5 h-100 text-center d-flex flex-column justify-content-between">
             <div>
-              <span class="badge bg-dark border border-secondary text-muted px-3 py-1 mb-3 font-mono fs-8">FOUNDATION TIER</span>
+              <span class="badge bg-light border border-secondary border-opacity-20 text-dark px-3 py-1 mb-3 font-mono fs-8">FOUNDATION TIER</span>
               <h3 class="text-white h4 mb-1">PrepFree</h3>
               <p class="text-muted fs-8 mb-4">Core tracker tools for personal preparation</p>
               <div class="my-4">
@@ -3285,7 +3276,7 @@ const components = {
           <div class="glass-panel p-4 mb-4 box-accent-primary">
             <div class="d-flex align-items-center justify-content-between mb-3">
               <h5 class="text-white fw-bold m-0 fs-6"><i class="fa-solid fa-link text-primary me-2"></i>Your Referral Link</h5>
-              <span class="badge bg-dark border border-secondary text-muted font-mono fs-9">SHARE</span>
+              <span class="badge bg-light border border-secondary border-opacity-20 text-dark font-mono fs-9">SHARE</span>
             </div>
             <p class="text-muted fs-8 mb-3">Share your personalized link with your college cohorts, Discord groups, and friends.</p>
             <div class="d-flex gap-2 mb-2">
@@ -3325,7 +3316,7 @@ const components = {
           <div class="glass-panel p-4 mb-4 box-accent-primary">
             <div class="d-flex align-items-center justify-content-between mb-3">
               <h5 class="text-white fw-bold m-0 fs-6"><i class="fa-solid fa-list-check text-primary me-2"></i>Referral Audit Trail</h5>
-              <span class="badge bg-dark border border-secondary text-muted font-mono fs-9">ACTIVITY</span>
+              <span class="badge bg-light border border-secondary border-opacity-20 text-dark font-mono fs-9">ACTIVITY</span>
             </div>
             <div class="table-responsive">
               <table class="table table-dark table-hover align-middle mb-0">
@@ -3349,7 +3340,7 @@ const components = {
           <div class="glass-panel p-4 box-accent-amber">
             <div class="d-flex align-items-center justify-content-between mb-3">
               <h5 class="text-white fw-bold m-0 fs-6"><i class="fa-solid fa-arrow-right-arrow-left text-warning me-2"></i>Withdrawal Claims</h5>
-              <span class="badge bg-dark border border-secondary text-muted font-mono fs-9">PAYOUTS</span>
+              <span class="badge bg-light border border-secondary border-opacity-20 text-dark font-mono fs-9">PAYOUTS</span>
             </div>
             <div class="table-responsive">
               <table class="table table-dark table-hover align-middle mb-0">
@@ -3473,7 +3464,7 @@ const components = {
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
           <div class="flex-grow-1" style="max-width: 400px;">
             <div class="input-group input-group-sm">
-              <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+              <span class="input-group-text bg-light border-secondary border-opacity-20 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
               <input type="text" id="admin-payment-search-input" class="form-control admin-input" placeholder="Search by email, order ID, or payment ID...">
             </div>
           </div>
@@ -3549,7 +3540,7 @@ const components = {
         <div class="row g-2 align-items-center mb-3">
           <div class="col-md-6">
             <div class="input-group input-group-sm">
-              <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+              <span class="input-group-text bg-light border-secondary border-opacity-20 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
               <input type="text" id="admin-user-search-input" class="form-control admin-input" placeholder="Search by name, email, role, or referral code...">
             </div>
           </div>
@@ -3713,7 +3704,7 @@ const components = {
 
         <div class="mb-3" style="max-width: 380px;">
           <div class="input-group input-group-sm">
-            <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+            <span class="input-group-text bg-light border-secondary border-opacity-20 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
             <input type="text" id="admin-audit-search-input" class="form-control admin-input" placeholder="Search by admin email, action, or key...">
           </div>
         </div>
@@ -3811,7 +3802,7 @@ const components = {
             <h5 class="text-white fw-bold mb-1"><i class="fa-solid fa-network-wired text-info me-2"></i>Webhook Inbound Stream Audit</h5>
             <small class="text-muted fs-8">Idempotent signature validation for gateway and external notifications</small>
           </div>
-          <span class="badge bg-dark text-white border border-secondary border-opacity-25 px-3 py-1 font-monospace">${webhooks.length} Webhook Events</span>
+          <span class="badge bg-light text-dark border border-secondary border-opacity-20 px-3 py-1 font-monospace">${webhooks.length} Webhook Events</span>
         </div>
 
         <div class="table-responsive" style="overflow-x: auto;">
@@ -3856,14 +3847,14 @@ const components = {
             <h5 class="text-white fw-bold mb-1"><i class="fa-solid fa-trophy text-warning me-2"></i>Placement League & Assessment Moderation</h5>
             <small class="text-muted fs-8">Anti-cheat scoring oversight, test submission logs, and leaderboard integrity</small>
           </div>
-          <span class="badge bg-dark text-white border border-secondary border-opacity-25 px-3 py-1 font-monospace">${tests.length} Total Attempts</span>
+          <span class="badge bg-light text-dark border border-secondary border-opacity-20 px-3 py-1 font-monospace">${tests.length} Total Attempts</span>
         </div>
 
         <!-- Filter and Search -->
         <div class="row g-2 align-items-center mb-3">
           <div class="col-md-6">
             <div class="input-group input-group-sm">
-              <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+              <span class="input-group-text bg-light border-secondary border-opacity-20 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
               <input type="text" id="admin-leaderboard-search-input" class="form-control admin-input" placeholder="Search candidate name, email, or category...">
             </div>
           </div>
@@ -3906,7 +3897,7 @@ const components = {
                       <div class="text-white fw-semibold text-truncate" style="max-width: 180px;">${candidateName}</div>
                       <div class="text-secondary font-monospace fs-9 text-truncate" style="max-width: 180px;">${candidateEmail}</div>
                     </td>
-                    <td><span class="badge bg-dark text-white border border-secondary border-opacity-25 font-monospace px-2 py-0.5 fs-9">${t.category}</span></td>
+                    <td><span class="badge bg-light text-dark border border-secondary border-opacity-20 font-monospace px-2 py-0.5 fs-9">${t.category}</span></td>
                     <td class="fw-bold text-success font-monospace">${t.score} pts</td>
                     <td>
                       ${t.score >= 90 ? '<span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-0.5 fs-9"><i class="fa-solid fa-shield-check me-1"></i> High Rank</span>' : '<span class="badge bg-secondary-subtle text-muted px-2 py-0.5 fs-9">Standard</span>'}
@@ -4082,7 +4073,7 @@ const components = {
               <div class="mb-3">
                 <label class="form-label text-muted fs-8 uppercase">Candidate Recipient Email</label>
                 <div class="input-group input-group-sm">
-                  <span class="input-group-text bg-dark border-secondary border-opacity-25 text-muted"><i class="fa-solid fa-at"></i></span>
+                  <span class="input-group-text bg-light border-secondary border-opacity-20 text-muted"><i class="fa-solid fa-at"></i></span>
                   <input type="email" id="broadcast-email-to" class="form-control admin-input" placeholder="e.g. candidate@gmail.com">
                 </div>
               </div>
@@ -4524,7 +4515,7 @@ const components = {
             </div>
 
             <!-- Progress bar -->
-            <div class="progress mb-3 bg-dark" style="height: 8px; border-radius: 9999px;">
+            <div class="progress mb-3 bg-secondary bg-opacity-15" style="height: 8px; border-radius: 9999px;">
               <div class="progress-bar progress-bar-striped progress-bar-animated" id="bulk-progress-bar" role="progressbar" style="width: 0%; background: linear-gradient(90deg, #6366f1, #8b5cf6);"></div>
             </div>
 
