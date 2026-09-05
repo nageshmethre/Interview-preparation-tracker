@@ -2131,3 +2131,15 @@ input:-webkit-autofill {
   font-weight: 600;
 }
 
+/* Top Announcement Bar (Vercel / Stripe Style) */
+.promo-announcement-bar {
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.promo-announcement-bar a:hover {
+  background: #fbbf24 !important;
+  transform: translateY(-1px);
+}
+
+

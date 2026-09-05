@@ -4,12 +4,22 @@ const components = {
   // Public SaaS Landing Page - Style 2: Stripe / Supabase Enterprise Gradient Look
   landing: () => `
     <header class="stripe-hero-mesh pb-5">
-      <!-- Sitewide Promotional Banner Ad -->
-      <div class="py-2 px-3 text-center border-bottom border-primary border-opacity-25" style="background: #1c1c20; border-bottom: 1px solid #323238;">
-        <div class="container d-flex flex-wrap align-items-center justify-content-center gap-2 fs-8 text-white">
-          <span class="badge bg-warning text-dark font-monospace fw-bold px-2 py-1"><i class="fa-solid fa-trophy me-1"></i> TOP 50 PERK</span>
-          <span>Rank in the <strong>Top 50</strong> of any Mock Exam (Java, Python, C++, React, DSA) & win a <strong>100% Free Lifetime Pro Subscription!</strong></span>
-          <a href="#/mock-exams" class="btn btn-sm btn-light py-0 px-2 fw-bold fs-9 text-dark rounded-pill ms-2 text-decoration-none">Take Mock Exam Now →</a>
+      <!-- Modern Top Announcement Alert Bar (Vercel / Stripe Style) -->
+      <div id="top-promo-banner" class="promo-announcement-bar py-2 px-3 position-relative" style="background: linear-gradient(90deg, #18181b 0%, #1f1f24 50%, #18181b 100%); border-bottom: 1px solid rgba(245, 158, 11, 0.22); z-index: 1050;">
+        <div class="container position-relative d-flex align-items-center justify-content-center">
+          <div class="d-inline-flex flex-wrap align-items-center justify-content-center gap-2 text-center text-white-50">
+            <span class="d-inline-flex align-items-center gap-1 px-2.5 py-0.5 rounded-pill font-monospace fw-bold" style="background: rgba(245, 158, 11, 0.12); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 0.72rem;">
+              <i class="fa-solid fa-trophy" style="font-size: 0.7rem;"></i> TOP 50 PERK
+            </span>
+            <span class="text-light" style="font-size: 0.82rem;">
+              Rank in the <strong class="text-white">Top 50</strong> of any Mock Exam to win a <strong style="color: #fbbf24;">100% Free Lifetime Pro</strong> membership.
+            </span>
+            <a href="#/mock-exams" class="d-inline-flex align-items-center gap-1 fw-bold text-decoration-none ms-1 px-3 py-1 rounded-pill text-dark" style="background: #f59e0b; font-size: 0.76rem; transition: all 0.2s ease;">
+              <span>Start Mock Exam</span>
+              <i class="fa-solid fa-arrow-right" style="font-size: 0.7rem;"></i>
+            </a>
+          </div>
+          <button type="button" class="btn-close btn-close-white position-absolute end-0 top-50 translate-middle-y me-2 d-none d-md-block" style="font-size: 0.65rem; opacity: 0.6;" onclick="document.getElementById('top-promo-banner').style.display='none';" aria-label="Dismiss banner"></button>
         </div>
       </div>
 
