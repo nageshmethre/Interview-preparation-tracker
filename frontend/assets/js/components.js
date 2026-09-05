@@ -37,8 +37,10 @@ const components = {
                 <a class="btn btn-glass px-3 py-1 fs-7 text-success border-success-subtle d-inline-flex align-items-center gap-1" href="https://stream-in.app/downloads/PrepSpace.apk" download="PrepSpace.apk" title="Direct Android APK Download">
                   <i class="fa-brands fa-android text-success"></i> <span class="d-none d-sm-inline">App</span>
                 </a>
-                <a class="btn btn-glass px-3 py-1 fs-7" href="#/login">Log In</a>
-                <a class="btn btn-premium px-3 py-1 fs-7 fw-bold" href="#/register">Sign Up Free</a>
+                ${(typeof state !== 'undefined' && state && state.token)
+                  ? `<a class="btn btn-premium px-3 py-1 fs-7 fw-bold" href="#/dashboard">Dashboard <i class="fa-solid fa-arrow-right ms-1"></i></a>`
+                  : `<a class="btn btn-glass px-3 py-1 fs-7" href="#/login">Log In</a>
+                     <a class="btn btn-premium px-3 py-1 fs-7 fw-bold" href="#/register">Sign Up Free</a>`}
               </li>
             </ul>
           </div>
@@ -725,33 +727,33 @@ const components = {
         
         <!-- Categorized Nav Links -->
         <div class="flex-grow-1 py-2 overflow-y-auto">
-          <div class="sidebar-section-title px-4 mb-2 text-muted fs-8 uppercase fw-bold tracking-wider">Core Tracker</div>
-          <a href="#/dashboard" class="sidebar-link active"><i class="fa-solid fa-chart-line text-primary"></i> <span>Dashboard</span></a>
-          <a href="#/coding-practice" class="sidebar-link"><i class="fa-solid fa-code text-cyan"></i> <span>Coding Practice</span></a>
-          <a href="#/mock-exams" class="sidebar-link"><i class="fa-solid fa-stopwatch text-danger"></i> <span>50-MCQ Mock Exams</span></a>
-          <a href="#/dsa-roadmap" class="sidebar-link"><i class="fa-solid fa-route text-success"></i> <span>DSA Roadmap</span></a>
-          <a href="#/studyplanner" class="sidebar-link"><i class="fa-solid fa-calendar-check text-warning"></i> <span>Study Planner</span></a>
+          <div class="sidebar-section-title px-4 mb-2">Core Tracker</div>
+          <a href="#/dashboard" class="sidebar-link active"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
+          <a href="#/coding-practice" class="sidebar-link"><i class="fa-solid fa-code"></i> <span>Coding Practice</span></a>
+          <a href="#/mock-exams" class="sidebar-link"><i class="fa-solid fa-stopwatch"></i> <span>50-MCQ Mock Exams</span></a>
+          <a href="#/dsa-roadmap" class="sidebar-link"><i class="fa-solid fa-route"></i> <span>DSA Roadmap</span></a>
+          <a href="#/studyplanner" class="sidebar-link"><i class="fa-solid fa-calendar-check"></i> <span>Study Planner</span></a>
 
-          <div class="sidebar-section-title px-4 mt-3 mb-2 text-muted fs-8 uppercase fw-bold tracking-wider">Academy & Prep</div>
-          <a href="#/courses" class="sidebar-link"><i class="fa-solid fa-graduation-cap text-info"></i> <span>LMS Courses</span></a>
-          <a href="#/certificates" class="sidebar-link"><i class="fa-solid fa-award text-warning"></i> <span>Certificates</span></a>
-          <a href="#/flashcards" class="sidebar-link"><i class="fa-solid fa-clone text-primary"></i> <span>Flashcards</span></a>
-          <a href="#/notes" class="sidebar-link"><i class="fa-solid fa-note-sticky text-warning"></i> <span>Study Notes</span></a>
-          <a href="#/experiences" class="sidebar-link"><i class="fa-solid fa-user-tie text-secondary"></i> <span>Experiences</span></a>
-          <a href="#/community" class="sidebar-link"><i class="fa-solid fa-comments text-info"></i> <span>Community</span></a>
+          <div class="sidebar-section-title px-4 mt-3 mb-2">Academy & Prep</div>
+          <a href="#/courses" class="sidebar-link"><i class="fa-solid fa-graduation-cap"></i> <span>LMS Courses</span></a>
+          <a href="#/certificates" class="sidebar-link"><i class="fa-solid fa-award"></i> <span>Certificates</span></a>
+          <a href="#/flashcards" class="sidebar-link"><i class="fa-solid fa-clone"></i> <span>Flashcards</span></a>
+          <a href="#/notes" class="sidebar-link"><i class="fa-solid fa-note-sticky"></i> <span>Study Notes</span></a>
+          <a href="#/experiences" class="sidebar-link"><i class="fa-solid fa-user-tie"></i> <span>Experiences</span></a>
+          <a href="#/community" class="sidebar-link"><i class="fa-solid fa-comments"></i> <span>Community</span></a>
 
-          <div class="sidebar-section-title px-4 mt-3 mb-2 text-muted fs-8 uppercase fw-bold tracking-wider">Career & Tools</div>
-          <a href="#/placement" class="sidebar-link"><i class="fa-solid fa-briefcase text-success"></i> <span>Placement Kanban</span></a>
-          <a href="#/ai-assistant" class="sidebar-link"><i class="fa-solid fa-robot text-primary"></i> <span>AI ATS Assistant</span></a>
-          <a href="#/calendar" class="sidebar-link"><i class="fa-solid fa-calendar-days text-muted"></i> <span>Interview Calendar</span></a>
-          <a href="#/reports" class="sidebar-link"><i class="fa-solid fa-file-invoice text-muted"></i> <span>Progress Reports</span></a>
-          <a href="#/desktop-client" class="sidebar-link"><i class="fa-brands fa-android text-success"></i> <span>Download App</span></a>
+          <div class="sidebar-section-title px-4 mt-3 mb-2">Career & Tools</div>
+          <a href="#/placement" class="sidebar-link"><i class="fa-solid fa-briefcase"></i> <span>Placement Kanban</span></a>
+          <a href="#/ai-assistant" class="sidebar-link"><i class="fa-solid fa-robot"></i> <span>AI ATS Assistant</span></a>
+          <a href="#/calendar" class="sidebar-link"><i class="fa-solid fa-calendar-days"></i> <span>Interview Calendar</span></a>
+          <a href="#/reports" class="sidebar-link"><i class="fa-solid fa-file-invoice"></i> <span>Progress Reports</span></a>
+          <a href="#/desktop-client" class="sidebar-link"><i class="fa-solid fa-mobile-screen"></i> <span>Download App</span></a>
 
-          <div class="sidebar-section-title px-4 mt-3 mb-2 text-muted fs-8 uppercase fw-bold tracking-wider">Account</div>
-          <a href="#/profile" class="sidebar-link"><i class="fa-solid fa-user-gear text-secondary"></i> <span>Settings</span></a>
-          <a href="#/billing" class="sidebar-link"><i class="fa-solid fa-credit-card text-success"></i> <span>Upgrade Space</span></a>
-          <a href="#/referral" class="sidebar-link"><i class="fa-solid fa-gift text-primary"></i> <span>Referral & Earn</span></a>
-          ${isAdmin ? `<a href="#/admin" class="sidebar-link text-warning-emphasis"><i class="fa-solid fa-shield-halved text-warning"></i> <span>Admin Panel</span></a>` : ''}
+          <div class="sidebar-section-title px-4 mt-3 mb-2">Account</div>
+          <a href="#/profile" class="sidebar-link"><i class="fa-solid fa-sliders"></i> <span>Settings</span></a>
+          <a href="#/billing" class="sidebar-link"><i class="fa-solid fa-credit-card"></i> <span>Upgrade Space</span></a>
+          <a href="#/referral" class="sidebar-link"><i class="fa-solid fa-gift"></i> <span>Referral & Earn</span></a>
+          ${isAdmin ? `<a href="#/admin" class="sidebar-link"><i class="fa-solid fa-shield-halved"></i> <span>Admin Panel</span></a>` : ''}
         </div>
         
         <!-- Sidebar Bottom Actions -->
@@ -774,7 +776,7 @@ const components = {
           <div class="d-flex align-items-center gap-2 overflow-hidden">
             <button class="btn btn-glass d-lg-none me-1" id="sidebar-toggle-btn"><i class="fa-solid fa-bars"></i></button>
             <div class="d-flex align-items-center gap-2 overflow-hidden">
-              <span class="badge bg-light text-dark border border-secondary border-opacity-20 px-2 py-1 fs-8 fw-bold d-none d-sm-inline-block font-monospace">WORKSPACE</span>
+              <span class="badge border border-secondary border-opacity-30 text-white px-2 py-1 fs-8 fw-bold d-none d-sm-inline-block font-monospace">WORKSPACE</span>
               <span class="text-secondary fs-7 d-none d-sm-inline-block">/</span>
               <h4 class="text-white fw-bold m-0 fs-5 fs-md-4 text-truncate" id="current-view-title">Dashboard</h4>
             </div>
@@ -827,12 +829,20 @@ const components = {
   `,
 
   // Dashboard Page Sub-view - Vercel Geist Template Look
-  dashboard: (stats) => `
+  dashboard: (stats = {}) => {
+    const totalStudyHours = stats.totalStudyHours ?? 0;
+    const completedTopics = stats.completedTopics ?? 0;
+    const upcomingInterviewsCount = stats.upcomingInterviewsCount ?? 0;
+    const applicationsCount = stats.applicationsCount ?? 0;
+    const streak = stats.streak ?? stats.streakDays ?? 0;
+    const xpPoints = stats.xpPoints ?? 0;
+    const readinessScore = stats.readinessScore ?? 78;
+    return `
     <!-- Vercel Project Header -->
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-3 border-bottom border-secondary border-opacity-10 gap-3">
       <div>
         <div class="d-flex align-items-center gap-2 mb-1">
-          <span class="badge bg-light text-dark border border-secondary border-opacity-20 font-monospace fs-9 px-2 py-0.5">PRODUCTION</span>
+          <span class="badge border border-secondary border-opacity-30 text-white font-monospace fs-9 px-2 py-0.5">PRODUCTION</span>
           <span class="text-secondary fs-9 font-monospace">stream-in.app</span>
         </div>
         <h4 class="text-white fw-bold mb-0">Interview Readiness Engine</h4>
@@ -847,40 +857,40 @@ const components = {
     <!-- Telemetry Metrics Strip (5-Column Responsive Bento) -->
     <div class="row g-2 g-md-3 mb-3">
       <div class="col-12 col-sm-6 col-md-4 col-xl">
-        <div class="bento-card box-accent-cyan p-3 text-start" id="dashboard-screentime-card">
+        <div class="bento-card p-3 text-start" id="dashboard-screentime-card">
           <div class="d-flex align-items-center justify-content-between mb-1">
             <span class="stat-label mb-0">Daily Screen Time</span>
-            <span class="badge bg-light text-dark border border-secondary border-opacity-20 font-monospace fs-9"><i class="fa-solid fa-clock me-1"></i>ACTIVE</span>
+            <span class="badge border border-secondary border-opacity-30 text-white font-monospace fs-9"><i class="fa-solid fa-clock me-1"></i>ACTIVE</span>
           </div>
           <div class="stat-num text-white mt-1 mb-0" id="daily-screentime-display">0h 0m</div>
           <small class="text-cyan fs-9 font-monospace" id="live-session-timer"><i class="fa-solid fa-spinner fa-spin me-1"></i>Session: 0m</small>
         </div>
       </div>
       <div class="col-6 col-sm-6 col-md-4 col-xl">
-        <div class="bento-card box-accent-emerald p-3 text-start">
+        <div class="bento-card p-3 text-start">
           <span class="stat-label mb-1">Total Study Time</span>
-          <div class="stat-num text-emerald mt-1 mb-0">${stats.totalStudyHours}h</div>
+          <div class="stat-num text-emerald mt-1 mb-0">${totalStudyHours}h</div>
           <small class="text-success fs-9 font-monospace"><i class="fa-solid fa-circle text-success me-1" style="font-size: 6px;"></i>Active Pace</small>
         </div>
       </div>
       <div class="col-6 col-sm-6 col-md-4 col-xl">
-        <div class="bento-card box-accent-primary p-3 text-start">
+        <div class="bento-card p-3 text-start">
           <span class="stat-label mb-1">Completed Topics</span>
-          <div class="stat-num text-white mt-1 mb-0">${stats.completedTopics}</div>
+          <div class="stat-num text-white mt-1 mb-0">${completedTopics}</div>
           <small class="text-secondary fs-9 font-monospace">Core Matrix</small>
         </div>
       </div>
       <div class="col-6 col-sm-6 col-md-4 col-xl">
-        <div class="bento-card box-accent-amber p-3 text-start">
+        <div class="bento-card p-3 text-start">
           <span class="stat-label mb-1">Upcoming Screens</span>
-          <div class="stat-num text-warning mt-1 mb-0">${stats.upcomingInterviewsCount}</div>
+          <div class="stat-num text-warning mt-1 mb-0">${upcomingInterviewsCount}</div>
           <small class="text-warning fs-9 font-monospace">Scheduled</small>
         </div>
       </div>
       <div class="col-6 col-sm-6 col-md-4 col-xl">
-        <div class="bento-card box-accent-purple p-3 text-start">
+        <div class="bento-card p-3 text-start">
           <span class="stat-label mb-1">Active Pipeline</span>
-          <div class="stat-num text-purple mt-1 mb-0">${stats.applicationsCount}</div>
+          <div class="stat-num text-purple mt-1 mb-0">${applicationsCount}</div>
           <small class="text-success fs-9 font-monospace">In Evaluation</small>
         </div>
       </div>
@@ -890,10 +900,10 @@ const components = {
     <div class="row g-3">
       <!-- Left Analytics Column -->
       <div class="col-lg-8">
-        <div class="bento-card box-accent-primary p-3 mb-3">
+        <div class="bento-card p-3 mb-3">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <h6 class="text-white fw-bold m-0"><i class="fa-solid fa-chart-area text-primary me-2"></i>Weekly Preparation Velocity</h6>
-            <span class="badge bg-light text-dark border border-secondary border-opacity-20 px-2 py-0.5 fs-9 font-monospace">HOURS LOGGED</span>
+            <span class="badge border border-secondary border-opacity-30 text-white px-2 py-0.5 fs-9 font-monospace">HOURS LOGGED</span>
           </div>
           <div style="position: relative; height: 175px;">
             <canvas id="weeklyHoursChart"></canvas>
@@ -903,15 +913,15 @@ const components = {
         <div class="row g-3">
           <!-- Streak & XP Bento -->
           <div class="col-md-6">
-            <div class="bento-card box-accent-amber p-3 h-100">
+            <div class="bento-card p-3 h-100">
               <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-trophy text-warning me-2"></i>Gamification & Streaks</h6>
               <div class="d-flex align-items-center justify-content-around py-2">
                 <div class="text-center">
-                  <div class="streak-badge fs-5 fw-bold text-white mb-1"><i class="fa-solid fa-fire me-1 text-warning"></i> ${stats.streak} Days</div>
+                  <div class="streak-badge fs-5 fw-bold text-white mb-1"><i class="fa-solid fa-fire me-1 text-warning"></i> ${streak} Days</div>
                   <span class="text-secondary fs-9 font-monospace">Daily Problem Streak</span>
                 </div>
                 <div class="text-center">
-                  <div class="xp-badge fs-5 fw-bold text-white mb-1"><i class="fa-solid fa-gem me-1 text-primary"></i> ${stats.xpPoints} XP</div>
+                  <div class="xp-badge fs-5 fw-bold text-white mb-1"><i class="fa-solid fa-gem me-1 text-primary"></i> ${xpPoints} XP</div>
                   <span class="text-secondary fs-9 font-monospace">Total Platform Points</span>
                 </div>
               </div>
@@ -920,20 +930,20 @@ const components = {
 
           <!-- Platform Solves Bento -->
           <div class="col-md-6">
-            <div class="bento-card box-accent-cyan p-3 h-100">
+            <div class="bento-card p-3 h-100">
               <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-code text-cyan me-2"></i>External Platform Solves</h6>
               <ul class="list-group list-group-flush bg-transparent">
                 <li class="list-group-item bg-transparent text-white border-secondary border-opacity-25 d-flex justify-content-between align-items-center px-0 py-1">
                   <span class="fs-8"><i class="fa-solid fa-circle-nodes text-warning me-2"></i>LeetCode</span>
-                  <span class="badge bg-light text-dark border border-secondary border-opacity-20 rounded-pill fs-9">${stats.codingPlatformsSolved.LeetCode || 0} Solved</span>
+                  <span class="badge border border-secondary border-opacity-30 text-white rounded-pill fs-9">${(stats.codingPlatformsSolved && stats.codingPlatformsSolved.LeetCode) || 0} Solved</span>
                 </li>
                 <li class="list-group-item bg-transparent text-white border-secondary border-opacity-25 d-flex justify-content-between align-items-center px-0 py-1">
                   <span class="fs-8"><i class="fa-solid fa-code text-primary me-2"></i>CodeChef</span>
-                  <span class="badge bg-light text-dark border border-secondary border-opacity-20 rounded-pill fs-9">${stats.codingPlatformsSolved.CodeChef || 0} Solved</span>
+                  <span class="badge border border-secondary border-opacity-30 text-white rounded-pill fs-9">${(stats.codingPlatformsSolved && stats.codingPlatformsSolved.CodeChef) || 0} Solved</span>
                 </li>
                 <li class="list-group-item bg-transparent text-white border-0 d-flex justify-content-between align-items-center px-0 py-1">
                   <span class="fs-8"><i class="fa-solid fa-terminal text-info me-2"></i>Codeforces</span>
-                  <span class="badge bg-light text-dark border border-secondary border-opacity-20 rounded-pill fs-9">${stats.codingPlatformsSolved.Codeforces || 0} Solved</span>
+                  <span class="badge border border-secondary border-opacity-30 text-white rounded-pill fs-9">${(stats.codingPlatformsSolved && stats.codingPlatformsSolved.Codeforces) || 0} Solved</span>
                 </li>
               </ul>
             </div>
@@ -944,20 +954,20 @@ const components = {
       <!-- Right Telemetry Widgets Column -->
       <div class="col-lg-4">
         <!-- Readiness Ring Card -->
-        <div class="bento-card box-accent-emerald p-3 text-center mb-3">
+        <div class="bento-card p-3 text-center mb-3">
           <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-circle-notch text-emerald me-2"></i>Interview Readiness Score</h6>
           <div class="readiness-ring my-2" style="width: 88px; height: 88px; margin: 0 auto; position: relative;">
-            <div class="readiness-value fw-extrabold text-white fs-4" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">${stats.readinessScore}%</div>
+            <div class="readiness-value fw-extrabold text-white fs-4" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">${readinessScore}%</div>
             <svg class="w-100 h-100" viewBox="0 0 36 36">
               <path class="circle-bg" stroke="rgba(255,255,255,0.08)" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              <path class="circle" stroke="#10b981" stroke-width="3.5" stroke-dasharray="${stats.readinessScore}, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <path class="circle" stroke="#10b981" stroke-width="3.5" stroke-dasharray="${readinessScore}, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
             </svg>
           </div>
           <p class="text-secondary fs-9 font-monospace mb-0">Based on solved DSA problems, consistency & mock grades.</p>
         </div>
 
         <!-- Pipeline Funnel Card -->
-        <div class="bento-card box-accent-purple p-3">
+        <div class="bento-card p-3">
           <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-filter text-purple me-2"></i>Recruitment Pipeline</h6>
           <div style="position: relative; height: 145px;">
             <canvas id="pipelineStatusChart"></canvas>
@@ -965,13 +975,14 @@ const components = {
         </div>
       </div>
     </div>
-  `,
+  `;
+  },
 
   // Study Planner Page Sub-view (milestones tracker + Pomodoro timer widget)
   studyPlanner: () => `
     <div class="row g-4">
       <div class="col-lg-8">
-        <div class="glass-panel p-4 mb-4 box-accent-primary">
+        <div class="glass-panel p-4 mb-4">
           <div class="d-flex align-items-center justify-content-between mb-4">
             <div>
               <h5 class="text-white fw-bold m-0"><i class="fa-solid fa-bullseye text-primary me-2"></i>Preparation Milestones</h5>
@@ -988,10 +999,10 @@ const components = {
 
       <div class="col-lg-4">
         <!-- Pomodoro Study Timer -->
-        <div class="glass-panel p-4 text-center box-accent-cyan">
+        <div class="glass-panel p-4 text-center">
           <div class="d-flex align-items-center justify-content-between mb-3">
             <h5 class="text-white fw-bold mb-0 fs-6"><i class="fa-regular fa-clock text-cyan me-2"></i>Focus Timer</h5>
-            <span class="badge bg-light border border-secondary border-opacity-20 text-dark font-mono fs-9">POMODORO</span>
+            <span class="badge border border-secondary border-opacity-30 text-white font-mono fs-9">POMODORO</span>
           </div>
           <div class="timer-display my-4 font-mono fw-bold text-white fs-1" id="pomodoro-time" style="letter-spacing: 2px;">25:00</div>
           
@@ -2183,22 +2194,26 @@ const components = {
           // Determine lesson count
           const lessonsCount = c.lessons ? c.lessons.length : 15;
           const ratingStars = Array(5).fill(0).map((_, i) => `<i class="fa-star ${i < Math.floor(c.rating || 5) ? 'fa-solid text-warning' : 'fa-regular text-muted'}"></i>`).join('');
+          const cTitle = c.title || 'Course';
+          const cDesc = c.description || '';
+          const cInstructor = c.instructor || 'Staff Instructor';
+          const cDifficulty = c.difficulty || 'Intermediate';
           
           return `
-            <div class="col-md-6 col-lg-4 course-card-wrapper" data-title="${c.title.toLowerCase()}" data-desc="${c.description.toLowerCase()}" data-instructor="${c.instructor.toLowerCase()}" data-difficulty="${c.difficulty}" data-category="${c.title.includes('Java') ? 'PROGRAMMING' : c.title.includes('Machine') ? 'AI' : c.title.includes('Data') ? 'DSA' : 'WEB'}">
+            <div class="col-md-6 col-lg-4 course-card-wrapper" data-title="${cTitle.toLowerCase()}" data-desc="${cDesc.toLowerCase()}" data-instructor="${cInstructor.toLowerCase()}" data-difficulty="${cDifficulty}" data-category="${cTitle.includes('Java') ? 'PROGRAMMING' : cTitle.includes('Machine') ? 'AI' : cTitle.includes('Data') ? 'DSA' : 'WEB'}">
               <div class="glass-panel h-100 d-flex flex-column rounded-3 border-secondary-subtle">
                 <div class="position-relative">
-                  <img src="${c.thumbnailUrl || 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7'}" class="img-fluid rounded-top w-100 object-fit-cover" style="height: 180px;" alt="${c.title}">
-                  <span class="course-badge position-absolute top-0 start-0 m-3 badge bg-dark bg-opacity-75 text-white border border-secondary-subtle py-2 px-3 rounded-pill">${c.difficulty}</span>
+                  <img src="${c.thumbnailUrl || 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7'}" class="img-fluid rounded-top w-100 object-fit-cover" style="height: 180px;" alt="${cTitle}">
+                  <span class="course-badge position-absolute top-0 start-0 m-3 badge bg-dark bg-opacity-75 text-white border border-secondary-subtle py-2 px-3 rounded-pill">${cDifficulty}</span>
                 </div>
                 
                 <div class="p-4 flex-grow-1 d-flex flex-column">
-                  <h5 class="text-white fw-bold mb-2">${c.title}</h5>
-                  <p class="text-muted fs-7 flex-grow-1 mb-3">${c.description.length > 100 ? c.description.substring(0, 100) + '...' : c.description}</p>
+                  <h5 class="text-white fw-bold mb-2">${cTitle}</h5>
+                  <p class="text-muted fs-7 flex-grow-1 mb-3">${cDesc.length > 100 ? cDesc.substring(0, 100) + '...' : cDesc}</p>
                   
                   <div class="d-flex align-items-center justify-content-between text-muted fs-8 mb-3">
-                    <span><i class="fa-solid fa-user-tie me-1"></i>${c.instructor}</span>
-                    <span><i class="fa-solid fa-clock me-1"></i>${c.duration}</span>
+                    <span><i class="fa-solid fa-user-tie me-1"></i>${cInstructor}</span>
+                    <span><i class="fa-solid fa-clock me-1"></i>${c.duration || 'Self-paced'}</span>
                   </div>
 
                   <div class="d-flex align-items-center justify-content-between mb-4 border-top border-secondary border-opacity-10 pt-3">
@@ -2315,7 +2330,9 @@ const components = {
   `,
 
   // 3. DSA Roadmap (Striver style)
-  dsaRoadmap: (topics) => `
+  dsaRoadmap: (topics) => {
+    const list = Array.isArray(topics) ? topics : (topics && Array.isArray(topics.topics) ? topics.topics : (topics && Array.isArray(topics.categories) ? topics.categories : []));
+    return `
     <div class="glass-panel p-4 mb-4">
       <h4 class="text-white fw-bold mb-2">Interactive Study Tree Roadmap</h4>
       <p class="text-muted">Progress topic-by-topic from Arrays to Dynamic Programming with visualizations, theory modules, and optimized complexity guides.</p>
@@ -2326,11 +2343,11 @@ const components = {
         <div class="glass-panel p-4">
           <h5 class="text-white fw-bold mb-4">Roadmap Nodes</h5>
           <div class="d-flex flex-column gap-3" id="roadmap-tree-nodes">
-            ${topics.map((t, idx) => `
-              <div class="roadmap-node-card p-3 rounded border border-secondary" style="cursor: pointer;" data-topic-id="${t.id}">
+            ${list.map((t, idx) => `
+              <div class="roadmap-node-card p-3 rounded border border-secondary" style="cursor: pointer;" data-topic-id="${t.id || idx}">
                 <div class="d-flex align-items-center justify-content-between">
-                  <span class="fw-bold text-white fs-6"><i class="fa-solid fa-circle-dot me-2 text-indigo"></i>Topic ${idx + 1}: ${t.name}</span>
-                  <span class="badge bg-indigo-subtle text-primary border border-primary-subtle fs-8">${t.subtopics.length} Modules</span>
+                  <span class="fw-bold text-white fs-6"><i class="fa-solid fa-circle-dot me-2 text-indigo"></i>Topic ${idx + 1}: ${t.name || t.title || 'Module'}</span>
+                  <span class="badge bg-indigo-subtle text-primary border border-primary-subtle fs-8">${(t.subtopics || []).length} Modules</span>
                 </div>
               </div>
             `).join('')}
@@ -2347,7 +2364,8 @@ const components = {
         </div>
       </div>
     </div>
-  `,
+  `;
+  },
 
   dsaTopicDetail: (topic) => `
     <h4 class="text-white fw-bold mb-3">${topic.name} Detail Modules</h4>
@@ -2433,7 +2451,7 @@ const components = {
             <div class="glass-panel p-3 h-100 d-flex flex-column" style="max-height: 80vh;">
               <div class="d-flex align-items-center justify-content-between mb-2">
                 <h6 class="text-white fw-bold m-0 fs-7"><i class="fa-solid fa-code text-cyan me-2"></i>Java Compiler IDE</h6>
-                <span class="badge bg-light border border-secondary border-opacity-20 text-dark fs-9">JDK 21</span>
+                <span class="badge border border-secondary border-opacity-30 text-white fs-9">JDK 21</span>
               </div>
               <div class="flex-grow-1 mb-2">
                 <textarea id="code-editor-textarea" class="form-control font-monospace text-white bg-dark border-secondary p-2 h-100 fs-8" style="resize:none; min-height: 240px;" placeholder="public int solve(...) {\n    // Type code here...\n}"></textarea>
@@ -2454,7 +2472,7 @@ const components = {
     <div class="row g-4">
       <!-- Create Exam form -->
       <div class="col-lg-4">
-        <div class="glass-panel p-4 h-100 box-accent-primary">
+        <div class="glass-panel p-4 h-100">
           <div class="d-flex align-items-center gap-2 mb-3">
             <i class="fa-solid fa-brain text-primary fs-4"></i>
             <h5 class="text-white fw-bold mb-0">Start Mock Assessment</h5>
@@ -2497,7 +2515,7 @@ const components = {
       </div>
       <!-- Leaderboard & Past attempts -->
       <div class="col-lg-8">
-        <div class="glass-panel p-4 mb-4 box-accent-amber">
+        <div class="glass-panel p-4 mb-4">
           <!-- Header & Controls -->
           <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
             <div>
@@ -2573,7 +2591,7 @@ const components = {
       <div class="row g-4">
         <!-- Left Info & Question Palette Drawer -->
         <div class="col-lg-4">
-          <div class="glass-panel p-4 mb-4 box-accent-danger">
+          <div class="glass-panel p-4 mb-4">
             <div class="d-flex align-items-center justify-content-between mb-3">
               <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-7 px-3 py-2">${category}</span>
               <div class="text-danger fw-bold fs-5 font-monospace d-flex align-items-center gap-2" id="mock-timer-box">
@@ -2612,7 +2630,7 @@ const components = {
 
         <!-- Right Active Question Card -->
         <div class="col-lg-8">
-          <div class="glass-panel p-4 h-100 d-flex flex-column justify-content-between box-accent-primary" id="mock-question-card-workspace" style="min-height: 480px;">
+          <div class="glass-panel p-4 h-100 d-flex flex-column justify-content-between" id="mock-question-card-workspace" style="min-height: 480px;">
             <div class="text-center py-5">
               <div class="spinner-border text-primary" role="status"></div>
               <p class="text-muted mt-3">Loading dynamic assessment questions...</p>
@@ -2624,7 +2642,7 @@ const components = {
   `,
 
   mockExamResult: (stats, questions, userAnswers) => `
-    <div class="glass-panel p-4 p-md-5 mb-4 text-center position-relative overflow-hidden ${stats.percentage >= 50 ? 'box-accent-emerald' : 'box-accent-danger'}">
+    <div class="glass-panel p-4 p-md-5 mb-4 text-center position-relative overflow-hidden ${stats.percentage >= 50 ? '' : ''}">
       <div class="mb-3">
         <span class="badge ${stats.percentage >= 80 ? 'bg-success' : stats.percentage >= 50 ? 'bg-warning text-dark' : 'bg-danger'} fs-6 px-4 py-2 text-uppercase">
           ${stats.percentage >= 80 ? '🌟 Assessment Passed with Distinction' : stats.percentage >= 50 ? '👍 Assessment Cleared' : '📚 Needs Further Study'}
@@ -2653,19 +2671,19 @@ const components = {
 
       <div class="row g-3 justify-content-center max-w-700 mx-auto mb-4">
         <div class="col-4">
-          <div class="stat-card box-accent-emerald p-3 text-center">
+          <div class="stat-card p-3 text-center">
             <div class="stat-num text-success">${stats.correctCount}</div>
             <div class="stat-label text-muted">CORRECT</div>
           </div>
         </div>
         <div class="col-4">
-          <div class="stat-card box-accent-danger p-3 text-center">
+          <div class="stat-card p-3 text-center">
             <div class="stat-num text-danger">${stats.incorrectCount}</div>
             <div class="stat-label text-muted">INCORRECT</div>
           </div>
         </div>
         <div class="col-4">
-          <div class="stat-card box-accent-purple p-3 text-center">
+          <div class="stat-card p-3 text-center">
             <div class="stat-num text-white">${stats.unansweredCount}</div>
             <div class="stat-label text-muted">SKIPPED</div>
           </div>
@@ -3158,7 +3176,7 @@ const components = {
         <div class="col-md-6 col-lg-4">
           <div class="glass-panel p-4 p-md-5 h-100 text-center d-flex flex-column justify-content-between">
             <div>
-              <span class="badge bg-light border border-secondary border-opacity-20 text-dark px-3 py-1 mb-3 font-mono fs-8">FOUNDATION TIER</span>
+              <span class="badge border border-secondary border-opacity-30 text-white px-3 py-1 mb-3 font-mono fs-8">FOUNDATION TIER</span>
               <h3 class="text-white h4 mb-1">PrepFree</h3>
               <p class="text-muted fs-8 mb-4">Core tracker tools for personal preparation</p>
               <div class="my-4">
@@ -3181,7 +3199,7 @@ const components = {
         </div>
         
         <div class="col-md-6 col-lg-4">
-          <div class="glass-panel p-4 p-md-5 h-100 text-center d-flex flex-column justify-content-between box-accent-primary" style="box-shadow: 0 10px 30px rgba(99, 102, 241, 0.15);">
+          <div class="glass-panel p-4 p-md-5 h-100 text-center d-flex flex-column justify-content-between" style="box-shadow: 0 10px 30px rgba(99, 102, 241, 0.15);">
             <div>
               <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle px-3 py-1 mb-3 font-mono fs-8">RECOMMENDED • LIFETIME ACCESS</span>
               <h3 class="text-white h4 mb-1">PrepPro</h3>
@@ -3224,15 +3242,15 @@ const components = {
   referral: (stats) => `
     <div class="container-fluid py-4">
       <!-- Program Hero Banner -->
-      <div class="glass-panel p-4 p-md-5 mb-4 box-accent-primary position-relative overflow-hidden">
+      <div class="glass-panel p-4 p-md-5 mb-4 position-relative overflow-hidden">
         <div class="row align-items-center">
           <div class="col-md-9">
-            <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-3 font-mono fs-8">AFFILIATE PARTNER BOUNTY</span>
+            <span class="badge bg-warning bg-opacity-15 text-warning border border-warning border-opacity-30 px-3 py-1 rounded-pill mb-3 font-mono fs-8">AFFILIATE PARTNER BOUNTY</span>
             <h2 class="text-white fw-bold mb-2">Share PrepSpace, Earn Cash Payouts!</h2>
-            <p class="text-muted mb-0">Invite classmates, friends, and peers. You earn <strong class="text-success">₹199 direct cash bounty</strong> on every user who upgrades their tracker space to PrepPro (₹399). Withdrawable instantly to your UPI ID!</p>
+            <p class="text-muted mb-0">Invite classmates, friends, and peers. You earn <strong class="text-warning">₹199 direct cash bounty</strong> on every user who upgrades their tracker space to PrepPro (₹399). Withdrawable instantly to your UPI ID!</p>
           </div>
           <div class="col-md-3 text-md-end mt-3 mt-md-0 d-none d-md-block">
-            <div class="stat-num text-success display-6 mb-0">₹199</div>
+            <div class="stat-num text-warning display-6 mb-0">₹199</div>
             <div class="stat-label text-muted">CASH PER UPGRADE</div>
           </div>
         </div>
@@ -3241,31 +3259,31 @@ const components = {
       <!-- 4-Metric Bento Grid -->
       <div class="row g-3 mb-4">
         <div class="col-6 col-lg-3">
-          <div class="stat-card box-accent-primary p-3">
+          <div class="stat-card p-3">
             <div class="stat-label">TOTAL REFERRALS</div>
             <div class="stat-num text-white">${stats.totalReferrals || 0}</div>
-            <div class="stat-caption text-muted"><i class="fa-solid fa-users text-primary me-1"></i>Peers registered</div>
+            <div class="stat-caption text-muted"><i class="fa-solid fa-users text-muted me-1"></i>Peers registered</div>
           </div>
         </div>
         <div class="col-6 col-lg-3">
-          <div class="stat-card box-accent-emerald p-3">
+          <div class="stat-card p-3">
             <div class="stat-label">TOTAL COMMISSIONS</div>
-            <div class="stat-num text-success">₹${stats.totalEarnings || 0}</div>
-            <div class="stat-caption text-muted"><i class="fa-solid fa-coins text-success me-1"></i>Lifetime earned</div>
+            <div class="stat-num text-white">₹${stats.totalEarnings || 0}</div>
+            <div class="stat-caption text-muted"><i class="fa-solid fa-coins text-muted me-1"></i>Lifetime earned</div>
           </div>
         </div>
         <div class="col-6 col-lg-3">
-          <div class="stat-card box-accent-cyan p-3">
+          <div class="stat-card p-3">
             <div class="stat-label">AVAILABLE BALANCE</div>
-            <div class="stat-num text-cyan">₹${stats.availableBalance || 0}</div>
-            <div class="stat-caption text-muted"><i class="fa-solid fa-wallet text-cyan me-1"></i>Ready for claim</div>
+            <div class="stat-num text-white">₹${stats.availableBalance || 0}</div>
+            <div class="stat-caption text-muted"><i class="fa-solid fa-wallet text-muted me-1"></i>Ready for claim</div>
           </div>
         </div>
         <div class="col-6 col-lg-3">
-          <div class="stat-card box-accent-purple p-3">
+          <div class="stat-card p-3">
             <div class="stat-label">MINIMUM PAYOUT</div>
             <div class="stat-num text-white">₹${stats.minWithdrawal || 99}</div>
-            <div class="stat-caption text-muted"><i class="fa-solid fa-bolt text-purple me-1"></i>Instant UPI claim</div>
+            <div class="stat-caption text-muted"><i class="fa-solid fa-bolt text-muted me-1"></i>Instant UPI claim</div>
           </div>
         </div>
       </div>
@@ -3273,10 +3291,10 @@ const components = {
       <div class="row g-4">
         <!-- Payout Request and Links -->
         <div class="col-lg-4">
-          <div class="glass-panel p-4 mb-4 box-accent-primary">
+          <div class="glass-panel p-4 mb-4">
             <div class="d-flex align-items-center justify-content-between mb-3">
-              <h5 class="text-white fw-bold m-0 fs-6"><i class="fa-solid fa-link text-primary me-2"></i>Your Referral Link</h5>
-              <span class="badge bg-light border border-secondary border-opacity-20 text-dark font-mono fs-9">SHARE</span>
+              <h5 class="text-white fw-bold m-0 fs-6"><i class="fa-solid fa-link text-warning me-2"></i>Your Referral Link</h5>
+              <span class="badge border border-secondary border-opacity-30 text-white font-mono fs-9" style="background: #27272a;">SHARE</span>
             </div>
             <p class="text-muted fs-8 mb-3">Share your personalized link with your college cohorts, Discord groups, and friends.</p>
             <div class="d-flex gap-2 mb-2">
@@ -3286,10 +3304,10 @@ const components = {
             <div class="text-muted fs-9">Your unique referral code is: <strong class="text-white font-mono">${stats.referralCode || 'N/A'}</strong></div>
           </div>
 
-          <div class="glass-panel p-4 box-accent-emerald">
+          <div class="glass-panel p-4">
             <div class="d-flex align-items-center justify-content-between mb-3">
-              <h5 class="text-white fw-bold m-0 fs-6"><i class="fa-solid fa-hand-holding-dollar text-success me-2"></i>Request Withdrawal</h5>
-              <span class="badge ${stats.availableBalance >= (stats.minWithdrawal || 99) ? 'bg-success' : 'bg-secondary'} font-mono fs-9">
+              <h5 class="text-white fw-bold m-0 fs-6"><i class="fa-solid fa-hand-holding-dollar text-warning me-2"></i>Request Withdrawal</h5>
+              <span class="badge ${stats.availableBalance >= (stats.minWithdrawal || 99) ? 'bg-success' : 'border border-secondary text-muted'} font-mono fs-9" style="${stats.availableBalance >= (stats.minWithdrawal || 99) ? '' : 'background: #27272a;'}">
                 ${stats.availableBalance >= (stats.minWithdrawal || 99) ? 'ELIGIBLE' : 'MIN ₹' + (stats.minWithdrawal || 99)}
               </span>
             </div>
@@ -3313,10 +3331,10 @@ const components = {
 
         <!-- History Tables -->
         <div class="col-lg-8">
-          <div class="glass-panel p-4 mb-4 box-accent-primary">
+          <div class="glass-panel p-4 mb-4">
             <div class="d-flex align-items-center justify-content-between mb-3">
-              <h5 class="text-white fw-bold m-0 fs-6"><i class="fa-solid fa-list-check text-primary me-2"></i>Referral Audit Trail</h5>
-              <span class="badge bg-light border border-secondary border-opacity-20 text-dark font-mono fs-9">ACTIVITY</span>
+              <h5 class="text-white fw-bold m-0 fs-6"><i class="fa-solid fa-list-check text-warning me-2"></i>Referral Audit Trail</h5>
+              <span class="badge border border-secondary border-opacity-30 text-white font-mono fs-9" style="background: #27272a;">ACTIVITY</span>
             </div>
             <div class="table-responsive">
               <table class="table table-dark table-hover align-middle mb-0">
@@ -3337,10 +3355,10 @@ const components = {
             </div>
           </div>
 
-          <div class="glass-panel p-4 box-accent-amber">
+          <div class="glass-panel p-4">
             <div class="d-flex align-items-center justify-content-between mb-3">
               <h5 class="text-white fw-bold m-0 fs-6"><i class="fa-solid fa-arrow-right-arrow-left text-warning me-2"></i>Withdrawal Claims</h5>
-              <span class="badge bg-light border border-secondary border-opacity-20 text-dark font-mono fs-9">PAYOUTS</span>
+              <span class="badge border border-secondary border-opacity-30 text-white font-mono fs-9" style="background: #27272a;">PAYOUTS</span>
             </div>
             <div class="table-responsive">
               <table class="table table-dark table-hover align-middle mb-0">
@@ -3438,21 +3456,21 @@ const components = {
         <!-- Summary Cards -->
         <div class="row g-3 mb-3">
           <div class="col-md-4">
-            <div class="admin-box admin-box-accent-emerald p-3">
+            <div class="admin-box p-3">
               <span class="admin-kpi-label">Audited Volume</span>
               <h4 class="text-success fw-bold mb-0 mt-1 font-monospace">₹${totalGross}</h4>
               <small class="text-muted fs-9">Processed via Cashfree Gateway</small>
             </div>
           </div>
           <div class="col-md-4">
-            <div class="admin-box admin-box-accent-primary p-3">
+            <div class="admin-box p-3">
               <span class="admin-kpi-label">Successful Charges</span>
               <h4 class="text-white fw-bold mb-0 mt-1 font-monospace">${successPayments.length} <span class="text-muted fs-7">/ ${payments.length}</span></h4>
               <small class="text-emerald fs-9"><i class="fa-solid fa-circle-check me-1"></i>${successRate}% Settlement Rate</small>
             </div>
           </div>
           <div class="col-md-4">
-            <div class="admin-box admin-box-accent-cyan p-3">
+            <div class="admin-box p-3">
               <span class="admin-kpi-label">Gateway Verification</span>
               <h4 class="text-info fw-bold mb-0 mt-1">Cashfree PG</h4>
               <small class="text-muted fs-9">Webhook signature validated</small>
@@ -3752,7 +3770,7 @@ const components = {
       <div class="row g-3 mb-4">
         <!-- Application Server -->
         <div class="col-md-3">
-          <div class="admin-box ${isAppUp ? 'admin-box-accent-emerald' : 'admin-box-accent-danger'} p-3 text-center">
+          <div class="admin-box ${isAppUp ? '' : ''} p-3 text-center">
             <div class="admin-kpi-label mb-2">Backend Application</div>
             <h5 class="fw-bold ${isAppUp ? 'text-success' : 'text-danger'} mb-0">
               <i class="fa-solid fa-circle-check me-2"></i>${isAppUp ? 'OPERATIONAL' : 'DEGRADED'}
@@ -3763,7 +3781,7 @@ const components = {
 
         <!-- PostgreSQL Database -->
         <div class="col-md-3">
-          <div class="admin-box ${isDbUp ? 'admin-box-accent-emerald' : 'admin-box-accent-danger'} p-3 text-center">
+          <div class="admin-box ${isDbUp ? '' : ''} p-3 text-center">
             <div class="admin-kpi-label mb-2">PostgreSQL Database</div>
             <h5 class="fw-bold ${isDbUp ? 'text-success' : 'text-danger'} mb-0">
                <i class="fa-solid fa-database me-2"></i>${isDbUp ? 'CONNECTED' : 'DISCONNECTED'}
@@ -3774,7 +3792,7 @@ const components = {
 
         <!-- Cashfree Gateway -->
         <div class="col-md-3">
-          <div class="admin-box ${isGwUp ? 'admin-box-accent-emerald' : 'admin-box-accent-danger'} p-3 text-center">
+          <div class="admin-box ${isGwUp ? '' : ''} p-3 text-center">
             <div class="admin-kpi-label mb-2">Payment Gateway</div>
             <h5 class="fw-bold ${isGwUp ? 'text-success' : 'text-danger'} mb-0">
               <i class="fa-solid fa-credit-card me-2"></i>${isGwUp ? 'ONLINE' : 'ERROR'}
@@ -3785,7 +3803,7 @@ const components = {
 
         <!-- System Uptime -->
         <div class="col-md-3">
-          <div class="admin-box admin-box-accent-cyan p-3 text-center">
+          <div class="admin-box p-3 text-center">
             <div class="admin-kpi-label mb-2">Runtime Uptime</div>
             <h5 class="text-white fw-bold mb-0 font-monospace">
               <i class="fa-solid fa-clock text-info me-2"></i>${uptimeHours}h ${uptimeMins}m
@@ -3802,7 +3820,7 @@ const components = {
             <h5 class="text-white fw-bold mb-1"><i class="fa-solid fa-network-wired text-info me-2"></i>Webhook Inbound Stream Audit</h5>
             <small class="text-muted fs-8">Idempotent signature validation for gateway and external notifications</small>
           </div>
-          <span class="badge bg-light text-dark border border-secondary border-opacity-20 px-3 py-1 font-monospace">${webhooks.length} Webhook Events</span>
+          <span class="badge border border-secondary border-opacity-30 text-white px-3 py-1 font-monospace">${webhooks.length} Webhook Events</span>
         </div>
 
         <div class="table-responsive" style="overflow-x: auto;">
@@ -3847,7 +3865,7 @@ const components = {
             <h5 class="text-white fw-bold mb-1"><i class="fa-solid fa-trophy text-warning me-2"></i>Placement League & Assessment Moderation</h5>
             <small class="text-muted fs-8">Anti-cheat scoring oversight, test submission logs, and leaderboard integrity</small>
           </div>
-          <span class="badge bg-light text-dark border border-secondary border-opacity-20 px-3 py-1 font-monospace">${tests.length} Total Attempts</span>
+          <span class="badge border border-secondary border-opacity-30 text-white px-3 py-1 font-monospace">${tests.length} Total Attempts</span>
         </div>
 
         <!-- Filter and Search -->
@@ -3897,7 +3915,7 @@ const components = {
                       <div class="text-white fw-semibold text-truncate" style="max-width: 180px;">${candidateName}</div>
                       <div class="text-secondary font-monospace fs-9 text-truncate" style="max-width: 180px;">${candidateEmail}</div>
                     </td>
-                    <td><span class="badge bg-light text-dark border border-secondary border-opacity-20 font-monospace px-2 py-0.5 fs-9">${t.category}</span></td>
+                    <td><span class="badge border border-secondary border-opacity-30 text-white font-monospace px-2 py-0.5 fs-9">${t.category}</span></td>
                     <td class="fw-bold text-success font-monospace">${t.score} pts</td>
                     <td>
                       ${t.score >= 90 ? '<span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-0.5 fs-9"><i class="fa-solid fa-shield-check me-1"></i> High Rank</span>' : '<span class="badge bg-secondary-subtle text-muted px-2 py-0.5 fs-9">Standard</span>'}
@@ -3957,7 +3975,7 @@ const components = {
       <!-- Tactical Telemetry & Quick Action Cards -->
       <div class="row g-3 mb-4">
         <div class="col-md-4">
-          <div class="admin-box admin-box-accent-primary p-3">
+          <div class="admin-box p-3">
             <div class="d-flex align-items-center justify-content-between">
               <div>
                 <div class="admin-kpi-label">Pro Conversion Rate</div>
@@ -3969,7 +3987,7 @@ const components = {
           </div>
         </div>
         <div class="col-md-4">
-          <div class="admin-box admin-box-accent-emerald p-3">
+          <div class="admin-box p-3">
             <div class="d-flex align-items-center justify-content-between">
               <div>
                 <div class="admin-kpi-label">Affiliate Bounties Paid</div>
@@ -3981,7 +3999,7 @@ const components = {
           </div>
         </div>
         <div class="col-md-4">
-          <div class="admin-box admin-box-accent-amber p-3">
+          <div class="admin-box p-3">
             <div class="d-flex align-items-center justify-content-between">
               <div>
                 <div class="admin-kpi-label">Pending Claims</div>
@@ -4329,7 +4347,7 @@ const components = {
       <div class="row g-2 g-md-3 mb-3">
         <!-- Total Registered Candidates -->
         <div class="col-6 col-md-4 col-xl-2">
-          <div class="admin-box admin-box-accent-primary admin-kpi-tile p-3">
+          <div class="admin-box admin-kpi-tile p-3">
             <div class="admin-kpi-label mb-1">Total Candidates</div>
             <div class="admin-kpi-num">${stats.totalUsers || 0}</div>
             <div class="admin-kpi-caption mt-1"><i class="fa-solid fa-user-check text-primary me-1"></i>Registered profiles</div>
@@ -4338,7 +4356,7 @@ const components = {
 
         <!-- Pro Subscribers -->
         <div class="col-6 col-md-4 col-xl-2">
-          <div class="admin-box admin-box-accent-emerald admin-kpi-tile p-3">
+          <div class="admin-box admin-kpi-tile p-3">
             <div class="admin-kpi-label mb-1">Pro Pass Members</div>
             <div class="admin-kpi-num text-emerald">${stats.paidUsers || 0}</div>
             <div class="admin-kpi-caption text-emerald mt-1">
@@ -4349,7 +4367,7 @@ const components = {
 
         <!-- Gross Platform Sales -->
         <div class="col-6 col-md-4 col-xl-2">
-          <div class="admin-box admin-box-accent-emerald admin-kpi-tile p-3">
+          <div class="admin-box admin-kpi-tile p-3">
             <div class="admin-kpi-label mb-1">Gross Revenue</div>
             <div class="admin-kpi-num text-success">₹${stats.totalRevenue || 0}</div>
             <div class="admin-kpi-caption mt-1">Cashfree sales</div>
@@ -4358,7 +4376,7 @@ const components = {
 
         <!-- Referral Bounties Ledger -->
         <div class="col-6 col-md-4 col-xl-2">
-          <div class="admin-box admin-box-accent-amber admin-kpi-tile p-3">
+          <div class="admin-box admin-kpi-tile p-3">
             <div class="admin-kpi-label mb-1">Referral Bounties</div>
             <div class="admin-kpi-num text-warning">₹${stats.totalReferralPayouts || 0}</div>
             <div class="admin-kpi-caption mt-1">₹199 per verified invite</div>
@@ -4367,7 +4385,7 @@ const components = {
 
         <!-- Cloudflare Edge & Anti-Cheat -->
         <div class="col-6 col-md-4 col-xl-2">
-          <div class="admin-box admin-box-accent-cyan admin-kpi-tile p-3">
+          <div class="admin-box admin-kpi-tile p-3">
             <div class="admin-kpi-label mb-1">Threat Defense</div>
             <div class="admin-kpi-num text-info">ACTIVE</div>
             <div class="admin-kpi-caption mt-1">Cloudflare WAF / Anti-Shodan</div>
@@ -4376,7 +4394,7 @@ const components = {
 
         <!-- System Uptime / Health -->
         <div class="col-6 col-md-4 col-xl-2">
-          <div class="admin-box admin-box-accent-purple admin-kpi-tile p-3">
+          <div class="admin-box admin-kpi-tile p-3">
             <div class="admin-kpi-label mb-1">Cluster Health</div>
             <div class="admin-kpi-num text-purple">99.98%</div>
             <div class="admin-kpi-caption mt-1">Zero critical outages</div>
@@ -4548,7 +4566,7 @@ const components = {
   premiumLock: (featureName) => `
     <div class="row justify-content-center align-items-center py-5">
       <div class="col-md-8 col-lg-6 text-center">
-        <div class="glass-panel p-5 box-accent-amber">
+        <div class="glass-panel p-5">
           <div class="text-warning mb-3"><i class="fa-solid fa-lock display-4"></i></div>
           <span class="badge bg-warning bg-opacity-25 text-warning border border-warning-subtle px-3 py-1 rounded-pill mb-3 font-mono fs-8">PREPPRO EXCLUSIVE</span>
           <h4 class="text-white fw-bold mb-2">Unlock ${featureName}</h4>
@@ -4675,6 +4693,7 @@ function getMcqQuestions(category, count) {
 }
 
 if (typeof window !== 'undefined') {
+  window.components = components;
   window.RAW_MCQ_DATA = RAW_MCQ_DATA;
   window.getMcqQuestions = getMcqQuestions;
 }

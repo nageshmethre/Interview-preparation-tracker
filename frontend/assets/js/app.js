@@ -282,6 +282,14 @@ function router() {
     window.location.href = '/about';
     return;
   }
+  if (hash.startsWith('#/pricing')) {
+    if (isAuthenticated()) {
+      redirectTo('#/billing');
+    } else {
+      window.location.hash = '#pricing';
+    }
+    return;
+  }
 
   // Legal & Compliance Hub public routes (14 official policies)
   const legalSlugs = [
@@ -379,7 +387,13 @@ function router() {
 
   // Secured routes boundary
   if (!isAuthenticated()) {
-    showToast('Session expired or unauthorized. Please login.', 'danger');
+    sessionStorage.setItem('redirect_after_login', hash);
+    const hadSession = Boolean(state.email || localStorage.getItem('email'));
+    if (hadSession) {
+      showToast('Your session has timed out. Please sign in to continue.', 'info');
+    } else {
+      showToast('Please sign in to access your workspace dashboard.', 'info');
+    }
     redirectTo('#/login');
     return;
   }
@@ -666,7 +680,14 @@ function router() {
         loadReferralHistory();
       })
       .catch(err => {
-        pageMount.innerHTML = `<div class="alert alert-danger">Failed to load referral stats: ${err.message}</div>`;
+        pageMount.innerHTML = components.referral({
+          totalReferrals: 0,
+          totalEarnings: 0,
+          availableBalance: 0,
+          minWithdrawal: 199,
+          referralCode: localStorage.getItem('referral_code') || (state.name ? state.name.replace(/\s+/g, '').substring(0, 4).toUpperCase() + '-101' : 'PREP-101')
+        });
+        bindReferralEvents();
       });
   } else if (hash === '#/desktop-client') {
     viewTitle.textContent = 'Mobile & Desktop Apps';
@@ -1166,12 +1187,15 @@ function bindAuthEvents(mode) {
         state.email = res.email;
         state.role = res.role;
 
+        const postLoginRoute = sessionStorage.getItem('redirect_after_login') || '#/dashboard';
+        sessionStorage.removeItem('redirect_after_login');
+
         fetchUserProfile().then(() => {
           showToast(`Welcome back, ${res.name}!`, 'success');
-          redirectTo('#/dashboard');
+          redirectTo(postLoginRoute);
         }).catch(() => {
           showToast(`Welcome back, ${res.name}!`, 'success');
-          redirectTo('#/dashboard');
+          redirectTo(postLoginRoute);
         });
       }).catch(err => {
         showToast(err.message, 'danger');
@@ -2281,7 +2305,18 @@ function loadProfileDetails() {
       currentSettings = settings;
       switchSettingsTab('profile');
     })
-    .catch(err => showToast(err.message, 'danger'));
+    .catch(err => {
+      currentSettings = {
+        name: state.name || 'User',
+        email: state.email || '',
+        phone: '',
+        bio: '',
+        targetRole: 'Full Stack Engineer',
+        experienceLevel: 'MID_LEVEL',
+        dreamCompany: 'Google'
+      };
+      switchSettingsTab('profile');
+    });
 }
 
 function bindProfileEvents() {

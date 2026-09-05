@@ -496,8 +496,9 @@
 
               <div class="d-flex align-items-center gap-2">
                 <button class="btn btn-sm btn-glass rounded-pill px-3" onclick="window.print()"><i class="fa-solid fa-print me-1"></i> Print</button>
-                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 text-white" onclick="openCookiePreferencesModal()"><i class="fa-solid fa-sliders me-1"></i> Cookies</button>
-                <a href="#/dashboard" class="btn btn-sm btn-dark rounded-2 px-3">Dashboard <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                ${(typeof state !== 'undefined' && state && state.token)
+                  ? `<a href="#/dashboard" class="btn btn-sm btn-premium rounded-2 px-3">Dashboard <i class="fa-solid fa-arrow-right ms-1"></i></a>`
+                  : `<a href="#/login" class="btn btn-sm btn-premium rounded-2 px-3">Sign In <i class="fa-solid fa-arrow-right ms-1"></i></a>`}
               </div>
             </div>
 
@@ -1055,7 +1056,7 @@
             </div>
 
             <div class="d-flex flex-column gap-2">
-              <a href="#/pricing" class="btn btn-premium rounded-pill py-2.5 fw-bold"><i class="fa-solid fa-arrow-rotate-left me-1"></i> Try Again with Alternate Method</a>
+              <a href="#/billing" class="btn btn-premium rounded-pill py-2.5 fw-bold"><i class="fa-solid fa-arrow-rotate-left me-1"></i> Try Again with Alternate Method</a>
               <a href="#/help" class="btn btn-glass rounded-pill py-2 text-muted fs-7"><i class="fa-solid fa-headset me-1"></i> Contact Billing Support</a>
             </div>
           </div>
@@ -1385,7 +1386,7 @@
             <p class="text-muted fs-7 mb-4">This section of the platform is reserved for PrepSpace Pro candidates or authorized administrators.</p>
 
             <div class="d-flex justify-content-center gap-2">
-              <a href="#/pricing" class="btn btn-premium rounded-pill px-4 py-2"><i class="fa-solid fa-crown me-1 text-warning"></i> Upgrade to Pro</a>
+              <a href="#/billing" class="btn btn-premium rounded-pill px-4 py-2"><i class="fa-solid fa-crown me-1 text-warning"></i> Upgrade to Pro</a>
               <a href="#/dashboard" class="btn btn-glass rounded-pill px-4 py-2 text-muted">Return to Safety</a>
             </div>
           </div>
@@ -1899,9 +1900,11 @@
     `;
   };
 
-  document.addEventListener('DOMContentLoaded', () => {
-    initOfflineDetector();
-    initCookieConsent();
-  });
+  if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+      initOfflineDetector();
+      initCookieConsent();
+    });
+  }
 
 })();
