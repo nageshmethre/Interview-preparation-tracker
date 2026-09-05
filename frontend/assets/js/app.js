@@ -215,6 +215,10 @@ window.updateRoiCalculator = function() {
 
 // Google Material Design System Theme Initialization
 function initTheme() {
+  if (localStorage.getItem('antigravity_v3') !== 'true') {
+    localStorage.setItem('theme', 'dark');
+    localStorage.setItem('antigravity_v3', 'true');
+  }
   const savedTheme = localStorage.getItem('theme') || 'dark';
   state.theme = savedTheme;
   document.documentElement.setAttribute('data-theme', savedTheme);
