@@ -2535,7 +2535,17 @@ const components = {
     const uniqueTopics = Array.from(new Set(list.map(q => q.category || q.topic || 'General'))).filter(Boolean).sort();
 
     return `
-      <div class="vscode-workspace-container">
+      <div class="vscode-workspace-container position-relative">
+        <!-- Floating Side Buttons for Quick Move Back / Move Next -->
+        <button type="button" class="side-nav-pill side-nav-prev" id="btn-side-prev" title="Move Back to Previous Problem (Alt + Left)">
+          <i class="fa-solid fa-chevron-left"></i>
+          <span>Prev</span>
+        </button>
+        <button type="button" class="side-nav-pill side-nav-next" id="btn-side-next" title="Move Forward to Next Problem (Alt + Right)">
+          <span>Next</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+
         <!-- 1. VS Code Top Breadcrumbs & Control Bar -->
         <div class="vscode-top-nav">
           <div class="d-flex align-items-center gap-2 flex-wrap">
@@ -2545,16 +2555,28 @@ const components = {
             <div class="text-muted fs-8 font-monospace d-none d-md-inline">
               <i class="fa-solid fa-folder-tree text-primary me-1"></i> Workspace <span class="mx-1">/</span> Coding <span class="mx-1">/</span>
             </div>
-            <!-- Quick Problem Selector Dropdown -->
-            <select id="header-problem-select" class="form-select form-select-sm bg-dark text-white border-secondary fs-8 py-1" style="max-width: 260px;">
-              ${list.map((q, idx) => `
-                <option value="${q.id || (idx + 1)}">${idx + 1}. ${q.title} (${(q.difficulty || 'MEDIUM').toUpperCase()})</option>
-              `).join('')}
-            </select>
+
+            <!-- Quick Problem Selector Dropdown with Prev/Next buttons -->
+            <div class="d-flex align-items-center gap-1">
+              <button type="button" class="btn btn-sm btn-dark border-secondary text-white py-1 px-2.5 fs-8" id="btn-prev-problem" title="Move Back to Previous Problem (Alt + Left)">
+                <i class="fa-solid fa-chevron-left me-1"></i> Prev
+              </button>
+              <select id="header-problem-select" class="form-select form-select-sm bg-dark text-white border-secondary fs-8 py-1" style="max-width: 240px;">
+                ${list.map((q, idx) => `
+                  <option value="${q.id || (idx + 1)}">${idx + 1}. ${q.title} (${(q.difficulty || 'MEDIUM').toUpperCase()})</option>
+                `).join('')}
+              </select>
+              <button type="button" class="btn btn-sm btn-dark border-secondary text-white py-1 px-2.5 fs-8" id="btn-next-problem" title="Move to Next Problem (Alt + Right)">
+                Next <i class="fa-solid fa-chevron-right ms-1"></i>
+              </button>
+            </div>
           </div>
 
           <!-- Top Action Buttons: Run & Submit -->
           <div class="d-flex align-items-center gap-2 flex-wrap">
+            <button class="btn btn-sm btn-glass text-muted py-1 px-2.5 fs-8" id="btn-toggle-split" title="Toggle Problem Details Side Panel">
+              <i class="fa-solid fa-table-columns me-1"></i> <span class="d-none d-sm-inline">Full Editor</span>
+            </button>
             <button class="btn btn-sm btn-glass text-warning py-1 px-3 fs-8" id="btn-practice-hints">
               <i class="fa-solid fa-lightbulb me-1"></i> Hint
             </button>
@@ -2567,13 +2589,19 @@ const components = {
           </div>
         </div>
 
-        <!-- Mobile Dual-View Toggle (Problem vs Code Editor) -->
-        <div class="d-flex d-lg-none bg-black border-bottom border-secondary border-opacity-25" id="mobile-vscode-pane-switcher">
+        <!-- Mobile Dual-View Toggle & Quick Nav (Problem vs Code Editor) -->
+        <div class="d-flex d-lg-none bg-black border-bottom border-secondary border-opacity-25 align-items-center" id="mobile-vscode-pane-switcher">
+          <button type="button" class="btn btn-sm btn-dark text-white px-3 py-2 border-end border-secondary border-opacity-25" id="btn-mobile-prev-problem" title="Previous Question" style="border-radius: 0;">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
           <button type="button" class="btn btn-sm flex-fill py-2 fs-8 fw-semibold active text-white" id="btn-mobile-show-desc" style="border-radius:0; border-bottom: 2px solid #3b82f6;">
-            <i class="fa-solid fa-book-open me-1"></i> Problem Details
+            <i class="fa-solid fa-book-open me-1"></i> Details
           </button>
           <button type="button" class="btn btn-sm flex-fill py-2 fs-8 fw-semibold text-muted" id="btn-mobile-show-editor" style="border-radius:0;">
-            <i class="fa-solid fa-code me-1"></i> Code Editor & Terminal
+            <i class="fa-solid fa-code me-1"></i> Editor & Terminal
+          </button>
+          <button type="button" class="btn btn-sm btn-dark text-white px-3 py-2 border-start border-secondary border-opacity-25" id="btn-mobile-next-problem" title="Next Question" style="border-radius: 0;">
+            <i class="fa-solid fa-chevron-right"></i>
           </button>
         </div>
 

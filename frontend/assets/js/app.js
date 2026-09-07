@@ -4170,6 +4170,89 @@ function bindCodingPracticeEvents(rawQuestions = []) {
     selectQuestion(questionCards[0].dataset);
   }
 
+  // 5b. Move Back & Move Next Problem Handlers (Side buttons, Top buttons & Mobile buttons)
+  function getFilteredCardsList() {
+    const visibleCards = Array.from(questionCards).filter(c => c.style.display !== 'none');
+    return visibleCards.length > 0 ? visibleCards : Array.from(questionCards);
+  }
+
+  function moveToAdjacentProblem(direction) {
+    const list = getFilteredCardsList();
+    if (list.length === 0) return;
+    const currentIdx = list.findIndex(c => String(c.dataset.questionId) === String(activeQuestionId));
+    let nextIdx = 0;
+    if (direction === 'prev') {
+      nextIdx = (currentIdx > 0) ? currentIdx - 1 : list.length - 1;
+    } else {
+      nextIdx = (currentIdx < list.length - 1) ? currentIdx + 1 : 0;
+    }
+    const targetCard = list[nextIdx];
+    if (targetCard) {
+      selectQuestion(targetCard.dataset);
+      showToast(`Problem ${nextIdx + 1} of ${list.length}: ${targetCard.dataset.title}`, 'info');
+      targetCard.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+  }
+
+  // Top Nav Move Back / Move Next buttons
+  const btnPrev = document.getElementById('btn-prev-problem');
+  const btnNext = document.getElementById('btn-next-problem');
+  if (btnPrev) btnPrev.addEventListener('click', () => moveToAdjacentProblem('prev'));
+  if (btnNext) btnNext.addEventListener('click', () => moveToAdjacentProblem('next'));
+
+  // Floating Side Buttons (both sides)
+  const btnSidePrev = document.getElementById('btn-side-prev');
+  const btnSideNext = document.getElementById('btn-side-next');
+  if (btnSidePrev) btnSidePrev.addEventListener('click', () => moveToAdjacentProblem('prev'));
+  if (btnSideNext) btnSideNext.addEventListener('click', () => moveToAdjacentProblem('next'));
+
+  // Mobile Switcher Prev / Next buttons
+  const btnMobPrev = document.getElementById('btn-mobile-prev-problem');
+  const btnMobNext = document.getElementById('btn-mobile-next-problem');
+  if (btnMobPrev) btnMobPrev.addEventListener('click', () => moveToAdjacentProblem('prev'));
+  if (btnMobNext) btnMobNext.addEventListener('click', () => moveToAdjacentProblem('next'));
+
+  // Keyboard Navigation: Alt + Left Arrow for Move Back, Alt + Right Arrow for Move Next
+  const keyNavHandler = (e) => {
+    if (!document.querySelector('.vscode-workspace-container')) {
+      document.removeEventListener('keydown', keyNavHandler);
+      return;
+    }
+    if (e.altKey && e.key === 'ArrowLeft') {
+      e.preventDefault();
+      moveToAdjacentProblem('prev');
+    } else if (e.altKey && e.key === 'ArrowRight') {
+      e.preventDefault();
+      moveToAdjacentProblem('next');
+    }
+  };
+  document.addEventListener('keydown', keyNavHandler);
+
+  // Toggle Left Pane Split / Full Editor View
+  const btnToggleSplit = document.getElementById('btn-toggle-split');
+  if (btnToggleSplit) {
+    btnToggleSplit.addEventListener('click', () => {
+      const leftCol = document.getElementById('vscode-left-pane');
+      const rightCol = document.getElementById('vscode-right-pane');
+      if (!leftCol || !rightCol) return;
+      if (leftCol.classList.contains('d-lg-none')) {
+        // Restore split view
+        leftCol.classList.remove('d-lg-none');
+        rightCol.classList.remove('col-lg-12');
+        rightCol.classList.add('col-lg-7');
+        btnToggleSplit.innerHTML = '<i class="fa-solid fa-table-columns me-1"></i> <span class="d-none d-sm-inline">Full Editor</span>';
+        showToast('Restored side-by-side split view', 'info');
+      } else {
+        // Collapse description to full editor
+        leftCol.classList.add('d-lg-none');
+        rightCol.classList.remove('col-lg-7');
+        rightCol.classList.add('col-lg-12');
+        btnToggleSplit.innerHTML = '<i class="fa-solid fa-book-open me-1"></i> <span class="d-none d-sm-inline">Show Details</span>';
+        showToast('Expanded to full-width code editor', 'info');
+      }
+    });
+  }
+
   // 6. Mobile Symbol Toolbar Quick-insert
   document.querySelectorAll('.mobile-symbol-btn').forEach(btn => {
     btn.addEventListener('click', () => {

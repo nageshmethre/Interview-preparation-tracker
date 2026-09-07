@@ -3025,3 +3025,59 @@ input:-webkit-autofill {
   font-family: 'JetBrains Mono', monospace;
   font-weight: 700;
 }
+
+/* ==========================================================================
+   CODING WORKSPACE SIDE NAVIGATION BUTTONS (MOVE BACK / MOVE NEXT)
+   ========================================================================== */
+.side-nav-pill {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(24, 24, 27, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  color: #f1f5f9;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  user-select: none;
+  opacity: 0.88;
+}
+
+.side-nav-pill:hover {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #3b82f6;
+  opacity: 1;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.45);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.side-nav-pill:active {
+  transform: translateY(-50%) scale(0.96);
+}
+
+.side-nav-prev {
+  left: 10px;
+}
+
+.side-nav-next {
+  right: 10px;
+}
+
+@media (max-width: 768px) {
+  .side-nav-pill {
+    display: none !important;
+  }
+}
+
