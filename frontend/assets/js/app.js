@@ -3833,6 +3833,8 @@ function bindDsaRoadmapEvents(roadmapData) {
       const topic = data.find(t => t.id == topicId) || COMPREHENSIVE_DSA_ROADMAP.find(t => t.id == topicId);
       if (topic) {
         document.getElementById('dsa-detail-panel').innerHTML = components.dsaTopicDetail(topic);
+        const detailWrapper = document.getElementById('dsa-detail-wrapper') || document.getElementById('page-mount');
+        if (detailWrapper) detailWrapper.scrollTo({ top: 0, behavior: 'smooth' });
       }
     });
   });
@@ -3853,13 +3855,15 @@ function bindDsaRoadmapEvents(roadmapData) {
   const btnScrollTop = document.getElementById('btn-roadmap-scroll-top');
   if (btnScrollTop) {
     btnScrollTop.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const detailWrapper = document.getElementById('dsa-detail-wrapper') || window;
+      detailWrapper.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
   const btnMobileScrollTop = document.getElementById('btn-mobile-scroll-top');
   if (btnMobileScrollTop) {
     btnMobileScrollTop.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const detailWrapper = document.getElementById('dsa-detail-wrapper') || window;
+      detailWrapper.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 }

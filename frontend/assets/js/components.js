@@ -761,22 +761,6 @@ const components = {
             <i class="fa-solid fa-xmark" style="font-size: 0.9rem;"></i>
           </button>
         </div>
-
-        <!-- User Profile Minimal Strip -->
-        <div class="user-minimal-strip px-2.5 py-1.5 mx-2 my-2 rounded-2 border border-secondary border-opacity-20 d-flex align-items-center justify-content-between flex-shrink-0" style="background: #1c1c20; border-color: #27272a;" id="sidebar-user-card">
-          <div class="d-flex align-items-center gap-2 overflow-hidden me-1">
-            <div class="position-relative flex-shrink-0">
-              <i class="fa-solid fa-circle-user fs-5 ${isPaid ? 'text-primary' : 'text-secondary'}"></i>
-            </div>
-            <span class="text-white fw-semibold fs-8 text-truncate" id="sidebar-user-name">${userName || 'Candidate'}</span>
-          </div>
-          <div id="sidebar-user-badge" class="flex-shrink-0">
-            ${isPaid 
-              ? `<span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle fs-9 font-monospace py-0.5 px-1.5">PRO</span>`
-              : `<a href="#/billing" class="badge bg-secondary bg-opacity-20 text-muted border border-secondary text-decoration-none fs-9 font-monospace py-0.5 px-1.5">FREE</a>`
-            }
-          </div>
-        </div>
         
         <!-- Categorized Nav Links -->
         <div class="flex-grow-1 py-2 overflow-y-auto sidebar-scroll-content" id="sidebar-nav-container">
@@ -2368,61 +2352,35 @@ const components = {
   dsaRoadmap: (topics) => {
     const list = Array.isArray(topics) ? topics : (topics && Array.isArray(topics.topics) ? topics.topics : (topics && Array.isArray(topics.categories) ? topics.categories : []));
     return `
-    <div class="glass-panel p-4 mb-4">
-      <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-        <div>
-          <h4 class="text-white fw-bold mb-1"><i class="fa-solid fa-route text-indigo me-2"></i>Comprehensive DSA Mastery Roadmap</h4>
-          <p class="text-muted fs-8 mb-0">Progress topic-by-topic across ${list.length || 16} curated algorithmic modules with theory, complexity models, and direct coding practice links.</p>
-        </div>
-        <div class="d-flex align-items-center gap-2 flex-wrap">
-          <a href="#/coding-practice" class="btn btn-premium py-2 px-3 fs-8 fw-bold">
-            <i class="fa-solid fa-laptop-code me-1"></i> Multi-Language Coding Workshop (325+ Problems)
-          </a>
-          <button type="button" class="btn btn-glass py-2 px-3 fs-8 text-info" id="btn-roadmap-scroll-top" title="Scroll to top of roadmap">
-            <i class="fa-solid fa-arrow-up me-1"></i> Scroll to Top
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="row g-4">
-      <!-- Roadmap Tree Nodes -->
-      <div class="col-md-5">
-        <div class="glass-panel p-4">
-          <div class="d-flex align-items-center justify-content-between mb-3">
-            <h5 class="text-white fw-bold m-0"><i class="fa-solid fa-folder-tree text-primary me-2"></i>Roadmap Modules</h5>
-            <span class="badge bg-indigo-subtle text-primary border border-primary-subtle fs-8">${list.length} Topics</span>
+    <div class="row g-3 dsa-roadmap-container" style="height: calc(100vh - 85px); overflow: hidden;">
+      <!-- Left: Fixed Topic Navigation Rail (Kept in fixed place) -->
+      <div class="col-12 col-lg-4 col-xl-3 h-100 d-flex flex-column" style="position: sticky; top: 0;">
+        <div class="glass-panel p-3 d-flex flex-column h-100 border border-secondary border-opacity-20" style="background: #141416;">
+          <div class="d-flex align-items-center justify-content-between pb-2 mb-2 border-bottom border-secondary border-opacity-20 flex-shrink-0">
+            <h5 class="text-white fw-bold m-0 fs-7"><i class="fa-solid fa-folder-tree text-primary me-2"></i>Roadmap Modules</h5>
+            <span class="badge bg-indigo-subtle text-primary border border-primary-subtle fs-9 font-monospace">${list.length} Topics</span>
           </div>
-          <div class="d-flex flex-column gap-2" id="roadmap-tree-nodes" style="max-height: 75vh; overflow-y: auto; padding-right: 4px;">
+          <div class="d-flex flex-column gap-1.5 flex-grow-1 overflow-y-auto pe-1" id="roadmap-tree-nodes" style="scrollbar-width: thin; scrollbar-color: #3f3f46 transparent;">
             ${list.map((t, idx) => `
-              <div class="roadmap-node-card p-3 rounded border border-secondary" style="cursor: pointer;" data-topic-id="${t.id || (idx + 1)}">
+              <div class="roadmap-node-card p-2.5 rounded border border-secondary border-opacity-25 ${idx === 0 ? 'border-primary bg-dark shadow-sm' : ''}" style="cursor: pointer; transition: all 0.15s ease;" data-topic-id="${t.id || (idx + 1)}">
                 <div class="d-flex align-items-center justify-content-between">
                   <span class="fw-bold text-white fs-8 text-truncate me-2"><i class="fa-solid fa-circle-dot me-2 text-indigo"></i>Topic ${idx + 1}: ${t.name || t.title || 'Module'}</span>
-                  <span class="badge bg-indigo-subtle text-primary border border-primary-subtle fs-9">${(t.subtopics || []).length} Modules</span>
+                  <span class="badge bg-dark text-muted border border-secondary border-opacity-20 fs-9">${(t.subtopics || []).length} Modules</span>
                 </div>
               </div>
             `).join('')}
           </div>
         </div>
       </div>
-      <!-- Detailed Topic Node View -->
-      <div class="col-md-7">
-        <div class="glass-panel p-4" id="dsa-detail-panel" style="min-height: 75vh;">
+      <!-- Right: Scrollable Document Reader (The only slide bar that moves) -->
+      <div class="col-12 col-lg-8 col-xl-9 h-100 overflow-y-auto pe-1" id="dsa-detail-wrapper" style="scrollbar-width: thin; scrollbar-color: #3f3f46 transparent;">
+        <div class="glass-panel p-3.5 p-md-4" id="dsa-detail-panel" style="min-height: 100%;">
           <div class="text-center py-5 text-muted">
             <i class="fa-solid fa-route display-5 mb-3"></i>
             <p>Select a roadmap node on the left to load its curriculum, complexity analysis, and practice challenges.</p>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Mobile Sticky Floating Workshop & Scroll Action Bar -->
-    <div class="mobile-sticky-workshop-bar d-lg-none d-flex align-items-center justify-content-between p-2 px-3 bg-dark border-top border-secondary border-opacity-30 position-fixed bottom-0 start-0 end-0 z-index-dropdown shadow-lg">
-      <a href="#/coding-practice" class="btn btn-premium btn-sm py-2 px-3 fw-bold fs-8 flex-fill me-2">
-        <i class="fa-solid fa-laptop-code me-1"></i> Open Coding Workshop
-      </a>
-      <button type="button" class="btn btn-outline-info btn-sm py-2 px-3 fs-8" id="btn-mobile-scroll-top" title="Scroll to Top">
-        <i class="fa-solid fa-arrow-up"></i>
-      </button>
     </div>
   `;
   },
@@ -2451,7 +2409,7 @@ const components = {
           <button type="button" class="btn btn-sm btn-glass py-1.5 px-2.5 fs-8 text-light" onclick="window.print()" title="Print / Save Specification as PDF">
             <i class="fa-solid fa-file-pdf text-danger me-1"></i> PDF
           </button>
-          <button type="button" class="btn btn-sm btn-glass py-1.5 px-2.5 fs-8 text-info" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Move Upward">
+          <button type="button" class="btn btn-sm btn-glass py-1.5 px-2.5 fs-8 text-info" onclick="(document.getElementById('dsa-detail-wrapper') || window).scrollTo({top: 0, behavior: 'smooth'})" title="Move Upward">
             <i class="fa-solid fa-arrow-up"></i>
           </button>
         </div>
@@ -2548,7 +2506,7 @@ const components = {
           <i class="fa-solid fa-check-double text-success me-1"></i> You have read all sections of <strong>${topic.name}</strong>. Ready to test your skills?
         </div>
         <div class="d-flex align-items-center gap-2">
-          <button type="button" class="btn btn-sm btn-glass text-info fs-8 py-1.5 px-3" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+          <button type="button" class="btn btn-sm btn-glass text-info fs-8 py-1.5 px-3" onclick="(document.getElementById('dsa-detail-wrapper') || window).scrollTo({top: 0, behavior: 'smooth'})">
             <i class="fa-solid fa-arrow-up me-1"></i> Back to Top
           </button>
           <a href="#/coding-practice" class="btn btn-sm btn-primary fs-8 fw-bold py-1.5 px-3">
