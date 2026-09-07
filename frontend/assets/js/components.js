@@ -811,16 +811,16 @@ const components = {
       <div class="main-content d-flex flex-column flex-grow-1 overflow-hidden" style="height: 100vh;">
         <!-- Top Nav Header (Vercel Style) -->
         <header class="d-flex align-items-center justify-content-between pb-3 border-bottom border-secondary border-opacity-25 mb-3 flex-shrink-0">
-          <div class="d-flex align-items-center gap-2 overflow-hidden">
-            <button class="btn btn-glass d-lg-none me-1" id="sidebar-toggle-btn"><i class="fa-solid fa-bars"></i></button>
-            <div class="d-flex align-items-center gap-2 overflow-hidden">
-              <span class="badge border border-secondary border-opacity-30 text-white px-2 py-1 fs-8 fw-bold d-none d-sm-inline-block font-monospace">WORKSPACE</span>
-              <span class="text-secondary fs-7 d-none d-sm-inline-block">/</span>
-              <h4 class="text-white fw-bold m-0 fs-5 fs-md-4 text-truncate" id="current-view-title">Dashboard</h4>
+          <div class="d-flex align-items-center gap-2 overflow-hidden flex-grow-1 me-2" style="min-width: 0;">
+            <button class="btn btn-glass d-lg-none me-1 flex-shrink-0" id="sidebar-toggle-btn"><i class="fa-solid fa-bars"></i></button>
+            <div class="d-flex align-items-center gap-2 overflow-hidden" style="min-width: 0;">
+              <span class="badge border border-secondary border-opacity-30 text-white px-2 py-1 fs-8 fw-bold d-none d-sm-inline-block font-monospace flex-shrink-0">WORKSPACE</span>
+              <span class="text-secondary fs-7 d-none d-sm-inline-block flex-shrink-0">/</span>
+              <h4 class="text-white fw-bold m-0 fs-6 fs-md-4 text-truncate" id="current-view-title" style="max-width: clamp(140px, 45vw, 400px);">Dashboard</h4>
             </div>
           </div>
           
-          <div class="d-flex align-items-center gap-2">
+          <div class="d-flex align-items-center gap-2 flex-shrink-0">
             <div class="dropdown">
               <button class="btn btn-glass dropdown-toggle d-flex align-items-center gap-2 py-1 px-2" type="button" id="userDropdown" data-bs-toggle="dropdown">
                 <i class="fa-solid fa-circle-user fs-5 text-secondary"></i>
