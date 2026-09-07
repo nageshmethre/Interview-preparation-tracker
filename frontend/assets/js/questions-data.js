@@ -1,4 +1,4 @@
-[
+window.DSA_QUESTIONS_BANK = [
   {
     "id": 1,
     "title": "Two Sum",
@@ -3899,4 +3899,4 @@
     "solution": "public class Solution {\n    public void execute() {\n        // Optimal Trie implementation\n    }\n}",
     "category": "Trie"
   }
-]
+];

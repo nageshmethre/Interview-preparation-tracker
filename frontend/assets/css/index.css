@@ -2605,36 +2605,73 @@ input:-webkit-autofill {
 }
 
 .book-theme-sepia {
-  background: #fbf0d9;
-  color: #433422;
-  border: 1px solid #e2d2b5;
+  background: #fbf0d9 !important;
+  color: #2c251d !important;
+  border: 1px solid #e2d2b5 !important;
+}
+
+.book-theme-sepia h1,
+.book-theme-sepia h2,
+.book-theme-sepia h3,
+.book-theme-sepia h4,
+.book-theme-sepia h5,
+.book-theme-sepia h6,
+.book-theme-sepia .book-chapter-title,
+.book-theme-sepia #book-chap-title,
+.book-theme-sepia .text-white,
+.book-theme-sepia .text-light {
+  color: #1a1612 !important;
 }
 
 .book-theme-sepia .text-muted,
 .book-theme-sepia .book-meta-text {
-  color: #7b6243 !important;
+  color: #5c4832 !important;
 }
 
 .book-theme-sepia .book-formula-card {
   background: #f2e3c6 !important;
   border: 1px solid #dcc69f !important;
-  color: #382c1e !important;
+  color: #2c251d !important;
+}
+
+.book-theme-sepia .book-formula-card code,
+.book-theme-sepia .book-formula-card li,
+.book-theme-sepia .book-formula-card pre {
+  color: #831843 !important;
 }
 
 .book-theme-sepia .book-example-card {
   background: #f6e8cc !important;
   border-left: 4px solid #b87b28 !important;
+  color: #2c251d !important;
+}
+
+.book-theme-sepia .book-example-card .text-muted {
+  color: #5c4832 !important;
 }
 
 .book-theme-paper {
-  background: #fdfdfd;
-  color: #18181b;
-  border: 1px solid #e4e4e7;
+  background: #fdfdfd !important;
+  color: #18181b !important;
+  border: 1px solid #e4e4e7 !important;
+}
+
+.book-theme-paper h1,
+.book-theme-paper h2,
+.book-theme-paper h3,
+.book-theme-paper h4,
+.book-theme-paper h5,
+.book-theme-paper h6,
+.book-theme-paper .book-chapter-title,
+.book-theme-paper #book-chap-title,
+.book-theme-paper .text-white,
+.book-theme-paper .text-light {
+  color: #09090b !important;
 }
 
 .book-theme-paper .text-muted,
 .book-theme-paper .book-meta-text {
-  color: #71717a !important;
+  color: #52525b !important;
 }
 
 .book-theme-paper .book-formula-card {
@@ -2643,9 +2680,15 @@ input:-webkit-autofill {
   color: #18181b !important;
 }
 
+.book-theme-paper .book-formula-card code,
+.book-theme-paper .book-formula-card li {
+  color: #0369a1 !important;
+}
+
 .book-theme-paper .book-example-card {
-  background: #fafafa !important;
+  background: #f8fafc !important;
   border-left: 4px solid #2563eb !important;
+  color: #18181b !important;
 }
 
 /* Book Page Inner Styling */
@@ -2920,4 +2963,65 @@ input:-webkit-autofill {
 .dialpad-btn.status-unvisited {
   background: rgba(24, 24, 27, 0.6);
   color: #71717a;
+}
+
+/* Fullscreen Exam Overlay Mode */
+.exam-fullscreen-mode {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 99999 !important;
+  background: #09090b !important;
+  overflow-y: auto !important;
+  padding: 20px !important;
+}
+
+/* Mobile Sticky Bottom Workshop Bar */
+.mobile-sticky-workshop-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1050;
+  background: rgba(18, 18, 20, 0.95);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Floating Scroll to Top Pill */
+.btn-scroll-top-pill {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #27272a;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-scroll-top-pill:hover {
+  background: #3b82f6;
+  border-color: #3b82f6;
+}
+
+/* Problem Bank Counter Badge */
+.problem-bank-badge {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
 }

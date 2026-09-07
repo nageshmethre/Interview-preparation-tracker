@@ -557,29 +557,16 @@ function router() {
       });
   } else if (hash === '#/coding-practice') {
     viewTitle.textContent = 'Multi-Language Coding Workspace';
+    const defaultBank = (typeof window !== 'undefined' && window.DSA_QUESTIONS_BANK && window.DSA_QUESTIONS_BANK.length > 0)
+      ? window.DSA_QUESTIONS_BANK
+      : [];
     const freshQuestions = getCachedData('cached_questions_v2', 180000);
-    if (freshQuestions && Array.isArray(freshQuestions) && freshQuestions.length > 0) {
-      pageMount.innerHTML = components.codingPractice(freshQuestions);
-      bindCodingPracticeEvents(freshQuestions);
-      return;
-    }
-    const cachedQuestionsStr = localStorage.getItem('cached_questions_v2');
-    let hasCache = false;
-    if (cachedQuestionsStr) {
-      try {
-        const questions = JSON.parse(cachedQuestionsStr).data;
-        if (Array.isArray(questions) && questions.length > 0) {
-          pageMount.innerHTML = components.codingPractice(questions);
-          bindCodingPracticeEvents(questions);
-          hasCache = true;
-        }
-      } catch (e) {}
-    }
-    if (!hasCache) {
-      // Immediate render with built-in problem bank for zero-latency mobile browsing
-      pageMount.innerHTML = components.codingPractice([]);
-      bindCodingPracticeEvents([]);
-    }
+    const questionsToUse = (freshQuestions && Array.isArray(freshQuestions) && freshQuestions.length > 0)
+      ? freshQuestions
+      : defaultBank;
+    pageMount.innerHTML = components.codingPractice(questionsToUse);
+    bindCodingPracticeEvents(questionsToUse);
+
     apiFetch('/v1/questions')
       .then(questions => {
         if (Array.isArray(questions) && questions.length > 0) {
@@ -589,7 +576,7 @@ function router() {
         }
       })
       .catch(() => {
-        // Keep the rendered default bank without throwing error alert
+        // Fallback bank already rendered instantly
       });
   } else if (hash === '#/aptitude') {
     viewTitle.textContent = 'Aptitude & Technical Reasoning Hub';
@@ -617,15 +604,20 @@ function router() {
     bindCommunityEvents();
   } else if (hash === '#/mock-exams') {
     viewTitle.textContent = 'Mock Assessment Platform';
-    pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
+    const cachedLeaderboard = getCachedData('cached_mock_leaderboard', 180000) || [];
+    pageMount.innerHTML = components.mockExams([], cachedLeaderboard);
+    bindMockExamsEvents(cachedLeaderboard);
+
     apiFetch('/v1/mocktests/leaderboard')
       .then(leaderboard => {
-        pageMount.innerHTML = components.mockExams([], leaderboard);
-        bindMockExamsEvents(leaderboard);
+        if (leaderboard) {
+          setCachedData('cached_mock_leaderboard', leaderboard);
+          pageMount.innerHTML = components.mockExams([], leaderboard);
+          bindMockExamsEvents(leaderboard);
+        }
       })
-      .catch(err => {
-        pageMount.innerHTML = components.mockExams([], []);
-        bindMockExamsEvents([]);
+      .catch(() => {
+        // Fallback already mounted smoothly
       });
   } else if (hash === '#/flashcards') {
     viewTitle.textContent = 'Spaced Repetition Flashcards';
@@ -2662,205 +2654,1134 @@ function bindCertificatesEvents() {
 
 const COMPREHENSIVE_DSA_ROADMAP = [
   {
-    id: 1,
-    name: 'Arrays',
-    sequenceNumber: 1,
-    subtopics: [
+    "id": 1,
+    "name": "Arrays & Vectors",
+    "sequenceNumber": 1,
+    "subtopics": [
       {
-        id: 101,
-        name: 'Two Pointer Technique',
-        theory: 'The two-pointer technique uses two markers (indices) scanning through an array concurrently to optimize searching from O(N^2) to O(N). Optimal for sorted arrays, palindrome checking, and target sum pairs (2Sum, 3Sum, Container With Most Water).',
-        complexityAnalysis: 'Time Complexity: O(N), Space Complexity: O(1)',
-        interviewTips: 'Always check if sorting the array first (O(N log N)) enables two-pointer convergence. Watch out for duplicate elements when skipping values in 3Sum/4Sum.'
+        "id": 101,
+        "name": "Two Pointer Technique",
+        "theory": "The two-pointer technique uses two markers scanning through an array concurrently to optimize searching from O(N^2) to O(N). Optimal for sorted arrays, palindrome checking, and target sum pairs (2Sum, 3Sum, Container With Most Water).",
+        "complexityAnalysis": "Time Complexity: O(N), Space Complexity: O(1)",
+        "interviewTips": "Always check if sorting the array first (O(N log N)) enables two-pointer convergence. Watch out for duplicate elements when skipping values in 3Sum/4Sum.",
+        "challenges": [
+          {
+            "id": 1,
+            "name": "Two Sum",
+            "qId": 1,
+            "difficulty": "EASY"
+          },
+          {
+            "id": 10,
+            "name": "Container With Most Water",
+            "qId": 10,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 11,
+            "name": "3Sum Zero Triplet Search",
+            "qId": 11,
+            "difficulty": "MEDIUM"
+          }
+        ]
       },
       {
-        id: 102,
-        name: 'Sliding Window Technique',
-        theory: 'A sliding window maintains a contiguous subsegment of elements, dynamically expanding to incorporate new elements and contracting when boundaries or constraints are violated. Essential for finding contiguous subarray aggregates, maximum sums, and substring conditions.',
-        complexityAnalysis: 'Time Complexity: O(N), Space Complexity: O(1) or O(K) for character frequency maps',
-        interviewTips: 'Distinguish between fixed-size (e.g. max sum subarray of size K) and dynamic-size (e.g. smallest subarray with sum >= S) windows. Keep an auxiliary frequency map to check validity in O(1).'
+        "id": 102,
+        "name": "Sliding Window Technique",
+        "theory": "A sliding window maintains a contiguous subsegment of elements, dynamically expanding to incorporate new elements and contracting when boundaries or constraints are violated.",
+        "complexityAnalysis": "Time Complexity: O(N), Space Complexity: O(1) or O(K) for character frequency maps",
+        "interviewTips": "Distinguish between fixed-size and dynamic-size windows. Keep an auxiliary frequency map to check validity in O(1).",
+        "challenges": [
+          {
+            "id": 3,
+            "name": "Longest Substring Without Repeating Characters",
+            "qId": 3,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 20,
+            "name": "Minimum Size Subarray Sum",
+            "qId": 20,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 21,
+            "name": "Maximum Average Subarray I",
+            "qId": 21,
+            "difficulty": "EASY"
+          }
+        ]
       },
       {
-        id: 103,
-        name: 'Prefix Sums & Kadane\'s Algorithm',
-        theory: 'Prefix sums precompute cumulative totals to answer range sum queries in O(1) time. Kadane\'s algorithm finds the maximum contiguous subarray sum in a single linear pass by discarding negative prefix accumulations.',
-        complexityAnalysis: 'Time Complexity: O(N), Space Complexity: O(1) for Kadane / O(N) for prefix sum table',
-        interviewTips: 'For maximum subarray product, remember negative numbers can flip parity—track both running minimum and maximum values concurrently.'
+        "id": 103,
+        "name": "Prefix Sums & Kadane Algorithm",
+        "theory": "Prefix sums precompute cumulative totals to answer range sum queries in O(1) time. Kadane algorithm finds the maximum contiguous subarray sum in a single linear pass by discarding negative prefix accumulations.",
+        "complexityAnalysis": "Time Complexity: O(N), Space Complexity: O(1) for Kadane / O(N) for prefix sum table",
+        "interviewTips": "For maximum subarray product, remember negative numbers can flip parity - track both running minimum and maximum values concurrently.",
+        "challenges": [
+          {
+            "id": 30,
+            "name": "Maximum Subarray (Kadane)",
+            "qId": 30,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 40,
+            "name": "Subarray Sum Equals K",
+            "qId": 40,
+            "difficulty": "MEDIUM"
+          }
+        ]
       }
     ]
   },
   {
-    id: 2,
-    name: 'Strings',
-    sequenceNumber: 2,
-    subtopics: [
+    "id": 2,
+    "name": "Strings & Text Algorithms",
+    "sequenceNumber": 2,
+    "subtopics": [
       {
-        id: 201,
-        name: 'String Hashing & Rabin-Karp Algorithm',
-        theory: 'Computes rolling polynomial hashes H = sum(c_i * p^i mod M) to verify substring equality and locate pattern occurrences in O(1) amortized time per window slide, avoiding quadratic string comparisons.',
-        complexityAnalysis: 'Time Complexity: O(N + M) average, O(N * M) worst-case collision, Space Complexity: O(1)',
-        interviewTips: 'Use large prime moduli (like 10^9 + 7) and double hashing to avoid spurious collisions. Always verify characters explicitly if hashes match.'
+        "id": 201,
+        "name": "String Hashing & Rabin-Karp Algorithm",
+        "theory": "Computes rolling polynomial hashes to verify substring equality and locate pattern occurrences in O(1) amortized time per window slide, avoiding quadratic string comparisons.",
+        "complexityAnalysis": "Time Complexity: O(N + M) average, O(N * M) worst-case collision, Space Complexity: O(1)",
+        "interviewTips": "Use large prime moduli (like 10^9 + 7) and double hashing to avoid spurious collisions. Always verify characters explicitly if hashes match.",
+        "challenges": [
+          {
+            "id": 25,
+            "name": "Repeated DNA Sequences",
+            "qId": 25,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 26,
+            "name": "Find the Index of First Occurrence",
+            "qId": 26,
+            "difficulty": "EASY"
+          }
+        ]
       },
       {
-        id: 202,
-        name: 'KMP Algorithm & Longest Prefix Suffix (LPS)',
-        theory: 'Knuth-Morris-Pratt searches for pattern occurrences without backtracking the text index by preprocessing an LPS (Longest Proper Prefix which is also a Suffix) array. When a mismatch occurs, it skips redundant comparisons.',
-        complexityAnalysis: 'Time Complexity: O(N + M), Space Complexity: O(M) for LPS array',
-        interviewTips: 'Understanding LPS construction is critical for solving problems like repeated substring detection, shortest palindrome additions, and string rotations.'
+        "id": 202,
+        "name": "KMP Algorithm & Longest Prefix Suffix (LPS)",
+        "theory": "Knuth-Morris-Pratt searches for pattern occurrences without backtracking the text index by preprocessing an LPS (Longest Proper Prefix which is also a Suffix) array.",
+        "complexityAnalysis": "Time Complexity: O(N + M), Space Complexity: O(M) for LPS array",
+        "interviewTips": "Understanding LPS construction is critical for solving problems like repeated substring detection, shortest palindrome additions, and string rotations.",
+        "challenges": [
+          {
+            "id": 27,
+            "name": "Shortest Palindrome via KMP",
+            "qId": 27,
+            "difficulty": "HARD"
+          },
+          {
+            "id": 28,
+            "name": "Repeated Substring Pattern",
+            "qId": 28,
+            "difficulty": "EASY"
+          }
+        ]
       },
       {
-        id: 203,
-        name: 'Trie (Prefix Tree) Architecture',
-        theory: 'A tree data structure where each node represents a character along string paths. Allows O(L) time insertion, exact match searching, and prefix queries where L is the maximum string length.',
-        complexityAnalysis: 'Time Complexity: O(L) for Insert, Search, and StartsWith, Space Complexity: O(N * L * AlphabetSize)',
-        interviewTips: 'Store a boolean isEndOfWord at each node. Tries are the gold standard for autocomplete search engines, Boggle solvers, and bitwise XOR maximum queries.'
+        "id": 203,
+        "name": "Anagrams & Frequency Maps",
+        "theory": "Comparing character frequency tables or sorted signatures to identify permutations and anagram groupings in linear time.",
+        "complexityAnalysis": "Time Complexity: O(N * K log K) or O(N * K), Space Complexity: O(N * K)",
+        "interviewTips": "An array of size 26 acts as a lightweight frequency hash for lowercase English letters.",
+        "challenges": [
+          {
+            "id": 29,
+            "name": "Valid Anagram",
+            "qId": 29,
+            "difficulty": "EASY"
+          },
+          {
+            "id": 69,
+            "name": "Group Anagrams",
+            "qId": 69,
+            "difficulty": "MEDIUM"
+          }
+        ]
       }
     ]
   },
   {
-    id: 3,
-    name: 'Linked Lists',
-    sequenceNumber: 3,
-    subtopics: [
+    "id": 3,
+    "name": "Two Pointers Technique",
+    "sequenceNumber": 3,
+    "subtopics": [
       {
-        id: 301,
-        name: 'Fast and Slow Pointer (Floyd\'s Cycle Detection)',
-        theory: 'Traverses linked list nodes using two pointers moving at 1x and 2x speeds. Solves cycle presence detection, exact cycle entry node identification, and middle node retrieval in a single pass without extra memory.',
-        complexityAnalysis: 'Time Complexity: O(N), Space Complexity: O(1)',
-        interviewTips: 'When a cycle is detected, reset the slow pointer to head while keeping fast at meeting point; moving both at 1x will intersect precisely at the cycle entrance.'
+        "id": 301,
+        "name": "Opposite Directional Pointers",
+        "theory": "Left and right pointers start at opposite ends and move toward each other until they meet. Widely used for palindrome verification, two-sum on sorted arrays, and boundary trapping.",
+        "complexityAnalysis": "Time Complexity: O(N), Space Complexity: O(1)",
+        "interviewTips": "Ideal when sorting is cheap or inputs are already sorted. Keep track of invariants as pointers advance.",
+        "challenges": [
+          {
+            "id": 31,
+            "name": "Two Sum II - Input Array Is Sorted",
+            "qId": 31,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 32,
+            "name": "Valid Palindrome",
+            "qId": 32,
+            "difficulty": "EASY"
+          }
+        ]
       },
       {
-        id: 302,
-        name: 'In-Place Linked List Reversal',
-        theory: 'Iteratively reverses node link directions using three pointer references (prev, curr, nextTemp) without allocating new heap memory. Also generalized to reverse sub-lists and k-node groups.',
-        complexityAnalysis: 'Time Complexity: O(N), Space Complexity: O(1)',
-        interviewTips: 'Always use a dummy head node (dummy.next = head) to eliminate edge cases where the initial head node is shifted or reversed.'
+        "id": 302,
+        "name": "Fast & Slow (Tortoise and Hare)",
+        "theory": "One pointer moves one step at a time while the second moves two steps. Used to detect cycles and locate midpoints in linear sequences without knowing total length.",
+        "complexityAnalysis": "Time Complexity: O(N), Space Complexity: O(1)",
+        "interviewTips": "Cycle entry point is found by moving head pointer and meeting pointer at equal 1x speed.",
+        "challenges": [
+          {
+            "id": 6,
+            "name": "Linked List Cycle",
+            "qId": 6,
+            "difficulty": "EASY"
+          },
+          {
+            "id": 41,
+            "name": "Linked List Cycle II Entry",
+            "qId": 41,
+            "difficulty": "MEDIUM"
+          }
+        ]
       },
       {
-        id: 303,
-        name: 'Merge & Sort Linked Lists (MergeSort)',
-        theory: 'Merges two or K sorted linked lists by comparing head values or using a min-heap. Because linked lists allow O(1) pointer redirection without element shifting, MergeSort is the optimal O(N log N) sorting algorithm for linked lists.',
-        complexityAnalysis: 'Time Complexity: O(N log N) for sorting, O(N log K) for K-way merge, Space Complexity: O(log N) recursion stack',
-        interviewTips: 'Use Floyd\'s slow/fast pointer to split the list into two halves before recursing in MergeSort.'
+        "id": 303,
+        "name": "In-Place Partition & Compaction",
+        "theory": "Read and write pointers separate desired elements from garbage or sentinel values in-place without auxiliary memory allocation.",
+        "complexityAnalysis": "Time Complexity: O(N), Space Complexity: O(1)",
+        "interviewTips": "Write pointer tracks the boundary of the cleaned subarray while read pointer scans forward.",
+        "challenges": [
+          {
+            "id": 33,
+            "name": "Remove Duplicates from Sorted Array",
+            "qId": 33,
+            "difficulty": "EASY"
+          },
+          {
+            "id": 34,
+            "name": "Move Zeroes",
+            "qId": 34,
+            "difficulty": "EASY"
+          }
+        ]
       }
     ]
   },
   {
-    id: 4,
-    name: 'Stacks & Queues',
-    sequenceNumber: 4,
-    subtopics: [
+    "id": 4,
+    "name": "Sliding Window & Kadane",
+    "sequenceNumber": 4,
+    "subtopics": [
       {
-        id: 401,
-        name: 'Monotonic Stack Pattern',
-        theory: 'Maintains elements in strictly increasing or decreasing order. As new elements are processed, stack elements that violate monotonicity are popped, resolving the Next Greater Element, Previous Greater Element, or boundary spans in amortized linear time.',
-        complexityAnalysis: 'Time Complexity: O(N) amortized (each element pushed and popped at most once), Space Complexity: O(N)',
-        interviewTips: 'Master this pattern for Daily Temperatures, Largest Rectangle in Histogram, Trapping Rain Water, and Stock Span problems.'
+        "id": 401,
+        "name": "Fixed-Length Window",
+        "theory": "Window maintains an exact length K while sliding from left to right. Adding new incoming element and dropping outgoing element in O(1) operations.",
+        "complexityAnalysis": "Time Complexity: O(N), Space Complexity: O(1) or O(K)",
+        "interviewTips": "Initialize the sum/state of the first K elements before entering the main sliding loop.",
+        "challenges": [
+          {
+            "id": 36,
+            "name": "Maximum Average Subarray I",
+            "qId": 36,
+            "difficulty": "EASY"
+          },
+          {
+            "id": 37,
+            "name": "Sliding Window Maximum",
+            "qId": 37,
+            "difficulty": "HARD"
+          }
+        ]
       },
       {
-        id: 402,
-        name: 'Two-Stack / Min-Max Stack Architecture',
-        theory: 'Augments standard LIFO stacks to track running minimum and maximum values in O(1) time without compromising push and pop operations, using either parallel min-tracking stacks or node-value pairs.',
-        complexityAnalysis: 'Time Complexity: O(1) for push, pop, top, and getMin, Space Complexity: O(N)',
-        interviewTips: 'Can also be adapted to implement a FIFO Queue using two LIFO stacks with amortized O(1) enqueue and dequeue.'
+        "id": 402,
+        "name": "Dynamic Variable-Length Window",
+        "theory": "Expands the right boundary until the target condition is met or violated, then contracts the left boundary to find the optimal subarray span.",
+        "complexityAnalysis": "Time Complexity: O(N), Space Complexity: O(min(M, N))",
+        "interviewTips": "Each element enters and exits the window at most once, maintaining amortized O(N) complexity.",
+        "challenges": [
+          {
+            "id": 3,
+            "name": "Longest Substring Without Repeating Characters",
+            "qId": 3,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 38,
+            "name": "Minimum Window Substring",
+            "qId": 38,
+            "difficulty": "HARD"
+          }
+        ]
       },
       {
-        id: 403,
-        name: 'Monotonic Deque for Sliding Window Maximum',
-        theory: 'A double-ended queue that maintains candidate maximum indices for a sliding window of size K. Smaller elements at the tail are evicted before pushing the new element, keeping the head as the current window maximum.',
-        complexityAnalysis: 'Time Complexity: O(N) overall (O(1) amortized per window shift), Space Complexity: O(K)',
-        interviewTips: 'Always check if the index at the head of the deque has fallen outside the left window boundary (idx < i - K + 1) and evict it before reading.'
+        "id": 403,
+        "name": "Kadane Max Contiguous Subarray",
+        "theory": "Maintains running maximum sum ending at current index. Resets running sum whenever it drops below zero.",
+        "complexityAnalysis": "Time Complexity: O(N), Space Complexity: O(1)",
+        "interviewTips": "If all numbers are negative, the result is the largest negative number (single element).",
+        "challenges": [
+          {
+            "id": 30,
+            "name": "Maximum Subarray",
+            "qId": 30,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 39,
+            "name": "Maximum Product Subarray",
+            "qId": 39,
+            "difficulty": "MEDIUM"
+          }
+        ]
       }
     ]
   },
   {
-    id: 5,
-    name: 'Trees & BST',
-    sequenceNumber: 5,
-    subtopics: [
+    "id": 5,
+    "name": "Linked Lists & Doubly Linked Lists",
+    "sequenceNumber": 5,
+    "subtopics": [
       {
-        id: 501,
-        name: 'Tree Traversals (BFS, DFS & Morris Inorder)',
-        theory: 'Systematically visits all tree nodes using Depth-First Search (Preorder, Inorder, Postorder via recursion or explicit stack) and Breadth-First Search (Level-Order via FIFO queue). Morris Traversal achieves O(1) space by threading predecessor null pointers.',
-        complexityAnalysis: 'Time Complexity: O(N), Space Complexity: O(H) call stack where H is tree height, O(1) for Morris',
-        interviewTips: 'Inorder traversal of a Binary Search Tree (BST) produces strictly ascending values. Level-order BFS is essential for shortest path in unweighted trees and zigzag views.'
+        "id": 501,
+        "name": "In-Place Linked List Reversal",
+        "theory": "Iteratively redirects next pointer references using three pointers (prev, curr, nextTemp) without allocating new memory nodes.",
+        "complexityAnalysis": "Time Complexity: O(N), Space Complexity: O(1)",
+        "interviewTips": "Always use a dummy head node to eliminate special handling of head changes.",
+        "challenges": [
+          {
+            "id": 7,
+            "name": "Reverse Linked List",
+            "qId": 7,
+            "difficulty": "EASY"
+          },
+          {
+            "id": 42,
+            "name": "Reverse Nodes in k-Group",
+            "qId": 42,
+            "difficulty": "HARD"
+          }
+        ]
       },
       {
-        id: 502,
-        name: 'Lowest Common Ancestor (LCA)',
-        theory: 'Locates the deepest node in a tree that has both nodes p and q as descendants. In a BST, LCA is found in O(H) by evaluating key intervals; in general binary trees, postorder recursion bubbles up matches from left and right subtrees.',
-        complexityAnalysis: 'Time Complexity: O(N) for general trees, O(H) for BST, Space Complexity: O(H)',
-        interviewTips: 'If the left and right recursive calls both return non-null pointers, the current node is the LCA. If only one subtree returns a match, bubble that match upward.'
+        "id": 502,
+        "name": "Merge & Sort Linked Lists",
+        "theory": "MergeSort on linked lists achieves O(N log N) without the auxiliary array memory needed by array MergeSort, using pointer splicing.",
+        "complexityAnalysis": "Time Complexity: O(N log N), Space Complexity: O(log N) stack",
+        "interviewTips": "Find midpoint using slow/fast pointers, break the link (mid.next = null), sort halves and merge.",
+        "challenges": [
+          {
+            "id": 8,
+            "name": "Merge Two Sorted Lists",
+            "qId": 8,
+            "difficulty": "EASY"
+          },
+          {
+            "id": 43,
+            "name": "Sort List (MergeSort)",
+            "qId": 43,
+            "difficulty": "MEDIUM"
+          }
+        ]
       },
       {
-        id: 503,
-        name: 'BST Validation & Balancing (AVL / Red-Black)',
-        theory: 'A valid BST requires every node to be strictly greater than all left-subtree descendants and smaller than all right-subtree descendants. Self-balancing trees enforce height balance factors using single and double tree rotations to guarantee O(log N) operations.',
-        complexityAnalysis: 'Time Complexity: O(N) for validation, O(log N) for balanced search/insert, Space Complexity: O(H)',
-        interviewTips: 'When validating a BST, pass allowable min and max bounds down the recursion: isValid(node, min, max). Comparing only direct children is a common rookie bug!'
+        "id": 503,
+        "name": "Doubly Linked List & LRU Cache Architecture",
+        "theory": "Nodes maintain both next and prev pointers, enabling O(1) removal of arbitrary nodes without traversing from the head.",
+        "complexityAnalysis": "Time Complexity: O(1) for insert/remove, Space Complexity: O(Capacity)",
+        "interviewTips": "Use sentinel head and tail dummy nodes to avoid null-pointer checks during boundary removals.",
+        "challenges": [
+          {
+            "id": 5,
+            "name": "LRU Cache Implementation",
+            "qId": 5,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 44,
+            "name": "LFU Cache Architecture",
+            "qId": 44,
+            "difficulty": "HARD"
+          }
+        ]
       }
     ]
   },
   {
-    id: 6,
-    name: 'Graphs',
-    sequenceNumber: 6,
-    subtopics: [
+    "id": 6,
+    "name": "Stacks & Monotonic Queues",
+    "sequenceNumber": 6,
+    "subtopics": [
       {
-        id: 601,
-        name: 'Breadth-First Search (BFS) & Depth-First Search (DFS)',
-        theory: 'The two fundamental graph traversal algorithms. BFS uses a FIFO queue to discover shortest paths in unweighted graphs layer-by-layer. DFS uses recursion or a stack to explore connectivity, cycle detection, and connected components.',
-        complexityAnalysis: 'Time Complexity: O(V + E), Space Complexity: O(V) for visited set and queue/stack',
-        interviewTips: 'Use a three-state visited array (0 = unvisited, 1 = visiting/in stack, 2 = visited) to detect cycles in directed graphs.'
+        "id": 601,
+        "name": "Parentheses Matching & Grammar Parsers",
+        "theory": "LIFO structure ensures nested blocks and delimiters close in the exact reverse order of their opening.",
+        "complexityAnalysis": "Time Complexity: O(N), Space Complexity: O(N)",
+        "interviewTips": "Check for empty stack before popping. At end of string, stack must be empty for valid syntax.",
+        "challenges": [
+          {
+            "id": 2,
+            "name": "Valid Parentheses",
+            "qId": 2,
+            "difficulty": "EASY"
+          },
+          {
+            "id": 45,
+            "name": "Evaluate Reverse Polish Notation",
+            "qId": 45,
+            "difficulty": "MEDIUM"
+          }
+        ]
       },
       {
-        id: 602,
-        name: 'Dijkstra\'s & Bellman-Ford Shortest Path',
-        theory: 'Dijkstra\'s algorithm uses a min-heap priority queue to greedily find single-source shortest paths on graphs with non-negative edge weights. Bellman-Ford relaxes all edges V-1 times and can detect negative-weight cycles.',
-        complexityAnalysis: 'Time Complexity: O((V + E) log V) for Dijkstra, O(V * E) for Bellman-Ford, Space Complexity: O(V)',
-        interviewTips: 'Dijkstra fails on negative edge weights. Always store (distance, node) pairs in the PriorityQueue and skip stale popped entries if dist > distances[u].'
+        "id": 602,
+        "name": "Monotonic Stack Pattern",
+        "theory": "Maintains elements in strictly increasing or decreasing order to resolve Next Greater / Previous Greater queries in amortized linear time.",
+        "complexityAnalysis": "Time Complexity: O(N) amortized, Space Complexity: O(N)",
+        "interviewTips": "Every element is pushed and popped at most once, yielding strictly O(N) total runtime.",
+        "challenges": [
+          {
+            "id": 46,
+            "name": "Daily Temperatures",
+            "qId": 46,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 47,
+            "name": "Largest Rectangle in Histogram",
+            "qId": 47,
+            "difficulty": "HARD"
+          }
+        ]
       },
       {
-        id: 603,
-        name: 'Topological Sort & Kahn\'s Algorithm',
-        theory: 'Generates a linear ordering of vertices in a Directed Acyclic Graph (DAG) such that for every directed edge u -> v, vertex u comes before v. Kahn\'s algorithm implements this using in-degree arrays and a zero-indegree queue.',
-        complexityAnalysis: 'Time Complexity: O(V + E), Space Complexity: O(V)',
-        interviewTips: 'If the number of processed nodes in Kahn\'s algorithm is less than V, the graph contains a cycle! Classic FAANG interview problem: Course Schedule I & II.'
-      },
-      {
-        id: 604,
-        name: 'Disjoint Set Union (Union-Find / DSU)',
-        theory: 'Maintains partitioned sets of elements with near O(1) Find and Union operations using Path Compression and Union by Rank/Size. Widely used for dynamic connectivity and Kruskal\'s Minimum Spanning Tree.',
-        complexityAnalysis: 'Time Complexity: O(alpha(N)) amortized per operation (~O(1)), Space Complexity: O(N)',
-        interviewTips: 'Path compression flattens the tree during find(x): parent[x] = find(parent[x]). Essential for detecting cycles in undirected graphs in O(E).'
+        "id": 603,
+        "name": "Monotonic Deque for Sliding Maximum",
+        "theory": "Double-ended queue preserving candidate optimal indices in monotonic order across sliding windows.",
+        "complexityAnalysis": "Time Complexity: O(N), Space Complexity: O(K)",
+        "interviewTips": "Discard elements from back of deque if incoming value is greater or equal.",
+        "challenges": [
+          {
+            "id": 37,
+            "name": "Sliding Window Maximum",
+            "qId": 37,
+            "difficulty": "HARD"
+          },
+          {
+            "id": 48,
+            "name": "Implement Queue using Stacks",
+            "qId": 48,
+            "difficulty": "EASY"
+          }
+        ]
       }
     ]
   },
   {
-    id: 7,
-    name: 'Dynamic Programming',
-    sequenceNumber: 7,
-    subtopics: [
+    "id": 7,
+    "name": "Binary Search & Divide and Conquer",
+    "sequenceNumber": 7,
+    "subtopics": [
       {
-        id: 701,
-        name: 'Memoization vs Tabulation',
-        theory: 'Dynamic programming breaks complex problems into overlapping subproblems with optimal substructure. Memoization caches recursive return values (top-down), while Tabulation fills a state matrix iteratively (bottom-up).',
-        complexityAnalysis: 'Time Complexity: O(N * W), Space Complexity: O(N * W) or O(W) with rolling array space optimization',
-        interviewTips: 'Always start with the recursive state definition and recurrence relation on paper before converting to iterative loops.'
+        "id": 701,
+        "name": "Lower & Upper Bound Searches",
+        "theory": "Divides monotonic search intervals in halves, identifying exact insertion points and boundary indices in logarithmic time.",
+        "complexityAnalysis": "Time Complexity: O(log N), Space Complexity: O(1)",
+        "interviewTips": "Calculate mid with low + (high - low) / 2 to prevent integer 32-bit overflow.",
+        "challenges": [
+          {
+            "id": 49,
+            "name": "Binary Search",
+            "qId": 49,
+            "difficulty": "EASY"
+          },
+          {
+            "id": 50,
+            "name": "Search in Rotated Sorted Array",
+            "qId": 50,
+            "difficulty": "MEDIUM"
+          }
+        ]
       },
       {
-        id: 702,
-        name: '0/1 Knapsack & Unbounded Knapsack Patterns',
-        theory: 'The archetype of decision-tree DP choosing whether to take or skip items within weight constraints. In 0/1 knapsack, iterate capacity backward in 1D array to avoid reusing items; in unbounded knapsack (Coin Change), iterate forward.',
-        complexityAnalysis: 'Time Complexity: O(N * Capacity), Space Complexity: O(Capacity) with 1D optimization',
-        interviewTips: 'Mastering the 1D space reduction backward loop (for w = W down to weight[i]) is a frequent interview differentiator.'
+        "id": 702,
+        "name": "Binary Search on Answer Space",
+        "theory": "When problem asks for minimum or maximum value satisfying a monotonic feasibility function f(x), search over the range of answers.",
+        "complexityAnalysis": "Time Complexity: O(N * log(Range)), Space Complexity: O(1)",
+        "interviewTips": "If f(x) is true for all x >= K and false for x < K, binary search can pinpoint K directly.",
+        "challenges": [
+          {
+            "id": 51,
+            "name": "Koko Eating Bananas",
+            "qId": 51,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 52,
+            "name": "Capacity To Ship Packages Within D Days",
+            "qId": 52,
+            "difficulty": "MEDIUM"
+          }
+        ]
       },
       {
-        id: 703,
-        name: 'Longest Common Subsequence (LCS) & Edit Distance',
-        theory: '2D matrix DP comparing prefixes of two sequences. If characters match, DP[i][j] = 1 + DP[i-1][j-1]; otherwise take max(DP[i-1][j], DP[i][j-1]). Edit Distance generalizes this to insertion, deletion, and substitution operations.',
-        complexityAnalysis: 'Time Complexity: O(N * M), Space Complexity: O(min(N, M)) with two-row rolling arrays',
-        interviewTips: 'Forms the basis of git diff tools, spellcheckers, and bioinformatics sequence alignment. Practice tracing the optimal solution path backward through the DP table.'
+        "id": 703,
+        "name": "Median & Partition Algorithms",
+        "theory": "Partitioning two sorted arrays concurrently to locate the median in sub-linear time.",
+        "complexityAnalysis": "Time Complexity: O(log(min(M, N))), Space Complexity: O(1)",
+        "interviewTips": "Ensure binary search runs on the smaller array to minimize iterations and handle index limits.",
+        "challenges": [
+          {
+            "id": 53,
+            "name": "Median of Two Sorted Arrays",
+            "qId": 53,
+            "difficulty": "HARD"
+          },
+          {
+            "id": 54,
+            "name": "Find Peak Element",
+            "qId": 54,
+            "difficulty": "MEDIUM"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Trees & Binary Search Trees (BST)",
+    "sequenceNumber": 8,
+    "subtopics": [
+      {
+        "id": 801,
+        "name": "Traversals (DFS Pre/In/Post, BFS Level-Order)",
+        "theory": "Visits nodes recursively or via queue. Inorder traversal of BST yields keys in strictly sorted ascending order.",
+        "complexityAnalysis": "Time Complexity: O(N), Space Complexity: O(H) call stack, O(W) queue width",
+        "interviewTips": "Morris Traversal threads null pointers to achieve O(1) auxiliary space without recursion.",
+        "challenges": [
+          {
+            "id": 9,
+            "name": "Binary Tree Level Order Traversal",
+            "qId": 9,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 55,
+            "name": "Binary Tree Inorder Traversal",
+            "qId": 55,
+            "difficulty": "EASY"
+          }
+        ]
+      },
+      {
+        "id": 802,
+        "name": "Lowest Common Ancestor (LCA)",
+        "theory": "Finds deepest node having both targets as descendants. In BST, uses value comparisons; in binary trees, postorder recursion bubbles matches.",
+        "complexityAnalysis": "Time Complexity: O(N) general / O(H) BST, Space Complexity: O(H)",
+        "interviewTips": "If left and right recursive calls both return non-null, current node is the LCA.",
+        "challenges": [
+          {
+            "id": 56,
+            "name": "Lowest Common Ancestor in BST",
+            "qId": 56,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 57,
+            "name": "Lowest Common Ancestor in Binary Tree",
+            "qId": 57,
+            "difficulty": "MEDIUM"
+          }
+        ]
+      },
+      {
+        "id": 803,
+        "name": "BST Validation & Construction",
+        "theory": "Validates strict BST ordering properties with allowable bounds (min, max). Constructs trees from traversal pairs.",
+        "complexityAnalysis": "Time Complexity: O(N), Space Complexity: O(H)",
+        "interviewTips": "Always pass allowable bounds down the recursion tree; checking immediate children is insufficient.",
+        "challenges": [
+          {
+            "id": 58,
+            "name": "Validate Binary Search Tree",
+            "qId": 58,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 59,
+            "name": "Construct Binary Tree from Preorder and Inorder",
+            "qId": 59,
+            "difficulty": "MEDIUM"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Heaps & Priority Queues",
+    "sequenceNumber": 9,
+    "subtopics": [
+      {
+        "id": 901,
+        "name": "Top-K Elements Pattern",
+        "theory": "Maintains a min-heap of size K to identify K largest elements in linearithmic time without fully sorting all N elements.",
+        "complexityAnalysis": "Time Complexity: O(N log K), Space Complexity: O(K)",
+        "interviewTips": "Use min-heap for K largest elements, and max-heap for K smallest elements.",
+        "challenges": [
+          {
+            "id": 60,
+            "name": "Kth Largest Element in an Array",
+            "qId": 60,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 61,
+            "name": "Top K Frequent Elements",
+            "qId": 61,
+            "difficulty": "MEDIUM"
+          }
+        ]
+      },
+      {
+        "id": 902,
+        "name": "Two Heaps for Running Median",
+        "theory": "Balances a max-heap for lower half and min-heap for upper half to compute streaming median in O(1) time.",
+        "complexityAnalysis": "Time Complexity: O(log N) insert, O(1) findMedian, Space Complexity: O(N)",
+        "interviewTips": "Keep sizes balanced so heap sizes differ by at most 1 element at all times.",
+        "challenges": [
+          {
+            "id": 62,
+            "name": "Find Median from Data Stream",
+            "qId": 62,
+            "difficulty": "HARD"
+          },
+          {
+            "id": 63,
+            "name": "Merge K Sorted Lists",
+            "qId": 63,
+            "difficulty": "HARD"
+          }
+        ]
+      },
+      {
+        "id": 903,
+        "name": "Scheduling & Greedy Priority Queues",
+        "theory": "Selects optimal next task dynamically based on deadlines, cooldown periods, or priorities.",
+        "complexityAnalysis": "Time Complexity: O(N log M), Space Complexity: O(M)",
+        "interviewTips": "Combine heaps with cooldown queues to track tasks undergoing cooling delays.",
+        "challenges": [
+          {
+            "id": 64,
+            "name": "Task Scheduler",
+            "qId": 64,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 65,
+            "name": "Reorganize String",
+            "qId": 65,
+            "difficulty": "MEDIUM"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Hashing & Hash Tables",
+    "sequenceNumber": 10,
+    "subtopics": [
+      {
+        "id": 1001,
+        "name": "Collision Resolution & HashMap Internals",
+        "theory": "Maps keys to bucket indices using hash functions. Uses separate chaining (linked list / red-black tree) or open addressing to handle collisions.",
+        "complexityAnalysis": "Time Complexity: O(1) amortized, O(N) worst case, Space Complexity: O(N)",
+        "interviewTips": "Java 8+ converts buckets with >8 elements into balanced Red-Black Trees (TreeMap) to cap lookup at O(log N).",
+        "challenges": [
+          {
+            "id": 1,
+            "name": "Two Sum",
+            "qId": 1,
+            "difficulty": "EASY"
+          },
+          {
+            "id": 66,
+            "name": "Design HashMap",
+            "qId": 66,
+            "difficulty": "EASY"
+          }
+        ]
+      },
+      {
+        "id": 1002,
+        "name": "Prefix Sum Hash Map",
+        "theory": "Stores prefix sum frequencies in a map to discover contiguous subarrays matching a target sum in a single linear pass.",
+        "complexityAnalysis": "Time Complexity: O(N), Space Complexity: O(N)",
+        "interviewTips": "Always seed the map with {0: 1} before iterating to count subarrays starting from index 0.",
+        "challenges": [
+          {
+            "id": 40,
+            "name": "Subarray Sum Equals K",
+            "qId": 40,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 67,
+            "name": "Continuous Subarray Sum",
+            "qId": 67,
+            "difficulty": "MEDIUM"
+          }
+        ]
+      },
+      {
+        "id": 1003,
+        "name": "Grouping & Canonical Representations",
+        "theory": "Normalizes input strings or tuples into sorted or character-counted canonical keys to partition identical classes.",
+        "complexityAnalysis": "Time Complexity: O(N * L), Space Complexity: O(N * L)",
+        "interviewTips": "Sorted string serves as an easy map key for anagram classification.",
+        "challenges": [
+          {
+            "id": 69,
+            "name": "Group Anagrams",
+            "qId": 69,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 68,
+            "name": "Longest Consecutive Sequence",
+            "qId": 68,
+            "difficulty": "MEDIUM"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "name": "Recursion & Backtracking",
+    "sequenceNumber": 11,
+    "subtopics": [
+      {
+        "id": 1101,
+        "name": "Subsets, Permutations & Combinations",
+        "theory": "Systematically explores combinatorial state trees using decision branches: choose, explore recursively, and unchoose (backtrack).",
+        "complexityAnalysis": "Time Complexity: O(2^N) or O(N!), Space Complexity: O(N) recursion stack",
+        "interviewTips": "Sort the array before backtracking to skip identical adjacent elements and eliminate duplicate subsets.",
+        "challenges": [
+          {
+            "id": 70,
+            "name": "Subsets & Power Set",
+            "qId": 70,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 71,
+            "name": "Permutations I & II",
+            "qId": 71,
+            "difficulty": "MEDIUM"
+          }
+        ]
+      },
+      {
+        "id": 1102,
+        "name": "Constraint Satisfaction (N-Queens & Sudoku)",
+        "theory": "Prunes invalid decision paths immediately whenever state conflicts with row, column, diagonal, or subgrid constraints.",
+        "complexityAnalysis": "Time Complexity: O(N!), Space Complexity: O(N)",
+        "interviewTips": "Use bitmasks or boolean sets for columns and diagonals (row - col, row + col) for O(1) collision checks.",
+        "challenges": [
+          {
+            "id": 72,
+            "name": "N-Queens Solver",
+            "qId": 72,
+            "difficulty": "HARD"
+          },
+          {
+            "id": 73,
+            "name": "Sudoku Solver",
+            "qId": 73,
+            "difficulty": "HARD"
+          }
+        ]
+      },
+      {
+        "id": 1103,
+        "name": "Grid Exploration with Backtracking",
+        "theory": "Explores 2D matrix paths (up, down, left, right), marking visited cells with sentinels and restoring them on return.",
+        "complexityAnalysis": "Time Complexity: O(N * M * 4^L), Space Complexity: O(L) call stack",
+        "interviewTips": "Avoid creating visited matrices when you can temporarily flip matrix[r][c] = \"#\" in-place.",
+        "challenges": [
+          {
+            "id": 74,
+            "name": "Word Search in Grid",
+            "qId": 74,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 75,
+            "name": "Palindrome Partitioning",
+            "qId": 75,
+            "difficulty": "MEDIUM"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "name": "Graphs (BFS, DFS, Dijkstra, Bellman-Ford, DSU)",
+    "sequenceNumber": 12,
+    "subtopics": [
+      {
+        "id": 1201,
+        "name": "BFS/DFS & Connected Components",
+        "theory": "Traverses vertices and edges to count independent clusters, find shortest unweighted paths, and discover cycles.",
+        "complexityAnalysis": "Time Complexity: O(V + E), Space Complexity: O(V)",
+        "interviewTips": "BFS is guaranteed to locate shortest unweighted paths layer by layer.",
+        "challenges": [
+          {
+            "id": 11,
+            "name": "Number of Islands",
+            "qId": 11,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 76,
+            "name": "Clone Graph",
+            "qId": 76,
+            "difficulty": "MEDIUM"
+          }
+        ]
+      },
+      {
+        "id": 1202,
+        "name": "Topological Sort & Kahn Algorithm",
+        "theory": "Generates linear node sequence in DAGs matching edge dependencies using indegree tracking and zero-indegree queues.",
+        "complexityAnalysis": "Time Complexity: O(V + E), Space Complexity: O(V)",
+        "interviewTips": "If total nodes popped from queue < V, the directed graph contains a dependency cycle.",
+        "challenges": [
+          {
+            "id": 77,
+            "name": "Course Schedule I (Cycle Detection)",
+            "qId": 77,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 78,
+            "name": "Course Schedule II (Order Generation)",
+            "qId": 78,
+            "difficulty": "MEDIUM"
+          }
+        ]
+      },
+      {
+        "id": 1203,
+        "name": "Shortest Paths & Disjoint Set Union (DSU)",
+        "theory": "Dijkstra computes single-source shortest paths on weighted graphs; DSU handles dynamic connectivity with path compression.",
+        "complexityAnalysis": "Time Complexity: O((V + E) log V) Dijkstra, O(alpha(N)) DSU, Space Complexity: O(V)",
+        "interviewTips": "Path compression flattens parent trees during find(), providing near constant O(1) performance.",
+        "challenges": [
+          {
+            "id": 79,
+            "name": "Network Delay Time (Dijkstra)",
+            "qId": 79,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 80,
+            "name": "Number of Provinces (Union-Find)",
+            "qId": 80,
+            "difficulty": "MEDIUM"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "name": "Dynamic Programming 1D",
+    "sequenceNumber": 13,
+    "subtopics": [
+      {
+        "id": 1301,
+        "name": "Linear State Transitions & Fibonacci",
+        "theory": "Subproblem optimal solution depends on a constant number of previous linear steps. Optimizes space from O(N) to O(1) using variables.",
+        "complexityAnalysis": "Time Complexity: O(N), Space Complexity: O(1)",
+        "interviewTips": "Identify state recurrence: dp[i] = dp[i-1] + dp[i-2], then replace the array with two rolling variables.",
+        "challenges": [
+          {
+            "id": 81,
+            "name": "Climbing Stairs",
+            "qId": 81,
+            "difficulty": "EASY"
+          },
+          {
+            "id": 82,
+            "name": "House Robber",
+            "qId": 82,
+            "difficulty": "MEDIUM"
+          }
+        ]
+      },
+      {
+        "id": 1302,
+        "name": "Coin Change & Unbounded Knapsack",
+        "theory": "Finds minimum elements or total combinations where items can be reused indefinitely. Loops forward through capacities.",
+        "complexityAnalysis": "Time Complexity: O(Amount * Coins), Space Complexity: O(Amount)",
+        "interviewTips": "Initialize DP array with a sentinel high value (e.g. amount + 1) to distinguish unreachable states.",
+        "challenges": [
+          {
+            "id": 83,
+            "name": "Coin Change (Min Coins)",
+            "qId": 83,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 84,
+            "name": "Coin Change 2 (Total Ways)",
+            "qId": 84,
+            "difficulty": "MEDIUM"
+          }
+        ]
+      },
+      {
+        "id": 1303,
+        "name": "Longest Increasing Subsequence (LIS)",
+        "theory": "Computes longest strictly ascending subsequence. Classic DP is O(N^2); patient sorting with binary search achieves O(N log N).",
+        "complexityAnalysis": "Time Complexity: O(N log N), Space Complexity: O(N)",
+        "interviewTips": "Maintain an array of smallest tails for subsequences of length L and use binary search (lower_bound) to update.",
+        "challenges": [
+          {
+            "id": 85,
+            "name": "Longest Increasing Subsequence",
+            "qId": 85,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 86,
+            "name": "Russian Doll Envelopes",
+            "qId": 86,
+            "difficulty": "HARD"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "name": "Dynamic Programming 2D & Grids",
+    "sequenceNumber": 14,
+    "subtopics": [
+      {
+        "id": 1401,
+        "name": "Grid Traversals & Path Sums",
+        "theory": "State dp[r][c] represents optimal score arriving at cell (r, c) from top or left adjacent neighbors.",
+        "complexityAnalysis": "Time Complexity: O(R * C), Space Complexity: O(C) rolling 1D row",
+        "interviewTips": "You can roll space into a single 1D array of size C: dp[c] = current_cell + min(dp[c], dp[c-1]).",
+        "challenges": [
+          {
+            "id": 87,
+            "name": "Unique Paths",
+            "qId": 87,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 88,
+            "name": "Minimum Path Sum",
+            "qId": 88,
+            "difficulty": "MEDIUM"
+          }
+        ]
+      },
+      {
+        "id": 1402,
+        "name": "Longest Common Subsequence & String Alignments",
+        "theory": "2D matrix comparing prefixes of two strings. If chars match, dp[i][j] = 1 + dp[i-1][j-1]; otherwise max(dp[i-1][j], dp[i][j-1]).",
+        "complexityAnalysis": "Time Complexity: O(N * M), Space Complexity: O(min(N, M))",
+        "interviewTips": "Fundamental algorithm for diff engines and bioinformatics sequence matching.",
+        "challenges": [
+          {
+            "id": 89,
+            "name": "Longest Common Subsequence",
+            "qId": 89,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 90,
+            "name": "Edit Distance (Levenshtein)",
+            "qId": 90,
+            "difficulty": "HARD"
+          }
+        ]
+      },
+      {
+        "id": 1403,
+        "name": "0/1 Knapsack & Subset Sum",
+        "theory": "Decides whether to take or skip item i under capacity constraint W. In 1D space optimization, loops backward to prevent duplicate item use.",
+        "complexityAnalysis": "Time Complexity: O(N * W), Space Complexity: O(W)",
+        "interviewTips": "Iterating capacity backward (w = W down to weight[i]) guarantees each item is used at most once.",
+        "challenges": [
+          {
+            "id": 91,
+            "name": "Partition Equal Subset Sum",
+            "qId": 91,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 92,
+            "name": "Target Sum (+/- Combinations)",
+            "qId": 92,
+            "difficulty": "MEDIUM"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "name": "Greedy Algorithms & Intervals",
+    "sequenceNumber": 15,
+    "subtopics": [
+      {
+        "id": 1501,
+        "name": "Interval Scheduling & Merging",
+        "theory": "Sorts intervals by start or end times to greedily merge overlaps or maximize non-overlapping task counts.",
+        "complexityAnalysis": "Time Complexity: O(N log N), Space Complexity: O(N)",
+        "interviewTips": "To maximize completed events, sort by end time. To merge overlapping intervals, sort by start time.",
+        "challenges": [
+          {
+            "id": 4,
+            "name": "Merge Intervals",
+            "qId": 4,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 93,
+            "name": "Non-overlapping Intervals",
+            "qId": 93,
+            "difficulty": "MEDIUM"
+          }
+        ]
+      },
+      {
+        "id": 1502,
+        "name": "Greedy Reachability & Jump Game",
+        "theory": "Maintains running maximum reachable index without backtracking or evaluating recursive branches.",
+        "complexityAnalysis": "Time Complexity: O(N), Space Complexity: O(1)",
+        "interviewTips": "If current index i exceeds maxReach, the destination is unreachable - return false immediately.",
+        "challenges": [
+          {
+            "id": 94,
+            "name": "Jump Game I",
+            "qId": 94,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 95,
+            "name": "Jump Game II (Min Jumps)",
+            "qId": 95,
+            "difficulty": "MEDIUM"
+          }
+        ]
+      },
+      {
+        "id": 1503,
+        "name": "Resource Allocation & Platforms",
+        "theory": "Treats start and end events as chronological timeline increments (+1 for start, -1 for end) to calculate peak concurrency.",
+        "complexityAnalysis": "Time Complexity: O(N log N), Space Complexity: O(1)",
+        "interviewTips": "Sort start times and end times separately, then advance with two pointers to count overlapping rooms.",
+        "challenges": [
+          {
+            "id": 96,
+            "name": "Meeting Rooms II",
+            "qId": 96,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 97,
+            "name": "Gas Station Circuit Tour",
+            "qId": 97,
+            "difficulty": "MEDIUM"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "name": "Trie & Bit Manipulation",
+    "sequenceNumber": 16,
+    "subtopics": [
+      {
+        "id": 1601,
+        "name": "Prefix Trees (Trie)",
+        "theory": "Tree structure where edges represent characters. Supports O(L) insert, prefix search, and autocomplete lookup where L is string length.",
+        "complexityAnalysis": "Time Complexity: O(L), Space Complexity: O(Total Characters * Alphabet)",
+        "interviewTips": "Store a boolean isEndOfWord at each node. Tries are ideal for IP routing and dictionary autocomplete.",
+        "challenges": [
+          {
+            "id": 98,
+            "name": "Implement Trie (Prefix Tree)",
+            "qId": 98,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 99,
+            "name": "Word Search II (Boggle with Trie)",
+            "qId": 99,
+            "difficulty": "HARD"
+          }
+        ]
+      },
+      {
+        "id": 1602,
+        "name": "Bitwise XOR & Arithmetic Tricks",
+        "theory": "Leverages binary properties: x ^ x = 0, x ^ 0 = x, and n & (n - 1) clears lowest set bit (Brian Kernighan algorithm).",
+        "complexityAnalysis": "Time Complexity: O(1) or O(Bits), Space Complexity: O(1)",
+        "interviewTips": "XOR cancels out duplicate pairs, isolating unique single numbers in O(N) time and O(1) auxiliary space.",
+        "challenges": [
+          {
+            "id": 100,
+            "name": "Single Number",
+            "qId": 100,
+            "difficulty": "EASY"
+          },
+          {
+            "id": 101,
+            "name": "Counting Bits",
+            "qId": 101,
+            "difficulty": "EASY"
+          }
+        ]
+      },
+      {
+        "id": 1603,
+        "name": "Bitmask Subsets & State Compression",
+        "theory": "Represents subsets of size N as integers from 0 to 2^N - 1, enabling O(1) subset membership checks via bit shifts (1 << i).",
+        "complexityAnalysis": "Time Complexity: O(2^N * N), Space Complexity: O(2^N)",
+        "interviewTips": "Essential for Traveling Salesperson Problem (TSP) and small state dynamic programming (N <= 20).",
+        "challenges": [
+          {
+            "id": 102,
+            "name": "Subsets via Bitmask",
+            "qId": 102,
+            "difficulty": "MEDIUM"
+          },
+          {
+            "id": 103,
+            "name": "Maximum XOR of Two Numbers in an Array",
+            "qId": 103,
+            "difficulty": "MEDIUM"
+          }
+        ]
       }
     ]
   }
@@ -2914,6 +3835,20 @@ function bindDsaRoadmapEvents(roadmapData) {
     if (firstTopic) {
       document.getElementById('dsa-detail-panel').innerHTML = components.dsaTopicDetail(firstTopic);
     }
+  }
+
+  // Upward smooth scroll button handlers
+  const btnScrollTop = document.getElementById('btn-roadmap-scroll-top');
+  if (btnScrollTop) {
+    btnScrollTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+  const btnMobileScrollTop = document.getElementById('btn-mobile-scroll-top');
+  if (btnMobileScrollTop) {
+    btnMobileScrollTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   }
 }
 
@@ -3082,37 +4017,52 @@ function bindCodingPracticeEvents(rawQuestions = []) {
   if (btnShowEditor) btnShowEditor.addEventListener('click', () => setMobileView('editor'));
   if (btnJumpCode) btnJumpCode.addEventListener('click', () => setMobileView('editor'));
 
-  // 3. Search Filter handler
+  // 3. Search & Topic & Difficulty Filter Handlers
   const searchInput = document.getElementById('practice-search-input');
-  if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      const term = e.target.value.toLowerCase();
-      document.querySelectorAll('#practice-problems-list .btn-select-question').forEach(card => {
-        const title = (card.dataset.title || '').toLowerCase();
-        const cat = (card.dataset.category || '').toLowerCase();
-        if (title.includes(term) || cat.includes(term)) {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
-        }
-      });
+  const topicFilterSelect = document.getElementById('practice-topic-filter');
+  let currentDiffFilter = 'ALL';
+
+  function applyBankFilters() {
+    const term = (searchInput ? searchInput.value : '').toLowerCase().trim();
+    const selectedTopic = topicFilterSelect ? topicFilterSelect.value : 'ALL';
+    let visibleCount = 0;
+
+    document.querySelectorAll('#practice-problems-list .btn-select-question').forEach(card => {
+      const title = (card.dataset.title || '').toLowerCase();
+      const cat = (card.dataset.category || '').toLowerCase();
+      const comp = (card.dataset.companies || '').toLowerCase();
+      const cardDiff = (card.dataset.difficulty || '').toUpperCase();
+
+      const matchTerm = !term || title.includes(term) || cat.includes(term) || comp.includes(term);
+      const matchTopic = (selectedTopic === 'ALL') || (card.dataset.category === selectedTopic);
+      const matchDiff = (currentDiffFilter === 'ALL') || (cardDiff === currentDiffFilter);
+
+      if (matchTerm && matchTopic && matchDiff) {
+        card.style.display = 'block';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
     });
+
+    const bankPill = document.getElementById('bank-count-pill');
+    if (bankPill) bankPill.textContent = visibleCount;
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', applyBankFilters);
+  }
+  if (topicFilterSelect) {
+    topicFilterSelect.addEventListener('change', applyBankFilters);
   }
 
   // 4. Difficulty Pills
   document.querySelectorAll('#difficulty-filter-pills button').forEach(pill => {
     pill.addEventListener('click', (e) => {
       document.querySelectorAll('#difficulty-filter-pills button').forEach(b => b.classList.remove('btn-primary', 'active-diff-filter'));
-      e.target.classList.add('btn-primary', 'active-diff-filter');
-      const diff = e.target.dataset.diff;
-      document.querySelectorAll('#practice-problems-list .btn-select-question').forEach(card => {
-        const cardDiff = (card.dataset.difficulty || '').toUpperCase();
-        if (diff === 'ALL' || cardDiff === diff) {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
-        }
-      });
+      e.currentTarget.classList.add('btn-primary', 'active-diff-filter');
+      currentDiffFilter = e.currentTarget.dataset.diff || 'ALL';
+      applyBankFilters();
     });
   });
 
@@ -3204,8 +4154,19 @@ function bindCodingPracticeEvents(rawQuestions = []) {
     });
   }
 
-  // Default select first question
-  if (questionCards.length > 0) {
+  // Auto-select question from URL query param (?q=ID) or default to first
+  const rawHash = window.location.hash || '';
+  const queryParams = new URLSearchParams(rawHash.includes('?') ? rawHash.split('?')[1] : '');
+  const targetQId = queryParams.get('q');
+
+  if (targetQId && questionCards.length > 0) {
+    const targetCard = Array.from(questionCards).find(c => String(c.dataset.questionId) === String(targetQId));
+    if (targetCard) {
+      selectQuestion(targetCard.dataset);
+    } else {
+      selectQuestion(questionCards[0].dataset);
+    }
+  } else if (questionCards.length > 0) {
     selectQuestion(questionCards[0].dataset);
   }
 
@@ -3371,135 +4332,11 @@ function bindCodingPracticeEvents(rawQuestions = []) {
 
 // Aptitude & Book Reading Events Handler
 function bindAptitudeEvents(topics = [], questions = []) {
-  const chapters = (topics && topics.length > 0) ? topics : [
-    {
-      id: 1,
-      chapterNumber: "01",
-      title: "Number Systems & Divisibility Hacks",
-      category: "Quantitative Aptitude",
-      readTime: "8 min read",
-      formulas: [
-        "Sum of first N natural numbers = N(N + 1) / 2",
-        "Sum of squares of first N numbers = N(N + 1)(2N + 1) / 6",
-        "Divisibility by 7: Subtract twice the last digit from the rest. Result must be divisible by 7.",
-        "Divisibility by 11: (Sum of digits at odd places) - (Sum of digits at even places) = 0 or multiple of 11."
-      ],
-      concepts: "Number systems form the foundation of technical assessment aptitude. The unit digit of a number raised to power follows cyclicity (e.g., 2^n cycles in periods of 4: 2, 4, 8, 6). HCF and LCM satisfy: Product of two numbers = HCF × LCM.",
-      examples: [
-        {
-          question: "Find the unit digit of 7^95 - 3^58.",
-          stepByStep: "1. Unit digit of 7 has cyclicity of 4 (7, 9, 3, 1). 95 mod 4 = 3, so unit digit of 7^95 = unit digit of 7^3 = 3.\n2. Unit digit of 3 has cyclicity of 4 (3, 9, 7, 1). 58 mod 4 = 2, so unit digit of 3^58 = 3^2 = 9.\n3. Subtracting with carry: (13 - 9) = 4.",
-          answer: "4"
-        }
-      ]
-    },
-    {
-      id: 2,
-      chapterNumber: "02",
-      title: "Percentages & Profit-Loss Shortcuts",
-      category: "Quantitative Aptitude",
-      readTime: "10 min read",
-      formulas: [
-        "Net % change for successive changes of a% and b% = a + b + (a × b)/100",
-        "Profit % = (Profit / Cost Price) × 100",
-        "Selling Price = Cost Price × (100 + Gain%) / 100",
-        "Discount % = (Marked Price - Selling Price) / Marked Price × 100"
-      ],
-      concepts: "Whenever price increases by x%, consumption must decrease by [x / (100 + x)] × 100% to keep expenditure constant. If cost price of X items equals selling price of Y items, Gain % = [(X - Y) / Y] × 100.",
-      examples: [
-        {
-          question: "If the price of sugar rises by 25%, by how much percent must a family reduce sugar consumption to not increase budget?",
-          stepByStep: "Formula: Reduction = [r / (100 + r)] × 100 = [25 / 125] × 100 = 1/5 × 100 = 20%.",
-          answer: "20%"
-        }
-      ]
-    },
-    {
-      id: 3,
-      chapterNumber: "03",
-      title: "Time, Work & Pipes Formulae",
-      category: "Quantitative Aptitude",
-      readTime: "9 min read",
-      formulas: [
-        "If A does a work in X days and B in Y days, together they take (X × Y) / (X + Y) days.",
-        "Total Work = LCM(Individual times). Efficiency = Total Work / Time.",
-        "Man-Day Formula: (M1 × D1 × H1) / W1 = (M2 × D2 × H2) / W2",
-        "Inlet pipe fills in X hrs, outlet pipe empties in Y hrs (Y > X). Net fill rate = (Y - X) / (X × Y)."
-      ],
-      concepts: "Efficiency is inversely proportional to time taken. If A is twice as good a workman as B, ratio of time taken by A and B is 1 : 2.",
-      examples: [
-        {
-          question: "A can complete a project in 12 days and B in 16 days. Working together with C, they finish in 4 days. In how many days can C alone complete it?",
-          stepByStep: "Let total work = LCM(12, 16, 4) = 48 units.\nA's 1-day work = 48/12 = 4 units.\nB's 1-day work = 48/16 = 3 units.\n(A + B + C)'s 1-day work = 48/4 = 12 units.\nC's work = 12 - (4 + 3) = 5 units/day.\nTime for C alone = 48 / 5 = 9.6 days.",
-          answer: "9.6 days"
-        }
-      ]
-    },
-    {
-      id: 4,
-      chapterNumber: "04",
-      title: "Speed, Time, Distance & Trains",
-      category: "Quantitative Aptitude",
-      readTime: "11 min read",
-      formulas: [
-        "Speed in m/s = Speed in km/h × (5 / 18)",
-        "Average Speed for equal distance = 2xy / (x + y)",
-        "Relative speed (opposite direction) = Speed1 + Speed2",
-        "Relative speed (same direction) = |Speed1 - Speed2|",
-        "Time to cross platform of length L by train of length T = (T + L) / Speed"
-      ],
-      concepts: "When two objects move in opposite directions, their relative speed is additive. When moving in the same direction, relative speed is the difference between speeds.",
-      examples: [
-        {
-          question: "A 180m long train crosses a 320m long bridge in 20 seconds. What is the speed of the train in km/h?",
-          stepByStep: "Total distance = 180 + 320 = 500 meters.\nSpeed = Distance / Time = 500 / 20 = 25 m/s.\nConvert to km/h: 25 × (18 / 5) = 90 km/h.",
-          answer: "90 km/h"
-        }
-      ]
-    },
-    {
-      id: 5,
-      chapterNumber: "05",
-      title: "Syllogisms & Venn Logic Rules",
-      category: "Logical Reasoning",
-      readTime: "7 min read",
-      formulas: [
-        "Universal Affirmative (All A are B) implies Some B are A.",
-        "Universal Negative (No A are B) implies No B are A and Some A are not B.",
-        "Particular Affirmative (Some A are B) implies Some B are A.",
-        "Complementary pairs for Either/Or: (All + Some Not) OR (Some + No)."
-      ],
-      concepts: "Syllogisms test formal deductive logic. Never assume real-world plausibility. Check conclusions against the minimal Venn diagram and all alternate possible overlapping diagrams.",
-      examples: [
-        {
-          question: "Statements: All cats are pets. All pets are animals. Conclusions: I. All cats are animals. II. Some animals are pets.",
-          stepByStep: "Cats ⊂ Pets ⊂ Animals.\nI. Cats is a complete subset of Animals -> True.\nII. Since Pets is a subset of Animals, Some animals are definitely pets -> True.",
-          answer: "Both Conclusion I and II follow"
-        }
-      ]
-    },
-    {
-      id: 6,
-      chapterNumber: "06",
-      title: "Blood Relations & Family Tree Maps",
-      category: "Logical Reasoning",
-      readTime: "6 min read",
-      formulas: [
-        "Use standard tree notation: Male = [+], Female = [-], Spouses = [=], Siblings = [-], Generations = [|]",
-        "Maternal relations relate to mother's side (Maternal uncle = Mother's brother)",
-        "Paternal relations relate to father's side (Paternal aunt = Father's sister)",
-        "'Only son of my grandfather' = Father (if paternal) or Maternal Uncle."
-      ],
-      concepts: "Break down chain relationships from the end of the sentence to the beginning. Always verify gender before asserting sibling or cousin relationship.",
-      examples: [
-        {
-          question: "Pointing to a photograph, a woman says: 'He is the only son of the wife of my husband.' How is the man in the photo related to the woman?",
-          stepByStep: "'Wife of my husband' = The woman herself.\n'Only son of the wife of my husband' = The woman's own son.",
-          answer: "Son"
-        }
-      ]
-    }
-  ];
+  const chapters = (topics && topics.length > 0)
+    ? topics
+    : ((typeof window !== 'undefined' && window.APTITUDE_TRIAD_CURRICULUM && window.APTITUDE_TRIAD_CURRICULUM.length > 0)
+        ? window.APTITUDE_TRIAD_CURRICULUM
+        : []);
 
   let currentChapIdx = 0;
   const savedChapId = localStorage.getItem('aptitude_bookmark_chapter');
@@ -3531,6 +4368,79 @@ function bindAptitudeEvents(topics = [], questions = []) {
   if (btnViewBook) btnViewBook.addEventListener('click', () => setMode('book'));
   if (btnViewPractice) btnViewPractice.addEventListener('click', () => setMode('practice'));
 
+  // Render Chapter Exercise MCQs
+  function renderChapterMCQs(chap) {
+    const mcqContainer = document.getElementById('book-chapter-mcqs-list');
+    if (!mcqContainer) return;
+    const mcqs = chap.practiceQuestions || [];
+    if (mcqs.length === 0) {
+      mcqContainer.innerHTML = '<p class="text-muted fs-8 fst-italic">Practice problems for this topic are available in the Interactive Practice Quiz tab.</p>';
+      return;
+    }
+
+    mcqContainer.innerHTML = mcqs.map((pq, qIdx) => `
+      <div class="p-3 rounded bg-black bg-opacity-30 border border-secondary border-opacity-25 chapter-mcq-card" data-correct="${pq.correctIndex}">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle fs-9">Challenge ${qIdx + 1}</span>
+          <button type="button" class="btn btn-sm btn-glass text-warning py-0 px-2 fs-9 btn-toggle-mcq-sol" data-target="sol-${chap.id}-${qIdx}">
+            <i class="fa-solid fa-lightbulb me-1"></i> Solution
+          </button>
+        </div>
+        <div class="text-light fw-bold fs-8 mb-2">${pq.question}</div>
+        <div class="row g-2 mb-2">
+          ${(pq.options || []).map((opt, oIdx) => `
+            <div class="col-sm-6 col-12">
+              <div class="p-2 px-3 rounded border border-secondary border-opacity-25 chapter-opt-btn"
+                   style="cursor: pointer; background: rgba(24, 24, 27, 0.4);"
+                   data-opt="${oIdx}">
+                <span class="text-muted font-monospace me-1">${String.fromCharCode(65 + oIdx)}.</span>
+                <span class="fs-8 text-light">${opt}</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        <div id="sol-${chap.id}-${qIdx}" class="d-none p-2 rounded bg-black bg-opacity-50 border border-secondary border-opacity-25 fs-8 text-secondary mt-2">
+          <div class="text-success fw-bold mb-1"><i class="fa-solid fa-check me-1"></i> Correct Answer: Option ${String.fromCharCode(65 + (pq.correctIndex || 0))}</div>
+          <div style="line-height: 1.6;">${pq.explanation}</div>
+          ${pq.shortcut ? `<div class="text-warning mt-1 font-monospace fs-9">⚡ Shortcut: ${pq.shortcut}</div>` : ''}
+        </div>
+      </div>
+    `).join('');
+
+    // Bind option click
+    mcqContainer.querySelectorAll('.chapter-opt-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const card = e.currentTarget.closest('.chapter-mcq-card');
+        const correct = parseInt(card.dataset.correct, 10);
+        const selected = parseInt(e.currentTarget.dataset.opt, 10);
+        card.querySelectorAll('.chapter-opt-btn').forEach(b => {
+          b.style.borderColor = 'rgba(100, 116, 139, 0.25)';
+          b.style.background = 'rgba(24, 24, 27, 0.4)';
+        });
+        if (selected === correct) {
+          e.currentTarget.style.borderColor = '#10b981';
+          e.currentTarget.style.background = 'rgba(16, 185, 129, 0.2)';
+          showToast('Correct answer! Well done.', 'success');
+        } else {
+          e.currentTarget.style.borderColor = '#ef4444';
+          e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)';
+          showToast('Incorrect option. View solution for step-by-step breakdown.', 'warning');
+        }
+      });
+    });
+
+    // Bind solution toggle
+    mcqContainer.querySelectorAll('.btn-toggle-mcq-sol').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const targetId = e.currentTarget.dataset.target;
+        const solEl = document.getElementById(targetId);
+        if (solEl) {
+          solEl.classList.toggle('d-none');
+        }
+      });
+    });
+  }
+
   // 1. Render Book Chapter
   function renderChapter(idx) {
     if (idx < 0 || idx >= chapters.length) return;
@@ -3550,7 +4460,7 @@ function bindAptitudeEvents(topics = [], questions = []) {
     const btnPrev = document.getElementById('btn-book-prev');
     const btnNext = document.getElementById('btn-book-next');
 
-    if (chapCategoryEl) chapCategoryEl.textContent = chap.category;
+    if (chapCategoryEl) chapCategoryEl.textContent = chap.section || chap.category;
     if (chapReadTimeEl) chapReadTimeEl.innerHTML = `<i class="fa-regular fa-clock me-1"></i> ${chap.readTime}`;
     if (chapTitleEl) chapTitleEl.textContent = `Chapter ${chap.chapterNumber}: ${chap.title}`;
     if (chapConceptsEl) chapConceptsEl.textContent = chap.concepts;
@@ -3564,6 +4474,8 @@ function bindAptitudeEvents(topics = [], questions = []) {
       if (exampleStepsEl) exampleStepsEl.textContent = chap.examples[0].stepByStep;
       if (exampleAnsEl) exampleAnsEl.textContent = chap.examples[0].answer;
     }
+
+    renderChapterMCQs(chap);
 
     if (pageIndicator) pageIndicator.textContent = `Chapter ${idx + 1} of ${chapters.length}`;
     if (selectEl) selectEl.value = chap.id;
@@ -3669,57 +4581,53 @@ function bindAptitudeEvents(topics = [], questions = []) {
     });
   }
 
-  // 2. Practice Quiz Mode Logic
-  let solvedCount = 0;
-  const solvedCountEl = document.getElementById('apt-solved-count');
-
-  // Filter categories in practice mode
+  // 2. Practice Quiz Filters
   document.querySelectorAll('#aptitude-category-filters button').forEach(btn => {
     btn.addEventListener('click', (e) => {
-      document.querySelectorAll('#aptitude-category-filters button').forEach(b => b.classList.remove('btn-primary', 'active-apt-filter'));
-      e.target.classList.add('btn-primary', 'active-apt-filter');
-      const cat = e.target.dataset.cat;
+      document.querySelectorAll('#aptitude-category-filters button').forEach(b => b.classList.remove('active-apt-filter', 'btn-primary'));
+      e.currentTarget.classList.add('active-apt-filter', 'btn-primary');
+      const cat = e.currentTarget.dataset.cat;
 
       document.querySelectorAll('.aptitude-quiz-card').forEach(card => {
-        const cardCat = card.dataset.cat;
-        if (cat === 'ALL' || cardCat === cat) {
-          card.classList.remove('d-none');
+        if (cat === 'ALL' || card.dataset.cat === cat) {
+          card.style.display = 'block';
         } else {
-          card.classList.add('d-none');
+          card.style.display = 'none';
         }
       });
     });
   });
 
-  // MCQ Selection handler
+  // 3. Option Selection & Instant Feedback in Practice Quiz
+  let solvedCount = 0;
   document.querySelectorAll('.aptitude-option-card').forEach(option => {
     option.addEventListener('click', (e) => {
       const target = e.currentTarget;
-      const qid = target.dataset.qid;
-      const optIdx = parseInt(target.dataset.opt, 10);
       const parentCard = target.closest('.aptitude-quiz-card');
-      if (!parentCard || parentCard.dataset.answered) return;
+      if (!parentCard || parentCard.dataset.answered === 'true') return;
+
+      const selectedOpt = parseInt(target.dataset.optIndex, 10);
+      const correctOpt = parseInt(parentCard.dataset.correct, 10);
 
       parentCard.dataset.answered = 'true';
-      const correctIdx = parseInt(parentCard.dataset.correct, 10);
-      const expBox = document.getElementById(`exp-${qid}`);
+      solvedCount++;
+      const solvedEl = document.getElementById('apt-solved-count');
+      if (solvedEl) solvedEl.textContent = solvedCount;
 
-      if (optIdx === correctIdx) {
-        target.classList.add('selected-correct');
-        solvedCount++;
-        if (solvedCountEl) solvedCountEl.textContent = solvedCount;
-        showToast('Correct! +15 XP Points', 'success');
+      if (selectedOpt === correctOpt) {
+        target.classList.add('bg-success', 'bg-opacity-25', 'border-success');
+        showToast('Correct! Great job.', 'success');
       } else {
-        target.classList.add('selected-wrong');
-        // Highlight correct option
+        target.classList.add('bg-danger', 'bg-opacity-25', 'border-danger');
         parentCard.querySelectorAll('.aptitude-option-card').forEach(opt => {
-          if (parseInt(opt.dataset.opt, 10) === correctIdx) {
-            opt.classList.add('selected-correct');
+          if (parseInt(opt.dataset.optIndex, 10) === correctOpt) {
+            opt.classList.add('bg-success', 'bg-opacity-25', 'border-success');
           }
         });
-        showToast('Incorrect. Study the step-by-step breakdown below.', 'warning');
+        showToast('Incorrect answer. Check explanation below.', 'warning');
       }
 
+      const expBox = parentCard.querySelector('.aptitude-explanation-box');
       if (expBox) expBox.classList.remove('d-none');
     });
   });
@@ -3727,6 +4635,45 @@ function bindAptitudeEvents(topics = [], questions = []) {
 
 
 function bindMockExamsEvents(rawLeaderboard = []) {
+  // True Fullscreen Mode Toggle
+  const btnFullscreen = document.getElementById('btn-toggle-fullscreen');
+  const examZone = document.getElementById('proctored-exam-zone');
+  if (btnFullscreen) {
+    btnFullscreen.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        const target = examZone || document.documentElement;
+        if (target.requestFullscreen) {
+          target.requestFullscreen();
+        } else if (target.webkitRequestFullscreen) {
+          target.webkitRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+      }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      const isFull = Boolean(document.fullscreenElement);
+      const fsIcon = document.getElementById('fullscreen-icon');
+      const fsText = document.getElementById('fullscreen-text');
+      if (examZone) {
+        if (isFull) {
+          examZone.classList.add('exam-fullscreen-mode');
+          if (fsIcon) fsIcon.className = 'fa-solid fa-compress me-1';
+          if (fsText) fsText.textContent = 'Exit Fullscreen';
+        } else {
+          examZone.classList.remove('exam-fullscreen-mode');
+          if (fsIcon) fsIcon.className = 'fa-solid fa-expand me-1';
+          if (fsText) fsText.textContent = 'Fullscreen';
+        }
+      }
+    });
+  }
+
   // 1. Leaderboard Timeframe & Subject Filter Controller
   let currentTimeframe = 'all';
   let currentSubject = 'ALL';
