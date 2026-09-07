@@ -78,11 +78,21 @@ public class DtoMapper {
         dto.setId(question.getId());
         dto.setTitle(question.getTitle());
         dto.setCompany(question.getCompanies());
+        dto.setCompanies(question.getCompanies());
         dto.setCategory(question.getCategory());
+        dto.setTopic(question.getCategory());
         dto.setDifficulty(question.getDifficulty());
         dto.setQuestion(question.getQuestion());
+        dto.setDesc(question.getQuestion());
         dto.setAnswer(question.getAnswer());
         dto.setTags(question.getTags());
+        dto.setExamples(question.getExamples());
+        dto.setConstraints(question.getConstraintsText());
+        dto.setHints(question.getHints());
+        dto.setSolution(question.getReferenceSolution());
+        dto.setOptimalApproach(question.getOptimalApproach());
+        dto.setTimeComplexity(question.getTimeComplexity());
+        dto.setSpaceComplexity(question.getSpaceComplexity());
         dto.setBookmarked(bookmarked);
         dto.setNoteContent(noteContent);
         return dto;
@@ -93,12 +103,19 @@ public class DtoMapper {
         InterviewQuestion question = new InterviewQuestion();
         question.setId(dto.getId());
         question.setTitle(dto.getTitle());
-        question.setCompanies(dto.getCompany());
-        question.setCategory(dto.getCategory());
+        question.setCompanies(dto.getCompanies() != null ? dto.getCompanies() : dto.getCompany());
+        question.setCategory(dto.getCategory() != null ? dto.getCategory() : dto.getTopic());
         question.setDifficulty(dto.getDifficulty());
-        question.setQuestion(dto.getQuestion());
+        question.setQuestion(dto.getQuestion() != null ? dto.getQuestion() : dto.getDesc());
         question.setAnswer(dto.getAnswer());
         question.setTags(dto.getTags());
+        question.setExamples(dto.getExamples());
+        question.setConstraintsText(dto.getConstraints());
+        question.setHints(dto.getHints());
+        question.setOptimalApproach(dto.getOptimalApproach());
+        question.setTimeComplexity(dto.getTimeComplexity());
+        question.setSpaceComplexity(dto.getSpaceComplexity());
+        question.setReferenceSolution(dto.getSolution());
         return question;
     }
 

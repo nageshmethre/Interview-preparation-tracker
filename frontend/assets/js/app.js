@@ -4080,24 +4080,40 @@ function bindCodingPracticeEvents(rawQuestions = []) {
     const agyTitleEl = document.getElementById('agy-active-title');
     const catEl = document.getElementById('active-q-category');
     const diffEl = document.getElementById('active-q-diff');
+    const diffBadgeEl = document.getElementById('active-q-diff-badge');
     const descEl = document.getElementById('active-q-desc');
     const constraintsEl = document.getElementById('active-q-constraints');
     const hintsEl = document.getElementById('active-q-hints');
+    const hintsContainerEl = document.getElementById('active-q-hints-container');
     const companiesEl = document.getElementById('companies-text');
     const examplesEl = document.getElementById('active-q-examples');
 
     if (titleEl) titleEl.textContent = data.title;
     if (agyTitleEl) agyTitleEl.textContent = `${data.questionId || 1}. ${data.title}`;
     if (catEl) catEl.textContent = data.category || 'Algorithms';
-    if (diffEl) {
+    if (diffEl || diffBadgeEl) {
       const diff = (data.difficulty || 'MEDIUM').toUpperCase();
-      diffEl.textContent = diff;
-      diffEl.className = `badge fs-9 bg-${diff === 'EASY' ? 'success' : diff === 'HARD' ? 'danger' : 'warning'}-subtle text-${diff === 'EASY' ? 'success' : diff === 'HARD' ? 'danger' : 'warning'} agy-pill-tag`;
+      const badgeCls = diff === 'EASY' ? 'success' : diff === 'HARD' ? 'danger' : 'warning';
+      if (diffEl) {
+        diffEl.textContent = diff;
+        diffEl.className = `badge fs-9 bg-${badgeCls}-subtle text-${badgeCls} agy-pill-tag`;
+      }
+      if (diffBadgeEl) {
+        diffBadgeEl.textContent = diff;
+        diffBadgeEl.className = `badge fs-9 bg-${badgeCls}-subtle text-${badgeCls}`;
+      }
     }
-    if (descEl) descEl.innerHTML = data.desc;
-    if (constraintsEl) constraintsEl.textContent = data.constraints;
-    if (hintsEl) hintsEl.textContent = data.hints;
-    if (companiesEl) companiesEl.textContent = data.companies || 'Top Tech Companies';
+    if (descEl) descEl.innerHTML = data.desc || data.question || '';
+    if (constraintsEl) constraintsEl.textContent = data.constraints || data.constraintsText || 'Standard constraints apply.';
+    if (hintsEl) hintsEl.textContent = data.hints || '';
+    if (hintsContainerEl) {
+      if (data.hints && data.hints.trim()) {
+        hintsContainerEl.classList.remove('d-none');
+      } else {
+        hintsContainerEl.classList.add('d-none');
+      }
+    }
+    if (companiesEl) companiesEl.textContent = data.companies || 'Top Tech';
 
     if (examplesEl && data.examples) {
       try {

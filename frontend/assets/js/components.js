@@ -2588,7 +2588,9 @@ const components = {
       ];
     }
 
-    const activeQ = list[0];
+    const rawHash = (typeof window !== 'undefined' && window.location && window.location.hash) ? window.location.hash : '';
+    const urlQId = rawHash.includes('?q=') ? new URLSearchParams(rawHash.split('?')[1]).get('q') : null;
+    const activeQ = (urlQId && list.find(q => String(q.id) === String(urlQId))) || list[0];
     const uniqueTopics = Array.from(new Set(list.map(q => q.category || q.topic || 'General'))).filter(Boolean).sort();
 
     return `
@@ -2677,39 +2679,31 @@ const components = {
           
           <!-- PANE 1: Collapsible Problem Explorer Sidebar -->
           <div class="agy-explorer-pane" id="agy-explorer">
-            <div class="p-2 border-bottom border-secondary border-opacity-25 flex-shrink-0">
-              <input type="text" id="practice-search-input" class="form-control form-control-sm bg-black border-secondary fs-9 py-1 px-2 mb-1.5" placeholder="Search 325+ problems...">
-              <div class="d-flex gap-1 mb-1.5 overflow-x-auto" id="difficulty-filter-pills">
-                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 active-diff-filter" data-diff="ALL">All</button>
-                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-success" data-diff="EASY">Easy</button>
-                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-warning" data-diff="MEDIUM">Med</button>
-                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-danger" data-diff="HARD">Hard</button>
-              </div>
-              <select id="practice-topic-filter" class="form-select form-select-sm bg-black text-white border-secondary fs-9 py-0">
-                <option value="ALL">All Topics (${list.length})</option>
-                ${uniqueTopics.map(top => `<option value="${top}">${top}</option>`).join('')}
-              </select>
+            <div class="px-3 py-2 border-bottom border-secondary border-opacity-20 flex-shrink-0 d-flex align-items-center justify-content-between">
+              <span class="text-white fw-bold fs-8"><i class="fa-solid fa-list-ol text-primary me-1.5"></i>Problems</span>
+              <span class="badge bg-dark border border-secondary border-opacity-40 text-muted fs-9">${list.length}</span>
             </div>
 
             <!-- Problem List Rail -->
             <div id="practice-problems-list" class="flex-grow-1 overflow-y-auto" style="scrollbar-width: thin; scrollbar-color: #323238 #18181b;">
               ${list.map((q, idx) => {
                 const diff = (q.difficulty || 'MEDIUM').toUpperCase();
-                const diffBadge = diff === 'EASY' ? 'success' : diff === 'MEDIUM' ? 'warning' : 'danger';
+                const diffBadge = diff === 'EASY' ? 'success' : diff === 'HARD' ? 'danger' : 'warning';
+                const isActive = String(q.id || (idx + 1)) === String(activeQ.id || 1);
                 return `
-                  <div class="agy-problem-row btn-select-question ${idx === 0 ? 'active' : ''}"
+                  <div class="agy-problem-row btn-select-question ${isActive ? 'active' : ''}"
                        data-question-id="${q.id || (idx + 1)}"
                        data-title="${(q.title || '').replace(/"/g, '&quot;')}"
-                       data-desc="${(q.desc || q.description || '').replace(/"/g, '&quot;')}"
+                       data-desc="${(q.desc || q.description || q.question || '').replace(/"/g, '&quot;')}"
                        data-constraints="${(q.constraints || q.constraintsText || '').replace(/"/g, '&quot;')}"
                        data-hints="${(q.hints || '').replace(/"/g, '&quot;')}"
                        data-solution="${(q.solution || q.referenceSolution || '').replace(/"/g, '&quot;')}"
                        data-category="${q.category || q.topic || 'Algorithms'}"
                        data-companies="${q.companies || q.company || 'Top Tech'}"
                        data-difficulty="${diff}">
-                    <div class="text-truncate me-1">
+                    <div class="text-truncate me-2 fs-8">
                       <span class="text-muted font-monospace me-1 fs-9">${idx + 1}.</span>
-                      <span class="text-white">${q.title}</span>
+                      <span class="text-light">${q.title}</span>
                     </div>
                     <span class="badge bg-${diffBadge}-subtle text-${diffBadge} fs-9">${diff}</span>
                   </div>
@@ -2718,77 +2712,56 @@ const components = {
             </div>
           </div>
 
-          <!-- PANE 2: High-Density Question Reading Pane -->
+          <!-- PANE 2: Question Specs & Description Pane -->
           <div class="agy-reading-pane" id="vscode-left-pane">
-            <!-- Reading Tabs -->
-            <div class="d-flex align-items-center border-bottom border-secondary border-opacity-25 px-2 bg-dark bg-opacity-20 flex-shrink-0">
-              <button class="btn btn-sm btn-link text-decoration-none py-1.5 px-2 fs-8 fw-semibold text-white border-bottom border-2 border-primary" id="tab-desc-btn" style="border-radius: 0;">
-                <i class="fa-solid fa-file-lines me-1 text-primary"></i> Problem Specs
-              </button>
-              <button class="btn btn-sm btn-link text-decoration-none py-1.5 px-2 fs-8 fw-semibold text-muted" id="tab-editorial-btn" style="border-radius: 0;">
-                <i class="fa-solid fa-wand-magic-sparkles me-1 text-warning"></i> Hints & Complexity
-              </button>
-            </div>
+            <div class="p-3 flex-grow-1 overflow-y-auto" id="problem-tab-content">
+              <!-- Title Row -->
+              <h5 class="fw-bold text-white fs-7 mb-1.5" id="active-q-title">${activeQ.title}</h5>
 
-            <!-- Content Area with Micro-Textures -->
-            <div class="p-2.5 flex-grow-1" id="problem-tab-content">
-              <!-- Description Section -->
-              <div id="tab-desc-pane">
-                <div class="d-flex align-items-center justify-content-between mb-1.5">
-                  <h5 class="text-white fw-bold m-0 fs-7" id="active-q-title">${activeQ.title}</h5>
-                  <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle fs-9" id="active-q-category">${activeQ.category || activeQ.topic || 'Algorithms'}</span>
-                </div>
+              <!-- Metadata Row: Category, Difficulty, Subtle Company Tag in Small Letters -->
+              <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
+                <span class="badge bg-primary-subtle text-primary fs-9" id="active-q-category">${activeQ.category || activeQ.topic || 'Algorithms'}</span>
+                <span class="badge bg-${(activeQ.difficulty || 'MEDIUM').toUpperCase() === 'EASY' ? 'success' : (activeQ.difficulty || 'MEDIUM').toUpperCase() === 'HARD' ? 'danger' : 'warning'}-subtle text-${(activeQ.difficulty || 'MEDIUM').toUpperCase() === 'EASY' ? 'success' : (activeQ.difficulty || 'MEDIUM').toUpperCase() === 'HARD' ? 'danger' : 'warning'} fs-9" id="active-q-diff-badge">${activeQ.difficulty || 'MEDIUM'}</span>
+                <span class="text-muted fs-9" id="active-q-companies">Companies: <span id="companies-text">${activeQ.companies || 'Top Tech'}</span></span>
+              </div>
 
-                <div class="text-muted fs-9 mb-2" id="active-q-companies">
-                  <i class="fa-solid fa-building text-secondary me-1"></i> <span id="companies-text">${activeQ.companies}</span>
-                </div>
+              <!-- Problem Description -->
+              <div class="text-light fs-8 mb-3" id="active-q-desc" style="line-height: 1.65;">
+                ${activeQ.desc || activeQ.description || activeQ.question || ''}
+              </div>
 
-                <div class="agy-micro-card text-light mb-2.5" id="active-q-desc">
-                  ${activeQ.desc || activeQ.description || ''}
-                </div>
+              <!-- Standardized Section Heading: Examples -->
+              <h6 class="text-muted fs-9 text-uppercase fw-bold mb-1.5" style="letter-spacing: 0.05em;">Examples</h6>
+              <div id="active-q-examples" class="mb-3">
+                ${(activeQ.examples || [
+                  { input: "nums = [2,7,11,15], target = 9", output: "[0,1]", explanation: "Because nums[0] + nums[1] == 9, we return [0, 1]." }
+                ]).map((ex, i) => `
+                  <div class="p-2.5 rounded bg-black bg-opacity-40 border border-secondary border-opacity-20 font-monospace fs-8 text-light mb-2">
+                    <div class="text-muted fs-9 mb-1">Example ${i + 1}:</div>
+                    <div><span class="text-info">Input:</span> ${ex.input}</div>
+                    <div><span class="text-success">Output:</span> ${ex.output}</div>
+                    ${ex.explanation ? `<div class="text-muted"><span class="text-warning">Explanation:</span> ${ex.explanation}</div>` : ''}
+                  </div>
+                `).join('')}
+              </div>
 
-                <!-- Micro Sample Examples -->
-                <div class="text-secondary fw-semibold text-uppercase fs-9 mb-1" style="letter-spacing: 0.05em;">Examples</div>
-                <div id="active-q-examples" class="mb-2">
-                  ${(activeQ.examples || [
-                    { input: "nums = [2,7,11,15], target = 9", output: "[0,1]", explanation: "Because nums[0] + nums[1] == 9, we return [0, 1]." }
-                  ]).map((ex, i) => `
-                    <div class="agy-micro-pre">
-                      <div class="text-muted"><strong>Example ${i + 1}:</strong></div>
-                      <div><span class="text-info">Input:</span> ${ex.input}</div>
-                      <div><span class="text-success">Output:</span> ${ex.output}</div>
-                      ${ex.explanation ? `<div class="text-muted"><span class="text-warning">Explain:</span> ${ex.explanation}</div>` : ''}
-                    </div>
-                  `).join('')}
-                </div>
+              <!-- Standardized Section Heading: Constraints -->
+              <h6 class="text-muted fs-9 text-uppercase fw-bold mb-1.5" style="letter-spacing: 0.05em;">Constraints</h6>
+              <div class="p-2.5 rounded bg-black bg-opacity-40 border border-secondary border-opacity-20 font-monospace fs-8 text-secondary mb-3" id="active-q-constraints" style="white-space: pre-wrap;">${activeQ.constraints || activeQ.constraintsText || 'Standard constraints apply.'}</div>
 
-                <!-- Micro Constraints Box -->
-                <div class="text-secondary fw-semibold text-uppercase fs-9 mb-1" style="letter-spacing: 0.05em;">Constraints</div>
-                <div class="agy-micro-pre text-warning mb-2" id="active-q-constraints" style="white-space: pre-wrap;">${activeQ.constraints || activeQ.constraintsText || 'Standard constraints apply.'}</div>
-
-                <!-- Mobile Quick Jump to Code Button -->
-                <div class="d-block d-lg-none my-2 text-center">
-                  <button type="button" class="btn btn-premium w-100 py-1.5 fs-8 fw-bold" id="btn-mobile-jump-code">
-                    <i class="fa-solid fa-code me-1"></i> Switch to Code Editor →
-                  </button>
+              <!-- Hints Container (Subtle & Compact) -->
+              <div id="active-q-hints-container" class="${activeQ.hints ? '' : 'd-none'} mb-3">
+                <h6 class="text-muted fs-9 text-uppercase fw-bold mb-1.5" style="letter-spacing: 0.05em;"><i class="fa-solid fa-lightbulb text-warning me-1"></i>Hints & Invariants</h6>
+                <div class="p-2.5 rounded bg-warning bg-opacity-10 border border-warning border-opacity-20 fs-8 text-secondary" id="active-q-hints">
+                  ${activeQ.hints || ''}
                 </div>
               </div>
 
-              <!-- Hints & Editorial Section (Hidden by default, toggled via JS) -->
-              <div id="tab-editorial-pane" class="d-none">
-                <div class="agy-micro-card border-warning border-opacity-30 mb-2">
-                  <div class="text-warning fw-bold fs-8 mb-1"><i class="fa-solid fa-lightbulb me-1"></i>Algorithmic Insights</div>
-                  <div class="text-muted fs-8" id="active-q-hints">
-                    ${activeQ.hints || 'Analyze the constraints, edge cases, and time/space invariants.'}
-                  </div>
-                </div>
-                <div class="agy-micro-card border-info border-opacity-30">
-                  <div class="text-info fw-bold fs-8 mb-1"><i class="fa-solid fa-chart-line me-1"></i>Complexity Targets</div>
-                  <div class="text-muted fs-8 font-monospace">
-                    <div>• Time Complexity: <strong>O(N)</strong> to <strong>O(N log N)</strong></div>
-                    <div>• Space Complexity: <strong>O(1)</strong> to <strong>O(N)</strong></div>
-                  </div>
-                </div>
+              <!-- Mobile Quick Jump to Code Button -->
+              <div class="d-block d-lg-none my-2 text-center">
+                <button type="button" class="btn btn-premium w-100 py-1.5 fs-8 fw-bold" id="btn-mobile-jump-code">
+                  <i class="fa-solid fa-code me-1"></i> Switch to Code Editor →
+                </button>
               </div>
             </div>
           </div>

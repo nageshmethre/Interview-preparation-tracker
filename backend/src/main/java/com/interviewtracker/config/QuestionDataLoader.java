@@ -51,8 +51,16 @@ public class QuestionDataLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         // 1. Seed Coding Questions
-        if (questionRepository.count() == 0) {
-            logger.info("Database coding questions table is empty. Starting bulk JSON import...");
+        boolean needsImport = (questionRepository.count() == 0);
+        if (!needsImport) {
+            Optional<InterviewQuestion> sample = questionRepository.findById(1);
+            if (sample.isPresent() && (sample.get().getQuestion() == null || sample.get().getConstraintsText() == null)) {
+                needsImport = true;
+                logger.info("Existing questions detected with missing columns (question/constraintsText). Re-synchronizing from questions.json...");
+            }
+        }
+        if (needsImport) {
+            logger.info("Starting bulk JSON import into coding questions table...");
             try {
                 ClassPathResource resource = new ClassPathResource("questions.json");
                 try (InputStream inputStream = resource.getInputStream()) {
@@ -60,6 +68,7 @@ public class QuestionDataLoader implements ApplicationRunner {
                         inputStream, 
                         new TypeReference<List<InterviewQuestion>>() {}
                     );
+                    questionRepository.deleteAll();
                     questionRepository.saveAll(questions);
                     logger.info("Successfully imported {} coding questions into the database.", questions.size());
                 }
@@ -67,7 +76,7 @@ public class QuestionDataLoader implements ApplicationRunner {
                 logger.error("Failed to load questions.json from classpath. Seeding skipped.", e);
             }
         } else {
-            logger.info("Coding questions table already seeded. Skipping JSON import.");
+            logger.info("Coding questions table already seeded with valid columns. Skipping JSON import.");
         }
 
         // 2. Seed Default Settings & Adsense/SEO
