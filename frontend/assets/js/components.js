@@ -2623,18 +2623,11 @@ const components = {
             </select>
           </div>
 
-          <!-- Right: Environment Badge, Run, Submit, Maximize, 3-Dots Menu -->
+          <!-- Right: Environment Badge, Maximize/Minimize, 3-Dots Menu -->
           <div class="d-flex align-items-center gap-1.5 flex-shrink-0">
             <span class="agy-pill-tag bg-black border border-secondary border-opacity-30 text-muted d-none d-md-inline-block" id="ide-env-badge">JDK 21 LTS</span>
-            
-            <button type="button" class="btn btn-sm btn-outline-info py-0 px-2 fs-8 fw-semibold" id="btn-practice-run" title="Run Tests">
-              <i class="fa-solid fa-play text-cyan me-1"></i> <span class="d-none d-sm-inline">Run</span>
-            </button>
-            <button type="button" class="btn btn-sm btn-warning py-0 px-2 fs-8 fw-bold text-dark" id="btn-practice-submit" title="Submit Solution">
-              <i class="fa-solid fa-cloud-arrow-up me-1"></i> <span class="d-none d-sm-inline">Submit</span>
-            </button>
 
-            <button type="button" class="agy-icon-btn" id="btn-ide-maximize" title="Maximize Code Workspace">
+            <button type="button" class="agy-icon-btn" id="btn-ide-maximize" title="Maximize / Restore Code Workspace">
               <i class="fa-solid fa-expand" id="icon-ide-maximize"></i>
             </button>
 
@@ -2768,18 +2761,6 @@ const components = {
 
           <!-- PANE 3: Dominant Coding IDE & Terminal -->
           <div class="agy-coding-pane" id="vscode-right-pane">
-            <!-- File Tabs -->
-            <div class="vscode-tab-strip">
-              <button class="vscode-file-tab active" data-lang="java"><i class="fa-brands fa-java text-danger"></i> Solution.java</button>
-              <button class="vscode-file-tab" data-lang="python"><i class="fa-brands fa-python text-warning"></i> solution.py</button>
-              <button class="vscode-file-tab" data-lang="cpp"><i class="fa-solid fa-microchip text-primary"></i> solution.cpp</button>
-              <button class="vscode-file-tab" data-lang="javascript"><i class="fa-brands fa-js text-warning"></i> solution.js</button>
-              <button class="vscode-file-tab" data-lang="typescript"><i class="fa-solid fa-code text-info"></i> solution.ts</button>
-              <button class="vscode-file-tab" data-lang="csharp"><i class="fa-solid fa-cube text-primary"></i> Solution.cs</button>
-              <button class="vscode-file-tab" data-lang="go"><i class="fa-brands fa-golang text-cyan"></i> solution.go</button>
-              <button class="vscode-file-tab" data-lang="rust"><i class="fa-solid fa-gear text-danger"></i> solution.rs</button>
-            </div>
-
             <!-- Editor Sub-Toolbar -->
             <div class="d-flex align-items-center justify-content-between p-1.5 px-2 bg-dark bg-opacity-40 border-bottom border-secondary border-opacity-25 flex-wrap gap-2">
               <div class="d-flex align-items-center gap-1.5">
@@ -2836,8 +2817,14 @@ const components = {
                   <button class="vscode-terminal-tab" id="term-tab-case1">Case 1</button>
                   <button class="vscode-terminal-tab" id="term-tab-case2">Case 2</button>
                 </div>
-                <div>
+                <div class="d-flex align-items-center gap-2">
                   <span class="badge bg-success-subtle text-success fs-9" id="console-status-badge">Ready</span>
+                  <button type="button" class="btn btn-sm btn-success py-0.5 px-2.5 fs-8 fw-semibold" id="btn-practice-run" title="Run Tests">
+                    <i class="fa-solid fa-play me-1"></i> Run
+                  </button>
+                  <button type="button" class="btn btn-sm btn-success py-0.5 px-2.5 fs-8 fw-semibold" id="btn-practice-submit" title="Submit Solution">
+                    <i class="fa-solid fa-cloud-arrow-up me-1"></i> Submit
+                  </button>
                 </div>
               </div>
               <div class="p-2 font-monospace fs-9" id="console-output-text" style="color: #22c55e; max-height: 120px; overflow-y: auto; background: #121214;">
