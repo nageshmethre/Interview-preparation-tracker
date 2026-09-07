@@ -4552,15 +4552,29 @@ function bindAptitudeEvents(topics = [], questions = []) {
       return;
     }
 
-    mcqContainer.innerHTML = mcqs.map((pq, qIdx) => `
-      <div class="p-3 rounded bg-black bg-opacity-30 border border-secondary border-opacity-25 chapter-mcq-card" data-correct="${pq.correctIndex}">
+    mcqContainer.innerHTML = mcqs.map((pq, qIdx) => {
+      const qText = pq.question || pq.q || '';
+      let correctIdx = 0;
+      if (typeof pq.correctIndex === 'number') {
+        correctIdx = pq.correctIndex;
+      } else if (typeof pq.ans === 'string' && pq.ans.length > 0) {
+        const charCode = pq.ans.toLowerCase().charCodeAt(0);
+        if (charCode >= 97 && charCode <= 100) correctIdx = charCode - 97;
+      } else if (typeof pq.answer === 'string' && pq.answer.length > 0) {
+        const charCode = pq.answer.toLowerCase().charCodeAt(0);
+        if (charCode >= 97 && charCode <= 100) correctIdx = charCode - 97;
+      }
+      const explanationText = pq.explanation || pq.explain || 'Refer to chapter theory for details.';
+
+      return `
+      <div class="p-3 rounded bg-black bg-opacity-30 border border-secondary border-opacity-25 chapter-mcq-card" data-correct="${correctIdx}">
         <div class="d-flex align-items-center justify-content-between mb-2">
           <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle fs-9">Challenge ${qIdx + 1}</span>
           <button type="button" class="btn btn-sm btn-glass text-warning py-0 px-2 fs-9 btn-toggle-mcq-sol" data-target="sol-${chap.id}-${qIdx}">
             <i class="fa-solid fa-lightbulb me-1"></i> Solution
           </button>
         </div>
-        <div class="text-light fw-bold fs-8 mb-2">${pq.question}</div>
+        <div class="text-light fw-bold fs-8 mb-2">${qText}</div>
         <div class="row g-2 mb-2">
           ${(pq.options || []).map((opt, oIdx) => `
             <div class="col-sm-6 col-12">
@@ -4574,12 +4588,13 @@ function bindAptitudeEvents(topics = [], questions = []) {
           `).join('')}
         </div>
         <div id="sol-${chap.id}-${qIdx}" class="d-none p-2 rounded bg-black bg-opacity-50 border border-secondary border-opacity-25 fs-8 text-secondary mt-2">
-          <div class="text-success fw-bold mb-1"><i class="fa-solid fa-check me-1"></i> Correct Answer: Option ${String.fromCharCode(65 + (pq.correctIndex || 0))}</div>
-          <div style="line-height: 1.6;">${pq.explanation}</div>
+          <div class="text-success fw-bold mb-1"><i class="fa-solid fa-check me-1"></i> Correct Answer: Option ${String.fromCharCode(65 + correctIdx)}</div>
+          <div style="line-height: 1.6;">${explanationText}</div>
           ${pq.shortcut ? `<div class="text-warning mt-1 font-monospace fs-9">⚡ Shortcut: ${pq.shortcut}</div>` : ''}
         </div>
       </div>
-    `).join('');
+    `;
+    }).join('');
 
     // Bind option click
     mcqContainer.querySelectorAll('.chapter-opt-btn').forEach(btn => {

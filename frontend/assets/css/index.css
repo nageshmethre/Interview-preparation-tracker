@@ -2746,17 +2746,21 @@ input:-webkit-autofill {
   font-weight: 600;
   font-size: 0.85rem;
   transition: all 0.2s ease;
+  background: #18181b;
+  color: #f4f4f5 !important;
   border: 1px solid rgba(255, 255, 255, 0.15);
   cursor: pointer;
 }
 
 .book-nav-btn:hover:not(:disabled) {
-  background: #3b82f6;
+  background: #2563eb;
   color: #ffffff !important;
   border-color: #3b82f6;
 }
 
 .book-nav-btn:disabled {
+  background: #27272a;
+  color: #a1a1aa !important;
   opacity: 0.4;
   cursor: not-allowed;
 }

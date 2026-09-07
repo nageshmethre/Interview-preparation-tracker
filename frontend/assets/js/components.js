@@ -2578,18 +2578,8 @@ const components = {
           <!-- PANE 1: Collapsible Problem Explorer Sidebar -->
           <div class="agy-explorer-pane" id="agy-explorer">
             <div class="px-3 py-2 border-bottom border-secondary border-opacity-20 flex-shrink-0 d-flex align-items-center justify-content-between">
-              <div class="d-flex align-items-center gap-1.5">
-                <span class="text-white fw-bold fs-8"><i class="fa-solid fa-list-ol text-primary me-1.5"></i>Problems</span>
-                <span class="badge bg-dark border border-secondary border-opacity-40 text-muted fs-9">${list.length}</span>
-              </div>
-              <div class="d-flex align-items-center gap-1">
-                <button type="button" class="btn btn-sm btn-glass py-0 px-2 fs-9 text-muted" id="btn-prev-problem" title="Previous Problem (Alt + Left)">
-                  <i class="fa-solid fa-chevron-left"></i>
-                </button>
-                <button type="button" class="btn btn-sm btn-glass py-0 px-2 fs-9 text-muted" id="btn-next-problem" title="Next Problem (Alt + Right)">
-                  <i class="fa-solid fa-chevron-right"></i>
-                </button>
-              </div>
+              <span class="text-white fw-bold fs-8"><i class="fa-solid fa-list-ol text-primary me-1.5"></i>Problems</span>
+              <span class="badge bg-dark border border-secondary border-opacity-40 text-muted fs-9">${list.length}</span>
             </div>
 
             <!-- Problem List Rail -->
@@ -2678,18 +2668,17 @@ const components = {
           <div class="agy-coding-pane" id="vscode-right-pane">
             <!-- Editor Sub-Toolbar -->
             <div class="d-flex align-items-center justify-content-between p-1.5 px-2 bg-dark bg-opacity-40 border-bottom border-secondary border-opacity-25 flex-wrap gap-2">
-              <div class="d-flex align-items-center gap-1.5">
-                <select id="coding-language-select" class="form-select form-select-sm bg-black text-white border-secondary fs-9 py-0.5 px-1.5" style="width: 135px;">
-                  <option value="java" selected>☕ Java 21</option>
-                  <option value="python">🐍 Python 3.12</option>
-                  <option value="cpp">⚡ C++ 20</option>
-                  <option value="javascript">🌐 JavaScript</option>
-                  <option value="typescript">📘 TypeScript</option>
-                  <option value="csharp">🔷 C# .NET 8</option>
-                  <option value="go">🐹 Go 1.22</option>
-                  <option value="rust">🦀 Rust 1.76</option>
+              <div class="d-flex align-items-center">
+                <select id="coding-language-select" class="form-select form-select-sm bg-black text-white border-secondary fs-9 py-0.5 px-2" style="width: 120px;">
+                  <option value="java" selected>Java 21</option>
+                  <option value="python">Python 3.12</option>
+                  <option value="cpp">C++ 20</option>
+                  <option value="javascript">JavaScript</option>
+                  <option value="typescript">TypeScript</option>
+                  <option value="csharp">C# .NET 8</option>
+                  <option value="go">Go 1.22</option>
+                  <option value="rust">Rust 1.76</option>
                 </select>
-                <span class="badge border border-secondary border-opacity-30 text-muted fs-9" id="ide-env-badge">JDK 21 LTS</span>
               </div>
 
               <!-- Tools: Font Size, Reset, Copy, Maximize, More Options -->
@@ -2931,8 +2920,8 @@ const components = {
 
             <!-- Book Footer & Pagination -->
             <div class="p-3 border-top border-secondary border-opacity-25 d-flex align-items-center justify-content-between flex-wrap gap-2">
-              <button class="book-nav-btn text-muted" id="btn-book-prev" disabled>
-                <i class="fa-solid fa-arrow-left"></i> Previous Chapter
+              <button class="btn btn-sm btn-glass text-muted py-1.5 px-3 fs-8" id="btn-book-prev" disabled>
+                <i class="fa-solid fa-arrow-left me-1"></i> Previous Chapter
               </button>
 
               <div class="text-muted fs-8 font-monospace book-meta-text" id="book-page-indicator">
@@ -2940,11 +2929,11 @@ const components = {
               </div>
 
               <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-outline-primary fs-8" id="btn-switch-to-quiz-for-chap">
+                <button class="btn btn-sm btn-outline-primary fs-8 py-1.5 px-3" id="btn-switch-to-quiz-for-chap">
                   <i class="fa-solid fa-pen-nib me-1"></i> Practice Topic MCQs
                 </button>
-                <button class="book-nav-btn text-white" id="btn-book-next">
-                  Next Chapter <i class="fa-solid fa-arrow-right"></i>
+                <button class="btn btn-sm btn-primary text-white fw-bold py-1.5 px-3 fs-8" id="btn-book-next">
+                  Next Chapter <i class="fa-solid fa-arrow-right ms-1"></i>
                 </button>
               </div>
             </div>
