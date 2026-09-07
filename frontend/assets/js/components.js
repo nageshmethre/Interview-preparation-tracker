@@ -2535,210 +2535,210 @@ const components = {
     const uniqueTopics = Array.from(new Set(list.map(q => q.category || q.topic || 'General'))).filter(Boolean).sort();
 
     return `
-      <div class="vscode-workspace-container position-relative">
-        <!-- Floating Side Buttons for Quick Move Back / Move Next -->
-        <button type="button" class="side-nav-pill side-nav-prev" id="btn-side-prev" title="Move Back to Previous Problem (Alt + Left)">
-          <i class="fa-solid fa-chevron-left"></i>
-          <span>Prev</span>
-        </button>
-        <button type="button" class="side-nav-pill side-nav-next" id="btn-side-next" title="Move Forward to Next Problem (Alt + Right)">
-          <span>Next</span>
-          <i class="fa-solid fa-chevron-right"></i>
-        </button>
-
-        <!-- 1. VS Code Top Breadcrumbs & Control Bar -->
-        <div class="vscode-top-nav">
-          <div class="d-flex align-items-center gap-2 flex-wrap">
-            <a href="#/dashboard" class="btn btn-sm btn-outline-secondary py-1 px-3 text-white fs-8" id="btn-back-dashboard">
-              <i class="fa-solid fa-arrow-left me-1"></i> Dashboard
-            </a>
-            <div class="text-muted fs-8 font-monospace d-none d-md-inline">
-              <i class="fa-solid fa-folder-tree text-primary me-1"></i> Workspace <span class="mx-1">/</span> Coding <span class="mx-1">/</span>
-            </div>
-
-            <!-- Quick Problem Selector Dropdown with Prev/Next buttons -->
-            <div class="d-flex align-items-center gap-1">
-              <button type="button" class="btn btn-sm btn-dark border-secondary text-white py-1 px-2.5 fs-8" id="btn-prev-problem" title="Move Back to Previous Problem (Alt + Left)">
-                <i class="fa-solid fa-chevron-left me-1"></i> Prev
+      <div class="agy-ide-container vscode-workspace-container position-relative" id="agy-coding-workspace">
+        <!-- 1. Antigravity Compact Top Toolbar (38px Minimalist) -->
+        <div class="agy-ide-toolbar" id="agy-top-toolbar">
+          <!-- Left: Sidebar Toggle, Unified Symbolic Navigation (< >), Title & Diff -->
+          <div class="d-flex align-items-center gap-1.5 overflow-hidden">
+            <button type="button" class="agy-icon-btn active" id="btn-toggle-sidebar" title="Toggle Problem Explorer Sidebar">
+              <i class="fa-solid fa-bars-staggered"></i>
+            </button>
+            
+            <div class="agy-nav-group">
+              <button type="button" class="agy-icon-btn" id="btn-prev-problem" title="Previous Problem (Alt + Left)">
+                <i class="fa-solid fa-chevron-left"></i>
               </button>
-              <select id="header-problem-select" class="form-select form-select-sm bg-dark text-white border-secondary fs-8 py-1" style="max-width: 240px;">
-                ${list.map((q, idx) => `
-                  <option value="${q.id || (idx + 1)}">${idx + 1}. ${q.title} (${(q.difficulty || 'MEDIUM').toUpperCase()})</option>
-                `).join('')}
-              </select>
-              <button type="button" class="btn btn-sm btn-dark border-secondary text-white py-1 px-2.5 fs-8" id="btn-next-problem" title="Move to Next Problem (Alt + Right)">
-                Next <i class="fa-solid fa-chevron-right ms-1"></i>
+              <button type="button" class="agy-icon-btn" id="btn-next-problem" title="Next Problem (Alt + Right)">
+                <i class="fa-solid fa-chevron-right"></i>
               </button>
             </div>
+
+            <span class="fw-bold text-white fs-8 text-truncate ms-1" id="agy-active-title" style="max-width: 220px;">1. ${activeQ.title}</span>
+            <span class="badge bg-success-subtle text-success agy-pill-tag" id="active-q-diff">${activeQ.difficulty}</span>
+
+            <!-- Compact Dropdown for Fast Access -->
+            <select id="header-problem-select" class="form-select form-select-sm bg-dark text-white border-secondary fs-9 py-0 ms-1 d-none d-xl-inline-block" style="width: auto; max-width: 170px;">
+              ${list.map((q, idx) => `
+                <option value="${q.id || (idx + 1)}">${idx + 1}. ${q.title}</option>
+              `).join('')}
+            </select>
           </div>
 
-          <!-- Top Action Buttons: Run & Submit -->
-          <div class="d-flex align-items-center gap-2 flex-wrap">
-            <button class="btn btn-sm btn-glass text-muted py-1 px-2.5 fs-8" id="btn-toggle-split" title="Toggle Problem Details Side Panel">
-              <i class="fa-solid fa-table-columns me-1"></i> <span class="d-none d-sm-inline">Full Editor</span>
+          <!-- Right: Environment Badge, Run, Submit, Maximize, 3-Dots Menu -->
+          <div class="d-flex align-items-center gap-1.5 flex-shrink-0">
+            <span class="agy-pill-tag bg-black border border-secondary border-opacity-30 text-muted d-none d-md-inline-block" id="ide-env-badge">JDK 21 LTS</span>
+            
+            <button type="button" class="btn btn-sm btn-outline-info py-0 px-2 fs-8 fw-semibold" id="btn-practice-run" title="Run Tests">
+              <i class="fa-solid fa-play text-cyan me-1"></i> <span class="d-none d-sm-inline">Run</span>
             </button>
-            <button class="btn btn-sm btn-glass text-warning py-1 px-3 fs-8" id="btn-practice-hints">
-              <i class="fa-solid fa-lightbulb me-1"></i> Hint
+            <button type="button" class="btn btn-sm btn-warning py-0 px-2 fs-8 fw-bold text-dark" id="btn-practice-submit" title="Submit Solution">
+              <i class="fa-solid fa-cloud-arrow-up me-1"></i> <span class="d-none d-sm-inline">Submit</span>
             </button>
-            <button class="btn btn-sm btn-outline-info py-1 px-3 fs-8 fw-semibold" id="btn-practice-run">
-              <i class="fa-solid fa-play text-cyan me-1"></i> Run Tests
+
+            <button type="button" class="agy-icon-btn" id="btn-ide-maximize" title="Maximize Code Workspace">
+              <i class="fa-solid fa-expand" id="icon-ide-maximize"></i>
             </button>
-            <button class="btn btn-sm btn-premium py-1 px-3 fs-8 fw-bold" id="btn-practice-submit">
-              <i class="fa-solid fa-cloud-arrow-up me-1"></i> Submit Solution
-            </button>
+
+            <!-- 3-Dots Extra Actions Dropdown -->
+            <div class="dropdown d-inline-block">
+              <button type="button" class="agy-icon-btn" id="btn-ide-more" data-bs-toggle="dropdown" aria-expanded="false" title="More Options">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end agy-dropdown-menu" aria-labelledby="btn-ide-more">
+                <li><button class="agy-dropdown-item" id="menu-opt-reset"><i class="fa-solid fa-rotate-left text-muted"></i> Reset Template</button></li>
+                <li><button class="agy-dropdown-item" id="menu-opt-copy"><i class="fa-solid fa-copy text-muted"></i> Copy Code</button></li>
+                <li><button class="agy-dropdown-item" id="menu-opt-font-inc"><i class="fa-solid fa-magnifying-glass-plus text-muted"></i> Increase Font (A+)</button></li>
+                <li><button class="agy-dropdown-item" id="menu-opt-font-dec"><i class="fa-solid fa-magnifying-glass-minus text-muted"></i> Decrease Font (A-)</button></li>
+                <li><hr class="dropdown-divider border-secondary border-opacity-25 my-1"></li>
+                <li><button class="agy-dropdown-item text-warning" id="btn-practice-hints"><i class="fa-solid fa-lightbulb"></i> View Hint</button></li>
+              </ul>
+            </div>
           </div>
         </div>
 
-        <!-- Mobile Dual-View Toggle & Quick Nav (Problem vs Code Editor) -->
+        <!-- Mobile Dual-View Toggle & Quick Nav (Explorer / Details / Code Editor) -->
         <div class="d-flex d-lg-none bg-black border-bottom border-secondary border-opacity-25 align-items-center" id="mobile-vscode-pane-switcher">
-          <button type="button" class="btn btn-sm btn-dark text-white px-3 py-2 border-end border-secondary border-opacity-25" id="btn-mobile-prev-problem" title="Previous Question" style="border-radius: 0;">
+          <button type="button" class="btn btn-sm btn-dark text-white px-2.5 py-1.5 border-end border-secondary border-opacity-25" id="btn-mobile-prev-problem" title="Previous Question" style="border-radius: 0;">
             <i class="fa-solid fa-chevron-left"></i>
           </button>
-          <button type="button" class="btn btn-sm flex-fill py-2 fs-8 fw-semibold active text-white" id="btn-mobile-show-desc" style="border-radius:0; border-bottom: 2px solid #3b82f6;">
+          <button type="button" class="btn btn-sm flex-fill py-1.5 fs-9 fw-semibold text-muted" id="btn-mobile-show-explorer" style="border-radius:0;">
+            <i class="fa-solid fa-folder-tree me-1"></i> Problems
+          </button>
+          <button type="button" class="btn btn-sm flex-fill py-1.5 fs-9 fw-semibold active text-white" id="btn-mobile-show-desc" style="border-radius:0; border-bottom: 2px solid #3b82f6;">
             <i class="fa-solid fa-book-open me-1"></i> Details
           </button>
-          <button type="button" class="btn btn-sm flex-fill py-2 fs-8 fw-semibold text-muted" id="btn-mobile-show-editor" style="border-radius:0;">
-            <i class="fa-solid fa-code me-1"></i> Editor & Terminal
+          <button type="button" class="btn btn-sm flex-fill py-1.5 fs-9 fw-semibold text-muted" id="btn-mobile-show-editor" style="border-radius:0;">
+            <i class="fa-solid fa-code me-1"></i> IDE & Output
           </button>
-          <button type="button" class="btn btn-sm btn-dark text-white px-3 py-2 border-start border-secondary border-opacity-25" id="btn-mobile-next-problem" title="Next Question" style="border-radius: 0;">
+          <button type="button" class="btn btn-sm btn-dark text-white px-2.5 py-1.5 border-start border-secondary border-opacity-25" id="btn-mobile-next-problem" title="Next Question" style="border-radius: 0;">
             <i class="fa-solid fa-chevron-right"></i>
           </button>
         </div>
 
-        <!-- 2. Two-Pane Split Layout (Problem Description | VS Code IDE) -->
-        <div class="row g-0 flex-grow-1 overflow-hidden" id="vscode-main-split">
-          <!-- LEFT PANE: Problem Statement, Constraints, Bank -->
-          <div class="col-lg-5 col-12 border-end border-secondary border-opacity-25 d-flex flex-column bg-dark bg-opacity-40" id="vscode-left-pane" style="height: 100%;">
-            <!-- Left Pane Nav Tabs -->
-            <ul class="nav nav-tabs border-secondary border-opacity-25 px-2 pt-2 flex-shrink-0" id="problem-view-tabs" role="tablist">
-              <li class="nav-item">
-                <button class="nav-link active py-2 px-3 fs-8 text-white" id="tab-desc-btn" data-bs-toggle="tab" data-bs-target="#tab-desc-pane">
-                  <i class="fa-solid fa-file-lines me-1 text-primary"></i> Description
-                </button>
-              </li>
-              <li class="nav-item">
-                <button class="nav-link py-2 px-3 fs-8 text-muted" id="tab-editorial-btn" data-bs-toggle="tab" data-bs-target="#tab-editorial-pane">
-                  <i class="fa-solid fa-wand-magic-sparkles me-1 text-warning"></i> Hints & Editorial
-                </button>
-              </li>
-              <li class="nav-item">
-                <button class="nav-link py-2 px-3 fs-8 text-muted" id="tab-bank-btn" data-bs-toggle="tab" data-bs-target="#tab-bank-pane">
-                  <i class="fa-solid fa-database me-1 text-info"></i> Problem Bank (<span id="bank-count-pill">${list.length}</span>)
-                </button>
-              </li>
-            </ul>
+        <!-- 2. Antigravity 3-Pane Body Grid (Explorer | Reading Pane | Coding IDE) -->
+        <div class="agy-3pane-body" id="agy-main-split">
+          
+          <!-- PANE 1: Collapsible Problem Explorer Sidebar -->
+          <div class="agy-explorer-pane" id="agy-explorer">
+            <div class="p-2 border-bottom border-secondary border-opacity-25 flex-shrink-0">
+              <input type="text" id="practice-search-input" class="form-control form-control-sm bg-black border-secondary fs-9 py-1 px-2 mb-1.5" placeholder="Search 325+ problems...">
+              <div class="d-flex gap-1 mb-1.5 overflow-x-auto" id="difficulty-filter-pills">
+                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 active-diff-filter" data-diff="ALL">All</button>
+                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-success" data-diff="EASY">Easy</button>
+                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-warning" data-diff="MEDIUM">Med</button>
+                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-danger" data-diff="HARD">Hard</button>
+              </div>
+              <select id="practice-topic-filter" class="form-select form-select-sm bg-black text-white border-secondary fs-9 py-0">
+                <option value="ALL">All Topics (${list.length})</option>
+                ${uniqueTopics.map(top => `<option value="${top}">${top}</option>`).join('')}
+              </select>
+            </div>
 
-            <!-- Left Tab Content -->
-            <div class="tab-content flex-grow-1 overflow-y-auto p-3" id="problem-tab-content">
-              <!-- TAB 1: Problem Description -->
-              <div class="tab-pane fade show active" id="tab-desc-pane">
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                  <h4 class="text-white fw-bold m-0 fs-5" id="active-q-title">${activeQ.title}</h4>
-                  <div>
-                    <span class="badge bg-success-subtle text-success fs-8" id="active-q-diff">${activeQ.difficulty}</span>
-                    <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle fs-8 ms-1" id="active-q-category">${activeQ.category || activeQ.topic || 'Algorithms'}</span>
+            <!-- Problem List Rail -->
+            <div id="practice-problems-list" class="flex-grow-1 overflow-y-auto" style="scrollbar-width: thin; scrollbar-color: #323238 #18181b;">
+              ${list.map((q, idx) => {
+                const diff = (q.difficulty || 'MEDIUM').toUpperCase();
+                const diffBadge = diff === 'EASY' ? 'success' : diff === 'MEDIUM' ? 'warning' : 'danger';
+                return `
+                  <div class="agy-problem-row btn-select-question ${idx === 0 ? 'active' : ''}"
+                       data-question-id="${q.id || (idx + 1)}"
+                       data-title="${(q.title || '').replace(/"/g, '&quot;')}"
+                       data-desc="${(q.desc || q.description || '').replace(/"/g, '&quot;')}"
+                       data-constraints="${(q.constraints || q.constraintsText || '').replace(/"/g, '&quot;')}"
+                       data-hints="${(q.hints || '').replace(/"/g, '&quot;')}"
+                       data-solution="${(q.solution || q.referenceSolution || '').replace(/"/g, '&quot;')}"
+                       data-category="${q.category || q.topic || 'Algorithms'}"
+                       data-companies="${q.companies || q.company || 'Top Tech'}"
+                       data-difficulty="${diff}">
+                    <div class="text-truncate me-1">
+                      <span class="text-muted font-monospace me-1 fs-9">${idx + 1}.</span>
+                      <span class="text-white">${q.title}</span>
+                    </div>
+                    <span class="badge bg-${diffBadge}-subtle text-${diffBadge} fs-9">${diff}</span>
                   </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+
+          <!-- PANE 2: High-Density Question Reading Pane -->
+          <div class="agy-reading-pane" id="vscode-left-pane">
+            <!-- Reading Tabs -->
+            <div class="d-flex align-items-center border-bottom border-secondary border-opacity-25 px-2 bg-dark bg-opacity-20 flex-shrink-0">
+              <button class="btn btn-sm btn-link text-decoration-none py-1.5 px-2 fs-8 fw-semibold text-white border-bottom border-2 border-primary" id="tab-desc-btn" style="border-radius: 0;">
+                <i class="fa-solid fa-file-lines me-1 text-primary"></i> Problem Specs
+              </button>
+              <button class="btn btn-sm btn-link text-decoration-none py-1.5 px-2 fs-8 fw-semibold text-muted" id="tab-editorial-btn" style="border-radius: 0;">
+                <i class="fa-solid fa-wand-magic-sparkles me-1 text-warning"></i> Hints & Complexity
+              </button>
+            </div>
+
+            <!-- Content Area with Micro-Textures -->
+            <div class="p-2.5 flex-grow-1" id="problem-tab-content">
+              <!-- Description Section -->
+              <div id="tab-desc-pane">
+                <div class="d-flex align-items-center justify-content-between mb-1.5">
+                  <h5 class="text-white fw-bold m-0 fs-7" id="active-q-title">${activeQ.title}</h5>
+                  <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle fs-9" id="active-q-category">${activeQ.category || activeQ.topic || 'Algorithms'}</span>
                 </div>
 
-                <div class="text-muted fs-8 mb-3" id="active-q-companies">
+                <div class="text-muted fs-9 mb-2" id="active-q-companies">
                   <i class="fa-solid fa-building text-secondary me-1"></i> <span id="companies-text">${activeQ.companies}</span>
                 </div>
 
-                <div class="text-light fs-7 mb-4" id="active-q-desc" style="line-height: 1.7;">
+                <div class="agy-micro-card text-light mb-2.5" id="active-q-desc">
                   ${activeQ.desc || activeQ.description || ''}
                 </div>
 
-                <!-- Formatted Examples -->
-                <h6 class="text-secondary fw-semibold text-uppercase fs-8 mb-2" style="letter-spacing: 0.05em;">Sample Examples</h6>
-                <div id="active-q-examples" class="mb-4">
+                <!-- Micro Sample Examples -->
+                <div class="text-secondary fw-semibold text-uppercase fs-9 mb-1" style="letter-spacing: 0.05em;">Examples</div>
+                <div id="active-q-examples" class="mb-2">
                   ${(activeQ.examples || [
                     { input: "nums = [2,7,11,15], target = 9", output: "[0,1]", explanation: "Because nums[0] + nums[1] == 9, we return [0, 1]." }
                   ]).map((ex, i) => `
-                    <div class="p-3 rounded bg-black bg-opacity-50 border border-secondary border-opacity-25 mb-2 font-monospace fs-8">
+                    <div class="agy-micro-pre">
                       <div class="text-muted"><strong>Example ${i + 1}:</strong></div>
                       <div><span class="text-info">Input:</span> ${ex.input}</div>
                       <div><span class="text-success">Output:</span> ${ex.output}</div>
-                      ${ex.explanation ? `<div class="text-muted mt-1"><span class="text-warning">Explanation:</span> ${ex.explanation}</div>` : ''}
+                      ${ex.explanation ? `<div class="text-muted"><span class="text-warning">Explain:</span> ${ex.explanation}</div>` : ''}
                     </div>
                   `).join('')}
                 </div>
 
-                <!-- Constraints Box -->
-                <h6 class="text-secondary fw-semibold text-uppercase fs-8 mb-2" style="letter-spacing: 0.05em;">Constraints</h6>
-                <pre class="font-monospace text-warning p-3 rounded bg-black bg-opacity-50 border border-secondary border-opacity-25 fs-8 mb-3" id="active-q-constraints" style="white-space: pre-wrap;">${activeQ.constraints || activeQ.constraintsText || 'Standard constraints apply.'}</pre>
+                <!-- Micro Constraints Box -->
+                <div class="text-secondary fw-semibold text-uppercase fs-9 mb-1" style="letter-spacing: 0.05em;">Constraints</div>
+                <div class="agy-micro-pre text-warning mb-2" id="active-q-constraints" style="white-space: pre-wrap;">${activeQ.constraints || activeQ.constraintsText || 'Standard constraints apply.'}</div>
 
                 <!-- Mobile Quick Jump to Code Button -->
-                <div class="d-block d-lg-none my-3 text-center">
-                  <button type="button" class="btn btn-premium w-100 py-2 fs-8 fw-bold" id="btn-mobile-jump-code">
-                    <i class="fa-solid fa-code me-1"></i> Open Code Editor & Terminal →
+                <div class="d-block d-lg-none my-2 text-center">
+                  <button type="button" class="btn btn-premium w-100 py-1.5 fs-8 fw-bold" id="btn-mobile-jump-code">
+                    <i class="fa-solid fa-code me-1"></i> Switch to Code Editor →
                   </button>
                 </div>
               </div>
 
-              <!-- TAB 2: Hints & Editorial -->
-              <div class="tab-pane fade" id="tab-editorial-pane">
-                <div class="p-3 rounded bg-black bg-opacity-50 border border-secondary border-opacity-25 mb-3">
-                  <h6 class="text-warning fw-bold fs-7 mb-2"><i class="fa-solid fa-lightbulb me-1"></i>Algorithmic Insights</h6>
-                  <p class="text-muted fs-8 mb-0" id="active-q-hints" style="line-height: 1.7;">
+              <!-- Hints & Editorial Section (Hidden by default, toggled via JS) -->
+              <div id="tab-editorial-pane" class="d-none">
+                <div class="agy-micro-card border-warning border-opacity-30 mb-2">
+                  <div class="text-warning fw-bold fs-8 mb-1"><i class="fa-solid fa-lightbulb me-1"></i>Algorithmic Insights</div>
+                  <div class="text-muted fs-8" id="active-q-hints">
                     ${activeQ.hints || 'Analyze the constraints, edge cases, and time/space invariants.'}
-                  </p>
+                  </div>
                 </div>
-                <div class="p-3 rounded bg-black bg-opacity-50 border border-secondary border-opacity-25">
-                  <h6 class="text-info fw-bold fs-7 mb-2"><i class="fa-solid fa-chart-line me-1"></i>Complexity Targets</h6>
+                <div class="agy-micro-card border-info border-opacity-30">
+                  <div class="text-info fw-bold fs-8 mb-1"><i class="fa-solid fa-chart-line me-1"></i>Complexity Targets</div>
                   <div class="text-muted fs-8 font-monospace">
-                    <div>• Optimal Time Complexity: <strong>O(N)</strong> to <strong>O(N log N)</strong></div>
-                    <div>• Optimal Space Complexity: <strong>O(1)</strong> to <strong>O(N)</strong></div>
+                    <div>• Time Complexity: <strong>O(N)</strong> to <strong>O(N log N)</strong></div>
+                    <div>• Space Complexity: <strong>O(1)</strong> to <strong>O(N)</strong></div>
                   </div>
-                </div>
-              </div>
-
-              <!-- TAB 3: Problem Bank (325+ Questions) -->
-              <div class="tab-pane fade" id="tab-bank-pane">
-                <div class="mb-3">
-                  <input type="text" id="practice-search-input" class="form-control glass-input py-1 px-2 fs-8 mb-2" placeholder="Search 325+ problems by title, topic, company...">
-                  <select id="practice-topic-filter" class="form-select form-select-sm bg-dark text-white border-secondary fs-8 mb-2 py-1">
-                    <option value="ALL">All Topics (${list.length} Problems)</option>
-                    ${uniqueTopics.map(top => `<option value="${top}">${top}</option>`).join('')}
-                  </select>
-                  <div class="d-flex gap-1" id="difficulty-filter-pills">
-                    <button class="btn btn-sm btn-glass py-0 px-2 fs-9 active-diff-filter" data-diff="ALL">All</button>
-                    <button class="btn btn-sm btn-glass py-0 px-2 fs-9 text-success" data-diff="EASY">Easy</button>
-                    <button class="btn btn-sm btn-glass py-0 px-2 fs-9 text-warning" data-diff="MEDIUM">Medium</button>
-                    <button class="btn btn-sm btn-glass py-0 px-2 fs-9 text-danger" data-diff="HARD">Hard</button>
-                  </div>
-                </div>
-                <div id="practice-problems-list" class="d-flex flex-column gap-2" style="max-height: 520px; overflow-y: auto; padding-right: 4px;">
-                  ${list.map((q, idx) => {
-                    const diff = (q.difficulty || 'MEDIUM').toUpperCase();
-                    const diffBadge = diff === 'EASY' ? 'success' : diff === 'MEDIUM' ? 'warning' : 'danger';
-                    return `
-                      <div class="p-2 rounded border border-secondary border-opacity-25 btn-select-question ${idx === 0 ? 'active-question-card' : ''}"
-                           style="cursor: pointer; background: ${idx === 0 ? 'rgba(59, 130, 246, 0.15)' : 'rgba(24, 24, 27, 0.6)'};"
-                           data-question-id="${q.id || (idx + 1)}"
-                           data-title="${(q.title || '').replace(/"/g, '&quot;')}"
-                           data-desc="${(q.desc || q.description || '').replace(/"/g, '&quot;')}"
-                           data-constraints="${(q.constraints || q.constraintsText || '').replace(/"/g, '&quot;')}"
-                           data-hints="${(q.hints || '').replace(/"/g, '&quot;')}"
-                           data-solution="${(q.solution || q.referenceSolution || '').replace(/"/g, '&quot;')}"
-                           data-category="${q.category || q.topic || 'Algorithms'}"
-                           data-companies="${q.companies || q.company || 'Top Tech'}"
-                           data-difficulty="${diff}">
-                        <div class="d-flex align-items-center justify-content-between mb-1">
-                          <span class="fw-bold text-white fs-8 text-truncate me-2">${idx + 1}. ${q.title}</span>
-                          <span class="badge bg-${diffBadge}-subtle text-${diffBadge} fs-9">${diff}</span>
-                        </div>
-                        <div class="text-muted fs-9 text-truncate">${q.category || q.topic || 'Algorithms'} • ${q.companies || 'Top Tech'}</div>
-                      </div>
-                    `;
-                  }).join('')}
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- RIGHT PANE: VS Code Editor & Bottom Terminal Tray -->
-          <div class="col-lg-7 col-12 d-none d-lg-flex flex-column" id="vscode-right-pane" style="height: 100%;">
-            <!-- VS Code File Tabs -->
+          <!-- PANE 3: Dominant Coding IDE & Terminal -->
+          <div class="agy-coding-pane" id="vscode-right-pane">
+            <!-- File Tabs -->
             <div class="vscode-tab-strip">
               <button class="vscode-file-tab active" data-lang="java"><i class="fa-brands fa-java text-danger"></i> Solution.java</button>
               <button class="vscode-file-tab" data-lang="python"><i class="fa-brands fa-python text-warning"></i> solution.py</button>
@@ -2751,9 +2751,9 @@ const components = {
             </div>
 
             <!-- Editor Sub-Toolbar -->
-            <div class="d-flex align-items-center justify-content-between p-2 px-3 bg-dark border-bottom border-secondary border-opacity-25 flex-wrap gap-2">
-              <div class="d-flex align-items-center gap-2">
-                <select id="coding-language-select" class="form-select form-select-sm bg-black text-white border-secondary fs-8 py-1 px-2" style="width: 145px;">
+            <div class="d-flex align-items-center justify-content-between p-1.5 px-2 bg-dark bg-opacity-40 border-bottom border-secondary border-opacity-25 flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-1.5">
+                <select id="coding-language-select" class="form-select form-select-sm bg-black text-white border-secondary fs-9 py-0.5 px-1.5" style="width: 135px;">
                   <option value="java" selected>☕ Java 21</option>
                   <option value="python">🐍 Python 3.12</option>
                   <option value="cpp">⚡ C++ 20</option>
@@ -2763,15 +2763,14 @@ const components = {
                   <option value="go">🐹 Go 1.22</option>
                   <option value="rust">🦀 Rust 1.76</option>
                 </select>
-                <span class="badge border border-secondary border-opacity-30 text-muted fs-9" id="ide-env-badge">JDK 21 LTS</span>
               </div>
 
               <!-- Tools: Font Size, Reset, Copy -->
               <div class="d-flex align-items-center gap-1">
-                <button class="btn btn-sm btn-glass py-0 px-2 fs-9 text-muted" id="btn-editor-font-dec" title="Decrease Font">A-</button>
-                <button class="btn btn-sm btn-glass py-0 px-2 fs-9 text-muted" id="btn-editor-font-inc" title="Increase Font">A+</button>
-                <button class="btn btn-sm btn-glass py-0 px-2 fs-9 text-muted" id="btn-editor-reset" title="Reset Code Template"><i class="fa-solid fa-rotate-left"></i></button>
-                <button class="btn btn-sm btn-glass py-0 px-2 fs-9 text-muted" id="btn-editor-copy" title="Copy Code"><i class="fa-solid fa-copy"></i></button>
+                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted" id="btn-editor-font-dec" title="Decrease Font">A-</button>
+                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted" id="btn-editor-font-inc" title="Increase Font">A+</button>
+                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted" id="btn-editor-reset" title="Reset Code Template"><i class="fa-solid fa-rotate-left"></i></button>
+                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted" id="btn-editor-copy" title="Copy Code"><i class="fa-solid fa-copy"></i></button>
               </div>
             </div>
 
@@ -2791,28 +2790,28 @@ const components = {
               <button type="button" class="mobile-symbol-btn" data-sym="\""> " </button>
             </div>
 
-            <!-- Main Monaco-Style Code Editor -->
-            <div class="flex-grow-1 position-relative p-2" style="min-height: 280px; background: #1e1e1e;">
+            <!-- Main Monaco-Style Code Editor (Auto-Expands on Focus) -->
+            <div class="flex-grow-1 position-relative p-1.5" style="min-height: 260px; background: #18181b;" id="agy-editor-wrapper">
               <textarea id="code-editor-textarea" 
                         class="form-control vscode-monaco-editor w-100 h-100 p-2" 
                         spellcheck="false" 
-                        placeholder="// Enter your solution here...">${activeQ.solution}</textarea>
+                        placeholder="// Enter your solution here... (Workspace auto-expands while typing)">${activeQ.solution}</textarea>
             </div>
 
             <!-- Bottom Collapsible VS Code Terminal Tray -->
             <div class="vscode-terminal-tray" id="vscode-terminal-panel">
               <div class="vscode-terminal-header">
-                <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-1.5">
                   <button class="vscode-terminal-tab active" id="term-tab-output"><i class="fa-solid fa-terminal me-1"></i> OUTPUT</button>
-                  <button class="vscode-terminal-tab" id="term-tab-case1">Test Case 1</button>
-                  <button class="vscode-terminal-tab" id="term-tab-case2">Test Case 2</button>
+                  <button class="vscode-terminal-tab" id="term-tab-case1">Case 1</button>
+                  <button class="vscode-terminal-tab" id="term-tab-case2">Case 2</button>
                 </div>
                 <div>
                   <span class="badge bg-success-subtle text-success fs-9" id="console-status-badge">Ready</span>
                 </div>
               </div>
-              <div class="p-2 font-monospace fs-9" id="console-output-text" style="color: #22c55e; max-height: 130px; overflow-y: auto; background: #121214;">
-// Run code or submit to compile solution against automated test suite.
+              <div class="p-2 font-monospace fs-9" id="console-output-text" style="color: #22c55e; max-height: 120px; overflow-y: auto; background: #121214;">
+// Ready to compile and run against automated test suite.
               </div>
             </div>
           </div>

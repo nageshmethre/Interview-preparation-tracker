@@ -3963,56 +3963,53 @@ function bindCodingPracticeEvents(rawQuestions = []) {
     });
   });
 
-  // 2b. Mobile View Switcher (Problem vs Code Editor)
+  // 2b. Mobile View Switcher (Explorer / Problem Specs / Code Editor)
+  const btnShowExplorer = document.getElementById('btn-mobile-show-explorer');
   const btnShowDesc = document.getElementById('btn-mobile-show-desc');
   const btnShowEditor = document.getElementById('btn-mobile-show-editor');
   const btnJumpCode = document.getElementById('btn-mobile-jump-code');
+  const explorerCol = document.getElementById('agy-explorer');
   const leftPane = document.getElementById('vscode-left-pane');
   const rightPane = document.getElementById('vscode-right-pane');
 
   function setMobileView(view) {
     if (window.innerWidth >= 992) return;
-    if (view === 'desc') {
+    [btnShowExplorer, btnShowDesc, btnShowEditor].forEach(b => {
+      if (b) {
+        b.classList.remove('active', 'text-white');
+        b.classList.add('text-muted');
+        b.style.borderBottom = 'none';
+      }
+    });
+    if (explorerCol) explorerCol.classList.add('d-none');
+    if (leftPane) leftPane.classList.add('d-none');
+    if (rightPane) rightPane.classList.add('d-none');
+
+    if (view === 'explorer') {
+      if (btnShowExplorer) {
+        btnShowExplorer.classList.add('active', 'text-white');
+        btnShowExplorer.classList.remove('text-muted');
+        btnShowExplorer.style.borderBottom = '2px solid #3b82f6';
+      }
+      if (explorerCol) explorerCol.classList.remove('d-none');
+    } else if (view === 'desc') {
       if (btnShowDesc) {
         btnShowDesc.classList.add('active', 'text-white');
         btnShowDesc.classList.remove('text-muted');
         btnShowDesc.style.borderBottom = '2px solid #3b82f6';
       }
-      if (btnShowEditor) {
-        btnShowEditor.classList.remove('active', 'text-white');
-        btnShowEditor.classList.add('text-muted');
-        btnShowEditor.style.borderBottom = 'none';
-      }
-      if (leftPane) {
-        leftPane.classList.remove('d-none');
-        leftPane.classList.add('d-flex');
-      }
-      if (rightPane) {
-        rightPane.classList.add('d-none');
-        rightPane.classList.remove('d-flex');
-      }
+      if (leftPane) leftPane.classList.remove('d-none');
     } else {
       if (btnShowEditor) {
         btnShowEditor.classList.add('active', 'text-white');
         btnShowEditor.classList.remove('text-muted');
         btnShowEditor.style.borderBottom = '2px solid #3b82f6';
       }
-      if (btnShowDesc) {
-        btnShowDesc.classList.remove('active', 'text-white');
-        btnShowDesc.classList.add('text-muted');
-        btnShowDesc.style.borderBottom = 'none';
-      }
-      if (leftPane) {
-        leftPane.classList.add('d-none');
-        leftPane.classList.remove('d-flex');
-      }
-      if (rightPane) {
-        rightPane.classList.remove('d-none');
-        rightPane.classList.add('d-flex');
-      }
+      if (rightPane) rightPane.classList.remove('d-none');
     }
   }
 
+  if (btnShowExplorer) btnShowExplorer.addEventListener('click', () => setMobileView('explorer'));
   if (btnShowDesc) btnShowDesc.addEventListener('click', () => setMobileView('desc'));
   if (btnShowEditor) btnShowEditor.addEventListener('click', () => setMobileView('editor'));
   if (btnJumpCode) btnJumpCode.addEventListener('click', () => setMobileView('editor'));
@@ -4025,7 +4022,6 @@ function bindCodingPracticeEvents(rawQuestions = []) {
   function applyBankFilters() {
     const term = (searchInput ? searchInput.value : '').toLowerCase().trim();
     const selectedTopic = topicFilterSelect ? topicFilterSelect.value : 'ALL';
-    let visibleCount = 0;
 
     document.querySelectorAll('#practice-problems-list .btn-select-question').forEach(card => {
       const title = (card.dataset.title || '').toLowerCase();
@@ -4038,15 +4034,11 @@ function bindCodingPracticeEvents(rawQuestions = []) {
       const matchDiff = (currentDiffFilter === 'ALL') || (cardDiff === currentDiffFilter);
 
       if (matchTerm && matchTopic && matchDiff) {
-        card.style.display = 'block';
-        visibleCount++;
+        card.style.display = 'flex';
       } else {
         card.style.display = 'none';
       }
     });
-
-    const bankPill = document.getElementById('bank-count-pill');
-    if (bankPill) bankPill.textContent = visibleCount;
   }
 
   if (searchInput) {
@@ -4073,6 +4065,7 @@ function bindCodingPracticeEvents(rawQuestions = []) {
     activeQuestionData = data;
 
     const titleEl = document.getElementById('active-q-title');
+    const agyTitleEl = document.getElementById('agy-active-title');
     const catEl = document.getElementById('active-q-category');
     const diffEl = document.getElementById('active-q-diff');
     const descEl = document.getElementById('active-q-desc');
@@ -4082,16 +4075,33 @@ function bindCodingPracticeEvents(rawQuestions = []) {
     const examplesEl = document.getElementById('active-q-examples');
 
     if (titleEl) titleEl.textContent = data.title;
+    if (agyTitleEl) agyTitleEl.textContent = `${data.questionId || 1}. ${data.title}`;
     if (catEl) catEl.textContent = data.category || 'Algorithms';
     if (diffEl) {
       const diff = (data.difficulty || 'MEDIUM').toUpperCase();
       diffEl.textContent = diff;
-      diffEl.className = `badge fs-8 bg-${diff === 'EASY' ? 'success' : diff === 'HARD' ? 'danger' : 'warning'}-subtle text-${diff === 'EASY' ? 'success' : diff === 'HARD' ? 'danger' : 'warning'}`;
+      diffEl.className = `badge fs-9 bg-${diff === 'EASY' ? 'success' : diff === 'HARD' ? 'danger' : 'warning'}-subtle text-${diff === 'EASY' ? 'success' : diff === 'HARD' ? 'danger' : 'warning'} agy-pill-tag`;
     }
     if (descEl) descEl.innerHTML = data.desc;
     if (constraintsEl) constraintsEl.textContent = data.constraints;
     if (hintsEl) hintsEl.textContent = data.hints;
     if (companiesEl) companiesEl.textContent = data.companies || 'Top Tech Companies';
+
+    if (examplesEl && data.examples) {
+      try {
+        const exList = typeof data.examples === 'string' ? JSON.parse(data.examples) : data.examples;
+        if (Array.isArray(exList)) {
+          examplesEl.innerHTML = exList.map((ex, i) => `
+            <div class="agy-micro-pre">
+              <div class="text-muted"><strong>Example ${i + 1}:</strong></div>
+              <div><span class="text-info">Input:</span> ${ex.input}</div>
+              <div><span class="text-success">Output:</span> ${ex.output}</div>
+              ${ex.explanation ? `<div class="text-muted"><span class="text-warning">Explain:</span> ${ex.explanation}</div>` : ''}
+            </div>
+          `).join('');
+        }
+      } catch (e) {}
+    }
 
     if (headerSelect) {
       headerSelect.value = data.questionId;
@@ -4113,22 +4123,14 @@ function bindCodingPracticeEvents(rawQuestions = []) {
       consoleStatus.textContent = 'Ready';
     }
 
-    // Highlight problem in list
-    document.querySelectorAll('.btn-select-question').forEach(c => {
-      if (c.dataset.questionId === data.questionId) {
-        c.classList.add('active-question-card');
-        c.style.background = 'rgba(59, 130, 246, 0.15)';
+    // Highlight problem in explorer list
+    document.querySelectorAll('#practice-problems-list .btn-select-question').forEach(c => {
+      if (String(c.dataset.questionId) === String(data.questionId)) {
+        c.classList.add('active');
       } else {
-        c.classList.remove('active-question-card');
-        c.style.background = 'rgba(24, 24, 27, 0.6)';
+        c.classList.remove('active');
       }
     });
-
-    // Auto-switch to description tab
-    const tabDescBtn = document.getElementById('tab-desc-btn');
-    if (tabDescBtn && typeof bootstrap !== 'undefined' && bootstrap.Tab) {
-      new bootstrap.Tab(tabDescBtn).show();
-    }
 
     if (window.innerWidth < 992) {
       setMobileView('desc');
@@ -4136,7 +4138,7 @@ function bindCodingPracticeEvents(rawQuestions = []) {
   }
 
   // Bind Question List Cards
-  const questionCards = document.querySelectorAll('.btn-select-question');
+  const questionCards = document.querySelectorAll('#practice-problems-list .btn-select-question');
   questionCards.forEach(card => {
     card.addEventListener('click', (e) => {
       selectQuestion(e.currentTarget.dataset);
@@ -4170,7 +4172,7 @@ function bindCodingPracticeEvents(rawQuestions = []) {
     selectQuestion(questionCards[0].dataset);
   }
 
-  // 5b. Move Back & Move Next Problem Handlers (Side buttons, Top buttons & Mobile buttons)
+  // 5b. Unified Symbolic Move Back & Move Next Problem Handlers (< and >)
   function getFilteredCardsList() {
     const visibleCards = Array.from(questionCards).filter(c => c.style.display !== 'none');
     return visibleCards.length > 0 ? visibleCards : Array.from(questionCards);
@@ -4194,17 +4196,11 @@ function bindCodingPracticeEvents(rawQuestions = []) {
     }
   }
 
-  // Top Nav Move Back / Move Next buttons
+  // Unified Symbolic Prev & Next buttons
   const btnPrev = document.getElementById('btn-prev-problem');
   const btnNext = document.getElementById('btn-next-problem');
   if (btnPrev) btnPrev.addEventListener('click', () => moveToAdjacentProblem('prev'));
   if (btnNext) btnNext.addEventListener('click', () => moveToAdjacentProblem('next'));
-
-  // Floating Side Buttons (both sides)
-  const btnSidePrev = document.getElementById('btn-side-prev');
-  const btnSideNext = document.getElementById('btn-side-next');
-  if (btnSidePrev) btnSidePrev.addEventListener('click', () => moveToAdjacentProblem('prev'));
-  if (btnSideNext) btnSideNext.addEventListener('click', () => moveToAdjacentProblem('next'));
 
   // Mobile Switcher Prev / Next buttons
   const btnMobPrev = document.getElementById('btn-mobile-prev-problem');
@@ -4228,28 +4224,79 @@ function bindCodingPracticeEvents(rawQuestions = []) {
   };
   document.addEventListener('keydown', keyNavHandler);
 
-  // Toggle Left Pane Split / Full Editor View
-  const btnToggleSplit = document.getElementById('btn-toggle-split');
-  if (btnToggleSplit) {
-    btnToggleSplit.addEventListener('click', () => {
-      const leftCol = document.getElementById('vscode-left-pane');
-      const rightCol = document.getElementById('vscode-right-pane');
-      if (!leftCol || !rightCol) return;
-      if (leftCol.classList.contains('d-lg-none')) {
-        // Restore split view
-        leftCol.classList.remove('d-lg-none');
-        rightCol.classList.remove('col-lg-12');
-        rightCol.classList.add('col-lg-7');
-        btnToggleSplit.innerHTML = '<i class="fa-solid fa-table-columns me-1"></i> <span class="d-none d-sm-inline">Full Editor</span>';
-        showToast('Restored side-by-side split view', 'info');
+  // Sidebar Toggle (Problem Explorer)
+  const btnToggleSidebar = document.getElementById('btn-toggle-sidebar');
+  if (btnToggleSidebar) {
+    btnToggleSidebar.addEventListener('click', () => {
+      const explorer = document.getElementById('agy-explorer');
+      if (!explorer) return;
+      const isCollapsed = explorer.classList.toggle('collapsed');
+      btnToggleSidebar.classList.toggle('active', !isCollapsed);
+    });
+  }
+
+  // Maximize Code Editor Toggle (Expand to 100% full width)
+  const btnMaximize = document.getElementById('btn-ide-maximize');
+  if (btnMaximize) {
+    btnMaximize.addEventListener('click', () => {
+      const codingPane = document.getElementById('vscode-right-pane');
+      const maxIcon = document.getElementById('icon-ide-maximize');
+      if (!codingPane) return;
+      const isMax = codingPane.classList.toggle('maximized');
+      if (isMax) {
+        if (maxIcon) maxIcon.className = 'fa-solid fa-compress';
+        showToast('Maximized Code Workspace (Full Screen)', 'info');
       } else {
-        // Collapse description to full editor
-        leftCol.classList.add('d-lg-none');
-        rightCol.classList.remove('col-lg-7');
-        rightCol.classList.add('col-lg-12');
-        btnToggleSplit.innerHTML = '<i class="fa-solid fa-book-open me-1"></i> <span class="d-none d-sm-inline">Show Details</span>';
-        showToast('Expanded to full-width code editor', 'info');
+        if (maxIcon) maxIcon.className = 'fa-solid fa-expand';
+        showToast('Restored 3-Pane View', 'info');
       }
+    });
+  }
+
+  // Auto-Expand Code Editor on Focus / Click (Gives large space to code)
+  if (editorTextarea) {
+    editorTextarea.addEventListener('focus', () => {
+      const codingPane = document.getElementById('vscode-right-pane');
+      const readingPane = document.getElementById('vscode-left-pane');
+      if (codingPane && window.innerWidth >= 992 && !codingPane.classList.contains('maximized')) {
+        codingPane.classList.add('expanded');
+        if (readingPane) readingPane.style.maxWidth = '260px';
+      }
+    });
+  }
+  const readingPaneEl = document.getElementById('vscode-left-pane');
+  if (readingPaneEl) {
+    readingPaneEl.addEventListener('click', () => {
+      const codingPane = document.getElementById('vscode-right-pane');
+      if (codingPane && !codingPane.classList.contains('maximized')) {
+        codingPane.classList.remove('expanded');
+        readingPaneEl.style.maxWidth = '';
+      }
+    });
+  }
+
+  // Reading Pane Tabs Toggle (Problem Specs vs Hints & Complexity)
+  const tabDescBtn = document.getElementById('tab-desc-btn');
+  const tabEditBtn = document.getElementById('tab-editorial-btn');
+  const tabDescPane = document.getElementById('tab-desc-pane');
+  const tabEditPane = document.getElementById('tab-editorial-pane');
+
+  if (tabDescBtn && tabEditBtn) {
+    tabDescBtn.addEventListener('click', () => {
+      tabDescBtn.classList.add('text-white', 'border-primary');
+      tabDescBtn.classList.remove('text-muted');
+      tabEditBtn.classList.remove('text-white', 'border-primary');
+      tabEditBtn.classList.add('text-muted');
+      if (tabDescPane) tabDescPane.classList.remove('d-none');
+      if (tabEditPane) tabEditPane.classList.add('d-none');
+    });
+    tabEditBtn.addEventListener('click', () => {
+      tabEditBtn.classList.add('text-white', 'border-primary');
+      tabEditBtn.classList.remove('text-muted');
+      tabDescBtn.classList.remove('text-white', 'border-primary');
+      tabDescBtn.classList.add('text-muted');
+      if (tabEditPane) tabEditPane.classList.remove('d-none');
+      if (tabDescPane) tabDescPane.classList.add('d-none');
     });
   }
 
@@ -4274,42 +4321,51 @@ function bindCodingPracticeEvents(rawQuestions = []) {
   const btnReset = document.getElementById('btn-editor-reset');
   const btnCopy = document.getElementById('btn-editor-copy');
 
-  if (btnFontInc) {
-    btnFontInc.addEventListener('click', () => {
-      if (editorFontSize < 20) {
-        editorFontSize++;
-        if (editorTextarea) editorTextarea.style.fontSize = `${editorFontSize}px`;
-      }
-    });
+  const menuFontInc = document.getElementById('menu-opt-font-inc');
+  const menuFontDec = document.getElementById('menu-opt-font-dec');
+  const menuReset = document.getElementById('menu-opt-reset');
+  const menuCopy = document.getElementById('menu-opt-copy');
+
+  function handleFontInc() {
+    if (editorFontSize < 20) {
+      editorFontSize++;
+      if (editorTextarea) editorTextarea.style.fontSize = `${editorFontSize}px`;
+    }
   }
-  if (btnFontDec) {
-    btnFontDec.addEventListener('click', () => {
-      if (editorFontSize > 10) {
-        editorFontSize--;
-        if (editorTextarea) editorTextarea.style.fontSize = `${editorFontSize}px`;
-      }
-    });
+  function handleFontDec() {
+    if (editorFontSize > 10) {
+      editorFontSize--;
+      if (editorTextarea) editorTextarea.style.fontSize = `${editorFontSize}px`;
+    }
   }
-  if (btnReset) {
-    btnReset.addEventListener('click', () => {
-      if (activeQuestionData && editorTextarea) {
-        editorTextarea.value = getMultiLangTemplate(currentLanguage, activeQuestionData.title, activeQuestionData.solution);
-        showToast('Code template restored.', 'info');
-      }
-    });
+  function handleResetTemplate() {
+    if (activeQuestionData && editorTextarea) {
+      editorTextarea.value = getMultiLangTemplate(currentLanguage, activeQuestionData.title, activeQuestionData.solution);
+      showToast('Code template restored.', 'info');
+    }
   }
-  if (btnCopy) {
-    btnCopy.addEventListener('click', () => {
-      if (!editorTextarea) return;
-      navigator.clipboard.writeText(editorTextarea.value)
-        .then(() => showToast('Code copied to clipboard!', 'success'))
-        .catch(() => {
-          editorTextarea.select();
-          document.execCommand('copy');
-          showToast('Code copied to clipboard!', 'success');
-        });
-    });
+  function handleCopyCode() {
+    if (!editorTextarea) return;
+    navigator.clipboard.writeText(editorTextarea.value)
+      .then(() => showToast('Code copied to clipboard!', 'success'))
+      .catch(() => {
+        editorTextarea.select();
+        document.execCommand('copy');
+        showToast('Code copied to clipboard!', 'success');
+      });
   }
+
+  if (btnFontInc) btnFontInc.addEventListener('click', handleFontInc);
+  if (menuFontInc) menuFontInc.addEventListener('click', handleFontInc);
+
+  if (btnFontDec) btnFontDec.addEventListener('click', handleFontDec);
+  if (menuFontDec) menuFontDec.addEventListener('click', handleFontDec);
+
+  if (btnReset) btnReset.addEventListener('click', handleResetTemplate);
+  if (menuReset) menuReset.addEventListener('click', handleResetTemplate);
+
+  if (btnCopy) btnCopy.addEventListener('click', handleCopyCode);
+  if (menuCopy) menuCopy.addEventListener('click', handleCopyCode);
 
   // 8. Hint Alert trigger
   const btnHints = document.getElementById('btn-practice-hints');
