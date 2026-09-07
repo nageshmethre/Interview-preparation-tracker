@@ -233,7 +233,10 @@ function toggleTheme() {
 }
 
 // Router
+let currentNavigationSeq = 0;
+
 function router() {
+  const navSeq = ++currentNavigationSeq;
   let rawHash = window.location.hash;
   if (!rawHash && window.location.pathname && window.location.pathname !== '/' && window.location.pathname !== '/index.html') {
     rawHash = '#' + window.location.pathname;
@@ -439,12 +442,14 @@ function router() {
     }
     apiFetch('/dashboard/stats')
       .then(stats => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/dashboard') return;
         setCachedData('cached_dashboard_stats_v2', stats);
         pageMount.innerHTML = components.dashboard(stats);
         renderDashboardCharts(stats);
         syncDashboardScreenTime();
       })
       .catch(err => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/dashboard') return;
         if (!hasCache) {
           pageMount.innerHTML = `<div class="alert alert-danger">Failed to load statistics: ${err.message}</div>`;
         }
@@ -477,11 +482,13 @@ function router() {
     }
     apiFetch('/v1/courses')
       .then(courses => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/courses') return;
         setCachedData('cached_courses_v2', courses);
         pageMount.innerHTML = components.courses(courses);
         bindCoursesEvents();
       })
       .catch(err => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/courses') return;
         if (!hasCache) {
           pageMount.innerHTML = `<div class="alert alert-danger">Failed to load courses: ${err.message}</div>`;
         }
@@ -509,11 +516,13 @@ function router() {
     }
     apiFetch('/v1/certificates')
       .then(certs => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/certificates') return;
         setCachedData('cached_certs_v2', certs);
         pageMount.innerHTML = components.certificates(certs);
         bindCertificatesEvents();
       })
       .catch(err => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/certificates') return;
         if (!hasCache) {
           pageMount.innerHTML = `<div class="alert alert-danger">Failed to load certificates: ${err.message}</div>`;
         }
@@ -521,36 +530,26 @@ function router() {
   } else if (hash === '#/dsa-roadmap') {
     viewTitle.textContent = 'Interactive DSA Roadmap';
     const freshRoadmap = getCachedData('cached_roadmap_v3', 180000);
-    if (freshRoadmap) {
+    if (freshRoadmap && Array.isArray(freshRoadmap) && freshRoadmap.length >= 16) {
       const enriched = getEnrichedDsaRoadmap(freshRoadmap);
       pageMount.innerHTML = components.dsaRoadmap(enriched);
       bindDsaRoadmapEvents(enriched);
       return;
     }
-    const cachedRoadmapStr = localStorage.getItem('cached_roadmap_v3');
-    let hasCache = false;
-    if (cachedRoadmapStr) {
-      try {
-        const parsed = JSON.parse(cachedRoadmapStr).data;
-        const enriched = getEnrichedDsaRoadmap(parsed);
-        pageMount.innerHTML = components.dsaRoadmap(enriched);
-        bindDsaRoadmapEvents(enriched);
-        hasCache = true;
-      } catch (e) {}
-    }
-    if (!hasCache) {
-      // Instantly mount complete syllabus without blocking spinner
-      pageMount.innerHTML = components.dsaRoadmap(COMPREHENSIVE_DSA_ROADMAP);
-      bindDsaRoadmapEvents(COMPREHENSIVE_DSA_ROADMAP);
-    }
+    // Instantly mount complete 16-topic syllabus without blocking spinner
+    pageMount.innerHTML = components.dsaRoadmap(COMPREHENSIVE_DSA_ROADMAP);
+    bindDsaRoadmapEvents(COMPREHENSIVE_DSA_ROADMAP);
+
     apiFetch('/v1/dsa/roadmap')
       .then(roadmap => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/dsa-roadmap') return;
         const enriched = getEnrichedDsaRoadmap(roadmap);
         setCachedData('cached_roadmap_v3', enriched);
         pageMount.innerHTML = components.dsaRoadmap(enriched);
         bindDsaRoadmapEvents(enriched);
       })
       .catch(err => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/dsa-roadmap') return;
         const enriched = COMPREHENSIVE_DSA_ROADMAP;
         pageMount.innerHTML = components.dsaRoadmap(enriched);
         bindDsaRoadmapEvents(enriched);
@@ -561,7 +560,7 @@ function router() {
       ? window.DSA_QUESTIONS_BANK
       : [];
     const freshQuestions = getCachedData('cached_questions_v2', 180000);
-    const questionsToUse = (freshQuestions && Array.isArray(freshQuestions) && freshQuestions.length > 0)
+    const questionsToUse = (freshQuestions && Array.isArray(freshQuestions) && freshQuestions.length >= defaultBank.length)
       ? freshQuestions
       : defaultBank;
     pageMount.innerHTML = components.codingPractice(questionsToUse);
@@ -569,7 +568,8 @@ function router() {
 
     apiFetch('/v1/questions')
       .then(questions => {
-        if (Array.isArray(questions) && questions.length > 0) {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/coding-practice') return;
+        if (Array.isArray(questions) && questions.length >= defaultBank.length) {
           setCachedData('cached_questions_v2', questions);
           pageMount.innerHTML = components.codingPractice(questions);
           bindCodingPracticeEvents(questions);
@@ -587,6 +587,7 @@ function router() {
       apiFetch('/v1/aptitude/topics'),
       apiFetch('/v1/aptitude/questions')
     ]).then(results => {
+      if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/aptitude') return;
       const topics = (results[0].status === 'fulfilled' && Array.isArray(results[0].value) && results[0].value.length > 0) ? results[0].value : [];
       const questions = (results[1].status === 'fulfilled' && Array.isArray(results[1].value) && results[1].value.length > 0) ? results[1].value : [];
       if (topics.length > 0 || questions.length > 0) {
@@ -610,6 +611,7 @@ function router() {
 
     apiFetch('/v1/mocktests/leaderboard')
       .then(leaderboard => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/mock-exams') return;
         if (leaderboard) {
           setCachedData('cached_mock_leaderboard', leaderboard);
           pageMount.innerHTML = components.mockExams([], leaderboard);
@@ -624,10 +626,12 @@ function router() {
     pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
     apiFetch('/v1/flashcards')
       .then(cards => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/flashcards') return;
         pageMount.innerHTML = components.flashcards(cards);
         bindFlashcardsEvents();
       })
       .catch(err => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/flashcards') return;
         pageMount.innerHTML = `<div class="alert alert-danger">Failed to load study deck: ${err.message}</div>`;
       });
   } else if (hash === '#/community') {
@@ -639,10 +643,12 @@ function router() {
     pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
     Promise.all([apiFetch('/v1/notes'), apiFetch('/v1/notes/folders')])
       .then(([notes, folders]) => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/notes') return;
         pageMount.innerHTML = components.notes(notes, folders);
         bindNotesEvents();
       })
       .catch(err => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/notes') return;
         pageMount.innerHTML = `<div class="alert alert-danger">Failed to load notes: ${err.message}</div>`;
       });
   } else if (hash === '#/placement') {
@@ -650,10 +656,12 @@ function router() {
     pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
     apiFetch('/applications')
       .then(apps => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/placement') return;
         pageMount.innerHTML = components.placement(apps);
         bindPlacementEvents();
       })
       .catch(err => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/placement') return;
         pageMount.innerHTML = `<div class="alert alert-danger">Failed to load job pipelines: ${err.message}</div>`;
       });
   } else if (hash === '#/ai-assistant') {
@@ -690,11 +698,13 @@ function router() {
     pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div><div class="text-muted fs-8 mt-2">Loading affiliate wallet & earnings...</div></div>`;
     apiFetch('/referrals/stats')
       .then(stats => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/referral') return;
         pageMount.innerHTML = components.referral(stats || {});
         bindReferralEvents();
         loadReferralHistory();
       })
       .catch(err => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/referral') return;
         pageMount.innerHTML = components.referral({
           totalReferrals: 0,
           totalEarnings: 0,
@@ -718,6 +728,7 @@ function router() {
     pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div><div class="text-muted fs-8 mt-2">Connecting to Super Admin Cluster...</div></div>`;
     apiFetch('/admin/stats')
       .then(stats => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/admin') return;
         window.currentAdminStats = stats || {};
         pageMount.innerHTML = components.admin(stats);
         
@@ -816,6 +827,7 @@ function router() {
         loadAdminPanelTab('overview');
       })
       .catch(err => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/admin') return;
         pageMount.innerHTML = `<div class="alert alert-danger">Failed to load admin stats: ${err.message}</div>`;
       });
   } else {
@@ -4165,6 +4177,9 @@ function bindCodingPracticeEvents(rawQuestions = []) {
     const targetCard = Array.from(questionCards).find(c => String(c.dataset.questionId) === String(targetQId));
     if (targetCard) {
       selectQuestion(targetCard.dataset);
+      setTimeout(() => {
+        try { targetCard.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) {}
+      }, 50);
     } else {
       selectQuestion(questionCards[0].dataset);
     }

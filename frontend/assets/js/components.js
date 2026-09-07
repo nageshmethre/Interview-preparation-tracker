@@ -130,10 +130,6 @@ const components = {
               <a href="#/register" class="btn btn-premium btn-lg px-5 py-3 fs-5 fw-bold shadow-lg">
                 <i class="fa-solid fa-rocket me-2"></i>Initialize Space Free
               </a>
-              <a href="https://stream-in.app/downloads/PrepSpace.apk" download="PrepSpace.apk" class="btn btn-glass btn-lg px-4 py-3 fs-5 text-success border-success-subtle d-inline-flex align-items-center gap-2 shadow-sm">
-                <i class="fa-brands fa-android text-success fs-4"></i>
-                <span>Download Android App</span>
-              </a>
               <a href="#showcase" class="btn btn-glass btn-lg px-4 py-3 fs-5 text-white">
                 <i class="fa-solid fa-layer-group me-2 text-cyan"></i>Explore Live Platform
               </a>
@@ -766,22 +762,18 @@ const components = {
           </button>
         </div>
 
-        <!-- User Profile Micro Card -->
-        <div class="user-micro-card px-2 py-2 mx-2 my-2 rounded-3 border border-secondary border-opacity-20 flex-shrink-0" style="background: #222226; border-color: #323238; d-flex align-items-center justify-content-between" id="sidebar-user-card">
+        <!-- User Profile Minimal Strip -->
+        <div class="user-minimal-strip px-2.5 py-1.5 mx-2 my-2 rounded-2 border border-secondary border-opacity-20 d-flex align-items-center justify-content-between flex-shrink-0" style="background: #1c1c20; border-color: #27272a;" id="sidebar-user-card">
           <div class="d-flex align-items-center gap-2 overflow-hidden me-1">
-            <div class="position-relative flex-shrink-0 user-avatar-dot">
-              <i class="fa-solid fa-circle-user fs-4 ${isPaid ? 'text-primary' : 'text-secondary'}"></i>
-              <span class="position-absolute bottom-0 end-0 ${isPaid ? 'bg-success' : 'bg-secondary'} border border-dark rounded-circle" style="width: 8px; height: 8px;"></span>
+            <div class="position-relative flex-shrink-0">
+              <i class="fa-solid fa-circle-user fs-5 ${isPaid ? 'text-primary' : 'text-secondary'}"></i>
             </div>
-            <div class="d-flex flex-column text-start text-truncate user-profile-text">
-              <span class="text-white fw-bold fs-7 text-truncate" id="sidebar-user-name">${userName || 'Candidate'}</span>
-              <span class="text-muted fs-8 text-truncate" id="sidebar-user-plan">${isPaid ? 'Pro Workspace' : 'Free Plan'}</span>
-            </div>
+            <span class="text-white fw-semibold fs-8 text-truncate" id="sidebar-user-name">${userName || 'Candidate'}</span>
           </div>
           <div id="sidebar-user-badge" class="flex-shrink-0">
             ${isPaid 
-              ? `<span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle font-monospace">PRO</span>`
-              : `<a href="#/billing" class="badge bg-secondary bg-opacity-25 text-muted border border-secondary text-decoration-none font-monospace">FREE</a>`
+              ? `<span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle fs-9 font-monospace py-0.5 px-1.5">PRO</span>`
+              : `<a href="#/billing" class="badge bg-secondary bg-opacity-20 text-muted border border-secondary text-decoration-none fs-9 font-monospace py-0.5 px-1.5">FREE</a>`
             }
           </div>
         </div>
@@ -844,13 +836,7 @@ const components = {
             </div>
           </div>
           
-          <div class="d-flex align-items-center gap-2 gap-md-3">
-            <a href="#/desktop-client" class="btn btn-glass btn-sm d-flex align-items-center py-1 px-2 px-md-3 text-white" title="Get PrepSpace for Android & iOS">
-              <span class="d-none d-sm-inline fw-semibold">Get Mobile App</span>
-            </a>
-            <a href="#/mock-exams" class="btn btn-glass btn-sm d-none d-md-flex align-items-center py-1 px-3 text-white">
-              <span>Mock Exam</span>
-            </a>
+          <div class="d-flex align-items-center gap-2">
             <div class="dropdown">
               <button class="btn btn-glass dropdown-toggle d-flex align-items-center gap-2 py-1 px-2" type="button" id="userDropdown" data-bs-toggle="dropdown">
                 <i class="fa-solid fa-circle-user fs-5 text-secondary"></i>
@@ -895,19 +881,11 @@ const components = {
     const xpPoints = stats.xpPoints ?? 0;
     const readinessScore = stats.readinessScore ?? 78;
     return `
-    <!-- Vercel Project Header -->
-    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-3 border-bottom border-secondary border-opacity-10 gap-3">
+    <!-- Minimalist Dashboard Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-15">
       <div>
-        <div class="d-flex align-items-center gap-2 mb-1">
-          <span class="badge border border-secondary border-opacity-30 text-white font-monospace fs-9 px-2 py-0.5">PRODUCTION</span>
-          <span class="text-secondary fs-9 font-monospace">stream-in.app</span>
-        </div>
-        <h4 class="text-white fw-bold mb-0">Interview Readiness Engine</h4>
-      </div>
-      <div class="d-flex gap-2 flex-wrap">
-        <a href="#/mock-exams" class="btn btn-premium btn-sm"><i class="fa-solid fa-play me-1"></i> Start Mock Exam</a>
-        <a href="#/coding-practice" class="btn btn-glass btn-sm">+ Log DSA Solve</a>
-        <a href="#/ai-assistant" class="btn btn-glass btn-sm"><i class="fa-solid fa-robot me-1 text-secondary"></i> AI Audit</a>
+        <h5 class="text-white fw-bold m-0 fs-6">Preparation Overview</h5>
+        <small class="text-muted fs-8 font-monospace">Real-time candidate telemetry & study velocity</small>
       </div>
     </div>
 
@@ -2450,55 +2428,134 @@ const components = {
   },
 
   dsaTopicDetail: (topic) => `
-    <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-      <h4 class="text-white fw-bold m-0">${topic.name} Detail Modules</h4>
-      <a href="#/coding-practice" class="btn btn-sm btn-outline-info py-1 px-3 fs-8">
-        <i class="fa-solid fa-code me-1"></i> Solve in Multi-Language Workshop →
-      </a>
-    </div>
-    <div class="accordion accordion-flush" id="subtopic-accordion">
-      ${(topic.subtopics || []).map((s, idx) => `
-        <div class="accordion-item bg-transparent text-white border-secondary mb-3 rounded border border-opacity-25 overflow-hidden">
-          <h2 class="accordion-header bg-transparent">
-            <button class="accordion-button bg-dark bg-opacity-50 text-white ${idx === 0 ? '' : 'collapsed'} fs-7 fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sub-collapse-${s.id || idx}">
-              <span class="badge bg-primary me-2">${idx + 1}</span> ${s.name}
-            </button>
-          </h2>
-          <div id="sub-collapse-${s.id || idx}" class="accordion-collapse collapse ${idx === 0 ? 'show' : ''}" data-bs-parent="#subtopic-accordion">
-            <div class="accordion-body bg-dark bg-opacity-25 text-secondary fs-7 p-3">
-              <h6 class="text-white fw-bold mt-1"><i class="fa-solid fa-lightbulb text-warning me-2"></i>Theory & Concept:</h6>
-              <p class="mb-3 text-light" style="line-height: 1.7;">${s.theory}</p>
-              
-              <h6 class="text-white fw-bold"><i class="fa-solid fa-chart-line text-cyan me-2"></i>Complexity Analysis:</h6>
-              <p class="font-monospace text-primary bg-dark p-2 rounded border border-secondary border-opacity-25 mb-3 fs-8">${s.complexityAnalysis}</p>
-              
-              <h6 class="text-white fw-bold"><i class="fa-solid fa-rocket text-success me-2"></i>Interview Tips:</h6>
-              <p class="mb-3 text-light" style="line-height: 1.7;">${s.interviewTips}</p>
+    <div class="dsa-document-sheet p-3 p-md-4 rounded-3 border border-secondary border-opacity-30 bg-black bg-opacity-40 shadow-lg">
+      <!-- 1. Technical Document Header / Cover Strip -->
+      <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-secondary border-opacity-25 flex-wrap gap-3">
+        <div>
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <span class="badge bg-indigo-subtle text-primary border border-primary-subtle fs-9 font-monospace">SPEC-DOC // TOPIC-${topic.sequenceNumber || topic.id || 1}</span>
+            <span class="badge bg-success-subtle text-success fs-9"><i class="fa-solid fa-circle-check me-1"></i>Official Curriculum</span>
+          </div>
+          <h3 class="text-white fw-bold m-0 fs-5">${topic.name}</h3>
+          <p class="text-muted fs-8 m-0 mt-1">Complete engineering curriculum, algorithmic proofs, complexity bounds, and curated workshop challenges.</p>
+        </div>
 
-              ${s.challenges && s.challenges.length > 0 ? `
-                <h6 class="text-white fw-bold mt-3 mb-2"><i class="fa-solid fa-laptop-code text-indigo me-2"></i>Curated Practice Challenges:</h6>
-                <div class="d-flex flex-column gap-2 mb-2">
+        <!-- Document Action Bar: Workshop, Internship, Print PDF, Scroll Up -->
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+          <a href="#/coding-practice" class="btn btn-sm btn-primary py-1.5 px-3 fs-8 fw-bold text-nowrap shadow-sm">
+            <i class="fa-solid fa-laptop-code me-1.5"></i> Multi-Language Coding Workshop
+          </a>
+          <a href="#/placement" class="btn btn-sm btn-outline-warning py-1.5 px-3 fs-8 fw-semibold text-nowrap">
+            <i class="fa-solid fa-briefcase me-1.5"></i> Internship Track
+          </a>
+          <button type="button" class="btn btn-sm btn-glass py-1.5 px-2.5 fs-8 text-light" onclick="window.print()" title="Print / Save Specification as PDF">
+            <i class="fa-solid fa-file-pdf text-danger me-1"></i> PDF
+          </button>
+          <button type="button" class="btn btn-sm btn-glass py-1.5 px-2.5 fs-8 text-info" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Move Upward">
+            <i class="fa-solid fa-arrow-up"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. Document Page Meta Bar (Modules count, FAANG Frequency, Time Estimation) -->
+      <div class="row g-2 mb-4 p-2.5 rounded bg-dark bg-opacity-60 border border-secondary border-opacity-20 fs-8 text-secondary">
+        <div class="col-6 col-md-3">
+          <span class="text-muted d-block fs-9 text-uppercase fw-bold">Curriculum Units</span>
+          <span class="text-white fw-semibold">${(topic.subtopics || []).length} In-Depth Sections</span>
+        </div>
+        <div class="col-6 col-md-3">
+          <span class="text-muted d-block fs-9 text-uppercase fw-bold">Interview Weight</span>
+          <span class="text-warning fw-semibold"><i class="fa-solid fa-star me-1"></i>Very High (FAANG / Tier-1)</span>
+        </div>
+        <div class="col-6 col-md-3">
+          <span class="text-muted d-block fs-9 text-uppercase fw-bold">Estimated Reading</span>
+          <span class="text-info fw-semibold"><i class="fa-solid fa-clock me-1"></i>15 - 20 Minutes</span>
+        </div>
+        <div class="col-6 col-md-3">
+          <span class="text-muted d-block fs-9 text-uppercase fw-bold">Workshop Mode</span>
+          <span class="text-success fw-semibold"><i class="fa-solid fa-terminal me-1"></i>325+ Interactive Tests</span>
+        </div>
+      </div>
+
+      <!-- 3. Continuous Document Page Content -->
+      <div class="dsa-document-body d-flex flex-column gap-4">
+        ${(topic.subtopics || []).map((s, idx) => `
+          <article class="dsa-document-section p-3.5 p-md-4 rounded-3 bg-dark bg-opacity-30 border border-secondary border-opacity-20 position-relative">
+            <div class="d-flex align-items-center justify-content-between mb-3 border-bottom border-secondary border-opacity-20 pb-2 flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-primary fs-8 px-2 py-1 fw-bold">Section ${idx + 1}</span>
+                <h5 class="text-white fw-bold m-0 fs-6">${s.name}</h5>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-primary py-1 px-2.5 fs-8" onclick="window.location.hash='#/coding-practice?q=${(s.challenges && s.challenges[0] && s.challenges[0].qId) || (idx * 5 + 1)}'">
+                <i class="fa-solid fa-code me-1"></i> Practice in Workshop →
+              </button>
+            </div>
+
+            <!-- Theory & Concept -->
+            <div class="mb-3">
+              <h6 class="text-light fw-bold fs-7 mb-1.5"><i class="fa-solid fa-book-open text-primary me-2"></i>1. Theory & Core Concept</h6>
+              <p class="text-secondary fs-7 mb-0" style="line-height: 1.75;">${s.theory}</p>
+            </div>
+
+            <!-- Complexity Matrix -->
+            <div class="mb-3">
+              <h6 class="text-light fw-bold fs-7 mb-1.5"><i class="fa-solid fa-chart-simple text-cyan me-2"></i>2. Time & Space Complexity Analysis</h6>
+              <div class="p-2.5 rounded bg-black bg-opacity-60 border border-secondary border-opacity-25 font-monospace fs-8 text-primary">
+                <i class="fa-solid fa-calculator text-muted me-2"></i>${s.complexityAnalysis}
+              </div>
+            </div>
+
+            <!-- Interview Pitfalls & Advice -->
+            <div class="mb-3">
+              <h6 class="text-light fw-bold fs-7 mb-1.5"><i class="fa-solid fa-lightbulb text-warning me-2"></i>3. Technical Interview Insights & Traps</h6>
+              <div class="p-2.5 rounded bg-warning bg-opacity-10 border border-warning border-opacity-25 text-light fs-7" style="line-height: 1.7;">
+                <i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>${s.interviewTips}
+              </div>
+            </div>
+
+            <!-- Curated Practice Challenges -->
+            ${s.challenges && s.challenges.length > 0 ? `
+              <div class="mt-3 pt-2 border-top border-secondary border-opacity-20">
+                <h6 class="text-light fw-bold fs-7 mb-2"><i class="fa-solid fa-code text-success me-2"></i>4. Curated Coding Challenges</h6>
+                <div class="row g-2">
                   ${s.challenges.map(ch => {
                     const diff = (ch.difficulty || 'MEDIUM').toUpperCase();
                     const diffBadge = diff === 'EASY' ? 'success' : diff === 'HARD' ? 'danger' : 'warning';
                     return `
-                      <div class="d-flex align-items-center justify-content-between p-2 rounded bg-black bg-opacity-40 border border-secondary border-opacity-25 flex-wrap gap-2">
-                        <div class="d-flex align-items-center gap-2">
-                          <span class="badge bg-${diffBadge}-subtle text-${diffBadge} fs-9">${diff}</span>
-                          <span class="fw-semibold text-white fs-8">${ch.name}</span>
+                      <div class="col-12 col-lg-6">
+                        <div class="d-flex align-items-center justify-content-between p-2.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-25 gap-2">
+                          <div class="overflow-hidden">
+                            <span class="badge bg-${diffBadge}-subtle text-${diffBadge} fs-9 me-1.5">${diff}</span>
+                            <span class="fw-semibold text-white fs-8 text-truncate">${ch.name}</span>
+                          </div>
+                          <a href="#/coding-practice?q=${ch.qId || 1}" class="btn btn-sm btn-primary py-1 px-2.5 fs-8 text-nowrap fw-semibold">
+                            <i class="fa-solid fa-terminal me-1"></i> Solve →
+                          </a>
                         </div>
-                        <a href="#/coding-practice?q=${ch.qId || 1}" class="btn btn-sm btn-outline-primary py-1 px-2 fs-9">
-                          <i class="fa-solid fa-code me-1"></i> Solve in Workshop →
-                        </a>
                       </div>
                     `;
                   }).join('')}
                 </div>
-              ` : ''}
-            </div>
-          </div>
+              </div>
+            ` : ''}
+          </article>
+        `).join('')}
+      </div>
+
+      <!-- 4. Document Page Footer Actions -->
+      <div class="d-flex align-items-center justify-content-between pt-4 mt-4 border-top border-secondary border-opacity-25 flex-wrap gap-3">
+        <div class="text-muted fs-8">
+          <i class="fa-solid fa-check-double text-success me-1"></i> You have read all sections of <strong>${topic.name}</strong>. Ready to test your skills?
         </div>
-      `).join('')}
+        <div class="d-flex align-items-center gap-2">
+          <button type="button" class="btn btn-sm btn-glass text-info fs-8 py-1.5 px-3" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+            <i class="fa-solid fa-arrow-up me-1"></i> Back to Top
+          </button>
+          <a href="#/coding-practice" class="btn btn-sm btn-primary fs-8 fw-bold py-1.5 px-3">
+            <i class="fa-solid fa-laptop-code me-1"></i> Open Multi-Language Workshop →
+          </a>
+        </div>
+      </div>
     </div>
   `,
 
