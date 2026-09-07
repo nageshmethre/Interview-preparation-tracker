@@ -2285,5 +2285,272 @@ input:-webkit-autofill {
   transform: scale(1.05);
 }
 
+/* ==========================================================================
+   MOBILE CODING WORKSPACE & MULTI-LANGUAGE IDE
+   ========================================================================== */
+.coding-mobile-nav {
+  display: flex;
+  background: rgba(24, 24, 27, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+  margin-bottom: 1rem;
+}
 
+.coding-mobile-tab {
+  flex: 1;
+  padding: 8px 12px;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #a1a1aa;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
 
+.coding-mobile-tab.active {
+  background: #27272a;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.mobile-symbol-toolbar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 6px 4px;
+  margin-bottom: 8px;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-symbol-btn {
+  background: rgba(39, 39, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e4e4e7;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.78rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  user-select: none;
+  touch-action: manipulation;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.mobile-symbol-btn:active {
+  background: #3b82f6;
+  color: #ffffff;
+  transform: scale(0.95);
+}
+
+.code-console-panel {
+  background: #09090b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.78rem;
+  color: #22c55e;
+  max-height: 140px;
+  overflow-y: auto;
+}
+
+/* ==========================================================================
+   APTITUDE & BOOK READING EXPERIENCE
+   ========================================================================== */
+.aptitude-view-toggle {
+  background: rgba(24, 24, 27, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 4px;
+  display: inline-flex;
+}
+
+.aptitude-view-btn {
+  border: none;
+  background: transparent;
+  color: #a1a1aa;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 7px;
+  transition: all 0.2s ease;
+}
+
+.aptitude-view-btn.active {
+  background: #3b82f6;
+  color: #ffffff;
+}
+
+/* Book Reading Page Styles */
+.book-outer-wrapper {
+  perspective: 1000px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.book-reader-card {
+  border-radius: 14px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Book Themes */
+.book-theme-dark {
+  background: #121214;
+  color: #e4e4e7;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.book-theme-sepia {
+  background: #fbf0d9;
+  color: #433422;
+  border: 1px solid #e2d2b5;
+}
+
+.book-theme-sepia .text-muted,
+.book-theme-sepia .book-meta-text {
+  color: #7b6243 !important;
+}
+
+.book-theme-sepia .book-formula-card {
+  background: #f2e3c6 !important;
+  border: 1px solid #dcc69f !important;
+  color: #382c1e !important;
+}
+
+.book-theme-sepia .book-example-card {
+  background: #f6e8cc !important;
+  border-left: 4px solid #b87b28 !important;
+}
+
+.book-theme-paper {
+  background: #fdfdfd;
+  color: #18181b;
+  border: 1px solid #e4e4e7;
+}
+
+.book-theme-paper .text-muted,
+.book-theme-paper .book-meta-text {
+  color: #71717a !important;
+}
+
+.book-theme-paper .book-formula-card {
+  background: #f4f4f5 !important;
+  border: 1px solid #e4e4e7 !important;
+  color: #18181b !important;
+}
+
+.book-theme-paper .book-example-card {
+  background: #fafafa !important;
+  border-left: 4px solid #2563eb !important;
+}
+
+/* Book Page Inner Styling */
+.book-spine-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 6px;
+  background: linear-gradient(180deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+  opacity: 0.9;
+}
+
+.book-page-content {
+  padding: 2.5rem 3rem;
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .book-page-content {
+    padding: 1.25rem 1.25rem;
+    font-size: 0.92rem;
+  }
+}
+
+.book-chapter-title {
+  font-family: 'Merriweather', 'Georgia', serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.book-formula-card {
+  background: rgba(30, 30, 36, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+}
+
+.book-example-card {
+  background: rgba(24, 24, 27, 0.6);
+  border-left: 4px solid #3b82f6;
+  border-radius: 0 10px 10px 0;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.book-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+}
+
+.book-nav-btn:hover:not(:disabled) {
+  background: #3b82f6;
+  color: #ffffff !important;
+  border-color: #3b82f6;
+}
+
+.book-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Practice Option Cards */
+.aptitude-option-card {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(24, 24, 27, 0.6);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  color: #e4e4e7;
+  user-select: none;
+}
+
+.aptitude-option-card:hover {
+  background: rgba(39, 39, 42, 0.9);
+  border-color: rgba(59, 130, 246, 0.5);
+  transform: translateX(4px);
+}
+
+.aptitude-option-card.selected-correct {
+  background: rgba(34, 197, 94, 0.15) !important;
+  border-color: #22c55e !important;
+  color: #86efac !important;
+}
+
+.aptitude-option-card.selected-wrong {
+  background: rgba(239, 68, 68, 0.15) !important;
+  border-color: #ef4444 !important;
+  color: #fca5a5 !important;
+}

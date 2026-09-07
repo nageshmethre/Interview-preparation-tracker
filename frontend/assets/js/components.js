@@ -791,6 +791,7 @@ const components = {
           <div class="sidebar-section-title px-4 mb-2">Core Tracker</div>
           <a href="#/dashboard" class="sidebar-link active"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
           <a href="#/coding-practice" class="sidebar-link"><i class="fa-solid fa-code"></i> <span>Coding Practice</span></a>
+          <a href="#/aptitude" class="sidebar-link"><i class="fa-solid fa-book-open-reader"></i> <span>Aptitude & Book</span></a>
           <a href="#/mock-exams" class="sidebar-link"><i class="fa-solid fa-stopwatch"></i> <span>50-MCQ Mock Exams</span></a>
           <a href="#/dsa-roadmap" class="sidebar-link"><i class="fa-solid fa-route"></i> <span>DSA Roadmap</span></a>
           <a href="#/studyplanner" class="sidebar-link"><i class="fa-solid fa-calendar-check"></i> <span>Study Planner</span></a>
@@ -2448,80 +2449,641 @@ const components = {
     </div>
   `,
 
-  // 4. LeetCode Coding Workspace
-  codingPractice: (questions) => `
-    <div class="row g-4">
-      <!-- Coding Questions Table -->
-      <div class="col-lg-4 col-12 mb-3 mb-lg-0">
-        <div class="glass-panel p-3 h-100 d-flex flex-column" style="max-height: 80vh;">
-          <h5 class="text-white fw-bold mb-2 fs-6"><i class="fa-solid fa-code text-cyan me-2"></i>Coding Problem Set</h5>
-          <div class="mb-2">
-            <input type="text" id="practice-search-input" class="form-control glass-input py-1 px-2 fs-8" placeholder="Search title or company...">
-          </div>
-          <div class="flex-grow-1 overflow-y-auto" id="practice-problems-list">
-            ${(questions || []).map(q => {
-              const category = q.category || q.topic || 'Algorithms';
-              const companies = q.companies || q.company || 'FAANG & Top Tech';
-              const difficulty = (q.difficulty || 'MEDIUM').toUpperCase();
-              const diffBadge = difficulty === 'EASY' ? 'success' : difficulty === 'MEDIUM' ? 'warning' : 'danger';
-              const title = q.title || 'Algorithmic Problem';
-              const desc = q.question || q.description || q.desc || 'Solve this algorithmic challenge.';
-              const constraints = q.constraintsText || q.constraints || '1 <= N <= 10^5';
-              const hints = q.hints || 'Consider optimal space-time trade-offs.';
-              const solution = q.referenceSolution || `public class Solution {\n    public static void main(String[] args) {\n        // Your code here\n    }\n}`;
-              
-              return `
-                <div class="p-2 rounded border border-secondary border-opacity-25 mb-2 btn-select-question" style="cursor: pointer;" data-question-id="${q.id || 0}" data-title="${title.replace(/"/g, '&quot;')}" data-desc="${desc.replace(/"/g, '&quot;')}" data-constraints="${constraints.replace(/"/g, '&quot;')}" data-hints="${hints.replace(/"/g, '&quot;')}" data-solution="${solution.replace(/"/g, '&quot;')}" data-category="${category}">
-                  <div class="d-flex align-items-center justify-content-between mb-1">
-                    <span class="fw-bold text-white fs-7 text-truncate me-2">${title}</span>
-                    <span class="badge bg-${diffBadge}-subtle text-${diffBadge} fs-9">${difficulty}</span>
+  // 4. Multi-Language & Mobile-Optimized Coding Workspace
+  codingPractice: (questions) => {
+    const list = (questions && questions.length > 0) ? questions : [
+      {
+        id: 1,
+        title: "Two Sum",
+        category: "Arrays & Hashing",
+        companies: "Google, Amazon, Meta",
+        difficulty: "EASY",
+        desc: "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice.",
+        constraints: "2 <= nums.length <= 10^4\n-10^9 <= nums[i] <= 10^9\n-10^9 <= target <= 10^9",
+        hints: "Use a hash map to map values to their indices. For each number x, check if (target - x) already exists in the map in O(1) time.",
+        solution: "public int[] twoSum(int[] nums, int target) {\n    Map<Integer, Integer> map = new HashMap<>();\n    for (int i = 0; i < nums.length; i++) {\n        int complement = target - nums[i];\n        if (map.containsKey(complement)) {\n            return new int[] { map.get(complement), i };\n        }\n        map.put(nums[i], i);\n    }\n    return new int[0];\n}"
+      },
+      {
+        id: 2,
+        title: "Valid Parentheses",
+        category: "Stack",
+        companies: "Meta, Amazon, Microsoft",
+        difficulty: "EASY",
+        desc: "Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid. Open brackets must be closed by the same type of brackets in the correct order.",
+        constraints: "1 <= s.length <= 10^4\ns consists of parentheses only '()[]{}'.",
+        hints: "Use a LIFO Stack. Push expected closing brackets when an opening bracket is seen, and verify match upon encountering closing characters.",
+        solution: "public boolean isValid(String s) {\n    Stack<Character> stack = new Stack<>();\n    for (char c : s.toCharArray()) {\n        if (c == '(') stack.push(')');\n        else if (c == '{') stack.push('}');\n        else if (c == '[') stack.push(']');\n        else if (stack.isEmpty() || stack.pop() != c) return false;\n    }\n    return stack.isEmpty();\n}"
+      },
+      {
+        id: 3,
+        title: "Longest Substring Without Repeating Characters",
+        category: "Sliding Window",
+        companies: "Amazon, Google, Bloomberg",
+        difficulty: "MEDIUM",
+        desc: "Given a string s, find the length of the longest substring without repeating characters.",
+        constraints: "0 <= s.length <= 5 * 10^4\ns consists of English letters, digits, symbols and spaces.",
+        hints: "Use the sliding window technique with two pointers (left and right) and a HashSet or HashMap storing last seen indices.",
+        solution: "public int lengthOfLongestSubstring(String s) {\n    int maxLen = 0, left = 0;\n    Map<Character, Integer> seen = new HashMap<>();\n    for (int right = 0; right < s.length(); right++) {\n        char c = s.charAt(right);\n        if (seen.containsKey(c)) {\n            left = Math.max(left, seen.get(c) + 1);\n        }\n        seen.put(c, right);\n        maxLen = Math.max(maxLen, right - left + 1);\n    }\n    return maxLen;\n}"
+      },
+      {
+        id: 4,
+        title: "Merge Intervals",
+        category: "Intervals",
+        companies: "Google, Meta, Apple",
+        difficulty: "MEDIUM",
+        desc: "Given an array of intervals where intervals[i] = [start_i, end_i], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.",
+        constraints: "1 <= intervals.length <= 10^4\nintervals[i].length == 2\n0 <= start_i <= end_i <= 10^4",
+        hints: "Sort intervals by their start time. Iterate through and expand the current interval's end time if next interval starts before current ends.",
+        solution: "public int[][] merge(int[][] intervals) {\n    Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));\n    List<int[]> merged = new ArrayList<>();\n    for (int[] interval : intervals) {\n        if (merged.isEmpty() || merged.get(merged.size() - 1)[1] < interval[0]) {\n            merged.add(interval);\n        } else {\n            merged.get(merged.size() - 1)[1] = Math.max(merged.get(merged.size() - 1)[1], interval[1]);\n        }\n    }\n    return merged.toArray(new int[merged.size()][]);\n}"
+      }
+    ];
+
+    return `
+      <!-- Mobile View Navigation Tabs (Only visible on small/mobile screens) -->
+      <div class="coding-mobile-nav d-lg-none">
+        <button class="coding-mobile-tab active" id="tab-btn-problems" data-pane="pane-problems">
+          <i class="fa-solid fa-list-check me-1"></i> Problems (<span id="mobile-problem-count">${list.length}</span>)
+        </button>
+        <button class="coding-mobile-tab" id="tab-btn-details" data-pane="pane-details">
+          <i class="fa-solid fa-file-lines me-1"></i> Description
+        </button>
+        <button class="coding-mobile-tab" id="tab-btn-editor" data-pane="pane-editor">
+          <i class="fa-solid fa-code me-1"></i> Code IDE
+        </button>
+      </div>
+
+      <div class="row g-3">
+        <!-- 1. Left Column: Coding Questions Problem Set -->
+        <div class="col-lg-4 col-12" id="pane-problems">
+          <div class="glass-panel p-3 h-100 d-flex flex-column" style="max-height: calc(85vh - 20px); min-height: 480px;">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <h5 class="text-white fw-bold m-0 fs-6"><i class="fa-solid fa-laptop-code text-cyan me-2"></i>Problem Bank</h5>
+              <span class="badge bg-primary bg-opacity-20 text-primary border border-primary border-opacity-25 fs-9">${list.length} Challenges</span>
+            </div>
+
+            <!-- Search & Difficulty Filter -->
+            <div class="mb-2">
+              <input type="text" id="practice-search-input" class="form-control glass-input py-1 px-2 fs-8 mb-2" placeholder="Search title, category or company...">
+              <div class="d-flex gap-1 overflow-x-auto pb-1" id="difficulty-filter-pills">
+                <button class="btn btn-sm btn-glass py-0 px-2 fs-9 active-diff-filter" data-diff="ALL">All</button>
+                <button class="btn btn-sm btn-glass py-0 px-2 fs-9 text-success" data-diff="EASY">Easy</button>
+                <button class="btn btn-sm btn-glass py-0 px-2 fs-9 text-warning" data-diff="MEDIUM">Medium</button>
+                <button class="btn btn-sm btn-glass py-0 px-2 fs-9 text-danger" data-diff="HARD">Hard</button>
+              </div>
+            </div>
+
+            <!-- Scrollable Problem List -->
+            <div class="flex-grow-1 overflow-y-auto pe-1" id="practice-problems-list">
+              ${list.map((q, idx) => {
+                const category = q.category || q.topic || 'Algorithms';
+                const companies = q.companies || q.company || 'FAANG & Top Tech';
+                const difficulty = (q.difficulty || 'MEDIUM').toUpperCase();
+                const diffBadge = difficulty === 'EASY' ? 'success' : difficulty === 'MEDIUM' ? 'warning' : 'danger';
+                const title = q.title || 'Algorithmic Problem';
+                const desc = q.question || q.description || q.desc || 'Solve this algorithmic challenge.';
+                const constraints = q.constraintsText || q.constraints || '1 <= N <= 10^5';
+                const hints = q.hints || 'Consider optimal space-time trade-offs.';
+                const solution = q.referenceSolution || q.solution || `public class Solution {\n    public static void main(String[] args) {\n        // Your code here\n    }\n}`;
+                const isFirst = idx === 0;
+
+                return `
+                  <div class="p-2 rounded border border-secondary border-opacity-25 mb-2 btn-select-question ${isFirst ? 'active-question-card' : ''}" 
+                       style="cursor: pointer; background: ${isFirst ? 'rgba(59, 130, 246, 0.12)' : 'rgba(24, 24, 27, 0.6)'};" 
+                       data-question-id="${q.id || (idx + 1)}" 
+                       data-title="${title.replace(/"/g, '&quot;')}" 
+                       data-desc="${desc.replace(/"/g, '&quot;')}" 
+                       data-constraints="${constraints.replace(/"/g, '&quot;')}" 
+                       data-hints="${hints.replace(/"/g, '&quot;')}" 
+                       data-solution="${solution.replace(/"/g, '&quot;')}" 
+                       data-category="${category}"
+                       data-difficulty="${difficulty}">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <span class="fw-bold text-white fs-7 text-truncate me-2">${idx + 1}. ${title}</span>
+                      <span class="badge bg-${diffBadge}-subtle text-${diffBadge} fs-9">${difficulty}</span>
+                    </div>
+                    <div class="text-muted fs-8 text-truncate">
+                      <span class="text-info">${category}</span> • ${companies}
+                    </div>
                   </div>
-                  <div class="text-muted fs-8 text-truncate"><span class="text-info">${category}</span> • ${companies}</div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Middle Column: Problem Description & Constraints -->
+        <div class="col-lg-4 col-12 d-none d-lg-block" id="pane-details">
+          <div class="glass-panel p-3 h-100 d-flex flex-column overflow-y-auto" style="max-height: calc(85vh - 20px); min-height: 480px;">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle fs-8" id="active-q-category">Arrays & Hashing</span>
+              <span class="badge bg-success-subtle text-success fs-8" id="active-q-diff">EASY</span>
+            </div>
+            
+            <h5 class="text-white fw-bold mb-2 fs-6" id="active-q-title">${list[0].title}</h5>
+            
+            <div class="mb-3">
+              <h6 class="text-secondary fw-semibold mb-1 fs-8 text-uppercase" style="letter-spacing: 0.05em;">Problem Statement</h6>
+              <p class="text-white fs-8 mb-3" id="active-q-desc" style="line-height: 1.6;">${list[0].desc}</p>
+            </div>
+
+            <div class="mb-3">
+              <h6 class="text-secondary fw-semibold mb-1 fs-8 text-uppercase" style="letter-spacing: 0.05em;">Constraints</h6>
+              <pre class="font-monospace text-warning fs-8 p-2 bg-dark bg-opacity-80 rounded border border-secondary border-opacity-25 mb-0" id="active-q-constraints">${list[0].constraints}</pre>
+            </div>
+
+            <div class="mb-3">
+              <h6 class="text-secondary fw-semibold mb-1 fs-8 text-uppercase" style="letter-spacing: 0.05em;">Algorithmic Hints</h6>
+              <div class="p-2 rounded bg-dark bg-opacity-50 border border-secondary border-opacity-25 text-muted fs-8" id="active-q-hints">
+                ${list[0].hints}
+              </div>
+            </div>
+
+            <div class="mt-auto pt-2 d-lg-none">
+              <button class="btn btn-primary w-100 py-2 fs-8 fw-bold" id="btn-quick-to-code">
+                <i class="fa-solid fa-code me-1"></i> Open in Code IDE
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Right Column: Multi-Language Code Editor & Runner -->
+        <div class="col-lg-4 col-12 d-none d-lg-block" id="pane-editor">
+          <div class="glass-panel p-3 h-100 d-flex flex-column" style="max-height: calc(85vh - 20px); min-height: 480px;">
+            <!-- Editor Header: Language Switcher & Controls -->
+            <div class="d-flex align-items-center justify-content-between mb-2 gap-2 flex-wrap">
+              <div class="d-flex align-items-center gap-1">
+                <select id="coding-language-select" class="form-select form-select-sm bg-dark text-white border-secondary fs-8 py-1 px-2" style="width: 145px;">
+                  <option value="java" selected>☕ Java 21</option>
+                  <option value="python">🐍 Python 3</option>
+                  <option value="cpp">⚡ C++ 20</option>
+                  <option value="javascript">🌐 JavaScript</option>
+                  <option value="typescript">📘 TypeScript</option>
+                  <option value="csharp">🔷 C# .NET</option>
+                  <option value="go">🐹 Go 1.22</option>
+                  <option value="rust">🦀 Rust</option>
+                </select>
+                <span class="badge border border-secondary border-opacity-30 text-muted fs-9 d-none d-sm-inline" id="ide-env-badge">Standard Runtime</span>
+              </div>
+              <div class="d-flex align-items-center gap-1">
+                <button class="btn btn-sm btn-glass py-0 px-2 fs-9 text-muted" id="btn-editor-font-dec" title="Decrease Font">A-</button>
+                <button class="btn btn-sm btn-glass py-0 px-2 fs-9 text-muted" id="btn-editor-font-inc" title="Increase Font">A+</button>
+                <button class="btn btn-sm btn-glass py-0 px-2 fs-9 text-muted" id="btn-editor-reset" title="Reset Code Template"><i class="fa-solid fa-rotate-left"></i></button>
+              </div>
+            </div>
+
+            <!-- Mobile Quick Symbols Bar -->
+            <div class="mobile-symbol-toolbar">
+              <button type="button" class="mobile-symbol-btn" data-sym="    ">Tab</button>
+              <button type="button" class="mobile-symbol-btn" data-sym="{"> { </button>
+              <button type="button" class="mobile-symbol-btn" data-sym="}"> } </button>
+              <button type="button" class="mobile-symbol-btn" data-sym="("> ( </button>
+              <button type="button" class="mobile-symbol-btn" data-sym=")"> ) </button>
+              <button type="button" class="mobile-symbol-btn" data-sym="["> [ </button>
+              <button type="button" class="mobile-symbol-btn" data-sym="]"> ] </button>
+              <button type="button" class="mobile-symbol-btn" data-sym=";"> ; </button>
+              <button type="button" class="mobile-symbol-btn" data-sym="="> = </button>
+              <button type="button" class="mobile-symbol-btn" data-sym="->"> -> </button>
+              <button type="button" class="mobile-symbol-btn" data-sym=":"> : </button>
+              <button type="button" class="mobile-symbol-btn" data-sym="\""> " </button>
+            </div>
+
+            <!-- Code Editor Textarea -->
+            <div class="flex-grow-1 mb-2 position-relative" style="min-height: 220px;">
+              <textarea id="code-editor-textarea" 
+                        class="form-control font-monospace text-white bg-dark border-secondary p-2 h-100 fs-8" 
+                        style="resize: none; tab-size: 4;" 
+                        spellcheck="false" 
+                        placeholder="// Enter your solution here...">${list[0].solution}</textarea>
+            </div>
+
+            <!-- Console Output Panel (Hidden by default, shown on Run) -->
+            <div id="code-console-output" class="code-console-panel mb-2 d-none">
+              <div class="d-flex align-items-center justify-content-between mb-1">
+                <span class="text-white fw-bold fs-9"><i class="fa-solid fa-terminal me-1 text-info"></i>Execution Console</span>
+                <span class="badge bg-success-subtle text-success fs-9" id="console-status-badge">Passed (12ms)</span>
+              </div>
+              <div id="console-output-text" class="text-muted fs-9 font-monospace" style="white-space: pre-wrap;">Test cases executed successfully.</div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex gap-2">
+              <button class="btn btn-glass py-1 fs-8 flex-grow-1" id="btn-practice-hints">
+                <i class="fa-solid fa-lightbulb text-warning me-1"></i> Hint
+              </button>
+              <button class="btn btn-outline-info py-1 fs-8 flex-grow-1" id="btn-practice-run">
+                <i class="fa-solid fa-play text-cyan me-1"></i> Run Tests
+              </button>
+              <button class="btn btn-premium py-1 fs-8 flex-grow-1" id="btn-practice-submit">
+                <i class="fa-solid fa-cloud-arrow-up me-1"></i> Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  // 4b. Aptitude & Technical Reasoning Hub (Practice Quiz & Book Reading Mode)
+  aptitudeHub: (topics = [], questions = []) => {
+    const chaptersList = (topics && topics.length > 0) ? topics : [
+      {
+        id: 1,
+        chapterNumber: "01",
+        title: "Number Systems & Divisibility Hacks",
+        category: "Quantitative Aptitude",
+        readTime: "8 min read",
+        formulas: [
+          "Sum of first N natural numbers = N(N + 1) / 2",
+          "Sum of squares of first N numbers = N(N + 1)(2N + 1) / 6",
+          "Divisibility by 7: Subtract twice the last digit from the rest. Result must be divisible by 7.",
+          "Divisibility by 11: (Sum of digits at odd places) - (Sum of digits at even places) = 0 or multiple of 11."
+        ],
+        concepts: "Number systems form the foundation of technical assessment aptitude. The unit digit of a number raised to power follows cyclicity (e.g., 2^n cycles in periods of 4: 2, 4, 8, 6). HCF and LCM satisfy: Product of two numbers = HCF × LCM.",
+        examples: [
+          {
+            question: "Find the unit digit of 7^95 - 3^58.",
+            stepByStep: "1. Unit digit of 7 has cyclicity of 4 (7, 9, 3, 1). 95 mod 4 = 3, so unit digit of 7^95 = unit digit of 7^3 = 3.\n2. Unit digit of 3 has cyclicity of 4 (3, 9, 7, 1). 58 mod 4 = 2, so unit digit of 3^58 = 3^2 = 9.\n3. Subtracting with carry: (13 - 9) = 4.",
+            answer: "4"
+          }
+        ]
+      },
+      {
+        id: 2,
+        chapterNumber: "02",
+        title: "Percentages & Profit-Loss Shortcuts",
+        category: "Quantitative Aptitude",
+        readTime: "10 min read",
+        formulas: [
+          "Net % change for successive changes of a% and b% = a + b + (a × b)/100",
+          "Profit % = (Profit / Cost Price) × 100",
+          "Selling Price = Cost Price × (100 + Gain%) / 100",
+          "Discount % = (Marked Price - Selling Price) / Marked Price × 100"
+        ],
+        concepts: "Whenever price increases by x%, consumption must decrease by [x / (100 + x)] × 100% to keep expenditure constant. If cost price of X items equals selling price of Y items, Gain % = [(X - Y) / Y] × 100.",
+        examples: [
+          {
+            question: "If the price of sugar rises by 25%, by how much percent must a family reduce sugar consumption to not increase budget?",
+            stepByStep: "Formula: Reduction = [r / (100 + r)] × 100 = [25 / 125] × 100 = 1/5 × 100 = 20%.",
+            answer: "20%"
+          }
+        ]
+      },
+      {
+        id: 3,
+        chapterNumber: "03",
+        title: "Time, Work & Pipes Formulae",
+        category: "Quantitative Aptitude",
+        readTime: "9 min read",
+        formulas: [
+          "If A does a work in X days and B in Y days, together they take (X × Y) / (X + Y) days.",
+          "Total Work = LCM(Individual times). Efficiency = Total Work / Time.",
+          "Man-Day Formula: (M1 × D1 × H1) / W1 = (M2 × D2 × H2) / W2",
+          "Inlet pipe fills in X hrs, outlet pipe empties in Y hrs (Y > X). Net fill rate = (Y - X) / (X × Y)."
+        ],
+        concepts: "Efficiency is inversely proportional to time taken. If A is twice as good a workman as B, ratio of time taken by A and B is 1 : 2.",
+        examples: [
+          {
+            question: "A can complete a project in 12 days and B in 16 days. Working together with C, they finish in 4 days. In how many days can C alone complete it?",
+            stepByStep: "Let total work = LCM(12, 16, 4) = 48 units.\nA's 1-day work = 48/12 = 4 units.\nB's 1-day work = 48/16 = 3 units.\n(A + B + C)'s 1-day work = 48/4 = 12 units.\nC's work = 12 - (4 + 3) = 5 units/day.\nTime for C alone = 48 / 5 = 9.6 days.",
+            answer: "9.6 days"
+          }
+        ]
+      },
+      {
+        id: 4,
+        chapterNumber: "04",
+        title: "Speed, Time, Distance & Trains",
+        category: "Quantitative Aptitude",
+        readTime: "11 min read",
+        formulas: [
+          "Speed in m/s = Speed in km/h × (5 / 18)",
+          "Average Speed for equal distance = 2xy / (x + y)",
+          "Relative speed (opposite direction) = Speed1 + Speed2",
+          "Relative speed (same direction) = |Speed1 - Speed2|",
+          "Time to cross platform of length L by train of length T = (T + L) / Speed"
+        ],
+        concepts: "When two objects move in opposite directions, their relative speed is additive. When moving in the same direction, relative speed is the difference between speeds.",
+        examples: [
+          {
+            question: "A 180m long train crosses a 320m long bridge in 20 seconds. What is the speed of the train in km/h?",
+            stepByStep: "Total distance = 180 + 320 = 500 meters.\nSpeed = Distance / Time = 500 / 20 = 25 m/s.\nConvert to km/h: 25 × (18 / 5) = 90 km/h.",
+            answer: "90 km/h"
+          }
+        ]
+      },
+      {
+        id: 5,
+        chapterNumber: "05",
+        title: "Syllogisms & Venn Logic Rules",
+        category: "Logical Reasoning",
+        readTime: "7 min read",
+        formulas: [
+          "Universal Affirmative (All A are B) implies Some B are A.",
+          "Universal Negative (No A are B) implies No B are A and Some A are not B.",
+          "Particular Affirmative (Some A are B) implies Some B are A.",
+          "Complementary pairs for Either/Or: (All + Some Not) OR (Some + No)."
+        ],
+        concepts: "Syllogisms test formal deductive logic. Never assume real-world plausibility. Check conclusions against the minimal Venn diagram and all alternate possible overlapping diagrams.",
+        examples: [
+          {
+            question: "Statements: All cats are pets. All pets are animals. Conclusions: I. All cats are animals. II. Some animals are pets.",
+            stepByStep: "Cats ⊂ Pets ⊂ Animals.\nI. Cats is a complete subset of Animals -> True.\nII. Since Pets is a subset of Animals, Some animals are definitely pets -> True.",
+            answer: "Both Conclusion I and II follow"
+          }
+        ]
+      },
+      {
+        id: 6,
+        chapterNumber: "06",
+        title: "Blood Relations & Family Tree Maps",
+        category: "Logical Reasoning",
+        readTime: "6 min read",
+        formulas: [
+          "Use standard tree notation: Male = [+], Female = [-], Spouses = [=], Siblings = [-], Generations = [|]",
+          "Maternal relations relate to mother's side (Maternal uncle = Mother's brother)",
+          "Paternal relations relate to father's side (Paternal aunt = Father's sister)",
+          "'Only son of my grandfather' = Father (if paternal) or Maternal Uncle."
+        ],
+        concepts: "Break down chain relationships from the end of the sentence to the beginning. Always verify gender before asserting sibling or cousin relationship.",
+        examples: [
+          {
+            question: "Pointing to a photograph, a woman says: 'He is the only son of the wife of my husband.' How is the man in the photo related to the woman?",
+            stepByStep: "'Wife of my husband' = The woman herself.\n'Only son of the wife of my husband' = The woman's own son.",
+            answer: "Son"
+          }
+        ]
+      }
+    ];
+
+    const practiceQuestions = (questions && questions.length > 0) ? questions : [
+      {
+        id: 1,
+        question: "A train 240 m long passes a pole in 24 seconds. How long will it take to pass a platform 650 m long?",
+        options: ["65 seconds", "89 seconds", "100 seconds", "75 seconds"],
+        correctIndex: 1,
+        category: "Quantitative Aptitude",
+        topic: "Speed, Time & Distance",
+        difficulty: "MEDIUM",
+        company: "TCS, Infosys, Wipro",
+        explanation: "Speed of the train = Length of train / Time = 240 / 24 = 10 m/s.\nDistance to cross platform = 240 + 650 = 890 meters.\nTime required = Distance / Speed = 890 / 10 = 89 seconds.",
+        shortcut: "Time ratio = (Train + Platform) / Train = (240 + 650) / 240 = 890 / 240 = 3.708. 24 × 3.708 = 89s."
+      },
+      {
+        id: 2,
+        question: "If A is 30% more efficient than B, how much time will they together take to complete a task which A alone can finish in 23 days?",
+        options: ["11 days", "13 days", "15 days", "17 days"],
+        correctIndex: 1,
+        category: "Quantitative Aptitude",
+        topic: "Time & Work",
+        difficulty: "MEDIUM",
+        company: "Amazon, Cognizant",
+        explanation: "Let B's efficiency = 10 units/day, then A's efficiency = 13 units/day.\nTotal work = A's days × A's efficiency = 23 × 13 = 299 units.\nCombined efficiency = 13 + 10 = 23 units/day.\nDays together = 299 / 23 = 13 days.",
+        shortcut: "Days = (A's efficiency / Total efficiency) × A's days = (130 / 230) × 23 = 13 days."
+      },
+      {
+        id: 3,
+        question: "Statements: Some actors are singers. All singers are dancers. Conclusions: I. Some actors are dancers. II. No singer is an actor.",
+        options: ["Only Conclusion I follows", "Only Conclusion II follows", "Either I or II follows", "Neither follows"],
+        correctIndex: 0,
+        category: "Logical Reasoning",
+        topic: "Syllogisms",
+        difficulty: "EASY",
+        company: "Capgemini, Accenture, TCS",
+        explanation: "Singers is a subset of Dancers. Since some actors are singers, those specific actors are inside the dancers circle. Hence, Conclusion I definitely follows. Conclusion II directly contradicts the premise.",
+        shortcut: "Some + All = Some. 'Some actors are dancers' is guaranteed."
+      },
+      {
+        id: 4,
+        question: "Pointing to a man, a woman said: 'His mother is the only daughter of my mother.' How is the woman related to the man?",
+        options: ["Grandmother", "Mother", "Sister", "Aunt"],
+        correctIndex: 1,
+        category: "Logical Reasoning",
+        topic: "Blood Relations",
+        difficulty: "EASY",
+        company: "Infosys, Wipro",
+        explanation: "Only daughter of the woman's mother is the woman herself. So, his mother is the woman herself. Therefore, the woman is the man's mother.",
+        shortcut: "Deconstruct from end: 'Only daughter of my mother' = Myself."
+      },
+      {
+        id: 5,
+        question: "Find the missing number in the series: 4, 18, 48, 100, 180, ?",
+        options: ["294", "280", "312", "264"],
+        correctIndex: 0,
+        category: "Logical Reasoning",
+        topic: "Number Series",
+        difficulty: "HARD",
+        company: "Google, Amazon, TCS Digital",
+        explanation: "Pattern is n^3 - n^2 or n^2 × (n - 1):\n2^3 - 2^2 = 8 - 4 = 4\n3^3 - 3^2 = 27 - 9 = 18\n4^3 - 4^2 = 64 - 16 = 48\n5^3 - 5^2 = 125 - 25 = 100\n6^3 - 6^2 = 216 - 36 = 180\n7^3 - 7^2 = 343 - 49 = 294.",
+        shortcut: "n^2 × (n - 1) formula for fast mental calculation."
+      },
+      {
+        id: 6,
+        question: "In an election between two candidates, the winner got 58% of total valid votes and won by a majority of 4,000 votes. What was the total number of valid votes?",
+        options: ["25,000", "20,000", "30,000", "24,000"],
+        correctIndex: 0,
+        category: "Quantitative Aptitude",
+        topic: "Percentages",
+        difficulty: "EASY",
+        company: "TCS, Tech Mahindra",
+        explanation: "Winner = 58%, Loser = 100 - 58 = 42%.\nDifference in % = 58% - 42% = 16%.\n16% of Total = 4,000.\nTotal Votes = 4,000 × (100 / 16) = 25,000.",
+        shortcut: "Total = (Vote Difference / % Difference) × 100 = (4000 / 16) × 100 = 25,000."
+      }
+    ];
+
+    return `
+      <div class="aptitude-hub-container">
+        <!-- Top Switcher Header -->
+        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
+          <div>
+            <h4 class="text-white fw-bold mb-1"><i class="fa-solid fa-book-open-reader text-primary me-2"></i>Aptitude & Technical Reasoning</h4>
+            <p class="text-muted fs-8 mb-0">Master numerical shortcuts, deductive reasoning, and placement test patterns in book view or test mode.</p>
+          </div>
+          <div class="aptitude-view-toggle">
+            <button class="aptitude-view-btn active" id="btn-view-book" data-mode="book">
+              <i class="fa-solid fa-book me-1"></i> Book / Reading View
+            </button>
+            <button class="aptitude-view-btn" id="btn-view-practice" data-mode="practice">
+              <i class="fa-solid fa-circle-check me-1"></i> Practice Quiz (${practiceQuestions.length})
+            </button>
+          </div>
+        </div>
+
+        <!-- MODE 1: BOOK / READING VIEW -->
+        <div id="aptitude-book-view" class="book-outer-wrapper">
+          <!-- Reader Top Controls Bar -->
+          <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2 p-2 rounded bg-dark border border-secondary border-opacity-25">
+            <!-- Chapter Selector -->
+            <div class="d-flex align-items-center gap-2">
+              <span class="text-muted fs-8 fw-semibold d-none d-sm-inline">Chapter:</span>
+              <select id="book-chapter-select" class="form-select form-select-sm bg-dark text-white border-secondary fs-8 py-1" style="min-width: 220px;">
+                ${chaptersList.map((chap, idx) => `
+                  <option value="${chap.id}">Chapter ${chap.chapterNumber}: ${chap.title}</option>
+                `).join('')}
+              </select>
+            </div>
+
+            <!-- Reader Customization Controls -->
+            <div class="d-flex align-items-center gap-2">
+              <!-- Theme Picker -->
+              <div class="btn-group btn-group-sm">
+                <button class="btn btn-dark border-secondary text-white fs-9 active" id="btn-theme-dark" title="Dark Study Room Theme">🌙 Dark</button>
+                <button class="btn btn-dark border-secondary text-warning fs-9" id="btn-theme-sepia" title="Warm Sepia Parchment">📜 Sepia</button>
+                <button class="btn btn-dark border-secondary text-light fs-9" id="btn-theme-paper" title="Clean Paper White">📄 Paper</button>
+              </div>
+
+              <!-- Font Sizing -->
+              <button class="btn btn-sm btn-glass py-0 px-2 fs-9 text-muted" id="btn-book-font-dec" title="Decrease Font">A-</button>
+              <button class="btn btn-sm btn-glass py-0 px-2 fs-9 text-muted" id="btn-book-font-inc" title="Increase Font">A+</button>
+              
+              <!-- Bookmark -->
+              <button class="btn btn-sm btn-glass py-0 px-2 fs-9 text-info" id="btn-book-bookmark" title="Bookmark This Page">
+                <i class="fa-regular fa-bookmark"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- The Realistic Book Page Card -->
+          <div class="book-reader-card book-theme-dark" id="book-page-card">
+            <div class="book-spine-line"></div>
+            
+            <div class="book-page-content" id="book-content-container">
+              <!-- Header Meta -->
+              <div class="d-flex align-items-center justify-content-between mb-3 border-bottom border-secondary border-opacity-25 pb-2">
+                <span class="text-primary fw-bold fs-8 text-uppercase tracking-wider" id="book-chap-category">
+                  ${chaptersList[0].category}
+                </span>
+                <span class="text-muted fs-8 book-meta-text" id="book-chap-readtime">
+                  <i class="fa-regular fa-clock me-1"></i> ${chaptersList[0].readTime}
+                </span>
+              </div>
+
+              <!-- Chapter Title -->
+              <h2 class="book-chapter-title mb-3 fs-4" id="book-chap-title">
+                Chapter ${chaptersList[0].chapterNumber}: ${chaptersList[0].title}
+              </h2>
+
+              <!-- Theory / Concept -->
+              <div class="mb-4">
+                <p class="fs-7" id="book-chap-concepts" style="line-height: 1.8;">
+                  ${chaptersList[0].concepts}
+                </p>
+              </div>
+
+              <!-- Formula Box Callout -->
+              <div class="book-formula-card" id="book-formulas-container">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <i class="fa-solid fa-square-root-variable text-warning fs-6"></i>
+                  <strong class="fs-7 text-uppercase tracking-wide">Essential Formulas & Speed Hacks</strong>
                 </div>
-              `;
-            }).join('')}
-          </div>
-        </div>
-      </div>
-      <!-- Interactive Code Workspace Split Pane -->
-      <div class="col-lg-8 col-12">
-        <div class="row g-3 h-100">
-          <!-- Problem specs -->
-          <div class="col-12 col-md-6">
-            <div class="glass-panel p-3 h-100 overflow-y-auto" style="max-height: 80vh;">
-              <h5 class="text-white fw-bold mb-1 fs-6" id="active-q-title">Select a Problem</h5>
-              <span class="badge bg-indigo-subtle text-primary mb-3 fs-8" id="active-q-category">Topic</span>
-              
-              <h6 class="text-white fw-bold mb-1 fs-7">Problem Description:</h6>
-              <p class="text-muted fs-8 mb-3" id="active-q-desc">Click any problem card from the left panel to load its syntax and workspace.</p>
-              
-              <h6 class="text-white fw-bold mb-1 fs-7">Constraints:</h6>
-              <pre class="font-monospace text-muted fs-8 p-2 bg-dark rounded border border-secondary border-opacity-25 mb-3" id="active-q-constraints">1 <= N <= 10^5</pre>
-              
-              <h6 class="text-white fw-bold mb-1 fs-7">Hints:</h6>
-              <p class="text-muted fs-8 mb-0" id="active-q-hints">Select a problem to view hints.</p>
+                <ul class="mb-0 ps-3 fs-8" id="book-formulas-list">
+                  ${chaptersList[0].formulas.map(f => `<li class="mb-1"><code>${f}</code></li>`).join('')}
+                </ul>
+              </div>
+
+              <!-- Solved Examples Breakdown -->
+              <div class="mt-4">
+                <h6 class="fw-bold fs-7 text-uppercase mb-2" style="letter-spacing: 0.05em;">
+                  <i class="fa-solid fa-pen-to-square text-info me-1"></i> Solved Exemplar Problem
+                </h6>
+                <div class="book-example-card" id="book-example-container">
+                  <div class="fw-bold mb-2 fs-7" id="book-example-q">${chaptersList[0].examples[0].question}</div>
+                  <pre class="font-monospace fs-8 p-2 rounded bg-black bg-opacity-25 border border-secondary border-opacity-25 mb-2" id="book-example-steps" style="white-space: pre-wrap;">${chaptersList[0].examples[0].stepByStep}</pre>
+                  <div class="text-success fw-bold fs-8">Final Answer: <span id="book-example-ans" class="badge bg-success-subtle text-success">${chaptersList[0].examples[0].answer}</span></div>
+                </div>
+              </div>
             </div>
-          </div>
-          <!-- Code editor -->
-          <div class="col-12 col-md-6">
-            <div class="glass-panel p-3 h-100 d-flex flex-column" style="max-height: 80vh;">
-              <div class="d-flex align-items-center justify-content-between mb-2">
-                <h6 class="text-white fw-bold m-0 fs-7"><i class="fa-solid fa-code text-cyan me-2"></i>Java Compiler IDE</h6>
-                <span class="badge border border-secondary border-opacity-30 text-white fs-9">JDK 21</span>
+
+            <!-- Book Footer & Pagination -->
+            <div class="p-3 border-top border-secondary border-opacity-25 d-flex align-items-center justify-content-between flex-wrap gap-2">
+              <button class="book-nav-btn text-muted" id="btn-book-prev" disabled>
+                <i class="fa-solid fa-arrow-left"></i> Previous Chapter
+              </button>
+
+              <div class="text-muted fs-8 font-monospace book-meta-text" id="book-page-indicator">
+                Chapter 1 of ${chaptersList.length}
               </div>
-              <div class="flex-grow-1 mb-2">
-                <textarea id="code-editor-textarea" class="form-control font-monospace text-white bg-dark border-secondary p-2 h-100 fs-8" style="resize:none; min-height: 240px;" placeholder="public int solve(...) {\n    // Type code here...\n}"></textarea>
-              </div>
+
               <div class="d-flex gap-2">
-                <button class="btn btn-glass w-50 py-1 fs-8" id="btn-practice-hints"><i class="fa-solid fa-lightbulb text-warning me-1"></i> Hint</button>
-                <button class="btn btn-premium w-50 py-1 fs-8" id="btn-practice-submit"><i class="fa-solid fa-play text-white me-1"></i> Submit</button>
+                <button class="btn btn-sm btn-outline-primary fs-8" id="btn-switch-to-quiz-for-chap">
+                  <i class="fa-solid fa-pen-nib me-1"></i> Practice This Topic
+                </button>
+                <button class="book-nav-btn text-white" id="btn-book-next">
+                  Next Chapter <i class="fa-solid fa-arrow-right"></i>
+                </button>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- MODE 2: INTERACTIVE PRACTICE QUIZ -->
+        <div id="aptitude-practice-view" class="d-none">
+          <!-- Filter Tabs & Stats -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-8 col-12">
+              <div class="d-flex gap-1 overflow-x-auto pb-1" id="aptitude-category-filters">
+                <button class="btn btn-sm btn-glass active-apt-filter" data-cat="ALL">All Categories</button>
+                <button class="btn btn-sm btn-glass text-info" data-cat="Quantitative Aptitude">Quantitative</button>
+                <button class="btn btn-sm btn-glass text-warning" data-cat="Logical Reasoning">Logical Reasoning</button>
+                <button class="btn btn-sm btn-glass text-success" data-cat="Verbal Ability">Verbal Ability</button>
+                <button class="btn btn-sm btn-glass text-primary" data-cat="Data Interpretation">Data Interpretation</button>
+              </div>
+            </div>
+            <div class="col-md-4 col-12 text-md-end">
+              <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle p-2 fs-8" id="aptitude-score-badge">
+                <i class="fa-solid fa-award me-1"></i> Solved: <span id="apt-solved-count">0</span> / ${practiceQuestions.length}
+              </span>
+            </div>
+          </div>
+
+          <!-- Questions Cards List -->
+          <div class="d-flex flex-column gap-3" id="aptitude-questions-list">
+            ${practiceQuestions.map((q, idx) => `
+              <div class="glass-panel p-4 aptitude-quiz-card" data-qid="${q.id}" data-cat="${q.category}" data-correct="${q.correctIndex}">
+                <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-secondary bg-opacity-30 text-white font-monospace">Q${idx + 1}</span>
+                    <span class="badge bg-info-subtle text-info fs-9">${q.category}</span>
+                    <span class="text-muted fs-8 d-none d-sm-inline">• ${q.topic}</span>
+                  </div>
+                  <div>
+                    <span class="badge border border-secondary border-opacity-25 text-muted fs-9">${q.company}</span>
+                  </div>
+                </div>
+
+                <h5 class="text-white fs-7 mb-3" style="line-height: 1.6;">${q.question}</h5>
+
+                <!-- Options -->
+                <div class="row g-2 mb-3">
+                  ${q.options.map((opt, optIdx) => `
+                    <div class="col-md-6 col-12">
+                      <div class="aptitude-option-card" data-qid="${q.id}" data-opt="${optIdx}">
+                        <span class="badge bg-dark border border-secondary border-opacity-50 text-muted me-2 font-monospace">
+                          ${String.fromCharCode(65 + optIdx)}
+                        </span>
+                        <span class="fs-8">${opt}</span>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+
+                <!-- Explanation Box (Initially Hidden) -->
+                <div class="aptitude-explanation-box p-3 rounded bg-dark border border-secondary border-opacity-25 mt-2 d-none" id="exp-${q.id}">
+                  <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge bg-success-subtle text-success fs-9" id="result-badge-${q.id}">Correct</span>
+                    <span class="badge bg-warning-subtle text-warning fs-9"><i class="fa-solid fa-bolt me-1"></i>Speed Shortcut</span>
+                  </div>
+                  <p class="text-warning fs-8 font-monospace mb-2" style="white-space: pre-wrap;">${q.shortcut}</p>
+                  <h6 class="text-white fw-bold fs-9 text-uppercase mb-1">Step-by-Step Mathematical Explanation:</h6>
+                  <p class="text-muted fs-8 mb-0" style="white-space: pre-wrap;">${q.explanation}</p>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
       </div>
-    </div>
-  `,
+    `;
+  },
+
 
   // 5. Mock Exams Platform
   mockExams: (tests, leaderboard) => `

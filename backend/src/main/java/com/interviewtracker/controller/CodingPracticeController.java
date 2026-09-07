@@ -14,7 +14,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
-@PreAuthorize("isAuthenticated()")
 public class CodingPracticeController {
 
     @Autowired
@@ -38,6 +37,7 @@ public class CodingPracticeController {
     }
 
     @PostMapping("/questions/{id}/status")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserProblemStatus> updateStatus(
             @PathVariable Integer id,
             @RequestParam String status,
@@ -49,21 +49,25 @@ public class CodingPracticeController {
     }
 
     @PostMapping("/questions/{id}/bookmark")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserProblemStatus> toggleBookmark(@PathVariable Integer id, Principal principal) {
         return ResponseEntity.ok(practiceService.toggleBookmark(principal.getName(), id));
     }
 
     @PostMapping("/questions/{id}/favorite")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserProblemStatus> toggleFavorite(@PathVariable Integer id, Principal principal) {
         return ResponseEntity.ok(practiceService.toggleFavorite(principal.getName(), id));
     }
 
     @PostMapping("/questions/{id}/revision")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserProblemStatus> toggleRevision(@PathVariable Integer id, Principal principal) {
         return ResponseEntity.ok(practiceService.toggleRevision(principal.getName(), id));
     }
 
     @GetMapping("/questions/status")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<UserProblemStatus>> getProblemStatuses(Principal principal) {
         return ResponseEntity.ok(practiceService.getUserProblemStatuses(principal.getName()));
     }
