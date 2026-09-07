@@ -3177,13 +3177,13 @@ input:-webkit-autofill {
 
 .agy-coding-pane.maximized {
   position: absolute !important;
-  top: 38px;
+  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 30;
   width: 100% !important;
-  height: calc(100% - 38px) !important;
+  height: 100% !important;
 }
 
 /* Micro-Textured Cards & Code Containers */

@@ -2553,59 +2553,6 @@ const components = {
 
     return `
       <div class="agy-ide-container vscode-workspace-container position-relative" id="agy-coding-workspace">
-        <!-- 1. Antigravity Compact Top Toolbar (38px Minimalist) -->
-        <div class="agy-ide-toolbar" id="agy-top-toolbar">
-          <!-- Left: Sidebar Toggle, Unified Symbolic Navigation (< >), Title & Diff -->
-          <div class="d-flex align-items-center gap-1.5 overflow-hidden">
-            <button type="button" class="agy-icon-btn active" id="btn-toggle-sidebar" title="Toggle Problem Explorer Sidebar">
-              <i class="fa-solid fa-bars-staggered"></i>
-            </button>
-            
-            <div class="agy-nav-group">
-              <button type="button" class="agy-icon-btn" id="btn-prev-problem" title="Previous Problem (Alt + Left)">
-                <i class="fa-solid fa-chevron-left"></i>
-              </button>
-              <button type="button" class="agy-icon-btn" id="btn-next-problem" title="Next Problem (Alt + Right)">
-                <i class="fa-solid fa-chevron-right"></i>
-              </button>
-            </div>
-
-            <span class="fw-bold text-white fs-8 text-truncate ms-1" id="agy-active-title" style="max-width: 220px;">1. ${activeQ.title}</span>
-            <span class="badge bg-success-subtle text-success agy-pill-tag" id="active-q-diff">${activeQ.difficulty}</span>
-
-            <!-- Compact Dropdown for Fast Access -->
-            <select id="header-problem-select" class="form-select form-select-sm bg-dark text-white border-secondary fs-9 py-0 ms-1 d-none d-xl-inline-block" style="width: auto; max-width: 170px;">
-              ${list.map((q, idx) => `
-                <option value="${q.id || (idx + 1)}">${idx + 1}. ${q.title}</option>
-              `).join('')}
-            </select>
-          </div>
-
-          <!-- Right: Environment Badge, Maximize/Minimize, 3-Dots Menu -->
-          <div class="d-flex align-items-center gap-1.5 flex-shrink-0">
-            <span class="agy-pill-tag bg-black border border-secondary border-opacity-30 text-muted d-none d-md-inline-block" id="ide-env-badge">JDK 21 LTS</span>
-
-            <button type="button" class="agy-icon-btn" id="btn-ide-maximize" title="Maximize / Restore Code Workspace">
-              <i class="fa-solid fa-expand" id="icon-ide-maximize"></i>
-            </button>
-
-            <!-- 3-Dots Extra Actions Dropdown -->
-            <div class="dropdown d-inline-block">
-              <button type="button" class="agy-icon-btn" id="btn-ide-more" data-bs-toggle="dropdown" aria-expanded="false" title="More Options">
-                <i class="fa-solid fa-ellipsis-vertical"></i>
-              </button>
-              <ul class="dropdown-menu dropdown-menu-end agy-dropdown-menu" aria-labelledby="btn-ide-more">
-                <li><button class="agy-dropdown-item" id="menu-opt-reset"><i class="fa-solid fa-rotate-left text-muted"></i> Reset Template</button></li>
-                <li><button class="agy-dropdown-item" id="menu-opt-copy"><i class="fa-solid fa-copy text-muted"></i> Copy Code</button></li>
-                <li><button class="agy-dropdown-item" id="menu-opt-font-inc"><i class="fa-solid fa-magnifying-glass-plus text-muted"></i> Increase Font (A+)</button></li>
-                <li><button class="agy-dropdown-item" id="menu-opt-font-dec"><i class="fa-solid fa-magnifying-glass-minus text-muted"></i> Decrease Font (A-)</button></li>
-                <li><hr class="dropdown-divider border-secondary border-opacity-25 my-1"></li>
-                <li><button class="agy-dropdown-item text-warning" id="btn-practice-hints"><i class="fa-solid fa-lightbulb"></i> View Hint</button></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
         <!-- Mobile Dual-View Toggle & Quick Nav (Explorer / Details / Code Editor) -->
         <div class="d-flex d-lg-none bg-black border-bottom border-secondary border-opacity-25 align-items-center" id="mobile-vscode-pane-switcher">
           <button type="button" class="btn btn-sm btn-dark text-white px-2.5 py-1.5 border-end border-secondary border-opacity-25" id="btn-mobile-prev-problem" title="Previous Question" style="border-radius: 0;">
@@ -2625,14 +2572,24 @@ const components = {
           </button>
         </div>
 
-        <!-- 2. Antigravity 3-Pane Body Grid (Explorer | Reading Pane | Coding IDE) -->
+        <!-- Antigravity 3-Pane Body Grid (Explorer | Reading Pane | Coding IDE) -->
         <div class="agy-3pane-body" id="agy-main-split">
           
           <!-- PANE 1: Collapsible Problem Explorer Sidebar -->
           <div class="agy-explorer-pane" id="agy-explorer">
             <div class="px-3 py-2 border-bottom border-secondary border-opacity-20 flex-shrink-0 d-flex align-items-center justify-content-between">
-              <span class="text-white fw-bold fs-8"><i class="fa-solid fa-list-ol text-primary me-1.5"></i>Problems</span>
-              <span class="badge bg-dark border border-secondary border-opacity-40 text-muted fs-9">${list.length}</span>
+              <div class="d-flex align-items-center gap-1.5">
+                <span class="text-white fw-bold fs-8"><i class="fa-solid fa-list-ol text-primary me-1.5"></i>Problems</span>
+                <span class="badge bg-dark border border-secondary border-opacity-40 text-muted fs-9">${list.length}</span>
+              </div>
+              <div class="d-flex align-items-center gap-1">
+                <button type="button" class="btn btn-sm btn-glass py-0 px-2 fs-9 text-muted" id="btn-prev-problem" title="Previous Problem (Alt + Left)">
+                  <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button type="button" class="btn btn-sm btn-glass py-0 px-2 fs-9 text-muted" id="btn-next-problem" title="Next Problem (Alt + Right)">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
             </div>
 
             <!-- Problem List Rail -->
@@ -2732,31 +2689,34 @@ const components = {
                   <option value="go">🐹 Go 1.22</option>
                   <option value="rust">🦀 Rust 1.76</option>
                 </select>
+                <span class="badge border border-secondary border-opacity-30 text-muted fs-9" id="ide-env-badge">JDK 21 LTS</span>
               </div>
 
-              <!-- Tools: Font Size, Reset, Copy -->
+              <!-- Tools: Font Size, Reset, Copy, Maximize, More Options -->
               <div class="d-flex align-items-center gap-1">
                 <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted" id="btn-editor-font-dec" title="Decrease Font">A-</button>
                 <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted" id="btn-editor-font-inc" title="Increase Font">A+</button>
                 <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted" id="btn-editor-reset" title="Reset Code Template"><i class="fa-solid fa-rotate-left"></i></button>
                 <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted" id="btn-editor-copy" title="Copy Code"><i class="fa-solid fa-copy"></i></button>
-              </div>
-            </div>
+                <button type="button" class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted" id="btn-ide-maximize" title="Maximize / Restore Code Workspace">
+                  <i class="fa-solid fa-expand" id="icon-ide-maximize"></i>
+                </button>
 
-            <!-- Mobile Quick Symbol Bar -->
-            <div class="mobile-symbol-toolbar px-2">
-              <button type="button" class="mobile-symbol-btn" data-sym="    ">Tab</button>
-              <button type="button" class="mobile-symbol-btn" data-sym="{"> { </button>
-              <button type="button" class="mobile-symbol-btn" data-sym="}"> } </button>
-              <button type="button" class="mobile-symbol-btn" data-sym="("> ( </button>
-              <button type="button" class="mobile-symbol-btn" data-sym=")"> ) </button>
-              <button type="button" class="mobile-symbol-btn" data-sym="["> [ </button>
-              <button type="button" class="mobile-symbol-btn" data-sym="]"> ] </button>
-              <button type="button" class="mobile-symbol-btn" data-sym=";"> ; </button>
-              <button type="button" class="mobile-symbol-btn" data-sym="="> = </button>
-              <button type="button" class="mobile-symbol-btn" data-sym="->"> -> </button>
-              <button type="button" class="mobile-symbol-btn" data-sym=":"> : </button>
-              <button type="button" class="mobile-symbol-btn" data-sym="\""> " </button>
+                <!-- 3-Dots Extra Actions Dropdown -->
+                <div class="dropdown d-inline-block">
+                  <button type="button" class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted" id="btn-ide-more" data-bs-toggle="dropdown" aria-expanded="false" title="More Options">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end agy-dropdown-menu" aria-labelledby="btn-ide-more">
+                    <li><button class="agy-dropdown-item" id="menu-opt-reset"><i class="fa-solid fa-rotate-left text-muted"></i> Reset Template</button></li>
+                    <li><button class="agy-dropdown-item" id="menu-opt-copy"><i class="fa-solid fa-copy text-muted"></i> Copy Code</button></li>
+                    <li><button class="agy-dropdown-item" id="menu-opt-font-inc"><i class="fa-solid fa-magnifying-glass-plus text-muted"></i> Increase Font (A+)</button></li>
+                    <li><button class="agy-dropdown-item" id="menu-opt-font-dec"><i class="fa-solid fa-magnifying-glass-minus text-muted"></i> Decrease Font (A-)</button></li>
+                    <li><hr class="dropdown-divider border-secondary border-opacity-25 my-1"></li>
+                    <li><button class="agy-dropdown-item text-warning" id="btn-practice-hints"><i class="fa-solid fa-lightbulb"></i> View Hint</button></li>
+                  </ul>
+                </div>
+              </div>
             </div>
 
             <!-- Main Monaco-Style Code Editor (Auto-Expands on Focus) -->
