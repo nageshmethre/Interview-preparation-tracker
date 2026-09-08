@@ -3536,18 +3536,25 @@ input:-webkit-autofill {
 /* Reader Table of Contents Drawer */
 .reader-toc-drawer {
   width: 280px;
-  background: #1c1c20;
+  background: #18181b;
   flex-shrink: 0;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow-y: auto;
+  transition: width 0.25s ease, margin 0.25s ease, opacity 0.2s ease, transform 0.25s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
 @media (min-width: 992px) {
   .reader-toc-drawer.collapsed {
-    margin-left: -280px;
-    opacity: 0;
-    pointer-events: none;
     width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    margin-left: 0 !important;
+    padding: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    border-right: none !important;
   }
 }
 
@@ -3560,11 +3567,81 @@ input:-webkit-autofill {
     z-index: 1050;
     transform: translateX(-100%);
     box-shadow: none;
+    width: 280px;
   }
   .reader-toc-drawer.active {
     transform: translateX(0);
     box-shadow: 12px 0 35px rgba(0, 0, 0, 0.75);
   }
+}
+
+/* Uniform Professional Symbolic Reader Buttons */
+.reader-tool-btn {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  max-width: 36px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 8px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #d1d5db !important;
+  font-size: 0.95rem !important;
+  line-height: 1 !important;
+  transition: all 0.15s ease-in-out !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  box-sizing: border-box !important;
+}
+
+.reader-tool-btn:hover {
+  background: rgba(255, 255, 255, 0.14) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.reader-tool-btn.active, .reader-tool-btn:active {
+  background: #2563eb !important;
+  border-color: #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+.reader-tool-btn.font-btn {
+  font-family: monospace !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+}
+
+.reader-tool-btn.dropdown-toggle::after {
+  display: none !important;
+}
+
+/* Static Side Category Slider Controls */
+.reader-slider-btn {
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  max-width: 34px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #e4e4e7 !important;
+  cursor: pointer !important;
+  flex-shrink: 0 !important;
+  transition: all 0.15s ease !important;
+}
+
+.reader-slider-btn:hover {
+  background: #2563eb !important;
+  border-color: #3b82f6 !important;
+  color: #ffffff !important;
 }
 
 /* Reader Typography & Authentic Textbook Prose Formatting */

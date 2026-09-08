@@ -7858,6 +7858,24 @@ function bindLibraryHubEvents(isProUser, currentCategory, currentDifficulty, cur
       reRenderCatalog();
     });
   }
+
+  // Static Side Slider Scroll Buttons
+  const scrollLeftBtn = document.getElementById('btn-scroll-cats-left');
+  const scrollRightBtn = document.getElementById('btn-scroll-cats-right');
+  const catScroller = document.getElementById('library-categories-scroller');
+
+  if (scrollLeftBtn && catScroller) {
+    scrollLeftBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      catScroller.scrollBy({ left: -260, behavior: 'smooth' });
+    });
+  }
+  if (scrollRightBtn && catScroller) {
+    scrollRightBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      catScroller.scrollBy({ left: 260, behavior: 'smooth' });
+    });
+  }
 }
 
 function handleLibraryBookDetailsRoute(hash, pageMount) {
@@ -7956,14 +7974,12 @@ function bindTechnicalReaderEvents(book, chapter, isProUser) {
       if (appContainer) {
         const isNowCollapsed = appContainer.classList.toggle('collapsed');
         if (isNowCollapsed) {
-          focusBtn.innerHTML = '<i class="fa-solid fa-compress me-1 text-primary"></i> <span class="d-none d-lg-inline">Exit Zen</span>';
-          focusBtn.classList.add('btn-primary', 'text-white');
-          focusBtn.classList.remove('btn-glass');
+          focusBtn.innerHTML = '<i class="fa-solid fa-compress text-primary"></i>';
+          focusBtn.classList.add('active');
           showToast('Zen Reading Mode enabled (sidebar collapsed for full focus)', 'info');
         } else {
-          focusBtn.innerHTML = '<i class="fa-solid fa-expand me-1 text-info"></i> <span class="d-none d-lg-inline">Zen Mode</span>';
-          focusBtn.classList.remove('btn-primary', 'text-white');
-          focusBtn.classList.add('btn-glass');
+          focusBtn.innerHTML = '<i class="fa-solid fa-expand text-info"></i>';
+          focusBtn.classList.remove('active');
           showToast('Exited Zen Mode', 'info');
         }
       }
@@ -7997,8 +8013,7 @@ function bindTechnicalReaderEvents(book, chapter, isProUser) {
   if (article && savedFontFamily === 'serif') {
     article.classList.add('reader-font-serif');
     if (fontFamBtn) {
-      fontFamBtn.classList.add('btn-primary', 'text-white');
-      fontFamBtn.classList.remove('btn-glass');
+      fontFamBtn.classList.add('active');
     }
   }
   if (fontFamBtn && article) {
@@ -8006,12 +8021,10 @@ function bindTechnicalReaderEvents(book, chapter, isProUser) {
       const isSerif = article.classList.toggle('reader-font-serif');
       localStorage.setItem('reader-font-family', isSerif ? 'serif' : 'sans');
       if (isSerif) {
-        fontFamBtn.classList.add('btn-primary', 'text-white');
-        fontFamBtn.classList.remove('btn-glass');
+        fontFamBtn.classList.add('active');
         showToast('Switched to Classic Book Serif typography', 'info');
       } else {
-        fontFamBtn.classList.remove('btn-primary', 'text-white');
-        fontFamBtn.classList.add('btn-glass');
+        fontFamBtn.classList.remove('active');
         showToast('Switched to Modern Sans typography', 'info');
       }
     });
@@ -8038,26 +8051,42 @@ function bindTechnicalReaderEvents(book, chapter, isProUser) {
     });
   });
 
-  // 6. Table of Contents Drawer Controls (Works on Desktop & Mobile)
-  if (toggleTocBtn && tocDrawer) {
-    toggleTocBtn.addEventListener('click', () => {
-      if (window.innerWidth >= 992) {
-        tocDrawer.classList.toggle('collapsed');
-        toggleTocBtn.classList.toggle('active');
-      } else {
-        tocDrawer.classList.toggle('active');
-      }
+  // 6. Table of Contents Drawer Controls (Robust & Unified Desktop + Mobile)
+  function closeDrawer() {
+    if (!tocDrawer) return;
+    tocDrawer.classList.add('collapsed');
+    tocDrawer.classList.remove('active');
+    if (toggleTocBtn) toggleTocBtn.classList.remove('active');
+  }
+
+  function openDrawer() {
+    if (!tocDrawer) return;
+    tocDrawer.classList.remove('collapsed');
+    tocDrawer.classList.add('active');
+    if (toggleTocBtn) toggleTocBtn.classList.add('active');
+  }
+
+  function toggleDrawer() {
+    if (!tocDrawer) return;
+    const isClosed = tocDrawer.classList.contains('collapsed') || (!tocDrawer.classList.contains('active') && window.innerWidth < 992);
+    if (isClosed) {
+      openDrawer();
+    } else {
+      closeDrawer();
+    }
+  }
+
+  if (toggleTocBtn) {
+    toggleTocBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleDrawer();
     });
   }
 
-  if (closeTocBtn && tocDrawer) {
-    closeTocBtn.addEventListener('click', () => {
-      if (window.innerWidth >= 992) {
-        tocDrawer.classList.add('collapsed');
-        if (toggleTocBtn) toggleTocBtn.classList.remove('active');
-      } else {
-        tocDrawer.classList.remove('active');
-      }
+  if (closeTocBtn) {
+    closeTocBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeDrawer();
     });
   }
 
@@ -8065,13 +8094,13 @@ function bindTechnicalReaderEvents(book, chapter, isProUser) {
     tocDrawer.querySelectorAll('a.list-group-item').forEach(link => {
       link.addEventListener('click', () => {
         if (window.innerWidth < 992) {
-          tocDrawer.classList.remove('active');
+          closeDrawer();
         }
       });
     });
   }
 
-  // 7. Dynamic Bookmark Toggle Action
+  // 7. Dynamic Bookmark Toggle Action (Pure Symbolic)
   if (bookmarkBtn) {
     bookmarkBtn.addEventListener('click', () => {
       const bookmarkKey = 'prepspace_library_bookmarks_' + book.id;
@@ -8085,7 +8114,8 @@ function bindTechnicalReaderEvents(book, chapter, isProUser) {
         // Remove existing bookmark
         bookmarks.splice(existingIdx, 1);
         localStorage.setItem(bookmarkKey, JSON.stringify(bookmarks));
-        bookmarkBtn.innerHTML = '<i class="fa-regular fa-bookmark text-primary"></i> <span class="d-none d-sm-inline">Bookmark</span>';
+        bookmarkBtn.innerHTML = '<i class="fa-regular fa-bookmark text-muted"></i>';
+        bookmarkBtn.classList.remove('active');
         bookmarkBtn.setAttribute('data-bookmarked', 'false');
         showToast(`Bookmark removed for Chapter ${chapter.chapterNumber}`, 'info');
       } else {
@@ -8099,7 +8129,8 @@ function bindTechnicalReaderEvents(book, chapter, isProUser) {
         };
         bookmarks.unshift(newBookmark);
         localStorage.setItem(bookmarkKey, JSON.stringify(bookmarks));
-        bookmarkBtn.innerHTML = '<i class="fa-solid fa-bookmark text-warning"></i> <span class="d-none d-sm-inline">Bookmarked</span>';
+        bookmarkBtn.innerHTML = '<i class="fa-solid fa-bookmark text-warning"></i>';
+        bookmarkBtn.classList.add('active');
         bookmarkBtn.setAttribute('data-bookmarked', 'true');
         showToast(`Chapter ${chapter.chapterNumber} bookmarked!`, 'success');
       }

@@ -773,7 +773,7 @@ const components = {
           <a href="#/studyplanner" class="sidebar-link"><i class="fa-solid fa-calendar-check"></i> <span>Study Planner</span></a>
 
           <div class="sidebar-section-title px-4 mt-3 mb-2">Academy & Prep</div>
-          <a href="#/library" class="sidebar-link"><i class="fa-solid fa-book-bookmark text-primary"></i> <span>Technical Library</span> <span class="badge bg-primary text-white ms-auto font-monospace" style="font-size: 0.65rem;">19 DOMAINS</span></a>
+          <a href="#/library" class="sidebar-link"><i class="fa-solid fa-book-bookmark text-primary"></i> <span>Technical Library</span></a>
           <a href="#/courses" class="sidebar-link"><i class="fa-solid fa-graduation-cap"></i> <span>LMS Courses</span></a>
           <a href="#/certificates" class="sidebar-link"><i class="fa-solid fa-award"></i> <span>Certificates</span></a>
           <a href="#/flashcards" class="sidebar-link"><i class="fa-solid fa-clone"></i> <span>Flashcards</span></a>
@@ -5490,7 +5490,7 @@ const components = {
           <div class="position-relative z-1">
             <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
               <span class="badge bg-primary text-white font-monospace px-2.5 py-1 fs-9"><i class="fa-solid fa-graduation-cap me-1"></i> OFFICIAL LEARNING REPOSITORY</span>
-              <span class="badge bg-dark bg-opacity-75 text-warning font-monospace px-2.5 py-1 fs-9 border border-warning border-opacity-25"><i class="fa-solid fa-book-bookmark me-1"></i> 19 CANONICAL DOMAINS</span>
+              <span class="badge bg-dark bg-opacity-75 text-warning font-monospace px-2.5 py-1 fs-9 border border-warning border-opacity-25"><i class="fa-solid fa-book-bookmark me-1"></i> MASTER CURRICULUM</span>
               ${isProUser ? '<span class="badge bg-success bg-opacity-25 text-emerald border border-success border-opacity-50 px-2.5 py-1 fs-9"><i class="fa-solid fa-crown me-1"></i> PRO ALL-ACCESS PASS</span>' : '<span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-50 px-2.5 py-1 fs-9"><i class="fa-solid fa-lock-open me-1"></i> FREE PREVIEWS ENABLED</span>'}
             </div>
             <h2 class="text-white fw-extrabold display-6 mb-2">PrepSpace Technical Library</h2>
@@ -5569,7 +5569,7 @@ const components = {
             </div>
             <div class="col-6 col-md-3 col-lg-3 text-end">
               <div class="btn-group btn-group-sm w-100" role="group">
-                <button type="button" class="btn btn-outline-secondary ${!activeCategory || activeCategory === 'ALL' ? 'active text-white' : ''}" id="btn-filter-all-cat">All (19)</button>
+                <button type="button" class="btn btn-outline-secondary ${!activeCategory || activeCategory === 'ALL' ? 'active text-white' : ''}" id="btn-filter-all-cat">All</button>
                 <button type="button" class="btn btn-outline-secondary ${activeCategory === 'FREE' ? 'active text-white' : ''}" id="btn-filter-free">Free</button>
                 <button type="button" class="btn btn-outline-secondary ${activeCategory === 'PRO' ? 'active text-white' : ''}" id="btn-filter-pro">Pro Pass</button>
               </div>
@@ -5577,16 +5577,24 @@ const components = {
           </div>
         </div>
 
-        <!-- Scrollable Category Navigation Pills -->
-        <div class="library-categories-scroller mb-4 pb-1 d-flex gap-2 overflow-x-auto">
-          <button class="btn btn-sm ${!activeCategory || activeCategory === 'ALL' ? 'btn-primary text-white' : 'btn-glass text-muted'} text-nowrap rounded-pill px-3 py-1.5 library-cat-pill" data-category="ALL">
-            <i class="fa-solid fa-layer-group me-1.5"></i> All 19 Domains
+        <!-- Scrollable Category Navigation Pills with Static Side Slider Buttons -->
+        <div class="library-categories-wrapper position-relative d-flex align-items-center mb-4">
+          <button id="btn-scroll-cats-left" class="reader-slider-btn me-2" type="button" title="Previous Categories">
+            <i class="fa-solid fa-chevron-left fs-9"></i>
           </button>
-          ${categories.map(cat => `
-            <button class="btn btn-sm ${activeCategory === cat.name ? 'btn-primary text-white' : 'btn-glass text-muted'} text-nowrap rounded-pill px-3 py-1.5 library-cat-pill" data-category="${cat.name}">
-              <i class="${cat.icon} me-1.5"></i> ${cat.name}
+          <div id="library-categories-scroller" class="library-categories-scroller d-flex gap-2 overflow-x-auto flex-grow-1" style="scrollbar-width: none; -ms-overflow-style: none;">
+            <button class="btn btn-sm ${!activeCategory || activeCategory === 'ALL' ? 'btn-primary text-white' : 'btn-glass text-muted'} text-nowrap rounded-pill px-3 py-1.5 library-cat-pill" data-category="ALL">
+              <i class="fa-solid fa-layer-group me-1.5"></i> All Handbooks
             </button>
-          `).join('')}
+            ${categories.map(cat => `
+              <button class="btn btn-sm ${activeCategory === cat.name ? 'btn-primary text-white' : 'btn-glass text-muted'} text-nowrap rounded-pill px-3 py-1.5 library-cat-pill" data-category="${cat.name}">
+                <i class="${cat.icon} me-1.5"></i> ${cat.name}
+              </button>
+            `).join('')}
+          </div>
+          <button id="btn-scroll-cats-right" class="reader-slider-btn ms-2" type="button" title="Next Categories">
+            <i class="fa-solid fa-chevron-right fs-9"></i>
+          </button>
         </div>
 
         <!-- Books Catalog Grid -->
@@ -5657,7 +5665,7 @@ const components = {
                     <!-- Book Metadata Specs -->
                     <div class="mt-auto pt-2 border-top border-secondary border-opacity-15 d-flex justify-content-between align-items-center text-muted fs-8">
                       <div><i class="fa-regular fa-clock me-1 text-primary"></i> ${book.estimatedReadingTime || '6 Hours'}</div>
-                      <div><i class="fa-regular fa-file-lines me-1 text-info"></i> ${book.pageCount || 120} pgs</div>
+                      <div><i class="fa-solid fa-book-open me-1 text-info"></i> ${book.chapters ? book.chapters.length : 8} Ch &bull; ${book.pageCount} pgs</div>
                       <div><i class="fa-solid fa-star me-1 text-warning"></i> ${book.rating || 4.9}</div>
                     </div>
 
@@ -5838,59 +5846,58 @@ const components = {
 
         <!-- Sticky Reader Control Navbar -->
         <header class="reader-navbar px-3 py-2 border-bottom border-secondary border-opacity-25 d-flex justify-content-between align-items-center sticky-top">
-          <!-- Left: Navigation & Drawer Trigger -->
+          <!-- Left: Compact Navigation & Drawer Toggle (Symbolic Buttons) -->
           <div class="d-flex align-items-center gap-2">
-            <a href="#/library/book?id=${book.id}" class="btn btn-glass btn-sm" title="Back to Book Overview">
-              <i class="fa-solid fa-arrow-left me-1"></i> <span class="d-none d-sm-inline">Overview</span>
+            <a href="#/library" class="reader-tool-btn" title="Back to Technical Library">
+              <i class="fa-solid fa-arrow-left"></i>
             </a>
-            <button id="btn-toggle-toc-drawer" class="btn btn-glass btn-sm" title="Table of Contents">
-              <i class="fa-solid fa-bars-staggered me-1"></i> <span class="d-none d-md-inline">Contents</span>
+            <button id="btn-toggle-toc-drawer" class="reader-tool-btn" title="Toggle Table of Contents">
+              <i class="fa-solid fa-bars-staggered"></i>
             </button>
-            <div class="vr d-none d-sm-block my-1 bg-secondary opacity-50"></div>
-            <div class="d-none d-lg-block text-truncate" style="max-width: 320px;">
-              <span class="text-muted fs-8">${book.title}:</span>
-              <span class="text-white fw-semibold fs-8 ms-1">Ch ${chapter.chapterNumber}</span>
+            <div class="vr d-none d-sm-block my-1 bg-secondary opacity-50" style="height: 20px;"></div>
+            <div class="d-none d-lg-block text-truncate" style="max-width: 260px;">
+              <span class="text-white fw-semibold fs-8" title="${book.title}">${book.title}</span>
             </div>
           </div>
 
-          <!-- Center: Progress Indicator -->
-          <div class="text-center font-monospace fs-8 text-muted d-none d-md-block">
-            Chapter ${chapter.chapterNumber} of ${chapters.length}
+          <!-- Center: Real Chapter & Page Pagination Metrics -->
+          <div class="reader-page-counter font-monospace fs-8 text-white px-3 py-1 rounded-pill bg-dark border border-secondary border-opacity-50 d-none d-md-flex align-items-center gap-2">
+            <i class="fa-solid fa-book-open text-warning fs-9"></i>
+            <span>Ch ${chapter.chapterNumber} of ${chapters.length}</span>
+            <span class="text-secondary">&bull;</span>
+            <span class="text-info">Pages ${((chapter.chapterNumber - 1) * Math.round(book.pageCount / chapters.length)) + 1}–${Math.min(book.pageCount, chapter.chapterNumber * Math.round(book.pageCount / chapters.length))} of ${book.pageCount}</span>
           </div>
 
-          <!-- Right: Reader Display Controls -->
-          <div class="d-flex align-items-center gap-2">
-            <!-- Zen / Fullscreen Reading Mode -->
-            <button id="btn-reader-focus" class="btn btn-glass btn-sm" title="Toggle Fullscreen Focus Mode">
-              <i class="fa-solid fa-expand me-1 text-info"></i> <span class="d-none d-lg-inline">Zen Mode</span>
+          <!-- Right: Reader Display Controls (Exact 36x36 Symbolic Buttons) -->
+          <div class="d-flex align-items-center gap-1.5">
+            <!-- Zen Focus Mode -->
+            <button id="btn-reader-focus" class="reader-tool-btn" title="Zen Focus Mode (Collapse Sidebar)">
+              <i class="fa-solid fa-expand text-info"></i>
             </button>
 
             <!-- Bookmark Button -->
-            <button id="btn-add-bookmark" class="btn btn-glass btn-sm" title="${(bookmarks || []).some(b => b.chapterNumber === chapter.chapterNumber) ? 'Bookmarked' : 'Save Bookmark'}" data-bookmarked="${(bookmarks || []).some(b => b.chapterNumber === chapter.chapterNumber) ? 'true' : 'false'}">
-              <i class="${(bookmarks || []).some(b => b.chapterNumber === chapter.chapterNumber) ? 'fa-solid fa-bookmark text-warning' : 'fa-regular fa-bookmark text-primary'}"></i> 
-              <span class="d-none d-sm-inline">${(bookmarks || []).some(b => b.chapterNumber === chapter.chapterNumber) ? 'Bookmarked' : 'Bookmark'}</span>
+            <button id="btn-add-bookmark" class="reader-tool-btn" title="${(bookmarks || []).some(b => b.chapterNumber === chapter.chapterNumber) ? 'Remove Bookmark' : 'Save Bookmark'}" data-bookmarked="${(bookmarks || []).some(b => b.chapterNumber === chapter.chapterNumber) ? 'true' : 'false'}">
+              <i class="${(bookmarks || []).some(b => b.chapterNumber === chapter.chapterNumber) ? 'fa-solid fa-bookmark text-warning' : 'fa-regular fa-bookmark text-muted'}"></i>
             </button>
 
-            <!-- Font Size Adjuster -->
-            <div class="btn-group btn-group-sm" role="group">
-              <button id="btn-font-decrease" class="btn btn-glass" title="Decrease Font Size">A-</button>
-              <button id="btn-font-increase" class="btn btn-glass" title="Increase Font Size">A+</button>
-            </div>
+            <!-- Font Size Adjusters -->
+            <button id="btn-font-decrease" class="reader-tool-btn font-btn" title="Decrease Font Size">A-</button>
+            <button id="btn-font-increase" class="reader-tool-btn font-btn" title="Increase Font Size">A+</button>
 
             <!-- Book Typography Style (Serif / Sans) -->
-            <button id="btn-toggle-font-family" class="btn btn-glass btn-sm" title="Toggle Book Typography (Serif Book / Sans Modern)">
-              <i class="fa-solid fa-font me-1"></i> <span class="d-none d-xl-inline">Book Font</span>
+            <button id="btn-toggle-font-family" class="reader-tool-btn" title="Toggle Book Serif Typography">
+              <i class="fa-solid fa-font"></i>
             </button>
 
             <!-- Print / PDF Export -->
-            <button id="btn-reader-print" class="btn btn-glass btn-sm" title="Print Chapter / Save as PDF">
+            <button id="btn-reader-print" class="reader-tool-btn" title="Print Chapter / Save as PDF">
               <i class="fa-solid fa-print"></i>
             </button>
 
             <!-- Reader Theme Selector -->
-            <div class="dropdown">
-              <button class="btn btn-glass btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                <i class="fa-solid fa-palette me-1"></i> <span class="d-none d-sm-inline">Theme</span>
+            <div class="dropdown d-inline-block">
+              <button class="reader-tool-btn dropdown-toggle no-caret" type="button" data-bs-toggle="dropdown" title="Reader Color Themes">
+                <i class="fa-solid fa-palette text-warning"></i>
               </button>
               <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow">
                 <li><button class="dropdown-item fs-8 active" data-reader-theme="theme-dark"><i class="fa-solid fa-moon me-2 text-primary"></i> Dark (Default)</button></li>
@@ -5907,10 +5914,10 @@ const components = {
           <!-- Collapsible Table of Contents Drawer (Desktop & Mobile) -->
           <aside class="reader-toc-drawer border-end border-secondary border-opacity-25" id="reader-toc-drawer">
             <div class="p-3 border-bottom border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
-              <h6 class="text-white fw-bold mb-0"><i class="fa-solid fa-list-ul me-2 text-primary"></i> Table of Contents</h6>
-              <button id="btn-close-toc-drawer" class="btn btn-glass btn-sm border-0"><i class="fa-solid fa-xmark"></i></button>
+              <h6 class="text-white fw-bold mb-0 fs-8"><i class="fa-solid fa-list-ul me-2 text-primary"></i> Table of Contents</h6>
+              <button id="btn-close-toc-drawer" class="reader-tool-btn" style="width: 28px !important; height: 28px !important; min-width: 28px !important;" title="Close Table of Contents"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="p-2 overflow-y-auto" style="max-height: calc(100vh - 120px);">
+            <div class="p-2 overflow-y-auto flex-grow-1" style="max-height: calc(100vh - 120px);">
               <div class="list-group list-group-flush">
                 ${chapters.map(c => `
                   <a href="#/library/read?id=${book.id}&ch=${c.chapterNumber}" class="list-group-item list-group-item-action bg-transparent border-0 text-white rounded-2 px-2 py-2 mb-1 fs-8 ${c.chapterNumber === chapter.chapterNumber ? 'active bg-primary text-white' : 'text-muted'}">
@@ -5929,8 +5936,11 @@ const components = {
             <!-- Chapter Metadata Heading -->
             <div class="mb-4 pb-3 border-bottom border-secondary border-opacity-25">
               <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
-                <span class="badge bg-primary text-white font-monospace fs-9">CHAPTER ${chapter.chapterNumber}</span>
-                <span class="text-muted fs-9"><i class="fa-regular fa-clock me-1"></i> ${chapter.readingTimeMinutes || 20} min read &bull; ${book.category}</span>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge bg-primary text-white font-monospace fs-9">CHAPTER ${chapter.chapterNumber}</span>
+                  <span class="badge bg-dark text-info border border-info border-opacity-25 font-monospace fs-9"><i class="fa-solid fa-file-lines me-1"></i> Pages ${((chapter.chapterNumber - 1) * Math.round(book.pageCount / chapters.length)) + 1}–${Math.min(book.pageCount, chapter.chapterNumber * Math.round(book.pageCount / chapters.length))} of ${book.pageCount}</span>
+                </div>
+                <span class="text-muted fs-9"><i class="fa-regular fa-clock me-1"></i> ${chapter.readingTimeMinutes || 25} min read &bull; ${book.category}</span>
               </div>
               <h2 class="text-white fw-extrabold display-6 mb-2 reader-heading-title">${chapter.title}</h2>
               <p class="text-info fs-7 mb-0">${chapter.subtitle || ''}</p>
