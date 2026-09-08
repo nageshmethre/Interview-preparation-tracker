@@ -6021,7 +6021,7 @@ const components = {
           </div>
 
           <div class="table-responsive">
-            <table class="table table-dark table-hover align-middle fs-8 mb-0">
+            <table class="table table-dark admin-table table-hover align-middle fs-8 mb-0">
               <thead>
                 <tr class="text-muted text-uppercase fs-9">
                   <th>Domain & Title</th>
@@ -6036,27 +6036,27 @@ const components = {
               <tbody>
                 ${bookList.map(b => `
                   <tr>
-                    <td>
+                    <td data-label="Domain & Title">
                       <div class="d-flex align-items-center gap-2">
-                        <div class="rounded-2 p-1.5 d-flex align-items-center justify-content-center" style="background: ${b.gradient}; width: 32px; height: 32px;">
+                        <div class="rounded-2 p-1.5 d-flex align-items-center justify-content-center flex-shrink-0" style="background: ${b.gradient}; width: 32px; height: 32px;">
                           <i class="${b.icon} text-white fs-6"></i>
                         </div>
-                        <div>
-                          <div class="text-white fw-semibold">${b.title}</div>
+                        <div style="min-width: 0;">
+                          <div class="text-white fw-semibold text-truncate" style="max-width: 220px;">${b.title}</div>
                           <div class="text-muted fs-9">${b.author}</div>
                         </div>
                       </div>
                     </td>
-                    <td><span class="text-muted">${b.category}</span></td>
-                    <td><span class="badge bg-secondary bg-opacity-25 text-light fs-9">${b.difficulty}</span></td>
-                    <td><span class="font-monospace">${b.pageCount || 100}</span></td>
-                    <td>
+                    <td data-label="Category"><span class="text-muted">${b.category}</span></td>
+                    <td data-label="Difficulty"><span class="badge bg-secondary bg-opacity-25 text-light fs-9">${b.difficulty}</span></td>
+                    <td data-label="Pages"><span class="font-monospace">${b.pageCount || 100}</span></td>
+                    <td data-label="Access Tier">
                       ${b.isPro ? '<span class="badge bg-warning text-dark fs-9"><i class="fa-solid fa-crown me-1"></i>PRO</span>' : '<span class="badge bg-emerald text-white fs-9"><i class="fa-solid fa-check me-1"></i>FREE</span>'}
                     </td>
-                    <td>
+                    <td data-label="Status">
                       <span class="badge bg-success bg-opacity-25 text-emerald fs-9">Published</span>
                     </td>
-                    <td class="text-end">
+                    <td data-label="Actions" class="text-end">
                       <a href="#/library/book?id=${b.id}" class="btn btn-glass btn-sm me-1" title="View Public Syllabus"><i class="fa-solid fa-eye text-info"></i></a>
                       <button class="btn btn-glass btn-sm me-1" title="Toggle Pro Status"><i class="fa-solid fa-crown text-warning"></i></button>
                       <button class="btn btn-glass btn-sm" title="Edit Metadata"><i class="fa-solid fa-pen-to-square text-muted"></i></button>
