@@ -5485,37 +5485,18 @@ const components = {
 
     return `
       <div class="container-fluid py-3 px-3 px-md-4 technical-library-container">
-        <!-- Hero Header -->
-        <div class="library-hero-banner p-4 p-md-5 rounded-4 mb-4 position-relative overflow-hidden">
-          <div class="position-relative z-1">
-            <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-              <span class="badge bg-primary text-white font-monospace px-2.5 py-1 fs-9"><i class="fa-solid fa-graduation-cap me-1"></i> OFFICIAL LEARNING REPOSITORY</span>
-              <span class="badge bg-dark bg-opacity-75 text-warning font-monospace px-2.5 py-1 fs-9 border border-warning border-opacity-25"><i class="fa-solid fa-book-bookmark me-1"></i> MASTER CURRICULUM</span>
-              ${isProUser ? '<span class="badge bg-success bg-opacity-25 text-emerald border border-success border-opacity-50 px-2.5 py-1 fs-9"><i class="fa-solid fa-crown me-1"></i> PRO ALL-ACCESS PASS</span>' : '<span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-50 px-2.5 py-1 fs-9"><i class="fa-solid fa-lock-open me-1"></i> FREE PREVIEWS ENABLED</span>'}
-            </div>
-            <h2 class="text-white fw-extrabold display-6 mb-2">PrepSpace Technical Library</h2>
-            <p class="text-secondary fs-7 mb-4 col-xl-9 col-xxl-8" style="max-width: 850px; line-height: 1.6;">
-              Deep, structured, textbook-grade technical study material designed specifically for software engineering placements and high-tier technical interviews. Real algorithms, systems architecture, code implementations, complexity breakdowns, and behavioral interview blueprints.
-            </p>
-
-            <!-- Library Telemetry Counters -->
-            <div class="d-flex flex-wrap gap-3 gap-md-4 pt-2 border-top border-white border-opacity-10 text-white">
-              <div>
-                <span class="fw-bold fs-5 text-warning">19</span>
-                <span class="text-muted fs-8 ms-1">Curated Domains</span>
+        <!-- Hero Header (Compact & Streamlined) -->
+        <div class="library-hero-banner px-3 px-md-4 py-3 rounded-3 mb-3 position-relative overflow-hidden">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <div>
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="badge bg-primary text-white font-monospace px-2 py-0.5 fs-9"><i class="fa-solid fa-graduation-cap me-1"></i> TECHNICAL LIBRARY</span>
+                ${isProUser ? '<span class="badge bg-success bg-opacity-25 text-emerald border border-success border-opacity-50 px-2 py-0.5 fs-9"><i class="fa-solid fa-crown me-1"></i> PRO PASS</span>' : '<span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-50 px-2 py-0.5 fs-9"><i class="fa-solid fa-lock-open me-1"></i> FREE PREVIEWS</span>'}
               </div>
-              <div>
-                <span class="fw-bold fs-5 text-info">3,000+</span>
-                <span class="text-muted fs-8 ms-1">Textbook Pages</span>
-              </div>
-              <div>
-                <span class="fw-bold fs-5 text-emerald">100%</span>
-                <span class="text-muted fs-8 ms-1">Original Content</span>
-              </div>
-              <div>
-                <span class="fw-bold fs-5 text-primary">Zero</span>
-                <span class="text-muted fs-8 ms-1">Third-Party Clutter</span>
-              </div>
+              <h4 class="text-white fw-bold mb-1">PrepSpace Technical Library</h4>
+              <p class="text-secondary fs-8 mb-0" style="max-width: 750px;">
+                Textbook-grade technical study curriculum, system architectures, polyglot algorithms, and placement blueprints.
+              </p>
             </div>
           </div>
         </div>
@@ -5616,22 +5597,17 @@ const components = {
             return `
               <div class="col-12 col-md-6 col-xl-4 d-flex">
                 <div class="card library-book-card w-100 bg-dark bg-opacity-75 border-secondary border-opacity-25 rounded-3 d-flex flex-column overflow-hidden transition-all">
-                  <!-- Book Card Spine / Header -->
-                  <div class="book-card-spine p-3 d-flex justify-content-between align-items-start position-relative" style="background: ${book.gradient}; min-height: 110px;">
-                    <div class="d-flex align-items-center gap-2.5">
-                      <div class="bg-black bg-opacity-30 rounded-3 p-2.5 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
-                        <i class="${book.icon} text-white fs-4"></i>
-                      </div>
-                      <div>
-                        <span class="badge bg-black bg-opacity-50 text-white border border-white border-opacity-25 fs-9 uppercase font-monospace">${book.difficulty}</span>
-                        <div class="text-white text-opacity-75 fs-9 mt-0.5">${book.category}</div>
-                      </div>
+                  <!-- Book Card Spine / Header (Clean, icon-free) -->
+                  <div class="book-card-spine px-3 py-2.5 d-flex justify-content-between align-items-center position-relative" style="background: ${book.gradient}; min-height: 48px;">
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="badge bg-black bg-opacity-50 text-white border border-white border-opacity-25 fs-9 uppercase font-monospace">${book.difficulty}</span>
+                      <span class="text-white text-opacity-90 fs-9 fw-semibold text-truncate" style="max-width: 170px;">${book.category}</span>
                     </div>
                     <div>
                       ${book.isPro ? `
-                        <span class="badge bg-warning bg-opacity-90 text-dark fw-bold font-monospace fs-9 shadow-sm"><i class="fa-solid fa-crown me-1"></i> PRO</span>
+                        <span class="badge bg-warning bg-opacity-95 text-dark fw-bold font-monospace fs-9 shadow-sm"><i class="fa-solid fa-crown me-1"></i> PRO</span>
                       ` : `
-                        <span class="badge bg-emerald bg-opacity-90 text-white fw-bold font-monospace fs-9 shadow-sm"><i class="fa-solid fa-check me-1"></i> FREE</span>
+                        <span class="badge bg-emerald bg-opacity-95 text-white fw-bold font-monospace fs-9 shadow-sm"><i class="fa-solid fa-check me-1"></i> FREE</span>
                       `}
                     </div>
                   </div>
@@ -5662,19 +5638,19 @@ const components = {
                       </div>
                     ` : ''}
 
-                    <!-- Book Metadata Specs -->
-                    <div class="mt-auto pt-2 border-top border-secondary border-opacity-15 d-flex justify-content-between align-items-center text-muted fs-8">
-                      <div><i class="fa-regular fa-clock me-1 text-primary"></i> ${book.estimatedReadingTime || '6 Hours'}</div>
-                      <div><i class="fa-solid fa-book-open me-1 text-info"></i> ${book.chapters ? book.chapters.length : 8} Ch &bull; ${book.pageCount} pgs</div>
-                      <div><i class="fa-solid fa-star me-1 text-warning"></i> ${book.rating || 4.9}</div>
+                    <!-- Book Metadata Specs (Single horizontal line, no vertical up-down wrapping) -->
+                    <div class="mt-auto pt-2.5 pb-1 border-top border-secondary border-opacity-15 d-flex justify-content-between align-items-center text-muted fs-9 font-monospace" style="white-space: nowrap; gap: 0.5rem;">
+                      <span class="text-nowrap d-inline-flex align-items-center"><i class="fa-regular fa-clock me-1 text-warning"></i>${(book.estimatedReadingTime || '6h').replace(/ Hours?/i, 'h')}</span>
+                      <span class="text-nowrap d-inline-flex align-items-center"><i class="fa-regular fa-file-lines me-1 text-info"></i>${book.chapters ? book.chapters.length : 8} Ch &bull; ${book.pageCount || 310} pgs</span>
+                      <span class="text-nowrap d-inline-flex align-items-center"><i class="fa-solid fa-star me-1 text-warning"></i>${book.rating || '4.95'}</span>
                     </div>
 
                     <!-- Card Actions -->
-                    <div class="d-flex gap-2 mt-3">
-                      <a href="#/library/read?id=${book.id}&ch=1" class="btn btn-primary btn-sm flex-grow-1 fw-semibold">
-                        <i class="fa-solid fa-book-open me-1"></i> ${percent > 0 ? 'Continue' : 'Read'}
+                    <div class="d-flex gap-2 mt-2.5">
+                      <a href="#/library/read?id=${book.id}&ch=1" class="btn btn-primary btn-sm flex-grow-1 fw-semibold d-flex align-items-center justify-content-center py-1.5">
+                        ${percent > 0 ? 'Continue' : 'Read'}
                       </a>
-                      <a href="#/library/book?id=${book.id}" class="btn btn-glass btn-sm px-2.5" title="View Table of Contents & Details">
+                      <a href="#/library/book?id=${book.id}" class="btn btn-glass btn-sm px-2.5 d-flex align-items-center justify-content-center" title="Table of Contents">
                         <i class="fa-solid fa-list-ul text-muted"></i>
                       </a>
                     </div>
