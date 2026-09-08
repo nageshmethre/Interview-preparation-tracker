@@ -555,23 +555,86 @@ input:-webkit-autofill:focus,
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
-    height: auto !important;
-    min-height: calc(100vh - 120px) !important;
+    height: calc(100dvh - 72px) !important;
+    min-height: 480px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    border-radius: 8px !important;
+    margin-bottom: 0 !important;
+  }
+  #mobile-vscode-pane-switcher {
+    flex-shrink: 0 !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    z-index: 20 !important;
   }
   .agy-3pane-body {
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    display: flex !important;
     flex-direction: column !important;
+    overflow: hidden !important;
+    position: relative !important;
   }
-  .agy-explorer-pane,
-  .agy-reading-pane,
+  .agy-explorer-pane {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    border-right: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .agy-reading-pane {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    border-right: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  #problem-tab-content {
+    overflow-y: visible !important;
+    min-height: 100% !important;
+  }
   .agy-coding-pane {
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
-    flex: 1 1 100% !important;
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
     border-right: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+  #agy-editor-wrapper {
+    flex: 1 1 0 !important;
+    min-height: 180px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    position: relative !important;
+  }
+  #code-editor-textarea {
+    flex: 1 1 auto !important;
+    height: 100% !important;
+    min-height: 160px !important;
+    width: 100% !important;
+  }
+  .vscode-terminal-tray {
+    flex-shrink: 0 !important;
+    padding-bottom: max(8px, env(safe-area-inset-bottom, 8px)) !important;
   }
 }
 
@@ -3292,21 +3355,6 @@ input:-webkit-autofill {
   color: #ffffff;
 }
 
-@media (max-width: 991.98px) {
-  .agy-explorer-pane {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 260px;
-    z-index: 40;
-    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.6);
-  }
-  .agy-reading-pane {
-    flex: 1 1 100%;
-    max-width: 100%;
-  }
-}
 
 /* Sleek User Profile Minimal Strip */
 .user-minimal-strip {

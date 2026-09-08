@@ -2553,21 +2553,23 @@ const components = {
 
     return `
       <div class="agy-ide-container vscode-workspace-container position-relative" id="agy-coding-workspace">
-        <!-- Mobile Dual-View Toggle & Quick Nav (Explorer / Details / Code Editor) -->
-        <div class="d-flex d-lg-none bg-black border-bottom border-secondary border-opacity-25 align-items-center" id="mobile-vscode-pane-switcher">
-          <button type="button" class="btn btn-sm btn-dark text-white px-2.5 py-1.5 border-end border-secondary border-opacity-25" id="btn-mobile-prev-problem" title="Previous Question" style="border-radius: 0;">
+        <!-- Mobile 3-Pane Segmented Switcher & Question Navigator -->
+        <div class="d-flex d-lg-none align-items-center bg-dark bg-opacity-75 border-bottom border-secondary border-opacity-25 flex-shrink-0" id="mobile-vscode-pane-switcher" style="min-height: 44px; z-index: 20;">
+          <button type="button" class="btn btn-sm text-secondary px-2.5 py-2 border-end border-secondary border-opacity-20 flex-shrink-0" id="btn-mobile-prev-problem" title="Previous Question" style="border-radius: 0; min-width: 40px; height: 44px;">
             <i class="fa-solid fa-chevron-left"></i>
           </button>
-          <button type="button" class="btn btn-sm flex-fill py-1.5 fs-9 fw-semibold text-muted" id="btn-mobile-show-explorer" style="border-radius:0;">
-            <i class="fa-solid fa-folder-tree me-1"></i> Problems
-          </button>
-          <button type="button" class="btn btn-sm flex-fill py-1.5 fs-9 fw-semibold active text-white" id="btn-mobile-show-desc" style="border-radius:0; border-bottom: 2px solid #3b82f6;">
-            <i class="fa-solid fa-book-open me-1"></i> Details
-          </button>
-          <button type="button" class="btn btn-sm flex-fill py-1.5 fs-9 fw-semibold text-muted" id="btn-mobile-show-editor" style="border-radius:0;">
-            <i class="fa-solid fa-code me-1"></i> IDE & Output
-          </button>
-          <button type="button" class="btn btn-sm btn-dark text-white px-2.5 py-1.5 border-start border-secondary border-opacity-25" id="btn-mobile-next-problem" title="Next Question" style="border-radius: 0;">
+          <div class="d-flex flex-grow-1 min-w-0" role="tablist">
+            <button type="button" class="btn btn-sm flex-fill py-2 px-1 text-muted font-monospace d-flex align-items-center justify-content-center gap-1.5 border-0 rounded-0" id="btn-mobile-show-explorer" style="font-size: 0.76rem; min-height: 44px;">
+              <i class="fa-solid fa-list-ol text-primary"></i> <span class="text-nowrap">Bank</span>
+            </button>
+            <button type="button" class="btn btn-sm flex-fill py-2 px-1 active text-white font-monospace d-flex align-items-center justify-content-center gap-1.5 border-0 rounded-0" id="btn-mobile-show-desc" style="font-size: 0.76rem; min-height: 44px; border-bottom: 2px solid #3b82f6 !important; background: rgba(59, 130, 246, 0.12);">
+              <i class="fa-solid fa-book-open text-info"></i> <span class="text-nowrap">Details</span>
+            </button>
+            <button type="button" class="btn btn-sm flex-fill py-2 px-1 text-muted font-monospace d-flex align-items-center justify-content-center gap-1.5 border-0 rounded-0" id="btn-mobile-show-editor" style="font-size: 0.76rem; min-height: 44px;">
+              <i class="fa-solid fa-code text-success"></i> <span class="text-nowrap">IDE & Run</span>
+            </button>
+          </div>
+          <button type="button" class="btn btn-sm text-secondary px-2.5 py-2 border-start border-secondary border-opacity-20 flex-shrink-0" id="btn-mobile-next-problem" title="Next Question" style="border-radius: 0; min-width: 40px; height: 44px;">
             <i class="fa-solid fa-chevron-right"></i>
           </button>
         </div>
@@ -2612,7 +2614,7 @@ const components = {
 
           <!-- PANE 2: Question Specs & Description Pane -->
           <div class="agy-reading-pane" id="vscode-left-pane">
-            <div class="p-3 flex-grow-1 overflow-y-auto" id="problem-tab-content">
+            <div class="p-3 p-md-3 flex-grow-1" id="problem-tab-content" style="padding-bottom: max(36px, env(safe-area-inset-bottom, 28px)) !important;">
               <!-- Title Row -->
               <h5 class="fw-bold text-white fs-7 mb-1.5" id="active-q-title">${activeQ.title}</h5>
 
@@ -2656,9 +2658,9 @@ const components = {
               </div>
 
               <!-- Mobile Quick Jump to Code Button -->
-              <div class="d-block d-lg-none my-2 text-center">
-                <button type="button" class="btn btn-premium w-100 py-1.5 fs-8 fw-bold" id="btn-mobile-jump-code">
-                  <i class="fa-solid fa-code me-1"></i> Switch to Code Editor →
+              <div class="d-block d-lg-none my-3 text-center">
+                <button type="button" class="btn btn-premium w-100 py-2 fs-8 fw-bold shadow-sm" id="btn-mobile-jump-code" style="min-height: 42px;">
+                  <i class="fa-solid fa-code me-1.5"></i> Open Code Editor & Run →
                 </button>
               </div>
             </div>
@@ -2667,9 +2669,9 @@ const components = {
           <!-- PANE 3: Dominant Coding IDE & Terminal -->
           <div class="agy-coding-pane" id="vscode-right-pane">
             <!-- Editor Sub-Toolbar -->
-            <div class="d-flex align-items-center justify-content-between p-1.5 px-2 bg-dark bg-opacity-40 border-bottom border-secondary border-opacity-25 flex-wrap gap-2">
-              <div class="d-flex align-items-center">
-                <select id="coding-language-select" class="form-select form-select-sm bg-black text-white border-secondary fs-9 py-0.5 px-2" style="width: 120px;">
+            <div class="d-flex align-items-center justify-content-between p-1.5 px-2 bg-dark bg-opacity-40 border-bottom border-secondary border-opacity-25 flex-nowrap gap-1" style="min-height: 38px;">
+              <div class="d-flex align-items-center flex-shrink-0">
+                <select id="coding-language-select" class="form-select form-select-sm bg-black text-white border-secondary fs-9 py-0.5 px-2" style="width: 105px; height: 28px;">
                   <option value="java" selected>Java 21</option>
                   <option value="python">Python 3.12</option>
                   <option value="cpp">C++ 20</option>
@@ -2682,18 +2684,18 @@ const components = {
               </div>
 
               <!-- Tools: Font Size, Reset, Copy, Maximize, More Options -->
-              <div class="d-flex align-items-center gap-1">
-                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted" id="btn-editor-font-dec" title="Decrease Font">A-</button>
-                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted" id="btn-editor-font-inc" title="Increase Font">A+</button>
-                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted" id="btn-editor-reset" title="Reset Code Template"><i class="fa-solid fa-rotate-left"></i></button>
-                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted" id="btn-editor-copy" title="Copy Code"><i class="fa-solid fa-copy"></i></button>
-                <button type="button" class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted" id="btn-ide-maximize" title="Maximize / Restore Code Workspace">
+              <div class="d-flex align-items-center gap-1 flex-shrink-0">
+                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted d-flex align-items-center justify-content-center" id="btn-editor-font-dec" title="Decrease Font" style="width: 28px; height: 28px; padding: 0;">A-</button>
+                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted d-flex align-items-center justify-content-center" id="btn-editor-font-inc" title="Increase Font" style="width: 28px; height: 28px; padding: 0;">A+</button>
+                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted d-flex align-items-center justify-content-center" id="btn-editor-reset" title="Reset Code Template" style="width: 28px; height: 28px; padding: 0;"><i class="fa-solid fa-rotate-left"></i></button>
+                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted d-flex align-items-center justify-content-center" id="btn-editor-copy" title="Copy Code" style="width: 28px; height: 28px; padding: 0;"><i class="fa-solid fa-copy"></i></button>
+                <button type="button" class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted d-flex align-items-center justify-content-center" id="btn-ide-maximize" title="Maximize / Restore Code Workspace" style="width: 28px; height: 28px; padding: 0;">
                   <i class="fa-solid fa-expand" id="icon-ide-maximize"></i>
                 </button>
 
                 <!-- 3-Dots Extra Actions Dropdown -->
                 <div class="dropdown d-inline-block">
-                  <button type="button" class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted" id="btn-ide-more" data-bs-toggle="dropdown" aria-expanded="false" title="More Options">
+                  <button type="button" class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted d-flex align-items-center justify-content-center" id="btn-ide-more" data-bs-toggle="dropdown" aria-expanded="false" title="More Options" style="width: 28px; height: 28px; padding: 0;">
                     <i class="fa-solid fa-ellipsis-vertical"></i>
                   </button>
                   <ul class="dropdown-menu dropdown-menu-end agy-dropdown-menu" aria-labelledby="btn-ide-more">
@@ -2708,29 +2710,29 @@ const components = {
               </div>
             </div>
 
-            <!-- Main Monaco-Style Code Editor (Auto-Expands on Focus) -->
-            <div class="flex-grow-1 position-relative p-1.5" style="min-height: 260px; background: #18181b;" id="agy-editor-wrapper">
+            <!-- Main Monaco-Style Code Editor (Auto-Expands to fill height) -->
+            <div class="flex-grow-1 position-relative p-1.5 d-flex flex-column" style="background: #18181b;" id="agy-editor-wrapper">
               <textarea id="code-editor-textarea" 
-                        class="form-control vscode-monaco-editor w-100 h-100 p-2" 
+                        class="form-control vscode-monaco-editor w-100 flex-grow-1 p-2" 
                         spellcheck="false" 
                         placeholder="// Enter your solution here... (Workspace auto-expands while typing)">${activeQ.solution}</textarea>
             </div>
 
             <!-- Bottom Collapsible VS Code Terminal Tray -->
             <div class="vscode-terminal-tray" id="vscode-terminal-panel">
-              <div class="vscode-terminal-header">
-                <div class="d-flex align-items-center gap-1.5">
-                  <button class="vscode-terminal-tab active" id="term-tab-output"><i class="fa-solid fa-terminal me-1"></i> OUTPUT</button>
-                  <button class="vscode-terminal-tab" id="term-tab-case1">Case 1</button>
-                  <button class="vscode-terminal-tab" id="term-tab-case2">Case 2</button>
+              <div class="vscode-terminal-header py-1 px-2">
+                <div class="d-flex align-items-center gap-1">
+                  <button class="vscode-terminal-tab active py-1 px-2" id="term-tab-output"><i class="fa-solid fa-terminal me-1"></i> OUTPUT</button>
+                  <button class="vscode-terminal-tab py-1 px-1.5" id="term-tab-case1">Case 1</button>
+                  <button class="vscode-terminal-tab py-1 px-1.5" id="term-tab-case2">Case 2</button>
                 </div>
-                <div class="d-flex align-items-center gap-2">
-                  <span class="badge bg-success-subtle text-success fs-9" id="console-status-badge">Ready</span>
-                  <button type="button" class="btn btn-sm btn-success py-0.5 px-2.5 fs-8 fw-semibold" id="btn-practice-run" title="Run Tests">
-                    <i class="fa-solid fa-play me-1"></i> Run
+                <div class="d-flex align-items-center gap-1.5">
+                  <span class="badge bg-success-subtle text-success fs-9 px-2 py-1" id="console-status-badge">Ready</span>
+                  <button type="button" class="btn btn-sm btn-success py-1 px-2.5 fs-8 fw-semibold text-nowrap d-flex align-items-center gap-1" id="btn-practice-run" title="Run Tests" style="min-height: 32px;">
+                    <i class="fa-solid fa-play"></i> Run
                   </button>
-                  <button type="button" class="btn btn-sm btn-success py-0.5 px-2.5 fs-8 fw-semibold" id="btn-practice-submit" title="Submit Solution">
-                    <i class="fa-solid fa-cloud-arrow-up me-1"></i> Submit
+                  <button type="button" class="btn btn-sm btn-success py-1 px-2.5 fs-8 fw-semibold text-nowrap d-flex align-items-center gap-1" id="btn-practice-submit" title="Submit Solution" style="min-height: 32px;">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Submit
                   </button>
                 </div>
               </div>
@@ -3506,21 +3508,21 @@ const components = {
 
   desktopClient: () => `
     <div class="container-fluid py-2">
-      <!-- Platform Navigation Tabs -->
+      <!-- Platform Navigation Tabs (Mobile Horizontally Scrollable & Desktop Centered) -->
       <div class="d-flex justify-content-center mb-4">
-        <ul class="nav nav-pills p-1 bg-dark bg-opacity-75 rounded-pill border border-secondary border-opacity-25" id="app-platform-tabs" role="tablist">
+        <ul class="nav nav-pills p-1 bg-dark bg-opacity-75 rounded-pill border border-secondary border-opacity-25 flex-nowrap overflow-x-auto w-auto max-w-100" id="app-platform-tabs" role="tablist" style="scrollbar-width: none; -webkit-overflow-scrolling: touch;">
           <li class="nav-item" role="presentation">
-            <button class="nav-link active rounded-pill px-3 px-md-4 py-2 fs-7 fw-bold" id="tab-android-btn" data-bs-toggle="pill" data-bs-target="#tab-android-pane" type="button" role="tab">
+            <button class="nav-link active rounded-pill px-3 px-md-4 py-2 fs-8 fs-sm-7 fw-bold text-nowrap" id="tab-android-btn" data-bs-toggle="pill" data-bs-target="#tab-android-pane" type="button" role="tab">
               <i class="fa-brands fa-android text-success me-1"></i> Android APK
             </button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link rounded-pill px-3 px-md-4 py-2 fs-7 fw-bold" id="tab-ios-btn" data-bs-toggle="pill" data-bs-target="#tab-ios-pane" type="button" role="tab">
+            <button class="nav-link rounded-pill px-3 px-md-4 py-2 fs-8 fs-sm-7 fw-bold text-nowrap" id="tab-ios-btn" data-bs-toggle="pill" data-bs-target="#tab-ios-pane" type="button" role="tab">
               <i class="fa-brands fa-apple text-white me-1"></i> Apple iOS (iPhone)
             </button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link rounded-pill px-3 px-md-4 py-2 fs-7 fw-bold" id="tab-desktop-btn" data-bs-toggle="pill" data-bs-target="#tab-desktop-pane" type="button" role="tab">
+            <button class="nav-link rounded-pill px-3 px-md-4 py-2 fs-8 fs-sm-7 fw-bold text-nowrap" id="tab-desktop-btn" data-bs-toggle="pill" data-bs-target="#tab-desktop-pane" type="button" role="tab">
               <i class="fa-solid fa-desktop text-indigo me-1"></i> Desktop Client
             </button>
           </li>
@@ -3531,7 +3533,7 @@ const components = {
         <!-- 1. ANDROID APK TAB -->
         <div class="tab-pane fade show active" id="tab-android-pane" role="tabpanel">
           <!-- Android App Hero Download Card -->
-          <div class="glass-panel p-4 p-md-5 text-center mb-4 border-success border-opacity-25" style="box-shadow: 0 0 35px rgba(16, 185, 129, 0.08);">
+          <div class="glass-panel p-3 p-sm-4 p-md-5 text-center mb-4 border-success border-opacity-25" style="box-shadow: 0 0 35px rgba(16, 185, 129, 0.08);">
             <div class="mb-3">
               <span class="badge bg-success bg-opacity-25 text-success border border-success-subtle px-3 py-2 rounded-pill font-monospace fs-7">
                 <i class="fa-brands fa-android me-1"></i> OFFICIAL ANDROID APK RELEASE (v1.0.0)
@@ -3542,53 +3544,53 @@ const components = {
               Experience fast, native mobile performance. Practice DSA questions, complete timed 50-MCQ mock exams, track your placement applications, and access study notes directly on your phone.
             </p>
 
-            <!-- Responsive, Modern Download Button (Mobile-Safe) -->
+            <!-- Responsive, Modern Download Button (Mobile-Safe & Zero Overflow) -->
             <div class="d-flex justify-content-center mb-4">
-              <a href="https://stream-in.app/downloads/PrepSpace.apk" download="PrepSpace.apk" class="btn btn-success p-3 fw-bold d-flex align-items-center justify-content-between gap-3 shadow-lg rounded-3 hover-lift w-100 text-decoration-none" style="max-width: 480px; min-height: 72px;" id="direct-apk-download-btn">
-                <div class="d-flex align-items-center gap-3 text-start">
-                  <div class="bg-white bg-opacity-20 rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+              <a href="https://stream-in.app/downloads/PrepSpace.apk" download="PrepSpace.apk" class="btn btn-success p-2.5 p-sm-3 fw-bold d-flex align-items-center justify-content-between gap-2.5 gap-sm-3 shadow-lg rounded-3 hover-lift w-100 text-decoration-none" style="max-width: 460px; min-height: 68px;" id="direct-apk-download-btn">
+                <div class="d-flex align-items-center gap-2.5 gap-sm-3 text-start flex-grow-1 min-w-0" style="min-width: 0;">
+                  <div class="bg-white bg-opacity-20 rounded-circle p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px;">
                     <i class="fa-brands fa-android fs-2 text-white"></i>
                   </div>
-                  <div>
-                    <div class="fs-9 text-uppercase text-white-50 fw-semibold font-monospace">DIRECT BROWSER DOWNLOAD</div>
-                    <div class="fs-5 text-white fw-bold lh-sm text-nowrap">Download Android APK</div>
-                    <div class="fs-9 text-white-50 font-monospace">v1.0.0 • 6.3 MB • Android 7.0 to 15+</div>
+                  <div class="min-w-0 flex-grow-1" style="min-width: 0;">
+                    <div class="fs-9 text-uppercase text-white-50 fw-semibold font-monospace text-truncate">DIRECT BROWSER DOWNLOAD</div>
+                    <div class="fs-6 fs-sm-5 text-white fw-bold lh-sm text-truncate">Download Android APK</div>
+                    <div class="fs-9 text-white-50 font-monospace text-truncate">v1.0.0 • 6.3 MB • Android 7.0+</div>
                   </div>
                 </div>
-                <div class="text-white fs-3 pe-1">
+                <div class="text-white fs-3 pe-1 flex-shrink-0">
                   <i class="fa-solid fa-cloud-arrow-down"></i>
                 </div>
               </a>
             </div>
 
-            <div class="d-flex flex-wrap justify-content-center gap-3 gap-md-4 text-muted fs-8 font-monospace">
+            <div class="d-flex flex-wrap justify-content-center gap-2 gap-sm-4 text-muted fs-8 font-monospace">
               <div><i class="fa-solid fa-shield-halved text-success me-1"></i> 100% Virus-Free & Verified</div>
               <div><i class="fa-solid fa-mobile-screen text-info me-1"></i> Android 7.0 to 15+ Compatible</div>
-              <div><i class="fa-solid fa-bolt text-warning me-1"></i> Instant Browser Download</div>
+              <div><i class="fa-solid fa-bolt text-warning me-1"></i> Instant Direct Download</div>
             </div>
           </div>
 
           <!-- Quick Android Installation Guide -->
-          <div class="row g-4 mb-4">
+          <div class="row g-3 g-md-4 mb-4">
             <div class="col-md-4">
-              <div class="glass-panel p-4 h-100">
+              <div class="glass-panel p-3 p-sm-4 h-100 text-start">
                 <div class="fs-4 text-success fw-bold font-monospace mb-2">01</div>
                 <h5 class="text-white fw-bold mb-2">Download APK</h5>
-                <p class="text-muted fs-7 mb-0">Click the green button above to download the <code class="text-success">PrepSpace.apk</code> (6.3 MB) directly in your mobile browser.</p>
+                <p class="text-muted fs-7 mb-0">Click the green button above to download <code class="text-success">PrepSpace.apk</code> (6.3 MB) directly in your mobile browser.</p>
               </div>
             </div>
             <div class="col-md-4">
-              <div class="glass-panel p-4 h-100">
+              <div class="glass-panel p-3 p-sm-4 h-100 text-start">
                 <div class="fs-4 text-primary fw-bold font-monospace mb-2">02</div>
                 <h5 class="text-white fw-bold mb-2">Allow Unknown Apps</h5>
-                <p class="text-muted fs-7 mb-0">When opening the downloaded package, tap <strong>Settings</strong> and toggle <em>"Allow from this source"</em> (Chrome/Edge) if prompted by Android.</p>
+                <p class="text-muted fs-7 mb-0">When opening the downloaded package, tap <strong>Settings</strong> and toggle <em>"Allow from this source"</em> if prompted by Android.</p>
               </div>
             </div>
             <div class="col-md-4">
-              <div class="glass-panel p-4 h-100">
+              <div class="glass-panel p-3 p-sm-4 h-100 text-start">
                 <div class="fs-4 text-warning fw-bold font-monospace mb-2">03</div>
                 <h5 class="text-white fw-bold mb-2">Install & Practice</h5>
-                <p class="text-muted fs-7 mb-0">Tap <strong>Install</strong> to complete setup. Launch PrepSpace from your app drawer and log in with your Gmail account!</p>
+                <p class="text-muted fs-7 mb-0">Tap <strong>Install</strong> to complete setup. Launch PrepSpace from your app drawer and start practicing DSA immediately!</p>
               </div>
             </div>
           </div>
@@ -3597,70 +3599,70 @@ const components = {
         <!-- 2. APPLE iOS (IPHONE / IPAD) TAB -->
         <div class="tab-pane fade" id="tab-ios-pane" role="tabpanel">
           <!-- iOS App Hero Card -->
-          <div class="glass-panel p-4 p-md-5 text-center mb-4 border-primary border-opacity-25" style="box-shadow: 0 0 35px rgba(99, 102, 241, 0.08);">
+          <div class="glass-panel p-3 p-sm-4 p-md-5 text-center mb-4 border-primary border-opacity-25" style="box-shadow: 0 0 35px rgba(99, 102, 241, 0.08);">
             <div class="mb-3">
               <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle px-3 py-2 rounded-pill font-monospace fs-7">
-                <i class="fa-brands fa-apple me-1"></i> APPLE iOS (IPHONE & IPAD)
+                <i class="fa-brands fa-apple me-1"></i> APPLE iOS (SAFARI PWA)
               </span>
             </div>
             <h2 class="text-white fw-extrabold mb-2 display-6">Install PrepSpace on iPhone & iPad</h2>
             <p class="text-muted fs-6 max-w-md mx-auto mb-4" style="max-width: 540px;">
-              Run PrepSpace as a native-speed iOS app directly on your iPhone. Full screen with offline caching, high-speed DSA practice, and an app icon on your home screen.
+              Run PrepSpace as a high-speed Safari Web App directly on your iPhone. Full screen, offline caching, instant home-screen launch, and zero App Store friction.
             </p>
 
             <!-- Safari Add to Home Screen Action -->
             <div class="d-flex justify-content-center mb-4">
-              <div class="p-3 fw-bold d-flex align-items-center justify-content-between gap-3 shadow-lg rounded-3 w-100 border border-primary border-opacity-50" style="max-width: 480px; min-height: 72px; background: linear-gradient(135deg, rgba(30, 27, 75, 0.9) 0%, rgba(67, 56, 202, 0.8) 100%);">
-                <div class="d-flex align-items-center gap-3 text-start">
-                  <div class="bg-white bg-opacity-20 rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+              <div class="p-2.5 p-sm-3 fw-bold d-flex align-items-center justify-content-between gap-2.5 gap-sm-3 shadow-lg rounded-3 w-100 border border-primary border-opacity-50" style="max-width: 460px; min-height: 68px; background: linear-gradient(135deg, rgba(30, 27, 75, 0.9) 0%, rgba(67, 56, 202, 0.8) 100%);">
+                <div class="d-flex align-items-center gap-2.5 gap-sm-3 text-start flex-grow-1 min-w-0" style="min-width: 0;">
+                  <div class="bg-white bg-opacity-20 rounded-circle p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px;">
                     <i class="fa-brands fa-apple fs-1 text-white"></i>
                   </div>
-                  <div>
-                    <div class="fs-9 text-uppercase text-white-50 fw-semibold font-monospace">SAFARI WEB APP INSTALLATION</div>
-                    <div class="fs-5 text-white fw-bold lh-sm text-nowrap">Install on iPhone / iPad</div>
-                    <div class="fs-9 text-white-50 font-monospace">Safari ➔ Share ➔ Add to Home Screen</div>
+                  <div class="min-w-0 flex-grow-1" style="min-width: 0;">
+                    <div class="fs-9 text-uppercase text-white-50 fw-semibold font-monospace text-truncate">SAFARI PWA (WEB APP)</div>
+                    <div class="fs-6 fs-sm-5 text-white fw-bold lh-sm text-truncate">Install on iPhone / iPad</div>
+                    <div class="fs-9 text-white-50 font-monospace text-truncate">Safari ➔ Share ➔ Add to Home Screen</div>
                   </div>
                 </div>
-                <div class="text-white fs-3 pe-1">
+                <div class="text-white fs-3 pe-1 flex-shrink-0">
                   <i class="fa-solid fa-arrow-up-from-bracket text-primary"></i>
                 </div>
               </div>
             </div>
 
-            <div class="d-flex flex-wrap justify-content-center gap-3 gap-md-4 text-muted fs-8 font-monospace">
+            <div class="d-flex flex-wrap justify-content-center gap-2 gap-sm-4 text-muted fs-8 font-monospace">
               <div><i class="fa-solid fa-bolt text-warning me-1"></i> Zero App Store Delays</div>
-              <div><i class="fa-solid fa-expand text-info me-1"></i> Native Full-Screen Interface</div>
+              <div><i class="fa-solid fa-expand text-info me-1"></i> Full-Screen Web App</div>
               <div><i class="fa-solid fa-shield-halved text-success me-1"></i> iOS 14.0 to 18+ Compatible</div>
             </div>
           </div>
 
           <!-- 3-Step iPhone Visual Installation Guide -->
-          <div class="row g-4 mb-4">
+          <div class="row g-3 g-md-4 mb-4">
             <div class="col-md-4">
-              <div class="glass-panel p-4 h-100 text-start border border-secondary border-opacity-25">
+              <div class="glass-panel p-3 p-sm-4 h-100 text-start border border-secondary border-opacity-25">
                 <div class="d-flex align-items-center gap-2 mb-2">
                   <span class="badge bg-primary rounded-circle p-2 font-monospace">01</span>
-                  <h5 class="text-white fw-bold mb-0">Tap Share in Safari</h5>
+                  <h5 class="text-white fw-bold mb-0 fs-6">Tap Share in Safari</h5>
                 </div>
                 <p class="text-muted fs-7 mb-0">Open <code class="text-info">stream-in.app</code> in Apple Safari. Tap the <strong>Share</strong> button (<i class="fa-solid fa-arrow-up-from-bracket text-primary"></i>) located in the bottom navigation toolbar.</p>
               </div>
             </div>
             <div class="col-md-4">
-              <div class="glass-panel p-4 h-100 text-start border border-secondary border-opacity-25">
+              <div class="glass-panel p-3 p-sm-4 h-100 text-start border border-secondary border-opacity-25">
                 <div class="d-flex align-items-center gap-2 mb-2">
                   <span class="badge bg-primary rounded-circle p-2 font-monospace">02</span>
-                  <h5 class="text-white fw-bold mb-0">Select "Add to Home Screen"</h5>
+                  <h5 class="text-white fw-bold mb-0 fs-6">Tap "Add to Home Screen"</h5>
                 </div>
                 <p class="text-muted fs-7 mb-0">Scroll down through the iOS share sheet actions and tap <strong>"Add to Home Screen"</strong> (<i class="fa-regular fa-square-plus text-success"></i>).</p>
               </div>
             </div>
             <div class="col-md-4">
-              <div class="glass-panel p-4 h-100 text-start border border-secondary border-opacity-25">
+              <div class="glass-panel p-3 p-sm-4 h-100 text-start border border-secondary border-opacity-25">
                 <div class="d-flex align-items-center gap-2 mb-2">
                   <span class="badge bg-primary rounded-circle p-2 font-monospace">03</span>
-                  <h5 class="text-white fw-bold mb-0">Tap "Add" to Launch</h5>
+                  <h5 class="text-white fw-bold mb-0 fs-6">Launch PrepSpace</h5>
                 </div>
-                <p class="text-muted fs-7 mb-0">Tap <strong>Add</strong> in the top-right corner. PrepSpace is now installed on your iPhone home screen with the official app icon and zero browser address bar!</p>
+                <p class="text-muted fs-7 mb-0">Tap <strong>Add</strong> in the top-right corner. PrepSpace is now installed on your iPhone home screen with the official app icon and full-screen experience!</p>
               </div>
             </div>
           </div>

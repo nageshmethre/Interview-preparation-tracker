@@ -4037,6 +4037,7 @@ function bindCodingPracticeEvents(rawQuestions = []) {
         b.classList.remove('active', 'text-white');
         b.classList.add('text-muted');
         b.style.borderBottom = 'none';
+        b.style.background = 'transparent';
       }
     });
     if (explorerCol) explorerCol.classList.add('d-none');
@@ -4048,6 +4049,7 @@ function bindCodingPracticeEvents(rawQuestions = []) {
         btnShowExplorer.classList.add('active', 'text-white');
         btnShowExplorer.classList.remove('text-muted');
         btnShowExplorer.style.borderBottom = '2px solid #3b82f6';
+        btnShowExplorer.style.background = 'rgba(59, 130, 246, 0.12)';
       }
       if (explorerCol) explorerCol.classList.remove('d-none');
     } else if (view === 'desc') {
@@ -4055,13 +4057,18 @@ function bindCodingPracticeEvents(rawQuestions = []) {
         btnShowDesc.classList.add('active', 'text-white');
         btnShowDesc.classList.remove('text-muted');
         btnShowDesc.style.borderBottom = '2px solid #3b82f6';
+        btnShowDesc.style.background = 'rgba(59, 130, 246, 0.12)';
       }
-      if (leftPane) leftPane.classList.remove('d-none');
+      if (leftPane) {
+        leftPane.classList.remove('d-none');
+        leftPane.scrollTop = 0;
+      }
     } else {
       if (btnShowEditor) {
         btnShowEditor.classList.add('active', 'text-white');
         btnShowEditor.classList.remove('text-muted');
         btnShowEditor.style.borderBottom = '2px solid #3b82f6';
+        btnShowEditor.style.background = 'rgba(59, 130, 246, 0.12)';
       }
       if (rightPane) rightPane.classList.remove('d-none');
     }
@@ -4222,6 +4229,36 @@ function bindCodingPracticeEvents(rawQuestions = []) {
       selectQuestion(e.currentTarget.dataset);
     });
   });
+
+  // Mobile Switcher Prev/Next Problem Handlers
+  const btnMobilePrev = document.getElementById('btn-mobile-prev-problem');
+  const btnMobileNext = document.getElementById('btn-mobile-next-problem');
+
+  if (btnMobilePrev) {
+    btnMobilePrev.addEventListener('click', () => {
+      const cards = Array.from(document.querySelectorAll('#practice-problems-list .btn-select-question'));
+      if (!cards.length) return;
+      const currentIndex = cards.findIndex(c => String(c.dataset.questionId) === String(activeQuestionId));
+      const prevIndex = (currentIndex > 0) ? currentIndex - 1 : cards.length - 1;
+      if (cards[prevIndex]) {
+        selectQuestion(cards[prevIndex].dataset);
+        showToast(`Problem: ${cards[prevIndex].dataset.title}`, 'info');
+      }
+    });
+  }
+
+  if (btnMobileNext) {
+    btnMobileNext.addEventListener('click', () => {
+      const cards = Array.from(document.querySelectorAll('#practice-problems-list .btn-select-question'));
+      if (!cards.length) return;
+      const currentIndex = cards.findIndex(c => String(c.dataset.questionId) === String(activeQuestionId));
+      const nextIndex = (currentIndex >= 0 && currentIndex < cards.length - 1) ? currentIndex + 1 : 0;
+      if (cards[nextIndex]) {
+        selectQuestion(cards[nextIndex].dataset);
+        showToast(`Problem: ${cards[nextIndex].dataset.title}`, 'info');
+      }
+    });
+  }
 
   // Top Breadcrumb Header Quick Selector
   if (headerSelect) {
