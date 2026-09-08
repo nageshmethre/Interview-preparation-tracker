@@ -7791,6 +7791,7 @@ function handleLibraryReaderRoute(hash, pageMount) {
   } catch (e) {}
 
   pageMount.innerHTML = components.bookReader(book, chapter, chapters, progressMap[bookId], bookmarks, isProUser);
+  pageMount.scrollTo({ top: 0, behavior: 'instant' });
   bindTechnicalReaderEvents(book, chapter, isProUser);
 }
 
@@ -7805,6 +7806,8 @@ function bindTechnicalReaderEvents(book, chapter, isProUser) {
   const markCompleteBtn = document.getElementById('btn-mark-chapter-complete');
   const fontIncBtn = document.getElementById('btn-font-increase');
   const fontDecBtn = document.getElementById('btn-font-decrease');
+  const focusBtn = document.getElementById('btn-reader-focus');
+  const pageMountEl = document.getElementById('page-mount');
 
   // 1. Restore Theme & Font Size
   const savedTheme = localStorage.getItem('reader-theme') || 'theme-dark';
@@ -7818,21 +7821,48 @@ function bindTechnicalReaderEvents(book, chapter, isProUser) {
     article.style.fontSize = currentFontSize + 'px';
   }
 
-  // 2. Scroll Progress Bar Listener
+  // 2. Scroll Progress Bar Listener (Attached directly to page-mount container)
   function onScrollProgress() {
     if (!scrollBar) return;
-    const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
-    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const target = pageMountEl || document.documentElement;
+    const winScroll = target.scrollTop || window.scrollY || 0;
+    const scrollHeight = (target.scrollHeight || document.documentElement.scrollHeight);
+    const clientHeight = (target.clientHeight || window.innerHeight);
+    const height = scrollHeight - clientHeight;
     const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
-    scrollBar.style.width = scrolled + '%';
+    scrollBar.style.width = Math.min(100, Math.max(0, scrolled)) + '%';
   }
-  if (window._readerScrollHandler) {
-    window.removeEventListener('scroll', window._readerScrollHandler);
+
+  if (pageMountEl) {
+    pageMountEl.removeEventListener('scroll', window._readerScrollHandler);
+    pageMountEl.addEventListener('scroll', onScrollProgress, { passive: true });
   }
+  window.removeEventListener('scroll', window._readerScrollHandler);
   window._readerScrollHandler = onScrollProgress;
   window.addEventListener('scroll', window._readerScrollHandler, { passive: true });
 
-  // 3. Font Size Controls
+  // 3. Zen Focus Mode (Hides Left Sidebar for Authentic Book Reading)
+  if (focusBtn) {
+    focusBtn.addEventListener('click', () => {
+      const appContainer = document.getElementById('app-container');
+      if (appContainer) {
+        const isNowCollapsed = appContainer.classList.toggle('collapsed');
+        if (isNowCollapsed) {
+          focusBtn.innerHTML = '<i class="fa-solid fa-compress me-1 text-primary"></i> <span class="d-none d-lg-inline">Exit Zen</span>';
+          focusBtn.classList.add('btn-primary', 'text-white');
+          focusBtn.classList.remove('btn-glass');
+          showToast('Zen Reading Mode enabled (sidebar collapsed for full focus)', 'info');
+        } else {
+          focusBtn.innerHTML = '<i class="fa-solid fa-expand me-1 text-info"></i> <span class="d-none d-lg-inline">Zen Mode</span>';
+          focusBtn.classList.remove('btn-primary', 'text-white');
+          focusBtn.classList.add('btn-glass');
+          showToast('Exited Zen Mode', 'info');
+        }
+      }
+    });
+  }
+
+  // 4. Font Size Controls
   if (fontIncBtn && article) {
     fontIncBtn.addEventListener('click', () => {
       if (currentFontSize < 24) {
@@ -7853,7 +7883,7 @@ function bindTechnicalReaderEvents(book, chapter, isProUser) {
     });
   }
 
-  // 4. Reader Theme Switcher
+  // 5. Reader Theme Switcher
   document.querySelectorAll('[data-reader-theme]').forEach(btn => {
     btn.addEventListener('click', () => {
       const theme = btn.getAttribute('data-reader-theme');
@@ -7866,20 +7896,30 @@ function bindTechnicalReaderEvents(book, chapter, isProUser) {
     });
   });
 
-  // 5. Drawer Controls
+  // 6. Table of Contents Drawer Controls (Works on Desktop & Mobile)
   if (toggleTocBtn && tocDrawer) {
     toggleTocBtn.addEventListener('click', () => {
-      tocDrawer.classList.toggle('active');
+      if (window.innerWidth >= 992) {
+        tocDrawer.classList.toggle('collapsed');
+        toggleTocBtn.classList.toggle('active');
+      } else {
+        tocDrawer.classList.toggle('active');
+      }
     });
   }
 
   if (closeTocBtn && tocDrawer) {
     closeTocBtn.addEventListener('click', () => {
-      tocDrawer.classList.remove('active');
+      if (window.innerWidth >= 992) {
+        tocDrawer.classList.add('collapsed');
+        if (toggleTocBtn) toggleTocBtn.classList.remove('active');
+      } else {
+        tocDrawer.classList.remove('active');
+      }
     });
   }
 
-  // 6. Bookmark Action
+  // 7. Dynamic Bookmark Toggle Action
   if (bookmarkBtn) {
     bookmarkBtn.addEventListener('click', () => {
       const bookmarkKey = 'prepspace_library_bookmarks_' + book.id;
@@ -7888,17 +7928,31 @@ function bindTechnicalReaderEvents(book, chapter, isProUser) {
         bookmarks = JSON.parse(localStorage.getItem(bookmarkKey) || '[]');
       } catch (e) {}
 
-      const newBookmark = {
-        id: Date.now(),
-        bookId: book.id,
-        chapterNumber: chapter.chapterNumber,
-        title: chapter.title,
-        createdAt: new Date().toISOString()
-      };
-      bookmarks.unshift(newBookmark);
-      localStorage.setItem(bookmarkKey, JSON.stringify(bookmarks));
+      const existingIdx = bookmarks.findIndex(b => b.chapterNumber === chapter.chapterNumber);
+      if (existingIdx >= 0) {
+        // Remove existing bookmark
+        bookmarks.splice(existingIdx, 1);
+        localStorage.setItem(bookmarkKey, JSON.stringify(bookmarks));
+        bookmarkBtn.innerHTML = '<i class="fa-regular fa-bookmark text-primary"></i> <span class="d-none d-sm-inline">Bookmark</span>';
+        bookmarkBtn.setAttribute('data-bookmarked', 'false');
+        showToast(`Bookmark removed for Chapter ${chapter.chapterNumber}`, 'info');
+      } else {
+        // Add new bookmark
+        const newBookmark = {
+          id: Date.now(),
+          bookId: book.id,
+          chapterNumber: chapter.chapterNumber,
+          title: chapter.title,
+          createdAt: new Date().toISOString()
+        };
+        bookmarks.unshift(newBookmark);
+        localStorage.setItem(bookmarkKey, JSON.stringify(bookmarks));
+        bookmarkBtn.innerHTML = '<i class="fa-solid fa-bookmark text-warning"></i> <span class="d-none d-sm-inline">Bookmarked</span>';
+        bookmarkBtn.setAttribute('data-bookmarked', 'true');
+        showToast(`Chapter ${chapter.chapterNumber} bookmarked!`, 'success');
+      }
 
-      // Synchronize with backend API
+      // Synchronize with backend API asynchronously
       apiFetch('/v1/library/bookmarks/' + book.id, {
         method: 'POST',
         body: JSON.stringify({
@@ -7907,12 +7961,10 @@ function bindTechnicalReaderEvents(book, chapter, isProUser) {
           title: `Chapter ${chapter.chapterNumber}: ${chapter.title}`
         })
       }).catch(() => {});
-
-      showToast(`Bookmark saved for Chapter ${chapter.chapterNumber}!`, 'success');
     });
   }
 
-  // 7. Mark Chapter Complete Action
+  // 8. Mark Chapter Complete Action
   if (markCompleteBtn) {
     markCompleteBtn.addEventListener('click', () => {
       let progressMap = {};

@@ -5852,9 +5852,15 @@ const components = {
 
           <!-- Right: Reader Display Controls -->
           <div class="d-flex align-items-center gap-2">
+            <!-- Zen / Fullscreen Reading Mode -->
+            <button id="btn-reader-focus" class="btn btn-glass btn-sm" title="Toggle Fullscreen Focus Mode">
+              <i class="fa-solid fa-expand me-1 text-info"></i> <span class="d-none d-lg-inline">Zen Mode</span>
+            </button>
+
             <!-- Bookmark Button -->
-            <button id="btn-add-bookmark" class="btn btn-glass btn-sm" title="Save Bookmark">
-              <i class="fa-regular fa-bookmark text-primary"></i> <span class="d-none d-sm-inline">Bookmark</span>
+            <button id="btn-add-bookmark" class="btn btn-glass btn-sm" title="${(bookmarks || []).some(b => b.chapterNumber === chapter.chapterNumber) ? 'Bookmarked' : 'Save Bookmark'}" data-bookmarked="${(bookmarks || []).some(b => b.chapterNumber === chapter.chapterNumber) ? 'true' : 'false'}">
+              <i class="${(bookmarks || []).some(b => b.chapterNumber === chapter.chapterNumber) ? 'fa-solid fa-bookmark text-warning' : 'fa-regular fa-bookmark text-primary'}"></i> 
+              <span class="d-none d-sm-inline">${(bookmarks || []).some(b => b.chapterNumber === chapter.chapterNumber) ? 'Bookmarked' : 'Bookmark'}</span>
             </button>
 
             <!-- Font Size Adjuster -->
