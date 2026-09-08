@@ -26,6 +26,8 @@ $$\text{PRD Requirement} \longrightarrow \text{TRD Requirement} \longrightarrow 
 | **`FR-AUTH-003`** | `TR-AUTH-001` | `User` | `POST /api/auth/login` | `components.login()` | `JwtTokenProvider.java`, `JwtAuthenticationFilter.java` | `TEST-AUTH-003` | **IMPLEMENTED** |
 | **`FR-AUTH-004`** | `TR-AUTH-003` | `User` | `POST /api/auth/google` | `components.login()` | `AuthController.java`, `GoogleLoginRequest.java` | `TEST-AUTH-003` | **IMPLEMENTED** |
 | **`FR-AUTH-005`** | `TR-AUTH-002` | `users.account_locked_until` | `POST /api/auth/login` | `components.login()` | `UserServiceImpl.java`, `User.java` | `TEST-AUTH-005` | **IMPLEMENTED** |
+| **`FR-AUTH-006`** | `TR-AUTH-004` | `User.email` | `POST /api/send-otp` | `components.forgotPassword()` | `send-otp.js`, `app.js` (`bindForgotPasswordEvents`) | `TEST-AUTH-006` | **IMPLEMENTED** |
+| **`FR-AUTH-007`** | `TR-AUTH-004` | `User.password` | `POST /api/auth/login` | `components.resetPassword()`, `components.sessionExpiredModal()` | `app.js` (`bindResetPasswordEvents`), `production-pages.js` (`handleSessionResume`) | `TEST-AUTH-007` | **IMPLEMENTED** |
 | **`FR-SUB-001`** | `TR-SUB-001` | `Payment`, `User` | `GET /api/users/profile` | `components.appLayout()` | `app.js`, `components.js` (`state.isPaid`) | `TEST-SUB-001` | **IMPLEMENTED** |
 | **`FR-SUB-002`** | `TR-SUB-001` | `BookChapter` | `GET /api/v1/library/books` | `components.libraryHub()` | `components.js`, `technical-library-data.js` | `TEST-SUB-001` | **IMPLEMENTED** |
 | **`FR-SUB-003`** | `TR-SUB-002` | `BookChapter` | `GET .../chapters/{id}` | `components.bookReader()` | `LibraryServiceImpl.java` (403 Gating) | `TEST-SUB-002` | **IMPLEMENTED** |
@@ -49,9 +51,9 @@ $$\text{PRD Requirement} \longrightarrow \text{TRD Requirement} \longrightarrow 
 
 ## 3. Coverage Analysis & Gap Summary
 
-- **Product Requirements Mapped**: $23 / 23$ ($100\%$).
-- **Fully Implemented & Verified**: $23 / 23$ ($100\%$).
-- **Planned / Pending**: $0 / 23$ ($0\%$).
+- **Product Requirements Mapped**: $25 / 25$ ($100\%$).
+- **Fully Implemented & Verified**: $25 / 25$ ($100\%$).
+- **Planned / Pending**: $0 / 25$ ($0\%$).
 - **Zero Orphaned Code Assets**: All entities, services, controllers, and frontend routes in the active build map directly to product requirements with complete bidirectional traceability.
 - **Automated Test Coverage**: 16/16 unit tests passing across `AuthServiceTests`, `LibraryServiceTests`, and `QuestionServiceTests` (`BUILD SUCCESS`).
 - **Visual QA Multi-Breakpoint Status**: Zero horizontal overflow verified across 15 breakpoints ($320\text{px}$ to $1920\text{px}$).
