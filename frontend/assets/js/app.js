@@ -1071,16 +1071,20 @@ function showToast(message, type = 'success') {
 
   const toast = document.createElement('div');
   toast.className = `glass-toast`;
-  const icon = type === 'success' ? 'fa-circle-check text-success' : 'fa-circle-exclamation text-danger';
+  let icon = 'fa-circle-check text-success';
+  if (type === 'danger') icon = 'fa-circle-xmark text-danger';
+  else if (type === 'warning') icon = 'fa-triangle-exclamation text-warning';
+  else if (type === 'info') icon = 'fa-circle-info text-info';
+
   toast.innerHTML = `
-    <i class="fa-solid ${icon} fs-5"></i>
-    <span>${message}</span>
+    <i class="fa-solid ${icon} fs-5 flex-shrink-0"></i>
+    <span class="flex-grow-1">${message}</span>
   `;
 
   container.appendChild(toast);
   setTimeout(() => {
     toast.style.opacity = '0';
-    toast.style.transform = 'translateY(-20px)';
+    toast.style.transform = 'translateY(-15px)';
     toast.style.transition = 'all 0.3s ease';
     setTimeout(() => toast.remove(), 300);
   }, 3500);
@@ -2391,9 +2395,15 @@ function loadProfileDetails() {
 function bindProfileEvents() {
   document.querySelectorAll('.btn-settings-tab').forEach(btn => {
     btn.addEventListener('click', (e) => {
-      document.querySelectorAll('.btn-settings-tab').forEach(b => b.classList.remove('active'));
-      e.currentTarget.classList.add('active');
       const tab = e.currentTarget.dataset.tab;
+      document.querySelectorAll('.btn-settings-tab').forEach(b => b.classList.remove('active', 'btn-primary'));
+      document.querySelectorAll(`.btn-settings-tab[data-tab="${tab}"]`).forEach(b => {
+        b.classList.add('active');
+        if (b.classList.contains('btn-glass')) {
+          b.classList.add('btn-primary');
+          b.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+      });
       switchSettingsTab(tab);
     });
   });
@@ -3861,15 +3871,51 @@ function bindDsaRoadmapEvents(roadmapData) {
     activeRoadmapStore = roadmapData;
   }
   const nodes = document.querySelectorAll('.roadmap-node-card');
+  const railCol = document.getElementById('roadmap-rail-col');
+  const detailCol = document.getElementById('dsa-detail-wrapper');
+  const btnShowTopics = document.getElementById('btn-show-roadmap-topics');
+  const btnShowReader = document.getElementById('btn-show-roadmap-reader');
+  const btnBackToTopics = document.getElementById('btn-roadmap-back-to-topics');
+
+  function setRoadmapMobileView(view) {
+    if (window.innerWidth >= 992) {
+      if (railCol) railCol.classList.remove('d-none');
+      if (detailCol) detailCol.classList.remove('d-none');
+      return;
+    }
+    if (view === 'topics') {
+      if (railCol) { railCol.classList.remove('d-none'); railCol.classList.add('d-flex'); }
+      if (detailCol) { detailCol.classList.add('d-none'); detailCol.classList.remove('d-block'); }
+      if (btnShowTopics) { btnShowTopics.classList.add('active', 'btn-primary'); btnShowTopics.classList.remove('text-muted'); }
+      if (btnShowReader) { btnShowReader.classList.remove('active', 'btn-primary'); btnShowReader.classList.add('text-muted'); }
+    } else {
+      if (railCol) { railCol.classList.add('d-none'); railCol.classList.remove('d-flex'); }
+      if (detailCol) { detailCol.classList.remove('d-none'); detailCol.classList.add('d-block'); }
+      if (btnShowReader) { btnShowReader.classList.add('active', 'btn-primary'); btnShowReader.classList.remove('text-muted'); }
+      if (btnShowTopics) { btnShowTopics.classList.remove('active', 'btn-primary'); btnShowTopics.classList.add('text-muted'); }
+      if (detailCol) detailCol.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  if (btnShowTopics) {
+    btnShowTopics.addEventListener('click', () => setRoadmapMobileView('topics'));
+  }
+  if (btnShowReader) {
+    btnShowReader.addEventListener('click', () => setRoadmapMobileView('reader'));
+  }
+  if (btnBackToTopics) {
+    btnBackToTopics.addEventListener('click', () => setRoadmapMobileView('topics'));
+  }
+
   nodes.forEach(card => {
     card.addEventListener('click', (e) => {
       const topicId = e.currentTarget.dataset.topicId;
       nodes.forEach(n => {
-        n.classList.remove('border-primary', 'bg-dark', 'shadow-sm');
+        n.classList.remove('border-primary', 'bg-dark', 'shadow-sm', 'active-topic');
         n.classList.add('border-secondary');
       });
       e.currentTarget.classList.remove('border-secondary');
-      e.currentTarget.classList.add('border-primary', 'bg-dark', 'shadow-sm');
+      e.currentTarget.classList.add('border-primary', 'bg-dark', 'shadow-sm', 'active-topic');
 
       const data = activeRoadmapStore || COMPREHENSIVE_DSA_ROADMAP;
       const topic = data.find(t => t.id == topicId) || COMPREHENSIVE_DSA_ROADMAP.find(t => t.id == topicId);
@@ -3878,6 +3924,11 @@ function bindDsaRoadmapEvents(roadmapData) {
         const detailWrapper = document.getElementById('dsa-detail-wrapper') || document.getElementById('page-mount');
         if (detailWrapper) detailWrapper.scrollTo({ top: 0, behavior: 'smooth' });
       }
+
+      // On mobile screens, automatically transition into the reader view
+      if (window.innerWidth < 992) {
+        setRoadmapMobileView('reader');
+      }
     });
   });
 
@@ -3885,7 +3936,7 @@ function bindDsaRoadmapEvents(roadmapData) {
   if (nodes.length > 0) {
     const firstCard = nodes[0];
     firstCard.classList.remove('border-secondary');
-    firstCard.classList.add('border-primary', 'bg-dark', 'shadow-sm');
+    firstCard.classList.add('border-primary', 'bg-dark', 'shadow-sm', 'active-topic');
     const data = activeRoadmapStore || COMPREHENSIVE_DSA_ROADMAP;
     const firstTopic = data[0];
     if (firstTopic) {
@@ -4752,11 +4803,67 @@ function bindAptitudeEvents(topics = [], questions = []) {
     if (pageIndicator) pageIndicator.textContent = `Chapter ${idx + 1} of ${chapters.length}`;
     if (selectEl) selectEl.value = chap.id;
 
+    const currentBtnLabel = document.getElementById('current-chapter-btn-label');
+    if (currentBtnLabel) {
+      currentBtnLabel.textContent = `Ch ${chap.chapterNumber}: ${chap.title}`;
+    }
+
     if (btnPrev) btnPrev.disabled = (idx === 0);
     if (btnNext) btnNext.disabled = (idx === chapters.length - 1);
   }
 
   renderChapter(currentChapIdx);
+
+  // Searchable Chapter Selector Modal Controls
+  const btnOpenChapterSelector = document.getElementById('btn-open-chapter-selector');
+  const modalEl = document.getElementById('aptitudeChaptersModal');
+  if (btnOpenChapterSelector && modalEl && window.bootstrap) {
+    btnOpenChapterSelector.addEventListener('click', () => {
+      const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+      modal.show();
+    });
+  }
+
+  const modalSearch = document.getElementById('modal-chapter-search');
+  if (modalSearch) {
+    modalSearch.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      document.querySelectorAll('.chapter-modal-item').forEach(item => {
+        const title = item.dataset.title || '';
+        const chapId = item.dataset.chapId || '';
+        const match = title.includes(query) || chapId.includes(query);
+        item.style.display = match ? '' : 'none';
+      });
+    });
+  }
+
+  document.querySelectorAll('.filter-chap-tab').forEach(tabBtn => {
+    tabBtn.addEventListener('click', (e) => {
+      document.querySelectorAll('.filter-chap-tab').forEach(t => t.classList.remove('active', 'btn-primary'));
+      e.currentTarget.classList.add('active', 'btn-primary');
+      const sec = e.currentTarget.dataset.section;
+      document.querySelectorAll('.chapter-modal-item').forEach(item => {
+        if (sec === 'all' || item.dataset.sec === sec) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  document.querySelectorAll('.chapter-modal-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      const idx = parseInt(e.currentTarget.dataset.chapIdx, 10);
+      if (!isNaN(idx)) {
+        renderChapter(idx);
+        if (modalEl && window.bootstrap) {
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          if (modal) modal.hide();
+        }
+      }
+    });
+  });
 
   const selectChap = document.getElementById('book-chapter-select');
   if (selectChap) {
@@ -6665,7 +6772,7 @@ function loadAdminPanelTab(tab) {
         if (searchInput) {
           searchInput.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase().trim();
-            document.querySelectorAll('.user-table-row').forEach(row => {
+            document.querySelectorAll('.user-table-row, .user-card-item').forEach(row => {
               const name = row.dataset.name || '';
               const email = row.dataset.email || '';
               const role = row.dataset.role || '';
@@ -6682,7 +6789,7 @@ function loadAdminPanelTab(tab) {
             e.currentTarget.classList.add('active');
             const filter = e.currentTarget.dataset.filter;
 
-            document.querySelectorAll('.user-table-row').forEach(row => {
+            document.querySelectorAll('.user-table-row, .user-card-item').forEach(row => {
               if (filter === 'all') {
                 row.style.display = '';
               } else if (filter === 'pro') {
@@ -6732,10 +6839,11 @@ function loadAdminPanelTab(tab) {
                   loadAdminPanelTab('users');
                 })
                 .catch(err => {
+                  console.warn('Toggle-pro error:', err);
                   if (err.message && err.message.includes('No static resource')) {
-                    showToast('Backend update pending on Render: Please deploy latest commit in Render Dashboard to activate toggle-pro.', 'warning');
+                    showToast('Feature temporarily unavailable on server. Please try again shortly.', 'warning');
                   } else {
-                    showToast(err.message, 'danger');
+                    showToast(err.message || 'Unable to update candidate status.', 'danger');
                   }
                 });
             }

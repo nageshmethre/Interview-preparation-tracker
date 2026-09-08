@@ -1512,8 +1512,48 @@ const components = {
   // Settings / Profile View
   profile: () => `
     <div class="settings-container h-100">
-      <!-- Settings Tabs Sidebar (Fixed Navigator with dedicated subtle scroll) -->
-      <div class="settings-sidebar-wrapper">
+      <!-- Mobile Settings Category Horizontal Pill Rail (< 992px) -->
+      <div class="d-flex d-lg-none align-items-center gap-1.5 overflow-x-auto pb-2 mb-2 w-100 flex-shrink-0" id="mobile-settings-pills" style="scrollbar-width: none; -webkit-overflow-scrolling: touch;">
+        <button type="button" class="btn btn-sm btn-glass text-nowrap py-1.5 px-3 fs-9 active btn-settings-tab" data-tab="profile">
+          <i class="fa-solid fa-circle-user text-indigo me-1"></i> Profile
+        </button>
+        <button type="button" class="btn btn-sm btn-glass text-nowrap py-1.5 px-3 fs-9 btn-settings-tab" data-tab="security">
+          <i class="fa-solid fa-shield-halved text-success me-1"></i> Security
+        </button>
+        <button type="button" class="btn btn-sm btn-glass text-nowrap py-1.5 px-3 fs-9 btn-settings-tab" data-tab="appearance">
+          <i class="fa-solid fa-palette text-warning me-1"></i> Appearance
+        </button>
+        <button type="button" class="btn btn-sm btn-glass text-nowrap py-1.5 px-3 fs-9 btn-settings-tab" data-tab="notifications">
+          <i class="fa-solid fa-bell text-danger me-1"></i> Alerts
+        </button>
+        <button type="button" class="btn btn-sm btn-glass text-nowrap py-1.5 px-3 fs-9 btn-settings-tab" data-tab="learning">
+          <i class="fa-solid fa-book-open text-primary me-1"></i> Goals
+        </button>
+        <button type="button" class="btn btn-sm btn-glass text-nowrap py-1.5 px-3 fs-9 btn-settings-tab" data-tab="career">
+          <i class="fa-solid fa-briefcase text-success me-1"></i> Career
+        </button>
+        <button type="button" class="btn btn-sm btn-glass text-nowrap py-1.5 px-3 fs-9 btn-settings-tab" data-tab="dashboard">
+          <i class="fa-solid fa-chart-line text-indigo me-1"></i> Widgets
+        </button>
+        <button type="button" class="btn btn-sm btn-glass text-nowrap py-1.5 px-3 fs-9 btn-settings-tab" data-tab="privacy">
+          <i class="fa-solid fa-user-shield text-danger me-1"></i> Privacy
+        </button>
+        <button type="button" class="btn btn-sm btn-glass text-nowrap py-1.5 px-3 fs-9 btn-settings-tab" data-tab="devices">
+          <i class="fa-solid fa-desktop text-info me-1"></i> Devices
+        </button>
+        <button type="button" class="btn btn-sm btn-glass text-nowrap py-1.5 px-3 fs-9 btn-settings-tab" data-tab="importexport">
+          <i class="fa-solid fa-file-export text-muted me-1"></i> Export
+        </button>
+        <button type="button" class="btn btn-sm btn-glass text-nowrap py-1.5 px-3 fs-9 btn-settings-tab" data-tab="developer">
+          <i class="fa-solid fa-code text-muted me-1"></i> API
+        </button>
+        <button type="button" class="btn btn-sm btn-glass text-nowrap py-1.5 px-3 fs-9 btn-settings-tab" data-tab="about">
+          <i class="fa-solid fa-circle-info text-muted me-1"></i> About
+        </button>
+      </div>
+
+      <!-- Settings Tabs Sidebar (Desktop Only: Fixed Navigator with dedicated subtle scroll) -->
+      <div class="settings-sidebar-wrapper d-none d-lg-block">
         <div class="glass-panel p-3 h-100 overflow-y-auto" style="scrollbar-width: thin; scrollbar-color: #3f3f46 #1c1c20;">
           <div class="settings-nav-group">
             <div class="settings-nav-header">Account</div>
@@ -1572,7 +1612,7 @@ const components = {
       </div>
 
       <!-- Settings Content Workspace: Only this page moves with its own grey slider -->
-      <div class="settings-content-wrapper h-100">
+      <div class="settings-content-wrapper h-100 flex-grow-1 min-w-0">
         <div class="glass-panel p-4 h-100 overflow-y-auto legal-doc-viewer" id="settings-workspace-mount">
           <!-- Loaded dynamically via js -->
           <div class="text-center py-5"><div class="spinner-border text-primary"></div></div>
@@ -2352,28 +2392,47 @@ const components = {
   dsaRoadmap: (topics) => {
     const list = Array.isArray(topics) ? topics : (topics && Array.isArray(topics.topics) ? topics.topics : (topics && Array.isArray(topics.categories) ? topics.categories : []));
     return `
-    <div class="row g-3 dsa-roadmap-container" style="height: calc(100vh - 85px); overflow: hidden;">
-      <!-- Left: Fixed Topic Navigation Rail (Kept in fixed place) -->
-      <div class="col-12 col-lg-4 col-xl-3 h-100 d-flex flex-column" style="position: sticky; top: 0;">
+    <!-- Mobile Segmented Switcher (< 992px) -->
+    <div class="d-flex d-lg-none align-items-center bg-dark bg-opacity-75 border border-secondary border-opacity-25 rounded-3 p-1 mb-2.5 flex-shrink-0" id="roadmap-mobile-switcher">
+      <button type="button" class="btn btn-sm flex-fill py-1.5 px-2 active btn-primary font-monospace fw-semibold" id="btn-show-roadmap-topics" style="font-size: 0.78rem;">
+        <i class="fa-solid fa-list-check me-1.5"></i>Modules (${list.length})
+      </button>
+      <button type="button" class="btn btn-sm flex-fill py-1.5 px-2 text-muted font-monospace fw-semibold" id="btn-show-roadmap-reader" style="font-size: 0.78rem;">
+        <i class="fa-solid fa-book-open me-1.5"></i>Topic Reader
+      </button>
+    </div>
+
+    <div class="row g-3 dsa-roadmap-container" id="dsa-roadmap-main-row" style="height: calc(100vh - 90px); overflow: hidden;">
+      <!-- Left: Fixed Topic Navigation Rail -->
+      <div class="col-12 col-lg-4 col-xl-3 h-100 d-flex flex-column" id="roadmap-rail-col" style="position: sticky; top: 0;">
         <div class="glass-panel p-3 d-flex flex-column h-100 border border-secondary border-opacity-20" style="background: #141416;">
           <div class="d-flex align-items-center justify-content-between pb-2 mb-2 border-bottom border-secondary border-opacity-20 flex-shrink-0">
             <h5 class="text-white fw-bold m-0 fs-7"><i class="fa-solid fa-folder-tree text-primary me-2"></i>Roadmap Modules</h5>
             <span class="badge bg-indigo-subtle text-primary border border-primary-subtle fs-9 font-monospace">${list.length} Topics</span>
           </div>
-          <div class="d-flex flex-column gap-1.5 flex-grow-1 overflow-y-auto pe-1" id="roadmap-tree-nodes" style="scrollbar-width: thin; scrollbar-color: #3f3f46 transparent;">
+          <div class="d-flex flex-column gap-2 flex-grow-1 overflow-y-auto pe-1" id="roadmap-tree-nodes" style="scrollbar-width: thin; scrollbar-color: #3f3f46 transparent;">
             ${list.map((t, idx) => `
-              <div class="roadmap-node-card p-2.5 rounded border border-secondary border-opacity-25 ${idx === 0 ? 'border-primary bg-dark shadow-sm' : ''}" style="cursor: pointer; transition: all 0.15s ease;" data-topic-id="${t.id || (idx + 1)}">
-                <div class="d-flex align-items-center justify-content-between">
-                  <span class="fw-bold text-white fs-8 text-truncate me-2"><i class="fa-solid fa-circle-dot me-2 text-indigo"></i>Topic ${idx + 1}: ${t.name || t.title || 'Module'}</span>
+              <div class="roadmap-node-card p-2.5 rounded-3 border border-secondary border-opacity-25 ${idx === 0 ? 'border-primary bg-dark shadow-sm active-topic' : ''}" style="cursor: pointer; transition: all 0.15s ease;" data-topic-id="${t.id || (idx + 1)}">
+                <div class="d-flex align-items-center justify-content-between mb-1.5">
+                  <span class="badge bg-indigo-subtle text-primary border border-primary-subtle fs-9 font-monospace"><i class="fa-solid fa-circle-dot me-1 text-primary"></i>Topic ${idx + 1}</span>
                   <span class="badge bg-dark text-muted border border-secondary border-opacity-20 fs-9">${(t.subtopics || []).length} Modules</span>
+                </div>
+                <div class="fw-semibold text-white fs-8 ps-0.5" style="line-height: 1.35; word-break: break-word; white-space: normal;">
+                  ${t.name || t.title || 'Module'}
                 </div>
               </div>
             `).join('')}
           </div>
         </div>
       </div>
-      <!-- Right: Scrollable Document Reader (The only slide bar that moves) -->
-      <div class="col-12 col-lg-8 col-xl-9 h-100 overflow-y-auto pe-1" id="dsa-detail-wrapper" style="scrollbar-width: thin; scrollbar-color: #3f3f46 transparent;">
+      <!-- Right: Scrollable Document Reader -->
+      <div class="col-12 col-lg-8 col-xl-9 h-100 overflow-y-auto pe-1 d-none d-lg-block" id="dsa-detail-wrapper" style="scrollbar-width: thin; scrollbar-color: #3f3f46 transparent;">
+        <!-- Mobile Back Button (< 992px) -->
+        <div class="d-block d-lg-none mb-2.5">
+          <button type="button" class="btn btn-sm btn-outline-primary py-1.5 px-3 fs-8 fw-semibold d-inline-flex align-items-center gap-2" id="btn-roadmap-back-to-topics">
+            <i class="fa-solid fa-arrow-left"></i> Back to Modules List
+          </button>
+        </div>
         <div class="glass-panel p-3.5 p-md-4" id="dsa-detail-panel" style="min-height: 100%;">
           <div class="text-center py-5 text-muted">
             <i class="fa-solid fa-route display-5 mb-3"></i>
@@ -2823,10 +2882,14 @@ const components = {
         <div id="aptitude-book-view" class="book-outer-wrapper">
           <!-- Reader Top Controls Bar -->
           <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2 p-2 rounded bg-dark border border-secondary border-opacity-25">
-            <!-- Chapter Selector Dropdown -->
-            <div class="d-flex align-items-center gap-2">
+            <!-- Chapter Selector Trigger & Searchable Modal -->
+            <div class="d-flex align-items-center gap-2 flex-wrap min-w-0">
               <span class="text-muted fs-8 fw-semibold d-none d-sm-inline">Chapter:</span>
-              <select id="book-chapter-select" class="form-select form-select-sm bg-dark text-white border-secondary fs-8 py-1" style="min-width: 280px; max-width: 420px;">
+              <button type="button" class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-between gap-2 text-start px-2.5 py-1.5 rounded-3" id="btn-open-chapter-selector" style="min-width: 220px; max-width: 360px; background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.15);">
+                <span class="text-truncate fw-semibold text-white fs-8" id="current-chapter-btn-label">Ch ${firstChap.chapterNumber}: ${firstChap.title}</span>
+                <i class="fa-solid fa-chevron-down text-muted fs-9 flex-shrink-0 ms-2"></i>
+              </button>
+              <select id="book-chapter-select" class="d-none" aria-hidden="true">
                 <optgroup label="Section A: Quantitative Aptitude (${quantChapters.length} Modules)">
                   ${quantChapters.map(chap => `<option value="${chap.id}">Ch ${chap.chapterNumber}: ${chap.title}</option>`).join('')}
                 </optgroup>
@@ -3008,6 +3071,63 @@ const components = {
                 </div>
               </div>
             `).join('')}
+          </div>
+        </div>
+
+        <!-- Searchable Chapters Modal -->
+        <div class="modal fade" id="aptitudeChaptersModal" tabindex="-1" aria-labelledby="aptitudeChaptersModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content bg-dark border border-secondary border-opacity-30 text-white shadow-lg" style="background: #141418 !important;">
+              <div class="modal-header border-bottom border-secondary border-opacity-20 pb-3">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="fa-solid fa-book-open-reader text-primary fs-5"></i>
+                  <h5 class="modal-title fw-bold fs-6 m-0" id="aptitudeChaptersModalLabel">Select Curriculum Module</h5>
+                  <span class="badge bg-indigo-subtle text-primary border border-primary-subtle fs-9">${safeChapters.length} Chapters</span>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body p-3">
+                <!-- Search and Section Tabs -->
+                <div class="mb-3">
+                  <div class="input-group input-group-sm mb-2.5">
+                    <span class="input-group-text bg-black bg-opacity-40 border-secondary text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" id="modal-chapter-search" class="form-control bg-black bg-opacity-40 text-white border-secondary fs-8" placeholder="Search chapters by title or keywords...">
+                  </div>
+                  <div class="d-flex flex-nowrap gap-1.5 overflow-x-auto pb-1" id="modal-chapter-tabs" style="scrollbar-width: none;">
+                    <button type="button" class="btn btn-sm btn-glass text-nowrap active btn-primary py-1 px-2.5 fs-9 filter-chap-tab" data-section="all">All (${safeChapters.length})</button>
+                    <button type="button" class="btn btn-sm btn-glass text-nowrap py-1 px-2.5 fs-9 filter-chap-tab" data-section="quant">Quantitative (${quantChapters.length})</button>
+                    <button type="button" class="btn btn-sm btn-glass text-nowrap py-1 px-2.5 fs-9 filter-chap-tab" data-section="logical">Logical (${logicalChapters.length})</button>
+                    <button type="button" class="btn btn-sm btn-glass text-nowrap py-1 px-2.5 fs-9 filter-chap-tab" data-section="verbal">Verbal (${verbalChapters.length})</button>
+                  </div>
+                </div>
+
+                <!-- Chapters List -->
+                <div class="d-flex flex-column gap-1.5" id="modal-chapters-list" style="max-height: 55vh; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #3f3f46 transparent;">
+                  ${safeChapters.map((chap, cIdx) => {
+                    const sec = (chap.section || chap.category || '').toLowerCase();
+                    const secTag = sec.includes('quant') ? 'quant' : sec.includes('logic') ? 'logical' : 'verbal';
+                    const secBadge = secTag === 'quant' ? 'primary' : secTag === 'logical' ? 'info' : 'warning';
+                    return `
+                      <div class="chapter-modal-item p-2.5 rounded border border-secondary border-opacity-20 d-flex align-items-center justify-content-between gap-2" 
+                           style="cursor: pointer; transition: all 0.15s ease; background: rgba(255,255,255,0.02);"
+                           data-chap-id="${chap.id}"
+                           data-chap-idx="${cIdx}"
+                           data-sec="${secTag}"
+                           data-title="${(chap.title || '').toLowerCase()}">
+                        <div class="d-flex align-items-center gap-2.5 min-w-0">
+                          <span class="badge bg-${secBadge}-subtle text-${secBadge} border border-${secBadge}-subtle fs-9 font-monospace flex-shrink-0">Ch ${chap.chapterNumber}</span>
+                          <span class="text-light fw-medium fs-8 text-truncate">${chap.title}</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                          <span class="text-muted fs-9 d-none d-sm-inline"><i class="fa-regular fa-clock me-1"></i>${chap.readTime || '8 min'}</span>
+                          <i class="fa-solid fa-chevron-right text-muted fs-9"></i>
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -4082,25 +4202,25 @@ const components = {
 
         <!-- Search Bar & Filter Chips -->
         <div class="row g-2 align-items-center mb-3">
-          <div class="col-md-6">
+          <div class="col-12 col-md-6">
             <div class="input-group input-group-sm">
               <span class="input-group-text bg-light border-secondary border-opacity-20 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
               <input type="text" id="admin-user-search-input" class="form-control admin-input" placeholder="Search by name, email, role, or referral code...">
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="d-flex flex-wrap gap-1 justify-content-md-end" id="admin-user-filter-chips">
-              <span class="admin-filter-pill active" data-filter="all">All (${users.length})</span>
-              <span class="admin-filter-pill" data-filter="pro">Pro (${paidCount})</span>
-              <span class="admin-filter-pill" data-filter="free">Free (${users.length - paidCount})</span>
-              <span class="admin-filter-pill" data-filter="admin">Admins (${adminCount})</span>
-              ${suspendedCount > 0 ? `<span class="admin-filter-pill" data-filter="suspended">Suspended (${suspendedCount})</span>` : ''}
+          <div class="col-12 col-md-6">
+            <div class="d-flex flex-nowrap gap-1.5 overflow-x-auto pb-1 justify-content-start justify-content-md-end" id="admin-user-filter-chips" style="scrollbar-width: none; -webkit-overflow-scrolling: touch;">
+              <span class="admin-filter-pill active text-nowrap" data-filter="all">All (${users.length})</span>
+              <span class="admin-filter-pill text-nowrap" data-filter="pro">Pro (${paidCount})</span>
+              <span class="admin-filter-pill text-nowrap" data-filter="free">Free (${users.length - paidCount})</span>
+              <span class="admin-filter-pill text-nowrap" data-filter="admin">Admins (${adminCount})</span>
+              ${suspendedCount > 0 ? `<span class="admin-filter-pill text-nowrap" data-filter="suspended">Suspended (${suspendedCount})</span>` : ''}
             </div>
           </div>
         </div>
 
-        <!-- User Table -->
-        <div class="table-responsive" style="overflow-x: auto;">
+        <!-- 1. Desktop Candidate Table (>= 992px) -->
+        <div class="table-responsive d-none d-lg-block" style="overflow-x: auto;">
           <table class="admin-table" id="admin-users-table">
             <thead>
               <tr>
@@ -4184,6 +4304,98 @@ const components = {
             </tbody>
           </table>
         </div>
+
+        <!-- 2. Mobile Candidate Cards Stream (< 992px) -->
+        <div class="d-flex d-lg-none flex-column gap-2.5" id="admin-users-cards-mobile">
+          ${users.map(u => {
+            const isAdmin = u.role && u.role.includes('ADMIN');
+            const isSuper = u.role === 'ADMIN_SUPER';
+            return `
+            <div class="user-card-item p-3 rounded-3 border border-secondary border-opacity-25" style="background: rgba(18, 18, 22, 0.85);"
+                 data-id="${u.id}" 
+                 data-name="${(u.name || '').toLowerCase()}" 
+                 data-email="${(u.email || '').toLowerCase()}" 
+                 data-role="${(u.role || '').toLowerCase()}" 
+                 data-paid="${u.isPaid ? 'true' : 'false'}" 
+                 data-suspended="${u.isSuspended ? 'true' : 'false'}">
+              <!-- Top Row: Avatar, Identity, Badges -->
+              <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                <div class="d-flex align-items-center gap-2.5 min-w-0" style="min-width: 0;">
+                  <div class="avatar-circle flex-shrink-0" style="width: 36px; height: 36px; border-radius: 50%; background: ${isSuper ? '#f59e0b' : isAdmin ? '#6366f1' : '#1e293b'}; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.82rem; font-weight: bold;">
+                    ${(u.name || 'U').charAt(0).toUpperCase()}
+                  </div>
+                  <div class="min-w-0 flex-grow-1" style="min-width: 0;">
+                    <div class="text-white fw-bold fs-7 text-truncate">${u.name || 'Anonymous Candidate'}</div>
+                    <div class="text-muted fs-9 font-monospace text-truncate">
+                      ${u.email}
+                      ${u.googleId ? '<span class="text-info ms-1"><i class="fa-brands fa-google"></i></span>' : ''}
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex flex-wrap gap-1 justify-content-end flex-shrink-0">
+                  ${isSuper ? '<span class="badge badge-super-admin px-2 py-0.5 fs-9"><i class="fa-solid fa-crown me-1"></i>SUPER</span>' :
+                    isAdmin ? '<span class="badge bg-primary px-2 py-0.5 fs-9">ADMIN</span>' :
+                    '<span class="badge bg-secondary bg-opacity-50 text-light px-2 py-0.5 fs-9">STUDENT</span>'}
+                  ${u.isPaid ? '<span class="badge badge-pro-lifetime px-2 py-0.5 fs-9"><i class="fa-solid fa-gem me-1"></i>PRO</span>' : '<span class="badge bg-dark text-muted border border-secondary border-opacity-25 px-2 py-0.5 fs-9">FREE</span>'}
+                  ${u.isSuspended ? '<span class="badge bg-danger text-white px-2 py-0.5 fs-9">SUSPENDED</span>' : ''}
+                </div>
+              </div>
+
+              <!-- Metadata Row: Joined Date & Referral Status -->
+              <div class="d-flex align-items-center justify-content-between py-1.5 px-2.5 rounded bg-black bg-opacity-40 fs-9 text-muted font-monospace mb-2.5">
+                <div><i class="fa-regular fa-calendar me-1"></i>Joined: <span class="text-light">${u.createdAt ? new Date(u.createdAt).toLocaleDateString() : 'N/A'}</span></div>
+                <div><i class="fa-solid fa-sack-dollar text-success me-1"></i>Ref: <span class="text-success fw-bold">₹${u.referralEarnings || 0}</span> (${u.referralCode || 'Direct'})</div>
+              </div>
+
+              <!-- Action Toolbar: Primary + More Menu -->
+              <div class="d-flex align-items-center justify-content-between pt-1 border-top border-secondary border-opacity-15">
+                <span class="text-muted font-monospace fs-9">#${u.id}</span>
+                <div class="d-flex align-items-center gap-1.5">
+                  <!-- Pro Pass Toggle -->
+                  <button class="btn btn-sm btn-glass btn-toggle-pro py-1 px-2.5 fs-8 fw-semibold" data-id="${u.id}" data-current="${u.isPaid ? 'true' : 'false'}" title="${u.isPaid ? 'Revoke Pro Pass' : 'Grant Lifetime Pro Pass'}">
+                    <i class="fa-solid fa-gem ${u.isPaid ? 'text-warning' : 'text-muted'} me-1"></i> ${u.isPaid ? 'Pro Pass' : 'Grant Pro'}
+                  </button>
+
+                  <!-- Direct Email -->
+                  <button class="btn btn-sm btn-glass btn-compose-user-email py-1 px-2.5 fs-8" data-email="${u.email}" data-name="${u.name || 'Candidate'}" title="Send direct email">
+                    <i class="fa-solid fa-envelope text-info"></i>
+                  </button>
+
+                  <!-- 3-Dots More Options Dropdown -->
+                  <div class="dropdown d-inline-block">
+                    <button class="btn btn-sm btn-glass py-1 px-2 fs-8 text-secondary" data-bs-toggle="dropdown" aria-expanded="false" title="More Actions">
+                      <i class="fa-solid fa-ellipsis-vertical"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end agy-dropdown-menu">
+                      ${!isSuper ? `
+                        <li><button class="agy-dropdown-item btn-toggle-role" data-id="${u.id}" data-role="${u.role}">
+                          <i class="fa-solid fa-user-shield text-primary"></i> ${isAdmin ? 'Demote to Student' : 'Promote to Admin'}
+                        </button></li>
+                      ` : ''}
+                      ${!isSuper ? (u.isSuspended ? `
+                        <li><button class="agy-dropdown-item text-success btn-user-action" data-id="${u.id}" data-action="unsuspend">
+                          <i class="fa-solid fa-user-check"></i> Unsuspend Candidate
+                        </button></li>
+                      ` : `
+                        <li><button class="agy-dropdown-item text-warning btn-user-action" data-id="${u.id}" data-action="suspend">
+                          <i class="fa-solid fa-user-slash"></i> Suspend Candidate
+                        </button></li>
+                      `) : ''}
+                      ${!isSuper ? `
+                        <li><hr class="dropdown-divider border-secondary border-opacity-25 my-1"></li>
+                        <li><button class="agy-dropdown-item text-danger btn-delete-user" data-id="${u.id}" data-email="${u.email}">
+                          <i class="fa-solid fa-trash"></i> Delete Account
+                        </button></li>
+                      ` : ''}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
       </div>
     `;
   },
