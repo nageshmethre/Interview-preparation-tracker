@@ -1,20 +1,20 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
-// Version: 4.3.0 (Master QA Production Release - Zero Dead Elements Parity)
+// Version: 4.3.1 (Reader Toolbar Decoupling & Coding IDE Visibility Release)
 
-const CACHE_NAME = 'prepspace-static-v4.3.0';
-const RUNTIME_CACHE = 'prepspace-runtime-v4.3.0';
+const CACHE_NAME = 'prepspace-static-v4.3.1';
+const RUNTIME_CACHE = 'prepspace-runtime-v4.3.1';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/index.css?v=4.3.0',
-  './assets/js/app.js?v=4.3.0',
-  './assets/js/components.js?v=4.3.0',
-  './assets/js/technical-library-data.js?v=4.3.0',
-  './assets/js/questions-data.js?v=4.3.0',
-  './assets/js/aptitude-curriculum.js?v=4.3.0',
-  './assets/js/production-pages.js?v=4.3.0',
+  './assets/css/index.css?v=4.3.1',
+  './assets/js/app.js?v=4.3.1',
+  './assets/js/components.js?v=4.3.1',
+  './assets/js/technical-library-data.js?v=4.3.1',
+  './assets/js/questions-data.js?v=4.3.1',
+  './assets/js/aptitude-curriculum.js?v=4.3.1',
+  './assets/js/production-pages.js?v=4.3.1',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',

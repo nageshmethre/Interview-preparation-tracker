@@ -3526,11 +3526,63 @@ input:-webkit-autofill {
   transition: width 0.1s linear;
 }
 
+/* Immersive Single-Header Reader Mode (Zero Layout-on-Layout) */
+#app-container.reader-active .workspace-top-header {
+  display: none !important;
+}
+
+#app-container.reader-active .main-content {
+  padding-top: 0 !important;
+}
+
+#app-container.reader-active #page-mount {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
 .reader-navbar {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   background: rgba(24, 24, 27, 0.94);
   z-index: 1030;
+  min-height: 52px;
+}
+
+.reader-page-counter {
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  line-height: 1 !important;
+}
+
+.reader-page-counter span {
+  white-space: nowrap !important;
+}
+
+/* IDE Coding Practice Language Selector Visibility Fix */
+#coding-language-select {
+  background-color: #121214 !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-radius: 6px !important;
+  height: 32px !important;
+  min-width: 128px !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  line-height: 1.25 !important;
+  padding: 4px 28px 4px 10px !important;
+  box-sizing: border-box !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23a1a1aa' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 8px center !important;
+  background-size: 12px 10px !important;
+}
+
+#coding-language-select:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25) !important;
+  outline: none !important;
 }
 
 /* Reader Table of Contents Drawer */

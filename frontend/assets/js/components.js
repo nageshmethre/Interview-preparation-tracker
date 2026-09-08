@@ -811,7 +811,7 @@ const components = {
       <!-- Main Content Area -->
       <div class="main-content d-flex flex-column flex-grow-1 overflow-hidden" style="height: 100vh;">
         <!-- Top Nav Header (Vercel Style) -->
-        <header class="d-flex align-items-center justify-content-between pb-3 border-bottom border-secondary border-opacity-25 mb-3 flex-shrink-0">
+        <header class="workspace-top-header d-flex align-items-center justify-content-between pb-3 border-bottom border-secondary border-opacity-25 mb-3 flex-shrink-0">
           <div class="d-flex align-items-center gap-2 overflow-hidden flex-grow-1 me-2" style="min-width: 0;">
             <button class="btn btn-glass d-lg-none me-1 flex-shrink-0" id="sidebar-toggle-btn"><i class="fa-solid fa-bars"></i></button>
             <div class="d-flex align-items-center gap-2 overflow-hidden" style="min-width: 0;">
@@ -2729,9 +2729,9 @@ const components = {
           <!-- PANE 3: Dominant Coding IDE & Terminal -->
           <div class="agy-coding-pane" id="vscode-right-pane">
             <!-- Editor Sub-Toolbar -->
-            <div class="d-flex align-items-center justify-content-between p-1.5 px-2 bg-dark bg-opacity-40 border-bottom border-secondary border-opacity-25 flex-nowrap gap-1" style="min-height: 38px;">
+            <div class="d-flex align-items-center justify-content-between p-1.5 px-2 bg-dark bg-opacity-60 border-bottom border-secondary border-opacity-25 flex-nowrap gap-2" style="min-height: 42px;">
               <div class="d-flex align-items-center flex-shrink-0">
-                <select id="coding-language-select" class="form-select form-select-sm bg-black text-white border-secondary fs-9 py-0.5 px-2" style="width: 105px; height: 28px;">
+                <select id="coding-language-select" class="form-select form-select-sm bg-black text-white border-secondary border-opacity-50 fw-semibold shadow-none" style="min-width: 128px; width: auto; height: 32px; font-size: 0.82rem; line-height: 1.25; padding: 4px 28px 4px 10px; cursor: pointer;">
                   <option value="java" selected>Java 21</option>
                   <option value="python">Python 3.12</option>
                   <option value="cpp">C++ 20</option>
@@ -2744,21 +2744,21 @@ const components = {
               </div>
 
               <!-- Tools: Font Size, Reset, Copy, Maximize, More Options -->
-              <div class="d-flex align-items-center gap-1 flex-shrink-0">
-                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted d-flex align-items-center justify-content-center" id="btn-editor-font-dec" title="Decrease Font" style="width: 28px; height: 28px; padding: 0;">A-</button>
-                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted d-flex align-items-center justify-content-center" id="btn-editor-font-inc" title="Increase Font" style="width: 28px; height: 28px; padding: 0;">A+</button>
-                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted d-flex align-items-center justify-content-center" id="btn-editor-reset" title="Reset Code Template" style="width: 28px; height: 28px; padding: 0;"><i class="fa-solid fa-rotate-left"></i></button>
-                <button class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted d-flex align-items-center justify-content-center" id="btn-editor-copy" title="Copy Code" style="width: 28px; height: 28px; padding: 0;"><i class="fa-solid fa-copy"></i></button>
-                <button type="button" class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted d-flex align-items-center justify-content-center" id="btn-ide-maximize" title="Maximize / Restore Code Workspace" style="width: 28px; height: 28px; padding: 0;">
+              <div class="d-flex align-items-center gap-1.5 flex-shrink-0">
+                <button class="btn btn-sm btn-glass d-flex align-items-center justify-content-center" id="btn-editor-font-dec" title="Decrease Font" style="width: 32px; height: 32px; padding: 0; font-size: 0.8rem; font-family: monospace; font-weight: 700;">A-</button>
+                <button class="btn btn-sm btn-glass d-flex align-items-center justify-content-center" id="btn-editor-font-inc" title="Increase Font" style="width: 32px; height: 32px; padding: 0; font-size: 0.8rem; font-family: monospace; font-weight: 700;">A+</button>
+                <button class="btn btn-sm btn-glass d-flex align-items-center justify-content-center" id="btn-editor-reset" title="Reset Code Template" style="width: 32px; height: 32px; padding: 0; font-size: 0.8rem;"><i class="fa-solid fa-rotate-left"></i></button>
+                <button class="btn btn-sm btn-glass d-flex align-items-center justify-content-center" id="btn-editor-copy" title="Copy Code" style="width: 32px; height: 32px; padding: 0; font-size: 0.8rem;"><i class="fa-solid fa-copy"></i></button>
+                <button type="button" class="btn btn-sm btn-glass d-flex align-items-center justify-content-center" id="btn-ide-maximize" title="Maximize / Restore Code Workspace" style="width: 32px; height: 32px; padding: 0; font-size: 0.8rem;">
                   <i class="fa-solid fa-expand" id="icon-ide-maximize"></i>
                 </button>
 
                 <!-- 3-Dots Extra Actions Dropdown -->
                 <div class="dropdown d-inline-block">
-                  <button type="button" class="btn btn-sm btn-glass py-0 px-1.5 fs-9 text-muted d-flex align-items-center justify-content-center" id="btn-ide-more" data-bs-toggle="dropdown" aria-expanded="false" title="More Options" style="width: 28px; height: 28px; padding: 0;">
+                  <button type="button" class="btn btn-sm btn-glass d-flex align-items-center justify-content-center" id="btn-ide-more" data-bs-toggle="dropdown" aria-expanded="false" title="More Options" style="width: 32px; height: 32px; padding: 0; font-size: 0.8rem;">
                     <i class="fa-solid fa-ellipsis-vertical"></i>
                   </button>
-                  <ul class="dropdown-menu dropdown-menu-end agy-dropdown-menu" aria-labelledby="btn-ide-more">
+                  <ul class="dropdown-menu dropdown-menu-end agy-dropdown-menu shadow" aria-labelledby="btn-ide-more">
                     <li><button class="agy-dropdown-item" id="menu-opt-reset"><i class="fa-solid fa-rotate-left text-muted"></i> Reset Template</button></li>
                     <li><button class="agy-dropdown-item" id="menu-opt-copy"><i class="fa-solid fa-copy text-muted"></i> Copy Code</button></li>
                     <li><button class="agy-dropdown-item" id="menu-opt-font-inc"><i class="fa-solid fa-magnifying-glass-plus text-muted"></i> Increase Font (A+)</button></li>
@@ -5820,58 +5820,58 @@ const components = {
         <!-- Top Reading Progress Bar -->
         <div class="reader-scroll-progress-bar" id="reader-scroll-bar" style="width: 0%;"></div>
 
-        <!-- Sticky Reader Control Navbar -->
-        <header class="reader-navbar px-3 py-2 border-bottom border-secondary border-opacity-25 d-flex justify-content-between align-items-center sticky-top">
+        <!-- Sticky Reader Control Navbar (Single-Line Unified Layout) -->
+        <header class="reader-navbar px-3 py-2 border-bottom border-secondary border-opacity-25 d-flex justify-content-between align-items-center sticky-top flex-nowrap gap-2" style="min-height: 52px;">
           <!-- Left: Compact Navigation & Drawer Toggle (Symbolic Buttons) -->
-          <div class="d-flex align-items-center gap-2">
-            <a href="#/library" class="reader-tool-btn" title="Back to Technical Library">
+          <div class="d-flex align-items-center gap-2 flex-shrink-0" style="max-width: 320px;">
+            <a href="#/library" class="reader-tool-btn flex-shrink-0" title="Back to Technical Library">
               <i class="fa-solid fa-arrow-left"></i>
             </a>
-            <button id="btn-toggle-toc-drawer" class="reader-tool-btn" title="Toggle Table of Contents">
+            <button id="btn-toggle-toc-drawer" class="reader-tool-btn flex-shrink-0" title="Toggle Table of Contents">
               <i class="fa-solid fa-bars-staggered"></i>
             </button>
-            <div class="vr d-none d-sm-block my-1 bg-secondary opacity-50" style="height: 20px;"></div>
-            <div class="d-none d-lg-block text-truncate" style="max-width: 260px;">
-              <span class="text-white fw-semibold fs-8" title="${book.title}">${book.title}</span>
+            <div class="vr d-none d-sm-block my-1 bg-secondary opacity-50 flex-shrink-0" style="height: 20px;"></div>
+            <div class="d-none d-lg-block text-truncate" style="max-width: 200px;">
+              <span class="text-white fw-semibold fs-8 text-truncate d-block" title="${book.title}">${book.title}</span>
             </div>
           </div>
 
-          <!-- Center: Real Chapter & Page Pagination Metrics -->
-          <div class="reader-page-counter font-monospace fs-8 text-white px-3 py-1 rounded-pill bg-dark border border-secondary border-opacity-50 d-none d-md-flex align-items-center gap-2">
-            <i class="fa-solid fa-book-open text-warning fs-9"></i>
-            <span>Ch ${chapter.chapterNumber} of ${chapters.length}</span>
-            <span class="text-secondary">&bull;</span>
-            <span class="text-info">Pages ${((chapter.chapterNumber - 1) * Math.round(book.pageCount / chapters.length)) + 1}–${Math.min(book.pageCount, chapter.chapterNumber * Math.round(book.pageCount / chapters.length))} of ${book.pageCount}</span>
+          <!-- Center: Real Chapter & Page Pagination Metrics (Never wraps) -->
+          <div class="reader-page-counter font-monospace text-white px-3 py-1 rounded-pill bg-dark border border-secondary border-opacity-50 d-none d-md-flex align-items-center gap-2 text-nowrap flex-shrink-0" style="white-space: nowrap; height: 32px; font-size: 0.78rem;">
+            <i class="fa-solid fa-book-open text-warning fs-9 flex-shrink-0"></i>
+            <span class="text-nowrap">Ch ${chapter.chapterNumber} of ${chapters.length}</span>
+            <span class="text-secondary opacity-50">&bull;</span>
+            <span class="text-info text-nowrap">Pages ${((chapter.chapterNumber - 1) * Math.round(book.pageCount / chapters.length)) + 1}–${Math.min(book.pageCount, chapter.chapterNumber * Math.round(book.pageCount / chapters.length))} of ${book.pageCount}</span>
           </div>
 
-          <!-- Right: Reader Display Controls (Exact 36x36 Symbolic Buttons) -->
-          <div class="d-flex align-items-center gap-1.5">
+          <!-- Right: Reader Display Controls & Integrated User Account Menu -->
+          <div class="d-flex align-items-center gap-1.5 flex-shrink-0">
             <!-- Zen Focus Mode -->
-            <button id="btn-reader-focus" class="reader-tool-btn" title="Zen Focus Mode (Collapse Sidebar)">
+            <button id="btn-reader-focus" class="reader-tool-btn flex-shrink-0" title="Zen Focus Mode (Collapse Sidebar)">
               <i class="fa-solid fa-expand text-info"></i>
             </button>
 
             <!-- Bookmark Button -->
-            <button id="btn-add-bookmark" class="reader-tool-btn" title="${(bookmarks || []).some(b => b.chapterNumber === chapter.chapterNumber) ? 'Remove Bookmark' : 'Save Bookmark'}" data-bookmarked="${(bookmarks || []).some(b => b.chapterNumber === chapter.chapterNumber) ? 'true' : 'false'}">
+            <button id="btn-add-bookmark" class="reader-tool-btn flex-shrink-0" title="${(bookmarks || []).some(b => b.chapterNumber === chapter.chapterNumber) ? 'Remove Bookmark' : 'Save Bookmark'}" data-bookmarked="${(bookmarks || []).some(b => b.chapterNumber === chapter.chapterNumber) ? 'true' : 'false'}">
               <i class="${(bookmarks || []).some(b => b.chapterNumber === chapter.chapterNumber) ? 'fa-solid fa-bookmark text-warning' : 'fa-regular fa-bookmark text-muted'}"></i>
             </button>
 
-            <!-- Font Size Adjusters -->
-            <button id="btn-font-decrease" class="reader-tool-btn font-btn" title="Decrease Font Size">A-</button>
-            <button id="btn-font-increase" class="reader-tool-btn font-btn" title="Increase Font Size">A+</button>
+            <!-- Font Size Adjusters (Unified 36px Buttons) -->
+            <button id="btn-font-decrease" class="reader-tool-btn font-btn flex-shrink-0" title="Decrease Font Size">A-</button>
+            <button id="btn-font-increase" class="reader-tool-btn font-btn flex-shrink-0" title="Increase Font Size">A+</button>
 
             <!-- Book Typography Style (Serif / Sans) -->
-            <button id="btn-toggle-font-family" class="reader-tool-btn" title="Toggle Book Serif Typography">
+            <button id="btn-toggle-font-family" class="reader-tool-btn flex-shrink-0" title="Toggle Book Serif Typography">
               <i class="fa-solid fa-font"></i>
             </button>
 
             <!-- Print / PDF Export -->
-            <button id="btn-reader-print" class="reader-tool-btn" title="Print Chapter / Save as PDF">
+            <button id="btn-reader-print" class="reader-tool-btn flex-shrink-0 d-none d-sm-inline-flex" title="Print Chapter / Save as PDF">
               <i class="fa-solid fa-print"></i>
             </button>
 
             <!-- Reader Theme Selector -->
-            <div class="dropdown d-inline-block">
+            <div class="dropdown d-inline-block flex-shrink-0">
               <button class="reader-tool-btn dropdown-toggle no-caret" type="button" data-bs-toggle="dropdown" title="Reader Color Themes">
                 <i class="fa-solid fa-palette text-warning"></i>
               </button>
@@ -5880,6 +5880,24 @@ const components = {
                 <li><button class="dropdown-item fs-8" data-reader-theme="theme-sepia"><i class="fa-solid fa-book me-2 text-warning"></i> Sepia Paper</button></li>
                 <li><button class="dropdown-item fs-8" data-reader-theme="theme-paper"><i class="fa-solid fa-sun me-2 text-light"></i> Clean Paper</button></li>
                 <li><button class="dropdown-item fs-8" data-reader-theme="theme-night"><i class="fa-solid fa-terminal me-2 text-success"></i> Deep Night</button></li>
+              </ul>
+            </div>
+
+            <!-- Integrated Account Menu (Prevents overlapping outer topbar) -->
+            <div class="vr d-none d-sm-block my-1 bg-secondary opacity-25 flex-shrink-0" style="height: 20px;"></div>
+            <div class="dropdown d-inline-block flex-shrink-0">
+              <button class="reader-tool-btn dropdown-toggle no-caret" type="button" id="readerUserDropdown" data-bs-toggle="dropdown" title="Account Menu">
+                <i class="fa-solid fa-circle-user text-secondary"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow glass-panel" aria-labelledby="readerUserDropdown">
+                <li class="px-3 py-1.5 border-bottom border-secondary border-opacity-25 mb-1">
+                  <div class="fs-9 text-muted font-monospace">SIGNED IN AS</div>
+                  <div class="fw-bold text-white fs-8 text-truncate" style="max-width: 170px;">${(typeof state !== 'undefined' && state.name) ? state.name : 'Candidate'}</div>
+                </li>
+                <li><a class="dropdown-item fs-8 text-white" href="#/profile"><i class="fa-solid fa-gear me-2 text-secondary"></i>Settings</a></li>
+                <li><a class="dropdown-item fs-8 text-warning" href="#/billing"><i class="fa-solid fa-gem me-2"></i>Membership</a></li>
+                <li><hr class="dropdown-divider border-secondary border-opacity-25 my-1"></li>
+                <li><button class="dropdown-item fs-8 text-danger" onclick="if(window.logout) window.logout(); else { localStorage.clear(); window.location.hash = '#/login'; }"><i class="fa-solid fa-right-from-bracket me-2"></i>Logout</button></li>
               </ul>
             </div>
           </div>

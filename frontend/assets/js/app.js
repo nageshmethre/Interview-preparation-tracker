@@ -419,6 +419,16 @@ function router() {
   updateSidebarSelection(hash);
   updateSidebarPlanBadge(state.isPaid);
 
+  // Manage reader-active state on #app-container to remove layout-on-layout
+  const appContainer = document.getElementById('app-container');
+  if (appContainer) {
+    if (hash.startsWith('#/library/read')) {
+      appContainer.classList.add('reader-active');
+    } else {
+      appContainer.classList.remove('reader-active');
+    }
+  }
+
   // Mount targeted page views
   const pageMount = document.getElementById('page-mount');
   const viewTitle = document.getElementById('current-view-title');
