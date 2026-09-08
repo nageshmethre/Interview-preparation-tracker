@@ -3474,5 +3474,232 @@ input:-webkit-autofill {
   }
 }
 
+/* ==========================================================================
+   PrepSpace Technical Library & Digital Reader Architecture
+   ========================================================================== */
+.technical-library-container {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.library-hero-banner {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.3) 0%, rgba(15, 23, 42, 0.9) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.library-categories-scroller {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.library-categories-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.library-book-card {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.library-book-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  border-color: rgba(245, 158, 11, 0.4) !important;
+}
+
+.book-card-spine {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Digital Reader Workspace */
+.technical-reader-wrapper {
+  background-color: var(--bg-body, #18181b);
+  color: #d4d4d8;
+  position: relative;
+}
+
+.reader-scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #f59e0b, #10b981);
+  z-index: 1060;
+  transition: width 0.1s linear;
+}
+
+.reader-navbar {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(24, 24, 27, 0.94);
+  z-index: 1030;
+}
+
+/* Reader Table of Contents Drawer */
+.reader-toc-drawer {
+  width: 280px;
+  background: #1c1c20;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+@media (max-width: 991.98px) {
+  .reader-toc-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1050;
+    transform: translateX(-100%);
+    box-shadow: none;
+  }
+  .reader-toc-drawer.active {
+    transform: translateX(0);
+    box-shadow: 12px 0 35px rgba(0, 0, 0, 0.75);
+  }
+}
+
+/* Reader Typography & Prose */
+.reader-prose-content {
+  font-family: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #e4e4e7;
+  letter-spacing: -0.01em;
+}
+
+.reader-prose-content h3 {
+  color: #ffffff;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+}
+
+.reader-prose-content h4 {
+  color: #fbbf24;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.15rem;
+}
+
+.reader-prose-content p {
+  margin-bottom: 1.25rem;
+  line-height: 1.75;
+}
+
+.reader-prose-content ul, .reader-prose-content ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.reader-prose-content li {
+  margin-bottom: 0.5rem;
+  line-height: 1.65;
+}
+
+.reader-prose-content pre {
+  background: #121215 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+  overflow-x: auto;
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.reader-prose-content code {
+  font-family: 'Geist Mono', monospace;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.875em;
+}
+
+.reader-prose-content pre code {
+  color: #e4e4e7;
+  background: transparent;
+  padding: 0;
+}
+
+.reader-prose-content .table {
+  margin: 1.5rem 0;
+  font-size: 0.85rem;
+}
+
+.reader-prose-content .table th {
+  background: #1e1e24;
+  color: #f4f4f5;
+  font-weight: 600;
+}
+
+/* Reader Themes */
+.technical-reader-wrapper.theme-sepia {
+  background-color: #f7efe2 !important;
+  color: #3b2f2f !important;
+}
+.technical-reader-wrapper.theme-sepia .reader-navbar {
+  background: rgba(247, 239, 226, 0.95) !important;
+  border-color: #e5d8c3 !important;
+}
+.technical-reader-wrapper.theme-sepia .reader-prose-content {
+  color: #3b2f2f !important;
+}
+.technical-reader-wrapper.theme-sepia h2, 
+.technical-reader-wrapper.theme-sepia h3, 
+.technical-reader-wrapper.theme-sepia h4 {
+  color: #231a1a !important;
+}
+.technical-reader-wrapper.theme-sepia pre {
+  background: #eee3cf !important;
+  border-color: #dfcfb6 !important;
+}
+.technical-reader-wrapper.theme-sepia pre code {
+  color: #231a1a !important;
+}
+.technical-reader-wrapper.theme-sepia code {
+  background: rgba(0, 0, 0, 0.06) !important;
+  color: #854d0e !important;
+}
+
+.technical-reader-wrapper.theme-paper {
+  background-color: #ffffff !important;
+  color: #1f2937 !important;
+}
+.technical-reader-wrapper.theme-paper .reader-navbar {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: #e5e7eb !important;
+}
+.technical-reader-wrapper.theme-paper .reader-prose-content {
+  color: #1f2937 !important;
+}
+.technical-reader-wrapper.theme-paper h2, 
+.technical-reader-wrapper.theme-paper h3, 
+.technical-reader-wrapper.theme-paper h4 {
+  color: #111827 !important;
+}
+.technical-reader-wrapper.theme-paper pre {
+  background: #f3f4f6 !important;
+  border-color: #e5e7eb !important;
+}
+.technical-reader-wrapper.theme-paper pre code {
+  color: #111827 !important;
+}
+.technical-reader-wrapper.theme-paper code {
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: #0284c7 !important;
+}
+
+.technical-reader-wrapper.theme-night {
+  background-color: #09090b !important;
+  color: #a1a1aa !important;
+}
+.technical-reader-wrapper.theme-night .reader-navbar {
+  background: rgba(9, 9, 11, 0.96) !important;
+  border-color: #27272a !important;
+}
+
+
 
 

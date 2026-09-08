@@ -614,6 +614,15 @@ function router() {
     }).catch(() => {
       // Fallback already rendered smoothly
     });
+  } else if (hash.startsWith('#/library/read')) {
+    viewTitle.textContent = 'Digital Technical Reader';
+    handleLibraryReaderRoute(rawHash, pageMount);
+  } else if (hash.startsWith('#/library/book')) {
+    viewTitle.textContent = 'Book Details & Syllabus';
+    handleLibraryBookDetailsRoute(rawHash, pageMount);
+  } else if (hash === '#/library' || hash.startsWith('#/library')) {
+    viewTitle.textContent = 'PrepSpace Technical Library';
+    handleLibraryHubRoute(rawHash, pageMount);
   } else if (hash === '#/experiences') {
     viewTitle.textContent = 'Interview Experiences';
     pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
@@ -770,8 +779,8 @@ function router() {
     if (window.adminClockInterval) clearInterval(window.adminClockInterval);
     window.adminClockInterval = setInterval(updateAdminClock, 1000);
 
-    // Bind all 9 Tabs
-    const tabMap = ['overview', 'users', 'leaderboard', 'payments', 'referrals', 'rules', 'broadcast', 'audit-logs', 'health'];
+    // Bind all 10 Tabs
+    const tabMap = ['overview', 'users', 'leaderboard', 'payments', 'referrals', 'rules', 'broadcast', 'audit-logs', 'health', 'library'];
     tabMap.forEach(tabName => {
       const tabEl = document.getElementById(`tab-${tabName}`);
       if (tabEl) {
@@ -6648,7 +6657,7 @@ function loadReferralHistory() {
 }
 
 function loadAdminPanelTab(tab) {
-  const allTabs = ['overview', 'users', 'leaderboard', 'payments', 'referrals', 'rules', 'broadcast', 'audit-logs', 'health'];
+  const allTabs = ['overview', 'users', 'leaderboard', 'payments', 'referrals', 'rules', 'broadcast', 'audit-logs', 'health', 'library'];
   allTabs.forEach(t => {
     const btn = document.getElementById(`tab-${t}`);
     if (btn) {
@@ -6664,6 +6673,11 @@ function loadAdminPanelTab(tab) {
   if (!contentArea) return;
 
   contentArea.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary spinner-border-sm"></div><div class="text-muted fs-8 mt-2">Loading module data...</div></div>`;
+
+  if (tab === 'library') {
+    contentArea.innerHTML = components.adminLibraryTab(window.PREPSPACE_LIBRARY ? window.PREPSPACE_LIBRARY.books : []);
+    return;
+  }
 
   if (tab === 'overview') {
     contentArea.innerHTML = components.adminOverviewTab(window.currentAdminStats || {});
@@ -7594,3 +7608,367 @@ function bindDesktopClientEvents() {
     }
   }
 }
+
+// ----------------------------------------------------
+// PREPSPACE TECHNICAL LIBRARY & DIGITAL READER
+// ----------------------------------------------------
+
+function handleLibraryHubRoute(hash, pageMount) {
+  const urlParams = new URLSearchParams(hash.includes('?') ? hash.substring(hash.indexOf('?')) : '');
+  let activeCategory = urlParams.get('cat') || 'ALL';
+  let activeDifficulty = urlParams.get('diff') || 'ALL';
+  let searchQuery = urlParams.get('q') || '';
+  const isProUser = Boolean(state.isPaid || (state.role && (state.role.includes('ADMIN') || state.role.startsWith('ROLE_ADMIN'))));
+
+  const catalog = window.PREPSPACE_LIBRARY ? window.PREPSPACE_LIBRARY.books : [];
+  let progressMap = {};
+  try {
+    progressMap = JSON.parse(localStorage.getItem('prepspace_library_progress') || '{}');
+  } catch (e) {
+    progressMap = {};
+  }
+
+  // Render initial view immediately
+  pageMount.innerHTML = components.libraryHub(catalog, progressMap, activeCategory, searchQuery, activeDifficulty, isProUser);
+  bindLibraryHubEvents(isProUser, activeCategory, activeDifficulty, searchQuery);
+
+  // Sync latest progress from backend
+  apiFetch('/v1/library/progress')
+    .then(progList => {
+      if (Array.isArray(progList) && progList.length > 0) {
+        progList.forEach(p => {
+          if (p && p.bookId) {
+            progressMap[p.bookId] = {
+              bookId: p.bookId,
+              lastChapterNumber: p.lastChapter ? p.lastChapter.chapterNumber : 1,
+              lastPage: p.lastPage || 1,
+              progressPercentage: p.progressPercentage || 0,
+              isCompleted: p.isCompleted || false
+            };
+          }
+        });
+        localStorage.setItem('prepspace_library_progress', JSON.stringify(progressMap));
+        // Refresh view with synced progress if user is still on library hub
+        if (window.location.hash.split('?')[0] === '#/library') {
+          pageMount.innerHTML = components.libraryHub(catalog, progressMap, activeCategory, searchQuery, activeDifficulty, isProUser);
+          bindLibraryHubEvents(isProUser, activeCategory, activeDifficulty, searchQuery);
+        }
+      }
+    })
+    .catch(() => {
+      // Retain offline cache smoothly
+    });
+}
+
+function bindLibraryHubEvents(isProUser, currentCategory, currentDifficulty, currentSearch) {
+  let activeCat = currentCategory || 'ALL';
+  let activeDiff = currentDifficulty || 'ALL';
+  let activeQuery = currentSearch || '';
+
+  const searchInput = document.getElementById('library-search-input');
+  const clearSearchBtn = document.getElementById('btn-clear-library-search');
+  const diffSelect = document.getElementById('library-difficulty-select');
+  const filterAllBtn = document.getElementById('btn-filter-all-cat');
+  const filterFreeBtn = document.getElementById('btn-filter-free');
+  const filterProBtn = document.getElementById('btn-filter-pro');
+  const resetBtn = document.getElementById('btn-reset-library-filters');
+
+  function reRenderCatalog() {
+    const pageMount = document.getElementById('page-mount');
+    const catalog = window.PREPSPACE_LIBRARY ? window.PREPSPACE_LIBRARY.books : [];
+    let progressMap = {};
+    try {
+      progressMap = JSON.parse(localStorage.getItem('prepspace_library_progress') || '{}');
+    } catch (e) {}
+
+    if (pageMount) {
+      pageMount.innerHTML = components.libraryHub(catalog, progressMap, activeCat, activeQuery, activeDiff, isProUser);
+      bindLibraryHubEvents(isProUser, activeCat, activeDiff, activeQuery);
+    }
+  }
+
+  // Live search debouncing
+  let searchTimer = null;
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        activeQuery = e.target.value.trim();
+        reRenderCatalog();
+      }, 200);
+    });
+  }
+
+  if (clearSearchBtn) {
+    clearSearchBtn.addEventListener('click', () => {
+      activeQuery = '';
+      reRenderCatalog();
+    });
+  }
+
+  if (diffSelect) {
+    diffSelect.addEventListener('change', (e) => {
+      activeDiff = e.target.value;
+      reRenderCatalog();
+    });
+  }
+
+  // Category Pills
+  document.querySelectorAll('.library-cat-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      activeCat = pill.getAttribute('data-category');
+      reRenderCatalog();
+    });
+  });
+
+  if (filterAllBtn) {
+    filterAllBtn.addEventListener('click', () => {
+      activeCat = 'ALL';
+      reRenderCatalog();
+    });
+  }
+
+  if (filterFreeBtn) {
+    filterFreeBtn.addEventListener('click', () => {
+      activeCat = 'FREE';
+      reRenderCatalog();
+    });
+  }
+
+  if (filterProBtn) {
+    filterProBtn.addEventListener('click', () => {
+      activeCat = 'PRO';
+      reRenderCatalog();
+    });
+  }
+
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      activeCat = 'ALL';
+      activeDiff = 'ALL';
+      activeQuery = '';
+      reRenderCatalog();
+    });
+  }
+}
+
+function handleLibraryBookDetailsRoute(hash, pageMount) {
+  const urlParams = new URLSearchParams(hash.includes('?') ? hash.substring(hash.indexOf('?')) : '');
+  const bookId = parseInt(urlParams.get('id') || '101', 10);
+  const catalog = window.PREPSPACE_LIBRARY ? window.PREPSPACE_LIBRARY.books : [];
+  const book = catalog.find(b => b.id === bookId) || catalog[0];
+
+  const isProUser = Boolean(state.isPaid || (state.role && (state.role.includes('ADMIN') || state.role.startsWith('ROLE_ADMIN'))));
+
+  let progressMap = {};
+  try {
+    progressMap = JSON.parse(localStorage.getItem('prepspace_library_progress') || '{}');
+  } catch (e) {}
+
+  pageMount.innerHTML = components.bookDetails(book, progressMap[bookId], isProUser);
+}
+
+function handleLibraryReaderRoute(hash, pageMount) {
+  const urlParams = new URLSearchParams(hash.includes('?') ? hash.substring(hash.indexOf('?')) : '');
+  const bookId = parseInt(urlParams.get('id') || '101', 10);
+  const chapterNum = parseInt(urlParams.get('ch') || '1', 10);
+
+  const catalog = window.PREPSPACE_LIBRARY ? window.PREPSPACE_LIBRARY.books : [];
+  const book = catalog.find(b => b.id === bookId) || catalog[0];
+  const chapters = book ? book.chapters : [];
+  const chapter = chapters.find(c => c.chapterNumber === chapterNum) || chapters[0];
+
+  const isProUser = Boolean(state.isPaid || (state.role && (state.role.includes('ADMIN') || state.role.startsWith('ROLE_ADMIN'))));
+
+  let progressMap = {};
+  try {
+    progressMap = JSON.parse(localStorage.getItem('prepspace_library_progress') || '{}');
+  } catch (e) {}
+
+  let bookmarks = [];
+  try {
+    bookmarks = JSON.parse(localStorage.getItem('prepspace_library_bookmarks_' + bookId) || '[]');
+  } catch (e) {}
+
+  pageMount.innerHTML = components.bookReader(book, chapter, chapters, progressMap[bookId], bookmarks, isProUser);
+  bindTechnicalReaderEvents(book, chapter, isProUser);
+}
+
+function bindTechnicalReaderEvents(book, chapter, isProUser) {
+  const container = document.getElementById('reader-container');
+  const article = document.getElementById('reader-article');
+  const scrollBar = document.getElementById('reader-scroll-bar');
+  const tocDrawer = document.getElementById('reader-toc-drawer');
+  const toggleTocBtn = document.getElementById('btn-toggle-toc-drawer');
+  const closeTocBtn = document.getElementById('btn-close-toc-drawer');
+  const bookmarkBtn = document.getElementById('btn-add-bookmark');
+  const markCompleteBtn = document.getElementById('btn-mark-chapter-complete');
+  const fontIncBtn = document.getElementById('btn-font-increase');
+  const fontDecBtn = document.getElementById('btn-font-decrease');
+
+  // 1. Restore Theme & Font Size
+  const savedTheme = localStorage.getItem('reader-theme') || 'theme-dark';
+  if (container) {
+    container.classList.remove('theme-dark', 'theme-sepia', 'theme-paper', 'theme-night');
+    container.classList.add(savedTheme);
+  }
+
+  let currentFontSize = parseInt(localStorage.getItem('reader-font-size') || '16', 10);
+  if (article) {
+    article.style.fontSize = currentFontSize + 'px';
+  }
+
+  // 2. Scroll Progress Bar Listener
+  function onScrollProgress() {
+    if (!scrollBar) return;
+    const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+    scrollBar.style.width = scrolled + '%';
+  }
+  if (window._readerScrollHandler) {
+    window.removeEventListener('scroll', window._readerScrollHandler);
+  }
+  window._readerScrollHandler = onScrollProgress;
+  window.addEventListener('scroll', window._readerScrollHandler, { passive: true });
+
+  // 3. Font Size Controls
+  if (fontIncBtn && article) {
+    fontIncBtn.addEventListener('click', () => {
+      if (currentFontSize < 24) {
+        currentFontSize += 1;
+        article.style.fontSize = currentFontSize + 'px';
+        localStorage.setItem('reader-font-size', currentFontSize.toString());
+      }
+    });
+  }
+
+  if (fontDecBtn && article) {
+    fontDecBtn.addEventListener('click', () => {
+      if (currentFontSize > 13) {
+        currentFontSize -= 1;
+        article.style.fontSize = currentFontSize + 'px';
+        localStorage.setItem('reader-font-size', currentFontSize.toString());
+      }
+    });
+  }
+
+  // 4. Reader Theme Switcher
+  document.querySelectorAll('[data-reader-theme]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const theme = btn.getAttribute('data-reader-theme');
+      if (container) {
+        container.classList.remove('theme-dark', 'theme-sepia', 'theme-paper', 'theme-night');
+        container.classList.add(theme);
+        localStorage.setItem('reader-theme', theme);
+        showToast(`Reader theme changed to ${theme.replace('theme-', '')}`, 'info');
+      }
+    });
+  });
+
+  // 5. Drawer Controls
+  if (toggleTocBtn && tocDrawer) {
+    toggleTocBtn.addEventListener('click', () => {
+      tocDrawer.classList.toggle('active');
+    });
+  }
+
+  if (closeTocBtn && tocDrawer) {
+    closeTocBtn.addEventListener('click', () => {
+      tocDrawer.classList.remove('active');
+    });
+  }
+
+  // 6. Bookmark Action
+  if (bookmarkBtn) {
+    bookmarkBtn.addEventListener('click', () => {
+      const bookmarkKey = 'prepspace_library_bookmarks_' + book.id;
+      let bookmarks = [];
+      try {
+        bookmarks = JSON.parse(localStorage.getItem(bookmarkKey) || '[]');
+      } catch (e) {}
+
+      const newBookmark = {
+        id: Date.now(),
+        bookId: book.id,
+        chapterNumber: chapter.chapterNumber,
+        title: chapter.title,
+        createdAt: new Date().toISOString()
+      };
+      bookmarks.unshift(newBookmark);
+      localStorage.setItem(bookmarkKey, JSON.stringify(bookmarks));
+
+      // Synchronize with backend API
+      apiFetch('/v1/library/bookmarks/' + book.id, {
+        method: 'POST',
+        body: JSON.stringify({
+          chapterId: chapter.id,
+          pageNumber: chapter.chapterNumber,
+          title: `Chapter ${chapter.chapterNumber}: ${chapter.title}`
+        })
+      }).catch(() => {});
+
+      showToast(`Bookmark saved for Chapter ${chapter.chapterNumber}!`, 'success');
+    });
+  }
+
+  // 7. Mark Chapter Complete Action
+  if (markCompleteBtn) {
+    markCompleteBtn.addEventListener('click', () => {
+      let progressMap = {};
+      try {
+        progressMap = JSON.parse(localStorage.getItem('prepspace_library_progress') || '{}');
+      } catch (e) {}
+
+      const totalChapters = book.chapters ? book.chapters.length : 1;
+      const calcPercent = Math.min(100, Math.round((chapter.chapterNumber / totalChapters) * 100));
+      const isBookCompleted = chapter.chapterNumber >= totalChapters;
+
+      progressMap[book.id] = {
+        bookId: book.id,
+        lastChapterNumber: chapter.chapterNumber,
+        lastPage: Math.round((chapter.chapterNumber / totalChapters) * book.pageCount),
+        progressPercentage: calcPercent,
+        isCompleted: isBookCompleted
+      };
+      localStorage.setItem('prepspace_library_progress', JSON.stringify(progressMap));
+
+      // Synchronize with backend API
+      apiFetch('/v1/library/progress/' + book.id, {
+        method: 'POST',
+        body: JSON.stringify({
+          chapterId: chapter.id,
+          page: Math.round((chapter.chapterNumber / totalChapters) * book.pageCount),
+          totalPages: book.pageCount,
+          isCompleted: isBookCompleted
+        })
+      }).catch(() => {});
+
+      markCompleteBtn.innerHTML = '<i class="fa-solid fa-check-double me-1"></i> Completed';
+      markCompleteBtn.classList.remove('btn-outline-success');
+      markCompleteBtn.classList.add('btn-success');
+      showToast(`Chapter ${chapter.chapterNumber} completed! (${calcPercent}% finished)`, 'success');
+    });
+  }
+
+  // 8. Keyboard Arrow Navigation
+  function onReaderKeyDown(e) {
+    if (['input', 'textarea'].includes(document.activeElement.tagName.toLowerCase())) return;
+    const chapters = book.chapters || [];
+    const idx = chapters.findIndex(c => c.chapterNumber === chapter.chapterNumber);
+    if (e.key === 'ArrowRight' && idx < chapters.length - 1) {
+      window.location.hash = `#/library/read?id=${book.id}&ch=${chapters[idx + 1].chapterNumber}`;
+    } else if (e.key === 'ArrowLeft' && idx > 0) {
+      window.location.hash = `#/library/read?id=${book.id}&ch=${chapters[idx - 1].chapterNumber}`;
+    }
+  }
+  window.removeEventListener('keydown', window._readerKeyHandler);
+  window._readerKeyHandler = onReaderKeyDown;
+  window.addEventListener('keydown', window._readerKeyHandler);
+}
+
+if (typeof window !== 'undefined') {
+  window.router = router;
+  window.state = state;
+}
+
