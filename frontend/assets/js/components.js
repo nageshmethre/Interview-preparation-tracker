@@ -5905,13 +5905,13 @@ const components = {
 
         <!-- Reader Workspace Body -->
         <div class="reader-layout d-flex flex-grow-1 position-relative">
-          <!-- Collapsible Table of Contents Drawer (Desktop & Mobile) -->
+          <!-- Collapsible Table of Contents Drawer (The ONE Static Sidebar) -->
           <aside class="reader-toc-drawer border-end border-secondary border-opacity-25" id="reader-toc-drawer">
-            <div class="p-3 border-bottom border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
+            <div class="p-3 border-bottom border-secondary border-opacity-25 d-flex justify-content-between align-items-center flex-shrink-0" style="min-height: 52px;">
               <h6 class="text-white fw-bold mb-0 fs-8"><i class="fa-solid fa-list-ul me-2 text-primary"></i> Table of Contents</h6>
               <button id="btn-close-toc-drawer" class="reader-tool-btn" style="width: 28px !important; height: 28px !important; min-width: 28px !important;" title="Close Table of Contents"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="p-2 overflow-y-auto flex-grow-1" style="max-height: calc(100vh - 120px);">
+            <div class="p-2 overflow-y-auto flex-grow-1">
               <div class="list-group list-group-flush">
                 ${chapters.map(c => `
                   <a href="#/library/read?id=${book.id}&ch=${c.chapterNumber}" class="list-group-item list-group-item-action bg-transparent border-0 text-white rounded-2 px-2 py-2 mb-1 fs-8 ${c.chapterNumber === chapter.chapterNumber ? 'active bg-primary text-white' : 'text-muted'}">
@@ -5925,76 +5925,78 @@ const components = {
             </div>
           </aside>
 
-          <!-- Main Reader Reading Canvas -->
-          <main class="reader-content-pane flex-grow-1 px-3 px-md-4 py-4 py-md-5 mx-auto" id="reader-content-pane" style="max-width: 860px;">
-            <!-- Chapter Metadata Heading -->
-            <div class="mb-4 pb-3 border-bottom border-secondary border-opacity-25">
-              <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
-                <div class="d-flex align-items-center gap-2">
-                  <span class="badge bg-primary text-white font-monospace fs-9">CHAPTER ${chapter.chapterNumber}</span>
-                  <span class="badge bg-dark text-info border border-info border-opacity-25 font-monospace fs-9"><i class="fa-solid fa-file-lines me-1"></i> Pages ${((chapter.chapterNumber - 1) * Math.round(book.pageCount / chapters.length)) + 1}–${Math.min(book.pageCount, chapter.chapterNumber * Math.round(book.pageCount / chapters.length))} of ${book.pageCount}</span>
+          <!-- Main Reader Reading Canvas (Static Centered Layout with Dedicated Single Scrollbar) -->
+          <main class="reader-content-pane" id="reader-content-pane">
+            <div class="reader-content-pane-inner mx-auto">
+              <!-- Chapter Metadata Heading -->
+              <div class="mb-4 pb-3 border-bottom border-secondary border-opacity-25">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-primary text-white font-monospace fs-9">CHAPTER ${chapter.chapterNumber}</span>
+                    <span class="badge bg-dark text-info border border-info border-opacity-25 font-monospace fs-9"><i class="fa-solid fa-file-lines me-1"></i> Pages ${((chapter.chapterNumber - 1) * Math.round(book.pageCount / chapters.length)) + 1}–${Math.min(book.pageCount, chapter.chapterNumber * Math.round(book.pageCount / chapters.length))} of ${book.pageCount}</span>
+                  </div>
+                  <span class="text-muted fs-9"><i class="fa-regular fa-clock me-1"></i> ${chapter.readingTimeMinutes || 25} min read &bull; ${book.category}</span>
                 </div>
-                <span class="text-muted fs-9"><i class="fa-regular fa-clock me-1"></i> ${chapter.readingTimeMinutes || 25} min read &bull; ${book.category}</span>
+                <h2 class="text-white fw-extrabold display-6 mb-2 reader-heading-title">${chapter.title}</h2>
+                <p class="text-info fs-7 mb-0">${chapter.subtitle || ''}</p>
               </div>
-              <h2 class="text-white fw-extrabold display-6 mb-2 reader-heading-title">${chapter.title}</h2>
-              <p class="text-info fs-7 mb-0">${chapter.subtitle || ''}</p>
+
+              ${isLocked ? `
+                <!-- Locked Pro Content Gatekeeper Card -->
+                <div class="card bg-dark border-warning border-opacity-50 rounded-4 p-4 p-md-5 my-4 text-center shadow-lg">
+                  <div class="rounded-circle bg-warning bg-opacity-10 p-3 d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                    <i class="fa-solid fa-lock text-warning display-6"></i>
+                  </div>
+                  <h4 class="text-white fw-bold mb-2">PrepSpace Pro Subscription Required</h4>
+                  <p class="text-muted fs-7 col-md-9 mx-auto mb-4" style="line-height: 1.6;">
+                    This chapter is an exclusive part of the <strong>${book.title}</strong> master curriculum. Upgrade to PrepSpace Pro to unlock complete chapters across all 19 technical domains, interactive code playgrounds, PDF exports, and unlimited mock assessments.
+                  </p>
+
+                  <!-- Chapter Abstract / Teaser -->
+                  <div class="card bg-dark bg-opacity-50 border-secondary border-opacity-25 text-start p-3 mb-4 rounded-3">
+                    <div class="text-warning fs-9 fw-bold font-monospace uppercase mb-1">What You Will Master in this Chapter:</div>
+                    <p class="text-light fs-8 mb-0">${chapter.summary || 'Advanced architectural deep-dives, algorithmic implementations, and interview traps.'}</p>
+                  </div>
+
+                  <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <a href="#/billing" class="btn btn-premium btn-lg px-4 py-2.5 fs-7 fw-bold shadow">
+                      <i class="fa-solid fa-bolt me-2"></i> Unlock All 19 Domains for ₹399
+                    </a>
+                    <a href="#/library/read?id=${book.id}&ch=1" class="btn btn-glass btn-lg px-4 py-2.5 fs-7">
+                      <i class="fa-solid fa-book-open me-2"></i> Read Free Sample Chapter
+                    </a>
+                  </div>
+                </div>
+              ` : `
+                <!-- Authenticated Full Chapter Content -->
+                <article class="reader-prose-content fs-7 text-light" id="reader-article" style="line-height: 1.8;">
+                  ${chapter.contentHtml || '<p>Chapter content is being generated...</p>'}
+                </article>
+
+                <!-- Chapter Bottom Navigation Footer -->
+                <div class="reader-footer-nav mt-5 pt-4 border-top border-secondary border-opacity-25 d-flex flex-wrap justify-content-between align-items-center gap-3">
+                  ${prevChapter ? `
+                    <a href="#/library/read?id=${book.id}&ch=${prevChapter.chapterNumber}" class="btn btn-glass btn-sm px-3 py-2">
+                      <i class="fa-solid fa-chevron-left me-1"></i> Prev: Ch ${prevChapter.chapterNumber}
+                    </a>
+                  ` : '<div></div>'}
+
+                  <button id="btn-mark-chapter-complete" class="btn btn-outline-success btn-sm px-3 py-2" data-book-id="${book.id}" data-chapter-id="${chapter.id}">
+                    <i class="fa-solid fa-circle-check me-1"></i> Mark Chapter Complete
+                  </button>
+
+                  ${nextChapter ? `
+                    <a href="#/library/read?id=${book.id}&ch=${nextChapter.chapterNumber}" class="btn btn-primary btn-sm px-3 py-2 fw-semibold">
+                      Next: Ch ${nextChapter.chapterNumber} <i class="fa-solid fa-chevron-right ms-1"></i>
+                    </a>
+                  ` : `
+                    <a href="#/library/book?id=${book.id}" class="btn btn-success btn-sm px-3 py-2 fw-semibold">
+                      Finish Book <i class="fa-solid fa-check ms-1"></i>
+                    </a>
+                  `}
+                </div>
+              `}
             </div>
-
-            ${isLocked ? `
-              <!-- Locked Pro Content Gatekeeper Card -->
-              <div class="card bg-dark border-warning border-opacity-50 rounded-4 p-4 p-md-5 my-4 text-center shadow-lg">
-                <div class="rounded-circle bg-warning bg-opacity-10 p-3 d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
-                  <i class="fa-solid fa-lock text-warning display-6"></i>
-                </div>
-                <h4 class="text-white fw-bold mb-2">PrepSpace Pro Subscription Required</h4>
-                <p class="text-muted fs-7 col-md-9 mx-auto mb-4" style="line-height: 1.6;">
-                  This chapter is an exclusive part of the <strong>${book.title}</strong> master curriculum. Upgrade to PrepSpace Pro to unlock complete chapters across all 19 technical domains, interactive code playgrounds, PDF exports, and unlimited mock assessments.
-                </p>
-
-                <!-- Chapter Abstract / Teaser -->
-                <div class="card bg-dark bg-opacity-50 border-secondary border-opacity-25 text-start p-3 mb-4 rounded-3">
-                  <div class="text-warning fs-9 fw-bold font-monospace uppercase mb-1">What You Will Master in this Chapter:</div>
-                  <p class="text-light fs-8 mb-0">${chapter.summary || 'Advanced architectural deep-dives, algorithmic implementations, and interview traps.'}</p>
-                </div>
-
-                <div class="d-flex flex-wrap justify-content-center gap-3">
-                  <a href="#/billing" class="btn btn-premium btn-lg px-4 py-2.5 fs-7 fw-bold shadow">
-                    <i class="fa-solid fa-bolt me-2"></i> Unlock All 19 Domains for ₹399
-                  </a>
-                  <a href="#/library/read?id=${book.id}&ch=1" class="btn btn-glass btn-lg px-4 py-2.5 fs-7">
-                    <i class="fa-solid fa-book-open me-2"></i> Read Free Sample Chapter
-                  </a>
-                </div>
-              </div>
-            ` : `
-              <!-- Authenticated Full Chapter Content -->
-              <article class="reader-prose-content fs-7 text-light" id="reader-article" style="line-height: 1.8;">
-                ${chapter.contentHtml || '<p>Chapter content is being generated...</p>'}
-              </article>
-
-              <!-- Chapter Bottom Navigation Footer -->
-              <div class="reader-footer-nav mt-5 pt-4 border-top border-secondary border-opacity-25 d-flex flex-wrap justify-content-between align-items-center gap-3">
-                ${prevChapter ? `
-                  <a href="#/library/read?id=${book.id}&ch=${prevChapter.chapterNumber}" class="btn btn-glass btn-sm px-3 py-2">
-                    <i class="fa-solid fa-chevron-left me-1"></i> Prev: Ch ${prevChapter.chapterNumber}
-                  </a>
-                ` : '<div></div>'}
-
-                <button id="btn-mark-chapter-complete" class="btn btn-outline-success btn-sm px-3 py-2" data-book-id="${book.id}" data-chapter-id="${chapter.id}">
-                  <i class="fa-solid fa-circle-check me-1"></i> Mark Chapter Complete
-                </button>
-
-                ${nextChapter ? `
-                  <a href="#/library/read?id=${book.id}&ch=${nextChapter.chapterNumber}" class="btn btn-primary btn-sm px-3 py-2 fw-semibold">
-                    Next: Ch ${nextChapter.chapterNumber} <i class="fa-solid fa-chevron-right ms-1"></i>
-                  </a>
-                ` : `
-                  <a href="#/library/book?id=${book.id}" class="btn btn-success btn-sm px-3 py-2 fw-semibold">
-                    Finish Book <i class="fa-solid fa-check ms-1"></i>
-                  </a>
-                `}
-              </div>
-            `}
           </main>
         </div>
       </div>

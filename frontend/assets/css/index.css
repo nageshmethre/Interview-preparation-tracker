@@ -3526,18 +3526,46 @@ input:-webkit-autofill {
   transition: width 0.1s linear;
 }
 
-/* Immersive Single-Header Reader Mode (Zero Layout-on-Layout) */
+/* Immersive Single-Sidebar Reader Mode (Zero Layout-on-Layout & Single Sidebar) */
 #app-container.reader-active .workspace-top-header {
   display: none !important;
 }
 
+#app-container.reader-active .sidebar {
+  display: none !important;
+}
+
+#app-container.reader-active #admin-broadcast-portal-container {
+  display: none !important;
+}
+
 #app-container.reader-active .main-content {
-  padding-top: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 100vh !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  overflow: hidden !important;
 }
 
 #app-container.reader-active #page-mount {
-  margin-top: 0 !important;
-  padding-top: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100vh !important;
+  width: 100% !important;
+  overflow: hidden !important;
+}
+
+.technical-reader-wrapper {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  box-sizing: border-box;
 }
 
 .reader-navbar {
@@ -3546,6 +3574,22 @@ input:-webkit-autofill {
   background: rgba(24, 24, 27, 0.94);
   z-index: 1030;
   min-height: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.reader-layout {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: calc(100vh - 52px) !important;
+  max-height: calc(100vh - 52px) !important;
+  display: flex !important;
+  flex-direction: row !important;
+  overflow: hidden !important;
+  position: relative !important;
+  box-sizing: border-box;
 }
 
 .reader-page-counter {
@@ -3585,16 +3629,20 @@ input:-webkit-autofill {
   outline: none !important;
 }
 
-/* Reader Table of Contents Drawer */
+/* Reader Table of Contents Drawer (The ONE Static Sidebar) */
 .reader-toc-drawer {
   width: 280px;
-  background: #18181b;
+  min-width: 280px;
+  max-width: 280px;
+  background: #141416;
   flex-shrink: 0;
-  transition: width 0.25s ease, margin 0.25s ease, opacity 0.2s ease, transform 0.25s ease;
+  transition: width 0.2s ease, margin 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  height: 100%;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 @media (min-width: 992px) {
@@ -3613,17 +3661,64 @@ input:-webkit-autofill {
 @media (max-width: 991.98px) {
   .reader-toc-drawer {
     position: fixed;
-    top: 0;
+    top: 52px;
     left: 0;
     bottom: 0;
+    height: calc(100vh - 52px);
     z-index: 1050;
     transform: translateX(-100%);
     box-shadow: none;
     width: 280px;
+    max-width: 85vw;
   }
   .reader-toc-drawer.active {
     transform: translateX(0);
     box-shadow: 12px 0 35px rgba(0, 0, 0, 0.75);
+  }
+}
+
+/* Static Reader Content Canvas & Single Smooth Scrollbar */
+.reader-content-pane {
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  scroll-behavior: smooth;
+}
+
+.reader-content-pane::-webkit-scrollbar {
+  width: 6px;
+}
+.reader-content-pane::-webkit-scrollbar-track {
+  background: transparent;
+}
+.reader-content-pane::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+.reader-content-pane::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.reader-content-pane-inner {
+  max-width: 860px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2.5rem 2rem 5rem 2rem;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .reader-content-pane-inner {
+    padding: 1.25rem 1rem 3.5rem 1rem !important;
   }
 }
 
@@ -3999,27 +4094,6 @@ input:-webkit-autofill {
 }
 
 /* 3. Technical Reader Canvas Hardening */
-.technical-reader-wrapper {
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
-  box-sizing: border-box;
-}
-
-.reader-layout {
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
-  box-sizing: border-box;
-}
-
-.reader-content-pane {
-  width: 100% !important;
-  max-width: 860px !important;
-  min-width: 0 !important;
-  box-sizing: border-box;
-}
-
 .reader-prose-content {
   width: 100% !important;
   max-width: 100% !important;
@@ -4049,7 +4123,7 @@ input:-webkit-autofill {
     padding: 0.25rem 0.5rem !important;
     font-size: 0.75rem !important;
   }
-  .reader-content-pane {
+  .reader-content-pane-inner {
     padding: 1rem 0.75rem !important;
   }
   .reader-heading-title {

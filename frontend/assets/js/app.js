@@ -8106,40 +8106,40 @@ function bindTechnicalReaderEvents(book, chapter, isProUser) {
     article.style.fontSize = currentFontSize + 'px';
   }
 
-  // 2. Scroll Progress Bar Listener (Attached directly to page-mount container)
+  // 2. Scroll Progress Bar Listener (Attached directly to reader-content-pane)
+  const contentPaneEl = document.getElementById('reader-content-pane');
   function onScrollProgress() {
     if (!scrollBar) return;
-    const target = pageMountEl || document.documentElement;
-    const winScroll = target.scrollTop || window.scrollY || 0;
-    const scrollHeight = (target.scrollHeight || document.documentElement.scrollHeight);
-    const clientHeight = (target.clientHeight || window.innerHeight);
+    const target = contentPaneEl || pageMountEl || document.documentElement;
+    const winScroll = target.scrollTop || 0;
+    const scrollHeight = target.scrollHeight || 1;
+    const clientHeight = target.clientHeight || 1;
     const height = scrollHeight - clientHeight;
     const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
     scrollBar.style.width = Math.min(100, Math.max(0, scrolled)) + '%';
   }
 
-  if (pageMountEl) {
+  if (contentPaneEl) {
+    contentPaneEl.removeEventListener('scroll', window._readerScrollHandler);
+    contentPaneEl.addEventListener('scroll', onScrollProgress, { passive: true });
+    window._readerScrollHandler = onScrollProgress;
+  } else if (pageMountEl) {
     pageMountEl.removeEventListener('scroll', window._readerScrollHandler);
     pageMountEl.addEventListener('scroll', onScrollProgress, { passive: true });
+    window._readerScrollHandler = onScrollProgress;
   }
-  window.removeEventListener('scroll', window._readerScrollHandler);
-  window._readerScrollHandler = onScrollProgress;
-  window.addEventListener('scroll', window._readerScrollHandler, { passive: true });
 
-  // 3. Zen Focus Mode (Hides Left Sidebar for Authentic Book Reading)
+  // 3. Zen Focus Mode (Collapses/Expands TOC Drawer for Full Immersive Distraction-Free Reading)
   if (focusBtn) {
     focusBtn.addEventListener('click', () => {
-      const appContainer = document.getElementById('app-container');
-      if (appContainer) {
-        const isNowCollapsed = appContainer.classList.toggle('collapsed');
-        if (isNowCollapsed) {
-          focusBtn.innerHTML = '<i class="fa-solid fa-compress text-primary"></i>';
-          focusBtn.classList.add('active');
-          showToast('Zen Reading Mode enabled (sidebar collapsed for full focus)', 'info');
+      if (tocDrawer) {
+        const isClosed = tocDrawer.classList.contains('collapsed') || (!tocDrawer.classList.contains('active') && window.innerWidth < 992);
+        if (isClosed) {
+          openDrawer();
+          showToast('Exited Focus Mode (Table of Contents visible)', 'info');
         } else {
-          focusBtn.innerHTML = '<i class="fa-solid fa-expand text-info"></i>';
-          focusBtn.classList.remove('active');
-          showToast('Exited Zen Mode', 'info');
+          closeDrawer();
+          showToast('Zen Focus Mode enabled (Table of Contents hidden)', 'info');
         }
       }
     });
@@ -8210,12 +8210,16 @@ function bindTechnicalReaderEvents(book, chapter, isProUser) {
     });
   });
 
-  // 6. Table of Contents Drawer Controls (Robust & Unified Desktop + Mobile)
+  // 6. Table of Contents Drawer Controls (The ONE Static Sidebar)
   function closeDrawer() {
     if (!tocDrawer) return;
     tocDrawer.classList.add('collapsed');
     tocDrawer.classList.remove('active');
     if (toggleTocBtn) toggleTocBtn.classList.remove('active');
+    if (focusBtn) {
+      focusBtn.innerHTML = '<i class="fa-solid fa-compress text-primary"></i>';
+      focusBtn.classList.add('active');
+    }
   }
 
   function openDrawer() {
@@ -8223,6 +8227,10 @@ function bindTechnicalReaderEvents(book, chapter, isProUser) {
     tocDrawer.classList.remove('collapsed');
     tocDrawer.classList.add('active');
     if (toggleTocBtn) toggleTocBtn.classList.add('active');
+    if (focusBtn) {
+      focusBtn.innerHTML = '<i class="fa-solid fa-expand text-info"></i>';
+      focusBtn.classList.remove('active');
+    }
   }
 
   function toggleDrawer() {
