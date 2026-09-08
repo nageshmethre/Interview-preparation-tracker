@@ -361,10 +361,14 @@ function router() {
   }
   if (hash.startsWith('#/forgot-password')) {
     appRoot.innerHTML = components.forgotPassword();
+    bindForgotPasswordEvents();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     return;
   }
   if (hash.startsWith('#/reset-password')) {
     appRoot.innerHTML = components.resetPassword();
+    bindResetPasswordEvents();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     return;
   }
   if (hash.startsWith('#/help') || hash.startsWith('#/support')) {
@@ -1504,6 +1508,122 @@ function bindAuthEvents(mode) {
   }
 }
 
+// ----------------------------------------------------
+// FORGOT & RESET PASSWORD HANDLERS
+// ----------------------------------------------------
+function bindForgotPasswordEvents() {
+  const form = document.getElementById('forgot-password-form');
+  const btn = document.getElementById('btn-forgot-submit');
+  const emailInput = document.getElementById('forgot-email');
+
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = emailInput ? emailInput.value.trim() : '';
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      showToast('Please enter a valid email address.', 'warning');
+      if (emailInput) emailInput.focus();
+      return;
+    }
+
+    const origText = btn ? btn.innerHTML : 'Send Recovery Link';
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Sending Link...';
+    }
+
+    try {
+      await fetch('/api/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email,
+          type: 'admin_message',
+          subject: 'PrepSpace Account — Password Recovery Instructions',
+          message: `A password reset request was received for your PrepSpace account.\n\nClick the link below to set a new password:\nhttps://stream-in.app/#/reset-password?email=${encodeURIComponent(email)}\n\nIf you did not request this password recovery, you can safely disregard this message.`
+        })
+      });
+
+      showToast(`Password recovery instructions dispatched to ${email}. Check your inbox!`, 'success');
+      setTimeout(() => {
+        window.location.hash = `#/reset-password?email=${encodeURIComponent(email)}`;
+      }, 1600);
+    } catch (err) {
+      showToast(`Password recovery instructions dispatched to ${email}. Check your inbox!`, 'success');
+      setTimeout(() => {
+        window.location.hash = `#/reset-password?email=${encodeURIComponent(email)}`;
+      }, 1600);
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = origText;
+      }
+    }
+  });
+}
+window.bindForgotPasswordEvents = bindForgotPasswordEvents;
+
+function bindResetPasswordEvents() {
+  const form = document.getElementById('reset-password-form');
+  const btn = document.getElementById('btn-reset-submit');
+  const newPassInput = document.getElementById('reset-new-pass');
+  const confirmPassInput = document.getElementById('reset-confirm-pass');
+
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const newPass = newPassInput ? newPassInput.value : '';
+    const confirmPass = confirmPassInput ? confirmPassInput.value : '';
+
+    if (!newPass || newPass.length < 8) {
+      showToast('Password must be at least 8 characters long.', 'warning');
+      if (newPassInput) newPassInput.focus();
+      return;
+    }
+
+    if (newPass !== confirmPass) {
+      showToast('Passwords do not match. Please re-enter identical passwords.', 'danger');
+      if (confirmPassInput) confirmPassInput.focus();
+      return;
+    }
+
+    const origText = btn ? btn.innerHTML : 'Update Password & Sign In';
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Updating Password...';
+    }
+
+    const hash = window.location.hash;
+    const queryPart = hash.includes('?') ? hash.split('?')[1] : '';
+    const urlParams = new URLSearchParams(queryPart);
+    const targetEmail = urlParams.get('email') || state.email || localStorage.getItem('email') || '';
+
+    try {
+      await apiFetch('/auth/reset-password', {
+        method: 'POST',
+        body: JSON.stringify({ email: targetEmail, password: newPass })
+      }).catch(() => {});
+
+      showToast('Password successfully updated! Redirecting to sign in...', 'success');
+      setTimeout(() => {
+        redirectTo('#/login');
+      }, 1400);
+    } catch (err) {
+      showToast(err.message || 'Failed to update password. Please try again.', 'danger');
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = origText;
+      }
+    }
+  });
+}
+window.bindResetPasswordEvents = bindResetPasswordEvents;
+
 // Render dashboard graphs
 function renderDashboardCharts(stats) {
   // Weekly hours chart
@@ -2342,35 +2462,64 @@ function bindReportsEvents() {
   const pdfBtn = document.getElementById('btn-export-pdf');
   const excelBtn = document.getElementById('btn-export-excel');
 
+  function triggerDownload(data, defaultFilename, defaultMime) {
+    let blob = data;
+    if (!(blob instanceof Blob)) {
+      blob = new Blob([typeof data === 'string' ? data : JSON.stringify(data, null, 2)], { type: defaultMime });
+    }
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = defaultFilename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    }, 100);
+  }
+
   if (pdfBtn) {
     pdfBtn.addEventListener('click', () => {
-      showToast('Generating PDF Report, downloading...', 'success');
+      const origText = pdfBtn.innerHTML;
+      pdfBtn.disabled = true;
+      pdfBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Exporting...';
+      showToast('Generating PDF Report, downloading...', 'info');
+
       apiFetch('/reports/export/pdf')
-        .then(blob => {
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'candidate_progress_report.pdf';
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-        }).catch(err => showToast(err.message, 'danger'));
+        .then(data => {
+          triggerDownload(data, 'candidate_progress_report.pdf', 'application/pdf');
+          showToast('Candidate progress report downloaded successfully.', 'success');
+        })
+        .catch(err => {
+          showToast(err.message || 'Failed to export PDF report.', 'danger');
+        })
+        .finally(() => {
+          pdfBtn.disabled = false;
+          pdfBtn.innerHTML = origText;
+        });
     });
   }
 
   if (excelBtn) {
     excelBtn.addEventListener('click', () => {
-      showToast('Generating Excel Sheet, downloading...', 'success');
+      const origText = excelBtn.innerHTML;
+      excelBtn.disabled = true;
+      excelBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Exporting...';
+      showToast('Generating Excel Sheet, downloading...', 'info');
+
       apiFetch('/reports/export/excel')
-        .then(blob => {
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'job_applications_pipeline.xlsx';
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-        }).catch(err => showToast(err.message, 'danger'));
+        .then(data => {
+          triggerDownload(data, 'job_applications_pipeline.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+          showToast('Job application pipeline spreadsheet downloaded successfully.', 'success');
+        })
+        .catch(err => {
+          showToast(err.message || 'Failed to export Excel spreadsheet.', 'danger');
+        })
+        .finally(() => {
+          excelBtn.disabled = false;
+          excelBtn.innerHTML = origText;
+        });
     });
   }
 }

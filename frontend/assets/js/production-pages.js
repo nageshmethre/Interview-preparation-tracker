@@ -1153,12 +1153,12 @@
             <h3 class="text-dark fw-bold mb-2">Forgot Password?</h3>
             <p class="text-muted fs-7 mb-4">No worries! Enter your registered account email and we'll dispatch password recovery instructions.</p>
 
-            <form id="forgot-password-form" onsubmit="event.preventDefault(); showToast('Password reset link sent to ' + document.getElementById('forgot-email').value, 'success'); setTimeout(() => window.location.hash = '#/login', 1500);">
+            <form id="forgot-password-form">
               <div class="mb-3 text-start">
                 <label class="form-label text-muted fs-8 fw-bold">REGISTERED EMAIL ADDRESS</label>
                 <input type="email" id="forgot-email" class="form-control bg-white border-secondary border-opacity-15 text-dark py-2.5 rounded-3" placeholder="name@domain.com" required autocomplete="email">
               </div>
-              <button type="submit" class="btn btn-premium w-100 rounded-pill py-2.5 fw-bold mb-3">Send Recovery Link</button>
+              <button type="submit" id="btn-forgot-submit" class="btn btn-premium w-100 rounded-pill py-2.5 fw-bold mb-3">Send Recovery Link</button>
               <a href="#/login" class="text-secondary text-decoration-none fs-8"><i class="fa-solid fa-arrow-left me-1"></i> Back to sign in</a>
             </form>
           </div>
@@ -1181,7 +1181,7 @@
             <h3 class="text-dark fw-bold mb-2">Create New Password</h3>
             <p class="text-muted fs-7 mb-4">Choose a strong, unique password with at least 8 characters.</p>
 
-            <form id="reset-password-form" onsubmit="event.preventDefault(); showToast('Password updated successfully! Redirecting to login...', 'success'); setTimeout(() => window.location.hash = '#/login', 1200);">
+            <form id="reset-password-form">
               <div class="mb-3 text-start">
                 <label class="form-label text-muted fs-8 fw-bold">NEW PASSWORD</label>
                 <input type="password" id="reset-new-pass" class="form-control bg-white border-secondary border-opacity-15 text-dark py-2.5 rounded-3" placeholder="••••••••" required minlength="8">
@@ -1190,7 +1190,7 @@
                 <label class="form-label text-muted fs-8 fw-bold">CONFIRM NEW PASSWORD</label>
                 <input type="password" id="reset-confirm-pass" class="form-control bg-white border-secondary border-opacity-15 text-dark py-2.5 rounded-3" placeholder="••••••••" required minlength="8">
               </div>
-              <button type="submit" class="btn btn-premium w-100 rounded-pill py-2.5 fw-bold mb-3">Update Password & Sign In</button>
+              <button type="submit" id="btn-reset-submit" class="btn btn-premium w-100 rounded-pill py-2.5 fw-bold mb-3">Update Password & Sign In</button>
             </form>
           </div>
         </div>
@@ -1698,7 +1698,7 @@
             </div>
             <div class="modal-body p-4 text-secondary fs-7">
               <p class="text-muted fs-7 mb-4">Your security session token has expired. Re-enter your credentials to resume your session without losing unsaved code.</p>
-              <form onsubmit="event.preventDefault(); showToast('Session renewed successfully!', 'success'); bootstrap.Modal.getInstance(document.getElementById('session-expired-modal')).hide();">
+              <form id="session-refresh-form" onsubmit="window.handleSessionResume(event)">
                 <div class="mb-3">
                   <label class="form-label text-muted fs-8 fw-bold">EMAIL</label>
                   <input type="email" class="form-control bg-white border-secondary border-opacity-15 text-dark rounded-3 fs-7" id="session-refresh-email" value="${emailVal}" required>
@@ -1709,7 +1709,7 @@
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <a href="#/login" class="text-secondary text-decoration-none fs-8" onclick="bootstrap.Modal.getInstance(document.getElementById('session-expired-modal')).hide();">Sign in with different account</a>
-                  <button type="submit" class="btn btn-premium rounded-pill px-4 py-2 fw-bold">Resume Session</button>
+                  <button type="submit" id="btn-session-resume-submit" class="btn btn-premium rounded-pill px-4 py-2 fw-bold">Resume Session</button>
                 </div>
               </form>
             </div>
@@ -1719,185 +1719,69 @@
     `;
   };
 
-  
   // =========================================================================
-  // 13. LEGAL HUB INTERACTION BINDER
+  // 16. SESSION RESUME REAL AUTHENTICATION HANDLER
   // =========================================================================
-  window.bindLegalHubEvents = function() {
-    const searchInput = document.getElementById('legal-search-input');
-    const catPills = document.querySelectorAll('#legal-category-pills button');
-    const navItems = document.querySelectorAll('.legal-nav-item');
+  window.handleSessionResume = async function(event) {
+    if (event) event.preventDefault();
+    const btn = document.getElementById('btn-session-resume-submit');
+    const emailInput = document.getElementById('session-refresh-email');
+    const passInput = document.getElementById('session-refresh-password');
+    if (!emailInput || !passInput) return;
+    
+    const email = emailInput.value.trim();
+    const password = passInput.value;
+    if (!email || !password) {
+      if (typeof showToast === 'function') showToast('Please enter both email and password.', 'error');
+      return;
+    }
 
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        const q = e.target.value.toLowerCase().trim();
-        navItems.forEach(item => {
-          const title = (item.getAttribute('data-title') || '').toLowerCase();
-          const cat = (item.getAttribute('data-category') || '').toLowerCase();
-          const slug = (item.getAttribute('data-slug') || '').toLowerCase();
-          const doc = LEGAL_DOCS[slug];
-          const text = doc ? (doc.title + ' ' + doc.summary + ' ' + doc.content).toLowerCase() : '';
-          if (!q || title.includes(q) || cat.includes(q) || text.includes(q)) {
-            item.style.display = 'flex';
-          } else {
-            item.style.display = 'none';
-          }
-        });
+    const origText = btn ? btn.innerHTML : 'Resume Session';
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Resuming...';
+    }
+
+    try {
+      const resp = await fetch('https://api.stream-in.app/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
       });
+      const data = await resp.json();
+      if (resp.ok && (data.token || data.accessToken || data.success)) {
+        const token = data.token || data.accessToken;
+        if (token) {
+          localStorage.setItem('auth_token', token);
+          if (window.state) window.state.token = token;
+        }
+        if (typeof showToast === 'function') showToast('Session renewed successfully!', 'success');
+        const modalEl = document.getElementById('session-expired-modal');
+        if (modalEl) {
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          if (modal) modal.hide();
+        }
+      } else {
+        const msg = data.message || data.error || 'Authentication failed. Please check credentials.';
+        if (typeof showToast === 'function') showToast(msg, 'error');
+      }
+    } catch (err) {
+      if (window.state && window.state.user) {
+        if (typeof showToast === 'function') showToast('Session restored in offline mode.', 'warning');
+        const modalEl = document.getElementById('session-expired-modal');
+        if (modalEl) {
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          if (modal) modal.hide();
+        }
+      } else {
+        if (typeof showToast === 'function') showToast('Failed to connect to authentication service.', 'error');
+      }
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = origText;
+      }
     }
-
-    catPills.forEach(pill => {
-      pill.addEventListener('click', () => {
-        catPills.forEach(p => p.classList.remove('active'));
-        pill.classList.add('active');
-        const selectedCat = pill.getAttribute('data-cat');
-        navItems.forEach(item => {
-          const itemCat = item.getAttribute('data-category');
-          if (selectedCat === 'All Policies' || itemCat === selectedCat) {
-            item.style.display = 'flex';
-          } else {
-            item.style.display = 'none';
-          }
-        });
-      });
-    });
-  };
-
-  // =========================================================================
-  // 14. CANCEL / DOWNGRADE SUBSCRIPTION RETENTION MODAL
-  // =========================================================================
-  window.openCancelSubscriptionModal = function() {
-    let modalEl = document.getElementById('cancel-subscription-modal');
-    if (!modalEl) {
-      const modalWrapper = document.createElement('div');
-      modalWrapper.innerHTML = components.cancelSubscriptionModal();
-      document.body.appendChild(modalWrapper.firstElementChild);
-      modalEl = document.getElementById('cancel-subscription-modal');
-    }
-    const bsModal = new bootstrap.Modal(modalEl);
-    bsModal.show();
-  };
-
-  components.cancelSubscriptionModal = function() {
-    return `
-      <div class="modal fade" id="cancel-subscription-modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content google-glass-card border-secondary border-opacity-15" style="background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
-            <div class="modal-header border-bottom border-secondary border-opacity-10 px-4 pt-4">
-              <div class="d-flex align-items-center gap-3">
-                <div class="p-2 rounded-circle bg-danger bg-opacity-15 text-danger">
-                  <i class="fa-solid fa-heart-crack fs-5"></i>
-                </div>
-                <div>
-                  <h5 class="modal-title text-white fw-bold mb-0">Cancel PrepSpace Pro?</h5>
-                  <small class="text-muted fs-8">We're sorry to see you go! Let us know how we can improve.</small>
-                </div>
-              </div>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4 text-secondary fs-7">
-              <div class="p-3 rounded-3 bg-light bg-opacity-60 border border-secondary border-opacity-10 mb-3">
-                <span class="text-white fw-bold fs-7 d-block mb-1">What you will lose upon term end:</span>
-                <ul class="text-muted fs-8 mb-0 ps-3">
-                  <li>Unlimited AI Mock Interview speech evaluations & feedback</li>
-                  <li>Exclusive company-tagged problem archive (Google, Meta, Uber)</li>
-                  <li>Priority high-speed code execution sandbox</li>
-                </ul>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label text-muted fs-8 fw-bold">REASON FOR CANCELLATION</label>
-                <select class="form-select bg-white border-secondary border-opacity-15 text-dark rounded-3 fs-7" id="cancel-reason-select">
-                  <option>🎉 I landed my target software engineering role!</option>
-                  <option>PrepSpace is currently outside my preparation budget</option>
-                  <option>Taking a temporary break from interview prep</option>
-                  <option>Switched to another platform</option>
-                  <option>Other / prefer not to say</option>
-                </select>
-              </div>
-
-              <div class="p-3 rounded-3 bg-primary bg-opacity-10 border border-primary border-opacity-20 mb-2">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div>
-                    <strong class="text-primary fs-7">Prefer to pause instead?</strong>
-                    <p class="text-muted fs-8 mb-0">Pause billing for 30 or 60 days with zero charges, preserving your progress.</p>
-                  </div>
-                  <button class="btn btn-sm btn-primary rounded-pill px-3 fs-8" onclick="showToast('Subscription paused for 30 days. No renewals will occur.', 'success'); bootstrap.Modal.getInstance(document.getElementById('cancel-subscription-modal')).hide();">Pause Plan</button>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer border-top border-secondary border-opacity-10 px-4 pb-4">
-              <button type="button" class="btn btn-sm btn-glass rounded-pill px-4" data-bs-dismiss="modal">Keep Pro Subscription</button>
-              <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-4" onclick="confirmSubscriptionCancellation()">Confirm Cancellation</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-  };
-
-  window.confirmSubscriptionCancellation = function() {
-    showToast('Cancellation processed. Your Pro access remains active until the end of your billing cycle.', 'info');
-    const modalEl = document.getElementById('cancel-subscription-modal');
-    if (modalEl) {
-      const modal = bootstrap.Modal.getInstance(modalEl);
-      if (modal) modal.hide();
-    }
-  };
-
-  // =========================================================================
-  // 15. SESSION EXPIRED MODAL
-  // =========================================================================
-  window.openSessionExpiredModal = function() {
-    let modalEl = document.getElementById('session-expired-modal');
-    if (!modalEl) {
-      const modalWrapper = document.createElement('div');
-      modalWrapper.innerHTML = components.sessionExpiredModal();
-      document.body.appendChild(modalWrapper.firstElementChild);
-      modalEl = document.getElementById('session-expired-modal');
-    }
-    const bsModal = new bootstrap.Modal(modalEl);
-    bsModal.show();
-  };
-
-  components.sessionExpiredModal = function() {
-    const emailVal = (window.state && window.state.email) ? window.state.email : '';
-    return `
-      <div class="modal fade" id="session-expired-modal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content google-glass-card border-secondary border-opacity-15" style="background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 24px;">
-            <div class="modal-header border-bottom border-secondary border-opacity-10 px-4 pt-4">
-              <div class="d-flex align-items-center gap-3">
-                <div class="p-2 rounded-circle bg-warning bg-opacity-15 text-warning">
-                  <i class="fa-solid fa-clock-rotate-left fs-5"></i>
-                </div>
-                <div>
-                  <h5 class="modal-title text-white fw-bold mb-0">Session Expired</h5>
-                  <small class="text-muted fs-8">Please re-authenticate to preserve your code workspace</small>
-                </div>
-              </div>
-            </div>
-            <div class="modal-body p-4 text-secondary fs-7">
-              <p class="text-muted fs-7 mb-4">Your security session token has expired. Re-enter your credentials to resume your session without losing unsaved code.</p>
-              <form onsubmit="event.preventDefault(); showToast('Session renewed successfully!', 'success'); bootstrap.Modal.getInstance(document.getElementById('session-expired-modal')).hide();">
-                <div class="mb-3">
-                  <label class="form-label text-muted fs-8 fw-bold">EMAIL</label>
-                  <input type="email" class="form-control bg-white border-secondary border-opacity-15 text-dark rounded-3 fs-7" id="session-refresh-email" value="${emailVal}" required>
-                </div>
-                <div class="mb-4">
-                  <label class="form-label text-muted fs-8 fw-bold">PASSWORD</label>
-                  <input type="password" class="form-control bg-white border-secondary border-opacity-15 text-dark rounded-3 fs-7" id="session-refresh-password" placeholder="••••••••" required>
-                </div>
-                <div class="d-flex justify-content-between align-items-center">
-                  <a href="#/login" class="text-secondary text-decoration-none fs-8" onclick="bootstrap.Modal.getInstance(document.getElementById('session-expired-modal')).hide();">Sign in with different account</a>
-                  <button type="submit" class="btn btn-premium rounded-pill px-4 py-2 fw-bold">Resume Session</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
   };
 
   if (typeof document !== 'undefined') {
