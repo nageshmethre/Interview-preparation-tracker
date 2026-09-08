@@ -5451,7 +5451,15 @@ const components = {
 
     // Filter books
     let filtered = books.filter(b => {
-      if (activeCategory && activeCategory !== 'ALL' && b.category !== activeCategory) return false;
+      if (activeCategory && activeCategory !== 'ALL') {
+        if (activeCategory === 'FREE') {
+          if (b.isPro) return false;
+        } else if (activeCategory === 'PRO') {
+          if (!b.isPro) return false;
+        } else if (b.category !== activeCategory) {
+          return false;
+        }
+      }
       if (activeDifficulty && activeDifficulty !== 'ALL' && b.difficulty !== activeDifficulty) return false;
       if (searchQuery && searchQuery.trim() !== '') {
         const q = searchQuery.toLowerCase().trim();
@@ -5869,6 +5877,16 @@ const components = {
               <button id="btn-font-increase" class="btn btn-glass" title="Increase Font Size">A+</button>
             </div>
 
+            <!-- Book Typography Style (Serif / Sans) -->
+            <button id="btn-toggle-font-family" class="btn btn-glass btn-sm" title="Toggle Book Typography (Serif Book / Sans Modern)">
+              <i class="fa-solid fa-font me-1"></i> <span class="d-none d-xl-inline">Book Font</span>
+            </button>
+
+            <!-- Print / PDF Export -->
+            <button id="btn-reader-print" class="btn btn-glass btn-sm" title="Print Chapter / Save as PDF">
+              <i class="fa-solid fa-print"></i>
+            </button>
+
             <!-- Reader Theme Selector -->
             <div class="dropdown">
               <button class="btn btn-glass btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -6064,8 +6082,8 @@ const components = {
                     </td>
                     <td data-label="Actions" class="text-end">
                       <a href="#/library/book?id=${b.id}" class="btn btn-glass btn-sm me-1" title="View Public Syllabus"><i class="fa-solid fa-eye text-info"></i></a>
-                      <button class="btn btn-glass btn-sm me-1" title="Toggle Pro Status"><i class="fa-solid fa-crown text-warning"></i></button>
-                      <button class="btn btn-glass btn-sm" title="Edit Metadata"><i class="fa-solid fa-pen-to-square text-muted"></i></button>
+                      <button class="btn btn-glass btn-sm me-1" data-action="toggle-pro" data-book-id="${b.id}" title="Toggle Pro Status"><i class="fa-solid fa-crown ${b.isPro ? 'text-warning' : 'text-muted'}"></i></button>
+                      <button class="btn btn-glass btn-sm" data-action="edit-book" data-book-id="${b.id}" title="Edit Metadata"><i class="fa-solid fa-pen-to-square text-muted"></i></button>
                     </td>
                   </tr>
                 `).join('')}

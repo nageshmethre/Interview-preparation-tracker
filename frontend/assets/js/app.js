@@ -5892,18 +5892,37 @@ function bindCommunityEvents() {
 }
 
 function bindNotesEvents() {
+  // 0. Compose New Note
+  const newNoteBtn = document.getElementById('btn-new-note');
+  if (newNoteBtn) {
+    newNoteBtn.addEventListener('click', () => {
+      activeNoteId = null;
+      const titleEl = document.getElementById('note-editor-title');
+      const contentEl = document.getElementById('note-editor-content');
+      const tagsEl = document.getElementById('note-editor-tags');
+      if (titleEl) titleEl.value = '';
+      if (contentEl) contentEl.value = '';
+      if (tagsEl) tagsEl.value = '';
+      if (titleEl) titleEl.focus();
+      showToast('Ready to compose a new note', 'info');
+    });
+  }
+
   // 1. Create Folder
-  document.getElementById('btn-create-folder').addEventListener('click', () => {
-    const name = prompt('Enter Folder Name:');
-    if (name) {
-      apiFetch(`/v1/notes/folders?name=${name}`, { method: 'POST' })
-        .then(() => {
-          showToast('Folder directory registered!', 'success');
-          redirectTo('#/dashboard');
-          setTimeout(() => redirectTo('#/notes'), 100);
-        });
-    }
-  });
+  const createFolderBtn = document.getElementById('btn-create-folder');
+  if (createFolderBtn) {
+    createFolderBtn.addEventListener('click', () => {
+      const name = prompt('Enter Folder Name:');
+      if (name) {
+        apiFetch(`/v1/notes/folders?name=${name}`, { method: 'POST' })
+          .then(() => {
+            showToast('Folder directory registered!', 'success');
+            redirectTo('#/dashboard');
+            setTimeout(() => redirectTo('#/notes'), 100);
+          });
+      }
+    });
+  }
 
   // 2. Select note previews
   let activeNoteId = null;
@@ -6656,6 +6675,93 @@ function loadReferralHistory() {
   }
 }
 
+function bindAdminLibraryEvents(container) {
+  if (!container) return;
+
+  // 1. Add New Book Button
+  const addBookBtn = container.querySelector('#btn-admin-add-book');
+  if (addBookBtn) {
+    addBookBtn.addEventListener('click', () => {
+      const title = prompt('Enter Book Title:');
+      if (!title || !title.trim()) return;
+      const category = prompt('Enter Category (e.g. Data Structures & Algorithms, Programming: Python Complete Guide, etc.):', 'Data Structures & Algorithms');
+      if (!category) return;
+      const difficulty = prompt('Enter Difficulty (BEGINNER, INTERMEDIATE, ADVANCED):', 'INTERMEDIATE') || 'INTERMEDIATE';
+      
+      const newId = 100 + ((window.PREPSPACE_LIBRARY && window.PREPSPACE_LIBRARY.books) ? window.PREPSPACE_LIBRARY.books.length + 1 : 1);
+      const newBook = {
+        id: newId,
+        slug: title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-handbook',
+        title: title.trim(),
+        subtitle: 'Official Handbook Curriculum',
+        description: `Comprehensive study materials and architectural guides for ${title.trim()}.`,
+        author: 'PrepSpace Engineering Curriculum Group',
+        category: category.trim(),
+        subcategory: 'Curriculum Core',
+        difficulty: difficulty.toUpperCase(),
+        pageCount: 150,
+        estimatedReadingTime: '5 Hours',
+        tags: [category.trim().split(' ')[0], 'Guide', 'Curriculum'],
+        licenseType: 'ORIGINAL',
+        copyrightNotice: '© 2026 PrepSpace (stream-in.app). All rights reserved.',
+        isPro: true,
+        badge: 'New Addition',
+        rating: 5.0,
+        readerCount: 1,
+        icon: 'fa-solid fa-book-bookmark',
+        gradient: 'linear-gradient(135deg, #1e3a8a, #3b82f6)',
+        chapters: [
+          {
+            id: newId * 100 + 1,
+            chapterNumber: 1,
+            title: 'Foundations & Architectural Scope',
+            subtitle: 'Overview and core principles',
+            summary: `Introduction and learning roadmap for ${title.trim()}.`,
+            readingTimeMinutes: 15,
+            isFreePreview: true,
+            sortOrder: 1,
+            contentHtml: `<h3>1.1 Foundations of ${title.trim()}</h3><p>Welcome to this curriculum handbook. Detailed modules and chapters are under active curriculum deployment.</p>`
+          }
+        ]
+      };
+      if (window.PREPSPACE_LIBRARY && window.PREPSPACE_LIBRARY.books) {
+        window.PREPSPACE_LIBRARY.books.push(newBook);
+      }
+      showToast(`Handbook "${title}" registered successfully!`, 'success');
+      loadAdminPanelTab('library');
+    });
+  }
+
+  // 2. Toggle Pro Status
+  container.querySelectorAll('[data-action="toggle-pro"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const bookId = parseInt(btn.getAttribute('data-book-id'), 10);
+      const book = (window.PREPSPACE_LIBRARY ? window.PREPSPACE_LIBRARY.books : []).find(b => b.id === bookId);
+      if (book) {
+        book.isPro = !book.isPro;
+        showToast(`"${book.title}" access tier set to ${book.isPro ? 'PRO PASS' : 'FREE'}!`, 'info');
+        loadAdminPanelTab('library');
+      }
+    });
+  });
+
+  // 3. Edit Metadata
+  container.querySelectorAll('[data-action="edit-book"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const bookId = parseInt(btn.getAttribute('data-book-id'), 10);
+      const book = (window.PREPSPACE_LIBRARY ? window.PREPSPACE_LIBRARY.books : []).find(b => b.id === bookId);
+      if (book) {
+        const newTitle = prompt('Edit Book Title:', book.title);
+        if (newTitle && newTitle.trim()) {
+          book.title = newTitle.trim();
+          showToast(`Handbook #${bookId} updated!`, 'success');
+          loadAdminPanelTab('library');
+        }
+      }
+    });
+  });
+}
+
 function loadAdminPanelTab(tab) {
   const allTabs = ['overview', 'users', 'leaderboard', 'payments', 'referrals', 'rules', 'broadcast', 'audit-logs', 'health', 'library'];
   allTabs.forEach(t => {
@@ -6675,7 +6781,9 @@ function loadAdminPanelTab(tab) {
   contentArea.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary spinner-border-sm"></div><div class="text-muted fs-8 mt-2">Loading module data...</div></div>`;
 
   if (tab === 'library') {
-    contentArea.innerHTML = components.adminLibraryTab(window.PREPSPACE_LIBRARY ? window.PREPSPACE_LIBRARY.books : []);
+    const books = window.PREPSPACE_LIBRARY ? window.PREPSPACE_LIBRARY.books : [];
+    contentArea.innerHTML = components.adminLibraryTab(books);
+    bindAdminLibraryEvents(contentArea);
     return;
   }
 
@@ -7883,6 +7991,40 @@ function bindTechnicalReaderEvents(book, chapter, isProUser) {
     });
   }
 
+  // 4b. Book Typography Serif/Sans Toggle
+  const fontFamBtn = document.getElementById('btn-toggle-font-family');
+  const savedFontFamily = localStorage.getItem('reader-font-family') || 'sans';
+  if (article && savedFontFamily === 'serif') {
+    article.classList.add('reader-font-serif');
+    if (fontFamBtn) {
+      fontFamBtn.classList.add('btn-primary', 'text-white');
+      fontFamBtn.classList.remove('btn-glass');
+    }
+  }
+  if (fontFamBtn && article) {
+    fontFamBtn.addEventListener('click', () => {
+      const isSerif = article.classList.toggle('reader-font-serif');
+      localStorage.setItem('reader-font-family', isSerif ? 'serif' : 'sans');
+      if (isSerif) {
+        fontFamBtn.classList.add('btn-primary', 'text-white');
+        fontFamBtn.classList.remove('btn-glass');
+        showToast('Switched to Classic Book Serif typography', 'info');
+      } else {
+        fontFamBtn.classList.remove('btn-primary', 'text-white');
+        fontFamBtn.classList.add('btn-glass');
+        showToast('Switched to Modern Sans typography', 'info');
+      }
+    });
+  }
+
+  // 4c. Print Chapter / PDF Export
+  const printBtn = document.getElementById('btn-reader-print');
+  if (printBtn) {
+    printBtn.addEventListener('click', () => {
+      window.print();
+    });
+  }
+
   // 5. Reader Theme Switcher
   document.querySelectorAll('[data-reader-theme]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -7916,6 +8058,16 @@ function bindTechnicalReaderEvents(book, chapter, isProUser) {
       } else {
         tocDrawer.classList.remove('active');
       }
+    });
+  }
+
+  if (tocDrawer) {
+    tocDrawer.querySelectorAll('a.list-group-item').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 992) {
+          tocDrawer.classList.remove('active');
+        }
+      });
     });
   }
 

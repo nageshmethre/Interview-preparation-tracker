@@ -3992,3 +3992,52 @@ input:-webkit-autofill {
   max-width: 100% !important;
   box-sizing: border-box;
 }
+
+/* 7. Authentic Book Typography (Serif) & Print Export */
+.reader-prose-content.reader-font-serif {
+  font-family: 'Merriweather', 'Georgia', 'Cambria', 'Times New Roman', serif !important;
+  line-height: 1.95 !important;
+  letter-spacing: 0.01em !important;
+}
+
+.reader-prose-content.reader-font-serif p {
+  font-size: 1.05rem !important;
+}
+
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+  #app-sidebar,
+  .reader-navbar,
+  .reader-toc-drawer,
+  .reader-scroll-progress-bar,
+  .reader-footer-nav,
+  #toast-container,
+  .btn {
+    display: none !important;
+  }
+  .reader-layout,
+  .reader-content-pane {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+  .reader-prose-content {
+    color: #111827 !important;
+    font-size: 11pt !important;
+    line-height: 1.6 !important;
+  }
+  .book-callout-theorem,
+  .book-callout-insight,
+  .book-callout-warning,
+  .book-callout-algorithm {
+    border-color: #374151 !important;
+    background: #f3f4f6 !important;
+    color: #111827 !important;
+    page-break-inside: avoid;
+  }
+}
+
