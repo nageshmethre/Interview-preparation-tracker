@@ -1,23 +1,13 @@
 /**
- * interview-suite.js - PrepSpace Advanced Interview Readiness & Career Accelerator Suite
+ * PrepSpace - 6 Advanced Career Acceleration & Interview Readiness Suites (v4.6.0)
  * 
- * Version: 4.5.0 (Studio Audio Podcast Engine & Interactive Polish Release)
- * Author: PrepSpace Engineering / Nagesh Methre
- * 
- * Included Suites:
- * 1. Recruiter Outreach & Cold Message CRM (#/outreach)
- *    - Smart Hook Generator, LinkedIn 300c Gauge, Launch Email/LinkedIn, CSV Export, Kanban
- * 2. STAR Story Vault & Behavioral Bank (#/star-vault)
- *    - 4-Box Matrix, 2-Min Pacing Practice Stopwatch, AI Feedback Prompt, Principle Filters
- * 3. Peer-to-Peer Mock Exchange & FAANG Rubric Arena (#/peer-mock)
- *    - 30m+30m Dual Track, Audio Round Chime, Dynamic Rubric Calculator, Secret Hints, Code Runner
- * 4. 60-Second Feynman Audio Bites with Studio Podcast Engine (#/audio-bites)
- *    - Neural Voice Discovery, 3 Persona Modes (Deep Baritone, Smooth Co-Host, British Scholar),
- *      Web Audio Studio Ambience Focus Bed, Interactive Sentence Highlighting & Jumping
- * 5. Emergency 60-Minute Pre-Interview Crisis Booster (#/interview-booster)
- *    - Active Recall Flashcard Mode, 5 Tech Stacks, Box Breathing Audio Chimes, Camera/Mic Diagnostics
- * 6. Reverse Interview Kit ("Questions to Ask Them") (#/reverse-interview)
- *    - 20+ High-Caliber Questions, Green/Red Flag Guides, Personal Interview Notes, Custom Questions
+ * Includes:
+ *  #3  - Recruiter Outreach CRM (Kanban Pipeline, 0-100 Quality Score, 5 Tone Archetypes)
+ *  #4  - STAR Story Vault (Teleprompter Mode, Speech-to-Text WPM Coach, Blind-Spot Radar)
+ *  #6  - Peer-to-Peer Mock Arena (AI Shadow Interviewer, FAANG 4-Axis Rubric, Code Scratchpad)
+ *  #7  - 60-Second Feynman Audio Bites (Podcast Studio Engine, Commute Playlist, Active Recall)
+ *  #8  - Emergency Crisis Booster (Pre-Flight Cockpit HUD, Webcam/Mic Meter, 3D Flashcards)
+ *  #10 - Reverse Interview Kit (Cultural Risk Radar, Team Health Score, 3x5 Index Card Export)
  */
 
 (function() {
@@ -25,177 +15,206 @@
 
   window.components = window.components || {};
 
-  // =========================================================================
-  // 0. SHARED AUDIO & VOICE SYNTHESIS ENGINES
-  // =========================================================================
-
-  const AudioSynth = {
-    ctx: null,
-    ambienceSource: null,
-    ambienceGain: null,
-    getCtx() {
-      if (!this.ctx) {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (AudioCtx) this.ctx = new AudioCtx();
-      }
-      if (this.ctx && this.ctx.state === 'suspended') {
-        this.ctx.resume();
-      }
-      return this.ctx;
-    },
-    playChime(freq1 = 587.33, freq2 = 880, duration = 0.8) {
-      try {
-        const ctx = this.getCtx();
-        if (!ctx) return;
-        const now = ctx.currentTime;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq1, now);
-        osc.frequency.exponentialRampToValueAtTime(freq2, now + 0.15);
-        gain.gain.setValueAtTime(0.18, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now);
-        osc.stop(now + duration);
-      } catch (e) {
-        console.warn('Audio chime notice:', e);
-      }
-    },
-    playBreathCue(type = 'inhale') {
-      try {
-        const ctx = this.getCtx();
-        if (!ctx) return;
-        const now = ctx.currentTime;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        const freq = type === 'inhale' ? 440 : (type === 'hold' ? 523.25 : 329.63);
-        osc.frequency.setValueAtTime(freq, now);
-        gain.gain.setValueAtTime(0.12, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now);
-        osc.stop(now + 1.2);
-      } catch (e) {
-        console.warn('Breath cue notice:', e);
-      }
-    },
-    startAmbience() {
-      try {
-        const ctx = this.getCtx();
-        if (!ctx || this.ambienceSource) return;
-        const bufferSize = ctx.sampleRate * 2;
-        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-          const white = Math.random() * 2 - 1;
-          const sine = Math.sin((i / ctx.sampleRate) * 2 * Math.PI * 432) * 0.15;
-          data[i] = (white * 0.05 + sine) * 0.12;
-        }
-        const noise = ctx.createBufferSource();
-        noise.buffer = buffer;
-        noise.loop = true;
-
-        const filter = ctx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.value = 550;
-
-        const gain = ctx.createGain();
-        gain.gain.value = 0.035; // Soft studio room tone
-
-        noise.connect(filter);
-        filter.connect(gain);
-        gain.connect(ctx.destination);
-
-        noise.start(0);
-        this.ambienceSource = noise;
-        this.ambienceGain = gain;
-      } catch (e) {
-        console.warn('Studio ambience notice:', e);
-      }
-    },
-    stopAmbience() {
-      if (this.ambienceSource) {
-        try { this.ambienceSource.stop(); } catch(e) {}
-        this.ambienceSource = null;
-        this.ambienceGain = null;
-      }
-    }
-  };
-
-  const VoiceEngine = {
-    voices: [],
-    init() {
-      if (typeof window === 'undefined' || !window.speechSynthesis) return;
-      const load = () => {
-        this.voices = window.speechSynthesis.getVoices() || [];
-      };
-      load();
-      if (window.speechSynthesis.onvoiceschanged !== undefined) {
-        window.speechSynthesis.onvoiceschanged = load;
-      }
-    },
-    getVoice(persona = 'host_deep') {
-      if (!this.voices.length && window.speechSynthesis) {
-        this.voices = window.speechSynthesis.getVoices() || [];
-      }
-      const en = this.voices.filter(v => v.lang && v.lang.startsWith('en'));
-      const list = en.length ? en : this.voices;
-      if (!list.length) return { voice: null, pitch: 0.95, rate: 1.0 };
-
-      if (persona === 'host_deep') {
-        const found = list.find(v => /guy|christopher|david|oliver|male|natural.*male/i.test(v.name)) ||
-                      list.find(v => /google.*english/i.test(v.name)) ||
-                      list.find(v => /natural|online|neural/i.test(v.name)) ||
-                      list[0];
-        return { voice: found, pitch: 0.92, rate: 0.98 };
-      } else if (persona === 'host_smooth') {
-        const found = list.find(v => /jenny|samantha|aria|zira|female|natural.*female/i.test(v.name)) ||
-                      list.find(v => /natural|online|neural/i.test(v.name)) ||
-                      list[0];
-        return { voice: found, pitch: 0.98, rate: 0.98 };
-      } else if (persona === 'scholar_uk') {
-        const found = list.find(v => /uk|british|great britain|oliver|daniel|ryan/i.test(v.name) || v.lang === 'en-GB') ||
-                      list[0];
-        return { voice: found, pitch: 0.95, rate: 0.96 };
-      } else {
-        return { voice: list[0], pitch: 1.0, rate: 1.0 };
-      }
-    },
-    formatText(text) {
-      return text
-        .replace(/CAP Theorem/g, 'C-A-P Theorem')
-        .replace(/LSM-Trees/g, 'L-S-M Trees')
-        .replace(/LSM Tree/g, 'L-S-M Tree')
-        .replace(/TCP 3-Way/g, 'T-C-P 3-Way')
-        .replace(/TCP/g, 'T-C-P')
-        .replace(/SYN-ACK/g, 'Syn, Ack')
-        .replace(/SYN/g, 'Syn')
-        .replace(/ACK/g, 'Ack')
-        .replace(/O\(1\)/g, 'O of 1')
-        .replace(/p99/g, 'p ninety-nine')
-        .replace(/—/g, ', ')
-        .replace(/ - /g, ', ')
-        .replace(/\. /g, '... ');
-    }
-  };
-
-  VoiceEngine.init();
-
-  // Helper Toast
+  // Safe toast notifier
   function safeToast(msg, type = 'info') {
     if (typeof window.showToast === 'function') {
       window.showToast(msg, type);
     } else {
-      console.log(`[${type.toUpperCase()}] ${msg}`);
+      console.log(`[PrepSpace Toast ${type.toUpperCase()}]:`, msg);
     }
   }
 
   // =========================================================================
-  // 1. RECRUITER OUTREACH & COLD MESSAGE CRM (#/outreach)
+  // AUDIO SYNTH & STUDIO RECORDING ENGINE (Web Audio API)
+  // =========================================================================
+  const AudioSynth = {
+    ctx: null,
+    ambienceSource: null,
+    ambienceGain: null,
+    ambienceTone: null,
+
+    init() {
+      if (!this.ctx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) {
+          this.ctx = new AudioCtx();
+        }
+      }
+      if (this.ctx && this.ctx.state === 'suspended') {
+        this.ctx.resume().catch(() => {});
+      }
+      return this.ctx;
+    },
+
+    startAmbience() {
+      try {
+        const ctx = this.init();
+        if (!ctx || this.ambienceSource) return;
+
+        // 1. Pink noise generator for room air tone
+        const bufferSize = ctx.sampleRate * 2;
+        const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          b0 = 0.99886 * b0 + white * 0.0555179;
+          b1 = 0.99332 * b1 + white * 0.0750759;
+          b2 = 0.96900 * b2 + white * 0.1538520;
+          b3 = 0.86650 * b3 + white * 0.3104856;
+          b4 = 0.55000 * b4 + white * 0.5329522;
+          b5 = -0.7616 * b5 - white * 0.0168980;
+          output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.04;
+          b6 = white * 0.115926;
+        }
+
+        const noise = ctx.createBufferSource();
+        noise.buffer = noiseBuffer;
+        noise.loop = true;
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(320, ctx.currentTime);
+
+        // 2. 432Hz warm harmonic focus tone
+        const osc = ctx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(432, ctx.currentTime);
+
+        const oscGain = ctx.createGain();
+        oscGain.gain.setValueAtTime(0.008, ctx.currentTime);
+
+        const masterGain = ctx.createGain();
+        masterGain.gain.setValueAtTime(0.001, ctx.currentTime);
+        masterGain.gain.exponentialRampToValueAtTime(0.08, ctx.currentTime + 1.2);
+
+        noise.connect(filter);
+        filter.connect(masterGain);
+        osc.connect(oscGain);
+        oscGain.connect(masterGain);
+        masterGain.connect(ctx.destination);
+
+        noise.start();
+        osc.start();
+
+        this.ambienceSource = noise;
+        this.ambienceTone = osc;
+        this.ambienceGain = masterGain;
+      } catch (e) {
+        console.warn('Studio ambience initialization notice:', e);
+      }
+    },
+
+    stopAmbience() {
+      if (this.ambienceGain && this.ctx) {
+        try {
+          this.ambienceGain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.8);
+          setTimeout(() => {
+            if (this.ambienceSource) { try { this.ambienceSource.stop(); } catch(e){} this.ambienceSource = null; }
+            if (this.ambienceTone) { try { this.ambienceTone.stop(); } catch(e){} this.ambienceTone = null; }
+            this.ambienceGain = null;
+          }, 850);
+        } catch(e) {
+          if (this.ambienceSource) { try { this.ambienceSource.stop(); } catch(err){} this.ambienceSource = null; }
+          this.ambienceGain = null;
+        }
+      }
+    },
+
+    playChime(f1 = 587.33, f2 = 880, dur = 0.25) {
+      try {
+        const ctx = this.init();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        const osc1 = ctx.createOscillator();
+        const osc2 = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc1.type = 'sine';
+        osc2.type = 'triangle';
+        osc1.frequency.setValueAtTime(f1, now);
+        osc1.frequency.exponentialRampToValueAtTime(f2, now + dur);
+        osc2.frequency.setValueAtTime(f1 * 1.5, now);
+        osc2.frequency.exponentialRampToValueAtTime(f2 * 1.5, now + dur);
+
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + dur + 0.3);
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + dur + 0.35);
+        osc2.stop(now + dur + 0.35);
+      } catch (e) {}
+    },
+
+    playBreathCue(freq = 440) {
+      try {
+        const ctx = this.init();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.09, now + 0.2);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.7);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.75);
+      } catch(e) {}
+    }
+  };
+
+  // =========================================================================
+  // ASYNCHRONOUS SPEECH SYNTHESIS ENGINE
+  // =========================================================================
+  let cachedVoices = [];
+  function initVoiceCache() {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      cachedVoices = window.speechSynthesis.getVoices() || [];
+      window.speechSynthesis.onvoiceschanged = () => {
+        cachedVoices = window.speechSynthesis.getVoices() || [];
+      };
+    }
+  }
+  initVoiceCache();
+
+  function getBestVoice(personaKey = 'host_deep') {
+    if (!cachedVoices.length && typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      cachedVoices = window.speechSynthesis.getVoices() || [];
+    }
+
+    if (personaKey === 'scholar_uk') {
+      const ukVoice = cachedVoices.find(v => (v.lang === 'en-GB' || v.name.includes('UK') || v.name.includes('George') || v.name.includes('Oliver') || v.name.includes('Hazel')));
+      if (ukVoice) return ukVoice;
+    }
+
+    // Natural / Neural priority
+    const naturalVoice = cachedVoices.find(v => 
+      (v.name.includes('Natural') || v.name.includes('Neural') || v.name.includes('Online')) && v.lang.startsWith('en')
+    );
+    if (naturalVoice) return naturalVoice;
+
+    // Microsoft Guy / Christopher / Google US English
+    const preferredVoice = cachedVoices.find(v => 
+      (v.name.includes('Guy') || v.name.includes('Christopher') || v.name.includes('Google US English') || v.name.includes('David') || v.name.includes('Zira')) && v.lang.startsWith('en')
+    );
+    if (preferredVoice) return preferredVoice;
+
+    // Any English voice
+    const englishVoice = cachedVoices.find(v => v.lang.startsWith('en'));
+    return englishVoice || cachedVoices[0] || null;
+  }
+
+
+  // =========================================================================
+  // 1. RECRUITER OUTREACH & COLD EMAIL CRM (#/outreach)
   // =========================================================================
 
   const DEFAULT_OUTREACH_ITEMS = [
@@ -203,34 +222,49 @@
       id: 'outreach-1',
       name: 'Sarah Chen',
       company: 'Stripe',
-      role: 'Backend Engineer - Infrastructure',
-      type: 'Engineering Manager',
+      role: 'Backend Engineering Manager',
+      type: 'manager',
       status: 'call_scheduled',
+      stage: 'screening',
       date: '2026-09-06',
-      notes: 'Reached out via LinkedIn referencing their Raft consensus blog. 20-min chat scheduled for Friday.',
-      lastMessage: 'Hi Sarah, loved your post on Stripe\'s distributed payment ledger. Built a similar Raft-based KV store in Go. Would love to learn about your infra hiring.'
+      notes: 'Replied within 2 hours. Screening scheduled for Thursday 3 PM PST.',
+      lastMessage: 'Hi Sarah, noticed Stripe’s recent expansion into unified payments infrastructure. Built idempotency microservices handling 45K rps at my previous org. Would love to learn about your engineering roadmap.'
     },
     {
       id: 'outreach-2',
       name: 'Arjun Mehta',
       company: 'Razorpay',
-      role: 'SDE-2 Full Stack',
-      type: 'Senior Peer (Referral)',
+      role: 'Staff Platform Engineer',
+      type: 'peer',
       status: 'connected',
+      stage: 'sent',
       date: '2026-09-08',
-      notes: 'College alumni. Agreed to review resume and drop internal referral once job req 4091 opens.',
-      lastMessage: 'Hey Arjun, great to see your journey from Reva to Razorpay. Saw the SDE-2 opening on Payments Gateway. Would appreciate if you could share an internal referral.'
+      notes: 'Connected on LinkedIn. Shared engineering blog on distributed saga pattern.',
+      lastMessage: 'Hey Arjun, big fan of your tech talks on distributed transaction recovery. As a backend engineer building event-driven services in Java & Kafka, excited to connect!'
     },
     {
       id: 'outreach-3',
       name: 'Emily Watson',
       company: 'Datadog',
-      role: 'Software Engineer - Telemetry',
-      type: 'Technical Recruiter',
+      role: 'Senior Technical Recruiter',
+      type: 'recruiter',
       status: 'note_sent',
+      stage: 'sent',
       date: '2026-09-09',
-      notes: 'Sent personalized InMail. Follow-up reminder set in 3 days.',
-      lastMessage: 'Hi Emily, saw you lead engineering talent at Datadog. With 2+ years scaling high-throughput Spring Boot services, I\'d love to connect regarding telemetry roles.'
+      notes: 'Sent personalized 280c connection request with flagship latency metric.',
+      lastMessage: 'Hi Emily, saw the SDE-2 Cloud Infrastructure req at Datadog. Recently engineered Kafka stream processing that lowered p99 latency by 45%. Would love to connect and share my resume.'
+    },
+    {
+      id: 'outreach-4',
+      name: 'Marcus Vance',
+      company: 'Uber',
+      role: 'Director of Platform Infrastructure',
+      type: 'manager',
+      status: 'identified',
+      stage: 'identified',
+      date: '2026-09-09',
+      notes: 'Found via engineering blog on zero-copy storage. Pitch drafted.',
+      lastMessage: ''
     }
   ];
 
@@ -242,77 +276,98 @@
       items = DEFAULT_OUTREACH_ITEMS;
     }
 
+    // Normalizing stage
+    items.forEach(i => {
+      if (!i.stage) {
+        if (i.status === 'call_scheduled') i.stage = 'screening';
+        else if (i.status === 'referral_received' || i.status === 'offer') i.stage = 'offer';
+        else if (i.status === 'note_sent' || i.status === 'connected') i.stage = 'sent';
+        else i.stage = 'identified';
+      }
+    });
+
     const stats = {
       total: items.length,
-      sent: items.filter(i => i.status === 'note_sent').length,
-      connected: items.filter(i => i.status === 'connected').length,
-      calls: items.filter(i => i.status === 'call_scheduled').length,
-      referrals: items.filter(i => i.status === 'referral_received').length
+      sent: items.filter(i => i.stage === 'sent' || i.stage === 'screening' || i.stage === 'offer').length,
+      screenings: items.filter(i => i.stage === 'screening').length,
+      offers: items.filter(i => i.stage === 'offer').length
     };
+    const responseRate = stats.total ? Math.round(((stats.screenings + stats.offers) / stats.total) * 100) : 0;
+
+    const kanbanCols = [
+      { key: 'identified', label: '1. Identified', badge: 'bg-secondary', icon: 'fa-user-clock' },
+      { key: 'sent', label: '2. Message Sent', badge: 'bg-info', icon: 'fa-paper-plane' },
+      { key: 'screening', label: '3. Screening Set', badge: 'bg-warning', icon: 'fa-phone' },
+      { key: 'offer', label: '4. Referral / Offer', badge: 'bg-success', icon: 'fa-trophy' }
+    ];
 
     return `
-      <div class="container-fluid px-3 px-md-4 py-3">
+      <div class="container-fluid px-3 px-md-4 py-3 suite-scroll-container">
         <!-- Header -->
-        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom border-secondary border-opacity-15 gap-2">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-15 gap-2">
           <div>
             <div class="d-flex align-items-center gap-2">
               <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-50 font-monospace fs-9">CAREER ACCELERATOR</span>
-              <h4 class="text-white fw-bold m-0 fs-5">Recruiter Outreach & Cold Message CRM</h4>
+              <h4 class="text-white fw-bold m-0 fs-5">AI Recruiter Outreach & Pipeline Kanban</h4>
             </div>
-            <p class="text-muted fs-8 mb-0 mt-1">Craft high-converting LinkedIn notes, cold InMails, and manage your referral pipeline.</p>
+            <p class="text-muted fs-8 mb-0 mt-1">Generate high-converting executive cold messages, score deliverability, and drag-track referral pipelines.</p>
           </div>
           <div class="d-flex gap-2">
             <button class="btn btn-outline-secondary btn-sm px-3" id="btn-export-outreach-csv">
               <i class="fa-solid fa-file-csv me-1 text-success"></i> Export CSV
             </button>
             <button class="btn btn-primary btn-sm px-3" data-bs-toggle="modal" data-bs-target="#addContactModal">
-              <i class="fa-solid fa-user-plus me-1"></i> Add Contact
+              <i class="fa-solid fa-user-plus me-1"></i> Add Prospect
             </button>
           </div>
         </div>
 
         <!-- Metric Cards -->
-        <div class="row g-2 g-md-3 mb-4">
+        <div class="row g-2 g-md-3 mb-3">
           <div class="col-6 col-md-3">
-            <div class="bento-card p-3">
-              <span class="stat-label">Total Outreached</span>
-              <div class="stat-num text-white">${stats.total}</div>
-              <small class="text-muted fs-9">Active prospects</small>
+            <div class="bento-card p-2.5">
+              <span class="stat-label fs-9">Total Prospects</span>
+              <div class="stat-num text-white fs-4">${stats.total}</div>
+              <small class="text-muted fs-9">In active funnel</small>
             </div>
           </div>
           <div class="col-6 col-md-3">
-            <div class="bento-card p-3">
-              <span class="stat-label">Response Rate</span>
-              <div class="stat-num text-success">${stats.total ? Math.round(((stats.connected + stats.calls + stats.referrals) / stats.total) * 100) : 0}%</div>
-              <small class="text-success fs-9"><i class="fa-solid fa-arrow-trend-up me-1"></i>Industry benchmark: 18%</small>
+            <div class="bento-card p-2.5">
+              <span class="stat-label fs-9">Conversion Rate</span>
+              <div class="stat-num text-success fs-4">${responseRate}%</div>
+              <small class="text-success fs-9"><i class="fa-solid fa-arrow-trend-up me-1"></i>Avg benchmark: 18%</small>
             </div>
           </div>
           <div class="col-6 col-md-3">
-            <div class="bento-card p-3">
-              <span class="stat-label">Screening Calls</span>
-              <div class="stat-num text-info">${stats.calls}</div>
-              <small class="text-info fs-9">Scheduled chats</small>
+            <div class="bento-card p-2.5">
+              <span class="stat-label fs-9">Screening Calls</span>
+              <div class="stat-num text-warning fs-4">${stats.screenings}</div>
+              <small class="text-warning fs-9">Interviews locked</small>
             </div>
           </div>
           <div class="col-6 col-md-3">
-            <div class="bento-card p-3">
-              <span class="stat-label">Referrals Secured</span>
-              <div class="stat-num text-warning">${stats.referrals}</div>
-              <small class="text-warning fs-9">Internal endorsements</small>
+            <div class="bento-card p-2.5">
+              <span class="stat-label fs-9">Endorsements & Offers</span>
+              <div class="stat-num text-info fs-4">${stats.offers}</div>
+              <small class="text-info fs-9">Internal champions</small>
             </div>
           </div>
         </div>
 
         <div class="row g-3">
-          <!-- Left: Smart Message & Hook Generator -->
+          <!-- Left: AI Generator & Quality Score -->
           <div class="col-12 col-xl-5">
-            <div class="card bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 p-3 p-md-4 shadow-sm h-100">
-              <div class="d-flex align-items-center justify-content-between mb-3">
-                <h6 class="text-white fw-bold m-0 fs-7"><i class="fa-solid fa-wand-magic-sparkles text-warning me-2"></i>Smart Pitch & Hook Generator</h6>
-                <span class="badge bg-dark text-muted border border-secondary border-opacity-30 fs-9 font-monospace" id="gauge-badge">LinkedIn Limit: 300c</span>
+            <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-3 shadow-sm h-100">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <h6 class="text-white fw-bold m-0 fs-7"><i class="fa-solid fa-wand-magic-sparkles text-warning me-1.5"></i>Smart Pitch Co-Pilot</h6>
+                <!-- Quality Score Badge -->
+                <div id="quality-score-wrapper" class="quality-meter-badge quality-meter-high">
+                  <i class="fa-solid fa-bolt"></i>
+                  <span id="quality-score-text">Quality: 92/100 (Optimal)</span>
+                </div>
               </div>
 
-              <!-- Quick Insertion Chips -->
+              <!-- Quick Tag Chips -->
               <div class="mb-2 d-flex flex-wrap gap-1 align-items-center">
                 <small class="text-secondary fs-9 me-1">Insert Tag:</small>
                 <button type="button" class="btn btn-glass py-0.5 px-2 fs-9 text-info outreach-insert-chip" data-tag="{{name}}">+ {{name}}</button>
@@ -321,59 +376,65 @@
                 <button type="button" class="btn btn-glass py-0.5 px-2 fs-9 text-info outreach-insert-chip" data-tag="{{hook}}">+ {{hook}}</button>
               </div>
 
-              <div class="mb-2">
-                <label class="form-label text-secondary fs-8 fw-semibold mb-1">Target Company & Role</label>
-                <div class="row g-2">
-                  <div class="col-6">
-                    <input type="text" id="gen-company" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. Google, Stripe" value="Uber">
-                  </div>
-                  <div class="col-6">
-                    <input type="text" id="gen-role" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. Backend SDE-2" value="Software Engineer">
-                  </div>
+              <!-- Input Fields (Compact Grid) -->
+              <div class="row g-2 mb-2">
+                <div class="col-6">
+                  <label class="form-label text-secondary fs-9 fw-semibold mb-0.5">Target Company</label>
+                  <input type="text" id="gen-company" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. Stripe, Uber" value="Uber">
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary fs-9 fw-semibold mb-0.5">Target Role</label>
+                  <input type="text" id="gen-role" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. Backend SDE-2" value="Software Engineer">
+                </div>
+              </div>
+
+              <div class="row g-2 mb-2">
+                <div class="col-6">
+                  <label class="form-label text-secondary fs-9 fw-semibold mb-0.5">Prospect Name</label>
+                  <input type="text" id="gen-name" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. Alex" value="Alex">
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-secondary fs-9 fw-semibold mb-0.5">Prospect Persona</label>
+                  <select id="gen-type" class="form-select form-select-sm bg-black text-white border-secondary border-opacity-50">
+                    <option value="manager" selected>Engineering Manager</option>
+                    <option value="recruiter">Technical Recruiter</option>
+                    <option value="peer">Senior Peer / Tech Lead</option>
+                    <option value="alumni">College / Work Alumni</option>
+                  </select>
                 </div>
               </div>
 
               <div class="mb-2">
-                <label class="form-label text-secondary fs-8 fw-semibold mb-1">Prospect Name & Persona</label>
-                <div class="row g-2">
-                  <div class="col-6">
-                    <input type="text" id="gen-name" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. Alex Rivera" value="Alex">
-                  </div>
-                  <div class="col-6">
-                    <select id="gen-type" class="form-select form-select-sm bg-black text-white border-secondary border-opacity-50">
-                      <option value="manager" selected>Engineering Manager</option>
-                      <option value="recruiter">Technical Recruiter</option>
-                      <option value="alumni">College / Work Alumni</option>
-                      <option value="peer">Senior Peer Engineer</option>
-                    </select>
-                  </div>
-                </div>
+                <label class="form-label text-secondary fs-9 fw-semibold mb-0.5">Key Tech Hook / Flagship Metric</label>
+                <input type="text" id="gen-hook" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. high-throughput microservices in Java & Redis" value="high-throughput microservices in Java & Redis">
               </div>
 
+              <!-- 5 Strategic Tone Archetypes -->
               <div class="mb-2">
-                <label class="form-label text-secondary fs-8 fw-semibold mb-1">Key Tech Hook / Flagship Accomplishment</label>
-                <input type="text" id="gen-hook" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. Kafka stream processing, Spring Boot 3" value="high-throughput microservices in Java & Redis">
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label text-secondary fs-8 fw-semibold mb-1">Pitch Strategy & Format</label>
-                <div class="btn-group w-100" role="group" id="outreach-format-group">
+                <label class="form-label text-secondary fs-9 fw-semibold mb-1">Pitch Strategy Archetype</label>
+                <div class="btn-group w-100 flex-wrap" role="group" id="outreach-format-group">
                   <input type="radio" class="btn-check" name="outreach-fmt" id="fmt-linkedin" value="linkedin" checked>
-                  <label class="btn btn-sm btn-outline-secondary fs-9" for="fmt-linkedin">LinkedIn Note (290c)</label>
+                  <label class="btn btn-sm btn-outline-secondary fs-9 py-1" for="fmt-linkedin">LinkedIn (290c)</label>
 
-                  <input type="radio" class="btn-check" name="outreach-fmt" id="fmt-email" value="email">
-                  <label class="btn btn-sm btn-outline-secondary fs-9" for="fmt-email">Cold InMail / Email</label>
+                  <input type="radio" class="btn-check" name="outreach-fmt" id="fmt-metrics" value="metrics">
+                  <label class="btn btn-sm btn-outline-secondary fs-9 py-1" for="fmt-metrics">Value Proof</label>
+
+                  <input type="radio" class="btn-check" name="outreach-fmt" id="fmt-alumni" value="alumni">
+                  <label class="btn btn-sm btn-outline-secondary fs-9 py-1" for="fmt-alumni">Alumni Bridge</label>
+
+                  <input type="radio" class="btn-check" name="outreach-fmt" id="fmt-pain" value="pain">
+                  <label class="btn btn-sm btn-outline-secondary fs-9 py-1" for="fmt-pain">Pain-Point Hook</label>
 
                   <input type="radio" class="btn-check" name="outreach-fmt" id="fmt-followup" value="followup">
-                  <label class="btn btn-sm btn-outline-secondary fs-9" for="fmt-followup">Day-3 Followup</label>
+                  <label class="btn btn-sm btn-outline-secondary fs-9 py-1" for="fmt-followup">Day-3 Followup</label>
                 </div>
               </div>
 
-              <!-- Output Box with Character Progress Gauge -->
+              <!-- Output Textarea -->
               <div class="position-relative mb-2">
-                <textarea id="gen-output" class="form-control bg-black text-white border-secondary border-opacity-50 p-2.5 fs-8 font-monospace" rows="5"></textarea>
+                <textarea id="gen-output" class="form-control bg-black text-white border-secondary border-opacity-50 p-2 fs-8 font-monospace" rows="4" style="resize: vertical;"></textarea>
                 <!-- Character Meter Bar -->
-                <div class="progress mt-1.5" style="height: 4px; background: rgba(255,255,255,0.08);">
+                <div class="progress mt-1" style="height: 4px; background: rgba(255,255,255,0.08);">
                   <div id="char-meter-bar" class="progress-bar bg-success" role="progressbar" style="width: 0%;"></div>
                 </div>
                 <div class="d-flex justify-content-between align-items-center mt-1">
@@ -386,120 +447,133 @@
                 </div>
               </div>
 
-              <div class="d-flex gap-2 mt-3">
+              <div class="d-flex gap-2 mt-2">
                 <button class="btn btn-outline-info btn-sm flex-grow-1" id="btn-regenerate-outreach"><i class="fa-solid fa-arrows-rotate me-1"></i> Alternate Tone</button>
                 <button class="btn btn-outline-success btn-sm" id="btn-save-as-contact"><i class="fa-solid fa-floppy-disk me-1"></i> Save to Pipeline</button>
               </div>
             </div>
           </div>
 
-          <!-- Right: Pipeline Table -->
+          <!-- Right: 4-Stage Visual Kanban Pipeline -->
           <div class="col-12 col-xl-7">
-            <div class="card bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 p-3 p-md-4 shadow-sm h-100">
+            <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-3 shadow-sm h-100">
               <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
-                <h6 class="text-white fw-bold m-0 fs-7"><i class="fa-solid fa-address-book text-primary me-2"></i>Outreach Pipeline & Follow-Ups</h6>
                 <div class="d-flex align-items-center gap-2">
-                  <input type="text" id="filter-outreach" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="Filter company or role..." style="width: 170px;">
+                  <h6 class="text-white fw-bold m-0 fs-7"><i class="fa-solid fa-table-columns text-primary me-1.5"></i>Outreach Pipeline Board</h6>
+                  <span class="badge bg-secondary bg-opacity-30 text-white font-monospace fs-9">${items.length} Tracked</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <input type="text" id="filter-outreach" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="Filter company or role..." style="width: 190px;">
                 </div>
               </div>
 
-              <div class="table-responsive">
-                <table class="table table-dark table-hover align-middle border-secondary border-opacity-25 fs-8 mb-0" id="outreach-table">
-                  <thead>
-                    <tr class="text-secondary border-bottom border-secondary border-opacity-25">
-                      <th>Contact & Company</th>
-                      <th>Role & Type</th>
-                      <th>Status</th>
-                      <th>Date</th>
-                      <th class="text-end">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody id="outreach-table-body">
-                    ${items.map(item => `
-                      <tr data-id="${item.id}">
-                        <td>
-                          <div class="fw-bold text-white">${item.name}</div>
-                          <small class="text-info">${item.company}</small>
-                        </td>
-                        <td>
-                          <div class="text-truncate" style="max-width: 140px;">${item.role}</div>
-                          <small class="text-muted font-monospace">${item.type}</small>
-                        </td>
-                        <td>
-                          <select class="form-select form-select-sm bg-black text-white border-secondary border-opacity-30 fs-9 outreach-status-select" data-id="${item.id}" style="width: auto;">
-                            <option value="note_sent" ${item.status === 'note_sent' ? 'selected' : ''}>⏳ Sent</option>
-                            <option value="connected" ${item.status === 'connected' ? 'selected' : ''}>🤝 Connected</option>
-                            <option value="call_scheduled" ${item.status === 'call_scheduled' ? 'selected' : ''}>📞 Call Scheduled</option>
-                            <option value="referral_received" ${item.status === 'referral_received' ? 'selected' : ''}>⭐ Referral</option>
-                            <option value="rejected" ${item.status === 'rejected' ? 'selected' : ''}>❌ Archived</option>
-                          </select>
-                        </td>
-                        <td class="text-muted font-monospace fs-9">${item.date}</td>
-                        <td class="text-end">
-                          <button class="btn btn-sm btn-glass text-info p-1 px-2 view-outreach-note" data-id="${item.id}" title="View Message"><i class="fa-solid fa-message"></i></button>
-                          <button class="btn btn-sm btn-glass text-danger p-1 px-2 delete-outreach-item" data-id="${item.id}" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                      </tr>
-                    `).join('')}
-                  </tbody>
-                </table>
+              <!-- Kanban Columns -->
+              <div class="outreach-kanban-board" id="kanban-board-container">
+                ${kanbanCols.map(col => {
+                  const colItems = items.filter(i => i.stage === col.key);
+                  return `
+                    <div class="outreach-kanban-col" data-col="${col.key}">
+                      <div class="outreach-kanban-col-header text-white">
+                        <span><i class="fa-solid ${col.icon} me-1 text-info"></i> ${col.label}</span>
+                        <span class="badge ${col.badge} fs-9">${colItems.length}</span>
+                      </div>
+                      <div class="kanban-cards-wrapper flex-grow-1" id="kanban-col-${col.key}">
+                        ${colItems.length === 0 ? `
+                          <div class="text-center py-4 text-muted fs-9 fst-italic">No prospects</div>
+                        ` : colItems.map(item => `
+                          <div class="outreach-kanban-card" data-id="${item.id}">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                              <span class="fw-bold text-white fs-8">${item.name}</span>
+                              <span class="badge bg-dark border border-secondary border-opacity-30 text-info fs-9">${item.company}</span>
+                            </div>
+                            <div class="text-secondary fs-9 text-truncate mb-1.5">${item.role}</div>
+                            <div class="d-flex justify-content-between align-items-center pt-1 border-top border-secondary border-opacity-15">
+                              <small class="text-muted fs-9 font-monospace">${item.date}</small>
+                              <div class="d-flex gap-1">
+                                <button class="btn btn-glass py-0.5 px-1.5 fs-9 text-info view-kanban-note" data-id="${item.id}" title="View Note & Pitch"><i class="fa-solid fa-comment-dots"></i></button>
+                                <button class="btn btn-glass py-0.5 px-1.5 fs-9 text-warning advance-kanban-stage" data-id="${item.id}" title="Advance to Next Stage"><i class="fa-solid fa-arrow-right"></i></button>
+                                <button class="btn btn-glass py-0.5 px-1.5 fs-9 text-danger delete-outreach-item" data-id="${item.id}" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                              </div>
+                            </div>
+                          </div>
+                        `).join('')}
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Add Contact Modal -->
+      <!-- Add Prospect Modal -->
       <div class="modal fade" id="addContactModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content bg-dark border-secondary border-opacity-50 text-white">
-            <div class="modal-header border-secondary border-opacity-25">
-              <h5 class="modal-title fs-6"><i class="fa-solid fa-user-plus text-primary me-2"></i>Add Outreach Prospect</h5>
+          <div class="modal-content bg-dark text-white border-secondary border-opacity-40">
+            <div class="modal-header border-secondary border-opacity-25 py-2.5">
+              <h5 class="modal-title fs-6"><i class="fa-solid fa-user-plus text-primary me-2"></i>Add New Prospect to Pipeline</h5>
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body p-3">
               <div class="mb-2">
-                <label class="form-label fs-8 text-secondary">Contact Name</label>
-                <input type="text" id="modal-c-name" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. David Marcus">
+                <label class="form-label fs-8 text-secondary fw-semibold">Prospect Full Name *</label>
+                <input type="text" id="modal-c-name" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. Rachel Adams">
               </div>
               <div class="row g-2 mb-2">
                 <div class="col-6">
-                  <label class="form-label fs-8 text-secondary">Company</label>
-                  <input type="text" id="modal-c-company" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. Amazon">
+                  <label class="form-label fs-8 text-secondary fw-semibold">Target Company *</label>
+                  <input type="text" id="modal-c-company" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. Netflix">
                 </div>
                 <div class="col-6">
-                  <label class="form-label fs-8 text-secondary">Target Role</label>
-                  <input type="text" id="modal-c-role" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. SDE-2 Backend">
+                  <label class="form-label fs-8 text-secondary fw-semibold">Target Role</label>
+                  <input type="text" id="modal-c-role" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. Platform SDE-2">
                 </div>
               </div>
               <div class="row g-2 mb-2">
                 <div class="col-6">
-                  <label class="form-label fs-8 text-secondary">Prospect Persona</label>
+                  <label class="form-label fs-8 text-secondary fw-semibold">Prospect Role</label>
                   <select id="modal-c-type" class="form-select form-select-sm bg-black text-white border-secondary border-opacity-50">
-                    <option value="Engineering Manager">Engineering Manager</option>
-                    <option value="Technical Recruiter">Technical Recruiter</option>
-                    <option value="Senior Peer (Referral)">Senior Peer (Referral)</option>
-                    <option value="College / Work Alumni">College / Work Alumni</option>
+                    <option value="recruiter">Technical Recruiter</option>
+                    <option value="manager" selected>Engineering Manager</option>
+                    <option value="peer">Senior Peer / Tech Lead</option>
+                    <option value="alumni">Alumni Connection</option>
                   </select>
                 </div>
                 <div class="col-6">
-                  <label class="form-label fs-8 text-secondary">Initial Status</label>
-                  <select id="modal-c-status" class="form-select form-select-sm bg-black text-white border-secondary border-opacity-50">
-                    <option value="note_sent">⏳ Note Sent</option>
-                    <option value="connected">🤝 Connected</option>
-                    <option value="call_scheduled">📞 Call Scheduled</option>
-                    <option value="referral_received">⭐ Referral</option>
+                  <label class="form-label fs-8 text-secondary fw-semibold">Initial Stage</label>
+                  <select id="modal-c-stage" class="form-select form-select-sm bg-black text-white border-secondary border-opacity-50">
+                    <option value="identified" selected>1. Identified</option>
+                    <option value="sent">2. Message Sent</option>
+                    <option value="screening">3. Screening Set</option>
+                    <option value="offer">4. Referral / Offer</option>
                   </select>
                 </div>
               </div>
               <div class="mb-2">
-                <label class="form-label fs-8 text-secondary">Notes / Next Steps</label>
-                <textarea id="modal-c-notes" class="form-control bg-black text-white border-secondary border-opacity-50 fs-8" rows="2" placeholder="e.g. Discussed distributed cache optimization; follow up Thursday"></textarea>
+                <label class="form-label fs-8 text-secondary fw-semibold">Follow-Up Notes</label>
+                <textarea id="modal-c-notes" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" rows="2" placeholder="e.g. Connect note sent on LinkedIn. Follow up in 3 days."></textarea>
               </div>
             </div>
-            <div class="modal-footer border-secondary border-opacity-25">
+            <div class="modal-footer border-secondary border-opacity-25 py-2">
               <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-              <button type="button" class="btn btn-primary btn-sm" id="btn-save-new-contact">Save Prospect</button>
+              <button type="button" class="btn btn-primary btn-sm px-3" id="btn-save-new-contact"><i class="fa-solid fa-check me-1"></i> Add to Pipeline</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detail Slide-Over Modal (replaces native alert) -->
+      <div class="modal fade" id="outreachDetailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content bg-dark text-white border-secondary border-opacity-40">
+            <div class="modal-header border-secondary border-opacity-25 py-2.5">
+              <h5 class="modal-title fs-6" id="detail-modal-title"><i class="fa-solid fa-address-card text-info me-2"></i>Prospect Details</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-3" id="detail-modal-body"></div>
+            <div class="modal-footer border-secondary border-opacity-25 py-2">
+              <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
@@ -507,24 +581,71 @@
     `;
   };
 
+
   window.bindOutreachCrmEvents = () => {
     let variantIndex = 0;
 
     const templates = {
       linkedin: [
-        (c, r, n, h) => `Hi ${n}, noticed your team at ${c} is building high-scale services. With 2+ yrs engineering ${h}, I'd love to connect and follow ${c}'s tech updates. Best!`,
-        (c, r, n, h) => `Hi ${n}, saw the ${r} opening at ${c}. Recently architected ${h} with zero downtime. Would love to connect and learn about your engineering roadmap!`,
-        (c, r, n, h) => `Hey ${n}, big fan of ${c}'s recent engineering blog on distributed systems. As a backend developer specialized in ${h}, I'd love to connect.`
+        (c, r, n, h) => `Hi ${n}, noticed your team at ${c} is building high-scale distributed services. With engineering experience in ${h}, I'd love to connect and follow ${c}'s tech updates. Best!`,
+        (c, r, n, h) => `Hi ${n}, saw the ${r} opening at ${c}. Recently architected ${h} with 99.99% availability. Would love to connect and learn about your team's engineering priorities!`,
+        (c, r, n, h) => `Hey ${n}, big fan of ${c}'s tech blog on resilient architecture. As a backend developer specialized in ${h}, I'd love to connect to your network.`
       ],
-      email: [
-        (c, r, n, h) => `Subject: ${r} role at ${c} — Engineer with background in ${h}\n\nHi ${n},\n\nI hope you're having a productive week. I've been following ${c}'s rapid growth and noticed your open ${r} role.\n\nIn my recent work, I focused on ${h}, achieving 40% latency improvements and 99.99% availability. Given your team's technical scale, I believe my background would allow me to contribute immediately.\n\nWould you be open to a 10-minute introductory call this week?\n\nBest regards,\n[Your Name] | [Portfolio Link] | [GitHub]`,
-        (c, r, n, h) => `Subject: Quick question regarding ${c}'s engineering roadmap (${r})\n\nHi ${n},\n\nSaw your profile while researching engineering leadership at ${c}. I'm a software engineer specialized in ${h}.\n\nI noticed ${c} is expanding its core infrastructure. I'd love to understand what challenges your team prioritizes and explore if my experience aligns with the ${r} vacancy.\n\nThanks for your time and consideration!\n\nSincerely,\n[Your Name]`
+      metrics: [
+        (c, r, n, h) => `Subject: ${r} role at ${c} — Engineer with proven track record in ${h}\n\nHi ${n},\n\nI've been following ${c}'s recent engineering milestones. In my recent role, I focused on ${h}, achieving a 45% reduction in p99 latency and handling 50M daily events.\n\nGiven your team's scale, I believe my background directly aligns with ${c}'s roadmap. Would you be open to a 10-minute introductory chat this week?\n\nBest regards,\n[Your Name] | [Portfolio] | [GitHub]`,
+        (c, r, n, h) => `Subject: Value-add for ${c}'s engineering team (${r})\n\nHi ${n},\n\nSaw your team is hiring for ${r}. I specialize in ${h}, recently delivering a 3x throughput improvement on zero-downtime microservices.\n\nWould love to share quick insights on how we solved concurrent state locks if you have 10 minutes.\n\nCheers,\n[Your Name]`
+      ],
+      alumni: [
+        (c, r, n, h) => `Hi ${n}, fellow alumni reaching out! Saw your incredible journey leading engineering at ${c}. I'm currently focused on ${h} and exploring the open ${r} position. Would love to connect and hear your perspective on the culture at ${c}!`,
+        (c, r, n, h) => `Hey ${n}, noticed we both share a background in tech alumni networks. I've been admiring ${c}'s platform growth. As an engineer specializing in ${h}, I'd love to connect and say hello!`
+      ],
+      pain: [
+        (c, r, n, h) => `Hi ${n}, noticed ${c} is scaling out its core data pipelines. Teams at this stage often battle p99 latency spikes and queue backpressure. Having recently solved this with ${h}, I'd love to share our architecture notes and discuss the ${r} req.`,
+        (c, r, n, h) => `Hey ${n}, saw ${c}'s engineering post on handling high-concurrency spikes. I recently designed ${h} to prevent cascade failovers. Open to a brief 10-min chat to discuss your technical challenges?`
       ],
       followup: [
-        (c, r, n, h) => `Hi ${n}, following up on my previous note regarding the ${r} opportunity at ${c}. I recently published a technical case study on ${h} that might be relevant to what your team is building. Would love to share insights if you have 5 minutes!\n\nBest, [Your Name]`,
-        (c, r, n, h) => `Hey ${n}, just bumping this to the top of your inbox. Still very excited about ${c} and the ${r} req. Hope you have a great rest of the week!\n\nCheers, [Your Name]`
+        (c, r, n, h) => `Hi ${n}, following up on my previous note regarding the ${r} role at ${c}. I recently published a technical case study on ${h} that relates to your stack. Would love to share insights if you have 5 minutes!\n\nBest, [Your Name]`,
+        (c, r, n, h) => `Hey ${n}, bumping this to the top of your inbox. Still very excited about ${c}'s mission and the ${r} position. Hope you have a productive rest of the week!\n\nCheers, [Your Name]`
       ]
     };
+
+    function calculateQualityScore(text, format) {
+      let score = 50;
+      const lower = text.toLowerCase();
+
+      // Spam/Desperation words check (-15 each)
+      const spamWords = ['hire me', 'give me a job', 'looking for a job', 'unemployed', 'desperate', 'urgent', 'please help me', 'begging'];
+      spamWords.forEach(w => {
+        if (lower.includes(w)) score -= 15;
+      });
+
+      // Personalization (+15)
+      const comp = document.getElementById('gen-company')?.value.trim().toLowerCase();
+      if (comp && comp !== 'uber' && lower.includes(comp)) score += 15;
+      else if (lower.includes('uber') || lower.includes('stripe')) score += 10;
+
+      // Tech Hook density (+15)
+      const techTerms = ['latency', 'throughput', 'kafka', 'redis', 'microservices', 'distributed', 'pipeline', 'architecture', 'resilient', 'scale', 'concurrency', 'p99'];
+      let termCount = 0;
+      techTerms.forEach(t => { if (lower.includes(t)) termCount++; });
+      score += Math.min(20, termCount * 7);
+
+      // Low Friction CTA (+15)
+      const ctas = ['10-min', '10-minute', 'introductory', 'connect', 'roadmap', 'say hello', 'share insights', 'perspective'];
+      let hasCta = false;
+      ctas.forEach(c => { if (lower.includes(c)) hasCta = true; });
+      if (hasCta) score += 15;
+
+      // Length optimization (+15)
+      if (format === 'linkedin') {
+        if (text.length >= 180 && text.length <= 290) score += 15;
+        else if (text.length > 300) score -= 25;
+      } else {
+        if (text.length >= 250 && text.length <= 800) score += 15;
+      }
+
+      return Math.max(20, Math.min(98, score));
+    }
 
     function updateGenerator() {
       const company = document.getElementById('gen-company')?.value || 'TechCorp';
@@ -542,31 +663,43 @@
       const outEl = document.getElementById('gen-output');
       const countEl = document.getElementById('gen-char-count');
       const barEl = document.getElementById('char-meter-bar');
-      const badgeEl = document.getElementById('gauge-badge');
+      const qWrapper = document.getElementById('quality-score-wrapper');
+      const qText = document.getElementById('quality-score-text');
 
       if (outEl) outEl.value = text;
       const len = text.length;
 
+      // Quality score computation
+      const qScore = calculateQualityScore(text, fmt);
+      if (qWrapper && qText) {
+        if (qScore >= 85) {
+          qWrapper.className = 'quality-meter-badge quality-meter-high';
+          qText.textContent = `Quality: ${qScore}/100 (Optimal)`;
+        } else if (qScore >= 70) {
+          qWrapper.className = 'quality-meter-badge quality-meter-med';
+          qText.textContent = `Quality: ${qScore}/100 (Solid)`;
+        } else {
+          qWrapper.className = 'quality-meter-badge quality-meter-low';
+          qText.textContent = `Quality: ${qScore}/100 (Needs Work)`;
+        }
+      }
+
       if (countEl) {
-        countEl.textContent = `${len} / 300 characters`;
+        countEl.textContent = `${len} / ${fmt === 'linkedin' ? '300 characters' : 'Unlimited email'}`;
         if (fmt === 'linkedin') {
           if (len <= 280) {
             countEl.className = 'fs-9 font-monospace text-success';
             if (barEl) { barEl.className = 'progress-bar bg-success'; barEl.style.width = Math.min(100, (len / 300) * 100) + '%'; }
-            if (badgeEl) { badgeEl.className = 'badge bg-success bg-opacity-20 text-success border border-success border-opacity-30 fs-9 font-monospace'; badgeEl.textContent = 'Safe LinkedIn Length'; }
           } else if (len <= 300) {
             countEl.className = 'fs-9 font-monospace text-warning';
             if (barEl) { barEl.className = 'progress-bar bg-warning'; barEl.style.width = (len / 300) * 100 + '%'; }
-            if (badgeEl) { badgeEl.className = 'badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-30 fs-9 font-monospace'; badgeEl.textContent = 'Near 300c Limit'; }
           } else {
             countEl.className = 'fs-9 font-monospace text-danger';
             if (barEl) { barEl.className = 'progress-bar bg-danger'; barEl.style.width = '100%'; }
-            if (badgeEl) { badgeEl.className = 'badge bg-danger bg-opacity-20 text-danger border border-danger border-opacity-30 fs-9 font-monospace'; badgeEl.textContent = 'Exceeds 300c Limit'; }
           }
         } else {
           countEl.className = 'fs-9 font-monospace text-muted';
-          if (barEl) { barEl.className = 'progress-bar bg-info'; barEl.style.width = '50%'; }
-          if (badgeEl) { badgeEl.className = 'badge bg-info bg-opacity-20 text-info border border-info border-opacity-30 fs-9 font-monospace'; badgeEl.textContent = 'Email Format'; }
+          if (barEl) { barEl.className = 'progress-bar bg-info'; barEl.style.width = '65%'; }
         }
       }
     }
@@ -583,15 +716,17 @@
       });
     });
 
-    // Tag Insertion Chips
+    // Tag Insertion Chips (inserts at cursor in textarea)
     document.querySelectorAll('.outreach-insert-chip').forEach(chip => {
       chip.addEventListener('click', () => {
         const tag = chip.getAttribute('data-tag');
-        const hookInput = document.getElementById('gen-hook');
-        if (hookInput) {
-          hookInput.value += ' ' + tag;
-          updateGenerator();
-          safeToast(`Added ${tag}`, 'info');
+        const out = document.getElementById('gen-output');
+        if (out) {
+          const start = out.selectionStart || out.value.length;
+          const end = out.selectionEnd || out.value.length;
+          out.value = out.value.substring(0, start) + ' ' + tag + ' ' + out.value.substring(end);
+          out.focus();
+          safeToast(`Inserted ${tag}`, 'info');
         }
       });
     });
@@ -653,9 +788,9 @@
           items = JSON.parse(localStorage.getItem('prepspace_outreach_crm')) || DEFAULT_OUTREACH_ITEMS;
         } catch(e) { items = DEFAULT_OUTREACH_ITEMS; }
 
-        let csv = 'Name,Company,Role,Type,Status,Date,Notes\n';
+        let csv = 'Name,Company,Role,Persona,Stage,Date,Notes\n';
         items.forEach(i => {
-          csv += `"${i.name}","${i.company}","${i.role}","${i.type}","${i.status}","${i.date}","${(i.notes||'').replace(/"/g, '""')}"\n`;
+          csv += `"${i.name}","${i.company}","${i.role}","${i.type}","${i.stage}","${i.date}","${(i.notes||'').replace(/"/g, '""')}"\n`;
         });
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
@@ -675,7 +810,7 @@
         const name = document.getElementById('gen-name')?.value || 'New Contact';
         const company = document.getElementById('gen-company')?.value || 'Company';
         const role = document.getElementById('gen-role')?.value || 'Role';
-        const type = document.getElementById('gen-type')?.value || 'Technical Recruiter';
+        const type = document.getElementById('gen-type')?.value || 'manager';
         const note = document.getElementById('gen-output')?.value || '';
 
         let items = [];
@@ -687,14 +822,15 @@
           id: 'outreach-' + Date.now(),
           name, company, role, type,
           status: 'note_sent',
+          stage: 'sent',
           date: new Date().toISOString().slice(0, 10),
-          notes: 'Saved from generator. Ready to send.',
+          notes: 'Saved from generator. Ready to follow-up.',
           lastMessage: note
         });
 
         localStorage.setItem('prepspace_outreach_crm', JSON.stringify(items));
         AudioSynth.playChime(587, 880, 0.3);
-        safeToast(`Saved ${name} (${company}) to your active pipeline!`, 'success');
+        safeToast(`Saved ${name} (${company}) to Pipeline!`, 'success');
 
         const mount = document.getElementById('page-mount');
         if (mount) {
@@ -704,16 +840,16 @@
       });
     }
 
-    // Modal Save Prospect
+    // Modal Save Prospect (with clean backdrop removal)
     const modalSaveBtn = document.getElementById('btn-save-new-contact');
     if (modalSaveBtn) {
       modalSaveBtn.addEventListener('click', () => {
-        const name = document.getElementById('modal-c-name')?.value;
-        const company = document.getElementById('modal-c-company')?.value;
-        const role = document.getElementById('modal-c-role')?.value;
+        const name = document.getElementById('modal-c-name')?.value.trim();
+        const company = document.getElementById('modal-c-company')?.value.trim();
+        const role = document.getElementById('modal-c-role')?.value.trim();
         const type = document.getElementById('modal-c-type')?.value;
-        const status = document.getElementById('modal-c-status')?.value;
-        const notes = document.getElementById('modal-c-notes')?.value;
+        const stage = document.getElementById('modal-c-stage')?.value || 'identified';
+        const notes = document.getElementById('modal-c-notes')?.value.trim();
 
         if (!name || !company) {
           safeToast('Please enter both Name and Company', 'warning');
@@ -727,27 +863,34 @@
 
         items.unshift({
           id: 'outreach-' + Date.now(),
-          name, company, role: role || 'Software Engineer', type, status,
+          name, company, role: role || 'Software Engineer', type, stage,
+          status: stage === 'screening' ? 'call_scheduled' : (stage === 'offer' ? 'offer' : (stage === 'sent' ? 'note_sent' : 'identified')),
           date: new Date().toISOString().slice(0, 10),
           notes: notes || '',
           lastMessage: ''
         });
 
         localStorage.setItem('prepspace_outreach_crm', JSON.stringify(items));
+
         const modalEl = document.getElementById('addContactModal');
         if (modalEl && window.bootstrap) {
-          const m = bootstrap.Modal.getInstance(modalEl);
+          const m = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
           if (m) m.hide();
         }
+        // Remove stuck backdrop if any
+        document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+        document.body.classList.remove('modal-open');
 
         AudioSynth.playChime(587, 880, 0.3);
-        safeToast(`Added ${name} to Outreach CRM!`, 'success');
+        safeToast(`Added ${name} to pipeline!`, 'success');
 
-        const mount = document.getElementById('page-mount');
-        if (mount) {
-          mount.innerHTML = components.outreachCrm();
-          bindOutreachCrmEvents();
-        }
+        setTimeout(() => {
+          const mount = document.getElementById('page-mount');
+          if (mount) {
+            mount.innerHTML = components.outreachCrm();
+            bindOutreachCrmEvents();
+          }
+        }, 150);
       });
     }
 
@@ -756,44 +899,31 @@
     if (filterInput) {
       filterInput.addEventListener('input', (e) => {
         const q = e.target.value.toLowerCase();
-        document.querySelectorAll('#outreach-table-body tr').forEach(row => {
-          row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+        document.querySelectorAll('.outreach-kanban-card').forEach(card => {
+          card.style.display = card.textContent.toLowerCase().includes(q) ? '' : 'none';
         });
       });
     }
 
-    // Status change
-    document.querySelectorAll('.outreach-status-select').forEach(sel => {
-      sel.addEventListener('change', () => {
-        const id = sel.getAttribute('data-id');
-        const val = sel.value;
+    // Advance Kanban Stage (Identified -> Sent -> Screening -> Offer)
+    const stageFlow = ['identified', 'sent', 'screening', 'offer'];
+    document.querySelectorAll('.advance-kanban-stage').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = btn.getAttribute('data-id');
         let items = [];
         try {
           items = JSON.parse(localStorage.getItem('prepspace_outreach_crm')) || DEFAULT_OUTREACH_ITEMS;
         } catch(e) { items = DEFAULT_OUTREACH_ITEMS; }
 
-        const it = items.find(i => i.id === id);
-        if (it) {
-          it.status = val;
+        const item = items.find(i => i.id === id);
+        if (item) {
+          const curIdx = stageFlow.indexOf(item.stage || 'identified');
+          const nextIdx = (curIdx + 1) % stageFlow.length;
+          item.stage = stageFlow[nextIdx];
           localStorage.setItem('prepspace_outreach_crm', JSON.stringify(items));
-          safeToast('Updated contact status', 'info');
-        }
-      });
-    });
-
-    // Delete item
-    document.querySelectorAll('.delete-outreach-item').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.getAttribute('data-id');
-        if (confirm('Delete this contact from your outreach pipeline?')) {
-          let items = [];
-          try {
-            items = JSON.parse(localStorage.getItem('prepspace_outreach_crm')) || DEFAULT_OUTREACH_ITEMS;
-          } catch(e) { items = DEFAULT_OUTREACH_ITEMS; }
-
-          items = items.filter(i => i.id !== id);
-          localStorage.setItem('prepspace_outreach_crm', JSON.stringify(items));
-          safeToast('Contact deleted from CRM', 'info');
+          AudioSynth.playChime(523, 784, 0.2);
+          safeToast(`Advanced ${item.name} to ${stageFlow[nextIdx].toUpperCase()}!`, 'success');
 
           const mount = document.getElementById('page-mount');
           if (mount) {
@@ -804,24 +934,74 @@
       });
     });
 
-    // View Note
-    document.querySelectorAll('.view-outreach-note').forEach(btn => {
-      btn.addEventListener('click', () => {
+    // View Note (opens modern modal instead of native alert)
+    document.querySelectorAll('.view-kanban-note').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
         const id = btn.getAttribute('data-id');
         let items = [];
         try {
           items = JSON.parse(localStorage.getItem('prepspace_outreach_crm')) || DEFAULT_OUTREACH_ITEMS;
         } catch(e) { items = DEFAULT_OUTREACH_ITEMS; }
 
-        const it = items.find(i => i.id === id);
-        if (it) {
-          alert(`Contact: ${it.name} (${it.company})\nNotes: ${it.notes || 'None'}\n\nLast Pitch:\n${it.lastMessage || 'No saved note'}`);
+        const item = items.find(i => i.id === id);
+        if (item) {
+          const titleEl = document.getElementById('detail-modal-title');
+          const bodyEl = document.getElementById('detail-modal-body');
+          if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-address-card text-info me-2"></i>${item.name} (${item.company})`;
+          if (bodyEl) {
+            bodyEl.innerHTML = `
+              <div class="mb-2">
+                <span class="badge bg-primary bg-opacity-20 text-info font-monospace fs-9">${item.role}</span>
+                <span class="badge bg-secondary font-monospace fs-9">${(item.stage || 'identified').toUpperCase()}</span>
+                <small class="text-muted ms-2 fs-9 font-monospace">Logged: ${item.date}</small>
+              </div>
+              <div class="p-2.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-30 mb-2">
+                <span class="text-secondary fs-9 fw-bold font-monospace d-block mb-1">CRM Follow-Up Notes:</span>
+                <p class="fs-8 text-light mb-0">${item.notes || 'No notes logged yet.'}</p>
+              </div>
+              ${item.lastMessage ? `
+                <div class="p-2.5 rounded bg-black bg-opacity-50 border border-info border-opacity-30">
+                  <span class="text-info fs-9 fw-bold font-monospace d-block mb-1">Generated Pitch Text:</span>
+                  <p class="fs-8 text-white font-monospace mb-0" style="white-space: pre-wrap;">${item.lastMessage}</p>
+                </div>
+              ` : ''}
+            `;
+          }
+          const detailModal = document.getElementById('outreachDetailModal');
+          if (detailModal && window.bootstrap) {
+            const m = new bootstrap.Modal(detailModal);
+            m.show();
+          }
+        }
+      });
+    });
+
+    // Delete item
+    document.querySelectorAll('.delete-outreach-item').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = btn.getAttribute('data-id');
+        let items = [];
+        try {
+          items = JSON.parse(localStorage.getItem('prepspace_outreach_crm')) || DEFAULT_OUTREACH_ITEMS;
+        } catch(e) { items = DEFAULT_OUTREACH_ITEMS; }
+
+        items = items.filter(i => i.id !== id);
+        localStorage.setItem('prepspace_outreach_crm', JSON.stringify(items));
+        safeToast('Prospect removed from CRM', 'info');
+
+        const mount = document.getElementById('page-mount');
+        if (mount) {
+          mount.innerHTML = components.outreachCrm();
+          bindOutreachCrmEvents();
         }
       });
     });
 
     updateGenerator();
   };
+
 
   // =========================================================================
   // 2. STAR STORY VAULT & BEHAVIORAL BANK (#/star-vault)
@@ -830,36 +1010,36 @@
   const DEFAULT_STAR_STORIES = [
     {
       id: 'star-1',
-      title: 'Resolving Critical Redis Cache Stampede on Black Friday Sale',
-      principles: ['Customer Obsession', 'Bias for Action', 'Dive Deep'],
-      company: 'Current/Previous Employer',
-      situation: 'During our peak Black Friday flash sale, our primary checkout service encountered a 300% spike in p99 latency because our product pricing cache expired simultaneously for 50,000 active concurrent users, causing a cache stampede directly hitting the PostgreSQL cluster.',
-      task: 'As the on-call backend engineer, my responsibility was to stabilize the database connection pool immediately, restore normal latency within 10 minutes, and engineer a permanent architectural safeguard.',
-      action: 'I first enabled temporary probabilistic early expiration (XFetch algorithm) on Redis and increased read-replica connection pools. Then, I engineered a distributed mutex locking pattern using Redisson so only one worker recomputed the stale cache while other requests received the slightly stale cache with a 2-second grace period.',
-      result: 'Database CPU utilization dropped from 98% to 22% instantly. Zero customer orders dropped during the 4-hour flash sale, and the architectural pattern was adopted into the engineering handbook across all 12 microservices.',
-      metrics: '76% latency reduction, 0 lost transactions, 99.99% uptime.'
+      title: 'Mitigated Critical P99 Latency Spike on Distributed Payment Gateway',
+      company: 'Fintech Platform',
+      principles: ['Customer Obsession', 'Bias for Action', 'Ownership'],
+      metrics: 'p99 latency: 1200ms -> 45ms (-96%), 0 transaction drop',
+      situation: 'During Black Friday flash traffic, our core checkout transaction service experienced severe cascade thread pool exhaustion, driving p99 latency above 1200ms and risking a \$2M payment SLA breach.',
+      task: 'As the technical lead on-call, I needed to isolate the root-cause bottleneck within 20 minutes, restore transaction throughput, and implement permanent mitigation without taking down the payment gateway.',
+      action: 'I inspected JVM thread dumps and isolated lock contention inside a synchronized legacy audit logger. I hot-patched the service by transitioning logging to an asynchronous ring-buffer (LMAX Disruptor pattern) and provisioned an ephemeral Redis write-through cache for idempotency tokens.',
+      result: 'Restored p99 latency to 45ms within 18 minutes. Processed over 4.2 million transactions with 100% data integrity and zero SLA penalties. Authored the subsequent post-mortem and rollout RFC across 12 microservices.'
     },
     {
       id: 'star-2',
-      title: 'Architectural Disagreement: Migrating Monolith to Microservices',
-      principles: ['Have Backbone; Disagree and Commit', 'Earn Trust'],
-      company: 'Fintech Platform',
-      situation: 'Our tech lead proposed immediately splitting our core monolith into 8 microservices. However, our team only had 4 engineers and lacked automated observability, distributed tracing, or CI/CD pipelines.',
-      task: 'I needed to challenge the immediate migration plan without appearing resistant to modernization, and propose a low-risk incremental path.',
-      action: 'I assembled benchmark telemetry showing that 85% of our server load was concentrated in just one subsystem (Notification & Webhooks). I presented a counter-proposal using the Strangler Fig pattern: extract ONLY the webhook processor first while setting up OpenTelemetry and container orchestration, rather than a risky big-bang rewrite.',
-      result: 'The team lead and VP agreed with the data-driven proposal. We extracted the single bottleneck service in 3 weeks with zero downtime, proving out our Docker/Kubernetes tooling before touching any sensitive transaction logic.',
-      metrics: 'Delivered 2 months ahead of schedule, zero production outages.'
+      title: 'Architected Real-Time Zero-Loss Kafka CDC Pipeline Migration',
+      company: 'Enterprise SaaS',
+      principles: ['Ownership', 'Invent and Simplify', 'Have Backbone'],
+      metrics: 'Saved \$140K/yr cloud compute, eliminated 4-hour batch delay',
+      situation: 'Our analytics ingestion relied on heavy nightly batch SQL jobs that overloaded the primary Postgres OLTP database, causing frequent read lockouts for paying enterprise customers.',
+      task: 'I was tasked with designing a streaming replication architecture to sync data into Snowflake in real-time with zero packet loss and minimal impact on the production database.',
+      action: 'Resisted pressure to simply scale up the database hardware. Instead, I championed and engineered a Change Data Capture (CDC) pipeline using Debezium and Kafka. Implemented idempotent consumer groups with dead-letter queues and strict schema registry governance.',
+      result: 'Reduced data sync latency from 4 hours to under 3 seconds. Cut cloud read-replica compute costs by \$140,000 annually and supported 10x query throughput for executive analytics.'
     },
     {
       id: 'star-3',
-      title: 'Recovering from a Production Outage Caused by Unindexed Foreign Key',
-      principles: ['Ownership', 'Deliver Results', 'Google: Navigating Ambiguity'],
-      company: 'SaaS Startup',
-      situation: 'A newly deployed user billing feature caused severe connection timeouts in production on Sunday evening. The database query logs were inundated with sequential table scans.',
-      task: 'I was the first to detect the pager alert and took full ownership to diagnose the root cause, roll back if necessary, and write the post-mortem.',
-      action: 'Within 8 minutes, I isolated a missing index on the tenant_id foreign key in the new invoice_items table. Rather than a full rollback which would break active subscriptions, I executed an asynchronous concurrent index creation (CREATE INDEX CONCURRENTLY) in production, verified query execution plans via EXPLAIN ANALYZE, and added an automated linter in our GitHub Actions pipeline to block unindexed foreign keys in future PRs.',
-      result: 'The incident was resolved in under 18 minutes. I authored the RCA (Root Cause Analysis) blameless post-mortem and led the team retro to strengthen our migration checklists.',
-      metrics: '18 min resolution time, 100% test coverage added for migrations.'
+      title: 'Resolved Silent Stale-Closure Memory Leak in Mission-Critical Dashboard',
+      company: 'Logistics Co',
+      principles: ['Deliver Results', 'Google / Ambiguity', 'Customer Obsession'],
+      metrics: 'Eliminated client browser crashes for 12,000 daily fleet operators',
+      situation: 'Fleet tracking dispatchers reported that our real-time GPS monitoring dashboard would freeze and crash browser tabs after 45 minutes of continuous operation in logistics hubs.',
+      task: 'Identified that the issue was causing lost dispatch communications, requiring an immediate diagnosis of frontend memory leaks without reproducing on local dev machines easily.',
+      action: 'Used Chrome DevTools Heap Snapshots and memory allocation instrumentation. Discovered uncleaned WebSocket event listeners retaining closures over large historical map coordinate arrays in a custom React hook. Refactored state synchronization to a centralized immutable store with explicit unsubscribe cleanup.',
+      result: 'Reduced steady-state browser heap footprint from 1.8GB down to 85MB (-95%). Completely resolved crashing issues across 12,000 dispatch terminals with 99.99% uptime.'
     }
   ];
 
@@ -871,14 +1051,29 @@
       stories = DEFAULT_STAR_STORIES;
     }
 
+    // Principle coverage radar calculation
+    const trackedPrinciples = [
+      { name: 'Customer Obsession', company: 'Amazon' },
+      { name: 'Ownership', company: 'Amazon' },
+      { name: 'Bias for Action', company: 'Amazon' },
+      { name: 'Have Backbone', company: 'Amazon' },
+      { name: 'Google / Ambiguity', company: 'Google' },
+      { name: 'Meta Move Fast', company: 'Meta' }
+    ];
+
+    const coverage = trackedPrinciples.map(p => {
+      const count = stories.filter(s => s.principles.some(sp => sp.toLowerCase().includes(p.name.toLowerCase()))).length;
+      return { ...p, count };
+    });
+
     return `
-      <div class="container-fluid px-3 px-md-4 py-3">
+      <div class="container-fluid px-3 px-md-4 py-3 suite-scroll-container">
         <!-- Header -->
-        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom border-secondary border-opacity-15 gap-2">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-15 gap-2">
           <div>
             <div class="d-flex align-items-center gap-2">
               <span class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-50 font-monospace fs-9">BEHAVIORAL MASTERY</span>
-              <h4 class="text-white fw-bold m-0 fs-5">STAR Story Vault & Behavioral Bank</h4>
+              <h4 class="text-white fw-bold m-0 fs-5">STAR Story Vault & Behavioral Teleprompter</h4>
             </div>
             <p class="text-muted fs-8 mb-0 mt-1">Structure real career stories into high-impact STAR responses mapped to Amazon Leadership & Google Principles.</p>
           </div>
@@ -886,23 +1081,45 @@
             <button class="btn btn-outline-info btn-sm px-3" data-bs-toggle="modal" data-bs-target="#practiceStopwatchModal">
               <i class="fa-solid fa-stopwatch me-1"></i> 2-Min Pacing Stopwatch
             </button>
-            <button class="btn btn-outline-light btn-sm px-3" onclick="window.print()"><i class="fa-solid fa-print me-1"></i> Print Story Matrix</button>
+            <button class="btn btn-outline-light btn-sm px-3" onclick="window.print()"><i class="fa-solid fa-print me-1"></i> Print Matrix</button>
             <button class="btn btn-primary btn-sm px-3" data-bs-toggle="modal" data-bs-target="#newStoryModal"><i class="fa-solid fa-plus me-1"></i> Add STAR Story</button>
           </div>
         </div>
 
-        <!-- Filter & Metrics Strip -->
+        <!-- Leadership Principle Coverage Radar -->
+        <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-3 mb-3 shadow-sm">
+          <div class="d-flex flex-wrap align-items-center justify-content-between mb-2 gap-2">
+            <span class="fs-8 fw-bold text-white"><i class="fa-solid fa-crosshairs text-warning me-1.5"></i>Leadership Principle Coverage & Blind-Spot Radar:</span>
+            <small class="text-secondary fs-9 font-monospace">Target: At least 2 stories per tier</small>
+          </div>
+          <div class="d-flex flex-wrap gap-2 align-items-center">
+            ${coverage.map(c => {
+              const isBlindSpot = c.count === 0;
+              const badgeClass = isBlindSpot 
+                ? 'border-danger text-danger bg-danger bg-opacity-10' 
+                : (c.count === 1 ? 'border-warning text-warning bg-warning bg-opacity-10' : 'border-success text-success bg-success bg-opacity-10');
+              return `
+                <div class="badge border font-monospace fs-9 py-1 px-2.5 ${badgeClass} d-flex align-items-center gap-1.5">
+                  <i class="fa-solid ${isBlindSpot ? 'fa-triangle-exclamation' : 'fa-circle-check'}"></i>
+                  <span>${c.name}</span>
+                  <span class="badge ${isBlindSpot ? 'bg-danger' : 'bg-dark'} ms-1">${c.count} ${isBlindSpot ? 'BLIND SPOT' : 'stories'}</span>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+
+        <!-- Filter & Search Strip -->
         <div class="row g-2 mb-3 align-items-center">
-          <div class="col-12 col-md-6 col-lg-4">
+          <div class="col-12 col-md-5">
             <input type="text" id="search-star" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="Search stories by keyword, conflict, latency...">
           </div>
-          <div class="col-12 col-md-6 col-lg-8 d-flex flex-wrap gap-1.5 justify-content-md-end" id="star-principles-pills">
+          <div class="col-12 col-md-7 d-flex flex-wrap gap-1.5 justify-content-md-end" id="star-principles-pills">
             <button class="btn btn-sm btn-glass active fs-9 star-filter-btn" data-filter="all">All Stories (${stories.length})</button>
             <button class="btn btn-sm btn-glass fs-9 star-filter-btn" data-filter="Customer Obsession">Customer Obsession</button>
             <button class="btn btn-sm btn-glass fs-9 star-filter-btn" data-filter="Ownership">Ownership</button>
             <button class="btn btn-sm btn-glass fs-9 star-filter-btn" data-filter="Bias for Action">Bias for Action</button>
             <button class="btn btn-sm btn-glass fs-9 star-filter-btn" data-filter="Have Backbone">Have Backbone</button>
-            <button class="btn btn-sm btn-glass fs-9 star-filter-btn" data-filter="Google">Google / Ambiguity</button>
           </div>
         </div>
 
@@ -918,7 +1135,7 @@
                     <h5 class="text-white fw-bold fs-6 mt-1 mb-2">${story.title}</h5>
                   </div>
                   <div class="d-flex align-items-center gap-1">
-                    <button class="btn btn-glass btn-sm p-1 px-2 text-info practice-story-btn" data-id="${story.id}" title="Practice delivery with 2-min timer"><i class="fa-solid fa-microphone me-1"></i> Practice</button>
+                    <button class="btn btn-glass btn-sm p-1 px-2 text-info teleprompter-trigger-btn" data-id="${story.id}" title="Launch Speech Teleprompter"><i class="fa-solid fa-microphone me-1"></i> Teleprompter</button>
                     <button class="btn btn-glass btn-sm p-1 px-2 text-light copy-star-markdown" data-id="${story.id}" title="Copy as Markdown"><i class="fa-solid fa-copy"></i></button>
                     <button class="btn btn-glass btn-sm p-1 px-2 text-danger delete-star-story" data-id="${story.id}" title="Delete"><i class="fa-solid fa-trash"></i></button>
                   </div>
@@ -966,88 +1183,108 @@
         </div>
       </div>
 
-      <!-- 2-Minute Practice Mode Modal -->
+      <!-- Full-Screen Speech Teleprompter Overlay -->
+      <div id="teleprompterOverlay" class="teleprompter-overlay d-none">
+        <div class="d-flex justify-content-between align-items-center border-bottom border-secondary border-opacity-30 pb-2 mb-3">
+          <div class="d-flex align-items-center gap-3">
+            <span class="badge bg-primary fs-8 font-monospace"><i class="fa-solid fa-microphone me-1"></i> TELEPROMPTER SPEECH MODE</span>
+            <h5 class="m-0 text-white fs-6" id="teleprompter-title">Story Title</h5>
+          </div>
+          <div class="d-flex align-items-center gap-3">
+            <!-- Real-time WPM Speech Coach -->
+            <div class="badge bg-dark border border-secondary border-opacity-40 font-monospace fs-8 px-3 py-1.5" id="teleprompter-wpm-badge">
+              <i class="fa-solid fa-gauge-high text-info me-1"></i> <span id="wpm-display">Pace: Listening...</span>
+            </div>
+            <button class="btn btn-sm btn-outline-info" id="btn-toggle-teleprompter-scroll"><i class="fa-solid fa-play me-1"></i> Auto-Scroll: OFF</button>
+            <button class="btn btn-sm btn-danger px-3" id="btn-close-teleprompter"><i class="fa-solid fa-xmark me-1"></i> Exit</button>
+          </div>
+        </div>
+        <div class="teleprompter-stream" id="teleprompter-content-area"></div>
+      </div>
+
+      <!-- 2-Minute Pacing Stopwatch Modal -->
       <div class="modal fade" id="practiceStopwatchModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content bg-dark border-secondary border-opacity-50 text-white">
-            <div class="modal-header border-secondary border-opacity-25">
-              <h5 class="modal-title fs-6"><i class="fa-solid fa-stopwatch text-info me-2"></i>2-Minute STAR Pacing Practice</h5>
+          <div class="modal-content bg-dark text-white border-secondary border-opacity-40">
+            <div class="modal-header border-secondary border-opacity-25 py-2.5">
+              <h5 class="modal-title fs-6"><i class="fa-solid fa-stopwatch text-info me-2"></i>2-Minute STAR Pacing Stopwatch</h5>
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body text-center py-4">
-              <span class="badge bg-secondary font-monospace fs-9 mb-2" id="practice-current-stage">STAGE 1: SITUATION (00:00 - 00:20)</span>
+            <div class="modal-body p-4 text-center">
               <div class="font-monospace fs-1 fw-bold text-warning mb-2" id="practice-timer-display">02:00</div>
-              
-              <!-- Pacing Progress Bar -->
-              <div class="progress mb-3 mx-auto" style="height: 8px; max-width: 320px; background: rgba(255,255,255,0.1);">
-                <div id="practice-pacing-bar" class="progress-bar bg-info" style="width: 0%;"></div>
+              <div class="badge bg-info bg-opacity-20 text-info font-monospace fs-8 px-3 py-1.5 mb-3" id="practice-phase-badge">
+                Phase: Situation (0 - 20s)
               </div>
 
-              <div class="p-3 bg-black rounded border border-secondary border-opacity-25 text-start fs-8 mb-3" style="line-height: 1.6;">
-                <div class="text-light fw-bold mb-1" id="practice-story-name">Story Practice</div>
-                <div class="text-secondary" id="practice-stage-tip">
-                  Focus: Set context quickly. Who was the client? What broke? Keep this under 20 seconds.
-                </div>
+              <!-- 4-Stage Segment Bar -->
+              <div class="progress mb-3" style="height: 10px; background: rgba(255,255,255,0.08);">
+                <div id="practice-seg-s" class="progress-bar bg-info" style="width: 17%;" title="Situation: 20s"></div>
+                <div id="practice-seg-t" class="progress-bar bg-primary" style="width: 17%;" title="Task: 20s"></div>
+                <div id="practice-seg-a" class="progress-bar bg-warning" style="width: 45%;" title="Action: 55s"></div>
+                <div id="practice-seg-r" class="progress-bar bg-success" style="width: 21%;" title="Result: 25s"></div>
               </div>
 
               <div class="d-flex justify-content-center gap-2">
-                <button class="btn btn-primary px-4" id="btn-practice-start"><i class="fa-solid fa-play me-1"></i> Start</button>
-                <button class="btn btn-outline-light px-3" id="btn-practice-reset"><i class="fa-solid fa-rotate-left me-1"></i> Reset</button>
+                <button class="btn btn-primary px-4" id="btn-practice-start"><i class="fa-solid fa-play me-1"></i> Start Pacing</button>
+                <button class="btn btn-outline-secondary px-3" id="btn-practice-pause"><i class="fa-solid fa-pause me-1"></i> Pause</button>
+                <button class="btn btn-outline-danger px-3" id="btn-practice-reset"><i class="fa-solid fa-rotate-left me-1"></i> Reset</button>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- New Story Modal -->
+      <!-- Add Story Modal -->
       <div class="modal fade" id="newStoryModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content bg-dark border-secondary border-opacity-50 text-white">
-            <div class="modal-header border-secondary border-opacity-25">
-              <h5 class="modal-title fs-6"><i class="fa-solid fa-star text-warning me-2"></i>Create New STAR Behavioral Story</h5>
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content bg-dark text-white border-secondary border-opacity-40">
+            <div class="modal-header border-secondary border-opacity-25 py-2.5">
+              <h5 class="modal-title fs-6"><i class="fa-solid fa-plus text-primary me-2"></i>Add STAR Experience Story</h5>
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body p-3">
               <div class="row g-2 mb-2">
                 <div class="col-8">
-                  <label class="form-label fs-8 text-secondary">Story Title / Theme</label>
-                  <input type="text" id="modal-s-title" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. Migrating auth service with zero downtime" required>
+                  <label class="form-label fs-8 text-secondary fw-semibold">Story Title *</label>
+                  <input type="text" id="modal-s-title" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. Architected Distributed Rate Limiter under 100K RPS">
                 </div>
                 <div class="col-4">
-                  <label class="form-label fs-8 text-secondary">Company / Team</label>
-                  <input type="text" id="modal-s-company" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. Acme Corp">
+                  <label class="form-label fs-8 text-secondary fw-semibold">Company / Org</label>
+                  <input type="text" id="modal-s-company" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. AWS, Meta">
+                </div>
+              </div>
+
+              <div class="row g-2 mb-2">
+                <div class="col-6">
+                  <label class="form-label fs-8 text-secondary fw-semibold">Leadership Principles (Comma separated)</label>
+                  <input type="text" id="modal-s-principles" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="Customer Obsession, Ownership, Bias for Action">
+                </div>
+                <div class="col-6">
+                  <label class="form-label fs-8 text-secondary fw-semibold">Quantified Impact Metric</label>
+                  <input type="text" id="modal-s-metrics" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. -45% latency, saved $120K/yr">
                 </div>
               </div>
 
               <div class="mb-2">
-                <label class="form-label fs-8 text-secondary">Leadership Principles (Comma separated)</label>
-                <input type="text" id="modal-s-principles" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. Customer Obsession, Ownership, Bias for Action" value="Customer Obsession, Ownership">
-              </div>
-
-              <div class="mb-2">
-                <label class="form-label fs-8 text-info fw-bold">S — Situation</label>
-                <textarea id="modal-s-situation" class="form-control bg-black text-white border-secondary border-opacity-50 fs-8" rows="2" placeholder="What was the business background and technical challenge?"></textarea>
+                <label class="form-label fs-8 text-info fw-semibold">S — Situation (What was the business challenge & stakes?)</label>
+                <textarea id="modal-s-situation" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" rows="2"></textarea>
               </div>
               <div class="mb-2">
-                <label class="form-label fs-8 text-primary fw-bold">T — Task</label>
-                <textarea id="modal-s-task" class="form-control bg-black text-white border-secondary border-opacity-50 fs-8" rows="2" placeholder="What were YOU tasked with accomplishing?"></textarea>
+                <label class="form-label fs-8 text-primary fw-semibold">T — Task (What was your specific ownership goal?)</label>
+                <textarea id="modal-s-task" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" rows="2"></textarea>
               </div>
               <div class="mb-2">
-                <label class="form-label fs-8 text-warning fw-bold">A — Action</label>
-                <textarea id="modal-s-action" class="form-control bg-black text-white border-secondary border-opacity-50 fs-8" rows="3" placeholder="What specific technical/interpersonal actions did YOU take?"></textarea>
+                <label class="form-label fs-8 text-warning fw-semibold">A — Action (What exact technical decisions and tradeoffs did you make?)</label>
+                <textarea id="modal-s-action" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" rows="3"></textarea>
               </div>
               <div class="mb-2">
-                <label class="form-label fs-8 text-success fw-bold">R — Result</label>
-                <textarea id="modal-s-result" class="form-control bg-black text-white border-secondary border-opacity-50 fs-8" rows="2" placeholder="What was the measurable outcome, customer impact, or lesson learned?"></textarea>
-              </div>
-              <div class="mb-2">
-                <label class="form-label fs-8 text-secondary">Impact Metric (Numbers/Percentages)</label>
-                <input type="text" id="modal-s-metrics" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. 45% latency drop, 0 outages, $15k AWS savings">
+                <label class="form-label fs-8 text-success fw-semibold">R — Result (Measurable outcome, metrics & retrospectives)</label>
+                <textarea id="modal-s-result" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" rows="2"></textarea>
               </div>
             </div>
-            <div class="modal-footer border-secondary border-opacity-25">
+            <div class="modal-footer border-secondary border-opacity-25 py-2">
               <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-              <button type="button" class="btn btn-primary btn-sm" id="btn-save-star-story">Save to Story Vault</button>
+              <button type="button" class="btn btn-primary btn-sm px-3" id="btn-save-new-star-story"><i class="fa-solid fa-check me-1"></i> Save to Vault</button>
             </div>
           </div>
         </div>
@@ -1055,10 +1292,10 @@
     `;
   };
 
-  window.bindStarVaultEvents = () => {
-    const searchInput = document.getElementById('search-star');
-    const filterBtns = document.querySelectorAll('.star-filter-btn');
 
+  window.bindStarVaultEvents = () => {
+    // Search
+    const searchInput = document.getElementById('search-star');
     if (searchInput) {
       searchInput.addEventListener('input', (e) => {
         const q = e.target.value.toLowerCase();
@@ -1068,70 +1305,23 @@
       });
     }
 
-    filterBtns.forEach(btn => {
+    // Filter pills
+    document.querySelectorAll('.star-filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        filterBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+        document.querySelectorAll('.star-filter-btn').forEach(b => b.classList.remove('active', 'btn-primary'));
+        btn.classList.add('active', 'btn-primary');
         const filter = btn.getAttribute('data-filter').toLowerCase();
+
         document.querySelectorAll('.star-story-card').forEach(card => {
           if (filter === 'all') {
             card.style.display = '';
           } else {
-            const cardPrinciples = card.getAttribute('data-principles') || '';
-            card.style.display = cardPrinciples.includes(filter) ? '' : 'none';
+            const principles = card.getAttribute('data-principles') || '';
+            card.style.display = principles.includes(filter) ? '' : 'none';
           }
         });
       });
     });
-
-    // Save Story
-    const saveBtn = document.getElementById('btn-save-star-story');
-    if (saveBtn) {
-      saveBtn.addEventListener('click', () => {
-        const title = document.getElementById('modal-s-title')?.value;
-        const company = document.getElementById('modal-s-company')?.value;
-        const principlesStr = document.getElementById('modal-s-principles')?.value || 'Customer Obsession';
-        const situation = document.getElementById('modal-s-situation')?.value;
-        const task = document.getElementById('modal-s-task')?.value;
-        const action = document.getElementById('modal-s-action')?.value;
-        const result = document.getElementById('modal-s-result')?.value;
-        const metrics = document.getElementById('modal-s-metrics')?.value;
-
-        if (!title || !situation || !action) {
-          safeToast('Please complete at least Title, Situation, and Action', 'warning');
-          return;
-        }
-
-        let stories = [];
-        try {
-          stories = JSON.parse(localStorage.getItem('prepspace_star_vault')) || DEFAULT_STAR_STORIES;
-        } catch(e) { stories = DEFAULT_STAR_STORIES; }
-
-        const principles = principlesStr.split(',').map(s => s.trim()).filter(Boolean);
-
-        stories.unshift({
-          id: 'star-' + Date.now(),
-          title, company, principles, situation, task, action, result, metrics
-        });
-
-        localStorage.setItem('prepspace_star_vault', JSON.stringify(stories));
-
-        const modalEl = document.getElementById('newStoryModal');
-        if (modalEl && window.bootstrap) {
-          const m = bootstrap.Modal.getInstance(modalEl);
-          if (m) m.hide();
-        }
-
-        AudioSynth.playChime(523, 784, 0.3);
-        safeToast('Saved new STAR story to your vault!', 'success');
-
-        const mount = document.getElementById('page-mount');
-        if (mount) {
-          mount.innerHTML = components.starVault();
-          bindStarVaultEvents();
-        }
-      });
-    }
 
     // Copy Markdown
     document.querySelectorAll('.copy-star-markdown').forEach(btn => {
@@ -1142,12 +1332,12 @@
           stories = JSON.parse(localStorage.getItem('prepspace_star_vault')) || DEFAULT_STAR_STORIES;
         } catch(e) { stories = DEFAULT_STAR_STORIES; }
 
-        const s = stories.find(item => item.id === id);
+        const s = stories.find(st => st.id === id);
         if (s) {
-          const md = `### ${s.title} (${s.company})\n**Principles**: ${s.principles.join(', ')}\n\n**Situation**:\n${s.situation}\n\n**Task**:\n${s.task}\n\n**Action**:\n${s.action}\n\n**Result**:\n${s.result}\n\n**Impact Metric**: ${s.metrics}`;
+          const md = `# STAR Story: ${s.title}\n**Company**: ${s.company || 'Tech'}\n**Principles**: ${s.principles.join(', ')}\n**Impact Metric**: ${s.metrics || 'N/A'}\n\n### Situation\n${s.situation}\n\n### Task\n${s.task}\n\n### Action\n${s.action}\n\n### Result\n${s.result}\n`;
           navigator.clipboard.writeText(md).then(() => {
-            AudioSynth.playChime(660, 880, 0.2);
-            safeToast('STAR Story copied as formatted Markdown!', 'success');
+            AudioSynth.playChime(523, 659, 0.25);
+            safeToast('Copied STAR story formatted in Markdown!', 'success');
           });
         }
       });
@@ -1162,114 +1352,13 @@
           stories = JSON.parse(localStorage.getItem('prepspace_star_vault')) || DEFAULT_STAR_STORIES;
         } catch(e) { stories = DEFAULT_STAR_STORIES; }
 
-        const s = stories.find(item => item.id === id);
+        const s = stories.find(st => st.id === id);
         if (s) {
-          const prompt = `Act as a Principal Bar Raiser at Amazon and Staff Engineer at Google. Critique my following STAR behavioral response. Rate my Situation, Task, Action, and Result from 1 to 10 on clarity, leadership principles (${s.principles.join(', ')}), and quantified impact. Then provide an improved, punchier 90-second script:\n\n[Story Title]: ${s.title}\n[Situation]: ${s.situation}\n[Task]: ${s.task}\n[Action]: ${s.action}\n[Result]: ${s.result}\n[Metrics]: ${s.metrics}`;
+          const prompt = `Act as an elite Amazon Bar Raiser & Principal Engineering Interviewer. Evaluate my STAR behavioral response below:\n\nTitle: ${s.title}\nTarget Leadership Principles: ${s.principles.join(', ')}\n\n[SITUATION]: ${s.situation}\n[TASK]: ${s.task}\n[ACTION]: ${s.action}\n[RESULT]: ${s.result}\n\nProvide rigorous feedback on: 1. Did I clearly demonstrate 'I' vs 'We'? 2. Are the metrics sufficiently quantified? 3. What skeptical probing follow-up questions should I prepare for?`;
           navigator.clipboard.writeText(prompt).then(() => {
-            AudioSynth.playChime(587, 880, 0.25);
-            safeToast('AI Bar Raiser Critique prompt copied! Paste into Gemini/ChatGPT.', 'info');
+            AudioSynth.playChime(523, 784, 0.25);
+            safeToast('AI Bar Raiser evaluation prompt copied to clipboard!', 'info');
           });
-        }
-      });
-    });
-
-    // Practice Stopwatch
-    let practiceInterval = null;
-    let practiceSeconds = 120;
-    let practiceRunning = false;
-
-    const pDisplay = document.getElementById('practice-timer-display');
-    const pBar = document.getElementById('practice-pacing-bar');
-    const pStage = document.getElementById('practice-current-stage');
-    const pTip = document.getElementById('practice-stage-tip');
-    const pStartBtn = document.getElementById('btn-practice-start');
-    const pResetBtn = document.getElementById('btn-practice-reset');
-
-    function updatePacingUI() {
-      const elapsed = 120 - practiceSeconds;
-      const m = Math.floor(practiceSeconds / 60).toString().padStart(2, '0');
-      const s = (practiceSeconds % 60).toString().padStart(2, '0');
-      if (pDisplay) pDisplay.textContent = `${m}:${s}`;
-      if (pBar) pBar.style.width = Math.min(100, (elapsed / 120) * 100) + '%';
-
-      if (elapsed < 20) {
-        if (pStage) pStage.textContent = 'STAGE 1: SITUATION (00:00 - 00:20)';
-        if (pTip) pTip.textContent = 'Focus: Set context quickly. Who was the client? What broke? Keep this under 20 seconds.';
-        if (pBar) pBar.className = 'progress-bar bg-info';
-      } else if (elapsed < 40) {
-        if (pStage) pStage.textContent = 'STAGE 2: TASK (00:20 - 00:40)';
-        if (pTip) pTip.textContent = 'Focus: Clarify YOUR personal ownership and the stakes if you failed.';
-        if (pBar) pBar.className = 'progress-bar bg-primary';
-      } else if (elapsed < 95) {
-        if (pStage) pStage.textContent = 'STAGE 3: ACTION (00:40 - 01:35)';
-        if (pTip) pTip.textContent = 'Focus: The core meat! Use "I did", specific architectural tradeoffs, edge cases handled.';
-        if (pBar) pBar.className = 'progress-bar bg-warning';
-      } else {
-        if (pStage) pStage.textContent = 'STAGE 4: RESULT (01:35 - 02:00)';
-        if (pTip) pTip.textContent = 'Focus: Concrete metrics! Numbers, % latency drops, team adoption, post-mortem lessons.';
-        if (pBar) pBar.className = 'progress-bar bg-success';
-      }
-    }
-
-    if (pStartBtn) {
-      pStartBtn.addEventListener('click', () => {
-        if (practiceRunning) {
-          clearInterval(practiceInterval);
-          practiceRunning = false;
-          pStartBtn.innerHTML = '<i class="fa-solid fa-play me-1"></i> Resume';
-        } else {
-          practiceRunning = true;
-          pStartBtn.innerHTML = '<i class="fa-solid fa-pause me-1"></i> Pause';
-          AudioSynth.playChime(440, 660, 0.2);
-          practiceInterval = setInterval(() => {
-            practiceSeconds--;
-            if (practiceSeconds <= 0) {
-              clearInterval(practiceInterval);
-              practiceRunning = false;
-              practiceSeconds = 0;
-              updatePacingUI();
-              AudioSynth.playChime(880, 440, 0.6);
-              safeToast('2-Minute delivery time complete! Great job pacing.', 'success');
-              pStartBtn.innerHTML = '<i class="fa-solid fa-play me-1"></i> Start';
-              return;
-            }
-            // Transition chimes at 100s, 80s, 25s remaining
-            if (practiceSeconds === 100 || practiceSeconds === 80 || practiceSeconds === 25) {
-              AudioSynth.playChime(550, 750, 0.15);
-            }
-            updatePacingUI();
-          }, 1000);
-        }
-      });
-    }
-
-    if (pResetBtn) {
-      pResetBtn.addEventListener('click', () => {
-        clearInterval(practiceInterval);
-        practiceRunning = false;
-        practiceSeconds = 120;
-        updatePacingUI();
-        if (pStartBtn) pStartBtn.innerHTML = '<i class="fa-solid fa-play me-1"></i> Start';
-      });
-    }
-
-    // Launch practice mode for specific story
-    document.querySelectorAll('.practice-story-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.getAttribute('data-id');
-        let stories = [];
-        try {
-          stories = JSON.parse(localStorage.getItem('prepspace_star_vault')) || DEFAULT_STAR_STORIES;
-        } catch(e) { stories = DEFAULT_STAR_STORIES; }
-
-        const s = stories.find(item => item.id === id);
-        const nameEl = document.getElementById('practice-story-name');
-        if (nameEl && s) nameEl.textContent = `Practicing: ${s.title}`;
-
-        const modalEl = document.getElementById('practiceStopwatchModal');
-        if (modalEl && window.bootstrap) {
-          const m = new bootstrap.Modal(modalEl);
-          m.show();
         }
       });
     });
@@ -1278,281 +1367,484 @@
     document.querySelectorAll('.delete-star-story').forEach(btn => {
       btn.addEventListener('click', () => {
         const id = btn.getAttribute('data-id');
-        if (confirm('Are you sure you want to delete this story from your vault?')) {
-          let stories = [];
-          try {
-            stories = JSON.parse(localStorage.getItem('prepspace_star_vault')) || DEFAULT_STAR_STORIES;
-          } catch(e) { stories = DEFAULT_STAR_STORIES; }
+        let stories = [];
+        try {
+          stories = JSON.parse(localStorage.getItem('prepspace_star_vault')) || DEFAULT_STAR_STORIES;
+        } catch(e) { stories = DEFAULT_STAR_STORIES; }
 
-          stories = stories.filter(s => s.id !== id);
-          localStorage.setItem('prepspace_star_vault', JSON.stringify(stories));
-          safeToast('Story deleted', 'info');
+        stories = stories.filter(s => s.id !== id);
+        localStorage.setItem('prepspace_star_vault', JSON.stringify(stories));
+        safeToast('Story deleted from vault', 'info');
 
+        const mount = document.getElementById('page-mount');
+        if (mount) {
+          mount.innerHTML = components.starVault();
+          bindStarVaultEvents();
+        }
+      });
+    });
+
+    // Modal Save Story
+    const saveStoryBtn = document.getElementById('btn-save-new-star-story');
+    if (saveStoryBtn) {
+      saveStoryBtn.addEventListener('click', () => {
+        const title = document.getElementById('modal-s-title')?.value.trim();
+        const company = document.getElementById('modal-s-company')?.value.trim();
+        const principlesRaw = document.getElementById('modal-s-principles')?.value.trim();
+        const metrics = document.getElementById('modal-s-metrics')?.value.trim();
+        const situation = document.getElementById('modal-s-situation')?.value.trim();
+        const task = document.getElementById('modal-s-task')?.value.trim();
+        const action = document.getElementById('modal-s-action')?.value.trim();
+        const result = document.getElementById('modal-s-result')?.value.trim();
+
+        if (!title || !situation || !action) {
+          safeToast('Please fill Title, Situation, and Action at minimum.', 'warning');
+          return;
+        }
+
+        const principles = principlesRaw ? principlesRaw.split(',').map(p => p.trim()) : ['Ownership'];
+
+        let stories = [];
+        try {
+          stories = JSON.parse(localStorage.getItem('prepspace_star_vault')) || DEFAULT_STAR_STORIES;
+        } catch(e) { stories = DEFAULT_STAR_STORIES; }
+
+        stories.unshift({
+          id: 'star-' + Date.now(),
+          title, company, principles, metrics, situation, task, action, result
+        });
+
+        localStorage.setItem('prepspace_star_vault', JSON.stringify(stories));
+
+        const modalEl = document.getElementById('newStoryModal');
+        if (modalEl && window.bootstrap) {
+          const m = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+          if (m) m.hide();
+        }
+        document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+        document.body.classList.remove('modal-open');
+
+        AudioSynth.playChime(587, 880, 0.3);
+        safeToast(`Saved "${title}" to your STAR Vault!`, 'success');
+
+        setTimeout(() => {
           const mount = document.getElementById('page-mount');
           if (mount) {
             mount.innerHTML = components.starVault();
             bindStarVaultEvents();
           }
+        }, 150);
+      });
+    }
+
+    // =======================================================================
+    // Teleprompter & Live Speech Coach (WPM Tracker)
+    // =======================================================================
+    let recognition = null;
+    let wordCount = 0;
+    let speechStartTime = 0;
+    let autoScrollInterval = null;
+
+    document.querySelectorAll('.teleprompter-trigger-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        let stories = [];
+        try {
+          stories = JSON.parse(localStorage.getItem('prepspace_star_vault')) || DEFAULT_STAR_STORIES;
+        } catch(e) { stories = DEFAULT_STAR_STORIES; }
+
+        const s = stories.find(st => st.id === id);
+        if (s) {
+          const overlay = document.getElementById('teleprompterOverlay');
+          const titleEl = document.getElementById('teleprompter-title');
+          const area = document.getElementById('teleprompter-content-area');
+          if (titleEl) titleEl.textContent = `${s.title} (${s.company || 'Tech'})`;
+
+          if (area) {
+            area.innerHTML = `
+              <div class="mb-4 p-3 rounded-3 bg-black bg-opacity-40 border-start border-4 border-info">
+                <span class="text-info font-monospace fs-7 fw-bold d-block mb-2"><i class="fa-solid fa-flag me-1"></i> SITUATION (Target: 0-20s):</span>
+                <p class="fs-4 text-white mb-0" style="line-height: 1.8;">${s.situation}</p>
+              </div>
+              <div class="mb-4 p-3 rounded-3 bg-black bg-opacity-40 border-start border-4 border-primary">
+                <span class="text-primary font-monospace fs-7 fw-bold d-block mb-2"><i class="fa-solid fa-bullseye me-1"></i> TASK (Target: 20-40s):</span>
+                <p class="fs-4 text-white mb-0" style="line-height: 1.8;">${s.task}</p>
+              </div>
+              <div class="mb-4 p-3 rounded-3 bg-black bg-opacity-40 border-start border-4 border-warning">
+                <span class="text-warning font-monospace fs-7 fw-bold d-block mb-2"><i class="fa-solid fa-gears me-1"></i> ACTION (Target: 40-95s):</span>
+                <p class="fs-4 text-white mb-0" style="line-height: 1.8;">${s.action}</p>
+              </div>
+              <div class="mb-4 p-3 rounded-3 bg-black bg-opacity-40 border-start border-4 border-success">
+                <span class="text-success font-monospace fs-7 fw-bold d-block mb-2"><i class="fa-solid fa-trophy me-1"></i> RESULT (Target: 95-120s):</span>
+                <p class="fs-4 text-white mb-0" style="line-height: 1.8;">${s.result}</p>
+              </div>
+            `;
+          }
+
+          if (overlay) overlay.classList.remove('d-none');
+          AudioSynth.playChime(587, 880, 0.2);
+
+          // Start Web Speech Recognition Coach
+          const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+          const wpmDisplay = document.getElementById('wpm-display');
+          wordCount = 0;
+          speechStartTime = Date.now();
+
+          if (SpeechRec) {
+            try {
+              recognition = new SpeechRec();
+              recognition.continuous = true;
+              recognition.interimResults = true;
+              recognition.onresult = (evt) => {
+                let total = 0;
+                for (let i = 0; i < evt.results.length; i++) {
+                  const transcript = evt.results[i][0].transcript.trim();
+                  total += transcript.split(/\s+/).length;
+                }
+                wordCount = total;
+                const elapsedMins = (Date.now() - speechStartTime) / 60000;
+                if (elapsedMins > 0.05 && wpmDisplay) {
+                  const wpm = Math.round(wordCount / elapsedMins);
+                  if (wpm < 110) {
+                    wpmDisplay.innerHTML = `Pace: <span class="text-info">${wpm} WPM (Steady)</span>`;
+                  } else if (wpm <= 160) {
+                    wpmDisplay.innerHTML = `Pace: <span class="text-success">${wpm} WPM (Optimal)</span>`;
+                  } else {
+                    wpmDisplay.innerHTML = `Pace: <span class="text-danger">${wpm} WPM (Too Fast!)</span>`;
+                  }
+                }
+              };
+              recognition.start();
+            } catch(e) {
+              if (wpmDisplay) wpmDisplay.textContent = 'Pace: Reading mode';
+            }
+          } else {
+            if (wpmDisplay) wpmDisplay.textContent = 'Pace: Reading mode';
+          }
         }
       });
     });
+
+    // Close Teleprompter
+    const closeTeleprompterBtn = document.getElementById('btn-close-teleprompter');
+    if (closeTeleprompterBtn) {
+      closeTeleprompterBtn.addEventListener('click', () => {
+        const overlay = document.getElementById('teleprompterOverlay');
+        if (overlay) overlay.classList.add('d-none');
+        if (recognition) { try { recognition.stop(); } catch(e){} recognition = null; }
+        if (autoScrollInterval) { clearInterval(autoScrollInterval); autoScrollInterval = null; }
+      });
+    }
+
+    // Auto-Scroll Toggle
+    const scrollToggleBtn = document.getElementById('btn-toggle-teleprompter-scroll');
+    if (scrollToggleBtn) {
+      scrollToggleBtn.addEventListener('click', () => {
+        const stream = document.getElementById('teleprompter-content-area');
+        if (autoScrollInterval) {
+          clearInterval(autoScrollInterval);
+          autoScrollInterval = null;
+          scrollToggleBtn.innerHTML = '<i class="fa-solid fa-play me-1"></i> Auto-Scroll: OFF';
+          scrollToggleBtn.className = 'btn btn-sm btn-outline-info';
+        } else if (stream) {
+          scrollToggleBtn.innerHTML = '<i class="fa-solid fa-pause me-1"></i> Auto-Scroll: ON';
+          scrollToggleBtn.className = 'btn btn-sm btn-warning';
+          autoScrollInterval = setInterval(() => {
+            stream.scrollTop += 2;
+          }, 35);
+        }
+      });
+    }
+
+    // =======================================================================
+    // 2-Minute Pacing Stopwatch
+    // =======================================================================
+    let pTimer = null;
+    let pSecondsLeft = 120;
+    let pRunning = false;
+
+    const pDisplay = document.getElementById('practice-timer-display');
+    const pBadge = document.getElementById('practice-phase-badge');
+
+    function updatePacingUI() {
+      const mins = Math.floor(pSecondsLeft / 60);
+      const secs = pSecondsLeft % 60;
+      if (pDisplay) pDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+      const elapsed = 120 - pSecondsLeft;
+      if (pBadge) {
+        if (elapsed <= 20) {
+          pBadge.textContent = 'Phase: Situation (Context & Stakes: 0-20s)';
+          pBadge.className = 'badge bg-info bg-opacity-20 text-info font-monospace fs-8 px-3 py-1.5 mb-3';
+        } else if (elapsed <= 40) {
+          pBadge.textContent = 'Phase: Task (Your Specific Ownership: 20-40s)';
+          pBadge.className = 'badge bg-primary bg-opacity-20 text-primary font-monospace fs-8 px-3 py-1.5 mb-3';
+        } else if (elapsed <= 95) {
+          pBadge.textContent = 'Phase: Action (Technical Decisions & Trade-offs: 40-95s)';
+          pBadge.className = 'badge bg-warning bg-opacity-20 text-warning font-monospace fs-8 px-3 py-1.5 mb-3';
+        } else {
+          pBadge.textContent = 'Phase: Result (Measurable Business Outcome: 95-120s)';
+          pBadge.className = 'badge bg-success bg-opacity-20 text-success font-monospace fs-8 px-3 py-1.5 mb-3';
+        }
+      }
+    }
+
+    const startPacingBtn = document.getElementById('btn-practice-start');
+    if (startPacingBtn) {
+      startPacingBtn.addEventListener('click', () => {
+        if (!pRunning) {
+          pRunning = true;
+          AudioSynth.playChime(523, 784, 0.2);
+          pTimer = setInterval(() => {
+            if (pSecondsLeft > 0) {
+              pSecondsLeft--;
+              const elapsed = 120 - pSecondsLeft;
+              if (elapsed === 20 || elapsed === 40 || elapsed === 95) {
+                AudioSynth.playChime(660, 880, 0.15); // stage transition chime
+              }
+              updatePacingUI();
+            } else {
+              clearInterval(pTimer);
+              pRunning = false;
+              AudioSynth.playChime(440, 880, 0.5);
+              safeToast('2-Minute STAR response time completed!', 'success');
+            }
+          }, 1000);
+        }
+      });
+    }
+
+    const pausePacingBtn = document.getElementById('btn-practice-pause');
+    if (pausePacingBtn) {
+      pausePacingBtn.addEventListener('click', () => {
+        if (pRunning) {
+          clearInterval(pTimer);
+          pRunning = false;
+        }
+      });
+    }
+
+    const resetPacingBtn = document.getElementById('btn-practice-reset');
+    if (resetPacingBtn) {
+      resetPacingBtn.addEventListener('click', () => {
+        clearInterval(pTimer);
+        pRunning = false;
+        pSecondsLeft = 120;
+        updatePacingUI();
+      });
+    }
   };
+
 
   // =========================================================================
   // 3. PEER-TO-PEER MOCK EXCHANGE & RUBRIC ARENA (#/peer-mock)
   // =========================================================================
 
-  const MOCK_QUESTIONS = [
+  const DEFAULT_MOCK_ROUNDS = [
     {
-      id: 'mock-q-1',
-      title: 'Design a Distributed Rate Limiter (Token Bucket / Sliding Window)',
-      domain: 'System Design',
-      difficulty: 'Medium / Hard',
-      timeLimit: 30,
-      description: 'You are tasked with designing an API rate limiter for a high-traffic microservices cluster handling 100,000 req/sec across 4 geographic regions.',
-      hints: [
-        'Hint 1: Consider how Redis INCR and EXPIRE behave under race conditions.',
-        'Hint 2: Sliding Window Log requires storing timestamps in a Sorted Set (ZADD/ZREMRANGEBYSCORE), which is memory intensive. Can we approximate with Sliding Window Counter?',
-        'Hint 3: How do we synchronize rate limit counters across multi-region edge nodes without adding 150ms cross-region latency?'
+      id: 'mock-sys-1',
+      type: 'System Design',
+      title: 'Design a Distributed Multi-Tenant Rate Limiter (100K RPS)',
+      difficulty: 'Hard (L5/L6)',
+      targetRole: 'Staff / Senior Backend SDE',
+      description: 'Architect an API gateway rate limiting tier that enforces per-user and per-IP quotas across multiple microservices with low latency (< 2ms overhead).',
+      shadowFollowUps: [
+        'How do you prevent race conditions when two concurrent requests hit different gateway instances simultaneously?',
+        'If Redis Cluster experiences a partition, does your rate limiter fail open or fail closed?',
+        'How would you handle a single rogue tenant executing a localized DDoS attack without exhausting memory in your caching cluster?'
       ],
-      rubricItems: [
-        { name: 'Problem Scoping & Functional Requirements', weight: 20 },
-        { name: 'Architecture & Redis/Memory Calculations', weight: 30 },
-        { name: 'Handling Race Conditions & High Concurrency', weight: 30 },
-        { name: 'Communication & Active Collaboration', weight: 20 }
-      ]
+      hints: [
+        'Evaluate Token Bucket vs Sliding Window Counter algorithms.',
+        'Consider Redis with Lua script atomicity or local in-memory token buckets with periodic background sync.',
+        'Address clock drift and NTP synchronization across distributed gateway servers.'
+      ],
+      starterCode: {
+        java: `public class DistributedRateLimiter {\n    // Implement Token Bucket or Sliding Window\n    public boolean allowRequest(String tenantId, int maxTokens, long refillIntervalMs) {\n        // TODO: Redis Lua script execution or atomic CAS counter\n        return true;\n    }\n}`,
+        python: `class DistributedRateLimiter:\n    def allow_request(self, tenant_id: str, max_tokens: int, refill_interval_ms: int) -> bool:\n        # TODO: Implement atomic sliding window logic\n        return True`,
+        typescript: `export class DistributedRateLimiter {\n  allowRequest(tenantId: string, maxTokens: number, refillMs: number): boolean {\n    // TODO: Atomic sliding log check\n    return true;\n  }\n}`
+      }
     },
     {
-      id: 'mock-q-2',
-      title: 'LRU Cache Implementation with O(1) Operations',
-      domain: 'Data Structures & Algorithms',
-      difficulty: 'Medium',
-      timeLimit: 30,
-      description: 'Design a data structure that follows the constraints of a Least Recently Used (LRU) cache. Implement get(key) and put(key, value) both in strict O(1) average time complexity.',
-      hints: [
-        'Hint 1: A Hash Map provides O(1) lookups, but does not maintain item ordering.',
-        'Hint 2: A Doubly Linked List allows O(1) removals and insertions if you have the node pointer.',
-        'Hint 3: Combine Hash Map (pointing to DLL Nodes) + Doubly Linked List with dummy head and tail sentinel nodes.'
+      id: 'mock-algo-1',
+      type: 'Algorithms',
+      title: 'Design and Implement an LRU Cache with O(1) Operations',
+      difficulty: 'Medium (L4/L5)',
+      targetRole: 'Software Development Engineer II',
+      description: 'Design a data structure that follows the constraints of a Least Recently Used (LRU) cache with O(1) time complexity for both get and put operations.',
+      shadowFollowUps: [
+        'How would you make this data structure thread-safe for high concurrency without acquiring a coarse global lock?',
+        'How does Java LinkedHashMap implement LRU eviction under the hood?',
+        'If the cached values can be large byte arrays, how would you design an eviction policy based on total memory footprint rather than element count?'
       ],
-      rubricItems: [
-        { name: 'Data Structure Design & Space Trade-offs', weight: 25 },
-        { name: 'O(1) Get and Put Implementation', weight: 35 },
-        { name: 'Edge Cases (Null keys, capacity 0/1, overwrite)', weight: 20 },
-        { name: 'Code Quality & Modular Cleanliness', weight: 20 }
-      ]
-    },
-    {
-      id: 'mock-q-3',
-      title: 'Build an Autocomplete Search System with Trie & Debounce',
-      domain: 'Frontend & Full Stack',
-      difficulty: 'Medium',
-      timeLimit: 30,
-      description: 'Implement a search input component that suggests top 5 matching queries as user types, with network debounce, client-side caching, and keyboard navigation (Arrow Up/Down/Enter).',
       hints: [
-        'Hint 1: What happens if an API call for "ca" finishes AFTER the API call for "cat"? How do you cancel or discard stale responses?',
-        'Hint 2: How do you structure the Trie node to quickly find top 5 most frequent completions without scanning all children?',
-        'Hint 3: ARIA accessibility: combobox role and aria-activedescendant.'
+        'Combine a Doubly Linked List for O(1) re-ordering with a Hash Table for O(1) key lookup.',
+        'Maintain dummy head and tail nodes to avoid null pointer edge cases when removing/inserting nodes.'
       ],
-      rubricItems: [
-        { name: 'Debounce & Race Condition Handling', weight: 30 },
-        { name: 'Trie / Client Cache Architecture', weight: 30 },
-        { name: 'Keyboard UX & Edge Cases', weight: 20 },
-        { name: 'Component Cleanliness & Reusability', weight: 20 }
-      ]
+      starterCode: {
+        java: `public class LRUCache {\n    private final int capacity;\n    \n    public LRUCache(int capacity) {\n        this.capacity = capacity;\n    }\n    \n    public int get(int key) {\n        return -1;\n    }\n    \n    public void put(int key, int value) {\n    }\n}`,
+        python: `class LRUCache:\n    def __init__(self, capacity: int):\n        self.capacity = capacity\n\n    def get(self, key: int) -> int:\n        return -1\n\n    def put(self, key: int, value: int) -> None:\n        pass`,
+        typescript: `class LRUCache {\n  constructor(private capacity: number) {}\n  get(key: number): number { return -1; }\n  put(key: number, value: number): void {}\n}`
+      }
     }
   ];
 
   components.peerMock = () => {
-    let karma = 100;
-    try {
-      karma = parseInt(localStorage.getItem('prepspace_peer_karma') || '100', 10);
-    } catch(e) {}
-
     return `
-      <div class="container-fluid px-3 px-md-4 py-3">
+      <div class="container-fluid px-3 px-md-4 py-3 suite-scroll-container">
         <!-- Header -->
-        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom border-secondary border-opacity-15 gap-2">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-15 gap-2">
           <div>
             <div class="d-flex align-items-center gap-2">
-              <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-50 font-monospace fs-9">COMMUNITY ARENA</span>
-              <h4 class="text-white fw-bold m-0 fs-5">Peer-to-Peer Mock Exchange & Rubric Studio</h4>
+              <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-50 font-monospace fs-9">ARENA ARENA</span>
+              <h4 class="text-white fw-bold m-0 fs-5">Peer Mock Exchange & AI Shadow Interviewer</h4>
             </div>
-            <p class="text-muted fs-8 mb-0 mt-1">Practice live 1v1 technical interviews with peers or solo simulation using official hiring rubrics.</p>
+            <p class="text-muted fs-8 mb-0 mt-1">Practice live 60-min reciprocal interview rounds with standardized FAANG rubrics or run solo against an AI Principal Shadow.</p>
           </div>
-          <div class="d-flex align-items-center gap-3">
-            <div class="d-flex align-items-center gap-2 bg-dark px-3 py-1.5 rounded-pill border border-secondary border-opacity-40">
-              <i class="fa-solid fa-fire text-warning"></i>
-              <span class="fs-8 text-secondary">Karma:</span>
-              <span class="fs-7 fw-bold text-warning font-monospace" id="peer-karma-display">${karma} pts</span>
+          <div class="d-flex align-items-center gap-2">
+            <!-- Mode Switcher -->
+            <div class="btn-group" role="group">
+              <input type="radio" class="btn-check" name="mock-mode" id="mode-human" value="human" checked>
+              <label class="btn btn-sm btn-outline-info fs-9" for="mode-human"><i class="fa-solid fa-users me-1"></i> Peer Mode</label>
+
+              <input type="radio" class="btn-check" name="mock-mode" id="mode-shadow" value="shadow">
+              <label class="btn btn-sm btn-outline-warning fs-9" for="mode-shadow"><i class="fa-solid fa-robot me-1"></i> AI Shadow Mode</label>
+            </div>
+            <button class="btn btn-outline-light btn-sm px-3" id="btn-export-mock-debrief"><i class="fa-solid fa-file-invoice me-1"></i> Export Debrief</button>
+          </div>
+        </div>
+
+        <!-- Session Status Ribbon -->
+        <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-3 mb-3 shadow-sm">
+          <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center gap-3">
+              <button class="btn btn-outline-warning rounded-circle d-flex align-items-center justify-content-center" id="btn-timer-toggle" style="width: 44px; height: 44px;">
+                <i class="fa-solid fa-play" id="timer-icon"></i>
+              </button>
+              <div>
+                <span class="badge bg-secondary font-monospace fs-9" id="turn-badge">Turn: Part A (You Interview Candidate)</span>
+                <div class="font-monospace fs-4 fw-bold text-warning" id="timer-display">30:00</div>
+              </div>
+            </div>
+
+            <!-- Problem Selector -->
+            <div class="d-flex align-items-center gap-2 flex-grow-1" style="max-width: 450px;">
+              <select id="mock-problem-select" class="form-select form-select-sm bg-black text-white border-secondary border-opacity-50">
+                ${DEFAULT_MOCK_ROUNDS.map(r => `
+                  <option value="${r.id}">[${r.type}] ${r.title} (${r.difficulty})</option>
+                `).join('')}
+              </select>
+              <button class="btn btn-sm btn-glass text-info fs-9 text-nowrap" id="btn-toggle-secret-hints">
+                <i class="fa-solid fa-eye me-1"></i> Secret Hints
+              </button>
+            </div>
+
+            <!-- Live Rubric Score Indicator -->
+            <div class="badge bg-dark border border-secondary border-opacity-40 p-2 d-flex align-items-center gap-2 font-monospace fs-8">
+              <span class="text-secondary">Rubric Score:</span>
+              <span class="text-warning fw-bold fs-7" id="composite-score-val">3.5 / 5.0</span>
+              <span class="badge bg-info bg-opacity-20 text-info border border-info border-opacity-30" id="rubric-grade-badge">Solid Hire</span>
+            </div>
+          </div>
+
+          <!-- Secret Hints Accordion -->
+          <div class="mt-2.5 pt-2 border-top border-secondary border-opacity-20 d-none" id="secret-hints-drawer">
+            <div class="p-2.5 rounded bg-black bg-opacity-50 border border-warning border-opacity-30">
+              <span class="text-warning fw-bold font-monospace fs-9 d-block mb-1"><i class="fa-solid fa-user-secret me-1"></i> Interviewer Solution Guide & Architectural Traps:</span>
+              <ul class="mb-0 fs-8 text-light ps-3" id="hints-list"></ul>
             </div>
           </div>
         </div>
 
-        <div class="row g-3" id="mock-setup-container">
-          <div class="col-12 col-lg-5">
-            <div class="card bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 p-3 p-md-4 h-100 shadow-sm">
-              <h6 class="text-white fw-bold mb-3 fs-7"><i class="fa-solid fa-sliders text-primary me-2"></i>Configure Mock Session</h6>
-
-              <div class="mb-3">
-                <label class="form-label fs-8 text-secondary fw-semibold">Choose Interview Track</label>
-                <select id="mock-select-question" class="form-select form-select-sm bg-black text-white border-secondary border-opacity-50">
-                  ${MOCK_QUESTIONS.map((q, i) => `
-                    <option value="${q.id}" ${i === 0 ? 'selected' : ''}>${q.domain}: ${q.title}</option>
-                  `).join('')}
-                </select>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label fs-8 text-secondary fw-semibold">Your Role in This Round</label>
-                <div class="btn-group w-100" role="group">
-                  <input type="radio" class="btn-check" name="mock-role" id="role-interviewer" value="interviewer" checked>
-                  <label class="btn btn-sm btn-outline-primary fs-8" for="role-interviewer">
-                    <i class="fa-solid fa-clipboard-check me-1"></i> Interviewer (Assess & Score)
-                  </label>
-
-                  <input type="radio" class="btn-check" name="mock-role" id="role-candidate" value="candidate">
-                  <label class="btn btn-sm btn-outline-primary fs-8" for="role-candidate">
-                    <i class="fa-solid fa-code me-1"></i> Candidate (Solve & Defend)
-                  </label>
-                </div>
-                <small class="text-muted fs-9 mt-1 d-block">Tip: Interviewing others is the fastest way to understand how hiring managers evaluate code.</small>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label fs-8 text-secondary fw-semibold">Session Timer</label>
+        <div class="row g-3">
+          <!-- Left: Code & System Design Scratchpad -->
+          <div class="col-12 col-xl-7">
+            <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-3 shadow-sm h-100">
+              <div class="d-flex align-items-center justify-content-between mb-2">
                 <div class="d-flex align-items-center gap-2">
-                  <span class="badge bg-dark border border-secondary border-opacity-50 text-white font-monospace px-3 py-2 fs-7">30:00 (Standard Technical Round)</span>
+                  <h6 class="text-white fw-bold m-0 fs-7"><i class="fa-solid fa-terminal text-success me-1.5"></i>Candidate Live Scratchpad</h6>
+                  <select id="scratchpad-lang" class="form-select form-select-sm bg-black text-white border-secondary border-opacity-50 py-0.5" style="width: 120px;">
+                    <option value="java" selected>Java 21</option>
+                    <option value="python">Python 3.12</option>
+                    <option value="typescript">TypeScript</option>
+                  </select>
+                </div>
+                <div class="d-flex gap-1.5">
+                  <button class="btn btn-sm btn-outline-success py-0.5 px-2 fs-9" id="btn-run-mock-tests"><i class="fa-solid fa-play me-1"></i> Run Tests</button>
+                  <button class="btn btn-sm btn-glass py-0.5 px-2 fs-9 text-secondary" id="btn-clear-scratchpad"><i class="fa-solid fa-eraser"></i></button>
                 </div>
               </div>
 
-              <div class="mt-auto pt-3 border-top border-secondary border-opacity-25">
-                <button class="btn btn-primary w-100 py-2 fw-semibold fs-8" id="btn-start-mock-session">
-                  <i class="fa-solid fa-play me-2"></i> Launch Mock Arena
-                </button>
+              <!-- Problem statement preview -->
+              <div class="p-2 rounded bg-black bg-opacity-40 border border-secondary border-opacity-20 mb-2">
+                <span class="text-info fs-9 fw-bold font-monospace d-block" id="mock-problem-title">Design a Distributed Multi-Tenant Rate Limiter</span>
+                <p class="text-muted fs-8 mb-0" id="mock-problem-desc"></p>
+              </div>
+
+              <textarea id="mock-code-editor" class="form-control bg-black text-white border-secondary border-opacity-50 p-2.5 fs-8 font-monospace flex-grow-1" rows="12" style="line-height: 1.6; tab-size: 2;"></textarea>
+
+              <!-- Test Execution Terminal -->
+              <div class="mt-2 p-2 rounded bg-black border border-secondary border-opacity-30 font-monospace fs-9 text-light d-none" id="test-console-output">
+                <span class="text-success fw-bold"><i class="fa-solid fa-circle-check me-1"></i> All 4/4 Test Assertions Passed (24ms)</span>
+                <div class="text-muted mt-1">&gt; testZeroLatencyCheck()... OK<br>&gt; testConcurrentQuotaExceeded()... OK (HTTP 429 received)<br>&gt; testSlidingWindowDrift()... OK</div>
               </div>
             </div>
           </div>
 
-          <div class="col-12 col-lg-7">
-            <div class="card bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 p-3 p-md-4 h-100 shadow-sm">
-              <h6 class="text-white fw-bold mb-3 fs-7"><i class="fa-solid fa-award text-warning me-2"></i>How the Peer Mock System Works</h6>
-
-              <div class="row g-2 mb-3">
-                <div class="col-6">
-                  <div class="p-2.5 rounded-2 bg-black bg-opacity-40 border border-secondary border-opacity-25">
-                    <div class="text-success fw-bold fs-8 mb-1"><i class="fa-solid fa-plus me-1"></i>Earn +50 Karma</div>
-                    <p class="fs-9 text-muted mb-0">Conduct a 30-min interview and fill out an honest rubric evaluation.</p>
-                  </div>
+          <!-- Right: FAANG 4-Axis Rubric & AI Shadow Follow-ups -->
+          <div class="col-12 col-xl-5">
+            <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-3 shadow-sm h-100">
+              <!-- AI Shadow Prompt Box -->
+              <div class="p-2.5 rounded bg-warning bg-opacity-10 border border-warning border-opacity-30 mb-3" id="ai-shadow-card">
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                  <span class="badge bg-warning text-dark fw-bold font-monospace fs-9"><i class="fa-solid fa-robot me-1"></i>AI Principal Shadow Follow-Up:</span>
+                  <button class="btn btn-glass py-0.5 px-1.5 fs-9 text-warning" id="btn-next-shadow-q"><i class="fa-solid fa-rotate me-1"></i> Next Prompt</button>
                 </div>
-                <div class="col-6">
-                  <div class="p-2.5 rounded-2 bg-black bg-opacity-40 border border-secondary border-opacity-25">
-                    <div class="text-info fw-bold fs-8 mb-1"><i class="fa-solid fa-minus me-1"></i>Spend 40 Karma</div>
-                    <p class="fs-9 text-muted mb-0">Get interviewed by a peer to receive detailed rubric scorecards.</p>
-                  </div>
-                </div>
+                <p class="fs-8 text-light fw-medium mb-0" id="ai-shadow-question-text">
+                  "How do you prevent race conditions when two concurrent requests hit different gateway instances simultaneously?"
+                </p>
               </div>
 
-              <div class="p-3 rounded-2 bg-black bg-opacity-30 border border-secondary border-opacity-20 mb-3">
-                <div class="text-white fw-semibold fs-8 mb-1">Live Evaluation Protocol:</div>
-                <ul class="fs-8 text-secondary ps-3 mb-0" style="line-height: 1.7;">
-                  <li><strong>Minutes 00–05:</strong> Problem introduction, clarifying questions, and edge case scoping.</li>
-                  <li><strong>Minutes 05–15:</strong> High-level approach discussion before writing any code.</li>
-                  <li><strong>Minutes 15–25:</strong> Implementation, dry-run with test cases, and time/space complexity analysis.</li>
-                  <li><strong>Minutes 25–30:</strong> Rubric scoring, constructive feedback, and debrief.</li>
-                </ul>
-              </div>
+              <h6 class="text-white fw-bold m-0 fs-7 mb-2"><i class="fa-solid fa-scale-balanced text-primary me-1.5"></i>FAANG 4-Pillar Scoring Rubric</h6>
 
-              <div class="d-flex justify-content-between align-items-center text-muted fs-9">
-                <span><i class="fa-solid fa-shield-halved text-success me-1"></i>Official FAANG Rubric criteria used across all interview rounds.</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div id="mock-arena-active" style="display: none;">
-          <div class="card bg-dark border-primary border-opacity-40 rounded-3 p-3 mb-3 shadow">
-            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
-              <div class="d-flex align-items-center gap-2">
-                <span class="badge bg-danger animate-pulse font-monospace">LIVE SESSION</span>
-                <h5 class="text-white fw-bold m-0 fs-6" id="arena-title">Loading Question...</h5>
-              </div>
-              <div class="d-flex align-items-center gap-2">
-                <button class="btn btn-sm btn-glass text-secondary" id="btn-timer-pause" title="Pause/Resume Timer"><i class="fa-solid fa-pause"></i></button>
-                <div class="font-monospace fs-5 fw-extrabold text-warning bg-black px-3 py-1 rounded border border-warning border-opacity-50" id="arena-timer">30:00</div>
-                <button class="btn btn-outline-danger btn-sm ms-2" id="btn-end-mock-session"><i class="fa-solid fa-stop me-1"></i> Exit Round</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="row g-3">
-            <div class="col-12 col-lg-6">
-              <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-3 p-md-4 h-100">
-                <h6 class="text-info fw-bold mb-2 fs-7"><i class="fa-solid fa-file-lines me-2"></i>Problem Specification</h6>
-                <p class="fs-8 text-light mb-3" id="arena-description">Loading...</p>
-
-                <div class="mb-3">
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <span class="text-warning fs-8 fw-bold"><i class="fa-solid fa-lightbulb me-1"></i>Interviewer Secret Hints</span>
-                    <button class="btn btn-sm btn-glass text-warning fs-9 py-0 px-2" id="btn-toggle-secret-hints">
-                      <i class="fa-solid fa-eye me-1"></i> <span id="hints-toggle-text">Show Hints</span>
-                    </button>
+              <!-- Rubric Sliders -->
+              <div class="d-flex flex-column gap-2 mb-3">
+                <div>
+                  <div class="d-flex justify-content-between fs-9 font-monospace mb-1">
+                    <span class="text-white">1. Problem Decomposition & Scope</span>
+                    <span class="text-info fw-bold" id="val-rubric-1">3.5 / 5.0</span>
                   </div>
-                  <div class="p-2 bg-black rounded border border-secondary border-opacity-30 fs-8 text-secondary" id="arena-hints" style="display: none;"></div>
+                  <input type="range" class="form-range rubric-slider" id="rubric-1" min="1" max="5" step="0.5" value="3.5">
                 </div>
 
-                <div class="mt-4 pt-3 border-top border-secondary border-opacity-25">
-                  <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h6 class="text-white fw-bold m-0 fs-7"><i class="fa-solid fa-square-check text-success me-2"></i>Interviewer Scoring Rubric</h6>
-                    <span class="badge bg-primary bg-opacity-20 text-info font-monospace fs-9" id="rubric-score-badge">Score: 3.0 / 5.0</span>
+                <div>
+                  <div class="d-flex justify-content-between fs-9 font-monospace mb-1">
+                    <span class="text-white">2. Architecture & Scalability</span>
+                    <span class="text-warning fw-bold" id="val-rubric-2">3.5 / 5.0</span>
                   </div>
-                  <div id="arena-rubric-items" class="d-flex flex-column gap-2 mb-3"></div>
+                  <input type="range" class="form-range rubric-slider" id="rubric-2" min="1" max="5" step="0.5" value="3.5">
+                </div>
 
-                  <div class="mb-3">
-                    <label class="form-label fs-8 text-secondary">Final Hiring Recommendation</label>
-                    <select id="arena-hire-rec" class="form-select form-select-sm bg-black text-white border-secondary border-opacity-50">
-                      <option value="Strong Hire">⭐ Strong Hire (Exceptional speed, zero hints needed)</option>
-                      <option value="Hire" selected>✅ Hire (Solid approach, responsive to feedback)</option>
-                      <option value="Lean Hire">⚠️ Lean Hire (Got to solution with moderate assistance)</option>
-                      <option value="No Hire">❌ No Hire (Struggled with fundamentals or stuck)</option>
-                    </select>
+                <div>
+                  <div class="d-flex justify-content-between fs-9 font-monospace mb-1">
+                    <span class="text-white">3. Code Quality & Correctness</span>
+                    <span class="text-success fw-bold" id="val-rubric-3">3.5 / 5.0</span>
                   </div>
+                  <input type="range" class="form-range rubric-slider" id="rubric-3" min="1" max="5" step="0.5" value="3.5">
+                </div>
 
-                  <div class="d-flex gap-2">
-                    <button class="btn btn-success btn-sm flex-grow-1 py-2" id="btn-submit-rubric">
-                      <i class="fa-solid fa-check-double me-1"></i> Submit Scorecard (+50 Karma)
-                    </button>
-                    <button class="btn btn-outline-light btn-sm py-2 px-3" id="btn-export-debrief">
-                      <i class="fa-solid fa-share-from-square me-1"></i> Export Debrief
-                    </button>
+                <div>
+                  <div class="d-flex justify-content-between fs-9 font-monospace mb-1">
+                    <span class="text-white">4. Communication & Poise</span>
+                    <span class="text-primary fw-bold" id="val-rubric-4">3.5 / 5.0</span>
                   </div>
+                  <input type="range" class="form-range rubric-slider" id="rubric-4" min="1" max="5" step="0.5" value="3.5">
                 </div>
               </div>
-            </div>
 
-            <div class="col-12 col-lg-6">
-              <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-3 p-md-4 h-100 d-flex flex-column">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <span class="fs-8 text-white fw-semibold"><i class="fa-solid fa-code text-primary me-2"></i>Candidate Code & Architecture Scratchpad</span>
-                  <div class="d-flex align-items-center gap-1">
-                    <select id="scratchpad-lang" class="form-select form-select-sm bg-black text-white border-secondary border-opacity-40 fs-9 py-0" style="width: 100px;">
-                      <option value="java" selected>Java 21</option>
-                      <option value="python">Python 3</option>
-                      <option value="typescript">TypeScript</option>
-                      <option value="cpp">C++ 20</option>
-                      <option value="sql">SQL</option>
-                    </select>
-                    <button class="btn btn-sm btn-glass text-secondary py-0 px-2" id="btn-clear-scratchpad" title="Clear Code"><i class="fa-solid fa-trash-can fs-9"></i></button>
-                  </div>
-                </div>
-                <textarea id="arena-code-editor" class="form-control bg-black text-white font-monospace fs-8 p-3 flex-grow-1 border-secondary border-opacity-40" rows="16" placeholder="// Candidate types code, architectural schemas, and trade-offs here live..."></textarea>
-                
-                <div class="mt-2 pt-2 border-top border-secondary border-opacity-20 d-flex justify-content-between align-items-center">
-                  <div class="fs-9 text-muted font-monospace" id="scratchpad-status">Ready to dry-run</div>
-                  <div class="d-flex gap-2">
-                    <button class="btn btn-sm btn-glass text-info fs-9" id="btn-copy-code"><i class="fa-solid fa-copy me-1"></i> Copy Code</button>
-                    <button class="btn btn-sm btn-outline-success fs-9" id="btn-run-mock-tests"><i class="fa-solid fa-play me-1"></i> Run Sample Tests</button>
-                  </div>
-                </div>
+              <!-- Peer Feedback Notes -->
+              <div>
+                <label class="form-label text-secondary fs-9 fw-semibold mb-1">Interviewer Constructive Feedback & Red Flags</label>
+                <textarea id="mock-feedback-notes" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50 p-2 fs-8 font-monospace" rows="3" placeholder="e.g. Strong high-level architecture. Could articulate memory complexity in the sliding window earlier."></textarea>
               </div>
             </div>
           </div>
@@ -1561,297 +1853,301 @@
     `;
   };
 
+
   window.bindPeerMockEvents = () => {
-    let timerInterval = null;
-    let secondsLeft = 1800;
-    let timerPaused = false;
+    let mockTimer = null;
+    let mockSeconds = 1800; // 30 mins
+    let timerRunning = false;
+    let activePart = 'A';
+    let currentProblem = DEFAULT_MOCK_ROUNDS[0];
+    let shadowQuestionIdx = 0;
 
-    const startBtn = document.getElementById('btn-start-mock-session');
-    const endBtn = document.getElementById('btn-end-mock-session');
-    const pauseBtn = document.getElementById('btn-timer-pause');
-    const submitRubricBtn = document.getElementById('btn-submit-rubric');
-    const qSelect = document.getElementById('mock-select-question');
-    const hintsToggleBtn = document.getElementById('btn-toggle-secret-hints');
-    const hintsContainer = document.getElementById('arena-hints');
-    const exportDebriefBtn = document.getElementById('btn-export-debrief');
-    const runTestsBtn = document.getElementById('btn-run-mock-tests');
-    const copyCodeBtn = document.getElementById('btn-copy-code');
-    const clearCodeBtn = document.getElementById('btn-clear-scratchpad');
+    const timerDisplay = document.getElementById('timer-display');
+    const timerBtn = document.getElementById('btn-timer-toggle');
+    const timerIcon = document.getElementById('timer-icon');
+    const turnBadge = document.getElementById('turn-badge');
 
-    if (startBtn) {
-      startBtn.addEventListener('click', () => {
-        const qId = qSelect ? qSelect.value : 'mock-q-1';
-        const question = MOCK_QUESTIONS.find(q => q.id === qId) || MOCK_QUESTIONS[0];
+    function updateTimerUI() {
+      const m = Math.floor(mockSeconds / 60);
+      const s = mockSeconds % 60;
+      if (timerDisplay) timerDisplay.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
 
-        document.getElementById('mock-setup-container').style.display = 'none';
-        document.getElementById('mock-arena-active').style.display = 'block';
-
-        document.getElementById('arena-title').textContent = `${question.domain}: ${question.title}`;
-        document.getElementById('arena-description').textContent = question.description;
-        if (hintsContainer) {
-          hintsContainer.innerHTML = question.hints.map(h => `<div class="mb-1">&bull; ${h}</div>`).join('');
-          hintsContainer.style.display = 'none';
-        }
-        const toggleText = document.getElementById('hints-toggle-text');
-        if (toggleText) toggleText.textContent = 'Show Hints';
-
-        const rubricContainer = document.getElementById('arena-rubric-items');
-        if (rubricContainer) {
-          rubricContainer.innerHTML = question.rubricItems.map((r, i) => `
-            <div class="d-flex justify-content-between align-items-center p-2 rounded bg-black bg-opacity-40 border border-secondary border-opacity-25 fs-8">
-              <span class="text-light">${r.name} (${r.weight}%)</span>
-              <div class="btn-group btn-group-sm" role="group">
-                <input type="radio" class="btn-check rubric-radio" name="rubric-score-${i}" id="sc-${i}-1" value="1" data-weight="${r.weight}">
-                <label class="btn btn-outline-secondary fs-9" for="sc-${i}-1">1</label>
-                <input type="radio" class="btn-check rubric-radio" name="rubric-score-${i}" id="sc-${i}-2" value="2" data-weight="${r.weight}">
-                <label class="btn btn-outline-secondary fs-9" for="sc-${i}-2">2</label>
-                <input type="radio" class="btn-check rubric-radio" name="rubric-score-${i}" id="sc-${i}-3" value="3" checked data-weight="${r.weight}">
-                <label class="btn btn-outline-secondary fs-9" for="sc-${i}-3">3</label>
-                <input type="radio" class="btn-check rubric-radio" name="rubric-score-${i}" id="sc-${i}-4" value="4" data-weight="${r.weight}">
-                <label class="btn btn-outline-secondary fs-9" for="sc-${i}-4">4</label>
-                <input type="radio" class="btn-check rubric-radio" name="rubric-score-${i}" id="sc-${i}-5" value="5" data-weight="${r.weight}">
-                <label class="btn btn-outline-secondary fs-9" for="sc-${i}-5">5</label>
-              </div>
-            </div>
-          `).join('');
-
-          // Bind recalculation
-          document.querySelectorAll('.rubric-radio').forEach(r => {
-            r.addEventListener('change', calculateRubricScore);
-          });
-        }
-
-        AudioSynth.playChime(440, 880, 0.4);
-
-        secondsLeft = 1800;
-        timerPaused = false;
-        clearInterval(timerInterval);
-        timerInterval = setInterval(() => {
-          if (!timerPaused) {
-            secondsLeft--;
-            if (secondsLeft <= 0) {
-              clearInterval(timerInterval);
-              AudioSynth.playChime(880, 440, 1.2);
-              safeToast('Time is up for this 30-minute round!', 'warning');
+    if (timerBtn) {
+      timerBtn.addEventListener('click', () => {
+        if (!timerRunning) {
+          timerRunning = true;
+          if (timerIcon) timerIcon.className = 'fa-solid fa-pause';
+          AudioSynth.playChime(523, 784, 0.2);
+          mockTimer = setInterval(() => {
+            if (mockSeconds > 0) {
+              mockSeconds--;
+              updateTimerUI();
+            } else {
+              clearInterval(mockTimer);
+              timerRunning = false;
+              AudioSynth.playChime(660, 880, 0.4);
+              if (activePart === 'A') {
+                activePart = 'B';
+                mockSeconds = 1800;
+                if (turnBadge) {
+                  turnBadge.textContent = 'Turn: Part B (Candidate Interviews You)';
+                  turnBadge.className = 'badge bg-warning font-monospace fs-9';
+                }
+                updateTimerUI();
+                safeToast('Part A complete! Switching turns to Part B (30 mins).', 'warning');
+              } else {
+                safeToast('Mock Interview round finished!', 'success');
+              }
             }
-            const m = Math.floor(secondsLeft / 60).toString().padStart(2, '0');
-            const s = (secondsLeft % 60).toString().padStart(2, '0');
-            const timerEl = document.getElementById('arena-timer');
-            if (timerEl) timerEl.textContent = `${m}:${s}`;
-          }
-        }, 1000);
+          }, 1000);
+        } else {
+          clearInterval(mockTimer);
+          timerRunning = false;
+          if (timerIcon) timerIcon.className = 'fa-solid fa-play';
+        }
       });
     }
 
-    function calculateRubricScore() {
-      let total = 0;
-      let count = 0;
-      document.querySelectorAll('.rubric-radio:checked').forEach(radio => {
-        total += parseFloat(radio.value);
-        count++;
-      });
-      const avg = count ? (total / count).toFixed(1) : '3.0';
-      const badge = document.getElementById('rubric-score-badge');
-      if (badge) {
-        badge.textContent = `Score: ${avg} / 5.0`;
-        if (avg >= 4.0) badge.className = 'badge bg-success bg-opacity-25 text-success border border-success border-opacity-40 font-monospace fs-9';
-        else if (avg >= 3.0) badge.className = 'badge bg-primary bg-opacity-25 text-info border border-primary border-opacity-40 font-monospace fs-9';
-        else badge.className = 'badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-40 font-monospace fs-9';
+    // Problem Select
+    function syncProblemData(prob) {
+      currentProblem = prob;
+      const titleEl = document.getElementById('mock-problem-title');
+      const descEl = document.getElementById('mock-problem-desc');
+      const hintsList = document.getElementById('hints-list');
+      const shadowQ = document.getElementById('ai-shadow-question-text');
+      const langSel = document.getElementById('scratchpad-lang');
+      const editor = document.getElementById('mock-code-editor');
+
+      if (titleEl) titleEl.textContent = `[${prob.type}] ${prob.title}`;
+      if (descEl) descEl.textContent = prob.description;
+      if (hintsList) {
+        hintsList.innerHTML = prob.hints.map(h => `<li class="mb-1">${h}</li>`).join('');
+      }
+      if (shadowQ) {
+        shadowQuestionIdx = 0;
+        shadowQ.textContent = prob.shadowFollowUps[0] || 'Explain your high-level architecture decisions.';
+      }
+
+      const lang = langSel ? langSel.value : 'java';
+      if (editor && prob.starterCode && prob.starterCode[lang]) {
+        editor.value = prob.starterCode[lang];
       }
     }
 
-    if (hintsToggleBtn) {
-      hintsToggleBtn.addEventListener('click', () => {
-        if (!hintsContainer) return;
-        const isHidden = hintsContainer.style.display === 'none';
-        hintsContainer.style.display = isHidden ? 'block' : 'none';
-        const toggleText = document.getElementById('hints-toggle-text');
-        if (toggleText) toggleText.textContent = isHidden ? 'Hide Hints' : 'Show Hints';
-        AudioSynth.playChime(550, 700, 0.15);
+    const probSelect = document.getElementById('mock-problem-select');
+    if (probSelect) {
+      probSelect.addEventListener('change', () => {
+        const p = DEFAULT_MOCK_ROUNDS.find(r => r.id === probSelect.value) || DEFAULT_MOCK_ROUNDS[0];
+        syncProblemData(p);
+      });
+      syncProblemData(DEFAULT_MOCK_ROUNDS[0]);
+    }
+
+    // Language Select
+    const langSelect = document.getElementById('scratchpad-lang');
+    if (langSelect) {
+      langSelect.addEventListener('change', () => {
+        const lang = langSelect.value;
+        const editor = document.getElementById('mock-code-editor');
+        if (editor && currentProblem && currentProblem.starterCode && currentProblem.starterCode[lang]) {
+          editor.value = currentProblem.starterCode[lang];
+        }
       });
     }
 
-    if (pauseBtn) {
-      pauseBtn.addEventListener('click', () => {
-        timerPaused = !timerPaused;
-        pauseBtn.innerHTML = timerPaused ? '<i class="fa-solid fa-play text-success"></i>' : '<i class="fa-solid fa-pause"></i>';
-        safeToast(timerPaused ? 'Timer paused' : 'Timer resumed', 'info');
+    // Secret Hints Toggle
+    const hintsBtn = document.getElementById('btn-toggle-secret-hints');
+    if (hintsBtn) {
+      hintsBtn.addEventListener('click', () => {
+        const drawer = document.getElementById('secret-hints-drawer');
+        if (drawer) drawer.classList.toggle('d-none');
       });
     }
 
+    // Next AI Shadow Question
+    const nextShadowBtn = document.getElementById('btn-next-shadow-q');
+    if (nextShadowBtn) {
+      nextShadowBtn.addEventListener('click', () => {
+        if (currentProblem && currentProblem.shadowFollowUps) {
+          shadowQuestionIdx = (shadowQuestionIdx + 1) % currentProblem.shadowFollowUps.length;
+          const shadowQ = document.getElementById('ai-shadow-question-text');
+          if (shadowQ) shadowQ.textContent = currentProblem.shadowFollowUps[shadowQuestionIdx];
+          AudioSynth.playChime(660, 880, 0.15);
+        }
+      });
+    }
+
+    // Run Mock Tests
+    const runTestsBtn = document.getElementById('btn-run-mock-tests');
     if (runTestsBtn) {
       runTestsBtn.addEventListener('click', () => {
-        const code = document.getElementById('arena-code-editor')?.value || '';
-        const statusEl = document.getElementById('scratchpad-status');
-        if (!code.trim()) {
-          safeToast('Write some code first before running sample tests', 'warning');
-          return;
-        }
-        if (statusEl) statusEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-warning me-1"></i> Running tests...';
-        setTimeout(() => {
-          AudioSynth.playChime(660, 880, 0.3);
-          if (statusEl) statusEl.innerHTML = '<span class="text-success"><i class="fa-solid fa-circle-check me-1"></i> 3/3 Sample Test Cases Passed (21ms)</span>';
-          safeToast('Mock dry-run completed successfully!', 'success');
-        }, 800);
-      });
-    }
-
-    if (copyCodeBtn) {
-      copyCodeBtn.addEventListener('click', () => {
-        const code = document.getElementById('arena-code-editor')?.value;
-        if (code) {
-          navigator.clipboard.writeText(code).then(() => {
-            AudioSynth.playChime(523, 659, 0.2);
-            safeToast('Candidate code copied to clipboard!', 'success');
-          });
+        const term = document.getElementById('test-console-output');
+        if (term) {
+          term.classList.remove('d-none');
+          term.innerHTML = '<span class="text-warning"><i class="fa-solid fa-spinner fa-spin me-1"></i> Compiling candidate source & running unit test assertions...</span>';
+          setTimeout(() => {
+            term.innerHTML = `
+              <span class="text-success fw-bold"><i class="fa-solid fa-circle-check me-1"></i> All 4/4 Test Assertions Passed (24ms)</span>
+              <div class="text-muted mt-1">&gt; testConcurrentThroughputQuota()... PASSED (0.8ms)<br>&gt; testRateLimiterEviction()... PASSED (1.4ms)<br>&gt; testSlidingWindowBurstTolerant()... PASSED (2.1ms)</div>
+            `;
+            AudioSynth.playChime(587, 880, 0.25);
+          }, 600);
         }
       });
     }
 
-    if (clearCodeBtn) {
-      clearCodeBtn.addEventListener('click', () => {
-        const ed = document.getElementById('arena-code-editor');
-        if (ed && confirm('Clear the code scratchpad?')) {
-          ed.value = '';
-          safeToast('Scratchpad cleared', 'info');
+    // Rubric Sliders
+    function updateRubricScore() {
+      const v1 = parseFloat(document.getElementById('rubric-1')?.value || 3.5);
+      const v2 = parseFloat(document.getElementById('rubric-2')?.value || 3.5);
+      const v3 = parseFloat(document.getElementById('rubric-3')?.value || 3.5);
+      const v4 = parseFloat(document.getElementById('rubric-4')?.value || 3.5);
+
+      const disp1 = document.getElementById('val-rubric-1');
+      const disp2 = document.getElementById('val-rubric-2');
+      const disp3 = document.getElementById('val-rubric-3');
+      const disp4 = document.getElementById('val-rubric-4');
+
+      if (disp1) disp1.textContent = `${v1.toFixed(1)} / 5.0`;
+      if (disp2) disp2.textContent = `${v2.toFixed(1)} / 5.0`;
+      if (disp3) disp3.textContent = `${v3.toFixed(1)} / 5.0`;
+      if (disp4) disp4.textContent = `${v4.toFixed(1)} / 5.0`;
+
+      const composite = ((v1 + v2 + v3 + v4) / 4).toFixed(1);
+      const compEl = document.getElementById('composite-score-val');
+      const badgeEl = document.getElementById('rubric-grade-badge');
+
+      if (compEl) compEl.textContent = `${composite} / 5.0`;
+      if (badgeEl) {
+        if (composite >= 4.5) {
+          badgeEl.textContent = 'Strong Hire (L6/FAANG Ready)';
+          badgeEl.className = 'badge bg-success bg-opacity-20 text-success border border-success border-opacity-40';
+        } else if (composite >= 3.8) {
+          badgeEl.textContent = 'Solid Hire (L5 Bar)';
+          badgeEl.className = 'badge bg-info bg-opacity-20 text-info border border-info border-opacity-40';
+        } else if (composite >= 3.0) {
+          badgeEl.textContent = 'Leaning Hire';
+          badgeEl.className = 'badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-40';
+        } else {
+          badgeEl.textContent = 'Needs More Practice';
+          badgeEl.className = 'badge bg-danger bg-opacity-20 text-danger border border-danger border-opacity-40';
         }
-      });
+      }
     }
 
+    document.querySelectorAll('.rubric-slider').forEach(slider => {
+      slider.addEventListener('input', updateRubricScore);
+    });
+
+    // Export Debrief
+    const exportDebriefBtn = document.getElementById('btn-export-mock-debrief');
     if (exportDebriefBtn) {
       exportDebriefBtn.addEventListener('click', () => {
-        const title = document.getElementById('arena-title')?.textContent || 'Mock Technical Round';
-        const rec = document.getElementById('arena-hire-rec')?.value || 'Hire';
-        const code = document.getElementById('arena-code-editor')?.value || '// No code written';
-        const debrief = `# PrepSpace Interview Debrief\n\n**Problem**: ${title}\n**Date**: ${new Date().toLocaleDateString()}\n**Verdict**: ${rec}\n\n## Candidate Solution\n\`\`\`\n${code}\n\`\`\`\n\n*Debrief compiled via PrepSpace Peer Mock Arena.*`;
-        navigator.clipboard.writeText(debrief).then(() => {
-          AudioSynth.playChime(587, 880, 0.3);
-          safeToast('Complete interview debrief copied to clipboard!', 'success');
+        const v1 = document.getElementById('val-rubric-1')?.textContent || '3.5';
+        const v2 = document.getElementById('val-rubric-2')?.textContent || '3.5';
+        const v3 = document.getElementById('val-rubric-3')?.textContent || '3.5';
+        const v4 = document.getElementById('val-rubric-4')?.textContent || '3.5';
+        const comp = document.getElementById('composite-score-val')?.textContent || '3.5 / 5.0';
+        const notes = document.getElementById('mock-feedback-notes')?.value || 'Solid round performance.';
+        const code = document.getElementById('mock-code-editor')?.value || '';
+
+        const report = `# FAANG Mock Interview Debrief Report\n**Date**: ${new Date().toISOString().slice(0, 10)}\n**Problem**: ${currentProblem.title} (${currentProblem.type})\n**Composite Score**: ${comp}\n\n## Rubric Breakdown\n- 1. Problem Decomposition: ${v1}\n- 2. Architecture & Scalability: ${v2}\n- 3. Code Correctness: ${v3}\n- 4. Communication & Poise: ${v4}\n\n## Interviewer Notes\n${notes}\n\n## Candidate Code Snapshot\n\`\`\`\n${code}\n\`\`\`\n`;
+
+        navigator.clipboard.writeText(report).then(() => {
+          AudioSynth.playChime(523, 784, 0.25);
+          safeToast('Mock Interview debrief report copied to clipboard!', 'success');
         });
-      });
-    }
-
-    function exitArena() {
-      clearInterval(timerInterval);
-      document.getElementById('mock-setup-container').style.display = 'flex';
-      document.getElementById('mock-arena-active').style.display = 'none';
-    }
-
-    if (endBtn) endBtn.addEventListener('click', exitArena);
-
-    if (submitRubricBtn) {
-      submitRubricBtn.addEventListener('click', () => {
-        let karma = parseInt(localStorage.getItem('prepspace_peer_karma') || '100', 10);
-        karma += 50;
-        localStorage.setItem('prepspace_peer_karma', karma.toString());
-
-        const rec = document.getElementById('arena-hire-rec')?.value || 'Hire';
-        AudioSynth.playChime(523, 784, 0.5);
-        safeToast(`Scorecard submitted! Recommendation: ${rec}. Awarded +50 Karma!`, 'success');
-
-        const karmaDisp = document.getElementById('peer-karma-display');
-        if (karmaDisp) karmaDisp.textContent = karma + ' pts';
-
-        exitArena();
       });
     }
   };
 
+
   // =========================================================================
-  // 4. 60-SECOND FEYNMAN AUDIO BITES WITH STUDIO PODCAST ENGINE (#/audio-bites)
+  // 4. 60-SECOND FEYNMAN AUDIO BITES (#/audio-bites)
   // =========================================================================
 
-  const AUDIO_BITES_DATA = [
+  const DEFAULT_AUDIO_BITES = [
     {
-      id: 'bite-1',
+      id: 'feynman-1',
       title: 'The CAP Theorem & PACELC Trade-offs',
       category: 'Distributed Systems',
-      duration: '60s',
-      analogy: 'A three-legged stool where network cables can get cut by a backhoe.',
-      script: 'In any distributed data store, you can only pick two of three guarantees: Consistency, Availability, and Partition Tolerance. But in the real world, network partitions are inevitable. Therefore, you are really choosing between CP or AP. If the network splits, do you reject writes to preserve exact consistency like MongoDB or Spanner? Or do you accept writes and resolve conflicts later like Cassandra or DynamoDB? PACELC expands this: Else, when the network is normal, do you trade latency or consistency? Remember: real world architecture is always about picking which pain you prefer.'
+      durationSec: 68,
+      script: 'Imagine a distributed bank database split between New York and London. The CAP Theorem states that when a network cable under the Atlantic snaps, creating a network partition, you must make a hard choice. Either you choose Consistency, meaning both servers refuse withdrawals until the network heals so account balances never drift apart, or you choose Availability, allowing customers in both cities to withdraw cash even though their local balances drift out of sync. But what happens during normal, happy-path operation when there is no partition? That is where the PACELC theorem comes in. It proves that even in healthy networks, you must trade Latency against Consistency. Synchronously waiting for both cities to acknowledge every update guarantees strict consistency, but skyrockets write latency. In high-scale system design, you almost always choose PACELC latency optimization with eventual consistency.',
+      recallQuestion: 'What fundamental trade-off does the PACELC extension describe during non-partitioned normal operations?',
+      recallAnswer: 'PACELC proves that during normal operations (else: E), a distributed system must still choose between Latency (L) and Consistency (C). Replicating data synchronously guarantees consistency but penalizes latency.'
     },
     {
-      id: 'bite-2',
-      title: 'B-Trees vs LSM-Trees: Storage Engine Internals',
-      category: 'Database Engines',
-      duration: '65s',
-      analogy: 'A printed phonebook versus a fast receipt spike at a diner counter.',
-      script: 'Why do traditional databases like Postgres use B-Trees, while high-write databases like Cassandra, RocksDB, and Kafka use Log-Structured Merge Trees? A B-Tree is like a printed phonebook. Reading any ones number is fast because pages are sorted, but inserting a new name requires erasing and re-shifting entries on disk, which causes slow random disk I/O. An LSM Tree is like a receipt spike at a diner. When an order happens, you just impale the receipt on top—that is an append-only sequential write, which is blazingly fast. Later, in the background, a worker merges those receipts into structured files. B-Trees optimize for reads; LSM trees optimize for furious write throughput.'
-    },
-    {
-      id: 'bite-3',
-      title: 'TCP 3-Way Handshake: The Walkie-Talkie Protocol',
-      category: 'Networking',
-      duration: '50s',
-      analogy: 'SYN, SYN-ACK, ACK explained like pilots communicating over radio.',
-      script: 'Before a browser can send a single byte of HTTP data over TCP, it performs the 3-way handshake. Think of two pilots over radio. Pilot A says: Tower, can you hear me? Syn. The tower replies: Loud and clear Pilot A, can you hear me? Syn, Ack. Pilot A responds: Copy that Tower, connection established, sending flight plan: Ack. Only after this confirmation can full-duplex reliable byte transmission begin. This is why TCP has an initial 1-Round-Trip-Time latency penalty before any data flows.'
-    },
-    {
-      id: 'bite-4',
-      title: 'Consistent Hashing: The Circular Roulette Wheel',
-      category: 'System Design',
-      duration: '70s',
-      analogy: 'A circular roulette ring where both servers and keys are placed as angle degrees.',
-      script: 'When you have 10 cache servers and calculate server equals hash of key mod 10, what happens if server 5 crashes? Now you must mod 9, which relocates 90 percent of your cached keys and causes a catastrophic database stampede. Consistent Hashing solves this by placing both servers and keys onto a 360-degree virtual ring. When a key looks for its cache server, it simply travels clockwise along the ring until it hits the first server. If one server dies, only the keys directly preceding it shift to the next neighbor—the remaining 90 percent of keys stay exactly where they were.'
-    },
-    {
-      id: 'bite-5',
-      title: 'Mutex vs Semaphore: The Coffee Shop Bathroom Key',
-      category: 'Operating Systems & Concurrency',
-      duration: '55s',
-      analogy: 'A single bathroom key held by one customer versus 4 bowling lane passes.',
-      script: 'What is the difference between a Mutex and a Counting Semaphore? A Mutex is a mutual exclusion lock: think of a single coffee shop bathroom key. Only one customer can hold the key. While they are inside, everyone else waits in line. Crucially, only the person who took the key is allowed to unlock and return it. A Semaphore is like a bowling alley with 4 lanes. It has a counter initialized to 4. As customers arrive, the counter decrements. When it hits zero, newcomers wait. When any bowler finishes, the counter increments. A mutex allows 1 owner; a semaphore controls access to a pool of finite resources.'
-    },
-    {
-      id: 'bite-6',
-      title: 'Zero-Copy Architecture: Kafka & Linux sendfile()',
-      category: 'Operating Systems & Messaging',
-      duration: '60s',
-      analogy: 'Directly transferring an envelope across desks instead of copying it 4 times.',
-      script: 'How does Apache Kafka stream gigabytes per second without melting the CPU? Traditional I/O reads data from disk into OS kernel cache, copies it to JVM user space, then copies it back to the kernel socket buffer, and finally to the network card. That is four memory copies and four expensive context switches! Zero-copy uses the Linux sendfile system call: data is read from disk straight into kernel memory and transferred directly to the network interface card via DMA. The CPU never touches the payload. That is how Kafka achieves raw network wire speed.'
-    },
-    {
-      id: 'bite-7',
-      title: 'Database Isolation Levels: Dirty Reads to Serializable',
+      id: 'feynman-2',
+      title: 'B-Trees vs LSM-Trees: Database Storage Engines',
       category: 'Database Internals',
-      duration: '65s',
-      analogy: 'Drafting Google Docs with or without seeing uncommitted colleague edits.',
-      script: 'Database transactions need isolation, but high isolation kills throughput. The standard ANSI SQL levels are four: Read Uncommitted lets you see uncommitted drafts, causing dirty reads. Read Committed guarantees you only read finalized transactions, but a query running twice might see different values, which is a non-repeatable read. Repeatable Read locks the snapshot of rows you inspected, preventing updates, but phantom rows can still sneak in. Finally, Serializable orders all transactions as if run one after another, eliminating all anomalies at the cost of high concurrency lock contention. Most production systems default to Read Committed for optimal balance.'
+      durationSec: 62,
+      script: 'Why do Postgres and MySQL use B-Trees while Cassandra and RocksDB use Log-Structured Merge Trees? A B-Tree is an in-place update engine. When you update a user row, the database traverses pointers down to the exact 8-kilobyte leaf page on disk and rewrites that page in-place. This provides blistering, deterministic read speeds because looking up a single key requires traversing a shallow, balanced tree. But random disk writes cause severe write amplification. In contrast, an LSM-Tree never updates disk pages in place. All writes are appended sequentially to an in-memory MemTable and committed to an append-only Write-Ahead Log. Once full, the MemTable is flushed to disk as an immutable SSTable. This delivers 10x higher write throughput, but reads must check multiple levels of Bloom filters and SSTables. Remember: B-Trees for read-heavy workloads, LSM-Trees for extreme write throughput.',
+      recallQuestion: 'Why does an LSM-Tree drastically outperform a B-Tree on high-frequency write workloads?',
+      recallAnswer: 'LSM-Trees append all writes sequentially to memory and sequential disk files (SSTables), avoiding the high-cost random page overwrites and disk head seeks inherent in B-Trees.'
+    },
+    {
+      id: 'feynman-3',
+      title: 'Zero-Copy Architecture: Kafka, sendfile, and Kernel Space',
+      category: 'Operating Systems & Messaging',
+      durationSec: 65,
+      script: 'How does Apache Kafka stream gigabytes of telemetry per second with virtually zero CPU utilization? In traditional web architectures, moving a file from disk to a network socket requires 4 context switches and 4 data copies between kernel space and user space. The operating system copies bytes from disk into the page cache, then copies them into your application buffer in user space, then copies them back down to the socket buffer in kernel space, and finally copies them to the Network Interface Card. Kafka eliminates this redundancy using the Linux sendfile system call, commonly known as Zero-Copy. The data is pulled directly from the OS page cache straight to the network interface buffer using Direct Memory Access. The CPU never touches the payload, user space is bypassed completely, and throughput reaches hardware wire speed.',
+      recallQuestion: 'What system call does Kafka leverage to achieve zero-copy data transfer, and what is bypassed?',
+      recallAnswer: 'Kafka leverages the Linux sendfile system call. It transfers data directly from the kernel page cache to the network socket buffer via DMA, completely bypassing user-space memory copies and context switches.'
+    },
+    {
+      id: 'feynman-4',
+      title: 'Consistent Hashing & Virtual Nodes in Distributed Systems',
+      category: 'Distributed Systems',
+      durationSec: 59,
+      script: 'When caching millions of user sessions across 100 Redis servers, using a simple modulus operator like user ID modulo N is disastrous. The moment one cache node crashes or a new node is added, ninety-nine percent of all keys rehash to different servers, causing an immediate thundering herd cache stampede on your primary database. Consistent Hashing solves this by mapping both cache servers and data keys onto a virtual 360-degree ring from zero to two to the power of thirty-two minus one. A key is stored on the first server encountered moving clockwise. When a node fails, only the keys assigned to that single node must be remapped. Furthermore, by assigning multiple virtual nodes or replicas to each physical server on the ring, consistent hashing guarantees a perfectly uniform distribution of traffic and prevents hot-spot servers.',
+      recallQuestion: 'Why are Virtual Nodes introduced into Consistent Hashing rings?',
+      recallAnswer: 'Virtual nodes prevent hot-spots and non-uniform data clustering by mapping each physical machine to hundreds of pseudorandom positions along the hash ring, ensuring uniform load distribution.'
+    },
+    {
+      id: 'feynman-5',
+      title: 'Database Isolation Levels: Dirty Reads to Serializable',
+      category: 'Database Concurrency',
+      durationSec: 64,
+      script: 'When multiple database transactions execute concurrently, what prevents financial data corruption? SQL defines four isolation levels. At Read Uncommitted, transactions can read uncommitted dirty writes that might be rolled back. At Read Committed, dirty reads are eliminated, but non-repeatable reads occur: if you query the same row twice, another transaction could update and commit it between your queries. Repeatable Read fixes this using snapshot isolation and multi-version concurrency control, guaranteeing that you always see data as it existed when your transaction started. However, phantom reads can still occur where new matching rows appear. Finally, Serializable isolation provides strict mathematical serial execution, eliminating all anomalies using two-phase locking or serializable snapshot isolation at the cost of higher transaction aborts and latency.',
+      recallQuestion: 'What is the difference between a Non-Repeatable Read and a Phantom Read?',
+      recallAnswer: 'A non-repeatable read occurs when an existing row is modified by another transaction between queries. A phantom read occurs when another transaction inserts new rows that match the query filter criteria.'
     }
   ];
 
   components.feynmanAudio = () => {
     return `
-      <div class="container-fluid px-3 px-md-4 py-3">
+      <div class="container-fluid px-3 px-md-4 py-3 suite-scroll-container">
         <!-- Header -->
-        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom border-secondary border-opacity-15 gap-2">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-15 gap-2">
           <div>
             <div class="d-flex align-items-center gap-2">
               <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-50 font-monospace fs-9">STUDIO AUDIO PODCAST</span>
               <h4 class="text-white fw-bold m-0 fs-5">60-Second Feynman Audio Bites</h4>
             </div>
-            <p class="text-muted fs-8 mb-0 mt-1">Master distributed systems, database internals, and OS concurrency with high-definition podcast narration.</p>
+            <p class="text-muted fs-8 mb-0 mt-1">Master distributed systems, database internals, and OS concurrency with high-definition studio podcast narration.</p>
           </div>
           <div class="d-flex align-items-center gap-2">
             <!-- Studio Focus Bed Toggle -->
             <button class="btn btn-sm btn-glass text-warning border border-warning border-opacity-30 fs-9" id="btn-toggle-ambience">
               <i class="fa-solid fa-headphones me-1"></i> <span id="ambience-status-text">Studio Ambience: OFF</span>
             </button>
-            <span class="badge bg-dark border border-secondary border-opacity-30 text-white font-monospace fs-9">
-              <i class="fa-solid fa-microphone text-info me-1"></i>HD Speech Engine
-            </span>
+            <!-- Continuous Commute Playlist Toggle -->
+            <button class="btn btn-sm btn-glass text-info border border-info border-opacity-30 fs-9" id="btn-toggle-playlist">
+              <i class="fa-solid fa-forward-step me-1"></i> <span id="playlist-status-text">Auto-Play Next: OFF</span>
+            </button>
           </div>
         </div>
 
         <!-- Master Studio Audio Player -->
-        <div class="card bg-dark border-primary border-opacity-40 rounded-3 p-3 mb-4 shadow" id="master-audio-player">
+        <div class="card bg-dark border-primary border-opacity-40 rounded-3 p-3 mb-3 shadow" id="master-audio-player">
           <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
             <div class="d-flex align-items-center gap-3">
-              <button class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center shadow-lg" id="btn-audio-play-pause" style="width: 52px; height: 52px; min-width: 52px;">
+              <button class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center shadow-lg" id="btn-audio-play-pause" style="width: 50px; height: 50px; min-width: 50px;">
                 <i class="fa-solid fa-play fs-5" id="icon-play-state"></i>
               </button>
               <div>
-                <span class="badge bg-primary bg-opacity-20 text-info font-monospace fs-9" id="player-category">SELECT A LESSON</span>
+                <span class="badge bg-primary bg-opacity-20 text-info font-monospace fs-9" id="player-category">SELECT A CONCEPT</span>
                 <h5 class="text-white fw-bold fs-6 m-0 mt-0.5" id="player-title">Click any concept card below to begin podcast playback</h5>
               </div>
             </div>
@@ -1896,7 +2192,7 @@
           </div>
 
           <!-- Progress Bar Scrubber -->
-          <div class="mt-3">
+          <div class="mt-2.5">
             <div class="progress" style="height: 5px; background: rgba(255,255,255,0.08);">
               <div id="audio-progress-bar" class="progress-bar bg-info" style="width: 0%; transition: width 0.3s linear;"></div>
             </div>
@@ -1911,31 +2207,42 @@
             <div class="d-flex justify-content-between align-items-center mb-1">
               <small class="text-secondary fs-9 font-monospace"><i class="fa-solid fa-quote-left me-1"></i> Interactive Podcast Transcript (Click any sentence to jump audio):</small>
             </div>
-            <div class="fs-8 text-light font-monospace p-2.5 rounded bg-black bg-opacity-40 border border-secondary border-opacity-25" id="player-transcript" style="line-height: 1.8;">
+            <div class="fs-8 text-light font-monospace p-2 rounded bg-black bg-opacity-40 border border-secondary border-opacity-25" id="player-transcript" style="line-height: 1.8;">
               Select any concept card below to begin narration.
+            </div>
+          </div>
+
+          <!-- Active Recall Challenge Block (Revealed after audio) -->
+          <div class="mt-2.5 pt-2 border-top border-warning border-opacity-30 d-none" id="recall-challenge-block">
+            <div class="p-2.5 rounded bg-warning bg-opacity-10 border border-warning border-opacity-30">
+              <div class="d-flex align-items-center justify-content-between mb-1">
+                <span class="badge bg-warning text-dark fw-bold font-monospace fs-9"><i class="fa-solid fa-bolt me-1"></i>Post-Lesson Active Recall Challenge:</span>
+                <button class="btn btn-glass py-0.5 px-2 fs-9 text-warning" id="btn-reveal-recall-answer">Reveal Model Answer</button>
+              </div>
+              <p class="fs-8 text-white fw-semibold mb-1" id="recall-q-text"></p>
+              <div class="p-2 rounded bg-black bg-opacity-60 border border-secondary border-opacity-30 fs-8 text-info font-monospace d-none" id="recall-a-text"></div>
             </div>
           </div>
         </div>
 
-        <!-- Concepts Catalog -->
+        <!-- Concepts Catalog Grid -->
         <div class="row g-3">
-          ${AUDIO_BITES_DATA.map((bite, i) => `
+          ${DEFAULT_AUDIO_BITES.map((bite, index) => `
             <div class="col-12 col-md-6 col-xl-4">
-              <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-3 h-100 shadow-sm feynman-card" data-id="${bite.id}">
+              <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-3 h-100 shadow-sm feynman-card position-relative" data-id="${bite.id}">
                 <div class="d-flex justify-content-between align-items-start mb-2">
-                  <span class="badge bg-secondary bg-opacity-25 text-info border border-secondary border-opacity-20 font-monospace fs-9">${bite.category}</span>
-                  <span class="text-muted font-monospace fs-9"><i class="fa-regular fa-clock me-1"></i>${bite.duration}</span>
+                  <span class="badge bg-secondary bg-opacity-30 text-info border border-secondary border-opacity-30 font-monospace fs-9">${bite.category}</span>
+                  <span class="text-muted fs-9 font-monospace"><i class="fa-regular fa-clock me-1"></i>${bite.durationSec}s</span>
                 </div>
                 <h6 class="text-white fw-bold fs-7 mb-2">${bite.title}</h6>
-                <div class="p-2.5 bg-black bg-opacity-40 rounded border-start border-2 border-warning mb-3">
-                  <span class="fs-9 text-warning font-monospace d-block">Intuitive Analogy:</span>
-                  <small class="fs-8 text-secondary">${bite.analogy}</small>
-                </div>
-                <div class="mt-auto pt-2 border-top border-secondary border-opacity-15 d-flex justify-content-between align-items-center">
-                  <button class="btn btn-sm btn-primary py-1 px-3 fs-9 play-bite-btn" data-id="${bite.id}">
-                    <i class="fa-solid fa-play me-1"></i> Listen (${bite.duration})
+                <p class="text-secondary fs-8 mb-3" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5;">
+                  ${bite.script}
+                </p>
+                <div class="mt-auto d-flex justify-content-between align-items-center pt-2 border-top border-secondary border-opacity-20">
+                  <span class="fs-9 text-muted font-monospace">Track #${index + 1}</span>
+                  <button class="btn btn-sm btn-outline-info py-1 px-3 play-bite-btn" data-id="${bite.id}">
+                    <i class="fa-solid fa-play me-1"></i> Listen
                   </button>
-                  <button class="btn btn-sm btn-glass text-muted fs-9 copy-bite-btn" data-id="${bite.id}"><i class="fa-solid fa-copy me-1"></i> Copy</button>
                 </div>
               </div>
             </div>
@@ -1945,77 +2252,104 @@
     `;
   };
 
+
   window.bindFeynmanAudioEvents = () => {
+    let currentBite = null;
     let currentUtterance = null;
     let isPlaying = false;
-    let currentBite = AUDIO_BITES_DATA[0];
-    let currentSpeed = 1.0;
+    let currentPlaybackRate = 1.0;
     let currentPersona = 'host_deep';
-    let ambienceActive = false;
     let progressTimer = null;
     let elapsedSeconds = 0;
+    let ambienceEnabled = false;
+    let continuousPlaylist = false;
+    let currentBiteIndex = 0;
+
     let sentenceList = [];
     let activeSentenceIndex = 0;
 
     const playPauseBtn = document.getElementById('btn-audio-play-pause');
     const playIcon = document.getElementById('icon-play-state');
-    const titleEl = document.getElementById('player-title');
-    const catEl = document.getElementById('player-category');
-    const transcriptEl = document.getElementById('player-transcript');
-    const waveformEl = document.getElementById('audio-waveform-bars');
+    const playerCategory = document.getElementById('player-category');
+    const playerTitle = document.getElementById('player-title');
+    const waveformBars = document.getElementById('audio-waveform-bars');
     const progressBar = document.getElementById('audio-progress-bar');
     const timeElapsedEl = document.getElementById('audio-time-elapsed');
     const timeTotalEl = document.getElementById('audio-time-total');
+    const transcriptEl = document.getElementById('player-transcript');
+    const speedBtn = document.getElementById('btn-audio-speed');
+    const personaLabel = document.getElementById('persona-label');
     const ambienceBtn = document.getElementById('btn-toggle-ambience');
-    const ambienceText = document.getElementById('ambience-status-text');
+    const ambienceStatus = document.getElementById('ambience-status-text');
+    const playlistBtn = document.getElementById('btn-toggle-playlist');
+    const playlistStatus = document.getElementById('playlist-status-text');
+    const recallBlock = document.getElementById('recall-challenge-block');
+    const recallQ = document.getElementById('recall-q-text');
+    const recallA = document.getElementById('recall-a-text');
+    const revealRecallBtn = document.getElementById('btn-reveal-recall-answer');
 
-    // Ambience focus bed toggle
+    // Ambience Toggle
     if (ambienceBtn) {
       ambienceBtn.addEventListener('click', () => {
-        ambienceActive = !ambienceActive;
-        if (ambienceActive) {
+        ambienceEnabled = !ambienceEnabled;
+        if (ambienceEnabled) {
           AudioSynth.startAmbience();
-          if (ambienceText) ambienceText.textContent = 'Studio Ambience: ON';
-          ambienceBtn.className = 'btn btn-sm btn-warning text-dark border border-warning fs-9';
-          safeToast('Studio room ambience bed activated', 'info');
+          ambienceBtn.className = 'btn btn-sm btn-warning text-dark border-0 fs-9';
+          if (ambienceStatus) ambienceStatus.textContent = 'Studio Ambience: ON';
+          safeToast('432Hz focus drone & room tone enabled', 'info');
         } else {
           AudioSynth.stopAmbience();
-          if (ambienceText) ambienceText.textContent = 'Studio Ambience: OFF';
           ambienceBtn.className = 'btn btn-sm btn-glass text-warning border border-warning border-opacity-30 fs-9';
-          safeToast('Studio ambience paused', 'info');
+          if (ambienceStatus) ambienceStatus.textContent = 'Studio Ambience: OFF';
         }
       });
     }
 
-    function stopPlayback() {
-      if (window.speechSynthesis) {
-        window.speechSynthesis.cancel();
-      }
-      isPlaying = false;
-      clearInterval(progressTimer);
-      if (playIcon) playIcon.className = 'fa-solid fa-play fs-5';
-      if (waveformEl) waveformEl.classList.remove('active');
+    // Playlist Toggle
+    if (playlistBtn) {
+      playlistBtn.addEventListener('click', () => {
+        continuousPlaylist = !continuousPlaylist;
+        if (continuousPlaylist) {
+          playlistBtn.className = 'btn btn-sm btn-info text-dark border-0 fs-9';
+          if (playlistStatus) playlistStatus.textContent = 'Auto-Play Next: ON';
+          safeToast('Continuous Commute Playlist enabled', 'info');
+        } else {
+          playlistBtn.className = 'btn btn-sm btn-glass text-info border border-info border-opacity-30 fs-9';
+          if (playlistStatus) playlistStatus.textContent = 'Auto-Play Next: OFF';
+        }
+      });
     }
 
-    function renderClickableTranscript(scriptText) {
-      // Split into sentences
+    // Reveal Active Recall Answer
+    if (revealRecallBtn && recallA) {
+      revealRecallBtn.addEventListener('click', () => {
+        recallA.classList.toggle('d-none');
+        revealRecallBtn.textContent = recallA.classList.contains('d-none') ? 'Reveal Model Answer' : 'Hide Answer';
+      });
+    }
+
+    function renderTranscript(scriptText) {
+      if (!transcriptEl) return;
       sentenceList = scriptText.match(/[^.!?]+[.!?]+/g) || [scriptText];
-      if (transcriptEl) {
+      if (sentenceList.length > 0) {
         transcriptEl.innerHTML = sentenceList.map((sen, idx) => `
           <span class="transcript-sentence ${idx === activeSentenceIndex ? 'active' : ''}" data-idx="${idx}" style="cursor: pointer; transition: all 0.2s ease;">
-            ${sen.trim()} 
+            ${sen.trim()}
           </span>
-        `).join('');
+        `).join(' ');
 
         transcriptEl.querySelectorAll('.transcript-sentence').forEach(span => {
           span.addEventListener('click', () => {
             const idx = parseInt(span.getAttribute('data-idx'), 10);
             activeSentenceIndex = idx;
-            // Seek and start speaking from this sentence
             const remainingScript = sentenceList.slice(idx).join(' ');
-            startPlayback(currentBite, remainingScript, idx);
+            if (currentBite) {
+              startPlayback(currentBite, remainingScript, idx);
+            }
           });
         });
+      } else {
+        transcriptEl.textContent = scriptText;
       }
     }
 
@@ -2036,59 +2370,85 @@
       });
     }
 
+    function stopPlayback() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      isPlaying = false;
+      if (progressTimer) {
+        clearInterval(progressTimer);
+        progressTimer = null;
+      }
+      if (playIcon) playIcon.className = 'fa-solid fa-play fs-5';
+      if (waveformBars) waveformBars.classList.remove('active');
+    }
+
     function startPlayback(bite, customScript = null, startSentenceIdx = 0) {
       stopPlayback();
       currentBite = bite;
+      currentBiteIndex = DEFAULT_AUDIO_BITES.findIndex(b => b.id === bite.id);
 
-      if (titleEl) titleEl.textContent = bite.title;
-      if (catEl) catEl.textContent = bite.category;
+      if (playerCategory) playerCategory.textContent = bite.category.toUpperCase();
+      if (playerTitle) playerTitle.textContent = bite.title;
 
-      const scriptToSpeak = customScript || bite.script;
-      renderClickableTranscript(bite.script);
+      const scriptToRead = customScript || bite.script;
+      if (!customScript) {
+        renderTranscript(bite.script);
+      }
       highlightSentence(startSentenceIdx);
 
-      if (!window.speechSynthesis) {
-        safeToast('Speech synthesis not supported on this browser', 'warning');
+      // Hide previous recall challenge
+      if (recallBlock) recallBlock.classList.add('d-none');
+      if (recallA) recallA.classList.add('d-none');
+      if (revealRecallBtn) revealRecallBtn.textContent = 'Reveal Model Answer';
+
+      if (!('speechSynthesis' in window)) {
+        safeToast('Web Speech API is not supported in this browser.', 'warning');
         return;
       }
 
-      const voiceConfig = VoiceEngine.getVoice(currentPersona);
-      const formatted = VoiceEngine.formatText(scriptToSpeak);
+      currentUtterance = new SpeechSynthesisUtterance(scriptToRead);
+      const selectedVoice = getBestVoice(currentPersona);
+      if (selectedVoice) currentUtterance.voice = selectedVoice;
 
-      currentUtterance = new SpeechSynthesisUtterance(formatted);
-      if (voiceConfig.voice) currentUtterance.voice = voiceConfig.voice;
-      currentUtterance.pitch = voiceConfig.pitch;
-      currentUtterance.rate = currentSpeed * voiceConfig.rate;
+      if (currentPersona === 'host_deep') {
+        currentUtterance.pitch = 0.92;
+        currentUtterance.rate = 0.98 * currentPlaybackRate;
+      } else if (currentPersona === 'host_smooth') {
+        currentUtterance.pitch = 0.98;
+        currentUtterance.rate = 0.98 * currentPlaybackRate;
+      } else {
+        currentUtterance.pitch = 0.95;
+        currentUtterance.rate = 0.96 * currentPlaybackRate;
+      }
 
-      // Estimate duration (words / ~2.5 words per sec adjusted for rate)
-      const words = scriptToSpeak.split(/\s+/).length;
-      const totalSec = Math.max(15, Math.round((words / (2.5 * currentSpeed))));
-      if (timeTotalEl) timeTotalEl.textContent = `0:${totalSec.toString().padStart(2, '0')}`;
+      const totalSec = Math.round(bite.durationSec / currentPlaybackRate);
+      if (!customScript) {
+        elapsedSeconds = 0;
+      } else {
+        elapsedSeconds = Math.round((startSentenceIdx / Math.max(1, sentenceList.length)) * totalSec);
+      }
 
-      elapsedSeconds = 0;
-      if (progressBar) progressBar.style.width = '0%';
-      if (timeElapsedEl) timeElapsedEl.textContent = '0:00';
+      if (timeTotalEl) {
+        const tm = Math.floor(totalSec / 60);
+        const ts = totalSec % 60;
+        timeTotalEl.textContent = `${tm}:${ts.toString().padStart(2, '0')}`;
+      }
 
       currentUtterance.onstart = () => {
         isPlaying = true;
         if (playIcon) playIcon.className = 'fa-solid fa-pause fs-5';
-        if (waveformEl) waveformEl.classList.add('active');
+        if (waveformBars) waveformBars.classList.add('active');
 
-        // Play subtle studio focus bed if enabled
-        if (ambienceActive) AudioSynth.startAmbience();
-
-        clearInterval(progressTimer);
         progressTimer = setInterval(() => {
           elapsedSeconds++;
-          const pct = Math.min(100, (elapsedSeconds / totalSec) * 100);
-          if (progressBar) progressBar.style.width = `${pct}%`;
+          const pct = Math.min(100, (elapsedSeconds / Math.max(1, totalSec)) * 100);
+          if (progressBar) progressBar.style.width = pct + '%';
           if (timeElapsedEl) {
-            const m = Math.floor(elapsedSeconds / 60);
-            const s = (elapsedSeconds % 60).toString().padStart(2, '0');
-            timeElapsedEl.textContent = `${m}:${s}`;
+            const em = Math.floor(elapsedSeconds / 60);
+            const es = elapsedSeconds % 60;
+            timeElapsedEl.textContent = `${em}:${es.toString().padStart(2, '0')}`;
           }
-
-          // Advance sentence highlight approx
           if (sentenceList.length > 1) {
             const sentenceDuration = totalSec / sentenceList.length;
             const targetIdx = Math.min(sentenceList.length - 1, Math.floor(elapsedSeconds / sentenceDuration));
@@ -2101,9 +2461,27 @@
         stopPlayback();
         if (progressBar) progressBar.style.width = '100%';
         highlightSentence(-1);
+        AudioSynth.playChime(660, 880, 0.25);
+
+        // Show Post-Lesson Active Recall Challenge
+        if (bite.recallQuestion && recallBlock && recallQ && recallA) {
+          recallQ.textContent = bite.recallQuestion;
+          recallA.textContent = bite.recallAnswer;
+          recallBlock.classList.remove('d-none');
+        }
+
+        // Auto-play next in Continuous Playlist mode
+        if (continuousPlaylist) {
+          const nextIdx = (currentBiteIndex + 1) % DEFAULT_AUDIO_BITES.length;
+          safeToast(`Auto-advancing to: ${DEFAULT_AUDIO_BITES[nextIdx].title}`, 'info');
+          setTimeout(() => {
+            startPlayback(DEFAULT_AUDIO_BITES[nextIdx]);
+          }, 2000);
+        }
       };
 
-      currentUtterance.onerror = () => {
+      currentUtterance.onerror = (e) => {
+        console.warn('Speech synthesis event notice:', e);
         stopPlayback();
       };
 
@@ -2113,44 +2491,72 @@
     if (playPauseBtn) {
       playPauseBtn.addEventListener('click', () => {
         if (isPlaying) {
-          stopPlayback();
+          if ('speechSynthesis' in window) window.speechSynthesis.pause();
+          isPlaying = false;
+          if (playIcon) playIcon.className = 'fa-solid fa-play fs-5';
+          if (waveformBars) waveformBars.classList.remove('active');
+          if (progressTimer) clearInterval(progressTimer);
+        } else if (currentBite) {
+          if ('speechSynthesis' in window && window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+            isPlaying = true;
+            if (playIcon) playIcon.className = 'fa-solid fa-pause fs-5';
+            if (waveformBars) waveformBars.classList.add('active');
+            const totalSec = Math.round(currentBite.durationSec / currentPlaybackRate);
+            progressTimer = setInterval(() => {
+              elapsedSeconds++;
+              const pct = Math.min(100, (elapsedSeconds / Math.max(1, totalSec)) * 100);
+              if (progressBar) progressBar.style.width = pct + '%';
+              if (timeElapsedEl) {
+                const em = Math.floor(elapsedSeconds / 60);
+                const es = elapsedSeconds % 60;
+                timeElapsedEl.textContent = `${em}:${es.toString().padStart(2, '0')}`;
+              }
+            }, 1000);
+          } else {
+            startPlayback(currentBite);
+          }
         } else {
-          startPlayback(currentBite);
+          startPlayback(DEFAULT_AUDIO_BITES[0]);
         }
       });
     }
 
-    // Voice Persona Selection
+    // Concept Card Listen buttons
+    document.querySelectorAll('.play-bite-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        const bite = DEFAULT_AUDIO_BITES.find(b => b.id === id);
+        if (bite) startPlayback(bite);
+      });
+    });
+
+    // Speed Selector
+    document.querySelectorAll('.speed-opt').forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll('.speed-opt').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        currentPlaybackRate = parseFloat(opt.getAttribute('data-speed'));
+        if (speedBtn) speedBtn.textContent = `${currentPlaybackRate}x`;
+        if (isPlaying && currentBite) {
+          startPlayback(currentBite, null, activeSentenceIndex);
+        }
+      });
+    });
+
+    // Voice Persona Selector
     document.querySelectorAll('.voice-persona-opt').forEach(opt => {
       opt.addEventListener('click', () => {
         document.querySelectorAll('.voice-persona-opt').forEach(o => o.classList.remove('active'));
         opt.classList.add('active');
         currentPersona = opt.getAttribute('data-persona');
-        const labelEl = document.getElementById('persona-label');
-        if (labelEl) {
-          if (currentPersona === 'host_deep') labelEl.textContent = 'Deep Studio Host';
-          else if (currentPersona === 'host_smooth') labelEl.textContent = 'Smooth Co-Host';
-          else if (currentPersona === 'scholar_uk') labelEl.textContent = 'British Scholar';
+        if (personaLabel) {
+          if (currentPersona === 'host_deep') personaLabel.textContent = 'Deep Studio Host';
+          else if (currentPersona === 'host_smooth') personaLabel.textContent = 'Smooth Co-Host';
+          else personaLabel.textContent = 'British Scholar';
         }
-        AudioSynth.playChime(660, 880, 0.2);
-        safeToast(`Voice persona: ${labelEl?.textContent || currentPersona}`, 'info');
         if (isPlaying && currentBite) {
-          startPlayback(currentBite);
-        }
-      });
-    });
-
-    // Speed Selection
-    document.querySelectorAll('.speed-opt').forEach(opt => {
-      opt.addEventListener('click', () => {
-        document.querySelectorAll('.speed-opt').forEach(o => o.classList.remove('active'));
-        opt.classList.add('active');
-        const spd = parseFloat(opt.getAttribute('data-speed'));
-        currentSpeed = spd;
-        const speedBtn = document.getElementById('btn-audio-speed');
-        if (speedBtn) speedBtn.textContent = spd + 'x';
-        if (isPlaying && currentBite) {
-          startPlayback(currentBite);
+          startPlayback(currentBite, null, activeSentenceIndex);
         }
       });
     });
@@ -2159,196 +2565,201 @@
     const rewindBtn = document.getElementById('btn-audio-rewind');
     if (rewindBtn) {
       rewindBtn.addEventListener('click', () => {
-        if (currentBite) {
-          AudioSynth.playChime(550, 440, 0.2);
-          startPlayback(currentBite);
-          safeToast('Rewound to start of lesson', 'info');
+        if (currentBite && isPlaying) {
+          elapsedSeconds = Math.max(0, elapsedSeconds - 10);
+          const totalSec = Math.round(currentBite.durationSec / currentPlaybackRate);
+          const pct = Math.min(100, (elapsedSeconds / Math.max(1, totalSec)) * 100);
+          if (progressBar) progressBar.style.width = pct + '%';
+          const targetSentence = Math.max(0, Math.floor((elapsedSeconds / totalSec) * sentenceList.length));
+          startPlayback(currentBite, sentenceList.slice(targetSentence).join(' '), targetSentence);
         }
       });
     }
-
-    // Concept Cards Listen Buttons
-    document.querySelectorAll('.play-bite-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.getAttribute('data-id');
-        const bite = AUDIO_BITES_DATA.find(b => b.id === id);
-        if (bite) {
-          startPlayback(bite);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      });
-    });
-
-    // Concept Cards Copy Buttons
-    document.querySelectorAll('.copy-bite-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.getAttribute('data-id');
-        const bite = AUDIO_BITES_DATA.find(b => b.id === id);
-        if (bite) {
-          navigator.clipboard.writeText(`${bite.title}\n\nAnalogy: ${bite.analogy}\n\n${bite.script}`).then(() => {
-            AudioSynth.playChime(523, 659, 0.2);
-            safeToast('Feynman summary copied to clipboard!', 'info');
-          });
-        }
-      });
-    });
-
-    renderClickableTranscript(currentBite.script);
   };
 
+
   // =========================================================================
-  // 5. EMERGENCY 60-MINUTE PRE-INTERVIEW CRISIS BOOSTER (#/interview-booster)
+  // 5. EMERGENCY PRE-INTERVIEW CRISIS BOOSTER (#/interview-booster)
   // =========================================================================
 
-  const BOOSTER_DATA = {
-    'java': {
-      name: 'Java & Spring Boot Core',
-      traps: [
-        { q: 'Why does overriding equals() require overriding hashCode()?', a: 'Because hash collections (HashMap, HashSet) compute the bucket index via hashCode(). If two objects are equal by equals() but have different hashCodes, the collection will store duplicates or fail to find the key.' },
-        { q: 'What is the difference between @Transactional(readOnly = true) and standard?', a: 'It hints to Hibernate to turn off dirty checking, sets JDBC connection to read-only, and prevents accidental flushes, boosting query throughput by up to 30%.' },
-        { q: 'How does ConcurrentHashMap achieve high concurrency in Java 8+?', a: 'It discarded the old ReentrantLock Segment array. It now uses CAS (Compare-And-Swap) for empty bucket insertion and synchronized locking strictly on the head node of a bucket collision chain.' },
-        { q: 'Difference between Thread Pool submit() vs execute()?', a: 'execute() accepts Runnable and returns void (uncaught exceptions print to stderr). submit() accepts Callable or Runnable and returns a Future, swallowing exceptions until Future.get() is called.' }
-      ],
-      slips: [
-        'String immutability: str.concat("x") does not modify str in-place.',
-        'Autoboxing pitfalls: Integer a = 128; Integer b = 128; a == b is FALSE (cache is -128 to 127).',
-        'Optional.get() without isPresent() is an anti-pattern; use orElse() or orElseThrow().'
-      ]
-    },
-    'frontend': {
-      name: 'React & Frontend Architecture',
-      traps: [
-        { q: 'Why shouldn\'t you mutate React state directly (e.g. state.items.push(x))?', a: 'React relies on shallow reference comparison (Object.is) to trigger reconciliations. Mutating in-place keeps the memory reference identical, so React ignores re-rendering.' },
-        { q: 'Difference between useMemo and useCallback?', a: 'useMemo caches the evaluated RESULT of a computation. useCallback caches the FUNCTION REFERENCE itself to prevent child re-renders with React.memo.' },
-        { q: 'What is the Event Loop order between microtasks and macrotasks?', a: 'Call Stack executes -> All Microtasks run (Promises, queueMicrotask) until queue is empty -> Render/Paint occurs -> Single Macrotask runs (setTimeout, setInterval, I/O).' }
-      ],
-      slips: [
-        'Missing dependency array in useEffect causes continuous infinite re-renders.',
-        'Keys in lists must be unique stable IDs, never array index if items can be re-ordered.',
-        'CSS specificity: inline > #id > .class/attribute > element.'
-      ]
-    },
-    'system_design': {
-      name: 'Distributed Systems & Architecture',
-      traps: [
-        { q: 'How do you handle database write bottlenecks without losing data?', a: 'Place an asynchronous message broker (Kafka or RabbitMQ) in front of the database to decouple ingestion rate from persistent disk writes (backpressure buffering).' },
-        { q: 'What is the difference between Idempotency and Deduplication?', a: 'Idempotency means f(f(x)) = f(x); executing a payment request with idempotency-key 5 times produces the exact same balance as executing it once.' },
-        { q: 'How do you prevent cache stampedes when hot keys expire?', a: 'Use probabilistic early expiration (XFetch algorithm) or acquire a distributed mutex (e.g. Redis Redlock) so only 1 worker computes the new cache while others serve the stale grace period.' }
-      ],
-      slips: [
-        'Single point of failure (SPOF): Always identify if your Load Balancer or Master DB has a standby replica.',
-        'Always estimate read-to-write ratio (e.g. Twitter is 100:1 read-heavy; IoT telemetry is write-heavy).',
-        'Clock skew: Never rely on server system clocks across distributed nodes for ordering; use Lamport timestamps or Raft log index.'
-      ]
-    },
-    'database': {
-      name: 'SQL & Database Concurrency',
-      traps: [
-        { q: 'Difference between clustered and non-clustered index?', a: 'A clustered index dictates the physical on-disk sorted order of table data (1 per table, usually Primary Key). A non-clustered index is a separate B-Tree storing index keys with pointers (row IDs) to the clustered rows.' },
-        { q: 'What is a Deadlock and how does the engine resolve it?', a: 'A circular wait where Tx1 holds Lock A and waits for Lock B, while Tx2 holds Lock B and waits for Lock A. The database engine detects cycles in the wait-for graph and rolls back the transaction with lower cost (victim).' }
-      ],
-      slips: [
-        'SELECT * in production disables index-only covering scans and causes extra disk I/O.',
-        'Adding a non-concurrent index in Postgres locks writes; always use CREATE INDEX CONCURRENTLY.'
-      ]
-    }
+  const CRISIS_TRAPS = {
+    java: [
+      {
+        id: 'java-1',
+        title: 'ConcurrentHashMap: Why is size() approximate and how does computeIfAbsent prevent race conditions?',
+        trap: 'Assuming map.putIfAbsent() is atomic with value generation or that size() provides strict real-time count during concurrent updates.',
+        solution: 'ConcurrentHashMap.size() relies on LongAdder striped cells for throughput and is an estimate under continuous writes. Always use computeIfAbsent() when value computation must execute atomically exactly once per key.'
+      },
+      {
+        id: 'java-2',
+        title: 'JVM Memory Leak via ThreadLocal in Pooled Worker Threads',
+        trap: 'Failing to call ThreadLocal.remove() when using thread pools (like Tomcat or ExecutorService).',
+        solution: 'Since pool worker threads never terminate, unremoved ThreadLocal instances retain their values indefinitely, preventing ClassLoader and large contextual objects from being garbage collected (OutOfMemoryError: Metaspace / Heap).'
+      },
+      {
+        id: 'java-3',
+        title: 'Volatile vs Synchronized & Memory Barriers',
+        trap: 'Assuming volatile provides thread-safe increments (i++).',
+        solution: 'Volatile guarantees visibility across CPU core caches via memory fences (Happens-Before guarantee) and prevents compiler instruction re-ordering, but does NOT guarantee compound atomicity. Use AtomicInteger or explicit locks for increments.'
+      }
+    ],
+    react: [
+      {
+        id: 'react-1',
+        title: 'Stale Closures in useEffect & useCallback',
+        trap: 'Omitting state variables from dependency arrays to avoid re-running effects.',
+        solution: 'The effect closure captures the initial render variable snapshot forever. Always supply accurate dependencies, or use functional state updates (setCount(prev => prev + 1)) to reference latest state without re-triggering effects.'
+      },
+      {
+        id: 'react-2',
+        title: 'React 18 Automatic Batching in Async Handlers',
+        trap: 'Assuming state updates inside setTimeout or fetch promises trigger immediate intermediate renders.',
+        solution: 'React 18 batches all state updates within microtasks and promises into a single commit phase by default. If synchronous paint is mandatory, wrap the update in ReactDOM.flushSync().'
+      },
+      {
+        id: 'react-3',
+        title: 'The Hidden Danger of Array Index as Keys in Dynamic Lists',
+        trap: 'Using index as key when list items can be filtered, reordered, or deleted.',
+        solution: 'Fiber reconciliation pairs elements by key. Using indices forces React to mutate the wrong existing DOM nodes and causes stateful child inputs to preserve the previous item values incorrectly.'
+      }
+    ],
+    system: [
+      {
+        id: 'sys-1',
+        title: 'Distributed Payment Idempotency Keys Under Network Retries',
+        trap: 'Inserting payment records without an atomic unique constraint or distributed lock.',
+        solution: 'Generate a client UUID idempotency key before dispatch. Store it in Redis with an atomic SETNX key status = PENDING (TTL 5 mins). If another retry arrives, return HTTP 409 or poll until original finishes.'
+      },
+      {
+        id: 'sys-2',
+        title: 'Split-Brain Scenarios in Distributed Consensus (Raft / Paxos)',
+        trap: 'Allowing two network-partitioned sub-clusters to accept and commit writes independently.',
+        solution: 'Require strict Quorum: a leader must acquire acknowledgments from at least (N/2) + 1 nodes before committing an entry to the Write-Ahead Log. The minority partition cannot achieve quorum and safely rejects writes.'
+      }
+    ],
+    sql: [
+      {
+        id: 'sql-1',
+        title: 'Phantom Reads Under Repeatable Read Isolation',
+        trap: 'Believing Repeatable Read prevents new rows from matching a range query.',
+        solution: 'Repeatable Read locks existing rows queried, but another transaction can insert brand new rows that fall within the range. Postgres prevents this using Multiversion Concurrency Control (MVCC) snapshot isolation, while MySQL InnoDB uses Next-Key Locks (Index + Gap lock).'
+      },
+      {
+        id: 'sql-2',
+        title: 'Index Selectivity: When B-Tree Indexes Are Ignored by the Query Planner',
+        trap: 'Creating indexes on boolean or low-cardinality enum columns (e.g. status = ACTIVE).',
+        solution: 'If the optimizer estimates the filter matches > 15-20% of table rows, random I/O from index lookups is slower than a sequential Full Table Scan. Use Composite Indexes with high-cardinality leading columns.'
+      }
+    ]
   };
 
   components.interviewBooster = () => {
     return `
-      <div class="container-fluid px-3 px-md-4 py-3">
+      <div class="container-fluid px-3 px-md-4 py-3 suite-scroll-container">
         <!-- Header -->
-        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom border-secondary border-opacity-15 gap-2">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-15 gap-2">
           <div>
             <div class="d-flex align-items-center gap-2">
-              <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-50 font-monospace fs-9 animate-pulse">EMERGENCY PREP</span>
-              <h4 class="text-white fw-bold m-0 fs-5">60-Minute Pre-Interview Crisis Booster</h4>
+              <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-50 font-monospace fs-9">EMERGENCY PRE-FLIGHT</span>
+              <h4 class="text-white fw-bold m-0 fs-5">Pre-Interview Crisis Booster & Cockpit HUD</h4>
             </div>
-            <p class="text-muted fs-8 mb-0 mt-1">Active-recall trick questions, mental calming box-breathing with audio cues, and hardware check.</p>
+            <p class="text-muted fs-8 mb-0 mt-1">Prime high-frequency technical traps, verify audio/video hardware, and regulate pre-interview cortisol.</p>
           </div>
-          <div class="d-flex gap-2">
-            <button class="btn btn-outline-light btn-sm" onclick="window.print()"><i class="fa-solid fa-print me-1"></i> Quick Print Sheet</button>
+          <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-sm btn-outline-info" id="btn-toggle-cam-drawer">
+              <i class="fa-solid fa-video me-1"></i> Hardware Check
+            </button>
+            <button class="btn btn-sm btn-outline-warning" id="btn-toggle-quiz-mode">
+              <i class="fa-solid fa-eye-slash me-1"></i> <span id="quiz-mode-label">Active Recall Mode</span>
+            </button>
           </div>
         </div>
 
-        <div class="row g-3">
-          <div class="col-12 col-xl-7">
-            <!-- Tech Stack Tabs & Active Recall Toggle -->
-            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
-              <div class="d-flex flex-wrap gap-1.5" id="booster-stack-tabs">
-                <button class="btn btn-sm btn-outline-primary active booster-tab-btn fs-9" data-stack="java">Java & Spring</button>
-                <button class="btn btn-sm btn-outline-primary booster-tab-btn fs-9" data-stack="frontend">React & Frontend</button>
-                <button class="btn btn-sm btn-outline-primary booster-tab-btn fs-9" data-stack="system_design">System Design</button>
-                <button class="btn btn-sm btn-outline-primary booster-tab-btn fs-9" data-stack="database">SQL & Databases</button>
+        <!-- Pre-Flight Cockpit HUD -->
+        <div class="cockpit-hud mb-3">
+          <div class="row g-3 align-items-center">
+            <!-- T-Minus Countdown -->
+            <div class="col-12 col-md-4 border-end border-secondary border-opacity-25 pe-md-3">
+              <span class="fs-9 font-monospace text-secondary fw-bold d-block mb-1"><i class="fa-regular fa-clock text-warning me-1"></i>T-MINUS UNTIL INTERVIEW:</span>
+              <div class="d-flex align-items-center gap-2">
+                <div class="font-monospace fs-3 fw-bold text-warning" id="cockpit-countdown">00:45:00</div>
+                <button class="btn btn-glass py-0.5 px-2 fs-9 text-info" id="btn-reset-countdown" title="Reset to 45m"><i class="fa-solid fa-rotate-left"></i></button>
               </div>
-              <button class="btn btn-sm btn-glass text-warning border border-warning border-opacity-30 fs-9" id="btn-toggle-quiz-mode">
-                <i class="fa-solid fa-eye-slash me-1"></i> <span id="quiz-mode-label">Hide Answers (Quiz Mode)</span>
-              </button>
+              <small class="text-muted fs-9">Optimal cognitive warm-up window</small>
             </div>
 
-            <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-3 p-md-4 mb-3 shadow-sm">
-              <h6 class="text-warning fw-bold mb-3 fs-7" id="booster-stack-title"><i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>Top Last-Minute Interview Gotchas & Traps</h6>
-              <div class="d-flex flex-column gap-2" id="booster-traps-container"></div>
+            <!-- Hardware Diagnostic Indicator -->
+            <div class="col-12 col-md-4 border-end border-secondary border-opacity-25 pe-md-3">
+              <span class="fs-9 font-monospace text-secondary fw-bold d-block mb-1"><i class="fa-solid fa-microphone-lines text-success me-1"></i>AUDIO INPUT MONITOR:</span>
+              <div class="d-flex align-items-center gap-2 mt-1">
+                <div class="flex-grow-1 bg-black rounded p-1" style="height: 16px;">
+                  <div id="mic-level-bar" class="bg-success rounded" style="height: 100%; width: 5%; transition: width 0.08s ease;"></div>
+                </div>
+                <span class="fs-9 font-monospace text-success fw-bold" id="mic-status-label">Mic Live</span>
+              </div>
+              <small class="text-muted fs-9">Speak into microphone to test levels</small>
             </div>
 
-            <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-3 p-md-4 shadow-sm">
-              <h6 class="text-danger fw-bold mb-2 fs-7"><i class="fa-solid fa-skull-crossbones text-danger me-2"></i>Costly Memory Slips to Avoid</h6>
-              <ul class="fs-8 text-secondary mb-0 ps-3" id="booster-slips-container" style="line-height: 1.7;"></ul>
+            <!-- Cortisol Regulation Prompt -->
+            <div class="col-12 col-md-4">
+              <span class="fs-9 font-monospace text-secondary fw-bold d-block mb-1"><i class="fa-solid fa-heart-pulse text-danger me-1"></i>VAGUS NERVE RESET:</span>
+              <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-outline-info py-1 px-3 fs-8" id="btn-start-breathing">
+                  <i class="fa-solid fa-lungs me-1"></i> Start Box Breathing (4-4-4-4)
+                </button>
+              </div>
+              <small class="text-muted fs-9">Lowers heart rate & anxiety before rounds</small>
             </div>
           </div>
 
-          <div class="col-12 col-xl-5">
-            <!-- Box Breathing Widget -->
-            <div class="card bg-dark bg-opacity-70 border-info border-opacity-30 rounded-3 p-3 p-md-4 mb-3 text-center shadow-sm">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="badge bg-info bg-opacity-20 text-info font-monospace fs-9">NEUROSCIENCE PROTOCOL</span>
-                <span class="fs-9 text-muted font-monospace" id="breath-cycle-count">Cycle: 0 / 8</span>
+          <!-- Camera Test Drawer (collapsible) -->
+          <div class="mt-3 pt-3 border-top border-secondary border-opacity-25 d-none" id="camera-test-drawer">
+            <div class="row g-3 align-items-center">
+              <div class="col-12 col-md-6">
+                <video id="webcam-preview" autoplay playsinline muted class="rounded-3 border border-secondary border-opacity-50 w-100 bg-black" style="max-height: 220px; object-fit: cover;"></video>
               </div>
-              <h6 class="text-white fw-bold mb-1 fs-7">2-Minute Box Breathing Guide</h6>
-              <p class="text-muted fs-9 mb-3">Activates the parasympathetic vagal nerve to lower heart rate and cortisol.</p>
-
-              <div class="breathing-circle-wrapper my-3 d-flex align-items-center justify-content-center">
-                <div class="breathing-circle d-flex align-items-center justify-content-center" id="breathing-visual">
-                  <span class="fs-7 fw-bold text-white font-monospace text-center px-2" id="breathing-text">INHALE (4s)</span>
-                </div>
+              <div class="col-12 col-md-6">
+                <h6 class="text-white fw-bold fs-7 mb-2"><i class="fa-solid fa-circle-check text-success me-1"></i> Pre-Flight Check Status</h6>
+                <ul class="fs-8 text-secondary ps-3 mb-2">
+                  <li class="mb-1">Framing: Eye-level camera position</li>
+                  <li class="mb-1">Lighting: Front-facing soft light (avoid backlighting)</li>
+                  <li class="mb-1">Environment: Do Not Disturb enabled</li>
+                  <li>IDE / Whiteboard open in clean browser profile</li>
+                </ul>
+                <button class="btn btn-sm btn-glass text-danger fs-9" id="btn-stop-camera"><i class="fa-solid fa-video-slash me-1"></i> Close Camera</button>
               </div>
+            </div>
+          </div>
+        </div>
 
-              <div class="d-flex justify-content-center gap-2 mt-2">
-                <button class="btn btn-sm btn-outline-info px-3" id="btn-toggle-breathing"><i class="fa-solid fa-play me-1"></i> Start 2m Timer</button>
-                <button class="btn btn-sm btn-glass text-secondary" id="btn-toggle-breath-audio" title="Mute/Unmute Breath Chime"><i class="fa-solid fa-volume-high"></i></button>
+        <!-- Tech Stack Trap Categories -->
+        <div class="d-flex flex-wrap gap-1.5 mb-3" id="booster-stack-tabs">
+          <button class="btn btn-sm btn-glass active fs-9 booster-tab-btn" data-stack="java">Java / JVM Internals</button>
+          <button class="btn btn-sm btn-glass fs-9 booster-tab-btn" data-stack="react">React & Web Architecture</button>
+          <button class="btn btn-sm btn-glass fs-9 booster-tab-btn" data-stack="system">System Design Traps</button>
+          <button class="btn btn-sm btn-glass fs-9 booster-tab-btn" data-stack="sql">SQL & Concurrency</button>
+        </div>
+
+        <!-- Flashcard & Trap Cards Grid -->
+        <div class="row g-3" id="booster-cards-container"></div>
+      </div>
+
+      <!-- Box Breathing Guided Modal -->
+      <div class="modal fade" id="breathingModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content bg-dark text-white border-secondary border-opacity-40 text-center p-4">
+            <h5 class="fs-6 text-white mb-2"><i class="fa-solid fa-lungs text-info me-2"></i>4-4-4-4 Box Breathing Exercise</h5>
+            <p class="text-muted fs-8 mb-4">Inhale 4s &bull; Hold 4s &bull; Exhale 4s &bull; Hold 4s</p>
+
+            <div class="d-flex justify-content-center mb-4">
+              <div id="breathe-circle" style="width: 140px; height: 140px; border-radius: 50%; background: radial-gradient(circle, rgba(56,189,248,0.4) 0%, rgba(14,165,233,0.1) 70%); border: 3px solid #38bdf8; display: flex; align-items: center; justify-content: center; transition: all 4s ease-in-out;">
+                <span class="fs-5 fw-bold text-white font-monospace" id="breathe-label">Inhale</span>
               </div>
             </div>
 
-            <!-- Pre-Flight Checklist & Camera Test -->
-            <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-3 p-md-4 shadow-sm">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h6 class="text-white fw-bold m-0 fs-7"><i class="fa-solid fa-clipboard-check text-success me-2"></i>Pre-Flight Checklist (10m Out)</h6>
-                <button class="btn btn-sm btn-glass text-info fs-9 py-0 px-2" id="btn-test-camera"><i class="fa-solid fa-video me-1"></i> Check Cam</button>
-              </div>
-              <div class="d-flex flex-column gap-2 fs-8 text-light">
-                <label class="d-flex align-items-center gap-2 cursor-pointer">
-                  <input type="checkbox" class="form-check-input mt-0" checked>
-                  <span>Camera & mic tested on Google Meet / Zoom</span>
-                </label>
-                <label class="d-flex align-items-center gap-2 cursor-pointer">
-                  <input type="checkbox" class="form-check-input mt-0" checked>
-                  <span>Closed unnecessary browser tabs & silenced phone</span>
-                </label>
-                <label class="d-flex align-items-center gap-2 cursor-pointer">
-                  <input type="checkbox" class="form-check-input mt-0" checked>
-                  <span>Glass of water & scratchpad + pen ready</span>
-                </label>
-                <label class="d-flex align-items-center gap-2 cursor-pointer">
-                  <input type="checkbox" class="form-check-input mt-0" checked>
-                  <span>Reviewed 2 reverse interview questions to ask</span>
-                </label>
-              </div>
-
-              <!-- Camera Preview Drawer -->
-              <div id="camera-preview-box" class="mt-3 p-2 bg-black rounded border border-secondary border-opacity-40 text-center" style="display: none;">
-                <video id="webcam-video-el" autoplay playsinline style="width: 100%; max-height: 140px; object-fit: cover; border-radius: 4px;"></video>
-                <button class="btn btn-sm btn-glass text-danger mt-1 fs-9" id="btn-close-cam"><i class="fa-solid fa-xmark me-1"></i> Close Camera</button>
-              </div>
+            <div class="badge bg-secondary font-monospace fs-9 mb-3" id="breathe-cycle-counter">Cycle 1 of 8</div>
+            <div>
+              <button class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal" id="btn-stop-breathing">Finish Reset</button>
             </div>
           </div>
         </div>
@@ -2356,391 +2767,446 @@
     `;
   };
 
+
   window.bindInterviewBoosterEvents = () => {
     let currentStack = 'java';
-    let quizMode = false;
-    let breathChimeMuted = false;
+    let quizMode = true; // Active recall by default
+    let countdownSec = 2700; // 45 mins
+    let countdownInterval = null;
+    let cameraStream = null;
+    let audioContext = null;
+    let audioAnalyser = null;
+    let micStream = null;
+    let breatheTimer = null;
 
-    function renderStack(stackKey) {
-      const data = BOOSTER_DATA[stackKey] || BOOSTER_DATA['java'];
-      const titleEl = document.getElementById('booster-stack-title');
-      const trapsContainer = document.getElementById('booster-traps-container');
-      const slipsContainer = document.getElementById('booster-slips-container');
-
-      if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>Gotchas: ${data.name}`;
-
-      if (trapsContainer) {
-        trapsContainer.innerHTML = data.traps.map((t, idx) => `
-          <div class="p-2.5 bg-black bg-opacity-50 rounded border border-secondary border-opacity-25 booster-trap-card">
-            <div class="text-info fw-bold fs-8 mb-1">Q${idx + 1}: ${t.q}</div>
-            <div class="trap-answer text-light fs-8 ${quizMode ? 'd-none' : ''}" style="line-height: 1.6;">
-              <strong>A:</strong> ${t.a}
-            </div>
-            ${quizMode ? `
-              <button class="btn btn-sm btn-glass text-warning fs-9 py-0 px-2 mt-1 reveal-answer-btn">
-                <i class="fa-solid fa-eye me-1"></i> Reveal Answer
-              </button>
-            ` : ''}
-          </div>
-        `).join('');
-
-        trapsContainer.querySelectorAll('.reveal-answer-btn').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const ans = btn.previousElementSibling;
-            if (ans) {
-              ans.classList.remove('d-none');
-              btn.remove();
-              AudioSynth.playChime(660, 880, 0.2);
-            }
-          });
-        });
-      }
-
-      if (slipsContainer) {
-        slipsContainer.innerHTML = data.slips.map(s => `<li>${s}</li>`).join('');
+    // T-Minus Countdown
+    const countdownEl = document.getElementById('cockpit-countdown');
+    function updateCountdownDisplay() {
+      const h = Math.floor(countdownSec / 3600);
+      const m = Math.floor((countdownSec % 3600) / 60);
+      const s = countdownSec % 60;
+      if (countdownEl) {
+        countdownEl.textContent = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
       }
     }
 
+    if (countdownInterval) clearInterval(countdownInterval);
+    countdownInterval = setInterval(() => {
+      if (countdownSec > 0) {
+        countdownSec--;
+        updateCountdownDisplay();
+      }
+    }, 1000);
+
+    const resetCountBtn = document.getElementById('btn-reset-countdown');
+    if (resetCountBtn) {
+      resetCountBtn.addEventListener('click', () => {
+        countdownSec = 2700;
+        updateCountdownDisplay();
+        safeToast('Reset countdown to 45 minutes.', 'info');
+      });
+    }
+
+    // Hardware Check: Microphone Monitor (Web Audio API)
+    async function initMicMonitor() {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        try {
+          micStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (!AudioCtx) return;
+          audioContext = new AudioCtx();
+          audioAnalyser = audioContext.createAnalyser();
+          audioAnalyser.fftSize = 64;
+          const source = audioContext.createMediaStreamSource(micStream);
+          source.connect(audioAnalyser);
+
+          const dataArray = new Uint8Array(audioAnalyser.frequencyBinCount);
+          const bar = document.getElementById('mic-level-bar');
+
+          function updateMicMeter() {
+            if (!audioAnalyser || !bar) return;
+            audioAnalyser.getByteFrequencyData(dataArray);
+            let sum = 0;
+            for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
+            const avg = sum / dataArray.length;
+            const pct = Math.min(100, Math.max(5, (avg / 128) * 100));
+            bar.style.width = pct + '%';
+            if (pct > 75) bar.className = 'bg-warning rounded';
+            else bar.className = 'bg-success rounded';
+
+            if (micStream && micStream.active) {
+              requestAnimationFrame(updateMicMeter);
+            }
+          }
+          updateMicMeter();
+        } catch(e) {
+          const lbl = document.getElementById('mic-status-label');
+          if (lbl) {
+            lbl.textContent = 'Mic Off';
+            lbl.className = 'fs-9 font-monospace text-muted';
+          }
+        }
+      }
+    }
+    initMicMonitor();
+
+    // Hardware Check: Camera Drawer
+    const camBtn = document.getElementById('btn-toggle-cam-drawer');
+    const camDrawer = document.getElementById('camera-test-drawer');
+    const videoEl = document.getElementById('webcam-preview');
+    const stopCamBtn = document.getElementById('btn-stop-camera');
+
+    if (camBtn) {
+      camBtn.addEventListener('click', async () => {
+        if (camDrawer) camDrawer.classList.toggle('d-none');
+        if (camDrawer && !camDrawer.classList.contains('d-none')) {
+          try {
+            cameraStream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 }, audio: false });
+            if (videoEl) videoEl.srcObject = cameraStream;
+          } catch(e) {
+            safeToast('Could not access webcam (check browser permissions).', 'warning');
+          }
+        } else {
+          if (cameraStream) {
+            cameraStream.getTracks().forEach(t => t.stop());
+            cameraStream = null;
+          }
+        }
+      });
+    }
+
+    if (stopCamBtn) {
+      stopCamBtn.addEventListener('click', () => {
+        if (camDrawer) camDrawer.classList.add('d-none');
+        if (cameraStream) {
+          cameraStream.getTracks().forEach(t => t.stop());
+          cameraStream = null;
+        }
+      });
+    }
+
+    // Render Cards
+    function renderCards() {
+      const container = document.getElementById('booster-cards-container');
+      if (!container) return;
+      const list = CRISIS_TRAPS[currentStack] || CRISIS_TRAPS.java;
+
+      container.innerHTML = list.map((item, idx) => `
+        <div class="col-12 col-md-6 col-xl-4">
+          <div class="flashcard-scene" data-id="${item.id}">
+            <div class="flashcard-object" id="card-obj-${item.id}">
+              <!-- Front Face (Question / Trap) -->
+              <div class="flashcard-face flashcard-face-front">
+                <div>
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <span class="badge bg-danger bg-opacity-20 text-danger border border-danger border-opacity-30 font-monospace fs-9">DANGER TRAP #${idx + 1}</span>
+                    <span class="badge bg-secondary font-monospace fs-9"><i class="fa-solid fa-arrows-rotate me-1"></i> Flip</span>
+                  </div>
+                  <h6 class="text-white fw-bold fs-7 mb-2">${item.title}</h6>
+                  <div class="p-2 rounded bg-black bg-opacity-40 border border-secondary border-opacity-30 mb-2">
+                    <span class="text-danger fw-bold font-monospace fs-9 d-block mb-0.5"><i class="fa-solid fa-triangle-exclamation me-1"></i> Candidate Trap / Pitfall:</span>
+                    <p class="fs-8 text-light mb-0">${item.trap}</p>
+                  </div>
+                </div>
+                <div class="mt-auto d-flex justify-content-between align-items-center pt-2 border-top border-secondary border-opacity-20">
+                  <small class="text-muted fs-9 font-monospace">Click to reveal senior solution</small>
+                  <button class="btn btn-sm btn-outline-info py-0.5 px-2 fs-9">Flip Card</button>
+                </div>
+              </div>
+
+              <!-- Back Face (Solution / Architecture) -->
+              <div class="flashcard-face flashcard-face-back">
+                <div>
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-30 font-monospace fs-9">STAFF+ SOLUTION</span>
+                    <span class="badge bg-secondary font-monospace fs-9"><i class="fa-solid fa-arrows-rotate me-1"></i> Flip</span>
+                  </div>
+                  <h6 class="text-info fw-bold fs-7 mb-2">${item.title}</h6>
+                  <div class="p-2.5 rounded bg-black bg-opacity-60 border border-info border-opacity-40">
+                    <span class="text-success fw-bold font-monospace fs-9 d-block mb-1"><i class="fa-solid fa-shield-halved me-1"></i> Architectural Fix:</span>
+                    <p class="fs-8 text-white mb-0" style="line-height: 1.6;">${item.solution}</p>
+                  </div>
+                </div>
+                <div class="mt-auto d-flex justify-content-between align-items-center pt-2 border-top border-secondary border-opacity-20">
+                  <small class="text-muted fs-9 font-monospace">Mastered? Next card</small>
+                  <button class="btn btn-sm btn-glass py-0.5 px-2 fs-9 text-secondary">Flip Back</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      // Flip card click listeners
+      container.querySelectorAll('.flashcard-object').forEach(card => {
+        card.addEventListener('click', () => {
+          card.classList.toggle('is-flipped');
+          AudioSynth.playChime(660, 880, 0.12);
+        });
+      });
+    }
+
+    // Stack tabs
     document.querySelectorAll('.booster-tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.booster-tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+        document.querySelectorAll('.booster-tab-btn').forEach(b => b.classList.remove('active', 'btn-primary'));
+        btn.classList.add('active', 'btn-primary');
         currentStack = btn.getAttribute('data-stack');
-        renderStack(currentStack);
+        renderCards();
       });
     });
 
-    // Quiz Mode Toggle
+    // Active Recall Toggle
     const quizToggleBtn = document.getElementById('btn-toggle-quiz-mode');
     if (quizToggleBtn) {
       quizToggleBtn.addEventListener('click', () => {
-        quizMode = !quizMode;
-        const label = document.getElementById('quiz-mode-label');
-        if (label) label.textContent = quizMode ? 'Show All Answers' : 'Hide Answers (Quiz Mode)';
-        renderStack(currentStack);
-        AudioSynth.playChime(550, 700, 0.15);
+        const cards = document.querySelectorAll('.flashcard-object');
+        cards.forEach(c => c.classList.toggle('is-flipped'));
+        safeToast('Toggled all card solutions!', 'info');
       });
     }
 
-    renderStack(currentStack);
+    // Guided Box Breathing
+    const breatheBtn = document.getElementById('btn-start-breathing');
+    const breatheCircle = document.getElementById('breathe-circle');
+    const breatheLabel = document.getElementById('breathe-label');
+    const cycleCounter = document.getElementById('breathe-cycle-counter');
 
-    // Box Breathing
-    let breathingInterval = null;
-    let step = 0;
-    let cycleCount = 0;
-    const steps = ['INHALE (4s)', 'HOLD (4s)', 'EXHALE (4s)', 'HOLD (4s)'];
-    const stepTypes = ['inhale', 'hold', 'exhale', 'hold'];
-    const breathText = document.getElementById('breathing-text');
-    const breathCircle = document.getElementById('breathing-visual');
-    const toggleBreathBtn = document.getElementById('btn-toggle-breathing');
-    const cycleCounter = document.getElementById('breath-cycle-count');
-    const breathAudioBtn = document.getElementById('btn-toggle-breath-audio');
-
-    if (breathAudioBtn) {
-      breathAudioBtn.addEventListener('click', () => {
-        breathChimeMuted = !breathChimeMuted;
-        breathAudioBtn.innerHTML = breathChimeMuted ? '<i class="fa-solid fa-volume-xmark text-danger"></i>' : '<i class="fa-solid fa-volume-high"></i>';
-        safeToast(breathChimeMuted ? 'Breath audio chime muted' : 'Breath audio chime enabled', 'info');
-      });
-    }
-
-    if (toggleBreathBtn) {
-      toggleBreathBtn.addEventListener('click', () => {
-        if (breathingInterval) {
-          clearInterval(breathingInterval);
-          breathingInterval = null;
-          toggleBreathBtn.innerHTML = '<i class="fa-solid fa-play me-1"></i> Start 2m Timer';
-          if (breathCircle) breathCircle.classList.remove('active');
-        } else {
-          if (breathCircle) breathCircle.classList.add('active');
-          toggleBreathBtn.innerHTML = '<i class="fa-solid fa-pause me-1"></i> Pause';
-          step = 0;
-          cycleCount = 0;
-          if (breathText) breathText.textContent = steps[step];
-          if (!breathChimeMuted) AudioSynth.playBreathCue('inhale');
-
-          breathingInterval = setInterval(() => {
-            step = (step + 1) % steps.length;
-            if (step === 0) {
-              cycleCount++;
-              if (cycleCounter) cycleCounter.textContent = `Cycle: ${cycleCount} / 8`;
-            }
-            if (breathText) breathText.textContent = steps[step];
-            if (!breathChimeMuted) AudioSynth.playBreathCue(stepTypes[step]);
-          }, 4000);
+    if (breatheBtn) {
+      breatheBtn.addEventListener('click', () => {
+        const modalEl = document.getElementById('breathingModal');
+        if (modalEl && window.bootstrap) {
+          const m = new bootstrap.Modal(modalEl);
+          m.show();
         }
-      });
-    }
 
-    // Camera Diagnostics Test
-    const testCamBtn = document.getElementById('btn-test-camera');
-    const camBox = document.getElementById('camera-preview-box');
-    const camVideo = document.getElementById('webcam-video-el');
-    const closeCamBtn = document.getElementById('btn-close-cam');
-    let mediaStream = null;
+        let cycle = 1;
+        let phase = 0; // 0: Inhale, 1: Hold, 2: Exhale, 3: Hold
+        const phases = [
+          { label: 'Inhale (4s)', scale: '1.4', freq: 440 },
+          { label: 'Hold (4s)', scale: '1.4', freq: 523 },
+          { label: 'Exhale (4s)', scale: '0.8', freq: 392 },
+          { label: 'Hold (4s)', scale: '0.8', freq: 330 }
+        ];
 
-    if (testCamBtn) {
-      testCamBtn.addEventListener('click', async () => {
-        try {
-          if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-            if (camVideo) camVideo.srcObject = mediaStream;
-            if (camBox) camBox.style.display = 'block';
-            safeToast('Camera test active — looking sharp!', 'success');
-          } else {
-            safeToast('Camera diagnostics not supported in this browser context', 'warning');
+        function runBreathStep() {
+          const current = phases[phase];
+          if (breatheLabel) breatheLabel.textContent = current.label;
+          if (breatheCircle) breatheCircle.style.transform = `scale(${current.scale})`;
+          AudioSynth.playBreathCue(current.freq);
+
+          phase = (phase + 1) % 4;
+          if (phase === 0) {
+            cycle++;
+            if (cycleCounter) cycleCounter.textContent = `Cycle ${cycle} of 8`;
           }
-        } catch(err) {
-          safeToast('Camera permission denied or camera not found', 'warning');
+        }
+
+        runBreathStep();
+        breatheTimer = setInterval(runBreathStep, 4000);
+      });
+    }
+
+    const stopBreatheBtn = document.getElementById('btn-stop-breathing');
+    if (stopBreatheBtn) {
+      stopBreatheBtn.addEventListener('click', () => {
+        if (breatheTimer) {
+          clearInterval(breatheTimer);
+          breatheTimer = null;
         }
       });
     }
 
-    if (closeCamBtn) {
-      closeCamBtn.addEventListener('click', () => {
-        if (mediaStream) {
-          mediaStream.getTracks().forEach(t => t.stop());
-          mediaStream = null;
-        }
-        if (camBox) camBox.style.display = 'none';
-      });
-    }
+    renderCards();
   };
 
+
   // =========================================================================
-  // 6. REVERSE INTERVIEW KIT ("QUESTIONS TO ASK THEM") (#/reverse-interview)
+  // 6. REVERSE INTERVIEW KIT & CULTURAL RISK RADAR (#/reverse-interview)
   // =========================================================================
 
-  const REVERSE_QUESTIONS = [
+  const DEFAULT_REVERSE_QUESTIONS = [
     {
-      id: 'rev-1',
-      category: 'Engineering Culture & Incidents',
-      role: 'Manager & Lead',
-      badgeColor: 'danger',
-      question: 'When a production severity-1 incident happens at 2 AM, what does the blameless post-mortem process look like here?',
-      whyItWorks: 'Shows you value psychological safety, system reliability, and post-incident learning rather than toxic finger-pointing.',
-      greenFlag: 'Team writes blameless RCAs, actions items are prioritized in sprint, no public shaming.',
-      redFlag: '"We never have outages" or leaders assigning personal blame to developers.'
+      id: 'rev-peer-1',
+      stage: 'peer',
+      tier: 'Senior Peer / Tech Lead',
+      question: 'When was the last time the on-call engineer was paged after midnight, and what was the blameless post-mortem follow-up?',
+      greenFlag: 'Blameless post-mortems generate prioritized P0 backlog tickets that are immediately scheduled into next sprint.',
+      redFlag: 'Engineers shrug it off as \'normal\', repeat outages happen frequently, or individuals are blamed.',
+      starred: true
     },
     {
-      id: 'rev-2',
-      category: 'Technical Debt & Architecture',
-      role: 'Peer Engineer',
-      badgeColor: 'warning',
-      question: 'What percentage of sprint capacity does the team realistically allocate to technical debt and refactoring versus new feature requests?',
-      whyItWorks: 'Reveals if you will be stuck firefighting legacy spaghetti code or if engineering leadership respects architectural hygiene.',
-      greenFlag: '15–25% dedicated sprint buffer or dedicated quarterly cleanup weeks.',
-      redFlag: '"We fix debt when we get free time" (which means never).'
+      id: 'rev-peer-2',
+      stage: 'peer',
+      tier: 'Senior Peer / Tech Lead',
+      question: 'What is the deployment process from merging a PR to production, and what happens if a regression breaks?',
+      greenFlag: 'Fully automated CI/CD canary deployments with automated telemetry rollback and zero human gatekeepers.',
+      redFlag: 'Manual testing spreadsheets, bi-weekly release trains, or code freeze periods spanning weeks.',
+      starred: true
     },
     {
-      id: 'rev-3',
-      category: 'Product & Business Growth',
-      role: 'Engineering Manager',
-      badgeColor: 'primary',
-      question: 'What is the single biggest technical bottleneck your team must solve in the next two quarters to meet its roadmap milestones?',
-      whyItWorks: 'Immediately frames you as a strategic problem-solver looking to add immediate business value.',
-      greenFlag: 'Manager has crystal-clear clarity on bottlenecks (e.g. database migration, latency, observability).',
-      redFlag: 'Vague answers or disconnected from the product roadmap.'
+      id: 'rev-mgr-1',
+      stage: 'manager',
+      tier: 'Engineering Manager',
+      question: 'What does a high-performing engineer do in this role during their first 90 days, and how is failure handled?',
+      greenFlag: 'Clear 30-60-90 onboarding milestones; failure is treated as an organizational learning feedback loop.',
+      redFlag: 'Vague \'hit the ground running\', no dedicated mentor, or unclear expectations of output.',
+      starred: true
     },
     {
-      id: 'rev-4',
-      category: 'Excellence & Team Dynamics',
-      role: 'Director / VP',
-      badgeColor: 'success',
-      question: 'Looking at engineers who have joined this team in the past year, what separated those who were merely good from those who were truly exceptional?',
-      whyItWorks: 'One of the most memorable questions an executive can be asked. Highlights high ambition and desire for measurable excellence.',
-      greenFlag: 'Specific traits mentioned: proactive communication, unblocking others, driving ownership in ambiguity.',
-      redFlag: '"Working 70 hours a week" or strictly grinding tickets.'
+      id: 'rev-mgr-2',
+      stage: 'manager',
+      tier: 'Engineering Manager',
+      question: 'How do you balance product roadmap feature pressure against engineering technical debt refactoring?',
+      greenFlag: 'Dedicated 20% engineering budget or quarterly tech-debt sprints baked into OKRs.',
+      redFlag: '\'We will fix it later\' mindset; product management dictates engineering architecture without engineering veto.',
+      starred: false
     },
     {
-      id: 'rev-5',
-      category: 'Mentorship & Career Progression',
-      role: 'Peer & Manager',
-      badgeColor: 'info',
-      question: 'How do architectural proposals and RFCs (Request for Comments) get reviewed between junior developers and staff architects?',
-      whyItWorks: 'Shows you care about collaborative design, transparent engineering standards, and career growth.',
-      greenFlag: 'Open RFC Google Docs, weekly design reviews where anyone can ask questions.',
-      redFlag: 'Ivory tower architects handing down decrees without team input.'
+      id: 'rev-dir-1',
+      stage: 'director',
+      tier: 'VP / Director',
+      question: 'What is the biggest existential technical or market risk the engineering org faces over the next 18 months?',
+      greenFlag: 'Candid, transparent analysis of competitive pressures, AI shifts, and modernization challenges.',
+      redFlag: 'Defensiveness, hand-waving, or pretending no competitors or architectural bottlenecks exist.',
+      starred: true
     },
     {
-      id: 'rev-6',
-      category: 'Velocity & Tooling',
-      role: 'Peer Engineer',
-      badgeColor: 'primary',
-      question: 'From merging a pull request on main to running in production, how long does the CI/CD pipeline take, and how often do you deploy?',
-      whyItWorks: 'Gauges automated test maturity, build speeds, and developer velocity.',
-      greenFlag: 'Deploys multiple times a day with canary rollouts and under 15-minute pipeline runs.',
-      redFlag: 'Manual testing releases once a month on Thursday nights.'
-    },
-    {
-      id: 'rev-7',
-      category: 'Business Runway & Strategy',
-      role: 'Director / VP',
-      badgeColor: 'warning',
-      question: 'What is the company\'s revenue runway or profitability path, and how does this team contribute to top-line business metrics?',
-      whyItWorks: 'Protects you against layoffs and shows strategic commercial acumen.',
-      greenFlag: 'Transparent runway (>24 months or profitable), clear metrics tied to business revenue.',
-      redFlag: 'Evading the question or defensive responses about burn rate.'
-    },
-    {
-      id: 'rev-8',
-      category: 'On-Call & Work-Life Balance',
-      role: 'Peer Engineer',
-      badgeColor: 'danger',
-      question: 'What does the on-call rotation look like, how many pages occur outside working hours, and do you get compensatory time off?',
-      whyItWorks: 'Vital self-care question to avoid burnout hellscapes.',
-      greenFlag: '<2 pages a week, comp time for overnight incidents, active investment in auto-healing.',
-      redFlag: 'Engineers laughing nervously or mentioning regular weekend emergency pages.'
+      id: 'rev-rec-1',
+      stage: 'recruiter',
+      tier: 'Recruiter Screen',
+      question: 'Why is this role open: is it net-new organizational growth or backfilling a departure?',
+      greenFlag: 'Transparent explanation of team expansion, newly funded initiatives, or promotion transitions.',
+      redFlag: 'Hesitation, multiple people churning out of the team within 6 months, or vague re-org explanations.',
+      starred: false
     }
   ];
 
   components.reverseInterview = () => {
-    let savedDeck = [];
-    let customQuestions = [];
+    let questions = [];
     try {
-      savedDeck = JSON.parse(localStorage.getItem('prepspace_reverse_deck') || '[]');
-      customQuestions = JSON.parse(localStorage.getItem('prepspace_reverse_custom') || '[]');
-    } catch(e) {}
+      questions = JSON.parse(localStorage.getItem('prepspace_reverse_questions')) || DEFAULT_REVERSE_QUESTIONS;
+    } catch(e) { questions = DEFAULT_REVERSE_QUESTIONS; }
 
-    const allQuestions = [...REVERSE_QUESTIONS, ...customQuestions];
+    const starredList = questions.filter(q => q.starred);
 
     return `
-      <div class="container-fluid px-3 px-md-4 py-3">
+      <div class="container-fluid px-3 px-md-4 py-3 suite-scroll-container">
         <!-- Header -->
-        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom border-secondary border-opacity-15 gap-2">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-15 gap-2">
           <div>
             <div class="d-flex align-items-center gap-2">
-              <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-monospace fs-9">INTERVIEW CLOSING KIT</span>
-              <h4 class="text-white fw-bold m-0 fs-5">Reverse Interview Kit ("Questions to Ask Them")</h4>
+              <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-50 font-monospace fs-9">EXECUTIVE DUE DILIGENCE</span>
+              <h4 class="text-white fw-bold m-0 fs-5">Reverse Interview Kit & Cultural Risk Radar</h4>
             </div>
-            <p class="text-muted fs-8 mb-0 mt-1">Flip the table: assess culture, architecture, on-call health, and strategic vision before signing an offer.</p>
+            <p class="text-muted fs-8 mb-0 mt-1">Interview your interviewer: detect toxic engineering cultures, decode red flags, and build your Pocket Deck.</p>
           </div>
-          <div class="d-flex align-items-center gap-2">
-            <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#addCustomQuestionModal">
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-info btn-sm px-3" id="btn-export-index-card">
+              <i class="fa-solid fa-note-sticky me-1"></i> 3x5 Pocket Cheat Sheet
+            </button>
+            <button class="btn btn-primary btn-sm px-3" data-bs-toggle="modal" data-bs-target="#addReverseModal">
               <i class="fa-solid fa-plus me-1"></i> Add Custom Question
             </button>
-            <span class="badge bg-dark border border-secondary border-opacity-30 text-white fs-8">
-              <i class="fa-solid fa-bookmark text-warning me-1"></i> Pocket Deck: <strong id="pocket-deck-count" class="text-warning">${savedDeck.length}</strong> Saved
-            </span>
           </div>
         </div>
 
-        <!-- Role Filter Pills -->
-        <div class="d-flex flex-wrap gap-1.5 mb-3 align-items-center" id="reverse-filter-pills">
-          <button class="btn btn-sm btn-glass active fs-9 rev-filter-btn" data-filter="all">All Questions (${allQuestions.length})</button>
-          <button class="btn btn-sm btn-glass fs-9 rev-filter-btn" data-filter="Peer">Peer / Senior IC</button>
-          <button class="btn btn-sm btn-glass fs-9 rev-filter-btn" data-filter="Manager">Engineering Manager</button>
-          <button class="btn btn-sm btn-glass fs-9 rev-filter-btn" data-filter="Director">VP & Director</button>
-        </div>
-
-        <div class="row g-3">
-          <div class="col-12 col-xl-8">
-            <div class="d-flex flex-column gap-3" id="reverse-catalog-container">
-              ${allQuestions.map(q => {
-                const isSaved = savedDeck.includes(q.id);
-                return `
-                  <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-3 p-md-4 shadow-sm reverse-question-card" data-id="${q.id}" data-role="${q.role.toLowerCase()}">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                      <div class="d-flex align-items-center gap-2">
-                        <span class="badge bg-${q.badgeColor || 'primary'} bg-opacity-20 text-${q.badgeColor || 'primary'} border border-${q.badgeColor || 'primary'} border-opacity-30 font-monospace fs-9">${q.category}</span>
-                        <span class="text-muted fs-9 font-monospace">&bull; Ask: ${q.role}</span>
-                      </div>
-                      <button class="btn btn-sm btn-glass text-warning toggle-deck-btn ${isSaved ? 'active' : ''}" data-id="${q.id}">
-                        <i class="${isSaved ? 'fa-solid fa-star text-warning' : 'fa-regular fa-star text-muted'}"></i>
-                      </button>
-                    </div>
-                    <h5 class="text-white fw-bold fs-6 mb-2">"${q.question}"</h5>
-                    
-                    <div class="p-2.5 rounded bg-black bg-opacity-40 border-start border-2 border-${q.badgeColor || 'primary'} mb-2">
-                      <span class="text-${q.badgeColor || 'primary'} fs-9 font-monospace fw-bold d-block mb-1">Why This Wins Offers:</span>
-                      <p class="text-secondary fs-8 mb-0" style="line-height: 1.6;">${q.whyItWorks}</p>
-                    </div>
-
-                    ${q.greenFlag ? `
-                      <div class="row g-2 mt-1">
-                        <div class="col-12 col-md-6">
-                          <div class="p-2 rounded bg-black bg-opacity-30 border-start border-2 border-success fs-9">
-                            <span class="text-success fw-bold d-block">🟢 Green Flag:</span>
-                            <span class="text-muted">${q.greenFlag}</span>
-                          </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                          <div class="p-2 rounded bg-black bg-opacity-30 border-start border-2 border-danger fs-9">
-                            <span class="text-danger fw-bold d-block">🔴 Red Flag:</span>
-                            <span class="text-muted">${q.redFlag}</span>
-                          </div>
-                        </div>
-                      </div>
-                    ` : ''}
-                  </div>
-                `;
-              }).join('')}
+        <!-- Pocket Deck Ribbon -->
+        <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-3 mb-3 shadow-sm">
+          <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-warning text-dark font-monospace fs-8"><i class="fa-solid fa-star me-1"></i>Active Pocket Deck</span>
+              <span class="text-white fw-bold fs-7" id="pocket-count-label">${starredList.length} Questions Starred</span>
             </div>
-          </div>
-
-          <div class="col-12 col-xl-4">
-            <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-3 p-md-4 sticky-top shadow-sm" style="top: 20px;">
-              <h6 class="text-white fw-bold mb-2 fs-7"><i class="fa-solid fa-box-archive text-warning me-2"></i>My Active Pocket Deck</h6>
-              <p class="text-muted fs-9 mb-3">Star 2–4 high-impact questions to keep directly on your second screen or notepad.</p>
-              
-              <div id="saved-deck-container" class="d-flex flex-column gap-2 mb-3">
-                ${savedDeck.length === 0 ? `
-                  <div class="text-center py-4 text-muted fs-8 font-monospace">No questions starred yet.<br>Click the star on any card to add it to your pocket deck.</div>
-                ` : savedDeck.map(id => {
-                  const item = allQuestions.find(q => q.id === id);
-                  if (!item) return '';
-                  return `
-                    <div class="p-2 bg-black rounded border border-secondary border-opacity-30 fs-8 text-light d-flex justify-content-between align-items-center">
-                      <span class="text-truncate me-2">"${item.question}"</span>
-                      <button class="btn btn-sm btn-glass text-danger p-0 px-1 remove-from-deck-btn" data-id="${item.id}"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
-                  `;
-                }).join('')}
-              </div>
-
-              <button class="btn btn-primary btn-sm w-100 py-2" id="btn-copy-pocket-deck">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-primary py-1 px-3 fs-9" id="btn-copy-pocket-deck">
                 <i class="fa-solid fa-copy me-1"></i> Copy Pocket Deck Notes
               </button>
             </div>
           </div>
         </div>
+
+        <!-- Stage Filter Pills -->
+        <div class="d-flex flex-wrap gap-1.5 mb-3" id="reverse-stage-pills">
+          <button class="btn btn-sm btn-glass active fs-9 rev-filter-btn" data-stage="all">All Questions (${questions.length})</button>
+          <button class="btn btn-sm btn-glass fs-9 rev-filter-btn" data-stage="recruiter">Recruiter Screen</button>
+          <button class="btn btn-sm btn-glass fs-9 rev-filter-btn" data-stage="peer">Senior Peer / Tech Lead</button>
+          <button class="btn btn-sm btn-glass fs-9 rev-filter-btn" data-stage="manager">Engineering Manager</button>
+          <button class="btn btn-sm btn-glass fs-9 rev-filter-btn" data-stage="director">VP / Director</button>
+        </div>
+
+        <!-- Questions List Grid -->
+        <div class="row g-3" id="reverse-questions-container">
+          ${questions.map((q) => `
+            <div class="col-12 col-xl-6 rev-question-card" data-stage="${q.stage}" data-id="${q.id}">
+              <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-3 h-100 shadow-sm cultural-risk-card position-relative">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <span class="badge bg-secondary bg-opacity-30 text-info border border-secondary border-opacity-30 font-monospace fs-9">${q.tier}</span>
+                  <button class="btn btn-glass btn-sm p-1 px-2 toggle-star-rev-btn text-warning" data-id="${q.id}">
+                    <i class="${q.starred ? 'fa-solid' : 'fa-regular'} fa-star"></i>
+                  </button>
+                </div>
+
+                <h6 class="text-white fw-bold fs-7 mb-2" style="line-height: 1.5;">"${q.question}"</h6>
+
+                <!-- Green Flag / Red Flag Radar -->
+                <div class="d-flex flex-column gap-1.5 mb-3">
+                  <div class="p-2 rounded bg-black bg-opacity-40 border-start border-3 border-success">
+                    <span class="text-success font-monospace fs-9 fw-bold d-block mb-0.5"><i class="fa-solid fa-circle-check me-1"></i> Green Flag Signal:</span>
+                    <p class="fs-8 text-light mb-0">${q.greenFlag}</p>
+                  </div>
+                  <div class="p-2 rounded bg-black bg-opacity-40 border-start border-3 border-danger">
+                    <span class="text-danger font-monospace fs-9 fw-bold d-block mb-0.5"><i class="fa-solid fa-triangle-exclamation me-1"></i> Red Flag Warning:</span>
+                    <p class="fs-8 text-light mb-0">${q.redFlag}</p>
+                  </div>
+                </div>
+
+                <div class="mt-auto d-flex justify-content-between align-items-center pt-2 border-top border-secondary border-opacity-20">
+                  <small class="text-muted fs-9 font-monospace">Stage: ${q.tier}</small>
+                  <button class="btn btn-sm btn-glass text-light py-0.5 px-2 fs-9 copy-single-rev-q" data-id="${q.id}">
+                    <i class="fa-solid fa-copy me-1"></i> Copy Question
+                  </button>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
       </div>
 
       <!-- Add Custom Question Modal -->
-      <div class="modal fade" id="addCustomQuestionModal" tabindex="-1" aria-hidden="true">
+      <div class="modal fade" id="addReverseModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content bg-dark border-secondary border-opacity-50 text-white">
-            <div class="modal-header border-secondary border-opacity-25">
-              <h5 class="modal-title fs-6"><i class="fa-solid fa-plus text-primary me-2"></i>Add Custom Reverse Question</h5>
+          <div class="modal-content bg-dark text-white border-secondary border-opacity-40">
+            <div class="modal-header border-secondary border-opacity-25 py-2.5">
+              <h5 class="modal-title fs-6"><i class="fa-solid fa-plus text-primary me-2"></i>Add Reverse Interview Question</h5>
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body p-3">
               <div class="mb-2">
-                <label class="form-label fs-8 text-secondary">Question</label>
-                <textarea id="modal-rev-q" class="form-control bg-black text-white border-secondary border-opacity-50 fs-8" rows="2" placeholder="e.g. How does the engineering org handle remote asynchronous communication?"></textarea>
-              </div>
-              <div class="row g-2 mb-2">
-                <div class="col-6">
-                  <label class="form-label fs-8 text-secondary">Target Role</label>
-                  <select id="modal-rev-role" class="form-select form-select-sm bg-black text-white border-secondary border-opacity-50">
-                    <option value="Peer Engineer">Peer Engineer</option>
-                    <option value="Engineering Manager">Engineering Manager</option>
-                    <option value="Director / VP">Director / VP</option>
-                  </select>
-                </div>
-                <div class="col-6">
-                  <label class="form-label fs-8 text-secondary">Category</label>
-                  <input type="text" id="modal-rev-cat" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. Remote Culture">
-                </div>
+                <label class="form-label fs-8 text-secondary fw-semibold">Interviewer Stage</label>
+                <select id="modal-rev-stage" class="form-select form-select-sm bg-black text-white border-secondary border-opacity-50">
+                  <option value="peer" selected>Senior Peer / Tech Lead</option>
+                  <option value="manager">Engineering Manager</option>
+                  <option value="director">VP / Director</option>
+                  <option value="recruiter">Recruiter Screen</option>
+                </select>
               </div>
               <div class="mb-2">
-                <label class="form-label fs-8 text-secondary">Strategic Rationale (Why ask this?)</label>
-                <input type="text" id="modal-rev-why" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. Checks for asynchronous documentation standards">
+                <label class="form-label fs-8 text-secondary fw-semibold">Target Question *</label>
+                <textarea id="modal-rev-question" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" rows="2" placeholder="e.g. How do performance calibrations handle disagreements between managers?"></textarea>
+              </div>
+              <div class="mb-2">
+                <label class="form-label fs-8 text-success fw-semibold">Green Flag (Ideal Answer)</label>
+                <input type="text" id="modal-rev-green" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. Committee reviews with anonymous calibration data">
+              </div>
+              <div class="mb-2">
+                <label class="form-label fs-8 text-danger fw-semibold">Red Flag (Warning Sign)</label>
+                <input type="text" id="modal-rev-red" class="form-control form-control-sm bg-black text-white border-secondary border-opacity-50" placeholder="e.g. Solo manager discretion, political favorites">
               </div>
             </div>
-            <div class="modal-footer border-secondary border-opacity-25">
+            <div class="modal-footer border-secondary border-opacity-25 py-2">
               <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-              <button type="button" class="btn btn-primary btn-sm" id="btn-save-custom-rev-q">Add to Catalog</button>
+              <button type="button" class="btn btn-primary btn-sm px-3" id="btn-save-new-rev-q"><i class="fa-solid fa-check me-1"></i> Save to Kit</button>
             </div>
           </div>
         </div>
@@ -2749,160 +3215,177 @@
   };
 
   window.bindReverseInterviewEvents = () => {
-    function refreshDeckView() {
-      let savedDeck = [];
-      let customQuestions = [];
-      try {
-        savedDeck = JSON.parse(localStorage.getItem('prepspace_reverse_deck') || '[]');
-        customQuestions = JSON.parse(localStorage.getItem('prepspace_reverse_custom') || '[]');
-      } catch(e) {}
-
-      const all = [...REVERSE_QUESTIONS, ...customQuestions];
-      const countEl = document.getElementById('pocket-deck-count');
-      if (countEl) countEl.textContent = savedDeck.length;
-
-      const container = document.getElementById('saved-deck-container');
-      if (container) {
-        if (savedDeck.length === 0) {
-          container.innerHTML = '<div class="text-center py-4 text-muted fs-8 font-monospace">No questions starred yet.<br>Click the star on any card to add it to your pocket deck.</div>';
-        } else {
-          container.innerHTML = savedDeck.map(id => {
-            const item = all.find(q => q.id === id);
-            if (!item) return '';
-            return `
-              <div class="p-2 bg-black rounded border border-secondary border-opacity-30 fs-8 text-light d-flex justify-content-between align-items-center">
-                <span class="text-truncate me-2">"${item.question}"</span>
-                <button class="btn btn-sm btn-glass text-danger p-0 px-1 remove-from-deck-btn" data-id="${item.id}"><i class="fa-solid fa-xmark"></i></button>
-              </div>
-            `;
-          }).join('');
-
-          container.querySelectorAll('.remove-from-deck-btn').forEach(b => {
-            b.addEventListener('click', () => {
-              const id = b.getAttribute('data-id');
-              let deck = JSON.parse(localStorage.getItem('prepspace_reverse_deck') || '[]');
-              deck = deck.filter(i => i !== id);
-              localStorage.setItem('prepspace_reverse_deck', JSON.stringify(deck));
-              // update star button
-              const starBtn = document.querySelector(`.toggle-deck-btn[data-id="${id}"]`);
-              if (starBtn) {
-                starBtn.classList.remove('active');
-                starBtn.innerHTML = '<i class="fa-regular fa-star text-muted"></i>';
-              }
-              refreshDeckView();
-            });
-          });
-        }
-      }
-    }
-
-    document.querySelectorAll('.toggle-deck-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.getAttribute('data-id');
-        let deck = JSON.parse(localStorage.getItem('prepspace_reverse_deck') || '[]');
-        if (deck.includes(id)) {
-          deck = deck.filter(item => item !== id);
-          btn.classList.remove('active');
-          btn.innerHTML = '<i class="fa-regular fa-star text-muted"></i>';
-          AudioSynth.playChime(550, 440, 0.2);
-          safeToast('Removed from Pocket Deck', 'info');
-        } else {
-          deck.push(id);
-          btn.classList.add('active');
-          btn.innerHTML = '<i class="fa-solid fa-star text-warning"></i>';
-          AudioSynth.playChime(660, 880, 0.25);
-          safeToast('Added to Pocket Deck!', 'success');
-        }
-        localStorage.setItem('prepspace_reverse_deck', JSON.stringify(deck));
-        refreshDeckView();
-      });
-    });
-
-    // Filter Buttons
+    // Filter by stage
     document.querySelectorAll('.rev-filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.rev-filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const filter = btn.getAttribute('data-filter').toLowerCase();
-        document.querySelectorAll('.reverse-question-card').forEach(card => {
-          if (filter === 'all') {
-            card.style.display = '';
-          } else {
-            const role = card.getAttribute('data-role') || '';
-            card.style.display = role.includes(filter) ? '' : 'none';
-          }
+        document.querySelectorAll('.rev-filter-btn').forEach(b => b.classList.remove('active', 'btn-primary'));
+        btn.classList.add('active', 'btn-primary');
+        const st = btn.getAttribute('data-stage');
+
+        document.querySelectorAll('.rev-question-card').forEach(card => {
+          if (st === 'all') card.style.display = '';
+          else card.style.display = card.getAttribute('data-stage') === st ? '' : 'none';
         });
       });
     });
 
-    // Save Custom Question
-    const saveCustomBtn = document.getElementById('btn-save-custom-rev-q');
-    if (saveCustomBtn) {
-      saveCustomBtn.addEventListener('click', () => {
-        const question = document.getElementById('modal-rev-q')?.value;
-        const role = document.getElementById('modal-rev-role')?.value || 'Peer Engineer';
-        const category = document.getElementById('modal-rev-cat')?.value || 'Custom Question';
-        const whyItWorks = document.getElementById('modal-rev-why')?.value || 'Tailored personal question';
-
-        if (!question) {
-          safeToast('Please enter the question text', 'warning');
-          return;
-        }
-
-        let customList = [];
+    // Reactive Star Toggle (no full page reload)
+    document.querySelectorAll('.toggle-star-rev-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        let questions = [];
         try {
-          customList = JSON.parse(localStorage.getItem('prepspace_reverse_custom') || '[]');
-        } catch(e) {}
+          questions = JSON.parse(localStorage.getItem('prepspace_reverse_questions')) || DEFAULT_REVERSE_QUESTIONS;
+        } catch(e) { questions = DEFAULT_REVERSE_QUESTIONS; }
 
-        customList.unshift({
-          id: 'custom-rev-' + Date.now(),
-          category, role, badgeColor: 'info',
-          question, whyItWorks
-        });
+        const q = questions.find(it => it.id === id);
+        if (q) {
+          q.starred = !q.starred;
+          localStorage.setItem('prepspace_reverse_questions', JSON.stringify(questions));
 
-        localStorage.setItem('prepspace_reverse_custom', JSON.stringify(customList));
+          const icon = btn.querySelector('i');
+          if (icon) {
+            icon.className = q.starred ? 'fa-solid fa-star' : 'fa-regular fa-star';
+          }
+          AudioSynth.playChime(660, 880, 0.15);
 
-        const modalEl = document.getElementById('addCustomQuestionModal');
-        if (modalEl && window.bootstrap) {
-          const m = bootstrap.Modal.getInstance(modalEl);
-          if (m) m.hide();
-        }
-
-        AudioSynth.playChime(523, 784, 0.3);
-        safeToast('Custom question added to your catalog!', 'success');
-
-        const mount = document.getElementById('page-mount');
-        if (mount) {
-          mount.innerHTML = components.reverseInterview();
-          bindReverseInterviewEvents();
+          const starredCount = questions.filter(it => it.starred).length;
+          const countLbl = document.getElementById('pocket-count-label');
+          if (countLbl) countLbl.textContent = `${starredCount} Questions Starred`;
+          safeToast(q.starred ? 'Starred to Pocket Deck!' : 'Removed from Pocket Deck', 'info');
         }
       });
-    }
+    });
 
+    // Copy Single Question
+    document.querySelectorAll('.copy-single-rev-q').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        let questions = [];
+        try {
+          questions = JSON.parse(localStorage.getItem('prepspace_reverse_questions')) || DEFAULT_REVERSE_QUESTIONS;
+        } catch(e) { questions = DEFAULT_REVERSE_QUESTIONS; }
+
+        const q = questions.find(it => it.id === id);
+        if (q) {
+          const txt = `"${q.question}"\n\n[Green Flag Signal]: ${q.greenFlag}\n[Red Flag Warning]: ${q.redFlag}`;
+          navigator.clipboard.writeText(txt).then(() => {
+            AudioSynth.playChime(523, 659, 0.2);
+            safeToast('Question copied to clipboard!', 'success');
+          });
+        }
+      });
+    });
+
+    // Copy Full Pocket Deck
     const copyDeckBtn = document.getElementById('btn-copy-pocket-deck');
     if (copyDeckBtn) {
       copyDeckBtn.addEventListener('click', () => {
-        let deck = JSON.parse(localStorage.getItem('prepspace_reverse_deck') || '[]');
-        let custom = JSON.parse(localStorage.getItem('prepspace_reverse_custom') || '[]');
-        const all = [...REVERSE_QUESTIONS, ...custom];
+        let questions = [];
+        try {
+          questions = JSON.parse(localStorage.getItem('prepspace_reverse_questions')) || DEFAULT_REVERSE_QUESTIONS;
+        } catch(e) { questions = DEFAULT_REVERSE_QUESTIONS; }
 
-        if (deck.length === 0) {
-          safeToast('Star at least one question first!', 'warning');
+        const starred = questions.filter(q => q.starred);
+        if (starred.length === 0) {
+          safeToast('Star at least 1 question to copy your pocket deck!', 'warning');
           return;
         }
-        const text = deck.map((id, idx) => {
-          const item = all.find(q => q.id === id);
-          return item ? `${idx + 1}. "${item.question}" (Ask: ${item.role})\n   Why: ${item.whyItWorks}` : '';
-        }).filter(Boolean).join('\n\n');
 
-        navigator.clipboard.writeText(text).then(() => {
-          AudioSynth.playChime(587, 880, 0.3);
-          safeToast('Pocket deck copied to clipboard!', 'success');
+        let output = `# My Interview Pocket Deck (${starred.length} Selected Questions)\n\n`;
+        starred.forEach((q, idx) => {
+          output += `### ${idx + 1}. [${q.tier}] ${q.question}\n- 🟢 Green Flag: ${q.greenFlag}\n- 🔴 Red Flag: ${q.redFlag}\n\n`;
+        });
+
+        navigator.clipboard.writeText(output).then(() => {
+          AudioSynth.playChime(587, 880, 0.25);
+          safeToast('Copied Pocket Deck to clipboard!', 'success');
         });
       });
     }
 
-    refreshDeckView();
+    // 3x5 Index Card Cheat Sheet Export
+    const indexCardBtn = document.getElementById('btn-export-index-card');
+    if (indexCardBtn) {
+      indexCardBtn.addEventListener('click', () => {
+        let questions = [];
+        try {
+          questions = JSON.parse(localStorage.getItem('prepspace_reverse_questions')) || DEFAULT_REVERSE_QUESTIONS;
+        } catch(e) { questions = DEFAULT_REVERSE_QUESTIONS; }
+
+        const starred = questions.filter(q => q.starred);
+        let text = '=== PREPSPACE 3x5 INTERVIEW POCKET CHEAT SHEET ===\n\n';
+        starred.forEach((q, i) => {
+          text += `[Q${i+1}] (${q.tier.toUpperCase()})\n"${q.question}"\n-> Watch for: ${q.greenFlag}\n\n`;
+        });
+
+        navigator.clipboard.writeText(text).then(() => {
+          AudioSynth.playChime(523, 784, 0.25);
+          safeToast('3x5 Pocket Cheat Sheet formatted & copied to clipboard!', 'success');
+        });
+      });
+    }
+
+    // Save Custom Question
+    const saveNewBtn = document.getElementById('btn-save-new-rev-q');
+    if (saveNewBtn) {
+      saveNewBtn.addEventListener('click', () => {
+        const stage = document.getElementById('modal-rev-stage')?.value || 'peer';
+        const question = document.getElementById('modal-rev-question')?.value.trim();
+        const green = document.getElementById('modal-rev-green')?.value.trim();
+        const red = document.getElementById('modal-rev-red')?.value.trim();
+
+        if (!question) {
+          safeToast('Please enter a question statement.', 'warning');
+          return;
+        }
+
+        const tierMap = {
+          recruiter: 'Recruiter Screen',
+          peer: 'Senior Peer / Tech Lead',
+          manager: 'Engineering Manager',
+          director: 'VP / Director'
+        };
+
+        let questions = [];
+        try {
+          questions = JSON.parse(localStorage.getItem('prepspace_reverse_questions')) || DEFAULT_REVERSE_QUESTIONS;
+        } catch(e) { questions = DEFAULT_REVERSE_QUESTIONS; }
+
+        questions.unshift({
+          id: 'rev-' + Date.now(),
+          stage,
+          tier: tierMap[stage] || 'Peer Engineer',
+          question,
+          greenFlag: green || 'Clear, transparent explanation',
+          redFlag: red || 'Defensiveness or ambiguity',
+          starred: true
+        });
+
+        localStorage.setItem('prepspace_reverse_questions', JSON.stringify(questions));
+
+        const modalEl = document.getElementById('addReverseModal');
+        if (modalEl && window.bootstrap) {
+          const m = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+          if (m) m.hide();
+        }
+        document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+        document.body.classList.remove('modal-open');
+
+        AudioSynth.playChime(587, 880, 0.3);
+        safeToast('Added custom question to your kit!', 'success');
+
+        setTimeout(() => {
+          const mount = document.getElementById('page-mount');
+          if (mount) {
+            mount.innerHTML = components.reverseInterview();
+            bindReverseInterviewEvents();
+          }
+        }, 150);
+      });
+    }
   };
 
 })();
+
+
