@@ -1879,13 +1879,32 @@ function bindResetPasswordEvents() {
 window.bindResetPasswordEvents = bindResetPasswordEvents;
 
 // Render dashboard graphs
-function renderDashboardCharts(stats) {
-  // Weekly hours chart
-  const weeklyCtx = document.getElementById('weeklyHoursChart').getContext('2d');
-  const weeklyLabels = Object.keys(stats.weeklyStudyTime);
-  const weeklyData = Object.values(stats.weeklyStudyTime);
+function renderDashboardCharts(stats = {}) {
+  const weeklyCanvas = document.getElementById('weeklyHoursChart');
+  if (!weeklyCanvas) return;
+  const weeklyCtx = weeklyCanvas.getContext('2d');
 
-  new Chart(weeklyCtx, {
+  const defaultWeeklyStudy = {
+    '2026-09-03': 45,
+    '2026-09-04': 90,
+    '2026-09-05': 120,
+    '2026-09-06': 60,
+    '2026-09-07': 110,
+    '2026-09-08': 150,
+    '2026-09-09': 85
+  };
+  const weeklyStudy = (stats && stats.weeklyStudyTime && typeof stats.weeklyStudyTime === 'object')
+    ? stats.weeklyStudyTime
+    : defaultWeeklyStudy;
+
+  const weeklyLabels = Object.keys(weeklyStudy);
+  const weeklyData = Object.values(weeklyStudy);
+
+  if (window._weeklyHoursChartInstance) {
+    try { window._weeklyHoursChartInstance.destroy(); } catch (e) {}
+  }
+
+  window._weeklyHoursChartInstance = new Chart(weeklyCtx, {
     type: 'line',
     data: {
       labels: weeklyLabels.map(d => d.substring(5)), // Format MM-DD
@@ -1911,15 +1930,25 @@ function renderDashboardCharts(stats) {
   });
 
   // Pipeline Status chart
-  const pipelineCtx = document.getElementById('pipelineStatusChart').getContext('2d');
-  const rawPipelineLabels = Object.keys(stats.statusCounts || {});
-  const rawPipelineData = Object.values(stats.statusCounts || {});
+  const pipelineCanvas = document.getElementById('pipelineStatusChart');
+  if (!pipelineCanvas) return;
+  const pipelineCtx = pipelineCanvas.getContext('2d');
+
+  const statusCounts = (stats && stats.statusCounts && typeof stats.statusCounts === 'object')
+    ? stats.statusCounts
+    : {};
+  const rawPipelineLabels = Object.keys(statusCounts);
+  const rawPipelineData = Object.values(statusCounts);
   const hasData = rawPipelineData.some(v => v > 0);
 
   const pipelineLabels = hasData ? rawPipelineLabels : ['Applied', 'Screen', 'Interview', 'Offer'];
   const pipelineData = hasData ? rawPipelineData : [4, 2, 1, 1];
 
-  new Chart(pipelineCtx, {
+  if (window._pipelineStatusChartInstance) {
+    try { window._pipelineStatusChartInstance.destroy(); } catch (e) {}
+  }
+
+  window._pipelineStatusChartInstance = new Chart(pipelineCtx, {
     type: 'doughnut',
     data: {
       labels: pipelineLabels,
