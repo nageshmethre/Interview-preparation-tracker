@@ -778,11 +778,17 @@ const components = {
           <a href="#/certificates" class="sidebar-link"><i class="fa-solid fa-award"></i> <span>Certificates</span></a>
           <a href="#/flashcards" class="sidebar-link"><i class="fa-solid fa-clone"></i> <span>Flashcards</span></a>
           <a href="#/notes" class="sidebar-link"><i class="fa-solid fa-note-sticky"></i> <span>Study Notes</span></a>
+          <a href="#/audio-bites" class="sidebar-link"><i class="fa-solid fa-headphones text-info"></i> <span>Feynman Audio (60s)</span></a>
           <a href="#/experiences" class="sidebar-link"><i class="fa-solid fa-user-tie"></i> <span>Experiences</span></a>
           <a href="#/community" class="sidebar-link"><i class="fa-solid fa-comments"></i> <span>Community</span></a>
 
           <div class="sidebar-section-title px-4 mt-3 mb-2">Career & Tools</div>
           <a href="#/placement" class="sidebar-link"><i class="fa-solid fa-briefcase"></i> <span>Placement Kanban</span></a>
+          <a href="#/outreach" class="sidebar-link"><i class="fa-solid fa-paper-plane text-warning"></i> <span>Outreach CRM</span></a>
+          <a href="#/star-vault" class="sidebar-link"><i class="fa-solid fa-star text-warning"></i> <span>STAR Story Vault</span></a>
+          <a href="#/peer-mock" class="sidebar-link"><i class="fa-solid fa-people-arrows text-primary"></i> <span>Peer Mock Arena</span></a>
+          <a href="#/interview-booster" class="sidebar-link"><i class="fa-solid fa-bolt text-danger"></i> <span>60-Min Booster</span></a>
+          <a href="#/reverse-interview" class="sidebar-link"><i class="fa-solid fa-clipboard-question text-success"></i> <span>Reverse Interview Kit</span></a>
           <a href="#/ai-assistant" class="sidebar-link"><i class="fa-solid fa-robot"></i> <span>AI ATS Assistant</span></a>
           <a href="#/calendar" class="sidebar-link"><i class="fa-solid fa-calendar-days"></i> <span>Interview Calendar</span></a>
           <a href="#/reports" class="sidebar-link"><i class="fa-solid fa-file-invoice"></i> <span>Progress Reports</span></a>
@@ -912,6 +918,28 @@ const components = {
           <span class="stat-label mb-1">Active Pipeline</span>
           <div class="stat-num text-purple mt-1 mb-0">${applicationsCount}</div>
           <small class="text-success fs-9 font-monospace">In Evaluation</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interview Accelerator & Career Readiness Suite (Features 3, 4, 6, 7, 8, 10) -->
+    <div class="row g-2 mb-3">
+      <div class="col-12">
+        <div class="card bg-dark bg-opacity-60 border-secondary border-opacity-30 rounded-3 p-2.5 px-3 shadow-sm">
+          <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-50 font-monospace fs-9">INTERVIEW ACCELERATOR</span>
+              <span class="text-white fw-bold fs-8">Candidate Readiness Hub:</span>
+            </div>
+            <div class="d-flex flex-wrap gap-1.5">
+              <a href="#/outreach" class="btn btn-sm btn-glass fs-9 text-warning"><i class="fa-solid fa-paper-plane me-1"></i>Outreach CRM</a>
+              <a href="#/star-vault" class="btn btn-sm btn-glass fs-9 text-warning"><i class="fa-solid fa-star me-1"></i>STAR Vault</a>
+              <a href="#/peer-mock" class="btn btn-sm btn-glass fs-9 text-primary"><i class="fa-solid fa-people-arrows me-1"></i>Peer Mock</a>
+              <a href="#/audio-bites" class="btn btn-sm btn-glass fs-9 text-info"><i class="fa-solid fa-headphones me-1"></i>Feynman Audio</a>
+              <a href="#/interview-booster" class="btn btn-sm btn-glass fs-9 text-danger"><i class="fa-solid fa-bolt me-1"></i>60m Booster</a>
+              <a href="#/reverse-interview" class="btn btn-sm btn-glass fs-9 text-success"><i class="fa-solid fa-clipboard-question me-1"></i>Reverse Kit</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>

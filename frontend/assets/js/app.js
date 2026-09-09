@@ -704,6 +704,30 @@ function router() {
         if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/placement') return;
         pageMount.innerHTML = `<div class="alert alert-danger">Failed to load job pipelines: ${err.message}</div>`;
       });
+  } else if (hash === '#/outreach') {
+    viewTitle.textContent = 'Recruiter Outreach CRM';
+    pageMount.innerHTML = components.outreachCrm ? components.outreachCrm() : '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
+    if (window.bindOutreachCrmEvents) bindOutreachCrmEvents();
+  } else if (hash === '#/star-vault') {
+    viewTitle.textContent = 'STAR Story Vault';
+    pageMount.innerHTML = components.starVault ? components.starVault() : '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
+    if (window.bindStarVaultEvents) bindStarVaultEvents();
+  } else if (hash === '#/peer-mock') {
+    viewTitle.textContent = 'Peer Mock Exchange';
+    pageMount.innerHTML = components.peerMock ? components.peerMock() : '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
+    if (window.bindPeerMockEvents) bindPeerMockEvents();
+  } else if (hash === '#/audio-bites') {
+    viewTitle.textContent = '60-Second Feynman Audio';
+    pageMount.innerHTML = components.feynmanAudio ? components.feynmanAudio() : '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
+    if (window.bindFeynmanAudioEvents) bindFeynmanAudioEvents();
+  } else if (hash === '#/interview-booster') {
+    viewTitle.textContent = 'Pre-Interview Crisis Booster';
+    pageMount.innerHTML = components.interviewBooster ? components.interviewBooster() : '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
+    if (window.bindInterviewBoosterEvents) bindInterviewBoosterEvents();
+  } else if (hash === '#/reverse-interview') {
+    viewTitle.textContent = 'Reverse Interview Kit';
+    pageMount.innerHTML = components.reverseInterview ? components.reverseInterview() : '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
+    if (window.bindReverseInterviewEvents) bindReverseInterviewEvents();
   } else if (hash === '#/ai-assistant') {
     viewTitle.textContent = 'Robotic Placement Diagnostics';
     if (!state.isPaid) {
