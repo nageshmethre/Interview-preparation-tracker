@@ -4462,65 +4462,7 @@ input:-webkit-autofill {
   margin: 0 auto;
   scroll-behavior: smooth;
 }
-
-/* 3. Crisis Booster Cockpit HUD */
-.cockpit-hud {
-  background: linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
-  border: 1px solid rgba(59, 130, 246, 0.25);
-  border-radius: 0.75rem;
-  padding: 1rem 1.25rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-}
-
-.mic-meter-bar {
-  width: 8px;
-  background: #10b981;
-  border-radius: 4px;
-  transition: height 0.08s ease;
-}
-
-/* 4. Crisis Flashcard Flip Animation */
-.flashcard-scene {
-  perspective: 1000px;
-  width: 100%;
-}
-
-.flashcard-object {
-  width: 100%;
-  min-height: 220px;
-  position: relative;
-  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-  transform-style: preserve-3d;
-  cursor: pointer;
-}
-
-.flashcard-object.is-flipped {
-  transform: rotateY(180deg);
-}
-
-.flashcard-face {
-  position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.flashcard-face-front {
-  background: rgba(30, 41, 59, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.flashcard-face-back {
-  background: rgba(15, 23, 42, 0.95);
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  transform: rotateY(180deg);
-}
-
-/* 5. Reverse Interview Risk Badges */
+/* 3. Reverse Interview Risk Badges */
 .cultural-risk-card {
   transition: transform 0.15s ease, border-color 0.15s ease;
 }

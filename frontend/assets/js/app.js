@@ -720,10 +720,6 @@ function router() {
     viewTitle.textContent = '60-Second Feynman Audio';
     pageMount.innerHTML = components.feynmanAudio ? components.feynmanAudio() : '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
     if (window.bindFeynmanAudioEvents) bindFeynmanAudioEvents();
-  } else if (hash === '#/interview-booster') {
-    viewTitle.textContent = 'Pre-Interview Crisis Booster';
-    pageMount.innerHTML = components.interviewBooster ? components.interviewBooster() : '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
-    if (window.bindInterviewBoosterEvents) bindInterviewBoosterEvents();
   } else if (hash === '#/reverse-interview') {
     viewTitle.textContent = 'Reverse Interview Kit';
     pageMount.innerHTML = components.reverseInterview ? components.reverseInterview() : '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';

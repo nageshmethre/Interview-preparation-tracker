@@ -787,7 +787,6 @@ const components = {
           <a href="#/outreach" class="sidebar-link"><i class="fa-solid fa-paper-plane text-warning"></i> <span>Outreach CRM</span></a>
           <a href="#/star-vault" class="sidebar-link"><i class="fa-solid fa-star text-warning"></i> <span>STAR Story Vault</span></a>
           <a href="#/peer-mock" class="sidebar-link"><i class="fa-solid fa-people-arrows text-primary"></i> <span>Peer Mock Arena</span></a>
-          <a href="#/interview-booster" class="sidebar-link"><i class="fa-solid fa-bolt text-danger"></i> <span>60-Min Booster</span></a>
           <a href="#/reverse-interview" class="sidebar-link"><i class="fa-solid fa-clipboard-question text-success"></i> <span>Reverse Interview Kit</span></a>
           <a href="#/ai-assistant" class="sidebar-link"><i class="fa-solid fa-robot"></i> <span>AI ATS Assistant</span></a>
           <a href="#/calendar" class="sidebar-link"><i class="fa-solid fa-calendar-days"></i> <span>Interview Calendar</span></a>
@@ -936,7 +935,6 @@ const components = {
               <a href="#/star-vault" class="btn btn-sm btn-glass fs-9 text-warning"><i class="fa-solid fa-star me-1"></i>STAR Vault</a>
               <a href="#/peer-mock" class="btn btn-sm btn-glass fs-9 text-primary"><i class="fa-solid fa-people-arrows me-1"></i>Peer Mock</a>
               <a href="#/audio-bites" class="btn btn-sm btn-glass fs-9 text-info"><i class="fa-solid fa-headphones me-1"></i>Feynman Audio</a>
-              <a href="#/interview-booster" class="btn btn-sm btn-glass fs-9 text-danger"><i class="fa-solid fa-bolt me-1"></i>60m Booster</a>
               <a href="#/reverse-interview" class="btn btn-sm btn-glass fs-9 text-success"><i class="fa-solid fa-clipboard-question me-1"></i>Reverse Kit</a>
             </div>
           </div>
