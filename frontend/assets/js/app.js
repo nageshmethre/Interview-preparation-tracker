@@ -489,6 +489,22 @@ function router() {
         // Keep rendered cached/default state smoothly
         console.warn('Live dashboard stats refresh skipped:', err.message);
       });
+  } else if (hash === '#/gamification') {
+    viewTitle.textContent = 'Gamification Hub';
+    const cachedStatsStr = localStorage.getItem('cached_dashboard_stats_v2');
+    let stats = {
+      totalSolved: 142,
+      completedTopics: 14,
+      streakDays: 7,
+      studyHoursThisWeek: 8.5
+    };
+    if (cachedStatsStr) {
+      try {
+        stats = { ...stats, ...(JSON.parse(cachedStatsStr).data || {}) };
+      } catch (e) {}
+    }
+    pageMount.innerHTML = components.gamificationHub(stats);
+    bindDashboardGamificationEvents();
   } else if (hash === '#/studyplanner') {
     viewTitle.textContent = 'Study Planner';
     pageMount.innerHTML = components.studyPlanner();

@@ -766,6 +766,7 @@ const components = {
         <div class="flex-grow-1 py-2 overflow-y-auto sidebar-scroll-content" id="sidebar-nav-container">
           <div class="sidebar-section-title px-4 mb-2">Core Tracker</div>
           <a href="#/dashboard" class="sidebar-link active"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
+          <a href="#/gamification" class="sidebar-link"><i class="fa-solid fa-gamepad text-warning"></i> <span>Gamification Hub</span> <span class="badge bg-warning bg-opacity-20 text-warning ms-auto fs-9">LVL 7</span></a>
           <a href="#/coding-practice" class="sidebar-link"><i class="fa-solid fa-code"></i> <span>Coding Practice</span></a>
           <a href="#/aptitude" class="sidebar-link"><i class="fa-solid fa-book-open-reader"></i> <span>Aptitude & Book</span></a>
           <a href="#/mock-exams" class="sidebar-link"><i class="fa-solid fa-stopwatch"></i> <span>50-MCQ Mock Exams</span></a>
@@ -894,26 +895,26 @@ const components = {
         <div id="admin-broadcast-portal-container" class="mb-3" style="display: none;"></div>
 
         <!-- Smart AI Behavioral Pace Nudge Banner -->
-        <div id="smart-pace-nudge-banner" class="smart-ai-nudge-banner mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
-          <div class="d-flex align-items-center gap-2.5">
-            <div class="rounded-circle bg-primary bg-opacity-25 p-2 text-info fs-6">
+        <div id="smart-pace-nudge-banner" class="smart-ai-nudge-banner mb-3 d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
+          <div class="d-flex align-items-center gap-2.5 flex-grow-1" style="min-width: 0;">
+            <div class="rounded-circle bg-primary bg-opacity-25 p-2 text-info fs-6 flex-shrink-0">
               <i class="fa-solid fa-robot"></i>
             </div>
-            <div>
+            <div style="min-width: 0;">
               <div class="d-flex align-items-center gap-2">
                 <span class="badge bg-primary bg-opacity-30 text-info font-monospace fs-9">PEPSPACE AI COACH</span>
                 <span class="text-secondary fs-9 font-monospace">Intelligent Pace Analysis</span>
               </div>
-              <p class="text-white fs-8 fw-semibold mb-0 mt-0.5">
+              <p class="text-white fs-8 fw-semibold mb-0 mt-0.5" style="word-break: break-word;">
                 “You haven't completed your weekly target. You're 18% behind your usual pace. Want me to create an AI recovery plan?”
               </p>
             </div>
           </div>
-          <div class="d-flex align-items-center gap-2">
-            <button class="btn btn-sm btn-primary py-1 px-3 fs-8 fw-semibold" id="btn-open-ai-recovery-plan">
+          <div class="d-flex align-items-center gap-2 flex-shrink-0 align-self-end align-self-md-center">
+            <button class="btn btn-sm btn-primary py-1 px-3 fs-8 fw-semibold text-nowrap" id="btn-open-ai-recovery-plan">
               <i class="fa-solid fa-bolt me-1 text-warning"></i> Create Recovery Plan
             </button>
-            <button class="btn btn-sm btn-glass text-secondary py-1 px-2 fs-8" id="btn-dismiss-ai-nudge" title="Dismiss">
+            <button class="btn btn-sm btn-glass text-secondary py-1 px-2 fs-8 flex-shrink-0" id="btn-dismiss-ai-nudge" title="Dismiss">
               <i class="fa-solid fa-xmark"></i>
             </button>
           </div>
@@ -1071,9 +1072,9 @@ const components = {
         <small class="text-muted fs-8 font-monospace">Real-time candidate telemetry & study velocity</small>
       </div>
       <div class="d-flex align-items-center gap-2">
-        <span class="badge bg-primary bg-opacity-20 text-primary border border-primary border-opacity-30 font-monospace fs-9">
-          <i class="fa-solid fa-gamepad me-1 text-warning"></i>GAMIFICATION HUB v4.8
-        </span>
+        <a href="#/gamification" class="btn btn-sm btn-outline-warning py-1 px-3 fs-8 fw-semibold">
+          <i class="fa-solid fa-gamepad me-1 text-warning"></i>Gamification Hub &rarr;
+        </a>
       </div>
     </div>
 
@@ -1119,42 +1120,17 @@ const components = {
       </div>
     </div>
 
-    <!-- Interview Accelerator & Career Readiness Suite -->
-    <div class="row g-2 mb-3">
-      <div class="col-12">
-        <div class="card bg-dark bg-opacity-60 border-secondary border-opacity-30 rounded-3 p-2.5 px-3 shadow-sm">
-          <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
-            <div class="d-flex align-items-center gap-2">
-              <span class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-50 font-monospace fs-9">INTERVIEW ACCELERATOR</span>
-              <span class="text-white fw-bold fs-8">Candidate Readiness Hub:</span>
-            </div>
-            <div class="d-flex flex-wrap gap-1.5">
-              <a href="#/outreach" class="btn btn-sm btn-glass fs-9 text-warning"><i class="fa-solid fa-paper-plane me-1"></i>Outreach CRM</a>
-              <a href="#/star-vault" class="btn btn-sm btn-glass fs-9 text-warning"><i class="fa-solid fa-star me-1"></i>STAR Vault</a>
-              <a href="#/peer-mock" class="btn btn-sm btn-glass fs-9 text-primary"><i class="fa-solid fa-people-arrows me-1"></i>Peer Mock</a>
-              <a href="#/audio-bites" class="btn btn-sm btn-glass fs-9 text-info"><i class="fa-solid fa-headphones me-1"></i>Feynman Audio</a>
-              <a href="#/reverse-interview" class="btn btn-sm btn-glass fs-9 text-success"><i class="fa-solid fa-clipboard-question me-1"></i>Reverse Kit</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- =========================================================================
-         v4.8.0 GAMIFICATION HUB & PROGRESSION SYSTEM
-         ========================================================================= -->
-
-    <!-- Level & XP Progression Strip -->
-    <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-3 mb-3 shadow-sm">
-      <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+    <!-- Compact Level & Habit Strip -->
+    <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-2.5 px-3 mb-3 shadow-sm">
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
         <div class="d-flex align-items-center gap-2.5">
-          <div class="rounded-circle bg-warning bg-opacity-20 p-2 text-warning fs-5">
+          <div class="rounded-circle bg-warning bg-opacity-20 p-2 text-warning fs-6">
             <i class="fa-solid fa-shield-cat"></i>
           </div>
           <div>
             <div class="d-flex align-items-center gap-2">
               <span class="badge bg-warning text-dark fw-bold font-monospace fs-9">LEVEL ${gState.level}</span>
-              <span class="text-white fw-bold fs-7" id="gamification-level-title">${gState.levelTitle}</span>
+              <span class="text-white fw-bold fs-8" id="gamification-level-title">${gState.levelTitle}</span>
               <span class="text-muted fs-9 font-monospace">&bull; Next: ${gState.nextLevelTitle}</span>
             </div>
             <div class="d-flex align-items-center gap-2 mt-0.5">
@@ -1165,306 +1141,28 @@ const components = {
         </div>
         <div class="d-flex align-items-center gap-2">
           <!-- Streak Pill -->
-          <div class="px-2.5 py-1 rounded bg-black bg-opacity-40 border border-secondary border-opacity-30 d-flex align-items-center gap-1.5">
-            <span class="streak-flame fs-6"><i class="fa-solid fa-fire"></i></span>
-            <div>
-              <div class="text-white fw-bold fs-8 lh-1" id="gamification-streak-display">${gState.streak} Days</div>
-              <small class="text-muted fs-9 font-monospace">Streak</small>
-            </div>
+          <div class="px-2 py-1 rounded bg-black bg-opacity-40 border border-secondary border-opacity-30 d-flex align-items-center gap-1.5">
+            <span class="streak-flame fs-7"><i class="fa-solid fa-fire"></i></span>
+            <div class="text-white fw-bold fs-9 lh-1" id="gamification-streak-display">${gState.streak} Days</div>
           </div>
           <!-- Streak Freeze Pill -->
-          <div class="px-2.5 py-1 rounded bg-black bg-opacity-40 border border-secondary border-opacity-30 d-flex align-items-center gap-1.5" title="Streak Freeze Protects You From Missed Days">
-            <i class="fa-solid fa-shield-halved text-info fs-6"></i>
-            <div>
-              <div class="text-info fw-bold fs-8 lh-1">${gState.streakFreeze} Active</div>
-              <small class="text-muted fs-9 font-monospace">Freeze</small>
-            </div>
+          <div class="px-2 py-1 rounded bg-black bg-opacity-40 border border-secondary border-opacity-30 d-flex align-items-center gap-1.5" title="Streak Freeze Active">
+            <i class="fa-solid fa-shield-halved text-info fs-7"></i>
+            <div class="text-info fw-bold fs-9 lh-1">${gState.streakFreeze} Freeze</div>
           </div>
-          <!-- Pro XP Multiplier Badge -->
-          <div class="px-2.5 py-1 rounded bg-warning bg-opacity-10 border border-warning border-opacity-30 d-flex align-items-center gap-1.5" title="Pro Members Receive 2X XP On All Activities">
-            <i class="fa-solid fa-bolt text-warning fs-6"></i>
-            <div>
-              <div class="text-warning fw-bold fs-8 lh-1">2X MULTIPLIER</div>
-              <small class="text-muted fs-9 font-monospace">Pro Perk</small>
-            </div>
+          <!-- 2X Multiplier -->
+          <div class="px-2 py-1 rounded bg-warning bg-opacity-10 border border-warning border-opacity-30 d-flex align-items-center gap-1.5" title="2X XP Multiplier Active">
+            <i class="fa-solid fa-bolt text-warning fs-7"></i>
+            <div class="text-warning fw-bold fs-9 lh-1">2X XP</div>
           </div>
+          <!-- Jump to Hub Button -->
+          <a href="#/gamification" class="btn btn-sm btn-glass text-warning py-1 px-2.5 fs-9 fw-semibold">
+            <i class="fa-solid fa-gamepad me-1"></i>View Full Hub &rarr;
+          </a>
         </div>
       </div>
-      <!-- XP Progress Bar -->
-      <div class="progress" style="height: 6px; background: rgba(255, 255, 255, 0.08);">
+      <div class="progress mt-2" style="height: 4px; background: rgba(255, 255, 255, 0.08);">
         <div class="progress-bar bg-gradient bg-warning" role="progressbar" id="gamification-level-progressbar" style="width: ${levelProgressPct}%;" aria-valuenow="${levelProgressPct}" aria-valuemin="0" aria-valuemax="100"></div>
-      </div>
-    </div>
-
-    <!-- 3-Column Gamification Grid: Rings, Missions, Leaderboard -->
-    <div class="row g-3 mb-3">
-      <!-- Col 1: Concentric Activity Rings (Apple Watch style) -->
-      <div class="col-12 col-md-6 col-xl-4">
-        <div class="bento-card p-3 h-100 d-flex flex-column justify-content-between">
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <h6 class="text-white fw-bold m-0 fs-8"><i class="fa-solid fa-circle-nodes text-primary me-2"></i>Activity Progress Rings</h6>
-            <span class="badge border border-secondary border-opacity-30 text-white font-monospace fs-9">VELOCITY</span>
-          </div>
-          <div class="py-2 text-center">
-            <div class="concentric-rings-container">
-              <svg class="concentric-rings-svg" viewBox="0 0 140 140">
-                <!-- Outer Ring (Daily Solves - Red) -->
-                <circle class="ring-track" cx="70" cy="70" r="56" stroke-width="8.5" />
-                <circle class="ring-progress ring-outer" cx="70" cy="70" r="56" stroke-width="8.5"
-                  stroke-dasharray="351.86" stroke-dashoffset="${outerOffset}" />
-
-                <!-- Middle Ring (Weekly Hours - Green) -->
-                <circle class="ring-track" cx="70" cy="70" r="42" stroke-width="8.5" />
-                <circle class="ring-progress ring-middle" cx="70" cy="70" r="42" stroke-width="8.5"
-                  stroke-dasharray="263.89" stroke-dashoffset="${middleOffset}" />
-
-                <!-- Inner Ring (Curriculum - Cyan) -->
-                <circle class="ring-track" cx="70" cy="70" r="28" stroke-width="8.5" />
-                <circle class="ring-progress ring-inner" cx="70" cy="70" r="28" stroke-width="8.5"
-                  stroke-dasharray="175.93" stroke-dashoffset="${innerOffset}" />
-              </svg>
-              <div class="position-absolute top-50 start-50 translate-middle text-center pointer-events-none">
-                <i class="fa-solid fa-trophy text-warning fs-5"></i>
-              </div>
-            </div>
-          </div>
-          <div class="d-flex flex-column gap-1.5 pt-2 border-top border-secondary border-opacity-20 font-monospace fs-9">
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="text-light"><i class="fa-solid fa-circle text-danger me-1.5" style="font-size: 8px;"></i>Daily Solves</span>
-              <strong class="text-white">${gState.dailyTargetSolved}/${gState.dailyTargetTotal} (${dailyPct}%)</strong>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="text-light"><i class="fa-solid fa-circle text-success me-1.5" style="font-size: 8px;"></i>Weekly Hours</span>
-              <strong class="text-white">${gState.weeklyVelocityHours}/${gState.weeklyVelocityTarget}h (${weeklyPct}%)</strong>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="text-light"><i class="fa-solid fa-circle text-info me-1.5" style="font-size: 8px;"></i>Curriculum Depth</span>
-              <strong class="text-white">${gState.curriculumBalanceCompleted}/${gState.curriculumBalanceTotal} (${curriculumPct}%)</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Col 2: Daily Missions & Weekly Boss Challenge -->
-      <div class="col-12 col-md-6 col-xl-4">
-        <div class="bento-card p-3 h-100 d-flex flex-column justify-content-between">
-          <div>
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <h6 class="text-white fw-bold m-0 fs-8"><i class="fa-solid fa-list-check text-warning me-2"></i>Daily Missions & Boss</h6>
-              <span class="badge bg-dark border border-secondary border-opacity-30 text-secondary font-monospace fs-9">
-                <i class="fa-regular fa-clock me-1"></i>Resets in 5h
-              </span>
-            </div>
-            <div class="d-flex flex-column gap-2 mb-2">
-              <!-- Mission 1 -->
-              <div class="daily-mission-item ${isMission1Claimed ? 'claimed' : 'claimable'}" id="mission-item-1">
-                <div class="d-flex justify-content-between align-items-center">
-                  <div>
-                    <div class="text-white fs-8 fw-semibold">Solve 1 Medium DSA Problem</div>
-                    <small class="text-secondary fs-9 font-monospace">+50 XP &bull; Completed</small>
-                  </div>
-                  <div>
-                    ${isMission1Claimed
-                      ? '<span class="badge bg-success bg-opacity-20 text-success font-monospace fs-9"><i class="fa-solid fa-check me-1"></i>Claimed</span>'
-                      : '<button class="btn btn-sm btn-success py-0.5 px-2 fs-9 claim-mission-btn" data-mission-id="mission-1" data-xp="50"><i class="fa-solid fa-gift me-1"></i>Claim +50 XP</button>'
-                    }
-                  </div>
-                </div>
-              </div>
-
-              <!-- Mission 2 -->
-              <div class="daily-mission-item ${isMission2Claimed ? 'claimed' : 'claimable'}" id="mission-item-2">
-                <div class="d-flex justify-content-between align-items-center">
-                  <div>
-                    <div class="text-white fs-8 fw-semibold">Listen to 1 Feynman Audio Bite</div>
-                    <small class="text-secondary fs-9 font-monospace">+30 XP &bull; Completed</small>
-                  </div>
-                  <div>
-                    ${isMission2Claimed
-                      ? '<span class="badge bg-success bg-opacity-20 text-success font-monospace fs-9"><i class="fa-solid fa-check me-1"></i>Claimed</span>'
-                      : '<button class="btn btn-sm btn-success py-0.5 px-2 fs-9 claim-mission-btn" data-mission-id="mission-2" data-xp="30"><i class="fa-solid fa-gift me-1"></i>Claim +30 XP</button>'
-                    }
-                  </div>
-                </div>
-              </div>
-
-              <!-- Mission 3 -->
-              <div class="daily-mission-item" id="mission-item-3">
-                <div class="d-flex justify-content-between align-items-center">
-                  <div>
-                    <div class="text-white fs-8 fw-semibold">Conduct 1 STAR Story Drill</div>
-                    <small class="text-secondary fs-9 font-monospace">+40 XP &bull; 0/1 Progress</small>
-                  </div>
-                  <div>
-                    <a href="#/star-vault" class="btn btn-sm btn-glass py-0.5 px-2 fs-9 text-cyan">Start &rarr;</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Weekly Boss Challenge Card -->
-          <div class="p-2 rounded bg-gradient border border-purple border-opacity-40" style="background: rgba(168, 85, 247, 0.08);">
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <span class="badge bg-purple bg-opacity-25 text-purple font-monospace fs-9 fw-bold">WEEKLY BOSS</span>
-              <span class="badge bg-warning bg-opacity-25 text-warning font-monospace fs-9">2X XP &bull; PRO</span>
-            </div>
-            <div class="text-white fs-8 fw-bold">Design Distributed Rate Limiter</div>
-            <div class="d-flex justify-content-between align-items-center mt-1">
-              <small class="text-light fs-9 font-monospace">+250 XP + Boss Badge</small>
-              <button class="btn btn-sm btn-outline-warning py-0.5 px-2 fs-9 fw-semibold" id="btn-attempt-boss-challenge">
-                <i class="fa-solid fa-crosshairs me-1"></i>Attempt Boss
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Col 3: Weekly Candidate Leaderboard -->
-      <div class="col-12 col-xl-4">
-        <div class="bento-card p-3 h-100 d-flex flex-column justify-content-between">
-          <div>
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <h6 class="text-white fw-bold m-0 fs-8"><i class="fa-solid fa-ranking-star text-warning me-2"></i>Weekly Candidate Sprint</h6>
-              <span class="badge border border-secondary border-opacity-30 text-white font-monospace fs-9">LEAGUE DIV 1</span>
-            </div>
-            <div class="d-flex flex-column">
-              <!-- Rank 1 -->
-              <div class="leaderboard-row d-flex justify-content-between align-items-center py-1.5 px-2 rounded">
-                <div class="d-flex align-items-center gap-2">
-                  <span class="fs-7">🥇</span>
-                  <div class="rounded-circle bg-primary bg-opacity-20 text-info px-1.5 py-0.5 fs-9 fw-bold">SC</div>
-                  <div>
-                    <div class="text-white fs-8 fw-semibold">Sarah Chen</div>
-                    <small class="text-muted fs-9 font-monospace"><i class="fa-solid fa-fire text-warning me-0.5"></i>24d streak</small>
-                  </div>
-                </div>
-                <span class="text-warning font-monospace fs-8 fw-bold">2,840 XP</span>
-              </div>
-
-              <!-- Rank 2 -->
-              <div class="leaderboard-row d-flex justify-content-between align-items-center py-1.5 px-2 rounded">
-                <div class="d-flex align-items-center gap-2">
-                  <span class="fs-7">🥈</span>
-                  <div class="rounded-circle bg-success bg-opacity-20 text-success px-1.5 py-0.5 fs-9 fw-bold">DS</div>
-                  <div>
-                    <div class="text-white fs-8 fw-semibold">Devansh Sharma</div>
-                    <small class="text-muted fs-9 font-monospace"><i class="fa-solid fa-fire text-warning me-0.5"></i>18d streak</small>
-                  </div>
-                </div>
-                <span class="text-light font-monospace fs-8 fw-bold">2,390 XP</span>
-              </div>
-
-              <!-- Rank 3 -->
-              <div class="leaderboard-row d-flex justify-content-between align-items-center py-1.5 px-2 rounded">
-                <div class="d-flex align-items-center gap-2">
-                  <span class="fs-7">🥉</span>
-                  <div class="rounded-circle bg-purple bg-opacity-20 text-purple px-1.5 py-0.5 fs-9 fw-bold">MV</div>
-                  <div>
-                    <div class="text-white fs-8 fw-semibold">Marcus Vance</div>
-                    <small class="text-muted fs-9 font-monospace"><i class="fa-solid fa-fire text-warning me-0.5"></i>14d streak</small>
-                  </div>
-                </div>
-                <span class="text-secondary font-monospace fs-8 fw-bold">1,910 XP</span>
-              </div>
-
-              <!-- Rank 4: Pinned Current User -->
-              <div class="leaderboard-row current-user d-flex justify-content-between align-items-center py-1.5 px-2 rounded mt-1">
-                <div class="d-flex align-items-center gap-2">
-                  <span class="text-info font-monospace fs-9 fw-bold">#4</span>
-                  <div class="rounded-circle bg-cyan bg-opacity-25 text-cyan px-1.5 py-0.5 fs-9 fw-bold">YOU</div>
-                  <div>
-                    <div class="text-white fs-8 fw-bold">You (Candidate)</div>
-                    <small class="text-cyan fs-9 font-monospace"><i class="fa-solid fa-fire text-warning me-0.5"></i>${gState.streak}d streak</small>
-                  </div>
-                </div>
-                <span class="text-cyan font-monospace fs-8 fw-bold" id="leaderboard-user-xp">${gState.xp} XP</span>
-              </div>
-
-              <!-- Rank 5 -->
-              <div class="leaderboard-row d-flex justify-content-between align-items-center py-1.5 px-2 rounded">
-                <div class="d-flex align-items-center gap-2">
-                  <span class="text-muted font-monospace fs-9">#5</span>
-                  <div class="rounded-circle bg-secondary bg-opacity-20 text-light px-1.5 py-0.5 fs-9 fw-bold">ER</div>
-                  <div>
-                    <div class="text-white fs-8 fw-semibold">Elena Rostova</div>
-                    <small class="text-muted fs-9 font-monospace"><i class="fa-solid fa-fire text-warning me-0.5"></i>6d streak</small>
-                  </div>
-                </div>
-                <span class="text-secondary font-monospace fs-8">1,120 XP</span>
-              </div>
-            </div>
-          </div>
-          <div class="pt-2 text-center border-top border-secondary border-opacity-20">
-            <small class="text-muted fs-9 font-monospace">Top 3 candidates advance to FAANG Platinum League on Sunday</small>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Achievement Badges & Rarity System Showcase -->
-    <div class="card bg-dark bg-opacity-60 border-secondary border-opacity-30 rounded-3 p-3 mb-3 shadow-sm">
-      <div class="d-flex justify-content-between align-items-center mb-2.5">
-        <div class="d-flex align-items-center gap-2">
-          <span class="rounded-circle bg-warning bg-opacity-20 p-1.5 text-warning fs-7"><i class="fa-solid fa-medal"></i></span>
-          <h6 class="text-white fw-bold m-0 fs-8">Achievement Badges & Rarity System</h6>
-        </div>
-        <span class="badge border border-secondary border-opacity-30 text-white font-monospace fs-9">4 / 6 UNLOCKED</span>
-      </div>
-      <div class="row g-2">
-        <!-- Badge 1: First Blood -->
-        <div class="col-6 col-sm-4 col-md-2">
-          <div class="achievement-badge-card unlocked badge-rarity-common" title="Solved your very first algorithmic problem">
-            <div class="fs-4 text-secondary mb-1"><i class="fa-solid fa-award"></i></div>
-            <div class="text-white fs-9 fw-bold">First Blood</div>
-            <span class="badge bg-secondary bg-opacity-25 text-light font-monospace fs-9">COMMON</span>
-          </div>
-        </div>
-
-        <!-- Badge 2: 7-Day Titan -->
-        <div class="col-6 col-sm-4 col-md-2">
-          <div class="achievement-badge-card unlocked badge-rarity-rare" title="Maintained an uninterrupted 7-day study streak">
-            <div class="fs-4 text-warning mb-1"><i class="fa-solid fa-fire"></i></div>
-            <div class="text-white fs-9 fw-bold">7-Day Titan</div>
-            <span class="badge bg-info bg-opacity-25 text-info font-monospace fs-9">RARE</span>
-          </div>
-        </div>
-
-        <!-- Badge 3: Feynman Disciple -->
-        <div class="col-6 col-sm-4 col-md-2">
-          <div class="achievement-badge-card unlocked badge-rarity-rare" title="Mastered 5 audio bite concepts">
-            <div class="fs-4 text-info mb-1"><i class="fa-solid fa-headphones"></i></div>
-            <div class="text-white fs-9 fw-bold">Feynman Disciple</div>
-            <span class="badge bg-info bg-opacity-25 text-info font-monospace fs-9">RARE</span>
-          </div>
-        </div>
-
-        <!-- Badge 4: STAR Master -->
-        <div class="col-6 col-sm-4 col-md-2">
-          <div class="achievement-badge-card unlocked badge-rarity-epic" title="Refined 4 behavioral interview stories">
-            <div class="fs-4 text-purple mb-1"><i class="fa-solid fa-star"></i></div>
-            <div class="text-white fs-9 fw-bold">STAR Master</div>
-            <span class="badge bg-purple bg-opacity-25 text-purple font-monospace fs-9">EPIC</span>
-          </div>
-        </div>
-
-        <!-- Badge 5: System Guru (Locked) -->
-        <div class="col-6 col-sm-4 col-md-2">
-          <div class="achievement-badge-card locked badge-rarity-epic" title="Complete 10 high-scale system design topics to unlock">
-            <div class="fs-4 text-secondary mb-1"><i class="fa-solid fa-diagram-project"></i></div>
-            <div class="text-white fs-9 fw-bold">System Guru</div>
-            <span class="badge bg-secondary bg-opacity-25 text-muted font-monospace fs-9"><i class="fa-solid fa-lock me-1"></i>LOCKED</span>
-          </div>
-        </div>
-
-        <!-- Badge 6: FAANG Ready (Locked) -->
-        <div class="col-6 col-sm-4 col-md-2">
-          <div class="achievement-badge-card locked badge-rarity-legendary" title="Achieve a 90%+ Interview Readiness Score to unlock">
-            <div class="fs-4 text-warning mb-1"><i class="fa-solid fa-crown"></i></div>
-            <div class="text-white fs-9 fw-bold">FAANG Ready</div>
-            <span class="badge bg-warning bg-opacity-25 text-warning font-monospace fs-9"><i class="fa-solid fa-lock me-1"></i>LEGENDARY</span>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -1526,6 +1224,380 @@ const components = {
           <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-filter text-purple me-2"></i>Recruitment Pipeline</h6>
           <div style="position: relative; height: 145px;">
             <canvas id="pipelineStatusChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  },
+
+  // Dedicated Gamification Hub Sub-view (v4.8.1)
+  gamificationHub: (stats = {}) => {
+    const completedTopics = stats.completedTopics ?? 14;
+    const streak = stats.streak ?? stats.streakDays ?? 7;
+    const xpPoints = stats.xpPoints ?? 1240;
+
+    let gState = {
+      xp: xpPoints || 1240,
+      level: 7,
+      levelTitle: 'Junior Craftsman',
+      nextLevelTitle: 'Senior Problem Solver',
+      nextLevelXp: 1500,
+      prevLevelXp: 1000,
+      streak: streak || 7,
+      streakFreeze: 1,
+      dailyTargetSolved: 3,
+      dailyTargetTotal: 3,
+      weeklyVelocityHours: stats.studyHoursThisWeek || 8.5,
+      weeklyVelocityTarget: 12,
+      curriculumBalanceCompleted: completedTopics || 14,
+      curriculumBalanceTotal: 20,
+      claimedMissions: ['mission-1']
+    };
+
+    if (typeof localStorage !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('prepspace_gamification_state');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          gState = { ...gState, ...parsed };
+        }
+      } catch(e) {}
+    }
+
+    const levelProgressPct = Math.min(100, Math.max(0, Math.round(((gState.xp - gState.prevLevelXp) / (gState.nextLevelXp - gState.prevLevelXp)) * 100)));
+    const dailyPct = Math.min(100, Math.round((gState.dailyTargetSolved / gState.dailyTargetTotal) * 100));
+    const weeklyPct = Math.min(100, Math.round((gState.weeklyVelocityHours / gState.weeklyVelocityTarget) * 100));
+    const curriculumPct = Math.min(100, Math.round((gState.curriculumBalanceCompleted / gState.curriculumBalanceTotal) * 100));
+
+    const isMission1Claimed = gState.claimedMissions && gState.claimedMissions.includes('mission-1');
+    const isMission2Claimed = gState.claimedMissions && gState.claimedMissions.includes('mission-2');
+
+    const outerOffset = (351.86 * (1 - dailyPct / 100)).toFixed(2);
+    const middleOffset = (263.89 * (1 - weeklyPct / 100)).toFixed(2);
+    const innerOffset = (175.93 * (1 - curriculumPct / 100)).toFixed(2);
+
+    return `
+    <!-- Gamification Hub Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-15 gap-2">
+      <div>
+        <div class="d-flex align-items-center gap-2">
+          <h5 class="text-white fw-bold m-0 fs-6">Gamification & Habit Engine</h5>
+          <span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-40 font-monospace fs-9">TIER MATRIX</span>
+        </div>
+        <small class="text-muted fs-8 font-monospace">Daily retention loop &bull; Engineering leveling &bull; Competitive leaderboards</small>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <a href="#/dashboard" class="btn btn-sm btn-glass fs-8"><i class="fa-solid fa-arrow-left me-1"></i>Back to Dashboard</a>
+      </div>
+    </div>
+
+    <!-- Level & XP Hero Strip -->
+    <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-3 mb-3 shadow-sm">
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+        <div class="d-flex align-items-center gap-2.5">
+          <div class="rounded-circle bg-warning bg-opacity-20 p-2.5 text-warning fs-4">
+            <i class="fa-solid fa-shield-cat"></i>
+          </div>
+          <div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-warning text-dark fw-bold font-monospace fs-8">LEVEL ${gState.level}</span>
+              <span class="text-white fw-bold fs-6" id="hub-level-title">${gState.levelTitle}</span>
+              <span class="text-muted fs-9 font-monospace">&bull; Next: ${gState.nextLevelTitle}</span>
+            </div>
+            <div class="d-flex align-items-center gap-2 mt-0.5">
+              <span class="text-secondary fs-9 font-monospace">XP: <strong class="text-white" id="gamification-xp-display">${gState.xp}</strong> / ${gState.nextLevelXp}</span>
+              <span class="badge bg-secondary bg-opacity-25 text-light font-monospace fs-9" id="gamification-progress-pct-badge">${levelProgressPct}% Tier Complete</span>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <!-- Streak Pill -->
+          <div class="px-2.5 py-1.5 rounded bg-black bg-opacity-40 border border-secondary border-opacity-30 d-flex align-items-center gap-1.5">
+            <span class="streak-flame fs-6"><i class="fa-solid fa-fire"></i></span>
+            <div>
+              <div class="text-white fw-bold fs-8 lh-1" id="gamification-streak-display">${gState.streak} Days</div>
+              <small class="text-muted fs-9 font-monospace">Active Streak</small>
+            </div>
+          </div>
+          <!-- Streak Freeze Pill -->
+          <div class="px-2.5 py-1.5 rounded bg-black bg-opacity-40 border border-secondary border-opacity-30 d-flex align-items-center gap-1.5">
+            <i class="fa-solid fa-shield-halved text-info fs-6"></i>
+            <div>
+              <div class="text-info fw-bold fs-8 lh-1">${gState.streakFreeze} Active</div>
+              <small class="text-muted fs-9 font-monospace">Freeze</small>
+            </div>
+          </div>
+          <!-- Pro 2X Multiplier Badge -->
+          <div class="px-2.5 py-1.5 rounded bg-warning bg-opacity-10 border border-warning border-opacity-30 d-flex align-items-center gap-1.5">
+            <i class="fa-solid fa-bolt text-warning fs-6"></i>
+            <div>
+              <div class="text-warning fw-bold fs-8 lh-1">2X MULTIPLIER</div>
+              <small class="text-muted fs-9 font-monospace">Pro Perk</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="progress" style="height: 6px; background: rgba(255, 255, 255, 0.08);">
+        <div class="progress-bar bg-gradient bg-warning" role="progressbar" id="gamification-level-progressbar" style="width: ${levelProgressPct}%;" aria-valuenow="${levelProgressPct}" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+    </div>
+
+    <!-- 3-Column Hub Grid -->
+    <div class="row g-3 mb-3">
+      <!-- Col 1: Concentric Rings -->
+      <div class="col-12 col-md-6 col-xl-4">
+        <div class="bento-card p-3 h-100 d-flex flex-column justify-content-between">
+          <div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h6 class="text-white fw-bold m-0 fs-8"><i class="fa-solid fa-circle-nodes text-primary me-2"></i>Activity Progress Rings</h6>
+              <span class="badge border border-secondary border-opacity-30 text-white font-monospace fs-9">APPLE STYLE</span>
+            </div>
+            <div class="py-3 text-center">
+              <div class="concentric-rings-container">
+                <svg class="concentric-rings-svg" viewBox="0 0 140 140">
+                  <circle class="ring-track" cx="70" cy="70" r="56" stroke-width="8.5" />
+                  <circle class="ring-progress ring-outer" cx="70" cy="70" r="56" stroke-width="8.5"
+                    stroke-dasharray="351.86" stroke-dashoffset="${outerOffset}" />
+
+                  <circle class="ring-track" cx="70" cy="70" r="42" stroke-width="8.5" />
+                  <circle class="ring-progress ring-middle" cx="70" cy="70" r="42" stroke-width="8.5"
+                    stroke-dasharray="263.89" stroke-dashoffset="${middleOffset}" />
+
+                  <circle class="ring-track" cx="70" cy="70" r="28" stroke-width="8.5" />
+                  <circle class="ring-progress ring-inner" cx="70" cy="70" r="28" stroke-width="8.5"
+                    stroke-dasharray="175.93" stroke-dashoffset="${innerOffset}" />
+                </svg>
+                <div class="position-absolute top-50 start-50 translate-middle text-center pointer-events-none">
+                  <i class="fa-solid fa-trophy text-warning fs-5"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex flex-column gap-1.5 pt-2 border-top border-secondary border-opacity-20 font-monospace fs-9">
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="text-light"><i class="fa-solid fa-circle text-danger me-1.5" style="font-size: 8px;"></i>Daily Solves</span>
+              <strong class="text-white">${gState.dailyTargetSolved}/${gState.dailyTargetTotal} (${dailyPct}%)</strong>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="text-light"><i class="fa-solid fa-circle text-success me-1.5" style="font-size: 8px;"></i>Weekly Hours</span>
+              <strong class="text-white">${gState.weeklyVelocityHours}/${gState.weeklyVelocityTarget}h (${weeklyPct}%)</strong>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="text-light"><i class="fa-solid fa-circle text-info me-1.5" style="font-size: 8px;"></i>Curriculum Depth</span>
+              <strong class="text-white">${gState.curriculumBalanceCompleted}/${gState.curriculumBalanceTotal} (${curriculumPct}%)</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Col 2: Daily Missions & Boss -->
+      <div class="col-12 col-md-6 col-xl-4">
+        <div class="bento-card p-3 h-100 d-flex flex-column justify-content-between">
+          <div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h6 class="text-white fw-bold m-0 fs-8"><i class="fa-solid fa-list-check text-warning me-2"></i>Daily Quests & Missions</h6>
+              <span class="badge bg-dark border border-secondary border-opacity-30 text-secondary font-monospace fs-9">
+                <i class="fa-regular fa-clock me-1"></i>Resets in 5h
+              </span>
+            </div>
+            <div class="d-flex flex-column gap-2 mb-2">
+              <!-- Mission 1 -->
+              <div class="daily-mission-item ${isMission1Claimed ? 'claimed' : 'claimable'}" id="mission-item-1">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <div class="text-white fs-8 fw-semibold">Solve 1 Medium DSA Problem</div>
+                    <small class="text-secondary fs-9 font-monospace">+50 XP &bull; Completed</small>
+                  </div>
+                  <div>
+                    ${isMission1Claimed
+                      ? '<span class="badge bg-success bg-opacity-20 text-success font-monospace fs-9"><i class="fa-solid fa-check me-1"></i>Claimed</span>'
+                      : '<button class="btn btn-sm btn-success py-0.5 px-2 fs-9 claim-mission-btn" data-mission-id="mission-1" data-xp="50"><i class="fa-solid fa-gift me-1"></i>Claim +50 XP</button>'
+                    }
+                  </div>
+                </div>
+              </div>
+
+              <!-- Mission 2 -->
+              <div class="daily-mission-item ${isMission2Claimed ? 'claimed' : 'claimable'}" id="mission-item-2">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <div class="text-white fs-8 fw-semibold">Listen to 1 Feynman Audio Bite</div>
+                    <small class="text-secondary fs-9 font-monospace">+30 XP &bull; Completed</small>
+                  </div>
+                  <div>
+                    ${isMission2Claimed
+                      ? '<span class="badge bg-success bg-opacity-20 text-success font-monospace fs-9"><i class="fa-solid fa-check me-1"></i>Claimed</span>'
+                      : '<button class="btn btn-sm btn-success py-0.5 px-2 fs-9 claim-mission-btn" data-mission-id="mission-2" data-xp="30"><i class="fa-solid fa-gift me-1"></i>Claim +30 XP</button>'
+                    }
+                  </div>
+                </div>
+              </div>
+
+              <!-- Mission 3 -->
+              <div class="daily-mission-item" id="mission-item-3">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <div class="text-white fs-8 fw-semibold">Conduct 1 STAR Story Drill</div>
+                    <small class="text-secondary fs-9 font-monospace">+40 XP &bull; 0/1 Progress</small>
+                  </div>
+                  <div>
+                    <a href="#/star-vault" class="btn btn-sm btn-glass py-0.5 px-2 fs-9 text-cyan">Start &rarr;</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Weekly Boss Challenge Card -->
+          <div class="p-2.5 rounded bg-gradient border border-purple border-opacity-40" style="background: rgba(168, 85, 247, 0.08);">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="badge bg-purple bg-opacity-25 text-purple font-monospace fs-9 fw-bold">WEEKLY BOSS</span>
+              <span class="badge bg-warning bg-opacity-25 text-warning font-monospace fs-9">2X XP &bull; PRO</span>
+            </div>
+            <div class="text-white fs-8 fw-bold">Design Distributed Rate Limiter</div>
+            <div class="d-flex justify-content-between align-items-center mt-1">
+              <small class="text-light fs-9 font-monospace">+250 XP + Boss Badge</small>
+              <button class="btn btn-sm btn-outline-warning py-0.5 px-2 fs-9 fw-semibold" id="btn-attempt-boss-challenge">
+                <i class="fa-solid fa-crosshairs me-1"></i>Attempt Boss
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Col 3: Weekly Sprint Leaderboard -->
+      <div class="col-12 col-xl-4">
+        <div class="bento-card p-3 h-100 d-flex flex-column justify-content-between">
+          <div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h6 class="text-white fw-bold m-0 fs-8"><i class="fa-solid fa-ranking-star text-warning me-2"></i>Weekly Candidate Sprint</h6>
+              <span class="badge border border-secondary border-opacity-30 text-white font-monospace fs-9">LEAGUE DIV 1</span>
+            </div>
+            <div class="d-flex flex-column">
+              <div class="leaderboard-row d-flex justify-content-between align-items-center py-1.5 px-2 rounded">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="fs-7">🥇</span>
+                  <div class="rounded-circle bg-primary bg-opacity-20 text-info px-1.5 py-0.5 fs-9 fw-bold">SC</div>
+                  <div>
+                    <div class="text-white fs-8 fw-semibold">Sarah Chen</div>
+                    <small class="text-muted fs-9 font-monospace"><i class="fa-solid fa-fire text-warning me-0.5"></i>24d streak</small>
+                  </div>
+                </div>
+                <span class="text-warning font-monospace fs-8 fw-bold">2,840 XP</span>
+              </div>
+
+              <div class="leaderboard-row d-flex justify-content-between align-items-center py-1.5 px-2 rounded">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="fs-7">🥈</span>
+                  <div class="rounded-circle bg-success bg-opacity-20 text-success px-1.5 py-0.5 fs-9 fw-bold">DS</div>
+                  <div>
+                    <div class="text-white fs-8 fw-semibold">Devansh Sharma</div>
+                    <small class="text-muted fs-9 font-monospace"><i class="fa-solid fa-fire text-warning me-0.5"></i>18d streak</small>
+                  </div>
+                </div>
+                <span class="text-light font-monospace fs-8 fw-bold">2,390 XP</span>
+              </div>
+
+              <div class="leaderboard-row d-flex justify-content-between align-items-center py-1.5 px-2 rounded">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="fs-7">🥉</span>
+                  <div class="rounded-circle bg-purple bg-opacity-20 text-purple px-1.5 py-0.5 fs-9 fw-bold">MV</div>
+                  <div>
+                    <div class="text-white fs-8 fw-semibold">Marcus Vance</div>
+                    <small class="text-muted fs-9 font-monospace"><i class="fa-solid fa-fire text-warning me-0.5"></i>14d streak</small>
+                  </div>
+                </div>
+                <span class="text-secondary font-monospace fs-8 fw-bold">1,910 XP</span>
+              </div>
+
+              <div class="leaderboard-row current-user d-flex justify-content-between align-items-center py-1.5 px-2 rounded mt-1">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="text-info font-monospace fs-9 fw-bold">#4</span>
+                  <div class="rounded-circle bg-cyan bg-opacity-25 text-cyan px-1.5 py-0.5 fs-9 fw-bold">YOU</div>
+                  <div>
+                    <div class="text-white fs-8 fw-bold">You (Candidate)</div>
+                    <small class="text-cyan fs-9 font-monospace"><i class="fa-solid fa-fire text-warning me-0.5"></i>${gState.streak}d streak</small>
+                  </div>
+                </div>
+                <span class="text-cyan font-monospace fs-8 fw-bold" id="leaderboard-user-xp">${gState.xp} XP</span>
+              </div>
+
+              <div class="leaderboard-row d-flex justify-content-between align-items-center py-1.5 px-2 rounded">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="text-muted font-monospace fs-9">#5</span>
+                  <div class="rounded-circle bg-secondary bg-opacity-20 text-light px-1.5 py-0.5 fs-9 fw-bold">ER</div>
+                  <div>
+                    <div class="text-white fs-8 fw-semibold">Elena Rostova</div>
+                    <small class="text-muted fs-9 font-monospace"><i class="fa-solid fa-fire text-warning me-0.5"></i>6d streak</small>
+                  </div>
+                </div>
+                <span class="text-secondary font-monospace fs-8">1,120 XP</span>
+              </div>
+            </div>
+          </div>
+          <div class="pt-2 text-center border-top border-secondary border-opacity-20">
+            <small class="text-muted fs-9 font-monospace">Top 3 candidates advance to FAANG Platinum League on Sunday</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Achievement Badges Showcase -->
+    <div class="card bg-dark bg-opacity-60 border-secondary border-opacity-30 rounded-3 p-3 mb-3 shadow-sm">
+      <div class="d-flex justify-content-between align-items-center mb-2.5">
+        <div class="d-flex align-items-center gap-2">
+          <span class="rounded-circle bg-warning bg-opacity-20 p-1.5 text-warning fs-7"><i class="fa-solid fa-medal"></i></span>
+          <h6 class="text-white fw-bold m-0 fs-8">Achievement Badges & Rarity System</h6>
+        </div>
+        <span class="badge border border-secondary border-opacity-30 text-white font-monospace fs-9">4 / 6 UNLOCKED</span>
+      </div>
+      <div class="row g-2">
+        <div class="col-6 col-sm-4 col-md-2">
+          <div class="achievement-badge-card unlocked badge-rarity-common" title="Solved your very first algorithmic problem">
+            <div class="fs-4 text-secondary mb-1"><i class="fa-solid fa-award"></i></div>
+            <div class="text-white fs-9 fw-bold">First Blood</div>
+            <span class="badge bg-secondary bg-opacity-25 text-light font-monospace fs-9">COMMON</span>
+          </div>
+        </div>
+
+        <div class="col-6 col-sm-4 col-md-2">
+          <div class="achievement-badge-card unlocked badge-rarity-rare" title="Maintained an uninterrupted 7-day study streak">
+            <div class="fs-4 text-warning mb-1"><i class="fa-solid fa-fire"></i></div>
+            <div class="text-white fs-9 fw-bold">7-Day Titan</div>
+            <span class="badge bg-info bg-opacity-25 text-info font-monospace fs-9">RARE</span>
+          </div>
+        </div>
+
+        <div class="col-6 col-sm-4 col-md-2">
+          <div class="achievement-badge-card unlocked badge-rarity-rare" title="Mastered 5 audio bite concepts">
+            <div class="fs-4 text-info mb-1"><i class="fa-solid fa-headphones"></i></div>
+            <div class="text-white fs-9 fw-bold">Feynman Disciple</div>
+            <span class="badge bg-info bg-opacity-25 text-info font-monospace fs-9">RARE</span>
+          </div>
+        </div>
+
+        <div class="col-6 col-sm-4 col-md-2">
+          <div class="achievement-badge-card unlocked badge-rarity-epic" title="Refined 4 behavioral interview stories">
+            <div class="fs-4 text-purple mb-1"><i class="fa-solid fa-star"></i></div>
+            <div class="text-white fs-9 fw-bold">STAR Master</div>
+            <span class="badge bg-purple bg-opacity-25 text-purple font-monospace fs-9">EPIC</span>
+          </div>
+        </div>
+
+        <div class="col-6 col-sm-4 col-md-2">
+          <div class="achievement-badge-card locked badge-rarity-epic" title="Complete 10 high-scale system design topics to unlock">
+            <div class="fs-4 text-secondary mb-1"><i class="fa-solid fa-diagram-project"></i></div>
+            <div class="text-white fs-9 fw-bold">System Guru</div>
+            <span class="badge bg-secondary bg-opacity-25 text-muted font-monospace fs-9"><i class="fa-solid fa-lock me-1"></i>LOCKED</span>
+          </div>
+        </div>
+
+        <div class="col-6 col-sm-4 col-md-2">
+          <div class="achievement-badge-card locked badge-rarity-legendary" title="Achieve a 90%+ Interview Readiness Score to unlock">
+            <div class="fs-4 text-warning mb-1"><i class="fa-solid fa-crown"></i></div>
+            <div class="text-white fs-9 fw-bold">FAANG Ready</div>
+            <span class="badge bg-warning bg-opacity-25 text-warning font-monospace fs-9"><i class="fa-solid fa-lock me-1"></i>LEGENDARY</span>
           </div>
         </div>
       </div>
