@@ -169,6 +169,9 @@
       } catch(e) {}
     }
   };
+  if (typeof window !== 'undefined') {
+    window.AudioSynth = AudioSynth;
+  }
 
   // =========================================================================
   // ASYNCHRONOUS SPEECH SYNTHESIS ENGINE

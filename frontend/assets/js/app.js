@@ -440,6 +440,7 @@ function router() {
       pageMount.innerHTML = components.dashboard(freshStats);
       renderDashboardCharts(freshStats);
       syncDashboardScreenTime();
+      bindDashboardGamificationEvents();
       return;
     }
     const cachedStatsStr = localStorage.getItem('cached_dashboard_stats_v2');
@@ -450,6 +451,7 @@ function router() {
         pageMount.innerHTML = components.dashboard(stats);
         renderDashboardCharts(stats);
         syncDashboardScreenTime();
+        bindDashboardGamificationEvents();
         hasCache = true;
       } catch (e) {}
     }
@@ -469,6 +471,7 @@ function router() {
       pageMount.innerHTML = components.dashboard(defaultStats);
       renderDashboardCharts(defaultStats);
       syncDashboardScreenTime();
+      bindDashboardGamificationEvents();
     }
     apiFetch('/dashboard/stats')
       .then(stats => {
@@ -478,6 +481,7 @@ function router() {
           pageMount.innerHTML = components.dashboard(stats);
           renderDashboardCharts(stats);
           syncDashboardScreenTime();
+          bindDashboardGamificationEvents();
         }
       })
       .catch(err => {
@@ -1105,7 +1109,227 @@ function bindLayoutEvents() {
 
   const modeToggle = document.getElementById('dark-mode-toggle');
   if (modeToggle) modeToggle.addEventListener('click', toggleTheme);
+
+  // Smart AI Behavioral Pace Nudge & AI Recovery Plan Modal Handlers
+  const aiNudgeBanner = document.getElementById('smart-pace-nudge-banner');
+  if (aiNudgeBanner && sessionStorage.getItem('prepspace_ai_nudge_dismissed') === 'true') {
+    aiNudgeBanner.style.display = 'none';
+  }
+
+  const dismissNudgeBtn = document.getElementById('btn-dismiss-ai-nudge');
+  if (dismissNudgeBtn && aiNudgeBanner) {
+    dismissNudgeBtn.addEventListener('click', () => {
+      aiNudgeBanner.style.display = 'none';
+      sessionStorage.setItem('prepspace_ai_nudge_dismissed', 'true');
+    });
+  }
+
+  const openRecoveryModal = () => {
+    const modalEl = document.getElementById('aiRecoveryPlanModal');
+    if (modalEl && window.bootstrap) {
+      const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+      modal.show();
+    }
+  };
+
+  const btnOpenRecoveryPlan = document.getElementById('btn-open-ai-recovery-plan');
+  if (btnOpenRecoveryPlan) {
+    btnOpenRecoveryPlan.addEventListener('click', openRecoveryModal);
+  }
+
+  const notifRecoveryItem = document.getElementById('notif-item-recovery');
+  if (notifRecoveryItem) {
+    notifRecoveryItem.addEventListener('click', (e) => {
+      e.preventDefault();
+      openRecoveryModal();
+    });
+  }
+
+  const btnApplyRecoveryPlan = document.getElementById('btn-apply-recovery-plan');
+  if (btnApplyRecoveryPlan) {
+    btnApplyRecoveryPlan.addEventListener('click', () => {
+      const modalEl = document.getElementById('aiRecoveryPlanModal');
+      if (modalEl && window.bootstrap) {
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        if (modal) modal.hide();
+      }
+      // Clean up modal backdrops safely
+      document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+      document.body.classList.remove('modal-open');
+      document.body.style.removeProperty('padding-right');
+
+      // Dismiss banner
+      if (aiNudgeBanner) {
+        aiNudgeBanner.style.display = 'none';
+      }
+      sessionStorage.setItem('prepspace_ai_nudge_dismissed', 'true');
+
+      // Award bonus XP to gamification state
+      const gState = getGamificationState();
+      gState.xp = (gState.xp || 1240) + 285;
+      saveGamificationState(gState);
+      updateDashboardGamificationDisplays(gState);
+
+      // Decrement unread notification badge
+      const notifBadge = document.getElementById('notif-badge-count');
+      if (notifBadge) {
+        notifBadge.textContent = '1';
+      }
+
+      playGamificationChime();
+      showToast('AI Recovery Plan applied! +285 bonus XP awarded. Pace restored to 100% on-track.', 'success');
+    });
+  }
 }
+
+// =========================================================================
+// v4.8.0 GAMIFICATION ENGINE CORE FUNCTIONS
+// =========================================================================
+function getGamificationState() {
+  const defaults = {
+    xp: 1240,
+    level: 7,
+    levelTitle: 'Junior Craftsman',
+    nextLevelTitle: 'Senior Problem Solver',
+    nextLevelXp: 1500,
+    prevLevelXp: 1000,
+    streak: 7,
+    streakFreeze: 1,
+    dailyTargetSolved: 3,
+    dailyTargetTotal: 3,
+    weeklyVelocityHours: 8.5,
+    weeklyVelocityTarget: 12,
+    curriculumBalanceCompleted: 14,
+    curriculumBalanceTotal: 20,
+    claimedMissions: ['mission-1']
+  };
+  if (typeof localStorage !== 'undefined') {
+    try {
+      const saved = localStorage.getItem('prepspace_gamification_state');
+      if (saved) return { ...defaults, ...JSON.parse(saved) };
+    } catch (e) {}
+  }
+  return defaults;
+}
+
+function saveGamificationState(gState) {
+  if (typeof localStorage !== 'undefined') {
+    try {
+      localStorage.setItem('prepspace_gamification_state', JSON.stringify(gState));
+    } catch (e) {}
+  }
+}
+
+function playGamificationChime() {
+  if (window.AudioSynth && typeof window.AudioSynth.playChime === 'function') {
+    window.AudioSynth.playChime(660, 880, 0.25);
+    return;
+  }
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const now = ctx.currentTime;
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc1.type = 'sine';
+    osc2.type = 'triangle';
+    osc1.frequency.setValueAtTime(587.33, now);
+    osc1.frequency.exponentialRampToValueAtTime(880, now + 0.25);
+    osc2.frequency.setValueAtTime(880, now);
+    osc2.frequency.exponentialRampToValueAtTime(1174.66, now + 0.25);
+    gain.gain.setValueAtTime(0.12, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+    osc1.connect(gain);
+    osc2.connect(gain);
+    gain.connect(ctx.destination);
+    osc1.start(now);
+    osc2.start(now);
+    osc1.stop(now + 0.4);
+    osc2.stop(now + 0.4);
+  } catch (e) {}
+}
+
+function updateDashboardGamificationDisplays(gState) {
+  const xpEl = document.getElementById('gamification-xp-display');
+  if (xpEl) xpEl.textContent = gState.xp;
+
+  const lbXpEl = document.getElementById('leaderboard-user-xp');
+  if (lbXpEl) lbXpEl.textContent = `${gState.xp} XP`;
+
+  const streakEl = document.getElementById('gamification-streak-display');
+  if (streakEl) streakEl.textContent = `${gState.streak} Days`;
+
+  const progressPct = Math.min(100, Math.max(0, Math.round(((gState.xp - gState.prevLevelXp) / (gState.nextLevelXp - gState.prevLevelXp)) * 100)));
+  const barEl = document.getElementById('gamification-level-progressbar');
+  if (barEl) {
+    barEl.style.width = `${progressPct}%`;
+    barEl.setAttribute('aria-valuenow', progressPct);
+  }
+
+  const badgeEl = document.getElementById('gamification-progress-pct-badge');
+  if (badgeEl) badgeEl.textContent = `${progressPct}% Tier Complete`;
+}
+
+function bindDashboardGamificationEvents() {
+  document.querySelectorAll('.claim-mission-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const missionId = btn.getAttribute('data-mission-id');
+      const basePoints = parseInt(btn.getAttribute('data-xp') || '30', 10);
+      const isPaid = state.isPaid;
+      const points = isPaid ? basePoints * 2 : basePoints;
+
+      const gState = getGamificationState();
+      if (!gState.claimedMissions) gState.claimedMissions = [];
+      if (!gState.claimedMissions.includes(missionId)) {
+        gState.claimedMissions.push(missionId);
+      }
+      gState.xp = (gState.xp || 1240) + points;
+      saveGamificationState(gState);
+
+      // Update UI
+      const parent = btn.parentElement;
+      if (parent) {
+        parent.innerHTML = '<span class="badge bg-success bg-opacity-20 text-success font-monospace fs-9"><i class="fa-solid fa-check me-1"></i>Claimed</span>';
+      }
+      const item = document.getElementById(missionId === 'mission-1' ? 'mission-item-1' : 'mission-item-2');
+      if (item) {
+        item.classList.remove('claimable');
+        item.classList.add('claimed');
+      }
+
+      updateDashboardGamificationDisplays(gState);
+      playGamificationChime();
+      showToast(`Mission Claimed! +${points} XP added to your profile.${isPaid ? ' (2X Pro Bonus Applied)' : ''}`, 'success');
+    });
+  });
+
+  const btnBoss = document.getElementById('btn-attempt-boss-challenge');
+  if (btnBoss) {
+    btnBoss.addEventListener('click', () => {
+      playGamificationChime();
+      showToast('Weekly Boss Challenge Initiated: "Design Distributed Rate Limiter". 2X XP active!', 'info');
+      window.location.hash = '#/star-vault';
+    });
+  }
+
+  document.querySelectorAll('.achievement-badge-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const title = card.getAttribute('title');
+      const badgeName = card.querySelector('.fw-bold')?.textContent || 'Badge';
+      const isLocked = card.classList.contains('locked');
+      if (isLocked) {
+        showToast(`Locked Achievement: ${badgeName}. Requirement: ${title}`, 'warning');
+      } else {
+        playGamificationChime();
+        showToast(`Unlocked Achievement: ${badgeName}! ${title}`, 'success');
+      }
+    });
+  });
+}
+
 
 // Toast Notification
 function showToast(message, type = 'success') {
