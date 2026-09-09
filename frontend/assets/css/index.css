@@ -4327,4 +4327,34 @@ input:-webkit-autofill {
   transform: translateY(-2px);
 }
 
+/* Interactive Feynman Podcast Transcript & Audio Seeking */
+.transcript-sentence {
+  border-radius: 4px;
+  padding: 1px 3px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.transcript-sentence:hover {
+  background: rgba(56, 189, 248, 0.15) !important;
+  color: #38bdf8 !important;
+  text-decoration: underline dotted;
+}
+
+.transcript-sentence.active {
+  background: rgba(56, 189, 248, 0.25) !important;
+  color: #38bdf8 !important;
+  font-weight: 500;
+}
+
+/* Crisis Booster & Active Recall transitions */
+.quiz-answer-block {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Rubric Slider styling */
+.rubric-score-badge {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+
 

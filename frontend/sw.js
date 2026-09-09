@@ -1,21 +1,21 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
-// Version: 4.4.0 (Interview Readiness & Career Accelerator Suite)
+// Version: 4.5.0 (Interview Readiness & Career Accelerator Suite)
 
-const CACHE_NAME = 'prepspace-static-v4.4.0';
-const RUNTIME_CACHE = 'prepspace-runtime-v4.4.0';
+const CACHE_NAME = 'prepspace-static-v4.5.0';
+const RUNTIME_CACHE = 'prepspace-runtime-v4.5.0';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/index.css?v=4.4.0',
-  './assets/js/app.js?v=4.4.0',
-  './assets/js/components.js?v=4.4.0',
-  './assets/js/interview-suite.js?v=4.4.0',
-  './assets/js/technical-library-data.js?v=4.4.0',
-  './assets/js/questions-data.js?v=4.4.0',
-  './assets/js/aptitude-curriculum.js?v=4.4.0',
-  './assets/js/production-pages.js?v=4.4.0',
+  './assets/css/index.css?v=4.5.0',
+  './assets/js/app.js?v=4.5.0',
+  './assets/js/components.js?v=4.5.0',
+  './assets/js/interview-suite.js?v=4.5.0',
+  './assets/js/technical-library-data.js?v=4.5.0',
+  './assets/js/questions-data.js?v=4.5.0',
+  './assets/js/aptitude-curriculum.js?v=4.5.0',
+  './assets/js/production-pages.js?v=4.5.0',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',
