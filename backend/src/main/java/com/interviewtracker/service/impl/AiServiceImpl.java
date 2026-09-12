@@ -148,29 +148,4 @@ public class AiServiceImpl implements AiService {
 
         return questions.toString();
     }
-
-    @Override
-    public String transformText(String action, String text, String tone, String lang) {
-        String clean = (text != null) ? text.trim() : "";
-        String firstLine = clean.split("\n")[0].replaceAll("^[#\\s*-]+", "").trim();
-        if (firstLine.isEmpty()) firstLine = "Software Engineering Concept";
-
-        if ("summarize".equalsIgnoreCase(action)) {
-            return String.format("### 💡 AI Executive Summary\n\n**Core Theme:** %s\n\n- **Primary Purpose:** Synthesizes architecture, execution constraints, and edge cases into an actionable engineering reference.\n- **Crucial Invariant:** State transitions must be idempotent and guarded against race conditions or distributed consensus drift.\n- **Key Takeaway:** Adheres to enterprise SLA benchmarks with predictable latency and minimal resource overhead.", firstLine);
-        } else if ("expand".equalsIgnoreCase(action)) {
-            return String.format("%s\n\n## Deep-Dive Analysis & Production Implementation\nWhen deploying this architecture at production scale (>100k QPS), engineers must account for:\n1. **Fault Isolation & Bulkheading:** Wrap downstream network calls in circuit breakers (e.g. Resilience4j) to prevent cascading thread pool depletion.\n2. **Observability & Distributed Tracing:** Instrument each lifecycle hook with OpenTelemetry span identifiers for sub-millisecond trace visibility.\n3. **Backpressure & Queue Throttling:** Ensure consumers signal saturation upstream before memory buffers spill into disk swap.", clean);
-        } else if ("grammar".equalsIgnoreCase(action)) {
-            return clean.replaceAll("\\b(i)\\b", "I").replaceAll("\\bteh\\b", "the");
-        } else if ("explain".equalsIgnoreCase(action)) {
-            return String.format("### 🧠 Concept Explainer: %s\n\n**Why does this matter?**\nIn modern distributed computing, naive approaches fail under sudden load spikes. This concept solves the core friction point by decoupling synchronous bottlenecks from asynchronous processing pipelines.\n\n**The Big Picture:**\nThink of this as an automated traffic control tower at an international airport. Instead of letting all jets land on one runway at once, the system schedules precision approach gates so every passenger arrives safely without collisions.", firstLine);
-        } else if ("quiz".equalsIgnoreCase(action)) {
-            return String.format("### 📝 Interactive Knowledge Check for %s (3 MCQs)\n\n**Q1. What is the primary bottleneck mitigated by this approach?**\n- A) CSS rendering lag\n- B) Cascading backend thread pool exhaustion *(Correct)*\n- C) Relational schema normalization\n- D) Browser cookie expiration\n\n**Q2. Under high-concurrency burst conditions, what data structure guarantees O(1) lookups?**\n- A) Unsorted Linked List\n- B) Binary Search Tree\n- C) In-Memory Hash Matrix / Redis Dictionary *(Correct)*\n- D) Max-Heap", firstLine);
-        } else if ("flashcards".equalsIgnoreCase(action)) {
-            return String.format("### 🗂️ Generated Spaced Repetition Flashcards\n\n**Card 1:**\n- **Front (Question):** What is the principal operational objective of %s?\n- **Back (Answer):** Enforces high throughput, fault tolerance, and predictable latency bounds without cascading resource exhaustion.\n\n**Card 2:**\n- **Front (Question):** Which concurrency guard prevents race conditions in this pattern?\n- **Back (Answer):** Atomic Lua scripting or Lock-Free CAS (Compare-And-Swap) variables.", firstLine);
-        } else if ("action-items".equalsIgnoreCase(action)) {
-            return "### 📋 Extracted Action Items & Engineering Checklist\n\n- [ ] **Phase 1:** Conduct benchmark load-testing against synthetic burst traffic.\n- [ ] **Phase 2:** Configure Prometheus metrics and Grafana dashboard alerts.\n- [ ] **Phase 3:** Review thread safety and lock contention across distributed replicas.\n- [ ] **Phase 4:** Author comprehensive unit and integration tests with Mockito.\n- [ ] **Phase 5:** Document SLA boundaries and failover runbook for team handoff.";
-        }
-
-        return "### ✨ AI Transformation\n\n" + clean;
-    }
 }

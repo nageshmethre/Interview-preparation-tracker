@@ -65,54 +65,8 @@ function checkCashfreeRedirectReturn() {
   }
 }
 
-function checkDemoOrUrlAuth() {
-  try {
-    const urlParams = new URLSearchParams(window.location.search);
-    let demoToken = urlParams.get('token');
-    let isDemo = urlParams.get('demo') === '1' || urlParams.get('demo') === 'true';
-    if (!demoToken && window.location.hash.includes('?')) {
-      const hashParams = new URLSearchParams(window.location.hash.split('?')[1]);
-      demoToken = hashParams.get('token');
-      if (hashParams.get('demo') === '1' || hashParams.get('demo') === 'true') isDemo = true;
-    }
-    if (demoToken || isDemo) {
-      const token = demoToken || 'demo_jwt_token_prepspace_ai';
-      localStorage.setItem('token', token);
-      localStorage.setItem('name', 'Alex Rivera');
-      localStorage.setItem('email', 'alex@prepspace.io');
-      localStorage.setItem('role', 'PRO_PLUS');
-      localStorage.setItem('isPaid', 'true');
-      localStorage.setItem('tier', 'PRO_PLUS');
-      state.token = token;
-      state.name = 'Alex Rivera';
-      state.email = 'alex@prepspace.io';
-      state.role = 'PRO_PLUS';
-      state.isPaid = true;
-    }
-  } catch (e) {
-    console.error('Demo auth check error', e);
-  }
-}
-
-window.loginAsDemo = function() {
-  localStorage.setItem('token', 'demo_jwt_token_prepspace_ai');
-  localStorage.setItem('name', 'Alex Rivera');
-  localStorage.setItem('email', 'alex@prepspace.io');
-  localStorage.setItem('role', 'PRO_PLUS');
-  localStorage.setItem('isPaid', 'true');
-  localStorage.setItem('tier', 'PRO_PLUS');
-  state.token = 'demo_jwt_token_prepspace_ai';
-  state.name = 'Alex Rivera';
-  state.email = 'alex@prepspace.io';
-  state.role = 'PRO_PLUS';
-  state.isPaid = true;
-  showToast('Welcome to PrepSpace Studio Demo Session!', 'success');
-  window.location.hash = '#/ai-studio';
-};
-
 // Application Init
 document.addEventListener('DOMContentLoaded', () => {
-  checkDemoOrUrlAuth();
   getReferralCodeFromUrl();
   checkCashfreeRedirectReturn();
   initTheme();
@@ -133,18 +87,18 @@ window.switchLandingTab = function(tabId, btnElement) {
     display.innerHTML = `
       <div id="tab-exam" class="tab-pane-content">
         <div class="d-flex justify-content-between align-items-center mb-3">
-          <span class="badge bg-danger bg-opacity-15 text-danger border border-danger-subtle px-3 py-1 rounded-pill font-monospace" style="font-size: 0.72rem;"><i class="fa-solid fa-clock me-1"></i> 50:00 Timed Mode</span>
-          <span class="text-muted fs-8 font-monospace">Topic: Data Structures & Algorithms</span>
+          <span class="badge bg-danger text-white px-3 py-1 rounded-pill"><i class="fa-solid fa-clock me-1"></i> 50:00 Timed Mode</span>
+          <span class="text-muted fs-8">Topic: Data Structures & Algorithms</span>
         </div>
         <h5 class="text-white fw-bold mb-3">Question 14 of 50: What is the average time complexity of searching in an AVL tree with n nodes?</h5>
         <div class="d-flex flex-column gap-2 mb-3">
-          <div class="p-2.5 rounded border text-white fs-7" style="background: #0d1117; border-color: #1c2230;"><span class="badge bg-secondary me-2 font-monospace">A</span> O(n)</div>
-          <div class="p-2.5 rounded border text-white fs-7 fw-bold" style="background: rgba(99, 102, 241, 0.12); border-color: #6366f1;"><span class="badge bg-primary me-2 font-monospace">B</span> O(log n) <i class="fa-solid fa-check text-success ms-2"></i></div>
-          <div class="p-2.5 rounded border text-white fs-7" style="background: #0d1117; border-color: #1c2230;"><span class="badge bg-secondary me-2 font-monospace">C</span> O(n log n)</div>
-          <div class="p-2.5 rounded border text-white fs-7" style="background: #0d1117; border-color: #1c2230;"><span class="badge bg-secondary me-2 font-monospace">D</span> O(1)</div>
+          <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-white fs-7"><span class="badge bg-secondary me-2">A</span> O(n)</div>
+          <div class="p-2 rounded bg-primary bg-opacity-25 border border-primary text-white fs-7 fw-bold"><span class="badge bg-primary me-2">B</span> O(log n) <i class="fa-solid fa-check text-success ms-2"></i></div>
+          <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-white fs-7"><span class="badge bg-secondary me-2">C</span> O(n log n)</div>
+          <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-white fs-7"><span class="badge bg-secondary me-2">D</span> O(1)</div>
         </div>
-        <div class="alert alert-success bg-opacity-10 border-success text-success fs-8 mb-0" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.25);">
-          <i class="fa-solid fa-circle-check me-2"></i><strong>Instant Diagnostic:</strong> Correct! AVL trees maintain strict height balance guaranteeing O(log n) lookups. +10 XP awarded.
+        <div class="alert alert-success bg-opacity-10 border-success text-success fs-8 mb-0">
+          <i class="fa-solid fa-circle-check me-2"></i><strong>Instant System Check:</strong> Correct! AVL trees maintain strict height balance guaranteeing O(log n) lookups. +10 XP awarded!
         </div>
       </div>
     `;
@@ -152,23 +106,23 @@ window.switchLandingTab = function(tabId, btnElement) {
     display.innerHTML = `
       <div id="tab-dsa" class="tab-pane-content">
         <div class="d-flex justify-content-between align-items-center mb-3">
-          <span class="badge bg-success bg-opacity-15 text-success border border-success-subtle px-3 py-1 rounded-pill font-monospace" style="font-size: 0.72rem;"><i class="fa-solid fa-fire me-1"></i> 18-Day Streak</span>
-          <span class="text-muted fs-8 font-monospace">LeetCode / Striver SDE Sheet</span>
+          <span class="badge bg-success text-white px-3 py-1 rounded-pill"><i class="fa-solid fa-fire me-1"></i> 18-Day Streak</span>
+          <span class="text-muted fs-8">LeetCode / Striver SDE Sheet</span>
         </div>
         <h5 class="text-white fw-bold mb-3">Daily Problem Matrix (240 / 300 Solved)</h5>
-        <div class="progress mb-3" style="height: 8px; background: #0d1117; border: 1px solid #1c2230; border-radius: 4px;">
-          <div class="progress-bar bg-success" style="width: 50%;"></div>
-          <div class="progress-bar bg-warning" style="width: 35%;"></div>
-          <div class="progress-bar bg-danger" style="width: 15%;"></div>
+        <div class="progress mb-3" style="height: 10px;">
+          <div class="progress-bar bg-success" style="width: 50%;">Easy 120</div>
+          <div class="progress-bar bg-warning" style="width: 35%;">Med 84</div>
+          <div class="progress-bar bg-danger" style="width: 15%;">Hard 36</div>
         </div>
-        <div class="p-3 rounded-3 border mb-3 fs-7" style="background: #0d1117; border-color: #1c2230;">
+        <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 mb-3 fs-7 text-secondary">
           <div class="d-flex justify-content-between align-items-center">
-            <span class="text-white"><i class="fa-solid fa-code text-indigo me-2"></i><strong>LRU Cache Implementation (Design)</strong></span>
-            <span class="badge bg-warning bg-opacity-15 text-warning border border-warning-subtle font-monospace" style="font-size: 0.72rem;">Medium</span>
+            <span><i class="fa-solid fa-code text-cyan me-2"></i><strong>LRU Cache Implementation (Design)</strong></span>
+            <span class="badge bg-warning-subtle text-warning">Medium</span>
           </div>
         </div>
-        <div class="alert alert-info bg-opacity-10 border-info text-info fs-8 mb-0" style="background: rgba(6, 182, 212, 0.08); border-color: rgba(6, 182, 212, 0.25);">
-          <i class="fa-solid fa-chart-line me-2"></i><strong>Algorithmic Velocity:</strong> Solved +28 questions this week across Dynamic Programming & Graphs.
+        <div class="alert alert-info bg-opacity-10 border-info text-info fs-8 mb-0">
+          <i class="fa-solid fa-chart-line me-2"></i><strong>Weekly Velocity:</strong> Solved +28 questions this week across Dynamic Programming & Graphs.
         </div>
       </div>
     `;
@@ -176,16 +130,16 @@ window.switchLandingTab = function(tabId, btnElement) {
     display.innerHTML = `
       <div id="tab-ai" class="tab-pane-content">
         <div class="d-flex justify-content-between align-items-center mb-3">
-          <span class="badge bg-indigo bg-opacity-15 text-indigo border border-indigo-subtle px-3 py-1 rounded-pill font-monospace" style="background: rgba(99, 102, 241, 0.15); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.3); font-size: 0.72rem;"><i class="fa-solid fa-brain me-1"></i> AI ATS Audit</span>
-          <span class="text-success fw-bold fs-7 font-monospace">Match Score: 94.2%</span>
+          <span class="badge bg-secondary text-white px-3 py-1 rounded-pill"><i class="fa-solid fa-brain me-1"></i> AI ATS Audit</span>
+          <span class="text-success fw-bold fs-7">Match Score: 94%</span>
         </div>
         <h5 class="text-white fw-bold mb-2">Target Role: Senior Backend Engineer @ Stripe</h5>
         <p class="text-muted fs-8 mb-3">Audit matches your distributed systems projects with required production requirements.</p>
-        <div class="p-3 rounded-3 border mb-3 fs-7" style="background: #0d1117; border-color: #1c2230;">
-          <div class="text-white fw-bold mb-1"><i class="fa-solid fa-wand-magic-sparkles text-indigo me-2"></i>AI Interview Prompt Recommendation:</div>
-          <p class="text-secondary fs-8 mb-0">"Be prepared to explain idempotent API requests, distributed locking with Redis, and dead-letter queue recovery mechanisms."</p>
+        <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 mb-3 fs-7">
+          <div class="text-white fw-bold mb-1"><i class="fa-solid fa-sparkles text-primary me-2"></i>AI Interview Prompt Recommendation:</div>
+          <p class="text-muted fs-8 mb-0">"Be prepared to explain idempotent API requests, distributed locking with Redis, and dead-letter queue recovery mechanisms."</p>
         </div>
-        <div class="alert alert-primary bg-opacity-10 border-primary text-indigo fs-8 mb-0" style="background: rgba(99, 102, 241, 0.08); border-color: rgba(99, 102, 241, 0.25); color: #818cf8;">
+        <div class="alert alert-primary bg-opacity-10 border-primary text-primary fs-8 mb-0">
           <i class="fa-solid fa-check-double me-2"></i><strong>ATS Keyword Verified:</strong> Found Kafka, Redis, Docker, Spring Boot, and System Architecture.
         </div>
       </div>
@@ -194,28 +148,28 @@ window.switchLandingTab = function(tabId, btnElement) {
     display.innerHTML = `
       <div id="tab-kanban" class="tab-pane-content">
         <div class="d-flex justify-content-between align-items-center mb-3">
-          <span class="badge bg-warning bg-opacity-15 text-warning border border-warning-subtle px-3 py-1 rounded-pill font-monospace" style="font-size: 0.72rem;"><i class="fa-solid fa-briefcase me-1"></i> 4 Active Offers</span>
-          <span class="text-muted fs-8 font-monospace">Pipeline Tracker</span>
+          <span class="badge bg-warning text-dark px-3 py-1 rounded-pill"><i class="fa-solid fa-briefcase me-1"></i> 4 Active Offers</span>
+          <span class="text-muted fs-8">Pipeline Tracker</span>
         </div>
         <h5 class="text-white fw-bold mb-3">Recruitment Pipeline Stages</h5>
         <div class="row g-2 mb-3">
           <div class="col-6">
-            <div class="p-3 rounded border" style="background: #0d1117; border-color: rgba(16, 185, 129, 0.3);">
-              <span class="badge bg-success bg-opacity-15 text-success border border-success-subtle mb-1 font-monospace" style="font-size: 0.68rem;">Offer Accepted</span>
+            <div class="p-2 rounded bg-dark border border-success border-opacity-50">
+              <span class="badge bg-success mb-1">Offer Accepted</span>
               <div class="text-white fw-bold fs-7">Google - L4 SDE</div>
-              <small class="text-muted fs-8 font-monospace">₹38 LPA • Bangalore</small>
+              <small class="text-muted fs-8">₹38 LPA • Bangalore</small>
             </div>
           </div>
           <div class="col-6">
-            <div class="p-3 rounded border" style="background: #0d1117; border-color: rgba(99, 102, 241, 0.3);">
-              <span class="badge bg-primary bg-opacity-15 text-primary border border-primary-subtle mb-1 font-monospace" style="font-size: 0.68rem;">Final Round</span>
+            <div class="p-2 rounded bg-dark border border-primary border-opacity-50">
+              <span class="badge bg-primary mb-1">Final Round</span>
               <div class="text-white fw-bold fs-7">Amazon - SDE II</div>
-              <small class="text-muted fs-8 font-monospace">System Design Screen</small>
+              <small class="text-muted fs-8">System Design Screen</small>
             </div>
           </div>
         </div>
-        <div class="alert alert-success bg-opacity-10 border-success text-success fs-8 mb-0" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.25);">
-          <i class="fa-solid fa-award me-2"></i><strong>Pipeline Velocity:</strong> 66.7% Offer conversion rate across technical onsite rounds.
+        <div class="alert alert-success bg-opacity-10 border-success text-success fs-8 mb-0">
+          <i class="fa-solid fa-award me-2"></i><strong>Pipeline Success Rate:</strong> 66.7% Offer conversion rate across technical onsite rounds.
         </div>
       </div>
     `;
@@ -744,51 +698,19 @@ function router() {
     viewTitle.textContent = 'Discussion Forum';
     pageMount.innerHTML = components.community([]);
     bindCommunityEvents();
-  } else if (hash === '#/ai-studio') {
-    viewTitle.textContent = 'AI Creation Studio';
-    pageMount.innerHTML = components.aiStudio();
-    if (window.AiStudioStore) window.AiStudioStore.updateCreditPill();
-  } else if (hash === '#/ai-image') {
-    viewTitle.textContent = 'AI Image Creator';
-    pageMount.innerHTML = components.aiImageStudio();
-    if (window.AiImageController) window.AiImageController.init();
-    if (window.AiStudioStore) window.AiStudioStore.updateCreditPill();
-  } else if (hash === '#/ai-library') {
-    viewTitle.textContent = 'AI Content Library';
-    pageMount.innerHTML = components.aiContentLibrary();
-    if (window.bindAiLibraryEvents) window.bindAiLibraryEvents();
-    if (window.AiStudioStore) window.AiStudioStore.updateCreditPill();
   } else if (hash === '#/notes') {
-    viewTitle.textContent = 'AI Smart Notes Workspace';
-    let targetNoteId = null;
-    let targetAction = null;
-    if (rawHash.includes('?')) {
-      const q = new URLSearchParams(rawHash.split('?')[1]);
-      targetNoteId = q.get('id');
-      targetAction = q.get('action');
-    }
-    if (window.AiStudioTemplates) {
-      pageMount.innerHTML = components.notes([], [], targetNoteId);
-      if (window.AiNotesController) {
-        window.AiNotesController.init(targetNoteId);
-        if (targetAction === 'new') {
-          setTimeout(() => window.AiNotesController.createNewNote(), 50);
-        }
-      }
-    } else {
-      pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
-      Promise.all([apiFetch('/v1/notes'), apiFetch('/v1/notes/folders')])
-        .then(([notes, folders]) => {
-          if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/notes') return;
-          pageMount.innerHTML = components.notes(notes, folders);
-          bindNotesEvents();
-        })
-        .catch(err => {
-          if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/notes') return;
-          pageMount.innerHTML = `<div class="alert alert-danger">Failed to load notes: ${err.message}</div>`;
-        });
-    }
-    if (window.AiStudioStore) window.AiStudioStore.updateCreditPill();
+    viewTitle.textContent = 'Markdown Study Planner Notes';
+    pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
+    Promise.all([apiFetch('/v1/notes'), apiFetch('/v1/notes/folders')])
+      .then(([notes, folders]) => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/notes') return;
+        pageMount.innerHTML = components.notes(notes, folders);
+        bindNotesEvents();
+      })
+      .catch(err => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/notes') return;
+        pageMount.innerHTML = `<div class="alert alert-danger">Failed to load notes: ${err.message}</div>`;
+      });
   } else if (hash === '#/placement') {
     viewTitle.textContent = 'Kanban Placement Tracker';
     pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
@@ -1039,16 +961,6 @@ function updateSidebarSelection(hash) {
       link.classList.remove('active');
     }
   });
-
-  // Also synchronize 21st.dev Mobile Floating Navigation Dock
-  document.querySelectorAll('.mobile-dock-item').forEach(item => {
-    const itemHref = item.getAttribute('href');
-    if (itemHref && hash.startsWith(itemHref)) {
-      item.classList.add('active');
-    } else if (itemHref) {
-      item.classList.remove('active');
-    }
-  });
 }
 
 // Local Storage Cache Helpers
@@ -1153,15 +1065,6 @@ function bindLayoutEvents() {
     });
   }
 
-  // 21st.dev Mobile Floating Dock Menu trigger
-  const mobileDockMenuBtn = document.getElementById('mobile-dock-menu-btn');
-  if (mobileDockMenuBtn && sidebar) {
-    mobileDockMenuBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      sidebar.classList.toggle('active');
-    });
-  }
-
   // Mobile sidebar auto-close on link clicks
   document.querySelectorAll('.sidebar-link').forEach(link => {
     link.addEventListener('click', () => {
@@ -1174,24 +1077,11 @@ function bindLayoutEvents() {
   // Mobile sidebar click outside to close
   document.addEventListener('click', (e) => {
     if (window.innerWidth < 992 && sidebar && sidebar.classList.contains('active')) {
-      if (!sidebar.contains(e.target) && (!toggleBtn || !toggleBtn.contains(e.target)) && (!mobileDockMenuBtn || !mobileDockMenuBtn.contains(e.target))) {
+      if (!sidebar.contains(e.target) && (!toggleBtn || !toggleBtn.contains(e.target))) {
         sidebar.classList.remove('active');
       }
     }
   });
-
-  // 21st.dev Reactive Spotlight Cursor Tracking
-  if (!window._spotlightListenerAttached) {
-    window._spotlightListenerAttached = true;
-    document.addEventListener('mousemove', (e) => {
-      const card = e.target && e.target.closest ? e.target.closest('.spotlight-card') : null;
-      if (card) {
-        const rect = card.getBoundingClientRect();
-        card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-        card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
-      }
-    }, { passive: true });
-  }
 
   const collapseBtn = document.getElementById('sidebar-collapse-btn');
   const container = document.getElementById('app-container');
@@ -1267,11 +1157,6 @@ function bindLayoutEvents() {
   if (notifRecoveryItem) {
     notifRecoveryItem.addEventListener('click', (e) => {
       e.preventDefault();
-      const notifBell = document.getElementById('notifBellDropdown');
-      if (notifBell && window.bootstrap) {
-        const dd = bootstrap.Dropdown.getInstance(notifBell);
-        if (dd) dd.hide();
-      }
       openRecoveryModal();
     });
   }

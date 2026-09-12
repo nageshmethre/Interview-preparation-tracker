@@ -45,16 +45,4 @@ public class AiController {
     ) {
         return ResponseEntity.ok(aiService.generateInterviewQuestions(company, role));
     }
-
-    @PostMapping("/transform")
-    public ResponseEntity<?> transformText(@RequestBody java.util.Map<String, String> payload) {
-        String action = payload.getOrDefault("action", "summarize");
-        String text = payload.getOrDefault("text", "");
-        String tone = payload.getOrDefault("tone", "professional");
-        String lang = payload.getOrDefault("lang", "English");
-        String output = aiService.transformText(action, text, tone, lang);
-        java.util.Map<String, String> res = new java.util.HashMap<>();
-        res.put("output", output);
-        return ResponseEntity.ok(res);
-    }
 }

@@ -36,25 +36,6 @@ public class RichNote {
     @Builder.Default
     private Boolean markdownEnabled = true;
 
-    @Column(name = "pinned")
-    @Builder.Default
-    private Boolean pinned = false;
-
-    @Column(name = "favorite")
-    @Builder.Default
-    private Boolean favorite = false;
-
-    @Column(name = "archived")
-    @Builder.Default
-    private Boolean archived = false;
-
-    @Column(name = "cover_image", columnDefinition = "TEXT")
-    private String coverImage;
-
-    @Column(name = "created_at")
-    @Builder.Default
-    private LocalDateTime createdAt = LocalDateTime.now();
-
     @Column(name = "updated_at")
     @Builder.Default
     private LocalDateTime updatedAt = LocalDateTime.now();

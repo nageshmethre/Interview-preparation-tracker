@@ -6,5 +6,4 @@ public interface AiService {
     String generateStudyPlan(String email);
     String getCodingFeedback(String code, String problemTitle);
     String generateInterviewQuestions(String company, String role);
-    String transformText(String action, String text, String tone, String lang);
 }
