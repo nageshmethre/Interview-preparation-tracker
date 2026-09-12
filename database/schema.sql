@@ -258,9 +258,39 @@ CREATE TABLE IF NOT EXISTS rich_notes (
     content TEXT NOT NULL,
     tags VARCHAR(200),
     markdown_enabled BOOLEAN DEFAULT TRUE,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    pinned BOOLEAN DEFAULT FALSE,
+    favorite BOOLEAN DEFAULT FALSE,
+    archived BOOLEAN DEFAULT FALSE,
+    cover_image TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (folder_id) REFERENCES folders(id) ON DELETE SET NULL
+);
+
+-- AI Generations & Asset Log
+CREATE TABLE IF NOT EXISTS ai_generations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    asset_type VARCHAR(50) NOT NULL, -- NOTE, IMAGE, AUDIO, TRANSCRIPT, QUIZ, FLASHCARD
+    prompt TEXT,
+    result_url TEXT,
+    result_text LONGTEXT,
+    metadata JSON,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- AI Usage & Entitlement Quotas
+CREATE TABLE IF NOT EXISTS ai_usage_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    action_type VARCHAR(50) NOT NULL, -- TEXT_TRANSFORM, IMAGE_GEN, TTS_AUDIO, STT_DICTATION
+    credits_consumed INT DEFAULT 1,
+    words_count INT DEFAULT 0,
+    duration_seconds INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- 17. Notes (Simple)

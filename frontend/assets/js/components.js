@@ -1,7 +1,7 @@
 // components.js - View Templates for PrepSpace SaaS Application
 
 const components = {
-  // Moving Announcement Ticker (Top Banner) - Configurable dynamically from Admin Panel
+  // Minimalist Developer Release Ticker (Top Banner)
   renderTopPromoTicker: (customConfig) => {
     let config = customConfig;
     if (!config) {
@@ -13,73 +13,45 @@ const components = {
     const isActive = config ? config.active !== 'false' : true;
     if (!isActive) return '';
 
-    const badge1 = (config && config.badge1) || 'TOP 50 PERK';
-    const text1 = (config && config.text1) || 'Rank in the <strong class=\"text-white\">Top 50</strong> of any Mock Exam (Java, Python, C++, React, DSA) & win a <strong style=\"color: #fbbf24;\">100% Free Lifetime Pro Subscription!</strong>';
-    const btn1 = (config && config.btn1) || 'Take Mock Exam →';
+    const badge1 = (config && config.badge1) || 'ENGINE V2.5';
+    const text1 = (config && config.text1) || 'Track <strong class="text-white">500+ LeetCode & Striver Problems</strong>, execute 50-MCQ timed screens, and optimize ATS resumes.';
+    const btn1 = (config && config.btn1) || 'Start Practicing →';
     const link1 = (config && config.link1) || '#/mock-exams';
 
-    const badge2 = (config && config.badge2) || 'LEADERBOARD CHALLENGE';
-    const text2 = (config && config.text2) || 'Compete with 2,400+ developers globally in real-time timed technical evaluations';
-    const btn2 = (config && config.btn2) || 'Join Leaderboard →';
+    const badge2 = (config && config.badge2) || 'GLOBAL LEADERBOARD';
+    const text2 = (config && config.text2) || 'Benchmark technical velocity with 2,400+ software engineers worldwide';
+    const btn2 = (config && config.btn2) || 'View Leaderboard →';
     const link2 = (config && config.link2) || '#/mock-exams';
 
     return `
-      <div id="top-promo-banner" class="promo-ticker-wrapper" title="Hover to pause ticker">
-        <div class="promo-ticker-track">
-          <!-- Slide 1 -->
-          <a href="${link1}" class="promo-ticker-item">
-            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(245, 158, 11, 0.18); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.35); font-size: 0.72rem;">
-              <i class="fa-solid fa-trophy me-1"></i> ${badge1}
+      <div id="top-promo-banner" class="promo-ticker-wrapper" style="background: #090a0f; border-bottom: 1px solid #1c2230; padding: 6px 0; font-size: 0.78rem;">
+        <div class="promo-ticker-track d-flex justify-content-center align-items-center gap-4">
+          <a href="${link1}" class="promo-ticker-item text-decoration-none d-inline-flex align-items-center gap-2" style="color: #94a3b8;">
+            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(99, 102, 241, 0.15); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.3); font-size: 0.68rem; padding: 3px 8px;">
+              <i class="fa-solid fa-code-commit me-1"></i> ${badge1}
             </span>
             <span>${text1}</span>
-            <span class="badge rounded-pill fw-bold text-dark px-2.5 py-1" style="background: #f59e0b; font-size: 0.75rem;">${btn1}</span>
-          </a>
-
-          <!-- Slide 2 -->
-          <a href="${link2}" class="promo-ticker-item">
-            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); font-size: 0.72rem;">
-              <i class="fa-solid fa-fire me-1"></i> ${badge2}
-            </span>
-            <span>${text2}</span>
-            <span class="badge rounded-pill fw-bold text-dark px-2.5 py-1" style="background: #10b981; font-size: 0.75rem;">${btn2}</span>
-          </a>
-
-          <!-- Slide 3 (Seamless Repeat) -->
-          <a href="${link1}" class="promo-ticker-item">
-            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(245, 158, 11, 0.18); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.35); font-size: 0.72rem;">
-              <i class="fa-solid fa-trophy me-1"></i> ${badge1}
-            </span>
-            <span>${text1}</span>
-            <span class="badge rounded-pill fw-bold text-dark px-2.5 py-1" style="background: #f59e0b; font-size: 0.75rem;">${btn1}</span>
-          </a>
-
-          <!-- Slide 4 (Seamless Repeat) -->
-          <a href="${link2}" class="promo-ticker-item">
-            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); font-size: 0.72rem;">
-              <i class="fa-solid fa-fire me-1"></i> ${badge2}
-            </span>
-            <span>${text2}</span>
-            <span class="badge rounded-pill fw-bold text-dark px-2.5 py-1" style="background: #10b981; font-size: 0.75rem;">${btn2}</span>
+            <span class="badge rounded-pill fw-semibold text-white px-2.5 py-1" style="background: #6366f1; font-size: 0.72rem;">${btn1}</span>
           </a>
         </div>
       </div>
     `;
   },
 
-  // Public SaaS Landing Page - Full Developer Grid Mesh Layout
+  // Public SaaS Landing Page - Modern Engineer-First Grid Layout
   landing: () => `
     <div class="landing-page-mesh">
-      <!-- Animated Moving Announcement Ticker (Side by Side) -->
+      <!-- Minimalist Developer Release Ticker -->
       ${components.renderTopPromoTicker()}
 
-      <!-- Vercel Minimalist Glass Navigation -->
-      <nav class="navbar navbar-expand-lg navbar-dark py-3 sticky-top border-bottom border-secondary border-opacity-20">
+      <!-- Minimalist Developer Navigation -->
+      <nav class="navbar navbar-expand-lg navbar-dark py-3 sticky-top">
         <div class="container">
           <a class="navbar-brand d-flex align-items-center gap-2 text-decoration-none" href="#/">
-            <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace Logo" class="brand-logo-img" style="width: 36px; height: 36px; object-fit: contain;">
+            <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace Logo" class="brand-logo-img" style="width: 32px; height: 32px; object-fit: contain;">
             <div class="d-flex flex-column text-start">
               <span class="fw-bold fs-5 text-white lh-1">PrepSpace</span>
-              <span class="text-secondary" style="font-size: 0.65rem; letter-spacing: 0.8px; margin-top: 2px; font-family: 'Geist Mono', monospace;">(stream-in)</span>
+              <span class="text-secondary" style="font-size: 0.65rem; letter-spacing: 0.6px; margin-top: 2px; font-family: 'Geist Mono', monospace;">// DEV PLATFORM</span>
             </div>
           </a>
           <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
@@ -89,17 +61,17 @@ const components = {
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center gap-1">
               <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="#showcase">Platform</a></li>
               <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="#features">Capabilities</a></li>
-              <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="#calculator">ROI Calculator</a></li>
+              <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="#calculator">Readiness Index</a></li>
               <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="#pricing">Pricing</a></li>
               <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="/about">About</a></li>
               <li class="nav-item ms-lg-3 d-flex align-items-center gap-2">
-                <a class="btn btn-glass px-3 py-1 fs-7 text-success border-success-subtle d-inline-flex align-items-center gap-1" href="https://stream-in.app/downloads/PrepSpace.apk" download="PrepSpace.apk" title="Direct Android APK Download">
-                  <i class="fa-brands fa-android text-success"></i> <span class="d-none d-sm-inline">App</span>
+                <a class="btn btn-glass px-3 py-1.5 fs-7 text-emerald border-emerald-subtle d-inline-flex align-items-center gap-1" href="https://stream-in.app/downloads/PrepSpace.apk" download="PrepSpace.apk" title="Android APK Download">
+                  <i class="fa-brands fa-android text-emerald"></i> <span class="d-none d-sm-inline">App</span>
                 </a>
                 ${(typeof state !== 'undefined' && state && state.token)
-                  ? `<a class="btn btn-premium px-3 py-1 fs-7 fw-bold" href="#/dashboard">Dashboard <i class="fa-solid fa-arrow-right ms-1"></i></a>`
-                  : `<a class="btn btn-glass px-3 py-1 fs-7" href="#/login">Log In</a>
-                     <a class="btn btn-premium px-3 py-1 fs-7 fw-bold" href="#/register">Sign Up Free</a>`}
+                  ? `<a class="btn btn-premium px-3.5 py-1.5 fs-7 fw-bold" href="#/dashboard">Dashboard <i class="fa-solid fa-arrow-right ms-1"></i></a>`
+                  : `<a class="btn btn-glass px-3 py-1.5 fs-7" href="#/login">Log In</a>
+                     <a class="btn btn-premium px-3.5 py-1.5 fs-7 fw-bold" href="#/register">Get Started Free</a>`}
               </li>
             </ul>
           </div>
@@ -107,43 +79,43 @@ const components = {
       </nav>
 
       <!-- Hero Banner Section -->
-      <header class="landing-hero-section pb-5">
-        <div class="container text-center pt-5 pb-4">
+      <header class="landing-hero-section pb-5 ambient-glow-mesh">
+        <div class="container text-center pt-5 pb-4 position-relative" style="z-index: 1;">
         <div class="row justify-content-center">
           <div class="col-lg-10 col-xl-9">
-            <a href="#features" class="announcement-pill mb-4">
-              <span class="badge bg-primary px-2 py-1 rounded-pill fw-bold">NEW</span>
-              <span>50-MCQ Timed Exam Engine & AI ATS Audit is Live</span>
-              <i class="fa-solid fa-arrow-right fs-8"></i>
+            <a href="#features" class="announcement-pill mb-4 d-inline-flex align-items-center gap-2">
+              <span class="badge-live-pulse"><span class="pulse-dot"></span> v2.5 RELEASE</span>
+              <span>50-MCQ Timed Exam Engine, DSA Matrix & ATS Audit</span>
+              <i class="fa-solid fa-arrow-right fs-9"></i>
             </a>
 
             <h1 class="display-3 fw-extrabold text-white mb-4 tracking-tight">
-              The Career Engine for <br class="d-none d-md-block"/>
-              <span class="gradient-text-stripe">Elite Tech Placements</span>
+              The Developer Platform for <br class="d-none d-md-block"/>
+              <span class="gradient-text-stripe">Technical Interview Mastery</span>
             </h1>
 
-            <p class="lead text-secondary mb-5 fs-5 mx-auto" style="max-width: 780px;">
-              Master Data Structures & Algorithms, test your knowledge with 50-MCQ timed technical screens, audit your resume against AI ATS systems, and manage your entire placement pipeline in one unified platform.
+            <p class="lead text-secondary mb-5 fs-5 mx-auto" style="max-width: 760px; line-height: 1.6;">
+              Organize your DSA study roadmap, execute timed 50-MCQ technical screens, analyze your ATS resume readiness, and track your complete engineering recruitment pipeline in a single unified workspace.
             </p>
 
             <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap mb-5">
-              <a href="#/register" class="btn btn-premium btn-lg px-5 py-3 fs-5 fw-bold shadow-lg">
-                <i class="fa-solid fa-rocket me-2"></i>Initialize Space Free
+              <a href="#/register" class="btn btn-vibe-primary btn-shimmer btn-lg px-5 py-3 fs-5 fw-bold shadow-lg text-decoration-none">
+                <i class="fa-solid fa-bolt me-2"></i>Initialize Workspace Free
               </a>
-              <a href="#showcase" class="btn btn-glass btn-lg px-4 py-3 fs-5 text-white">
-                <i class="fa-solid fa-layer-group me-2 text-cyan"></i>Explore Live Platform
+              <a href="#showcase" class="btn btn-glass btn-lg px-4 py-3 fs-5 text-white text-decoration-none">
+                <i class="fa-solid fa-terminal me-2 text-indigo"></i>Explore Live Workspace
               </a>
             </div>
 
             <!-- Social Proof Strip -->
-            <div class="pt-4 border-top border-secondary border-opacity-10">
-              <p class="text-muted small text-uppercase tracking-wider mb-3 fs-8">Preparing Candidates for Engineering Roles at</p>
+            <div class="pt-4 border-top border-secondary border-opacity-15">
+              <p class="text-muted small text-uppercase tracking-wider mb-3 fs-8 font-monospace">PREPARING CANDIDATES FOR ENGINEERING ROLES AT</p>
               <div class="company-logo-strip">
                 <span class="company-badge"><i class="fa-brands fa-google text-danger"></i> Google</span>
                 <span class="company-badge"><i class="fa-brands fa-microsoft text-primary"></i> Microsoft</span>
                 <span class="company-badge"><i class="fa-brands fa-amazon text-warning"></i> Amazon</span>
                 <span class="company-badge"><i class="fa-brands fa-meta text-info"></i> Meta</span>
-                <span class="company-badge"><i class="fa-brands fa-uber text-white"></i> Uber</span>
+                <span class="company-badge"><i class="fa-brands fa-apple text-white"></i> Apple</span>
                 <span class="company-badge"><i class="fa-brands fa-stripe text-indigo"></i> Stripe</span>
                 <span class="company-badge"><i class="fa-brands fa-atlassian text-primary"></i> Atlassian</span>
               </div>
@@ -154,114 +126,116 @@ const components = {
     </header>
 
     <main>
-      <!-- 3D Interactive Floating Dashboard Showcase (Stripe-Style) -->
+      <!-- Interactive Developer Console Showcase -->
       <section id="showcase" class="container py-5">
         <div class="text-center mb-5">
-          <span class="badge bg-indigo-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-2">INTERACTIVE WORKSPACE</span>
-          <h2 class="display-5 fw-extrabold text-white mb-2">Built for Relentless Focus & Speed</h2>
-          <p class="text-muted fs-5">A real-time control room for your technical preparation journey.</p>
+          <span class="badge bg-primary bg-opacity-15 text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-2 font-monospace fs-8">LIVE WORKSPACE PREVIEW</span>
+          <h2 class="display-5 fw-extrabold text-white mb-2">Engineered for Focus & Execution Speed</h2>
+          <p class="text-muted fs-5">A unified mission control designed specifically for software engineers.</p>
         </div>
 
-        <div class="dashboard-mockup-wrapper">
-          <div class="mockup-window">
-            <div class="mockup-header">
-              <div class="window-dots">
-                <span class="window-dot red"></span>
-                <span class="window-dot yellow"></span>
-                <span class="window-dot green"></span>
-              </div>
-              <div class="mockup-url-bar">https://stream-in.app/#/dashboard</div>
-              <div class="text-muted fs-8"><i class="fa-solid fa-shield-halved text-success me-1"></i> TLS 1.3 Verified</div>
-            </div>
-
-            <!-- Inside Mockup Viewport -->
-            <div class="p-4 p-md-5" style="background: #222226;">
-              <!-- Live Metrics Strip -->
-              <div class="row g-3 mb-4">
-                <div class="col-6 col-md-3">
-                  <div class="p-3 rounded-3 border border-secondary border-opacity-20" style="background: #1c1c20; border-color: #323238; text-start">
-                    <span class="text-muted fs-8 uppercase">Readiness Score</span>
-                    <h3 class="text-white fw-bold mt-1 mb-0 gradient-text-stripe">96.8%</h3>
-                    <small class="text-success fs-8"><i class="fa-solid fa-arrow-trend-up me-1"></i>+12% this week</small>
-                  </div>
+        <div class="dashboard-mockup-wrapper border-beam-card">
+          <div class="border-beam-inner">
+            <div class="mockup-window">
+              <div class="mockup-header">
+                <div class="window-dots">
+                  <span class="window-dot red"></span>
+                  <span class="window-dot yellow"></span>
+                  <span class="window-dot green"></span>
                 </div>
-                <div class="col-6 col-md-3">
-                  <div class="p-3 rounded-3 border border-secondary border-opacity-20" style="background: #1c1c20; border-color: #323238; text-start">
-                    <span class="text-muted fs-8 uppercase">DSA Streaks</span>
-                    <h3 class="text-warning fw-bold mt-1 mb-0"><i class="fa-solid fa-fire me-1"></i>18 Days</h3>
-                    <small class="text-muted fs-8">240 Problems Solved</small>
-                  </div>
-                </div>
-                <div class="col-6 col-md-3">
-                  <div class="p-3 rounded-3 border border-secondary border-opacity-20" style="background: #1c1c20; border-color: #323238; text-start">
-                    <span class="text-muted fs-8 uppercase">50-MCQ Exam Grade</span>
-                    <h3 class="text-info fw-bold mt-1 mb-0">50 / 50</h3>
-                    <small class="text-success fs-8">100% Top Percentile</small>
-                  </div>
-                </div>
-                <div class="col-6 col-md-3">
-                  <div class="p-3 rounded-3 border border-secondary border-opacity-20" style="background: #1c1c20; border-color: #323238; text-start">
-                    <span class="text-muted fs-8 uppercase">Active Pipeline</span>
-                    <h3 class="text-success fw-bold mt-1 mb-0">4 Offers</h3>
-                    <small class="text-muted fs-8">8 Companies In Review</small>
-                  </div>
-                </div>
+                <div class="mockup-url-bar">prepspace.dev/#/workspace/dashboard</div>
+                <div class="text-muted fs-8 font-monospace"><i class="fa-solid fa-shield-halved text-success me-1"></i> TLS 1.3 Verified</div>
               </div>
 
-              <!-- Interactive Tabs & Preview Deck (Supabase-Style) -->
-              <div class="row g-4 text-start">
-                <div class="col-lg-4 d-flex flex-column gap-2">
-                  <button class="feature-tab-btn active" onclick="window.switchLandingTab('tab-exam', this)">
-                    <i class="fa-solid fa-stopwatch-20 text-primary fs-5"></i>
-                    <div>
-                      <div class="text-white fw-bold">50-MCQ Exam Engine</div>
-                      <small class="text-muted fs-8">Full-length timed technical testing</small>
+              <!-- Inside Mockup Viewport -->
+              <div class="p-4 p-md-5" style="background: #0d1117;">
+                <!-- Live Metrics Strip -->
+                <div class="row g-3 mb-4">
+                  <div class="col-6 col-md-3">
+                    <div class="p-3 rounded-3 border" style="background: #131722; border-color: #202737; text-align: left;">
+                      <span class="text-muted fs-8 text-uppercase font-monospace">Readiness Score</span>
+                      <h3 class="text-white fw-bold mt-1 mb-0 gradient-text-stripe">96.8%</h3>
+                      <small class="text-success fs-8"><i class="fa-solid fa-arrow-trend-up me-1"></i>+12% this week</small>
                     </div>
-                  </button>
-
-                  <button class="feature-tab-btn" onclick="window.switchLandingTab('tab-dsa', this)">
-                    <i class="fa-solid fa-code-branch text-success fs-5"></i>
-                    <div>
-                      <div class="text-white fw-bold">DSA Problem Matrix</div>
-                      <small class="text-muted fs-8">Track LeetCode, Striver & NeetCode</small>
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <div class="p-3 rounded-3 border" style="background: #131722; border-color: #202737; text-align: left;">
+                      <span class="text-muted fs-8 text-uppercase font-monospace">Current Streak</span>
+                      <h3 class="text-white fw-bold mt-1 mb-0">14 Days</h3>
+                      <small class="text-warning fs-8"><i class="fa-solid fa-fire me-1"></i>Consistency Top 5%</small>
                     </div>
-                  </button>
-
-                  <button class="feature-tab-btn" onclick="window.switchLandingTab('tab-ai', this)">
-                    <i class="fa-solid fa-brain text-secondary fs-5"></i>
-                    <div>
-                      <div class="text-white fw-bold">AI Career & ATS Audit</div>
-                      <small class="text-muted fs-8">Tailored company prompt guides</small>
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <div class="p-3 rounded-3 border" style="background: #131722; border-color: #202737; text-align: left;">
+                      <span class="text-muted fs-8 text-uppercase font-monospace">Mastery Level</span>
+                      <h3 class="text-white fw-bold mt-1 mb-0">Level 8</h3>
+                      <small class="text-indigo fs-8"><i class="fa-solid fa-bolt me-1"></i>Senior Solver</small>
                     </div>
-                  </button>
-
-                  <button class="feature-tab-btn" onclick="window.switchLandingTab('tab-kanban', this)">
-                    <i class="fa-solid fa-table-columns text-warning fs-5"></i>
-                    <div>
-                      <div class="text-white fw-bold">Placement Kanban Pipeline</div>
-                      <small class="text-muted fs-8">End-to-end recruitment tracking</small>
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <div class="p-3 rounded-3 border" style="background: #131722; border-color: #202737; text-align: left;">
+                      <span class="text-muted fs-8 text-uppercase font-monospace">Live Interviews</span>
+                      <h3 class="text-white fw-bold mt-1 mb-0">4 Active</h3>
+                      <small class="text-emerald fs-8"><i class="fa-solid fa-circle-check me-1"></i>2 Final Rounds</small>
                     </div>
-                  </button>
+                  </div>
                 </div>
 
-                <!-- Tab Preview Canvas -->
-                <div class="col-lg-8">
-                  <div class="glass-panel p-4 h-100 border-primary border-opacity-25" id="landing-tab-display">
-                    <!-- Default Tab: Exam Engine -->
-                    <div id="tab-exam" class="tab-pane-content">
-                      <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="badge bg-danger text-white px-3 py-1 rounded-pill"><i class="fa-solid fa-clock me-1"></i> 50:00 Timed Mode</span>
-                        <span class="text-muted fs-8">Topic: Data Structures & Algorithms</span>
+                <!-- Interactive Feature Switcher Bar -->
+                <div class="row g-4 text-start">
+                  <div class="col-lg-4 d-flex flex-column gap-2">
+                    <button class="feature-tab-btn active" onclick="window.switchLandingTab('tab-exam', this)">
+                      <i class="fa-solid fa-stopwatch text-rose fs-5"></i>
+                      <div>
+                        <div class="text-white fw-bold">50-MCQ Screening Engine</div>
+                        <small class="text-muted fs-8">Automated real-time timers & grading</small>
                       </div>
-                      <h5 class="text-white fw-bold mb-3">Question 14 of 50: What is the average time complexity of searching in an AVL tree with n nodes?</h5>
-                      <div class="d-flex flex-column gap-2 mb-3">
-                        <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-white fs-7"><span class="badge bg-secondary me-2">A</span> O(n)</div>
-                        <div class="p-2 rounded bg-primary bg-opacity-25 border border-primary text-white fs-7 fw-bold"><span class="badge bg-primary me-2">B</span> O(log n) <i class="fa-solid fa-check text-success ms-2"></i></div>
-                        <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-white fs-7"><span class="badge bg-secondary me-2">C</span> O(n log n)</div>
-                        <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-white fs-7"><span class="badge bg-secondary me-2">D</span> O(1)</div>
+                    </button>
+
+                    <button class="feature-tab-btn" onclick="window.switchLandingTab('tab-dsa', this)">
+                      <i class="fa-solid fa-code text-indigo fs-5"></i>
+                      <div>
+                        <div class="text-white fw-bold">DSA Problem Matrix</div>
+                        <small class="text-muted fs-8">Difficulty ratios & topic mastery</small>
                       </div>
-                      <div class="alert alert-success bg-opacity-10 border-success text-success fs-8 mb-0">
-                        <i class="fa-solid fa-circle-check me-2"></i><strong>Instant System Check:</strong> Correct! AVL trees maintain strict height balance guaranteeing O(log n) lookups. +10 XP awarded!
+                    </button>
+
+                    <button class="feature-tab-btn" onclick="window.switchLandingTab('tab-ai', this)">
+                      <i class="fa-solid fa-brain text-secondary fs-5"></i>
+                      <div>
+                        <div class="text-white fw-bold">AI Career & ATS Audit</div>
+                        <small class="text-muted fs-8">Tailored company prompt guides</small>
+                      </div>
+                    </button>
+
+                    <button class="feature-tab-btn" onclick="window.switchLandingTab('tab-kanban', this)">
+                      <i class="fa-solid fa-table-columns text-warning fs-5"></i>
+                      <div>
+                        <div class="text-white fw-bold">Placement Kanban Pipeline</div>
+                        <small class="text-muted fs-8">End-to-end recruitment tracking</small>
+                      </div>
+                    </button>
+                  </div>
+
+                  <!-- Tab Preview Canvas -->
+                  <div class="col-lg-8">
+                    <div class="glass-panel p-4 h-100 border-primary" id="landing-tab-display" style="background: #131722; border-color: #202737;">
+                      <!-- Default Tab: Exam Engine -->
+                      <div id="tab-exam" class="tab-pane-content">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                          <span class="badge bg-danger bg-opacity-15 text-danger border border-danger-subtle px-3 py-1 rounded-pill font-monospace"><i class="fa-solid fa-clock me-1"></i> 50:00 Timed Mode</span>
+                          <span class="text-muted fs-8 font-monospace">Topic: Data Structures & Algorithms</span>
+                        </div>
+                        <h5 class="text-white fw-bold mb-3">Question 14 of 50: What is the average time complexity of searching in an AVL tree with n nodes?</h5>
+                        <div class="d-flex flex-column gap-2 mb-3">
+                          <div class="p-2.5 rounded border text-white fs-7" style="background: #0e1219; border-color: #202737;"><span class="badge bg-secondary me-2 font-monospace">A</span> O(n)</div>
+                          <div class="p-2.5 rounded border text-white fs-7 fw-bold" style="background: rgba(99, 102, 241, 0.12); border-color: #6366f1;"><span class="badge bg-primary me-2 font-monospace">B</span> O(log n) <i class="fa-solid fa-check text-success ms-2"></i></div>
+                          <div class="p-2.5 rounded border text-white fs-7" style="background: #0e1219; border-color: #202737;"><span class="badge bg-secondary me-2 font-monospace">C</span> O(n log n)</div>
+                          <div class="p-2.5 rounded border text-white fs-7" style="background: #0e1219; border-color: #202737;"><span class="badge bg-secondary me-2 font-monospace">D</span> O(1)</div>
+                        </div>
+                        <div class="alert alert-success bg-opacity-10 border-success text-success fs-8 mb-0">
+                          <i class="fa-solid fa-circle-check me-2"></i><strong>Instant Diagnostic:</strong> Correct! AVL trees maintain strict height balance guaranteeing O(log n) lookups. +10 XP awarded.
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -272,17 +246,17 @@ const components = {
         </div>
       </section>
 
-      <!-- Bento Grid Features Section -->
+      <!-- Bento Grid Platform Features Section -->
       <section id="features" class="container py-5">
         <div class="text-center mb-5">
-          <span class="badge bg-indigo-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-2">COMPLETE ECOSYSTEM</span>
-          <h2 class="display-5 fw-extrabold text-white mb-3">Engineered for Technical Mastery</h2>
-          <p class="text-muted fs-5">Every single feature designed to give you the competitive edge in interviews.</p>
+          <span class="badge bg-primary bg-opacity-15 text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-2 font-monospace fs-8">ARCHITECTURE & CAPABILITIES</span>
+          <h2 class="display-5 fw-extrabold text-white mb-3">Engineered for Technical Depth</h2>
+          <p class="text-muted fs-5">Every module is built with extreme precision to accelerate your career progression.</p>
         </div>
 
         <div class="row g-4">
           <div class="col-md-6 col-lg-4">
-            <div class="bento-card">
+            <div class="bento-card-vibe spotlight-card p-4 h-100">
               <div class="feature-icon mb-3 text-primary fs-2"><i class="fa-solid fa-stopwatch-20"></i></div>
               <h3 class="text-white h5 fw-bold mb-2">50-MCQ Timed Exam Engine</h3>
               <p class="text-muted fs-7 mb-0">Experience realistic, timed screening exams across DSA, Java, SQL, and System Design with automatic scoring and detailed review logs.</p>
@@ -290,7 +264,7 @@ const components = {
           </div>
 
           <div class="col-md-6 col-lg-4">
-            <div class="bento-card">
+            <div class="bento-card-vibe spotlight-card p-4 h-100">
               <div class="feature-icon mb-3 text-cyan fs-2"><i class="fa-solid fa-chart-line"></i></div>
               <h3 class="text-white h5 fw-bold mb-2">DSA Matrix & Heatmaps</h3>
               <p class="text-muted fs-7 mb-0">Log problems by topic, track difficulty ratios (Easy/Medium/Hard), and maintain daily streak momentum with interactive visual heatmaps.</p>
@@ -298,7 +272,7 @@ const components = {
           </div>
 
           <div class="col-md-6 col-lg-4">
-            <div class="bento-card">
+            <div class="bento-card-vibe spotlight-card p-4 h-100">
               <div class="feature-icon mb-3 text-secondary fs-2"><i class="fa-solid fa-brain"></i></div>
               <h3 class="text-white h5 fw-bold mb-2">AI Career & ATS Audit</h3>
               <p class="text-muted fs-7 mb-0">Generate personalized 30-to-90-day study roadmaps, company-specific prompt guides, and ATS resume audits tailored for top tech employers.</p>
@@ -306,26 +280,26 @@ const components = {
           </div>
 
           <div class="col-md-6 col-lg-4">
-            <div class="bento-card">
-              <div class="feature-icon mb-3 text-success fs-2"><i class="fa-solid fa-kanban"></i></div>
+            <div class="bento-card-vibe spotlight-card p-4 h-100">
+              <div class="feature-icon mb-3 text-success fs-2"><i class="fa-solid fa-table-columns"></i></div>
               <h3 class="text-white h5 fw-bold mb-2">Placement Kanban Board</h3>
               <p class="text-muted fs-7 mb-0">Move applications seamlessly through Wishlist, Applied, Interviewing, and Offered stages with compensation tracking and interview dates.</p>
             </div>
           </div>
 
           <div class="col-md-6 col-lg-4">
-            <div class="bento-card">
-              <div class="feature-icon mb-3 text-warning fs-2"><i class="fa-solid fa-medal"></i></div>
+            <div class="bento-card-vibe spotlight-card p-4 h-100">
+              <div class="feature-icon mb-3 text-warning fs-2"><i class="fa-solid fa-award"></i></div>
               <h3 class="text-white h5 fw-bold mb-2">Verified Academy Credentials</h3>
               <p class="text-muted fs-7 mb-0">Earn verifiable certificates upon curriculum mastery and share your authenticated credentials directly on LinkedIn and your resume.</p>
             </div>
           </div>
 
           <div class="col-md-6 col-lg-4">
-            <div class="bento-card">
-              <div class="feature-icon mb-3 text-danger fs-2"><i class="fa-solid fa-desktop"></i></div>
+            <div class="bento-card-vibe spotlight-card p-4 h-100">
+              <div class="feature-icon mb-3 text-danger fs-2"><i class="fa-solid fa-laptop-code"></i></div>
               <h3 class="text-white h5 fw-bold mb-2">Desktop Client & Cloud Sync</h3>
-              <p class="text-muted fs-7 mb-0">Native Java Swing desktop client paired with real-time cloud synchronization for zero latency and offline coding sessions.</p>
+              <p class="text-muted fs-7 mb-0">Native desktop client paired with real-time cloud synchronization for zero latency and offline coding sessions.</p>
             </div>
           </div>
         </div>
@@ -333,15 +307,15 @@ const components = {
 
       <!-- Interactive Preparation ROI Calculator -->
       <section id="calculator" class="container py-5">
-        <div class="p-4 p-md-5 rounded-4 border border-secondary border-opacity-20" style="background: #222226; border-color: #323238;">
+        <div class="p-4 p-md-5 rounded-4 border" style="background: #131722; border-color: #202737;">
           <div class="row align-items-center g-4">
             <div class="col-lg-6 text-start">
-              <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-3">READINESS SIMULATOR</span>
-              <h2 class="display-6 fw-extrabold text-white mb-3">Calculate Your Interview Readiness</h2>
-              <p class="text-muted fs-7 mb-4">Adjust your daily study pace and preparation timeframe to simulate your total solved problem forecast and target readiness score.</p>
+              <span class="badge bg-primary bg-opacity-15 text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-3 font-monospace fs-8">READINESS SIMULATOR</span>
+              <h2 class="display-6 fw-extrabold text-white mb-3">Calculate Your Target Readiness</h2>
+              <p class="text-muted fs-7 mb-4">Adjust your daily study pace and preparation timeframe to simulate your total solved problem forecast and target placement readiness index.</p>
               
               <div class="mb-4">
-                <div class="d-flex justify-content-between text-white fs-7 mb-1">
+                <div class="d-flex justify-content-between text-white fs-7 mb-1 font-monospace">
                   <span>Questions Practiced Per Day</span>
                   <strong id="calc-questions-val" class="text-primary">5 Problems / day</strong>
                 </div>
@@ -349,7 +323,7 @@ const components = {
               </div>
 
               <div class="mb-2">
-                <div class="d-flex justify-content-between text-white fs-7 mb-1">
+                <div class="d-flex justify-content-between text-white fs-7 mb-1 font-monospace">
                   <span>Preparation Timeframe</span>
                   <strong id="calc-weeks-val" class="text-cyan">8 Weeks</strong>
                 </div>
@@ -360,26 +334,26 @@ const components = {
             <div class="col-lg-6">
               <div class="row g-3 text-center">
                 <div class="col-sm-6">
-                  <div class="p-4 rounded-3 glass-panel border-primary">
-                    <span class="text-muted fs-8 uppercase">Projected Solved</span>
+                  <div class="p-4 rounded-3 glass-panel" style="background: #0e1219; border-color: #202737;">
+                    <span class="text-muted fs-8 text-uppercase font-monospace">Projected Solved</span>
                     <h2 class="display-5 fw-extrabold text-white mt-2 mb-0" id="calc-total-problems">280</h2>
                     <small class="text-success fs-8"><i class="fa-solid fa-code me-1"></i>Mastery Milestone</small>
                   </div>
                 </div>
                 <div class="col-sm-6">
-                  <div class="p-4 rounded-3 glass-panel border-success">
-                    <span class="text-muted fs-8 uppercase">Readiness Level</span>
+                  <div class="p-4 rounded-3 glass-panel" style="background: #0e1219; border-color: #202737;">
+                    <span class="text-muted fs-8 text-uppercase font-monospace">Readiness Level</span>
                     <h2 class="display-5 fw-extrabold text-success mt-2 mb-0" id="calc-readiness-score">92%</h2>
-                    <small class="text-muted fs-8">FAANG-Ready Tier</small>
+                    <small class="text-muted fs-8">Top Tech Ready Tier</small>
                   </div>
                 </div>
                 <div class="col-12">
-                  <div class="p-3 rounded-3 border border-secondary border-opacity-20" style="background: #1c1c20; border-color: #323238; text-start d-flex align-items-center justify-content-between">
+                  <div class="p-3 rounded-3 border d-flex align-items-center justify-content-between" style="background: #0e1219; border-color: #202737; text-align: left;">
                     <div>
                       <span class="text-white fw-bold fs-7">Estimated Offer Probability</span>
-                      <p class="text-muted fs-8 mb-0" id="calc-odds-desc">Top 5% Placement Performance Group</p>
+                      <p class="text-muted fs-8 mb-0" id="calc-odds-desc">Top 5% Placement Performance Tier</p>
                     </div>
-                    <span class="badge bg-success px-3 py-2 fs-6 fw-bold" id="calc-odds-val">94% Probability</span>
+                    <span class="badge bg-success bg-opacity-20 text-success border border-success-subtle px-3 py-2 fs-7 fw-bold font-monospace" id="calc-odds-val">94% Probability</span>
                   </div>
                 </div>
               </div>
@@ -388,27 +362,27 @@ const components = {
         </div>
       </section>
 
-      <!-- Pricing Section (Stripe-Style Cards) -->
+      <!-- Pricing Section -->
       <section id="pricing" class="container py-5">
         <div class="text-center mb-5">
-          <span class="badge bg-indigo-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-2">SIMPLE & TRANSPARENT</span>
-          <h2 class="display-5 fw-extrabold text-white mb-3">Straightforward Pricing</h2>
-          <p class="text-muted fs-5">Invest in your career with a single one-time payment. No hidden monthly subscriptions.</p>
+          <span class="badge bg-primary bg-opacity-15 text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-2 font-monospace fs-8">TRANSPARENT PRICING</span>
+          <h2 class="display-5 fw-extrabold text-white mb-3">Straightforward Lifetime Plans</h2>
+          <p class="text-muted fs-5">Invest in your career with a single one-time payment. Zero hidden subscriptions.</p>
         </div>
 
         <div class="row g-4 justify-content-center">
           <!-- Free Tier -->
           <div class="col-md-6 col-lg-5 col-xl-4">
-            <div class="glass-panel p-4 h-100 d-flex flex-column text-start">
+            <div class="glass-panel p-4 h-100 d-flex flex-column text-start" style="background: #131722; border-color: #202737;">
               <div>
-                <h3 class="text-white h5 fw-bold mb-1">PrepFree</h3>
-                <p class="text-muted fs-8 mb-3">Essential tools to start tracking your daily prep</p>
-                <div class="my-3"><span class="display-6 fw-extrabold text-white">₹0</span><span class="text-muted fs-8"> / lifetime</span></div>
+                <h3 class="text-white h5 fw-bold mb-1">Developer Free</h3>
+                <p class="text-muted fs-8 mb-3">Essential tools to track daily coding practice</p>
+                <div class="my-3"><span class="display-6 fw-extrabold text-white">₹0</span><span class="text-muted fs-8 font-monospace"> / lifetime</span></div>
                 <ul class="list-unstyled text-start mb-4 text-muted fs-8 d-flex flex-column gap-2">
                   <li><i class="fa-solid fa-check text-success me-2"></i> Access to Core Question Bank</li>
                   <li><i class="fa-solid fa-check text-success me-2"></i> Log Solved Problems & Streaks</li>
                   <li><i class="fa-solid fa-check text-success me-2"></i> Standard Placement Kanban</li>
-                  <li><i class="fa-solid fa-check text-success me-2"></i> Basic Progress Graphs</li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> Basic Progress Charts</li>
                 </ul>
               </div>
               <a href="#/register" class="btn btn-glass w-100 py-2 fs-7 fw-bold mt-auto">Get Started Free</a>
@@ -417,14 +391,14 @@ const components = {
 
           <!-- Pro Tier -->
           <div class="col-md-6 col-lg-5 col-xl-4">
-            <div class="glass-panel p-4 h-100 d-flex flex-column text-start border-primary position-relative" style="box-shadow: 0 0 35px var(--accent-glow);">
-              <div class="badge bg-primary text-white border border-primary-subtle px-3 py-1 rounded-pill position-absolute top-0 start-50 translate-middle fw-bold fs-9">
-                MOST POPULAR
+            <div class="glass-panel p-4 h-100 d-flex flex-column text-start border-primary position-relative" style="background: #131722; border-color: #6366f1 !important; box-shadow: 0 4px 30px rgba(99, 102, 241, 0.2);">
+              <div class="badge bg-primary text-white border border-primary-subtle px-3 py-1 rounded-pill position-absolute top-0 start-50 translate-middle fw-bold fs-9 font-monospace">
+                RECOMMENDED
               </div>
               <div>
-                <h3 class="text-white h5 fw-bold mb-1 mt-1">PrepPro</h3>
-                <p class="text-indigo fs-8 mb-3">Recommended for Active Jobseekers & Students</p>
-                <div class="my-3"><span class="display-6 fw-extrabold text-white">₹399</span><span class="text-muted fs-8"> / one-time lifetime</span></div>
+                <h3 class="text-white h5 fw-bold mb-1 mt-1">Engineer Pro</h3>
+                <p class="text-indigo fs-8 mb-3">Complete placement acceleration suite</p>
+                <div class="my-3"><span class="display-6 fw-extrabold text-white">₹399</span><span class="text-muted fs-8 font-monospace"> / one-time lifetime</span></div>
                 <ul class="list-unstyled text-start mb-4 text-muted fs-8 d-flex flex-column gap-2">
                   <li><i class="fa-solid fa-check text-success me-2"></i> <strong>Unlimited 50-MCQ Timed Exams</strong></li>
                   <li><i class="fa-solid fa-check text-success me-2"></i> <strong>AI ATS Resume & Keyword Audit</strong></li>
@@ -434,7 +408,7 @@ const components = {
                   <li><i class="fa-solid fa-check text-success me-2"></i> Verified Completion Certificates</li>
                 </ul>
               </div>
-              <a href="#/register" class="btn btn-premium w-100 py-2 fs-7 fw-bold mt-auto"><i class="fa-solid fa-gem me-2"></i>Upgrade to PrepPro Access</a>
+              <a href="#/register" class="btn btn-premium w-100 py-2 fs-7 fw-bold mt-auto"><i class="fa-solid fa-bolt me-2"></i>Upgrade to Engineer Pro</a>
             </div>
           </div>
         </div>
@@ -444,22 +418,22 @@ const components = {
       <section class="container py-5">
         <div class="text-center mb-5">
           <h2 class="display-6 fw-bold text-white mb-2">Frequently Asked Questions</h2>
-          <p class="text-muted">Have questions? We have answers.</p>
+          <p class="text-muted">Technical clarity on platform capabilities.</p>
         </div>
         <div class="row justify-content-center">
           <div class="col-lg-8">
             <div class="accordion d-flex flex-column gap-3" id="landingFaq">
-              <div class="glass-panel p-3">
+              <div class="glass-panel p-3" style="background: #131722; border-color: #202737;">
                 <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-circle-question text-primary me-2"></i>How do the 50-MCQ Mock Exams work?</h6>
-                <p class="text-muted fs-7 mb-0 mt-2">PrepSpace generates a balanced 50-question examination covering Data Structures, Algorithms, Core Java, OOP, and Database concepts. The system auto-grades your submission instantly, calculates exact percentile marks, and awards XP to your profile.</p>
+                <p class="text-muted fs-7 mb-0 mt-2">PrepSpace generates balanced 50-question technical examinations covering Data Structures, Algorithms, Core Java, OOP, and Database architecture. The system auto-grades your submission instantly, calculates exact percentile marks, and awards XP to your profile.</p>
               </div>
-              <div class="glass-panel p-3">
-                <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-circle-question text-primary me-2"></i>Is the ₹399 PrepPro payment a recurring subscription?</h6>
-                <p class="text-muted fs-7 mb-0 mt-2">No. PrepPro is a single one-time payment of ₹399 with lifetime access. You will never be billed again.</p>
+              <div class="glass-panel p-3" style="background: #131722; border-color: #202737;">
+                <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-circle-question text-primary me-2"></i>Is the ₹399 Engineer Pro payment a recurring subscription?</h6>
+                <p class="text-muted fs-7 mb-0 mt-2">No. Engineer Pro is a single one-time payment of ₹399 with permanent lifetime access. You will never be billed again.</p>
               </div>
-              <div class="glass-panel p-3">
+              <div class="glass-panel p-3" style="background: #131722; border-color: #202737;">
                 <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-circle-question text-primary me-2"></i>Can I use PrepSpace offline or on desktop?</h6>
-                <p class="text-muted fs-7 mb-0 mt-2">Yes. We provide a complete Java Swing desktop client that connects directly to the tracker database for lightning-fast, offline placement management.</p>
+                <p class="text-muted fs-7 mb-0 mt-2">Yes. We provide a complete desktop client that connects directly to the tracker database for lightning-fast, offline placement management.</p>
               </div>
             </div>
           </div>
@@ -468,8 +442,8 @@ const components = {
 
       <!-- Call to Action Banner -->
       <section class="container py-5">
-        <div class="cta-banner-stripe text-center">
-          <h2 class="display-5 fw-extrabold text-white mb-3">Accelerate Your Placement Preparation Today</h2>
+        <div class="p-5 rounded-4 text-center border" style="background: #131722; border-color: #202737;">
+          <h2 class="display-5 fw-extrabold text-white mb-3">Accelerate Your Technical Career Today</h2>
           <p class="text-secondary fs-5 mb-4 mx-auto" style="max-width: 600px;">Join thousands of engineers organizing their daily coding routines and landing top software engineering offers.</p>
           <a href="#/register" class="btn btn-premium btn-lg px-5 py-3 fs-5 fw-bold shadow-lg">
             <i class="fa-solid fa-rocket me-2"></i>Get Started with PrepSpace Free
@@ -479,7 +453,7 @@ const components = {
 
       <!-- Google AdSense Multiplex Ad Unit -->
       <div class="container my-4">
-        <div class="glass-panel p-3">
+        <div class="glass-panel p-3" style="background: #131722; border-color: #202737;">
           <ins class="adsbygoogle"
                style="display:block"
                data-ad-format="autorelaxed"
@@ -625,7 +599,10 @@ const components = {
               </button>
             </div>
           </div>
-          <button type="submit" class="vercel-btn-primary mb-3">Sign In</button>
+          <button type="submit" class="vercel-btn-primary mb-2">Sign In</button>
+          <button type="button" class="btn btn-outline-secondary w-100 mb-3 py-2 fw-semibold fs-7 rounded-3 text-white border-secondary-subtle" onclick="window.loginAsDemo()" style="background: rgba(99, 102, 241, 0.08); border-color: rgba(99, 102, 241, 0.3) !important;">
+            <i class="fa-solid fa-wand-magic-sparkles text-indigo me-2"></i>Explore AI Studio Demo Session
+          </button>
         </form>
 
         <div class="my-3 d-flex align-items-center">
@@ -740,25 +717,25 @@ const components = {
     </div>
   `,
 
-  // Application Layout Wrapper - Style 2: Stripe / Supabase Enterprise Gradient Workspace
+  // Application Layout Wrapper - Modern Engineering Workspace Shell
   appLayout: (userName, isAdmin, isPaid = false) => `
     <div id="app-container" class="d-flex w-100 position-relative">
       <!-- Sidebar -->
-      <div class="sidebar glass-panel border-top-0 border-bottom-0 border-start-0 rounded-0 d-flex flex-column">
+      <div class="sidebar glass-panel border-top-0 border-bottom-0 border-start-0 rounded-0 d-flex flex-column" style="background-color: #0e1217; border-color: #1c2230;">
         <!-- Brand Header -->
-        <div class="p-3 border-bottom border-secondary-subtle d-flex align-items-center justify-content-between brand-header-box flex-shrink-0">
+        <div class="p-3 border-bottom d-flex align-items-center justify-content-between brand-header-box flex-shrink-0" style="border-color: #1c2230 !important;">
           <a class="navbar-brand d-flex align-items-center brand-text text-decoration-none" href="#/dashboard">
-            <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace Logo" class="me-2 brand-logo-img" style="width: 36px; height: 36px; object-fit: contain;">
+            <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace Logo" class="me-2 brand-logo-img" style="width: 30px; height: 30px; object-fit: contain;">
             <div class="d-flex flex-column text-start brand-name">
-              <span class="fw-extrabold fs-5 text-white lh-1">PrepSpace</span>
-              <span class="text-primary fw-bold" style="font-size: 0.65rem; letter-spacing: 0.8px; margin-top: 2px;">(stream-in)</span>
+              <span class="fw-bold fs-6 text-white lh-1">PrepSpace</span>
+              <span class="text-primary fw-semibold font-monospace" style="font-size: 0.62rem; letter-spacing: 0.5px; margin-top: 2px;">// DEV WORKSPACE</span>
             </div>
           </a>
-          <button id="sidebar-collapse-btn" class="btn btn-glass btn-sm border-0 rounded-circle text-white d-none d-lg-flex align-items-center justify-content-center" style="width: 26px; height: 26px; padding: 0;">
-            <i class="fa-solid fa-chevron-left" id="collapse-icon" style="font-size: 0.8rem;"></i>
+          <button id="sidebar-collapse-btn" class="btn btn-glass btn-sm border-0 rounded-circle text-muted d-none d-lg-flex align-items-center justify-content-center" style="width: 24px; height: 24px; padding: 0;" title="Toggle Sidebar">
+            <i class="fa-solid fa-chevron-left" id="collapse-icon" style="font-size: 0.75rem;"></i>
           </button>
-          <button id="sidebar-close-btn" class="btn btn-glass btn-sm border-0 rounded-circle text-white d-flex d-lg-none align-items-center justify-content-center" style="width: 26px; height: 26px; padding: 0;">
-            <i class="fa-solid fa-xmark" style="font-size: 0.9rem;"></i>
+          <button id="sidebar-close-btn" class="btn btn-glass btn-sm border-0 rounded-circle text-muted d-flex d-lg-none align-items-center justify-content-center" style="width: 24px; height: 24px; padding: 0;">
+            <i class="fa-solid fa-xmark" style="font-size: 0.85rem;"></i>
           </button>
         </div>
         
@@ -766,43 +743,48 @@ const components = {
         <div class="flex-grow-1 py-2 overflow-y-auto sidebar-scroll-content" id="sidebar-nav-container">
           <div class="sidebar-section-title px-4 mb-2">Core Tracker</div>
           <a href="#/dashboard" class="sidebar-link active"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
-          <a href="#/gamification" class="sidebar-link"><i class="fa-solid fa-gamepad text-warning"></i> <span>Gamification Hub</span> <span class="badge bg-warning bg-opacity-20 text-warning ms-auto fs-9">LVL 7</span></a>
-          <a href="#/coding-practice" class="sidebar-link"><i class="fa-solid fa-code"></i> <span>Coding Practice</span></a>
+          <a href="#/gamification" class="sidebar-link"><i class="fa-solid fa-gamepad text-warning"></i> <span>Gamification Hub</span> <span class="badge bg-warning bg-opacity-20 text-warning ms-auto fs-9 font-monospace">LVL 7</span></a>
+          <a href="#/coding-practice" class="sidebar-link"><i class="fa-solid fa-code text-indigo"></i> <span>DSA Matrix</span></a>
           <a href="#/aptitude" class="sidebar-link"><i class="fa-solid fa-book-open-reader"></i> <span>Aptitude & Book</span></a>
-          <a href="#/mock-exams" class="sidebar-link"><i class="fa-solid fa-stopwatch"></i> <span>50-MCQ Mock Exams</span></a>
+          <a href="#/mock-exams" class="sidebar-link"><i class="fa-solid fa-stopwatch text-rose"></i> <span>50-MCQ Mock Exams</span></a>
           <a href="#/dsa-roadmap" class="sidebar-link"><i class="fa-solid fa-route"></i> <span>DSA Roadmap</span></a>
           <a href="#/studyplanner" class="sidebar-link"><i class="fa-solid fa-calendar-check"></i> <span>Study Planner</span></a>
+
+          <div class="sidebar-section-title px-4 mt-3 mb-2 text-indigo"><i class="fa-solid fa-wand-magic-sparkles me-1"></i> AI Studio</div>
+          <a href="#/ai-studio" class="sidebar-link"><i class="fa-solid fa-wand-magic-sparkles text-indigo"></i> <span>Creation Hub</span> <span class="badge bg-primary bg-opacity-20 text-indigo ms-auto fs-9 font-monospace">PRO</span></a>
+          <a href="#/notes" class="sidebar-link"><i class="fa-solid fa-file-signature text-secondary"></i> <span>AI Smart Notes</span></a>
+          <a href="#/ai-image" class="sidebar-link"><i class="fa-solid fa-palette text-secondary"></i> <span>Image Creator</span></a>
+          <a href="#/ai-library" class="sidebar-link"><i class="fa-solid fa-box-archive text-secondary"></i> <span>AI Content Library</span></a>
 
           <div class="sidebar-section-title px-4 mt-3 mb-2">Academy & Prep</div>
           <a href="#/library" class="sidebar-link"><i class="fa-solid fa-book-bookmark text-primary"></i> <span>Technical Library</span></a>
           <a href="#/courses" class="sidebar-link"><i class="fa-solid fa-graduation-cap"></i> <span>LMS Courses</span></a>
-          <a href="#/certificates" class="sidebar-link"><i class="fa-solid fa-award"></i> <span>Certificates</span></a>
+          <a href="#/certificates" class="sidebar-link"><i class="fa-solid fa-award text-warning"></i> <span>Certificates</span></a>
           <a href="#/flashcards" class="sidebar-link"><i class="fa-solid fa-clone"></i> <span>Flashcards</span></a>
-          <a href="#/notes" class="sidebar-link"><i class="fa-solid fa-note-sticky"></i> <span>Study Notes</span></a>
-          <a href="#/audio-bites" class="sidebar-link"><i class="fa-solid fa-headphones text-info"></i> <span>Feynman Audio (60s)</span></a>
+          <a href="#/audio-bites" class="sidebar-link"><i class="fa-solid fa-headphones text-cyan"></i> <span>Feynman Audio</span></a>
           <a href="#/experiences" class="sidebar-link"><i class="fa-solid fa-user-tie"></i> <span>Experiences</span></a>
           <a href="#/community" class="sidebar-link"><i class="fa-solid fa-comments"></i> <span>Community</span></a>
 
-          <div class="sidebar-section-title px-4 mt-3 mb-2">Career & Tools</div>
-          <a href="#/placement" class="sidebar-link"><i class="fa-solid fa-briefcase"></i> <span>Placement Kanban</span></a>
+          <div class="sidebar-section-title px-4 mt-3 mb-2">Career Pipeline</div>
+          <a href="#/placement" class="sidebar-link"><i class="fa-solid fa-table-columns text-emerald"></i> <span>Placement Kanban</span></a>
           <a href="#/outreach" class="sidebar-link"><i class="fa-solid fa-paper-plane text-warning"></i> <span>Outreach CRM</span></a>
           <a href="#/star-vault" class="sidebar-link"><i class="fa-solid fa-star text-warning"></i> <span>STAR Story Vault</span></a>
           <a href="#/peer-mock" class="sidebar-link"><i class="fa-solid fa-people-arrows text-primary"></i> <span>Peer Mock Arena</span></a>
-          <a href="#/reverse-interview" class="sidebar-link"><i class="fa-solid fa-clipboard-question text-success"></i> <span>Reverse Interview Kit</span></a>
-          <a href="#/ai-assistant" class="sidebar-link"><i class="fa-solid fa-robot"></i> <span>AI ATS Assistant</span></a>
+          <a href="#/reverse-interview" class="sidebar-link"><i class="fa-solid fa-clipboard-question text-emerald"></i> <span>Reverse Interview Kit</span></a>
+          <a href="#/ai-assistant" class="sidebar-link"><i class="fa-solid fa-robot text-cyan"></i> <span>AI ATS Assistant</span></a>
           <a href="#/calendar" class="sidebar-link"><i class="fa-solid fa-calendar-days"></i> <span>Interview Calendar</span></a>
           <a href="#/reports" class="sidebar-link"><i class="fa-solid fa-file-invoice"></i> <span>Progress Reports</span></a>
-          <a href="#/desktop-client" class="sidebar-link"><i class="fa-solid fa-mobile-screen"></i> <span>Download App</span></a>
+          <a href="#/desktop-client" class="sidebar-link"><i class="fa-solid fa-laptop-code"></i> <span>Desktop Client</span></a>
 
-          <div class="sidebar-section-title px-4 mt-3 mb-2">Account</div>
+          <div class="sidebar-section-title px-4 mt-3 mb-2">Account & Access</div>
           <a href="#/profile" class="sidebar-link"><i class="fa-solid fa-sliders"></i> <span>Settings</span></a>
-          <a href="#/billing" class="sidebar-link"><i class="fa-solid fa-credit-card"></i> <span>Upgrade Space</span></a>
-          <a href="#/referral" class="sidebar-link"><i class="fa-solid fa-gift"></i> <span>Referral & Earn</span></a>
-          ${isAdmin ? `<a href="#/admin" class="sidebar-link"><i class="fa-solid fa-shield-halved"></i> <span>Admin Panel</span></a>` : ''}
+          <a href="#/billing" class="sidebar-link"><i class="fa-solid fa-credit-card text-emerald"></i> <span>Upgrade Space</span></a>
+          <a href="#/referral" class="sidebar-link"><i class="fa-solid fa-gift text-warning"></i> <span>Referral & Earn</span></a>
+          ${isAdmin ? `<a href="#/admin" class="sidebar-link"><i class="fa-solid fa-shield-halved text-danger"></i> <span>Admin Panel</span></a>` : ''}
         </div>
         
         <!-- Sidebar Bottom Actions -->
-        <div class="p-3 border-top border-secondary-subtle mt-auto flex-shrink-0 sidebar-footer-box">
+        <div class="p-3 border-top mt-auto flex-shrink-0 sidebar-footer-box" style="border-color: #1c2230 !important;">
           <button id="logout-btn" class="btn btn-glass w-100 py-2 mb-2"><i class="fa-solid fa-right-from-bracket me-2 text-danger"></i> <span>Logout</span></button>
           <div class="sidebar-footer-links d-flex justify-content-center gap-2 text-center" style="font-size: 0.7rem; opacity: 0.6;">
             <a href="/about" target="_blank" class="text-muted text-decoration-none">About</a>
@@ -815,43 +797,60 @@ const components = {
       </div>
 
       <!-- Main Content Area -->
-      <div class="main-content d-flex flex-column flex-grow-1 overflow-hidden" style="height: 100vh;">
-        <!-- Top Nav Header (Vercel Style) -->
-        <header class="workspace-top-header d-flex align-items-center justify-content-between pb-3 border-bottom border-secondary border-opacity-25 mb-3 flex-shrink-0">
+      <div class="main-content d-flex flex-column flex-grow-1 overflow-hidden" style="height: 100vh; background-color: #090a0f;">
+        <!-- Top Nav Header (Engineering Style) -->
+        <header class="workspace-top-header d-flex align-items-center justify-content-between pb-3 border-bottom mb-3 flex-shrink-0" style="border-color: #1c2230 !important;">
           <div class="d-flex align-items-center gap-2 overflow-hidden flex-grow-1 me-2" style="min-width: 0;">
             <button class="btn btn-glass d-lg-none me-1 flex-shrink-0" id="sidebar-toggle-btn"><i class="fa-solid fa-bars"></i></button>
             <div class="d-flex align-items-center gap-2 overflow-hidden" style="min-width: 0;">
-              <span class="badge border border-secondary border-opacity-30 text-white px-2 py-1 fs-8 fw-bold d-none d-sm-inline-block font-monospace flex-shrink-0">WORKSPACE</span>
+              <span class="badge border text-white px-2 py-1 fs-8 fw-bold d-none d-sm-inline-block font-monospace flex-shrink-0" style="background: #131722; border-color: #202737;">WORKSPACE</span>
               <span class="text-secondary fs-7 d-none d-sm-inline-block flex-shrink-0">/</span>
-              <h4 class="text-white fw-bold m-0 fs-6 fs-md-4 text-truncate" id="current-view-title" style="max-width: clamp(140px, 45vw, 400px);">Dashboard</h4>
+              <h4 class="text-white fw-bold m-0 fs-6 fs-md-5 text-truncate" id="current-view-title" style="max-width: clamp(140px, 45vw, 400px);">Dashboard</h4>
             </div>
+          </div>
+
+          <!-- Quick Global Search Command Bar (Ctrl+K) -->
+          <div class="d-none d-md-flex align-items-center position-relative me-3" style="max-width: 280px; width: 100%; cursor: pointer;" onclick="if(window.AiCommandBar) window.AiCommandBar.open();">
+            <i class="fa-solid fa-magnifying-glass position-absolute start-0 ps-3 text-muted fs-8"></i>
+            <input type="text" class="form-control form-control-sm ps-5 pe-5 rounded-pill fs-8 font-monospace" placeholder="Quick find & AI tools... (Ctrl+K)" readonly style="background: #0e1219 !important; border: 1px solid #202737 !important; cursor: pointer;">
+            <span class="position-absolute end-0 pe-2.5 text-muted fs-9 font-monospace" style="opacity: 0.6;">⌘K</span>
           </div>
           
           <div class="d-flex align-items-center gap-2 flex-shrink-0">
+            <!-- Quick Log Problem CTA -->
+            <a href="#/coding-practice" class="btn btn-premium btn-sm py-1 px-2.5 fs-8 fw-semibold d-none d-sm-inline-flex align-items-center gap-1">
+              <i class="fa-solid fa-plus fs-9"></i> <span>Log Problem</span>
+            </a>
+
+            <!-- AI Credit Telemetry Pill -->
+            <div id="ai-credit-status-pill" class="d-none d-md-flex align-items-center">
+              <span class="badge text-white border font-monospace" title="Daily AI Credits Remaining" style="background: #131722; border-color: #202737;"><i class="fa-solid fa-sparkles text-indigo me-1"></i>45/50 Credits</span>
+            </div>
+
             <!-- Smart AI Notification Bell -->
             <div class="dropdown">
               <button class="btn btn-glass position-relative py-1 px-2.5" type="button" id="notifBellDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Smart AI Notifications">
                 <i class="fa-solid fa-bell text-secondary"></i>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger font-monospace" style="font-size: 0.65rem;" id="notif-badge-count">2</span>
               </button>
-              <ul class="dropdown-menu dropdown-menu-end glass-panel shadow-lg p-2" style="width: 320px; max-width: 90vw;" aria-labelledby="notifBellDropdown">
-                <li class="d-flex justify-content-between align-items-center px-2 py-1 border-bottom border-secondary border-opacity-25 mb-2">
-                  <span class="fs-8 fw-bold text-white font-monospace"><i class="fa-solid fa-bolt text-warning me-1"></i> Smart Behavioral Nudges</span>
-                  <span class="badge bg-primary bg-opacity-25 text-info fs-9" id="notif-unread-count">2 Unread</span>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark shadow-lg p-2" id="notif-dropdown-menu" style="width: 340px; min-width: 320px; max-width: min(380px, 92vw); background: #131722; border-color: #202737;" aria-labelledby="notifBellDropdown">
+                <li class="d-flex justify-content-between align-items-center px-2 py-1 border-bottom mb-2" style="border-color: #202737 !important;">
+                  <span class="fs-8 fw-bold text-white font-monospace"><i class="fa-solid fa-bolt text-warning me-1"></i> Behavioral Telemetry</span>
+                  <span class="badge bg-primary bg-opacity-25 text-indigo fs-9 font-monospace" id="notif-unread-count">2 Unread</span>
                 </li>
                 <li class="mb-1.5">
-                  <a class="dropdown-item rounded p-2 text-wrap bg-dark bg-opacity-60 border border-info border-opacity-25" href="javascript:void(0)" id="notif-item-recovery">
+                  <a class="dropdown-item rounded p-2 text-wrap border" href="javascript:void(0)" id="notif-item-recovery" style="background: #0e1219; border-color: #202737;">
                     <div class="d-flex align-items-start gap-2">
                       <i class="fa-solid fa-triangle-exclamation text-warning mt-1 fs-8"></i>
                       <div>
                         <div class="text-white fs-8 fw-bold">18% Behind Weekly Target</div>
-                        <div class="text-secondary fs-9">PepSpace AI prepared an emergency 3-day recovery plan for you.</div>
+                        <div class="text-secondary fs-9">PrepSpace AI prepared an emergency 3-day recovery plan for you.</div>
                       </div>
                     </div>
                   </a>
                 </li>
                 <li class="mb-1.5">
-                  <a class="dropdown-item rounded p-2 text-wrap bg-dark bg-opacity-60 border border-secondary border-opacity-20" href="#/dashboard">
+                  <a class="dropdown-item rounded p-2 text-wrap border" href="#/gamification" style="background: #0e1219; border-color: #202737;">
                     <div class="d-flex align-items-start gap-2">
                       <i class="fa-solid fa-fire text-danger mt-1 fs-8"></i>
                       <div>
@@ -861,7 +860,7 @@ const components = {
                     </div>
                   </a>
                 </li>
-                <li class="pt-1 text-center border-top border-secondary border-opacity-25">
+                <li class="pt-1 text-center border-top" style="border-color: #202737 !important;">
                   <small class="text-muted fs-9 font-monospace">Automated behavioral telemetry active</small>
                 </li>
               </ul>
@@ -871,21 +870,21 @@ const components = {
             <div class="dropdown">
               <button class="btn btn-glass dropdown-toggle d-flex align-items-center gap-2 py-1 px-2" type="button" id="userDropdown" data-bs-toggle="dropdown">
                 <i class="fa-solid fa-circle-user fs-5 text-secondary"></i>
-                <span class="d-none d-md-inline" id="user-display-name">${userName}</span>
+                <span class="d-none d-md-inline text-white fw-medium fs-8" id="user-display-name">${userName}</span>
               </button>
-              <ul class="dropdown-menu dropdown-menu-end glass-panel" aria-labelledby="userDropdown">
-                <li class="px-3 py-1 border-bottom border-secondary border-opacity-25 mb-1" id="dropdown-plan-info">
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark shadow-lg" aria-labelledby="userDropdown" style="min-width: 210px; background: #131722; border-color: #202737;">
+                <li class="px-3 py-1 border-bottom mb-1" id="dropdown-plan-info" style="border-color: #202737 !important;">
                   <div class="fs-8 text-muted font-monospace">MEMBERSHIP</div>
                   <div class="fw-bold ${isPaid ? 'text-primary' : 'text-secondary'} fs-7 d-flex align-items-center gap-1">
                     ${isPaid 
-                      ? '<span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle font-monospace me-1">PRO</span> PrepPro Active' 
+                      ? '<span class="badge bg-primary bg-opacity-25 text-indigo border border-primary-subtle font-monospace me-1">PRO</span> Engineer Pro Active' 
                       : '<span class="badge bg-secondary bg-opacity-25 text-muted border border-secondary font-monospace me-1">FREE</span> Starter Workspace'}
                   </div>
                 </li>
-                <li><a class="dropdown-item text-white" href="#/profile"><i class="fa-solid fa-gear me-2 text-secondary"></i>Settings</a></li>
-                ${!isPaid ? `<li><a class="dropdown-item text-primary fw-semibold" href="#/billing"><i class="fa-solid fa-gem me-2"></i>Upgrade to Pro</a></li>` : ''}
-                <li><hr class="dropdown-divider border-secondary border-opacity-25"></li>
-                <li><button class="dropdown-item text-danger" id="dropdown-logout"><i class="fa-solid fa-right-from-bracket me-2 text-danger"></i>Logout</button></li>
+                <li><a class="dropdown-item text-white fs-8" href="#/profile"><i class="fa-solid fa-gear me-2 text-secondary"></i>Settings</a></li>
+                ${!isPaid ? `<li><a class="dropdown-item text-primary fw-semibold fs-8" href="#/billing"><i class="fa-solid fa-gem me-2"></i>Upgrade to Pro</a></li>` : ''}
+                <li><hr class="dropdown-divider" style="border-color: #202737 !important;"></li>
+                <li><button class="dropdown-item text-danger fs-8" id="dropdown-logout"><i class="fa-solid fa-right-from-bracket me-2 text-danger"></i>Logout</button></li>
               </ul>
             </div>
           </div>
@@ -894,34 +893,32 @@ const components = {
         <!-- Dynamic Sitewide Admin Broadcast Container -->
         <div id="admin-broadcast-portal-container" class="mb-3" style="display: none;"></div>
 
-        <!-- Smart AI Behavioral Pace Nudge Banner -->
-        <div id="smart-pace-nudge-banner" class="smart-ai-nudge-banner mb-3 d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
-          <div class="d-flex align-items-center gap-2.5 flex-grow-1" style="min-width: 0;">
-            <div class="rounded-circle bg-primary bg-opacity-25 p-2 text-info fs-6 flex-shrink-0">
-              <i class="fa-solid fa-robot"></i>
-            </div>
-            <div style="min-width: 0;">
-              <div class="d-flex align-items-center gap-2">
-                <span class="badge bg-primary bg-opacity-30 text-info font-monospace fs-9">PEPSPACE AI COACH</span>
-                <span class="text-secondary fs-9 font-monospace">Intelligent Pace Analysis</span>
-              </div>
-              <p class="text-white fs-8 fw-semibold mb-0 mt-0.5" style="word-break: break-word;">
-                “You haven't completed your weekly target. You're 18% behind your usual pace. Want me to create an AI recovery plan?”
-              </p>
-            </div>
-          </div>
-          <div class="d-flex align-items-center gap-2 flex-shrink-0 align-self-end align-self-md-center">
-            <button class="btn btn-sm btn-primary py-1 px-3 fs-8 fw-semibold text-nowrap" id="btn-open-ai-recovery-plan">
-              <i class="fa-solid fa-bolt me-1 text-warning"></i> Create Recovery Plan
-            </button>
-            <button class="btn btn-sm btn-glass text-secondary py-1 px-2 fs-8 flex-shrink-0" id="btn-dismiss-ai-nudge" title="Dismiss">
-              <i class="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-        </div>
-
         <!-- Dynamic Sub-view Mounting Port -->
         <div id="page-mount" class="flex-grow-1 overflow-y-auto"></div>
+
+        <!-- 21st.dev Signature Mobile Floating Navigation Dock -->
+        <nav class="mobile-floating-dock" aria-label="Quick Mobile Navigation">
+          <a href="#/dashboard" class="mobile-dock-item active" data-dock="dashboard" title="Dashboard">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Overview</span>
+          </a>
+          <a href="#/coding-practice" class="mobile-dock-item" data-dock="practice" title="DSA Matrix">
+            <i class="fa-solid fa-code"></i>
+            <span>DSA</span>
+          </a>
+          <a href="#/mock-exams" class="mobile-dock-item" data-dock="exams" title="50-MCQ Mock Exams">
+            <i class="fa-solid fa-stopwatch"></i>
+            <span>Exams</span>
+          </a>
+          <a href="#/ai-studio" class="mobile-dock-item" data-dock="ai" title="AI Studio">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span>AI Studio</span>
+          </a>
+          <button type="button" class="mobile-dock-item" id="mobile-dock-menu-btn" data-dock="menu" title="Open Full Menu">
+            <i class="fa-solid fa-bars"></i>
+            <span>More</span>
+          </button>
+        </nav>
       </div>
     </div>
 
@@ -1065,14 +1062,14 @@ const components = {
     const innerOffset = (175.93 * (1 - curriculumPct / 100)).toFixed(2);
 
     return `
-    <!-- Minimalist Dashboard Header -->
-    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-15">
+    <!-- Minimalist Engineering Dashboard Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom" style="border-color: #1c2230 !important;">
       <div>
-        <h5 class="text-white fw-bold m-0 fs-6">Preparation Overview</h5>
-        <small class="text-muted fs-8 font-monospace">Real-time candidate telemetry & study velocity</small>
+        <h5 class="text-white fw-bold m-0 fs-6">Developer Overview & Telemetry</h5>
+        <small class="text-muted fs-8 font-monospace">Real-time candidate metrics, velocity & interview readiness</small>
       </div>
       <div class="d-flex align-items-center gap-2">
-        <a href="#/gamification" class="btn btn-sm btn-outline-warning py-1 px-3 fs-8 fw-semibold">
+        <a href="#/gamification" class="btn btn-sm btn-glass py-1 px-3 fs-8 fw-semibold" style="border-color: #242e42;">
           <i class="fa-solid fa-gamepad me-1 text-warning"></i>Gamification Hub &rarr;
         </a>
       </div>
@@ -1080,89 +1077,96 @@ const components = {
 
     <!-- Telemetry Metrics Strip (5-Column Responsive Bento) -->
     <div class="row g-2 g-md-3 mb-3">
-      <div class="col-12 col-sm-6 col-md-4 col-xl">
-        <div class="bento-card p-3 text-start" id="dashboard-screentime-card">
+      <div class="col-6 col-md-4 col-xl">
+        <div class="bento-card-vibe spotlight-card p-3 text-start h-100 d-flex flex-column justify-content-between" id="dashboard-screentime-card" style="background: #131722; border-color: #202737;">
           <div class="d-flex align-items-center justify-content-between mb-1">
-            <span class="stat-label mb-0">Daily Screen Time</span>
-            <span class="badge border border-secondary border-opacity-30 text-white font-monospace fs-9"><i class="fa-solid fa-clock me-1"></i>ACTIVE</span>
+            <span class="stat-label mb-0 text-muted fs-8 font-monospace text-uppercase">Screen Time</span>
+            <span class="badge text-white font-monospace fs-9 border" style="background: #0e1219; border-color: #202737;"><i class="fa-solid fa-clock me-1 text-indigo"></i>ACTIVE</span>
           </div>
-          <div class="stat-num text-white mt-1 mb-0" id="daily-screentime-display">0h 0m</div>
-          <small class="text-cyan fs-9 font-monospace" id="live-session-timer"><i class="fa-solid fa-spinner fa-spin me-1"></i>Session: 0m</small>
+          <div class="stat-num text-white fw-bold fs-4 mt-1 mb-0" id="daily-screentime-display">0h 0m</div>
+          <small class="text-indigo fs-9 font-monospace" id="live-session-timer"><i class="fa-solid fa-spinner fa-spin me-1"></i>Session: 0m</small>
         </div>
       </div>
-      <div class="col-6 col-sm-6 col-md-4 col-xl">
-        <div class="bento-card p-3 text-start">
-          <span class="stat-label mb-1">Total Study Time</span>
-          <div class="stat-num text-emerald mt-1 mb-0">${totalStudyHours}h</div>
-          <small class="text-success fs-9 font-monospace"><i class="fa-solid fa-circle text-success me-1" style="font-size: 6px;"></i>Active Pace</small>
+      <div class="col-6 col-md-4 col-xl">
+        <div class="bento-card-vibe spotlight-card p-3 text-start h-100 d-flex flex-column justify-content-between" style="background: #131722; border-color: #202737;">
+          <div class="d-flex align-items-center justify-content-between mb-1">
+            <span class="stat-label mb-0 text-muted fs-8 font-monospace text-uppercase">Total Study</span>
+            <span class="badge text-emerald font-monospace fs-9 border" style="background: #0e1219; border-color: rgba(16, 185, 129, 0.25);"><i class="fa-solid fa-bolt me-1"></i>PACE</span>
+          </div>
+          <div class="stat-num text-emerald fw-bold fs-4 mt-1 mb-0">${totalStudyHours}h</div>
+          <small class="text-success fs-9 font-monospace"><i class="fa-solid fa-circle text-success me-1" style="font-size: 6px;"></i>Active Velocity</small>
         </div>
       </div>
-      <div class="col-6 col-sm-6 col-md-4 col-xl">
-        <div class="bento-card p-3 text-start">
-          <span class="stat-label mb-1">Completed Topics</span>
-          <div class="stat-num text-white mt-1 mb-0">${completedTopics}</div>
-          <small class="text-secondary fs-9 font-monospace">Core Matrix</small>
+      <div class="col-6 col-md-4 col-xl">
+        <div class="bento-card-vibe spotlight-card p-3 text-start h-100 d-flex flex-column justify-content-between" style="background: #131722; border-color: #202737;">
+          <div class="d-flex align-items-center justify-content-between mb-1">
+            <span class="stat-label mb-0 text-muted fs-8 font-monospace text-uppercase">Topics Mastered</span>
+            <span class="badge text-light font-monospace fs-9 border" style="background: #0e1219; border-color: #202737;">MATRIX</span>
+          </div>
+          <div class="stat-num text-white fw-bold fs-4 mt-1 mb-0">${completedTopics}</div>
+          <small class="text-secondary fs-9 font-monospace">Core DSA & System</small>
         </div>
       </div>
-      <div class="col-6 col-sm-6 col-md-4 col-xl">
-        <div class="bento-card p-3 text-start">
-          <span class="stat-label mb-1">Upcoming Screens</span>
-          <div class="stat-num text-warning mt-1 mb-0">${upcomingInterviewsCount}</div>
-          <small class="text-warning fs-9 font-monospace">Scheduled</small>
+      <div class="col-6 col-md-4 col-xl">
+        <div class="bento-card-vibe spotlight-card p-3 text-start h-100 d-flex flex-column justify-content-between" style="background: #131722; border-color: #202737;">
+          <div class="d-flex align-items-center justify-content-between mb-1">
+            <span class="stat-label mb-0 text-muted fs-8 font-monospace text-uppercase">Upcoming Rounds</span>
+            <span class="badge text-warning font-monospace fs-9 border" style="background: #0e1219; border-color: rgba(245, 158, 11, 0.25);">ROUNDS</span>
+          </div>
+          <div class="stat-num text-warning fw-bold fs-4 mt-1 mb-0">${upcomingInterviewsCount}</div>
+          <small class="text-warning fs-9 font-monospace">Scheduled Screens</small>
         </div>
       </div>
-      <div class="col-6 col-sm-6 col-md-4 col-xl">
-        <div class="bento-card p-3 text-start">
-          <span class="stat-label mb-1">Active Pipeline</span>
-          <div class="stat-num text-purple mt-1 mb-0">${applicationsCount}</div>
-          <small class="text-success fs-9 font-monospace">In Evaluation</small>
+      <div class="col-6 col-md-4 col-xl">
+        <div class="bento-card-vibe spotlight-card p-3 text-start h-100 d-flex flex-column justify-content-between" style="background: #131722; border-color: #202737;">
+          <div class="d-flex align-items-center justify-content-between mb-1">
+            <span class="stat-label mb-0 text-muted fs-8 font-monospace text-uppercase">Active Pipeline</span>
+            <span class="badge text-indigo font-monospace fs-9 border" style="background: #0e1219; border-color: rgba(99, 102, 241, 0.25);">OFFERS</span>
+          </div>
+          <div class="stat-num text-indigo fw-bold fs-4 mt-1 mb-0">${applicationsCount}</div>
+          <small class="text-success fs-9 font-monospace">In Final Evaluation</small>
         </div>
       </div>
     </div>
 
     <!-- Compact Level & Habit Strip -->
-    <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-2.5 px-3 mb-3 shadow-sm">
+    <div class="bento-card-vibe spotlight-card rounded-3 p-2.5 px-3 mb-3 border shadow-sm" style="background: #131722; border-color: #202737;">
       <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
         <div class="d-flex align-items-center gap-2.5">
-          <div class="rounded-circle bg-warning bg-opacity-20 p-2 text-warning fs-6">
-            <i class="fa-solid fa-shield-cat"></i>
+          <div class="rounded-circle p-2 fs-6 d-flex align-items-center justify-content-center" style="background: rgba(99, 102, 241, 0.15); color: #818cf8; width: 34px; height: 34px;">
+            <i class="fa-solid fa-code"></i>
           </div>
           <div>
             <div class="d-flex align-items-center gap-2">
-              <span class="badge bg-warning text-dark fw-bold font-monospace fs-9">LEVEL ${gState.level}</span>
+              <span class="badge fw-bold font-monospace fs-9" style="background: #6366f1; color: #ffffff;">LEVEL ${gState.level}</span>
               <span class="text-white fw-bold fs-8" id="gamification-level-title">${gState.levelTitle}</span>
               <span class="text-muted fs-9 font-monospace">&bull; Next: ${gState.nextLevelTitle}</span>
             </div>
             <div class="d-flex align-items-center gap-2 mt-0.5">
               <span class="text-secondary fs-9 font-monospace">XP: <strong class="text-white" id="gamification-xp-display">${gState.xp}</strong> / ${gState.nextLevelXp}</span>
-              <span class="badge bg-secondary bg-opacity-25 text-light font-monospace fs-9" id="gamification-progress-pct-badge">${levelProgressPct}% Tier Complete</span>
+              <span class="badge text-light font-monospace fs-9 border" style="background: #0e1219; border-color: #202737;" id="gamification-progress-pct-badge">${levelProgressPct}% Tier Complete</span>
             </div>
           </div>
         </div>
         <div class="d-flex align-items-center gap-2">
           <!-- Streak Pill -->
-          <div class="px-2 py-1 rounded bg-black bg-opacity-40 border border-secondary border-opacity-30 d-flex align-items-center gap-1.5">
-            <span class="streak-flame fs-7"><i class="fa-solid fa-fire"></i></span>
-            <div class="text-white fw-bold fs-9 lh-1" id="gamification-streak-display">${gState.streak} Days</div>
+          <div class="px-2.5 py-1 rounded border d-flex align-items-center gap-1.5" style="background: #0e1219; border-color: #202737;">
+            <span class="streak-flame fs-7" style="color: #f59e0b;"><i class="fa-solid fa-fire"></i></span>
+            <div class="text-white fw-bold fs-9 font-monospace lh-1" id="gamification-streak-display">${gState.streak} Days</div>
           </div>
           <!-- Streak Freeze Pill -->
-          <div class="px-2 py-1 rounded bg-black bg-opacity-40 border border-secondary border-opacity-30 d-flex align-items-center gap-1.5" title="Streak Freeze Active">
-            <i class="fa-solid fa-shield-halved text-info fs-7"></i>
-            <div class="text-info fw-bold fs-9 lh-1">${gState.streakFreeze} Freeze</div>
-          </div>
-          <!-- 2X Multiplier -->
-          <div class="px-2 py-1 rounded bg-warning bg-opacity-10 border border-warning border-opacity-30 d-flex align-items-center gap-1.5" title="2X XP Multiplier Active">
-            <i class="fa-solid fa-bolt text-warning fs-7"></i>
-            <div class="text-warning fw-bold fs-9 lh-1">2X XP</div>
+          <div class="px-2.5 py-1 rounded border d-flex align-items-center gap-1.5" style="background: #0e1219; border-color: #202737;" title="Streak Freeze Active">
+            <i class="fa-solid fa-shield-halved text-cyan fs-7"></i>
+            <div class="text-cyan fw-bold fs-9 font-monospace lh-1">${gState.streakFreeze} Freeze</div>
           </div>
           <!-- Jump to Hub Button -->
-          <a href="#/gamification" class="btn btn-sm btn-glass text-warning py-1 px-2.5 fs-9 fw-semibold">
-            <i class="fa-solid fa-gamepad me-1"></i>View Full Hub &rarr;
+          <a href="#/gamification" class="btn btn-sm btn-glass py-1 px-2.5 fs-9 fw-semibold text-white" style="border-color: #202737;">
+            <i class="fa-solid fa-gamepad me-1 text-warning"></i>Hub &rarr;
           </a>
         </div>
       </div>
-      <div class="progress mt-2" style="height: 4px; background: rgba(255, 255, 255, 0.08);">
-        <div class="progress-bar bg-gradient bg-warning" role="progressbar" id="gamification-level-progressbar" style="width: ${levelProgressPct}%;" aria-valuenow="${levelProgressPct}" aria-valuemin="0" aria-valuemax="100"></div>
+      <div class="progress mt-2" style="height: 4px; background: rgba(255, 255, 255, 0.06);">
+        <div class="progress-bar" role="progressbar" id="gamification-level-progressbar" style="width: ${levelProgressPct}%; background-color: #6366f1;" aria-valuenow="${levelProgressPct}" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
     </div>
 
@@ -1170,12 +1174,12 @@ const components = {
     <div class="row g-3">
       <!-- Left Analytics Column -->
       <div class="col-lg-8">
-        <div class="bento-card p-3 mb-3">
+        <div class="bento-card-vibe spotlight-card p-3 mb-3 d-flex flex-column justify-content-between" style="min-height: 250px; background: #131722; border-color: #202737;">
           <div class="d-flex justify-content-between align-items-center mb-2">
-            <h6 class="text-white fw-bold m-0"><i class="fa-solid fa-chart-area text-primary me-2"></i>Weekly Preparation Velocity</h6>
-            <span class="badge border border-secondary border-opacity-30 text-white px-2 py-0.5 fs-9 font-monospace">HOURS LOGGED</span>
+            <h6 class="text-white fw-bold m-0 fs-8"><i class="fa-solid fa-chart-area text-indigo me-2"></i>Weekly Preparation Velocity</h6>
+            <span class="badge text-white px-2 py-0.5 fs-9 font-monospace border" style="background: #0e1219; border-color: #202737;">HOURS LOGGED</span>
           </div>
-          <div style="position: relative; height: 175px;">
+          <div style="position: relative; height: 180px;">
             <canvas id="weeklyHoursChart"></canvas>
           </div>
         </div>
@@ -1183,20 +1187,23 @@ const components = {
         <div class="row g-3">
           <!-- Platform Solves Bento -->
           <div class="col-12">
-            <div class="bento-card p-3 h-100">
-              <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-code text-cyan me-2"></i>External Platform Solves</h6>
-              <ul class="list-group list-group-flush bg-transparent">
-                <li class="list-group-item bg-transparent text-white border-secondary border-opacity-25 d-flex justify-content-between align-items-center px-0 py-1">
+            <div class="bento-card-vibe spotlight-card p-3 d-flex flex-column justify-content-between" style="min-height: 220px; background: #131722; border-color: #202737;">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="text-white fw-bold m-0 fs-8"><i class="fa-solid fa-code text-cyan me-2"></i>External Platform Solves</h6>
+                <span class="badge text-cyan px-2 py-0.5 fs-9 font-monospace border" style="background: #0e1219; border-color: rgba(56, 189, 248, 0.25);">SYNCED</span>
+              </div>
+              <ul class="list-group list-group-flush bg-transparent my-auto">
+                <li class="list-group-item bg-transparent text-white border-bottom d-flex justify-content-between align-items-center px-0 py-1.5" style="border-color: #1c2230 !important;">
                   <span class="fs-8"><i class="fa-solid fa-circle-nodes text-warning me-2"></i>LeetCode</span>
-                  <span class="badge border border-secondary border-opacity-30 text-white rounded-pill fs-9">${(stats.codingPlatformsSolved && stats.codingPlatformsSolved.LeetCode) || 0} Solved</span>
+                  <span class="badge text-white rounded-pill fs-9 font-monospace border" style="background: #0e1219; border-color: #202737;">${(stats.codingPlatformsSolved && stats.codingPlatformsSolved.LeetCode) || 0} Solved</span>
                 </li>
-                <li class="list-group-item bg-transparent text-white border-secondary border-opacity-25 d-flex justify-content-between align-items-center px-0 py-1">
-                  <span class="fs-8"><i class="fa-solid fa-code text-primary me-2"></i>CodeChef</span>
-                  <span class="badge border border-secondary border-opacity-30 text-white rounded-pill fs-9">${(stats.codingPlatformsSolved && stats.codingPlatformsSolved.CodeChef) || 0} Solved</span>
+                <li class="list-group-item bg-transparent text-white border-bottom d-flex justify-content-between align-items-center px-0 py-1.5" style="border-color: #1c2230 !important;">
+                  <span class="fs-8"><i class="fa-solid fa-code text-indigo me-2"></i>CodeChef</span>
+                  <span class="badge text-white rounded-pill fs-9 font-monospace border" style="background: #0e1219; border-color: #202737;">${(stats.codingPlatformsSolved && stats.codingPlatformsSolved.CodeChef) || 0} Solved</span>
                 </li>
-                <li class="list-group-item bg-transparent text-white border-0 d-flex justify-content-between align-items-center px-0 py-1">
+                <li class="list-group-item bg-transparent text-white border-0 d-flex justify-content-between align-items-center px-0 py-1.5">
                   <span class="fs-8"><i class="fa-solid fa-terminal text-info me-2"></i>Codeforces</span>
-                  <span class="badge border border-secondary border-opacity-30 text-white rounded-pill fs-9">${(stats.codingPlatformsSolved && stats.codingPlatformsSolved.Codeforces) || 0} Solved</span>
+                  <span class="badge text-white rounded-pill fs-9 font-monospace border" style="background: #0e1219; border-color: #202737;">${(stats.codingPlatformsSolved && stats.codingPlatformsSolved.Codeforces) || 0} Solved</span>
                 </li>
               </ul>
             </div>
@@ -1207,22 +1214,28 @@ const components = {
       <!-- Right Telemetry Widgets Column -->
       <div class="col-lg-4">
         <!-- Readiness Ring Card -->
-        <div class="bento-card p-3 text-center mb-3">
-          <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-circle-notch text-emerald me-2"></i>Interview Readiness Score</h6>
-          <div class="readiness-ring my-2" style="width: 88px; height: 88px; margin: 0 auto; position: relative;">
+        <div class="bento-card-vibe spotlight-card p-3 text-center mb-3 d-flex flex-column justify-content-between" style="min-height: 250px; background: #131722; border-color: #202737;">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="text-white fw-bold m-0 fs-8"><i class="fa-solid fa-circle-notch text-emerald me-2"></i>Interview Readiness</h6>
+            <span class="badge text-emerald px-2 py-0.5 fs-9 font-monospace border" style="background: #0e1219; border-color: rgba(16, 185, 129, 0.25);">TOP 15%</span>
+          </div>
+          <div class="readiness-ring my-auto py-1" style="width: 88px; height: 88px; margin: 0 auto; position: relative;">
             <div class="readiness-value fw-extrabold text-white fs-4" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">${readinessScore}%</div>
             <svg class="w-100 h-100" viewBox="0 0 36 36">
               <path class="circle-bg" stroke="rgba(255,255,255,0.08)" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
               <path class="circle" stroke="#10b981" stroke-width="3.5" stroke-dasharray="${readinessScore}, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
             </svg>
           </div>
-          <p class="text-secondary fs-9 font-monospace mb-0">Based on solved DSA problems, consistency & mock grades.</p>
+          <p class="text-secondary fs-9 font-monospace mb-0 mt-1">Computed from solved DSA problems, consistency & mock grades.</p>
         </div>
 
         <!-- Pipeline Funnel Card -->
-        <div class="bento-card p-3">
-          <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-filter text-purple me-2"></i>Recruitment Pipeline</h6>
-          <div style="position: relative; height: 145px;">
+        <div class="bento-card-vibe spotlight-card p-3 d-flex flex-column justify-content-between" style="min-height: 220px; background: #131722; border-color: #202737;">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="text-white fw-bold m-0 fs-8"><i class="fa-solid fa-filter text-indigo me-2"></i>Recruitment Pipeline</h6>
+            <span class="badge text-indigo px-2 py-0.5 fs-9 font-monospace border" style="background: #0e1219; border-color: rgba(99, 102, 241, 0.25);">ACTIVE</span>
+          </div>
+          <div style="position: relative; height: 160px;">
             <canvas id="pipelineStatusChart"></canvas>
           </div>
         </div>
@@ -1266,16 +1279,9 @@ const components = {
     }
 
     const levelProgressPct = Math.min(100, Math.max(0, Math.round(((gState.xp - gState.prevLevelXp) / (gState.nextLevelXp - gState.prevLevelXp)) * 100)));
-    const dailyPct = Math.min(100, Math.round((gState.dailyTargetSolved / gState.dailyTargetTotal) * 100));
-    const weeklyPct = Math.min(100, Math.round((gState.weeklyVelocityHours / gState.weeklyVelocityTarget) * 100));
-    const curriculumPct = Math.min(100, Math.round((gState.curriculumBalanceCompleted / gState.curriculumBalanceTotal) * 100));
 
     const isMission1Claimed = gState.claimedMissions && gState.claimedMissions.includes('mission-1');
     const isMission2Claimed = gState.claimedMissions && gState.claimedMissions.includes('mission-2');
-
-    const outerOffset = (351.86 * (1 - dailyPct / 100)).toFixed(2);
-    const middleOffset = (263.89 * (1 - weeklyPct / 100)).toFixed(2);
-    const innerOffset = (175.93 * (1 - curriculumPct / 100)).toFixed(2);
 
     return `
     <!-- Gamification Hub Header -->
@@ -1343,57 +1349,11 @@ const components = {
       </div>
     </div>
 
-    <!-- 3-Column Hub Grid -->
+    <!-- 2-Column Hub Grid -->
     <div class="row g-3 mb-3">
-      <!-- Col 1: Concentric Rings -->
-      <div class="col-12 col-md-6 col-xl-4">
-        <div class="bento-card p-3 h-100 d-flex flex-column justify-content-between">
-          <div>
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <h6 class="text-white fw-bold m-0 fs-8"><i class="fa-solid fa-circle-nodes text-primary me-2"></i>Activity Progress Rings</h6>
-              <span class="badge border border-secondary border-opacity-30 text-white font-monospace fs-9">APPLE STYLE</span>
-            </div>
-            <div class="py-3 text-center">
-              <div class="concentric-rings-container">
-                <svg class="concentric-rings-svg" viewBox="0 0 140 140">
-                  <circle class="ring-track" cx="70" cy="70" r="56" stroke-width="8.5" />
-                  <circle class="ring-progress ring-outer" cx="70" cy="70" r="56" stroke-width="8.5"
-                    stroke-dasharray="351.86" stroke-dashoffset="${outerOffset}" />
-
-                  <circle class="ring-track" cx="70" cy="70" r="42" stroke-width="8.5" />
-                  <circle class="ring-progress ring-middle" cx="70" cy="70" r="42" stroke-width="8.5"
-                    stroke-dasharray="263.89" stroke-dashoffset="${middleOffset}" />
-
-                  <circle class="ring-track" cx="70" cy="70" r="28" stroke-width="8.5" />
-                  <circle class="ring-progress ring-inner" cx="70" cy="70" r="28" stroke-width="8.5"
-                    stroke-dasharray="175.93" stroke-dashoffset="${innerOffset}" />
-                </svg>
-                <div class="position-absolute top-50 start-50 translate-middle text-center pointer-events-none">
-                  <i class="fa-solid fa-trophy text-warning fs-5"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="d-flex flex-column gap-1.5 pt-2 border-top border-secondary border-opacity-20 font-monospace fs-9">
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="text-light"><i class="fa-solid fa-circle text-danger me-1.5" style="font-size: 8px;"></i>Daily Solves</span>
-              <strong class="text-white">${gState.dailyTargetSolved}/${gState.dailyTargetTotal} (${dailyPct}%)</strong>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="text-light"><i class="fa-solid fa-circle text-success me-1.5" style="font-size: 8px;"></i>Weekly Hours</span>
-              <strong class="text-white">${gState.weeklyVelocityHours}/${gState.weeklyVelocityTarget}h (${weeklyPct}%)</strong>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="text-light"><i class="fa-solid fa-circle text-info me-1.5" style="font-size: 8px;"></i>Curriculum Depth</span>
-              <strong class="text-white">${gState.curriculumBalanceCompleted}/${gState.curriculumBalanceTotal} (${curriculumPct}%)</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Col 2: Daily Missions & Boss -->
-      <div class="col-12 col-md-6 col-xl-4">
-        <div class="bento-card p-3 h-100 d-flex flex-column justify-content-between">
+      <!-- Col 1: Daily Missions & Boss -->
+      <div class="col-12 col-lg-6">
+        <div class="bento-card-vibe spotlight-card p-3 h-100 d-flex flex-column justify-content-between">
           <div>
             <div class="d-flex justify-content-between align-items-center mb-2">
               <h6 class="text-white fw-bold m-0 fs-8"><i class="fa-solid fa-list-check text-warning me-2"></i>Daily Quests & Missions</h6>
@@ -1466,9 +1426,9 @@ const components = {
         </div>
       </div>
 
-      <!-- Col 3: Weekly Sprint Leaderboard -->
-      <div class="col-12 col-xl-4">
-        <div class="bento-card p-3 h-100 d-flex flex-column justify-content-between">
+      <!-- Col 2: Weekly Sprint Leaderboard -->
+      <div class="col-12 col-lg-6">
+        <div class="bento-card-vibe spotlight-card p-3 h-100 d-flex flex-column justify-content-between">
           <div>
             <div class="d-flex justify-content-between align-items-center mb-2">
               <h6 class="text-white fw-bold m-0 fs-8"><i class="fa-solid fa-ranking-star text-warning me-2"></i>Weekly Candidate Sprint</h6>
@@ -4096,8 +4056,17 @@ const components = {
     </div>
   `,
 
-  // 8. Study Notes Folders & Markdown
-  notes: (noteList, folders) => `
+  // 8. AI Creation Studio Hub & Workspaces (v4.9.0)
+  aiStudio: () => (typeof window !== 'undefined' && window.AiStudioTemplates ? window.AiStudioTemplates.hubView() : '<div class="text-center py-5"><div class="spinner-border text-amber"></div></div>'),
+  aiImageStudio: () => (typeof window !== 'undefined' && window.AiStudioTemplates ? window.AiStudioTemplates.imageStudioView() : '<div class="text-center py-5"><div class="spinner-border text-amber"></div></div>'),
+  aiContentLibrary: () => (typeof window !== 'undefined' && window.AiStudioTemplates ? window.AiStudioTemplates.libraryView() : '<div class="text-center py-5"><div class="spinner-border text-amber"></div></div>'),
+
+  // Upgraded AI Notes Workspace
+  notes: (noteList, folders, activeId = null) => {
+    if (typeof window !== 'undefined' && window.AiStudioTemplates) {
+      return window.AiStudioTemplates.notesView(activeId);
+    }
+    return `
     <div class="row g-4">
       <!-- Folder Directories list -->
       <div class="col-md-3">
@@ -4110,7 +4079,7 @@ const components = {
             <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-3 btn-select-folder active" data-folder-id="">
               <i class="fa-solid fa-folder-open text-indigo me-2"></i> All Notes
             </button>
-            ${folders.map(f => `
+            ${(folders || []).map(f => `
               <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-3 btn-select-folder" data-folder-id="${f.id}">
                 <i class="fa-solid fa-folder text-indigo me-2"></i> ${f.name}
               </button>
@@ -4125,7 +4094,7 @@ const components = {
             <div class="glass-panel p-4 overflow-y-auto" style="max-height: 70vh;" id="notes-cards-container">
               <button class="btn btn-glass w-100 mb-3 py-2 btn-sm" id="btn-new-note"><i class="fa-solid fa-file-signature me-1 text-indigo"></i> Compose Note</button>
               <div class="d-flex flex-column gap-2" id="notes-cards-list">
-                ${noteList.map(n => `
+                ${(noteList || []).map(n => `
                   <div class="p-3 rounded border border-secondary note-preview-card" style="cursor:pointer;" data-id="${n.id}" data-title="${n.title}" data-content="${n.content}" data-tags="${n.tags || ''}">
                     <h6 class="text-white fw-bold mb-1">${n.title}</h6>
                     <div class="text-muted fs-8">${n.updatedAt ? n.updatedAt.substring(0,10) : 'Just now'}</div>
@@ -4155,7 +4124,8 @@ const components = {
         </div>
       </div>
     </div>
-  `,
+  `;
+  },
 
   // 9. Placement Tracker Kanban Pipeline
   placement: (apps) => {
