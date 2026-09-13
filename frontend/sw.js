@@ -1,21 +1,21 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
-// Version: 5.4.0 (Spektral 3D Production Studio Design System)
+// Version: 5.5.0 (Restored Original Clean Version)
 
-const CACHE_NAME = 'prepspace-static-v5.4.0';
-const RUNTIME_CACHE = 'prepspace-runtime-v5.4.0';
+const CACHE_NAME = 'prepspace-static-v5.5.0';
+const RUNTIME_CACHE = 'prepspace-runtime-v5.5.0';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/index.css?v=5.4.0',
-  './assets/js/app.js?v=5.4.0',
-  './assets/js/components.js?v=5.4.0',
-  './assets/js/interview-suite.js?v=5.4.0',
-  './assets/js/technical-library-data.js?v=5.4.0',
-  './assets/js/questions-data.js?v=5.4.0',
-  './assets/js/aptitude-curriculum.js?v=5.4.0',
-  './assets/js/production-pages.js?v=5.4.0',
+  './assets/css/index.css?v=5.5.0',
+  './assets/js/app.js?v=5.5.0',
+  './assets/js/components.js?v=5.5.0',
+  './assets/js/interview-suite.js?v=5.5.0',
+  './assets/js/technical-library-data.js?v=5.5.0',
+  './assets/js/questions-data.js?v=5.5.0',
+  './assets/js/aptitude-curriculum.js?v=5.5.0',
+  './assets/js/production-pages.js?v=5.5.0',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',
