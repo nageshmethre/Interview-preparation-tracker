@@ -832,23 +832,12 @@ const components = {
             <div class="dropdown">
               <button class="btn btn-glass position-relative py-1 px-2.5" type="button" id="notifBellDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Smart AI Notifications">
                 <i class="fa-solid fa-bell text-secondary"></i>
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger font-monospace" style="font-size: 0.65rem;" id="notif-badge-count">2</span>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger font-monospace" style="font-size: 0.65rem;" id="notif-badge-count">1</span>
               </button>
               <ul class="dropdown-menu dropdown-menu-end glass-panel shadow-lg p-2" style="width: 320px; max-width: 90vw;" aria-labelledby="notifBellDropdown">
                 <li class="d-flex justify-content-between align-items-center px-2 py-1 border-bottom border-secondary border-opacity-25 mb-2">
                   <span class="fs-8 fw-bold text-white font-monospace"><i class="fa-solid fa-bolt text-warning me-1"></i> Smart Behavioral Nudges</span>
-                  <span class="badge bg-primary bg-opacity-25 text-info fs-9" id="notif-unread-count">2 Unread</span>
-                </li>
-                <li class="mb-1.5">
-                  <a class="dropdown-item rounded p-2 text-wrap bg-dark bg-opacity-60 border border-info border-opacity-25" href="javascript:void(0)" id="notif-item-recovery">
-                    <div class="d-flex align-items-start gap-2">
-                      <i class="fa-solid fa-triangle-exclamation text-warning mt-1 fs-8"></i>
-                      <div>
-                        <div class="text-white fs-8 fw-bold">18% Behind Weekly Target</div>
-                        <div class="text-secondary fs-9">PepSpace AI prepared an emergency 3-day recovery plan for you.</div>
-                      </div>
-                    </div>
-                  </a>
+                  <span class="badge bg-primary bg-opacity-25 text-info fs-9" id="notif-unread-count">1 Unread</span>
                 </li>
                 <li class="mb-1.5">
                   <a class="dropdown-item rounded p-2 text-wrap bg-dark bg-opacity-60 border border-secondary border-opacity-20" href="#/dashboard">
@@ -894,116 +883,8 @@ const components = {
         <!-- Dynamic Sitewide Admin Broadcast Container -->
         <div id="admin-broadcast-portal-container" class="mb-3" style="display: none;"></div>
 
-        <!-- Smart AI Behavioral Pace Nudge Banner -->
-        <div id="smart-pace-nudge-banner" class="smart-ai-nudge-banner mb-3 d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
-          <div class="d-flex align-items-center gap-2.5 flex-grow-1" style="min-width: 0;">
-            <div class="rounded-circle bg-primary bg-opacity-25 p-2 text-info fs-6 flex-shrink-0">
-              <i class="fa-solid fa-robot"></i>
-            </div>
-            <div style="min-width: 0;">
-              <div class="d-flex align-items-center gap-2">
-                <span class="badge bg-primary bg-opacity-30 text-info font-monospace fs-9">PEPSPACE AI COACH</span>
-                <span class="text-secondary fs-9 font-monospace">Intelligent Pace Analysis</span>
-              </div>
-              <p class="text-white fs-8 fw-semibold mb-0 mt-0.5" style="word-break: break-word;">
-                “You haven't completed your weekly target. You're 18% behind your usual pace. Want me to create an AI recovery plan?”
-              </p>
-            </div>
-          </div>
-          <div class="d-flex align-items-center gap-2 flex-shrink-0 align-self-end align-self-md-center">
-            <button class="btn btn-sm btn-primary py-1 px-3 fs-8 fw-semibold text-nowrap" id="btn-open-ai-recovery-plan">
-              <i class="fa-solid fa-bolt me-1 text-warning"></i> Create Recovery Plan
-            </button>
-            <button class="btn btn-sm btn-glass text-secondary py-1 px-2 fs-8 flex-shrink-0" id="btn-dismiss-ai-nudge" title="Dismiss">
-              <i class="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-        </div>
-
         <!-- Dynamic Sub-view Mounting Port -->
         <div id="page-mount" class="flex-grow-1 overflow-y-auto"></div>
-      </div>
-    </div>
-
-    <!-- AI Recovery Plan Modal -->
-    <div class="modal fade" id="aiRecoveryPlanModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content bg-dark text-white border-secondary border-opacity-40">
-          <div class="modal-header border-secondary border-opacity-25 py-2.5">
-            <div class="d-flex align-items-center gap-2">
-              <div class="rounded-circle bg-primary bg-opacity-20 p-1.5 text-info fs-7"><i class="fa-solid fa-robot"></i></div>
-              <h5 class="modal-title fs-6 fw-bold">PepSpace AI 3-Day Pace Recovery Plan</h5>
-            </div>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body p-3 p-md-4">
-            <!-- Deficit Diagnostic Card -->
-            <div class="p-3 rounded bg-warning bg-opacity-10 border border-warning border-opacity-30 mb-3">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <span class="badge bg-warning text-dark font-monospace fs-9 fw-bold"><i class="fa-solid fa-chart-line me-1"></i>Deficit Analysis</span>
-                <span class="text-warning font-monospace fs-9 fw-bold">Pace Gap: -18% (2.7 hrs / 3 problems)</span>
-              </div>
-              <p class="fs-8 text-light mb-0">
-                Based on your historical study velocity, PepSpace AI has calculated a low-friction 3-day catch-up schedule. Spreading your deficit across 3 micro-sessions guarantees you hit your weekly milestone without burnout.
-              </p>
-            </div>
-
-            <!-- 3-Day Schedule Breakdown -->
-            <div class="row g-2 mb-3">
-              <div class="col-12 col-md-4">
-                <div class="p-2.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-30 h-100">
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <span class="badge bg-info bg-opacity-20 text-info font-monospace fs-9">DAY 1 (TOMORROW)</span>
-                    <small class="text-muted fs-9">+35 mins</small>
-                  </div>
-                  <h6 class="fs-8 fw-bold text-white mb-1">DSA Trees & DFS Recursion</h6>
-                  <ul class="fs-9 text-secondary ps-3 mb-0">
-                    <li>Solve 1 Medium Tree problem (+50 XP)</li>
-                    <li>Listen to 1 Feynman Audio Bite (+30 XP)</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="col-12 col-md-4">
-                <div class="p-2.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-30 h-100">
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <span class="badge bg-primary bg-opacity-20 text-primary font-monospace fs-9">DAY 2</span>
-                    <small class="text-muted fs-9">+40 mins</small>
-                  </div>
-                  <h6 class="fs-8 fw-bold text-white mb-1">System Design & Caching</h6>
-                  <ul class="fs-9 text-secondary ps-3 mb-0">
-                    <li>Review Redis Isolation & Lua (+40 XP)</li>
-                    <li>Attempt 1 Mock 15-MCQ Quiz (+50 XP)</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="col-12 col-md-4">
-                <div class="p-2.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-30 h-100">
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <span class="badge bg-success bg-opacity-20 text-success font-monospace fs-9">DAY 3 (WEEKEND)</span>
-                    <small class="text-muted fs-9">+45 mins</small>
-                  </div>
-                  <h6 class="fs-8 fw-bold text-white mb-1">Behavioral STAR Master</h6>
-                  <ul class="fs-9 text-secondary ps-3 mb-0">
-                    <li>Practice 1 STAR story with Teleprompter (+75 XP)</li>
-                    <li>Log 1 Recruiter Prospect (+40 XP)</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <!-- Projected Outcome -->
-            <div class="p-2 rounded bg-black bg-opacity-40 border border-secondary border-opacity-20 d-flex justify-content-between align-items-center">
-              <span class="fs-9 font-monospace text-secondary"><i class="fa-solid fa-trophy text-warning me-1"></i>Projected Recovery Bonus:</span>
-              <span class="text-success font-monospace fs-9 fw-bold">+285 XP &bull; Restores Pace to 100% On-Track</span>
-            </div>
-          </div>
-          <div class="modal-footer border-secondary border-opacity-25 py-2">
-            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary btn-sm px-3" id="btn-apply-recovery-plan">
-              <i class="fa-solid fa-calendar-check me-1 text-warning"></i> Apply to My Calendar & Rebalance Pace
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   `,

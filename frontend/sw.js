@@ -1,21 +1,21 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
-// Version: 5.2.0 (Restored Core Clean UI Layout)
+// Version: 5.3.0 (Removed AI Nudge Banner)
 
-const CACHE_NAME = 'prepspace-static-v5.2.0';
-const RUNTIME_CACHE = 'prepspace-runtime-v5.2.0';
+const CACHE_NAME = 'prepspace-static-v5.3.0';
+const RUNTIME_CACHE = 'prepspace-runtime-v5.3.0';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/index.css?v=5.2.0',
-  './assets/js/app.js?v=5.2.0',
-  './assets/js/components.js?v=5.2.0',
-  './assets/js/interview-suite.js?v=5.2.0',
-  './assets/js/technical-library-data.js?v=5.2.0',
-  './assets/js/questions-data.js?v=5.2.0',
-  './assets/js/aptitude-curriculum.js?v=5.2.0',
-  './assets/js/production-pages.js?v=5.2.0',
+  './assets/css/index.css?v=5.3.0',
+  './assets/js/app.js?v=5.3.0',
+  './assets/js/components.js?v=5.3.0',
+  './assets/js/interview-suite.js?v=5.3.0',
+  './assets/js/technical-library-data.js?v=5.3.0',
+  './assets/js/questions-data.js?v=5.3.0',
+  './assets/js/aptitude-curriculum.js?v=5.3.0',
+  './assets/js/production-pages.js?v=5.3.0',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',
