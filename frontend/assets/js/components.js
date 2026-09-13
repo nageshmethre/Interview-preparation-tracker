@@ -67,201 +67,176 @@ const components = {
   },
 
   // Public SaaS Landing Page - Full Developer Grid Mesh Layout
+  // Public SaaS Landing Page - Spektral 3D Production Studio Design System
   landing: () => `
-    <div class="landing-page-mesh">
-      <!-- Animated Moving Announcement Ticker (Side by Side) -->
-      ${components.renderTopPromoTicker()}
+    <div class="spektral-outer-container">
+      <div class="spektral-frame">
 
-      <!-- Vercel Minimalist Glass Navigation -->
-      <nav class="navbar navbar-expand-lg navbar-dark py-3 sticky-top border-bottom border-secondary border-opacity-20">
-        <div class="container">
-          <a class="navbar-brand d-flex align-items-center gap-2 text-decoration-none" href="#/">
-            <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace Logo" class="brand-logo-img" style="width: 36px; height: 36px; object-fit: contain;">
-            <div class="d-flex flex-column text-start">
-              <span class="fw-bold fs-5 text-white lh-1">PrepSpace</span>
-              <span class="text-secondary" style="font-size: 0.65rem; letter-spacing: 0.8px; margin-top: 2px; font-family: 'Geist Mono', monospace;">(stream-in)</span>
-            </div>
-          </a>
-          <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-            <span class="navbar-toggler-icon"></span>
+        <!-- Top Announcement Ticker (Technical Dark Edition) -->
+        ${components.renderTopPromoTicker()}
+
+        <!-- Spektral Minimalist Header -->
+        <header class="spektral-navbar">
+          <button class="spektral-nav-action" type="button" data-bs-toggle="offcanvas" data-bs-target="#spektralMenuDrawer" aria-controls="spektralMenuDrawer">
+            <i class="fa-solid fa-bars-staggered me-1.5 text-cyan"></i> MENU
           </button>
-          <div class="collapse navbar-collapse" id="navMenu">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center gap-1">
-              <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="#showcase">Platform</a></li>
-              <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="#features">Capabilities</a></li>
-              <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="#calculator">ROI Calculator</a></li>
-              <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="#pricing">Pricing</a></li>
-              <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="/about">About</a></li>
-              <li class="nav-item ms-lg-3 d-flex align-items-center gap-2">
-                <a class="btn btn-glass px-3 py-1 fs-7 text-success border-success-subtle d-inline-flex align-items-center gap-1" href="https://stream-in.app/downloads/PrepSpace.apk" download="PrepSpace.apk" title="Direct Android APK Download">
-                  <i class="fa-brands fa-android text-success"></i> <span class="d-none d-sm-inline">App</span>
-                </a>
-                ${(typeof state !== 'undefined' && state && state.token)
-                  ? `<a class="btn btn-premium px-3 py-1 fs-7 fw-bold" href="#/dashboard">Dashboard <i class="fa-solid fa-arrow-right ms-1"></i></a>`
-                  : `<a class="btn btn-glass px-3 py-1 fs-7" href="#/login">Log In</a>
-                     <a class="btn btn-premium px-3 py-1 fs-7 fw-bold" href="#/register">Sign Up Free</a>`}
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
 
-      <!-- Hero Banner Section -->
-      <header class="landing-hero-section pb-5">
-        <div class="container text-center pt-5 pb-4">
-        <div class="row justify-content-center">
-          <div class="col-lg-10 col-xl-9">
-            <a href="#features" class="announcement-pill mb-4">
-              <span class="badge bg-primary px-2 py-1 rounded-pill fw-bold">NEW</span>
-              <span>50-MCQ Timed Exam Engine & AI ATS Audit is Live</span>
-              <i class="fa-solid fa-arrow-right fs-8"></i>
+          <a href="#/" class="spektral-nav-brand">
+            <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace" style="width: 22px; height: 22px; object-fit: contain;">
+            <span>prepspace</span>
+          </a>
+
+          <div class="d-flex align-items-center gap-1.5">
+            <a class="spektral-nav-action d-none d-sm-inline-flex" href="https://stream-in.app/downloads/PrepSpace.apk" download="PrepSpace.apk" title="Direct Android APK Download">
+              <i class="fa-brands fa-android text-success"></i> APK
             </a>
+            ${(typeof state !== 'undefined' && state && state.token)
+              ? `<a class="spektral-cta-pill active-highlight py-1.5 px-3" href="#/dashboard"><i class="fa-solid fa-terminal me-1"></i> DASHBOARD</a>`
+              : `<a class="spektral-cta-pill d-none d-md-inline-block py-1.5 px-3" href="#/login">LOG IN</a>
+                 <a class="spektral-cta-pill active-highlight py-1.5 px-3" href="#/register">
+                   <span class="d-none d-sm-inline">INITIALIZE SPACE</span>
+                   <span class="d-inline d-sm-none">START</span>
+                 </a>`}
+          </div>
+        </header>
 
-            <h1 class="display-3 fw-extrabold text-white mb-4 tracking-tight">
-              The Career Engine for <br class="d-none d-md-block"/>
-              <span class="gradient-text-stripe">Elite Tech Placements</span>
-            </h1>
-
-            <p class="lead text-secondary mb-5 fs-5 mx-auto" style="max-width: 780px;">
-              Master Data Structures & Algorithms, test your knowledge with 50-MCQ timed technical screens, audit your resume against AI ATS systems, and manage your entire placement pipeline in one unified platform.
-            </p>
-
-            <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap mb-5">
-              <a href="#/register" class="btn btn-premium btn-lg px-5 py-3 fs-5 fw-bold shadow-lg">
-                <i class="fa-solid fa-rocket me-2"></i>Initialize Space Free
-              </a>
-              <a href="#showcase" class="btn btn-glass btn-lg px-4 py-3 fs-5 text-white">
-                <i class="fa-solid fa-layer-group me-2 text-cyan"></i>Explore Live Platform
-              </a>
+        <!-- Spektral Hero Header Block -->
+        <section class="spektral-hero-header">
+          <div class="row align-items-start g-4">
+            <div class="col-lg-7">
+              <h1 class="spektral-display-heading mb-0" style="font-size: clamp(2.4rem, 5.5vw, 4.6rem);">
+                <span class="spektral-accent-bar"></span>PREPARATION ×<br>
+                ENGINEERING
+              </h1>
             </div>
-
-            <!-- Social Proof Strip -->
-            <div class="pt-4 border-top border-secondary border-opacity-10">
-              <p class="text-muted small text-uppercase tracking-wider mb-3 fs-8">Preparing Candidates for Engineering Roles at</p>
-              <div class="company-logo-strip">
-                <span class="company-badge"><i class="fa-brands fa-google text-danger"></i> Google</span>
-                <span class="company-badge"><i class="fa-brands fa-microsoft text-primary"></i> Microsoft</span>
-                <span class="company-badge"><i class="fa-brands fa-amazon text-warning"></i> Amazon</span>
-                <span class="company-badge"><i class="fa-brands fa-meta text-info"></i> Meta</span>
-                <span class="company-badge"><i class="fa-brands fa-uber text-white"></i> Uber</span>
-                <span class="company-badge"><i class="fa-brands fa-stripe text-indigo"></i> Stripe</span>
-                <span class="company-badge"><i class="fa-brands fa-atlassian text-primary"></i> Atlassian</span>
+            <div class="col-lg-5 pt-lg-2">
+              <div class="d-flex align-items-start">
+                <span class="spektral-hero-sub-divider mt-2 d-none d-md-inline-block"></span>
+                <div class="spektral-mono-sub">
+                  ALGORITHMIC MASTERY & INTERVIEW INTELLIGENCE<br class="d-none d-md-block">
+                  ACCELERATING HIGH-STAKES TECH PLACEMENTS
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-3 mt-4 flex-wrap">
+                <a href="#/register" class="spektral-cta-pill active-highlight py-2 px-4 fs-7 fw-bold">
+                  <i class="fa-solid fa-rocket me-1.5"></i> START FREE ACCESS
+                </a>
+                <a href="#matrix-breakdown" class="spektral-nav-action py-2 px-3 fs-7">
+                  <i class="fa-solid fa-arrow-down me-1.5 text-cyan"></i> EXPLORE MATRIX
+                </a>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </header>
+        </section>
 
-    <main>
-      <!-- 3D Interactive Floating Dashboard Showcase (Stripe-Style) -->
-      <section id="showcase" class="container py-5">
-        <div class="text-center mb-5">
-          <span class="badge bg-indigo-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-2">INTERACTIVE WORKSPACE</span>
-          <h2 class="display-5 fw-extrabold text-white mb-2">Built for Relentless Focus & Speed</h2>
-          <p class="text-muted fs-5">A real-time control room for your technical preparation journey.</p>
-        </div>
+        <!-- Spektral Cinematic Showcase Viewport -->
+        <section class="spektral-showcase-box" id="showcase">
+          <!-- Top HUD Telemetry Status Tags -->
+          <div class="spektral-hud-status d-none d-md-flex align-items-center gap-2">
+            <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background: #38bdf8; animation: pulsePing 2s infinite;"></span>
+            <span>SYSTEM // LIVE TESTBENCH // COMPILER: 100% READY</span>
+          </div>
+          <div class="spektral-hud-status-right d-none d-md-block">
+            <span>SECURE TLS 1.3 // LATENCY: 12ms // 50-MCQ ENGINE</span>
+          </div>
 
-        <div class="dashboard-mockup-wrapper">
-          <div class="mockup-window">
-            <div class="mockup-header">
-              <div class="window-dots">
-                <span class="window-dot red"></span>
-                <span class="window-dot yellow"></span>
-                <span class="window-dot green"></span>
-              </div>
-              <div class="mockup-url-bar">https://stream-in.app/#/dashboard</div>
-              <div class="text-muted fs-8"><i class="fa-solid fa-shield-halved text-success me-1"></i> TLS 1.3 Verified</div>
-            </div>
-
-            <!-- Inside Mockup Viewport -->
-            <div class="p-4 p-md-5" style="background: #222226;">
+          <!-- Inside Cockpit / Interactive Workspace Preview -->
+          <div class="p-3 p-md-5 pt-md-5 mt-md-3">
+            <div class="container-fluid px-0">
               <!-- Live Metrics Strip -->
-              <div class="row g-3 mb-4">
+              <div class="row g-2 g-md-3 mb-4 text-start">
                 <div class="col-6 col-md-3">
-                  <div class="p-3 rounded-3 border border-secondary border-opacity-20" style="background: #1c1c20; border-color: #323238; text-start">
-                    <span class="text-muted fs-8 uppercase">Readiness Score</span>
-                    <h3 class="text-white fw-bold mt-1 mb-0 gradient-text-stripe">96.8%</h3>
-                    <small class="text-success fs-8"><i class="fa-solid fa-arrow-trend-up me-1"></i>+12% this week</small>
+                  <div class="p-3 rounded border border-secondary border-opacity-20" style="background: rgba(14, 16, 19, 0.9);">
+                    <div class="spektral-mono text-muted fs-9 text-uppercase">Readiness Score</div>
+                    <div class="spektral-display-heading-sm fs-4 text-white mt-1 mb-0" style="color: var(--spektral-cyan) !important;">96.8%</div>
+                    <small class="spektral-mono text-success fs-9"><i class="fa-solid fa-arrow-trend-up me-1"></i>+12% pace</small>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
-                  <div class="p-3 rounded-3 border border-secondary border-opacity-20" style="background: #1c1c20; border-color: #323238; text-start">
-                    <span class="text-muted fs-8 uppercase">DSA Streaks</span>
-                    <h3 class="text-warning fw-bold mt-1 mb-0"><i class="fa-solid fa-fire me-1"></i>18 Days</h3>
-                    <small class="text-muted fs-8">240 Problems Solved</small>
+                  <div class="p-3 rounded border border-secondary border-opacity-20" style="background: rgba(14, 16, 19, 0.9);">
+                    <div class="spektral-mono text-muted fs-9 text-uppercase">DSA Streaks</div>
+                    <div class="spektral-display-heading-sm fs-4 text-warning mt-1 mb-0"><i class="fa-solid fa-fire me-1 text-danger"></i>18 Days</div>
+                    <small class="spektral-mono text-muted fs-9">240 Solved</small>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
-                  <div class="p-3 rounded-3 border border-secondary border-opacity-20" style="background: #1c1c20; border-color: #323238; text-start">
-                    <span class="text-muted fs-8 uppercase">50-MCQ Exam Grade</span>
-                    <h3 class="text-info fw-bold mt-1 mb-0">50 / 50</h3>
-                    <small class="text-success fs-8">100% Top Percentile</small>
+                  <div class="p-3 rounded border border-secondary border-opacity-20" style="background: rgba(14, 16, 19, 0.9);">
+                    <div class="spektral-mono text-muted fs-9 text-uppercase">50-MCQ Exam Grade</div>
+                    <div class="spektral-display-heading-sm fs-4 text-info mt-1 mb-0">50 / 50</div>
+                    <small class="spektral-mono text-success fs-9">Top Percentile</small>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
-                  <div class="p-3 rounded-3 border border-secondary border-opacity-20" style="background: #1c1c20; border-color: #323238; text-start">
-                    <span class="text-muted fs-8 uppercase">Active Pipeline</span>
-                    <h3 class="text-success fw-bold mt-1 mb-0">4 Offers</h3>
-                    <small class="text-muted fs-8">8 Companies In Review</small>
+                  <div class="p-3 rounded border border-secondary border-opacity-20" style="background: rgba(14, 16, 19, 0.9);">
+                    <div class="spektral-mono text-muted fs-9 text-uppercase">Active Pipeline</div>
+                    <div class="spektral-display-heading-sm fs-4 text-success mt-1 mb-0">4 Offers</div>
+                    <small class="spektral-mono text-muted fs-9">8 In Review</small>
                   </div>
                 </div>
               </div>
 
-              <!-- Interactive Tabs & Preview Deck (Supabase-Style) -->
-              <div class="row g-4 text-start">
+              <!-- Interactive Tabs & Preview Deck -->
+              <div class="row g-3 g-md-4 text-start">
                 <div class="col-lg-4 d-flex flex-column gap-2">
-                  <button class="feature-tab-btn active" onclick="window.switchLandingTab('tab-exam', this)">
-                    <i class="fa-solid fa-stopwatch-20 text-primary fs-5"></i>
-                    <div>
-                      <div class="text-white fw-bold">50-MCQ Exam Engine</div>
-                      <small class="text-muted fs-8">Full-length timed technical testing</small>
+                  <button class="feature-tab-btn active w-100" onclick="window.switchLandingTab('tab-exam', this)" style="background: #101317; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 14px;">
+                    <div class="d-flex align-items-center gap-3">
+                      <i class="fa-solid fa-stopwatch-20 text-info fs-5"></i>
+                      <div class="text-start">
+                        <div class="spektral-mono text-white fw-bold fs-8">50-MCQ Exam Engine</div>
+                        <small class="spektral-mono text-muted fs-9">Full-length timed technical testing</small>
+                      </div>
                     </div>
                   </button>
 
-                  <button class="feature-tab-btn" onclick="window.switchLandingTab('tab-dsa', this)">
-                    <i class="fa-solid fa-code-branch text-success fs-5"></i>
-                    <div>
-                      <div class="text-white fw-bold">DSA Problem Matrix</div>
-                      <small class="text-muted fs-8">Track LeetCode, Striver & NeetCode</small>
+                  <button class="feature-tab-btn w-100" onclick="window.switchLandingTab('tab-dsa', this)" style="background: #101317; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 14px;">
+                    <div class="d-flex align-items-center gap-3">
+                      <i class="fa-solid fa-code-branch text-success fs-5"></i>
+                      <div class="text-start">
+                        <div class="spektral-mono text-white fw-bold fs-8">DSA Problem Matrix</div>
+                        <small class="spektral-mono text-muted fs-9">Track LeetCode & Striver sheets</small>
+                      </div>
                     </div>
                   </button>
 
-                  <button class="feature-tab-btn" onclick="window.switchLandingTab('tab-ai', this)">
-                    <i class="fa-solid fa-brain text-secondary fs-5"></i>
-                    <div>
-                      <div class="text-white fw-bold">AI Career & ATS Audit</div>
-                      <small class="text-muted fs-8">Tailored company prompt guides</small>
+                  <button class="feature-tab-btn w-100" onclick="window.switchLandingTab('tab-ai', this)" style="background: #101317; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 14px;">
+                    <div class="d-flex align-items-center gap-3">
+                      <i class="fa-solid fa-brain text-secondary fs-5"></i>
+                      <div class="text-start">
+                        <div class="spektral-mono text-white fw-bold fs-8">AI Career & ATS Audit</div>
+                        <small class="spektral-mono text-muted fs-9">Tailored company prompt guides</small>
+                      </div>
                     </div>
                   </button>
 
-                  <button class="feature-tab-btn" onclick="window.switchLandingTab('tab-kanban', this)">
-                    <i class="fa-solid fa-table-columns text-warning fs-5"></i>
-                    <div>
-                      <div class="text-white fw-bold">Placement Kanban Pipeline</div>
-                      <small class="text-muted fs-8">End-to-end recruitment tracking</small>
+                  <button class="feature-tab-btn w-100" onclick="window.switchLandingTab('tab-kanban', this)" style="background: #101317; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 14px;">
+                    <div class="d-flex align-items-center gap-3">
+                      <i class="fa-solid fa-table-columns text-warning fs-5"></i>
+                      <div class="text-start">
+                        <div class="spektral-mono text-white fw-bold fs-8">Placement Kanban Pipeline</div>
+                        <small class="spektral-mono text-muted fs-9">End-to-end recruitment stages</small>
+                      </div>
                     </div>
                   </button>
                 </div>
 
                 <!-- Tab Preview Canvas -->
                 <div class="col-lg-8">
-                  <div class="glass-panel p-4 h-100 border-primary border-opacity-25" id="landing-tab-display">
+                  <div class="p-3 p-md-4 rounded h-100" style="background: #0d0f12; border: 1px solid rgba(255,255,255,0.1);" id="landing-tab-display">
                     <!-- Default Tab: Exam Engine -->
                     <div id="tab-exam" class="tab-pane-content">
                       <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="badge bg-danger text-white px-3 py-1 rounded-pill"><i class="fa-solid fa-clock me-1"></i> 50:00 Timed Mode</span>
-                        <span class="text-muted fs-8">Topic: Data Structures & Algorithms</span>
+                        <span class="badge bg-danger text-white px-2.5 py-1 font-monospace fs-9"><i class="fa-solid fa-clock me-1"></i> 50:00 TIMED TESTBENCH</span>
+                        <span class="spektral-mono text-muted fs-9">DOMAIN: DATA STRUCTURES & ALGORITHMS</span>
                       </div>
-                      <h5 class="text-white fw-bold mb-3">Question 14 of 50: What is the average time complexity of searching in an AVL tree with n nodes?</h5>
-                      <div class="d-flex flex-column gap-2 mb-3">
-                        <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-white fs-7"><span class="badge bg-secondary me-2">A</span> O(n)</div>
-                        <div class="p-2 rounded bg-primary bg-opacity-25 border border-primary text-white fs-7 fw-bold"><span class="badge bg-primary me-2">B</span> O(log n) <i class="fa-solid fa-check text-success ms-2"></i></div>
-                        <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-white fs-7"><span class="badge bg-secondary me-2">C</span> O(n log n)</div>
-                        <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-white fs-7"><span class="badge bg-secondary me-2">D</span> O(1)</div>
+                      <h5 class="text-white fw-bold mb-3 spektral-mono" style="font-size: 0.95rem; line-height: 1.5;">Question 14 of 50: What is the average time complexity of searching in an AVL tree with n nodes?</h5>
+                      <div class="d-flex flex-column gap-2 mb-3 spektral-mono">
+                        <div class="p-2 rounded bg-black border border-secondary border-opacity-25 text-white fs-8"><span class="badge bg-secondary me-2">A</span> O(n)</div>
+                        <div class="p-2 rounded border border-info text-white fs-8 fw-bold" style="background: rgba(56, 189, 248, 0.12);"><span class="badge bg-primary me-2">B</span> O(log n) <i class="fa-solid fa-check text-success ms-2"></i></div>
+                        <div class="p-2 rounded bg-black border border-secondary border-opacity-25 text-white fs-8"><span class="badge bg-secondary me-2">C</span> O(n log n)</div>
+                        <div class="p-2 rounded bg-black border border-secondary border-opacity-25 text-white fs-8"><span class="badge bg-secondary me-2">D</span> O(1)</div>
                       </div>
-                      <div class="alert alert-success bg-opacity-10 border-success text-success fs-8 mb-0">
-                        <i class="fa-solid fa-circle-check me-2"></i><strong>Instant System Check:</strong> Correct! AVL trees maintain strict height balance guaranteeing O(log n) lookups. +10 XP awarded!
+                      <div class="p-2.5 rounded border border-success border-opacity-30 text-success spektral-mono fs-9 mb-0" style="background: rgba(16, 185, 129, 0.08);">
+                        <i class="fa-solid fa-circle-check me-2"></i><strong>Instant Diagnostic Check:</strong> Correct. AVL trees strictly balance heights, guaranteeing O(log n) lookups. +10 XP awarded.
                       </div>
                     </div>
                   </div>
@@ -269,87 +244,183 @@ const components = {
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- Bento Grid Features Section -->
-      <section id="features" class="container py-5">
-        <div class="text-center mb-5">
-          <span class="badge bg-indigo-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-2">COMPLETE ECOSYSTEM</span>
-          <h2 class="display-5 fw-extrabold text-white mb-3">Engineered for Technical Mastery</h2>
-          <p class="text-muted fs-5">Every single feature designed to give you the competitive edge in interviews.</p>
-        </div>
+        <!-- Spektral Lower Matrix Grid: Integrated Development -->
+        <section class="spektral-matrix-container" id="matrix-breakdown">
+          <div class="row g-4 g-lg-5">
+            <!-- Left Column: Primary Studio Service -->
+            <div class="col-lg-4">
+              <h2 class="spektral-display-heading-sm mb-4" style="font-size: clamp(1.4rem, 2.2vw, 2.1rem);">
+                <span class="spektral-accent-bar"></span>INTEGRATED CAREER<br>
+                DEVELOPMENT
+              </h2>
+              <ul class="spektral-tech-list mb-0">
+                <li class="spektral-bullet-item"><span class="spektral-bullet">↳</span> 50-MCQ Timed Examination Engine</li>
+                <li class="spektral-bullet-item"><span class="spektral-bullet">↳</span> 19-Domain Digital Textbook Library</li>
+                <li class="spektral-bullet-item"><span class="spektral-bullet">↳</span> Multi-Language Code Compiler IDE</li>
+                <li class="spektral-bullet-item"><span class="spektral-bullet">↳</span> AI ATS Resume Scanner & STAR Vault</li>
+                <li class="spektral-bullet-item"><span class="spektral-bullet">↳</span> Placement Kanban Lifecycle Tracking</li>
+              </ul>
+            </div>
 
-        <div class="row g-4">
-          <div class="col-md-6 col-lg-4">
-            <div class="bento-card">
-              <div class="feature-icon mb-3 text-primary fs-2"><i class="fa-solid fa-stopwatch-20"></i></div>
-              <h3 class="text-white h5 fw-bold mb-2">50-MCQ Timed Exam Engine</h3>
-              <p class="text-muted fs-7 mb-0">Experience realistic, timed screening exams across DSA, Java, SQL, and System Design with automatic scoring and detailed review logs.</p>
+            <!-- Right Column: Modular Technical Rows -->
+            <div class="col-lg-8">
+              <!-- Row 1: CURRICULUM ARCHITECTURE -->
+              <div class="spektral-matrix-row">
+                <div class="row g-3">
+                  <div class="col-md-5">
+                    <div class="spektral-mono fs-8 fw-bold text-uppercase text-white mb-1">
+                      <i class="fa-solid fa-microchip me-1 text-cyan"></i> CURRICULUM ARCHITECTURE
+                    </div>
+                    <p class="spektral-mono-sub mb-0">
+                      We craft rigorous diagnostic curricula spanning algorithms, low-level memory, concurrency, and cloud architectures.
+                    </p>
+                  </div>
+                  <div class="col-md-7">
+                    <p class="spektral-mono text-muted mb-0" style="font-size: 0.78rem; line-height: 1.6;">
+                      Calibrated for engineering candidates across all stages of technical evaluation — from campus placements to Staff and Principal systems architects.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Row 2: REAL-TIME SIMULATION -->
+              <div class="spektral-matrix-row">
+                <div class="row g-3">
+                  <div class="col-md-5">
+                    <div class="spektral-mono fs-8 fw-bold text-uppercase text-white mb-1">
+                      <i class="fa-solid fa-terminal me-1 text-cyan"></i> REAL-TIME SIMULATION
+                    </div>
+                    <p class="spektral-mono-sub mb-0">
+                      High-fidelity testbenches ensuring zero friction during high-stakes corporate recruitment rounds.
+                    </p>
+                  </div>
+                  <div class="col-md-7">
+                    <div class="spektral-mono text-white mb-1" style="font-size: 0.78rem;">Our engine capabilities:</div>
+                    <ul class="list-unstyled spektral-mono text-muted mb-0" style="font-size: 0.75rem; line-height: 1.8;">
+                      <li>- Multi-language sandboxed code executor (Java, Python, C++, JS)</li>
+                      <li>- Adaptive timed examination buret with instant percentile scoring</li>
+                      <li>- Behavioral AI teleprompter & structured STAR recovery protocols</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+        </section>
 
-          <div class="col-md-6 col-lg-4">
-            <div class="bento-card">
-              <div class="feature-icon mb-3 text-cyan fs-2"><i class="fa-solid fa-chart-line"></i></div>
-              <h3 class="text-white h5 fw-bold mb-2">DSA Matrix & Heatmaps</h3>
-              <p class="text-muted fs-7 mb-0">Log problems by topic, track difficulty ratios (Easy/Medium/Hard), and maintain daily streak momentum with interactive visual heatmaps.</p>
+        <!-- Social Proof Strip: Target Engineering Teams -->
+        <section class="p-4 px-md-5 border-bottom border-secondary border-opacity-10 text-center">
+          <p class="spektral-mono text-muted small text-uppercase tracking-wider mb-3 fs-9">Preparing Candidates for Engineering Roles at</p>
+          <div class="company-logo-strip">
+            <span class="company-badge"><i class="fa-brands fa-google text-danger"></i> Google</span>
+            <span class="company-badge"><i class="fa-brands fa-microsoft text-primary"></i> Microsoft</span>
+            <span class="company-badge"><i class="fa-brands fa-amazon text-warning"></i> Amazon</span>
+            <span class="company-badge"><i class="fa-brands fa-meta text-info"></i> Meta</span>
+            <span class="company-badge"><i class="fa-brands fa-uber text-white"></i> Uber</span>
+            <span class="company-badge"><i class="fa-brands fa-stripe text-indigo"></i> Stripe</span>
+            <span class="company-badge"><i class="fa-brands fa-atlassian text-primary"></i> Atlassian</span>
+          </div>
+        </section>
+
+        <!-- Spektral Bento Grid Features Section -->
+        <section id="features" class="p-4 p-md-5 border-bottom border-secondary border-opacity-10">
+          <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
+            <div>
+              <div class="spektral-mono-sub mb-1"><span class="spektral-accent-bar"></span>SPECIFICATION MATRIX</div>
+              <h2 class="spektral-display-heading-sm mb-0">Engineered for Technical Dominance</h2>
             </div>
+            <div class="spektral-mono text-muted fs-8">6 INTEGRATED MODULES</div>
           </div>
 
-          <div class="col-md-6 col-lg-4">
-            <div class="bento-card">
-              <div class="feature-icon mb-3 text-secondary fs-2"><i class="fa-solid fa-brain"></i></div>
-              <h3 class="text-white h5 fw-bold mb-2">AI Career & ATS Audit</h3>
-              <p class="text-muted fs-7 mb-0">Generate personalized 30-to-90-day study roadmaps, company-specific prompt guides, and ATS resume audits tailored for top tech employers.</p>
+          <div class="row g-3 g-md-4">
+            <div class="col-md-6 col-lg-4">
+              <div class="spektral-card h-100">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="spektral-index-tag">[01]</span>
+                  <i class="fa-solid fa-stopwatch-20 text-cyan"></i>
+                </div>
+                <h3 class="text-white h6 fw-bold mb-2 spektral-mono">50-MCQ Timed Examination</h3>
+                <p class="spektral-mono text-muted fs-8 mb-0">Realistic, timed screening exams across DSA, Java, SQL, and Architecture with automatic scoring and detailed review logs.</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+              <div class="spektral-card h-100">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="spektral-index-tag">[02]</span>
+                  <i class="fa-solid fa-book-bookmark text-cyan"></i>
+                </div>
+                <h3 class="text-white h6 fw-bold mb-2 spektral-mono">19-Domain Digital Textbook</h3>
+                <p class="spektral-mono text-muted fs-8 mb-0">152 deep-dive chapters covering Distributed Systems, BBR TCP, OS Kernels, Concurrency, and Low-Level System Design.</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+              <div class="spektral-card h-100">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="spektral-index-tag">[03]</span>
+                  <i class="fa-solid fa-brain text-cyan"></i>
+                </div>
+                <h3 class="text-white h6 fw-bold mb-2 spektral-mono">AI Career & ATS Audit</h3>
+                <p class="spektral-mono text-muted fs-8 mb-0">Generate tailored 30-to-90-day study roadmaps, company prompt guides, and ATS resume audits for elite tech companies.</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+              <div class="spektral-card h-100">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="spektral-index-tag">[04]</span>
+                  <i class="fa-solid fa-table-columns text-cyan"></i>
+                </div>
+                <h3 class="text-white h6 fw-bold mb-2 spektral-mono">Placement Kanban Pipeline</h3>
+                <p class="spektral-mono text-muted fs-8 mb-0">Move applications smoothly through Wishlist, Applied, Interviewing, and Offered stages with compensation tracking.</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+              <div class="spektral-card h-100">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="spektral-index-tag">[05]</span>
+                  <i class="fa-solid fa-headphones text-cyan"></i>
+                </div>
+                <h3 class="text-white h6 fw-bold mb-2 spektral-mono">Feynman Audio Bites</h3>
+                <p class="spektral-mono text-muted fs-8 mb-0">Bite-sized audio explanations of complex CS topics designed for rapid commute listening and retention.</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+              <div class="spektral-card h-100">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="spektral-index-tag">[06]</span>
+                  <i class="fa-solid fa-trophy text-cyan"></i>
+                </div>
+                <h3 class="text-white h6 fw-bold mb-2 spektral-mono">Gamified XP & Quests</h3>
+                <p class="spektral-mono text-muted fs-8 mb-0">Earn XP, unlock milestone tiers, maintain streaks with freeze guards, and compete on the real-time global leaderboard.</p>
+              </div>
             </div>
           </div>
+        </section>
 
-          <div class="col-md-6 col-lg-4">
-            <div class="bento-card">
-              <div class="feature-icon mb-3 text-success fs-2"><i class="fa-solid fa-kanban"></i></div>
-              <h3 class="text-white h5 fw-bold mb-2">Placement Kanban Board</h3>
-              <p class="text-muted fs-7 mb-0">Move applications seamlessly through Wishlist, Applied, Interviewing, and Offered stages with compensation tracking and interview dates.</p>
-            </div>
-          </div>
-
-          <div class="col-md-6 col-lg-4">
-            <div class="bento-card">
-              <div class="feature-icon mb-3 text-warning fs-2"><i class="fa-solid fa-medal"></i></div>
-              <h3 class="text-white h5 fw-bold mb-2">Verified Academy Credentials</h3>
-              <p class="text-muted fs-7 mb-0">Earn verifiable certificates upon curriculum mastery and share your authenticated credentials directly on LinkedIn and your resume.</p>
-            </div>
-          </div>
-
-          <div class="col-md-6 col-lg-4">
-            <div class="bento-card">
-              <div class="feature-icon mb-3 text-danger fs-2"><i class="fa-solid fa-desktop"></i></div>
-              <h3 class="text-white h5 fw-bold mb-2">Desktop Client & Cloud Sync</h3>
-              <p class="text-muted fs-7 mb-0">Native Java Swing desktop client paired with real-time cloud synchronization for zero latency and offline coding sessions.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Interactive Preparation ROI Calculator -->
-      <section id="calculator" class="container py-5">
-        <div class="p-4 p-md-5 rounded-4 border border-secondary border-opacity-20" style="background: #222226; border-color: #323238;">
+        <!-- Spektral Technical ROI Readiness Simulator -->
+        <section id="calculator" class="p-4 p-md-5 border-bottom border-secondary border-opacity-10">
           <div class="row align-items-center g-4">
             <div class="col-lg-6 text-start">
-              <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-3">READINESS SIMULATOR</span>
-              <h2 class="display-6 fw-extrabold text-white mb-3">Calculate Your Interview Readiness</h2>
-              <p class="text-muted fs-7 mb-4">Adjust your daily study pace and preparation timeframe to simulate your total solved problem forecast and target readiness score.</p>
+              <div class="spektral-mono-sub mb-2"><span class="spektral-accent-bar"></span>READINESS SIMULATOR</div>
+              <h2 class="spektral-display-heading-sm mb-3">Calculate Your Velocity</h2>
+              <p class="spektral-mono text-muted fs-8 mb-4">Simulate your solved problem trajectory and target readiness score based on daily output and preparation duration.</p>
               
               <div class="mb-4">
-                <div class="d-flex justify-content-between text-white fs-7 mb-1">
+                <div class="d-flex justify-content-between spektral-mono fs-8 mb-1">
                   <span>Questions Practiced Per Day</span>
-                  <strong id="calc-questions-val" class="text-primary">5 Problems / day</strong>
+                  <strong id="calc-questions-val" class="text-cyan">5 Problems / day</strong>
                 </div>
                 <input type="range" class="calc-slider" id="calc-questions" min="1" max="20" value="5" oninput="window.updateRoiCalculator()">
               </div>
 
               <div class="mb-2">
-                <div class="d-flex justify-content-between text-white fs-7 mb-1">
+                <div class="d-flex justify-content-between spektral-mono fs-8 mb-1">
                   <span>Preparation Timeframe</span>
                   <strong id="calc-weeks-val" class="text-cyan">8 Weeks</strong>
                 </div>
@@ -360,242 +431,244 @@ const components = {
             <div class="col-lg-6">
               <div class="row g-3 text-center">
                 <div class="col-sm-6">
-                  <div class="p-4 rounded-3 glass-panel border-primary">
-                    <span class="text-muted fs-8 uppercase">Projected Solved</span>
-                    <h2 class="display-5 fw-extrabold text-white mt-2 mb-0" id="calc-total-problems">280</h2>
-                    <small class="text-success fs-8"><i class="fa-solid fa-code me-1"></i>Mastery Milestone</small>
+                  <div class="p-3.5 rounded spektral-card">
+                    <span class="spektral-mono text-muted fs-9 text-uppercase">Projected Solved</span>
+                    <h2 class="spektral-display-heading-sm fs-2 text-white mt-2 mb-0" id="calc-total-problems">280</h2>
+                    <small class="spektral-mono text-success fs-9"><i class="fa-solid fa-code me-1"></i>Mastery Milestone</small>
                   </div>
                 </div>
                 <div class="col-sm-6">
-                  <div class="p-4 rounded-3 glass-panel border-success">
-                    <span class="text-muted fs-8 uppercase">Readiness Level</span>
-                    <h2 class="display-5 fw-extrabold text-success mt-2 mb-0" id="calc-readiness-score">92%</h2>
-                    <small class="text-muted fs-8">FAANG-Ready Tier</small>
+                  <div class="p-3.5 rounded spektral-card">
+                    <span class="spektral-mono text-muted fs-9 text-uppercase">Readiness Level</span>
+                    <h2 class="spektral-display-heading-sm fs-2 text-success mt-2 mb-0" id="calc-readiness-score">92%</h2>
+                    <small class="spektral-mono text-muted fs-9">Tier-1 Ready</small>
                   </div>
                 </div>
                 <div class="col-12">
-                  <div class="p-3 rounded-3 border border-secondary border-opacity-20" style="background: #1c1c20; border-color: #323238; text-start d-flex align-items-center justify-content-between">
+                  <div class="p-3 rounded spektral-card d-flex align-items-center justify-content-between text-start">
                     <div>
-                      <span class="text-white fw-bold fs-7">Estimated Offer Probability</span>
-                      <p class="text-muted fs-8 mb-0" id="calc-odds-desc">Top 5% Placement Performance Group</p>
+                      <span class="spektral-mono text-white fw-bold fs-8">Offer Probability Model</span>
+                      <p class="spektral-mono text-muted fs-9 mb-0" id="calc-odds-desc">Top 5% Placement Group</p>
                     </div>
-                    <span class="badge bg-success px-3 py-2 fs-6 fw-bold" id="calc-odds-val">94% Probability</span>
+                    <span class="spektral-cta-pill active-highlight py-1 px-3 fs-8 fw-bold" id="calc-odds-val">94% Probability</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- Pricing Section (Stripe-Style Cards) -->
-      <section id="pricing" class="container py-5">
-        <div class="text-center mb-5">
-          <span class="badge bg-indigo-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-2">SIMPLE & TRANSPARENT</span>
-          <h2 class="display-5 fw-extrabold text-white mb-3">Straightforward Pricing</h2>
-          <p class="text-muted fs-5">Invest in your career with a single one-time payment. No hidden monthly subscriptions.</p>
-        </div>
+        <!-- Spektral Transparent Pricing Section -->
+        <section id="pricing" class="p-4 p-md-5 border-bottom border-secondary border-opacity-10">
+          <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
+            <div>
+              <div class="spektral-mono-sub mb-1"><span class="spektral-accent-bar"></span>ACCESS TIERS</div>
+              <h2 class="spektral-display-heading-sm mb-0">Transparent Engineering Membership</h2>
+            </div>
+            <div class="spektral-mono text-muted fs-8">ONE-TIME PAYMENT // NO SUBSCRIPTION</div>
+          </div>
 
-        <div class="row g-4 justify-content-center">
-          <!-- Free Tier -->
-          <div class="col-md-6 col-lg-5 col-xl-4">
-            <div class="glass-panel p-4 h-100 d-flex flex-column text-start">
-              <div>
-                <h3 class="text-white h5 fw-bold mb-1">PrepFree</h3>
-                <p class="text-muted fs-8 mb-3">Essential tools to start tracking your daily prep</p>
-                <div class="my-3"><span class="display-6 fw-extrabold text-white">₹0</span><span class="text-muted fs-8"> / lifetime</span></div>
-                <ul class="list-unstyled text-start mb-4 text-muted fs-8 d-flex flex-column gap-2">
-                  <li><i class="fa-solid fa-check text-success me-2"></i> Access to Core Question Bank</li>
-                  <li><i class="fa-solid fa-check text-success me-2"></i> Log Solved Problems & Streaks</li>
-                  <li><i class="fa-solid fa-check text-success me-2"></i> Standard Placement Kanban</li>
-                  <li><i class="fa-solid fa-check text-success me-2"></i> Basic Progress Graphs</li>
+          <div class="row g-4 justify-content-center">
+            <!-- Free Starter Tier -->
+            <div class="col-md-6 col-lg-5">
+              <div class="spektral-card h-100 d-flex flex-column text-start">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="spektral-index-tag">[STARTER]</span>
+                  <span class="badge bg-secondary bg-opacity-25 font-monospace fs-9">COMMUNITY</span>
+                </div>
+                <h3 class="text-white h5 fw-bold mb-1 spektral-mono">PrepFree</h3>
+                <p class="spektral-mono text-muted fs-9 mb-3">Essential tools for daily problem tracking</p>
+                <div class="my-2"><span class="spektral-display-heading-sm fs-2 text-white">₹0</span><span class="spektral-mono text-muted fs-8"> / lifetime</span></div>
+                <ul class="list-unstyled spektral-mono text-muted fs-8 d-flex flex-column gap-2 my-3">
+                  <li><span class="spektral-bullet">↳</span> Core Question Bank Access</li>
+                  <li><span class="spektral-bullet">↳</span> Solved Problem & Streak Logging</li>
+                  <li><span class="spektral-bullet">↳</span> Standard Placement Kanban</li>
+                  <li><span class="spektral-bullet">↳</span> Daily Screen Time Telemetry</li>
                 </ul>
+                <a href="#/register" class="spektral-cta-pill text-center w-100 py-2 fs-8 mt-auto">INITIALIZE FREE</a>
               </div>
-              <a href="#/register" class="btn btn-glass w-100 py-2 fs-7 fw-bold mt-auto">Get Started Free</a>
             </div>
-          </div>
 
-          <!-- Pro Tier -->
-          <div class="col-md-6 col-lg-5 col-xl-4">
-            <div class="glass-panel p-4 h-100 d-flex flex-column text-start border-primary position-relative" style="box-shadow: 0 0 35px var(--accent-glow);">
-              <div class="badge bg-primary text-white border border-primary-subtle px-3 py-1 rounded-pill position-absolute top-0 start-50 translate-middle fw-bold fs-9">
-                MOST POPULAR
-              </div>
-              <div>
-                <h3 class="text-white h5 fw-bold mb-1 mt-1">PrepPro</h3>
-                <p class="text-indigo fs-8 mb-3">Recommended for Active Jobseekers & Students</p>
-                <div class="my-3"><span class="display-6 fw-extrabold text-white">₹399</span><span class="text-muted fs-8"> / one-time lifetime</span></div>
-                <ul class="list-unstyled text-start mb-4 text-muted fs-8 d-flex flex-column gap-2">
-                  <li><i class="fa-solid fa-check text-success me-2"></i> <strong>Unlimited 50-MCQ Timed Exams</strong></li>
-                  <li><i class="fa-solid fa-check text-success me-2"></i> <strong>AI ATS Resume & Keyword Audit</strong></li>
-                  <li><i class="fa-solid fa-check text-success me-2"></i> <strong>AI Custom Study Planners</strong></li>
-                  <li><i class="fa-solid fa-check text-success me-2"></i> <strong>Company Interview Guides & Prompts</strong></li>
-                  <li><i class="fa-solid fa-check text-success me-2"></i> <strong>Export Excel / PDF Progress Reports</strong></li>
-                  <li><i class="fa-solid fa-check text-success me-2"></i> Verified Completion Certificates</li>
+            <!-- Pro Lifetime Tier -->
+            <div class="col-md-6 col-lg-5">
+              <div class="spektral-card h-100 d-flex flex-column text-start position-relative" style="border-color: var(--spektral-cyan);">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="spektral-index-tag" style="color: var(--spektral-cyan);">[FULL SUITE]</span>
+                  <span class="badge bg-info bg-opacity-20 text-info font-monospace fs-9">LIFETIME ACCESS</span>
+                </div>
+                <h3 class="text-white h5 fw-bold mb-1 spektral-mono">PrepPro</h3>
+                <p class="spektral-mono text-cyan fs-9 mb-3">Recommended for Active Jobseekers & Students</p>
+                <div class="my-2"><span class="spektral-display-heading-sm fs-2 text-white">₹399</span><span class="spektral-mono text-muted fs-8"> / one-time lifetime</span></div>
+                <ul class="list-unstyled spektral-mono text-muted fs-8 d-flex flex-column gap-2 my-3">
+                  <li><span class="spektral-bullet">↳</span> <strong>Unlimited 50-MCQ Timed Examination Engine</strong></li>
+                  <li><span class="spektral-bullet">↳</span> <strong>19-Domain Digital Textbook Curriculum (152 Ch.)</strong></li>
+                  <li><span class="spektral-bullet">↳</span> <strong>AI ATS Resume & Keyword Audit Engine</strong></li>
+                  <li><span class="spektral-bullet">↳</span> <strong>AI Custom Study Planners & Prompt Guides</strong></li>
+                  <li><span class="spektral-bullet">↳</span> <strong>Export Excel & PDF Progress Reports</strong></li>
+                  <li><span class="spektral-bullet">↳</span> Verified Completion Certificates & LinkedIn Badges</li>
                 </ul>
-              </div>
-              <a href="#/register" class="btn btn-premium w-100 py-2 fs-7 fw-bold mt-auto"><i class="fa-solid fa-gem me-2"></i>Upgrade to PrepPro Access</a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- FAQ Section -->
-      <section class="container py-5">
-        <div class="text-center mb-5">
-          <h2 class="display-6 fw-bold text-white mb-2">Frequently Asked Questions</h2>
-          <p class="text-muted">Have questions? We have answers.</p>
-        </div>
-        <div class="row justify-content-center">
-          <div class="col-lg-8">
-            <div class="accordion d-flex flex-column gap-3" id="landingFaq">
-              <div class="glass-panel p-3">
-                <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-circle-question text-primary me-2"></i>How do the 50-MCQ Mock Exams work?</h6>
-                <p class="text-muted fs-7 mb-0 mt-2">PrepSpace generates a balanced 50-question examination covering Data Structures, Algorithms, Core Java, OOP, and Database concepts. The system auto-grades your submission instantly, calculates exact percentile marks, and awards XP to your profile.</p>
-              </div>
-              <div class="glass-panel p-3">
-                <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-circle-question text-primary me-2"></i>Is the ₹399 PrepPro payment a recurring subscription?</h6>
-                <p class="text-muted fs-7 mb-0 mt-2">No. PrepPro is a single one-time payment of ₹399 with lifetime access. You will never be billed again.</p>
-              </div>
-              <div class="glass-panel p-3">
-                <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-circle-question text-primary me-2"></i>Can I use PrepSpace offline or on desktop?</h6>
-                <p class="text-muted fs-7 mb-0 mt-2">Yes. We provide a complete Java Swing desktop client that connects directly to the tracker database for lightning-fast, offline placement management.</p>
+                <a href="#/register" class="spektral-cta-pill active-highlight text-center w-100 py-2 fs-8 fw-bold mt-auto">
+                  <i class="fa-solid fa-gem me-1.5"></i> UPGRADE TO PREPPRO
+                </a>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- Call to Action Banner -->
-      <section class="container py-5">
-        <div class="cta-banner-stripe text-center">
-          <h2 class="display-5 fw-extrabold text-white mb-3">Accelerate Your Placement Preparation Today</h2>
-          <p class="text-secondary fs-5 mb-4 mx-auto" style="max-width: 600px;">Join thousands of engineers organizing their daily coding routines and landing top software engineering offers.</p>
-          <a href="#/register" class="btn btn-premium btn-lg px-5 py-3 fs-5 fw-bold shadow-lg">
-            <i class="fa-solid fa-rocket me-2"></i>Get Started with PrepSpace Free
+        <!-- Spektral Footer -->
+        <footer class="spektral-footer">
+          <div class="row g-4 justify-content-between mb-4">
+            <div class="col-lg-4 text-start">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace" style="width: 22px; height: 22px; object-fit: contain;">
+                <span class="text-white fw-bold fs-6 spektral-mono">prepspace // studio</span>
+              </div>
+              <p class="spektral-mono text-muted fs-9 mb-3" style="max-width: 320px; line-height: 1.6;">
+                Unified career intelligence, technical interview preparation & timed mock assessments for developers worldwide.
+              </p>
+              <div class="spektral-mono fs-9 text-success d-flex align-items-center gap-2">
+                <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#10b981;"></span>
+                <span>SYSTEM STATUS: 100% OPERATIONAL</span>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-3 col-lg-2 text-start">
+              <div class="spektral-mono text-white fs-9 text-uppercase fw-bold mb-2">Platform</div>
+              <ul class="list-unstyled spektral-mono fs-9 d-flex flex-column gap-1.5 text-muted">
+                <li><a href="#showcase" class="text-muted text-decoration-none hover-white">Mock Exams</a></li>
+                <li><a href="#features" class="text-muted text-decoration-none hover-white">DSA Matrix</a></li>
+                <li><a href="#features" class="text-muted text-decoration-none hover-white">ATS Resume AI</a></li>
+                <li><a href="#pricing" class="text-muted text-decoration-none hover-white">Pro Pricing</a></li>
+                <li><a href="#/courses" class="text-muted text-decoration-none hover-white">LMS Courses</a></li>
+              </ul>
+            </div>
+
+            <div class="col-6 col-md-3 col-lg-2 text-start">
+              <div class="spektral-mono text-white fs-9 text-uppercase fw-bold mb-2">Compliance</div>
+              <ul class="list-unstyled spektral-mono fs-9 d-flex flex-column gap-1.5 text-muted">
+                <li><a href="#/privacy" class="text-muted text-decoration-none hover-white">Privacy Policy</a></li>
+                <li><a href="#/terms" class="text-muted text-decoration-none hover-white">Terms of Service</a></li>
+                <li><a href="#/refund-policy" class="text-muted text-decoration-none hover-white">Refund Policy</a></li>
+                <li><a href="#/security" class="text-muted text-decoration-none hover-white">Security Architecture</a></li>
+                <li><a href="#/dpa" class="text-muted text-decoration-none hover-white">Data Processing</a></li>
+              </ul>
+            </div>
+
+            <div class="col-6 col-md-3 col-lg-3 text-start">
+              <div class="spektral-mono text-white fs-9 text-uppercase fw-bold mb-2">Telemetry</div>
+              <div class="spektral-mono text-muted fs-9 d-flex flex-column gap-1">
+                <div>GEO: 12.9716° N / 77.5946° E</div>
+                <div>TLS: 256-BIT CHACHA20-POLY1305</div>
+                <div>PCI-DSS: CASHFREE CERTIFIED</div>
+                <div>ZERO-TRUST ARCHITECTURE</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-top border-secondary border-opacity-10 pt-3 d-flex flex-wrap justify-content-between align-items-center gap-2 spektral-mono fs-9 text-muted">
+            <div>&copy; 2026 PrepSpace (stream-in.app). Engineered by Nagesh Methre.</div>
+            <div class="d-flex align-items-center gap-2">
+              <span>WCAG 2.1 AA</span> &bull; <span>GDPR READY</span> &bull; <span>SOC2 COMPLIANT</span>
+            </div>
+          </div>
+        </footer>
+
+      </div>
+    </div>
+
+    <!-- Spektral Offcanvas Technical Menu Drawer -->
+    <div class="offcanvas offcanvas-start spektral-offcanvas" tabindex="-1" id="spektralMenuDrawer" aria-labelledby="spektralMenuLabel">
+      <div class="offcanvas-header border-bottom border-secondary border-opacity-20 p-3">
+        <div class="d-flex align-items-center gap-2" id="spektralMenuLabel">
+          <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace" style="width: 20px; height: 20px;">
+          <span class="spektral-mono text-white fw-bold fs-7">PREPSPACE // SYSTEM INDEX</span>
+        </div>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body p-3 overflow-y-auto">
+        <!-- Quick Nav CTAs -->
+        <div class="d-flex gap-2 mb-4">
+          <a href="#/login" class="spektral-cta-pill flex-grow-1 text-center py-2 fs-8" data-bs-dismiss="offcanvas">LOG IN</a>
+          <a href="#/register" class="spektral-cta-pill active-highlight flex-grow-1 text-center py-2 fs-8" data-bs-dismiss="offcanvas">INITIALIZE</a>
+        </div>
+
+        <!-- Section 1: Core Trackers -->
+        <div class="spektral-mono-sub mb-2 fs-9">01 // CORE TRACKER SUITE</div>
+        <div class="d-flex flex-column gap-1 mb-4">
+          <a href="#/dashboard" class="spektral-menu-link" data-bs-dismiss="offcanvas">
+            <span><i class="fa-solid fa-gauge me-2 text-cyan"></i>Dashboard</span>
+            <i class="fa-solid fa-chevron-right fs-9 text-muted"></i>
+          </a>
+          <a href="#/coding-practice" class="spektral-menu-link" data-bs-dismiss="offcanvas">
+            <span><i class="fa-solid fa-code me-2 text-success"></i>Coding Practice IDE</span>
+            <i class="fa-solid fa-chevron-right fs-9 text-muted"></i>
+          </a>
+          <a href="#/mock-exams" class="spektral-menu-link" data-bs-dismiss="offcanvas">
+            <span><i class="fa-solid fa-stopwatch-20 me-2 text-danger"></i>50-MCQ Timed Exams</span>
+            <i class="fa-solid fa-chevron-right fs-9 text-muted"></i>
+          </a>
+          <a href="#/gamification" class="spektral-menu-link" data-bs-dismiss="offcanvas">
+            <span><i class="fa-solid fa-gamepad me-2 text-warning"></i>Gamification Hub</span>
+            <i class="fa-solid fa-chevron-right fs-9 text-muted"></i>
+          </a>
+          <a href="#/studyplanner" class="spektral-menu-link" data-bs-dismiss="offcanvas">
+            <span><i class="fa-solid fa-clock me-2 text-info"></i>Pomodoro Planner</span>
+            <i class="fa-solid fa-chevron-right fs-9 text-muted"></i>
           </a>
         </div>
-      </section>
 
-      <!-- Google AdSense Multiplex Ad Unit -->
-      <div class="container my-4">
-        <div class="glass-panel p-3">
-          <ins class="adsbygoogle"
-               style="display:block"
-               data-ad-format="autorelaxed"
-               data-ad-client="ca-pub-4662205173096609"
-               data-ad-slot="3928140249"></ins>
+        <!-- Section 2: Academy & Prep -->
+        <div class="spektral-mono-sub mb-2 fs-9">02 // ACADEMY & KNOWLEDGE</div>
+        <div class="d-flex flex-column gap-1 mb-4">
+          <a href="#/library" class="spektral-menu-link" data-bs-dismiss="offcanvas">
+            <span><i class="fa-solid fa-book me-2 text-primary"></i>19-Domain Textbook</span>
+            <i class="fa-solid fa-chevron-right fs-9 text-muted"></i>
+          </a>
+          <a href="#/courses" class="spektral-menu-link" data-bs-dismiss="offcanvas">
+            <span><i class="fa-solid fa-graduation-cap me-2 text-secondary"></i>LMS Video Courses</span>
+            <i class="fa-solid fa-chevron-right fs-9 text-muted"></i>
+          </a>
+          <a href="#/audio-bites" class="spektral-menu-link" data-bs-dismiss="offcanvas">
+            <span><i class="fa-solid fa-headphones me-2 text-warning"></i>Feynman Audio Bites</span>
+            <i class="fa-solid fa-chevron-right fs-9 text-muted"></i>
+          </a>
+          <a href="#/certificates" class="spektral-menu-link" data-bs-dismiss="offcanvas">
+            <span><i class="fa-solid fa-certificate me-2 text-success"></i>Verified Credentials</span>
+            <i class="fa-solid fa-chevron-right fs-9 text-muted"></i>
+          </a>
+        </div>
+
+        <!-- Section 3: Interview Readiness Suites -->
+        <div class="spektral-mono-sub mb-2 fs-9">03 // READINESS SUITES</div>
+        <div class="d-flex flex-column gap-1 mb-4">
+          <a href="#/star-vault" class="spektral-menu-link" data-bs-dismiss="offcanvas">
+            <span><i class="fa-solid fa-star me-2 text-warning"></i>STAR Method Vault</span>
+            <i class="fa-solid fa-chevron-right fs-9 text-muted"></i>
+          </a>
+          <a href="#/peer-mock" class="spektral-menu-link" data-bs-dismiss="offcanvas">
+            <span><i class="fa-solid fa-user-group me-2 text-info"></i>Peer Mock Exchange</span>
+            <i class="fa-solid fa-chevron-right fs-9 text-muted"></i>
+          </a>
+          <a href="#/recruiter-outreach" class="spektral-menu-link" data-bs-dismiss="offcanvas">
+            <span><i class="fa-solid fa-paper-plane me-2 text-cyan"></i>Recruiter Outreach</span>
+            <i class="fa-solid fa-chevron-right fs-9 text-muted"></i>
+          </a>
+          <a href="#/reverse-kit" class="spektral-menu-link" data-bs-dismiss="offcanvas">
+            <span><i class="fa-solid fa-comments-dollar me-2 text-success"></i>Reverse Interview Kit</span>
+            <i class="fa-solid fa-chevron-right fs-9 text-muted"></i>
+          </a>
+        </div>
+
+        <!-- Section 4: Legal & Policies -->
+        <div class="spektral-mono-sub mb-2 fs-9">04 // LEGAL & GOVERNANCE</div>
+        <div class="d-flex flex-column gap-1">
+          <a href="#/privacy" class="spektral-menu-link" data-bs-dismiss="offcanvas"><span>Privacy Policy</span></a>
+          <a href="#/terms" class="spektral-menu-link" data-bs-dismiss="offcanvas"><span>Terms of Service</span></a>
+          <a href="#/refund-policy" class="spektral-menu-link" data-bs-dismiss="offcanvas"><span>Refund Policy</span></a>
+          <a href="#/security" class="spektral-menu-link" data-bs-dismiss="offcanvas"><span>Security Architecture</span></a>
         </div>
       </div>
-    </main>
-
-    <!-- Google-Inspired Production Enterprise Footer -->
-    <footer class="py-5 border-top border-secondary-subtle border-opacity-10 mt-5 position-relative">
-      <div class="position-absolute top-0 start-0 end-0" style="height: 1px; background: #323238;"></div>
-      <div class="container pt-3">
-        <div class="row g-4 justify-content-between mb-5">
-          <!-- Brand & Mission Column -->
-          <div class="col-lg-3 text-start">
-            <div class="d-flex align-items-center gap-2 mb-3">
-              <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace Logo" style="width: 38px; height: 38px; object-fit: contain;">
-              <div class="d-flex flex-column text-start">
-                <span class="text-white fw-bold fs-5 lh-1">PrepSpace</span>
-                <span class="text-primary fw-semibold" style="font-size: 0.65rem; letter-spacing: 0.5px;">(stream-in.app)</span>
-              </div>
-            </div>
-            <p class="text-muted fs-7 mb-3" style="max-width: 300px;">The unified career intelligence, technical interview preparation & AI mock assessment SaaS for developers worldwide.</p>
-            <div class="google-dots d-flex gap-1 mb-2">
-              <span style="width: 8px; height: 8px; border-radius: 50%; background: #4285F4;"></span>
-              <span style="width: 8px; height: 8px; border-radius: 50%; background: #EA4335;"></span>
-              <span style="width: 8px; height: 8px; border-radius: 50%; background: #FBBC05;"></span>
-              <span style="width: 8px; height: 8px; border-radius: 50%; background: #34A853;"></span>
-            </div>
-            <div class="d-flex align-items-center gap-2 text-success fs-8">
-              <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981;"></span>
-              <span>All Systems Operational (Zero-Trust)</span>
-            </div>
-          </div>
-
-          <!-- Column 2: Platform & Learning -->
-          <div class="col-6 col-md-3 col-lg-2 text-start">
-            <h6 class="text-white fw-bold mb-3 fs-7 uppercase" style="letter-spacing: 0.6px;"><i class="fa-solid fa-layer-group text-primary me-1.5"></i> Platform</h6>
-            <ul class="list-unstyled fs-7 d-flex flex-column gap-2 text-muted">
-              <li><a href="#showcase" class="text-muted text-decoration-none hover-white">Mock Exams</a></li>
-              <li><a href="#features" class="text-muted text-decoration-none hover-white">DSA Matrix</a></li>
-              <li><a href="#features" class="text-muted text-decoration-none hover-white">ATS Resume AI</a></li>
-              <li><a href="#pricing" class="text-muted text-decoration-none hover-white">Pro Pricing</a></li>
-              <li><a href="#/courses" class="text-muted text-decoration-none hover-white">LMS Courses</a></li>
-              <li><a href="#/onboarding" class="text-muted text-decoration-none hover-white">Onboarding Tour</a></li>
-            </ul>
-          </div>
-
-          <!-- Column 3: Legal & Governance -->
-          <div class="col-6 col-md-3 col-lg-2 text-start">
-            <h6 class="text-white fw-bold mb-3 fs-7 uppercase" style="letter-spacing: 0.6px;"><i class="fa-solid fa-scale-balanced text-primary me-1.5"></i> Legal</h6>
-            <ul class="list-unstyled fs-7 d-flex flex-column gap-2 text-muted">
-              <li><a href="#/privacy" class="text-muted text-decoration-none hover-white">Privacy Policy</a></li>
-              <li><a href="#/terms" class="text-muted text-decoration-none hover-white">Terms of Service</a></li>
-              <li><a href="#/cookies" class="text-muted text-decoration-none hover-white">Cookie Policy</a></li>
-              <li><a href="javascript:void(0)" onclick="openCookiePreferencesModal()" class="text-muted text-decoration-none hover-white">Cookie Preferences</a></li>
-              <li><a href="#/dpa" class="text-muted text-decoration-none hover-white">Data Processing (DPA)</a></li>
-              <li><a href="#/disclaimer" class="text-muted text-decoration-none hover-white">Legal Disclaimer</a></li>
-              <li><a href="#/accessibility" class="text-muted text-decoration-none hover-white">Accessibility</a></li>
-            </ul>
-          </div>
-
-          <!-- Column 4: Billing & Consumer Rights -->
-          <div class="col-6 col-md-3 col-lg-2 text-start">
-            <h6 class="text-white fw-bold mb-3 fs-7 uppercase" style="letter-spacing: 0.6px;"><i class="fa-solid fa-credit-card text-success me-1.5"></i> Billing & Rights</h6>
-            <ul class="list-unstyled fs-7 d-flex flex-column gap-2 text-muted">
-              <li><a href="#/refund-policy" class="text-muted text-decoration-none hover-white">7-Day Refund Policy</a></li>
-              <li><a href="#/cancellation-policy" class="text-muted text-decoration-none hover-white">Cancellation Policy</a></li>
-              <li><a href="#/shipping-policy" class="text-muted text-decoration-none hover-white">Digital Delivery</a></li>
-              <li><a href="#/return-policy" class="text-muted text-decoration-none hover-white">Return & Exchange</a></li>
-              <li><a href="javascript:void(0)" onclick="openCancelSubscriptionModal()" class="text-muted text-decoration-none hover-white">Cancel Subscription</a></li>
-            </ul>
-          </div>
-
-          <!-- Column 5: Trust, Security & Support -->
-          <div class="col-6 col-md-3 col-lg-3 text-start">
-            <h6 class="text-white fw-bold mb-3 fs-7 uppercase" style="letter-spacing: 0.6px;"><i class="fa-solid fa-shield-halved text-warning me-1.5"></i> Trust & Security</h6>
-            <ul class="list-unstyled fs-7 d-flex flex-column gap-2 text-muted mb-3">
-              <li><a href="#/security" class="text-muted text-decoration-none hover-white">Security Architecture</a></li>
-              <li><a href="#/acceptable-use" class="text-muted text-decoration-none hover-white">Acceptable Use Policy</a></li>
-              <li><a href="#/responsible-disclosure" class="text-muted text-decoration-none hover-white">Responsible Disclosure</a></li>
-              <li><a href="#/community-guidelines" class="text-muted text-decoration-none hover-white">Community Guidelines</a></li>
-              <li><a href="#/help" class="text-muted text-decoration-none hover-white">Help Center & FAQs</a></li>
-              <li><a href="#/support" class="text-muted text-decoration-none hover-white">Priority Support</a></li>
-            </ul>
-            <div class="pt-1 d-flex flex-column gap-2 text-muted fs-8">
-              <div class="d-flex align-items-center gap-2">
-                <i class="fa-solid fa-lock text-primary"></i>
-                <span class="text-secondary">256-Bit TLS 1.3 Encryption</span>
-              </div>
-              <div class="d-flex align-items-center gap-2">
-                <i class="fa-solid fa-shield-check text-success"></i>
-                <span class="text-secondary">Cashfree PCI-DSS Compliant</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="border-top border-secondary border-opacity-10 pt-4 d-flex flex-wrap justify-content-between align-items-center gap-2 text-muted fs-8">
-          <p class="mb-0">&copy; 2026 PrepSpace (stream-in.app). Developed with excellence by Nagesh Methre. All rights reserved.</p>
-          <div class="d-flex flex-wrap align-items-center gap-2.5">
-            <span class="google-badge-pill google-badge-blue">
-              <i class="fa-solid fa-universal-access me-1.5"></i> WCAG 2.1 AA Compliant
-            </span>
-            <span class="google-badge-pill google-badge-green">
-              <i class="fa-solid fa-shield-halved me-1.5"></i> GDPR / DPA Certified
-            </span>
-            <span class="google-badge-pill google-badge-yellow">
-              <i class="fa-solid fa-certificate me-1.5"></i> Zero-Trust SLA
-            </span>
-          </div>
-        </div>
-      </div>
-    </footer>
-  </div>
+    </div>
   `,
 
   // Authentication: Login Page (Vercel UI/UX)

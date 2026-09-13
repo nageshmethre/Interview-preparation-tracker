@@ -4589,3 +4589,376 @@ input:-webkit-autofill {
   border-left: 3px solid #38bdf8;
 }
 
+/* ==========================================================================
+   9.0 SPEKTRAL 3D PRODUCTION STUDIO DESIGN SYSTEM
+   Inspired by Spektral (Shakuro - Dribbble shot 26505973)
+   ========================================================================== */
+
+:root {
+  --spektral-bg: #060707;
+  --spektral-surface: #0a0c0e;
+  --spektral-surface-card: #101317;
+  --spektral-surface-hover: #16191f;
+  --spektral-border: rgba(255, 255, 255, 0.1);
+  --spektral-border-strong: rgba(255, 255, 255, 0.2);
+  --spektral-border-hover: rgba(176, 209, 224, 0.4);
+  --spektral-cyan: #b0d1e0;
+  --spektral-cyan-glow: rgba(176, 209, 224, 0.16);
+  --spektral-olive: #454739;
+  --spektral-muted: #828f7e;
+  --spektral-slate: #a2b4b2;
+  --spektral-text: #f1f5f9;
+  --spektral-dim: #94a3b8;
+}
+
+/* Spektral Outer Frame & Wrapper */
+.spektral-outer-container {
+  background-color: #020303;
+  padding: 16px 12px 32px 12px;
+  min-height: 100vh;
+  color: var(--spektral-text);
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+@media (min-width: 992px) {
+  .spektral-outer-container {
+    padding: 24px 28px 48px 28px;
+  }
+}
+
+.spektral-frame {
+  max-width: 1440px;
+  margin: 0 auto;
+  background: var(--spektral-bg);
+  border: 1px solid var(--spektral-border);
+  border-radius: 12px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.88), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Spektral Typography */
+.spektral-display-heading {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+  color: #ffffff;
+}
+
+.spektral-display-heading-sm {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: #ffffff;
+}
+
+.spektral-mono {
+  font-family: 'Space Mono', monospace;
+}
+
+.spektral-mono-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.76rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.6;
+  color: var(--spektral-slate);
+}
+
+.spektral-accent-bar {
+  display: inline-block;
+  width: 4px;
+  height: 1.15em;
+  background: var(--spektral-cyan);
+  margin-right: 14px;
+  vertical-align: -2px;
+  border-radius: 1px;
+}
+
+.spektral-bullet {
+  color: var(--spektral-cyan);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.95rem;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+/* Spektral Minimalist Header */
+.spektral-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--spektral-border);
+  background: rgba(6, 7, 7, 0.94);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+@media (min-width: 768px) {
+  .spektral-navbar {
+    padding: 20px 28px;
+  }
+}
+
+.spektral-nav-action {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.spektral-nav-action:hover {
+  border-color: var(--spektral-cyan);
+  color: var(--spektral-cyan);
+  background: rgba(176, 209, 224, 0.06);
+}
+
+.spektral-nav-brand {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.15em;
+  text-transform: lowercase;
+  color: #ffffff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spektral-nav-brand:hover {
+  color: var(--spektral-cyan);
+}
+
+.spektral-cta-pill {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 7px 18px;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  background: transparent;
+}
+
+.spektral-cta-pill:hover {
+  border-color: var(--spektral-cyan);
+  color: var(--spektral-cyan);
+}
+
+.spektral-cta-pill.active-highlight {
+  background: var(--spektral-cyan);
+  border-color: var(--spektral-cyan);
+  color: #060707;
+  font-weight: 700;
+}
+
+.spektral-cta-pill.active-highlight:hover {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #060707;
+}
+
+/* Spektral Hero Header Block */
+.spektral-hero-header {
+  padding: 44px 28px 36px 28px;
+  border-bottom: 1px solid var(--spektral-border);
+}
+
+@media (min-width: 768px) {
+  .spektral-hero-header {
+    padding: 56px 40px 48px 40px;
+  }
+}
+
+.spektral-hero-sub-divider {
+  display: inline-block;
+  width: 42px;
+  height: 1px;
+  background: var(--spektral-border-strong);
+  margin-right: 16px;
+  vertical-align: middle;
+}
+
+/* Spektral Cinematic Showcase Viewport */
+.spektral-showcase-box {
+  position: relative;
+  border-bottom: 1px solid var(--spektral-border);
+  background: #080a0c;
+  overflow: hidden;
+}
+
+.spektral-hud-status {
+  position: absolute;
+  top: 18px;
+  left: 24px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: var(--spektral-cyan);
+  background: rgba(6, 7, 7, 0.85);
+  padding: 5px 12px;
+  border: 1px solid rgba(176, 209, 224, 0.25);
+  border-radius: 4px;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+}
+
+.spektral-hud-status-right {
+  position: absolute;
+  top: 18px;
+  right: 24px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: var(--spektral-muted);
+  background: rgba(6, 7, 7, 0.85);
+  padding: 5px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+}
+
+/* Spektral Matrix Grid (Lower Section) */
+.spektral-matrix-container {
+  padding: 44px 28px;
+  border-bottom: 1px solid var(--spektral-border);
+}
+
+@media (min-width: 768px) {
+  .spektral-matrix-container {
+    padding: 60px 40px;
+  }
+}
+
+.spektral-matrix-row {
+  padding-top: 28px;
+  padding-bottom: 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.spektral-matrix-row:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.spektral-bullet-item {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  transition: color 0.15s ease;
+}
+
+.spektral-bullet-item:hover {
+  color: #ffffff;
+}
+
+/* Spektral Bento & Feature Cards */
+.spektral-card {
+  background: var(--spektral-surface-card);
+  border: 1px solid var(--spektral-border);
+  border-radius: 8px;
+  padding: 24px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.spektral-card:hover {
+  background: var(--spektral-surface-hover);
+  border-color: var(--spektral-border-hover);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 20px var(--spektral-cyan-glow);
+}
+
+.spektral-index-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--spektral-cyan);
+  opacity: 0.8;
+}
+
+/* Spektral Offcanvas Menu */
+.spektral-offcanvas {
+  background: #07090b !important;
+  color: var(--spektral-text) !important;
+  border-left: 1px solid var(--spektral-border) !important;
+  width: 440px !important;
+  max-width: 88vw !important;
+}
+
+.spektral-offcanvas .btn-close {
+  filter: invert(1) grayscale(100%);
+  opacity: 0.7;
+}
+
+.spektral-menu-link {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.spektral-menu-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.spektral-menu-link.active {
+  color: var(--spektral-cyan);
+  border-color: rgba(176, 209, 224, 0.3);
+  background: rgba(176, 209, 224, 0.06);
+}
+
+/* Spektral Footer */
+.spektral-footer {
+  padding: 36px 28px;
+  border-top: 1px solid var(--spektral-border);
+  background: var(--spektral-bg);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--spektral-dim);
+}
+
+@media (min-width: 768px) {
+  .spektral-footer {
+    padding: 44px 40px;
+  }
+}
+
+
