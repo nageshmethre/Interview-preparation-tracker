@@ -98,7 +98,7 @@ window.switchLandingTab = function(tabId, btnElement) {
           <div class="p-2 rounded bg-dark border border-secondary border-opacity-25 text-white fs-7"><span class="badge bg-secondary me-2">D</span> O(1)</div>
         </div>
         <div class="alert alert-success bg-opacity-10 border-success text-success fs-8 mb-0">
-          <i class="fa-solid fa-circle-check me-2"></i><strong>Instant System Check:</strong> Correct! AVL trees maintain strict height balance guaranteeing O(log n) lookups. +10 XP awarded!
+          <i class="fa-solid fa-circle-check me-2"></i><strong>Instant System Check:</strong> Correct! AVL trees maintain strict height balance guaranteeing O(log n) lookups. +10 Points awarded!
         </div>
       </div>
     `;
@@ -440,7 +440,6 @@ function router() {
       pageMount.innerHTML = components.dashboard(freshStats);
       renderDashboardCharts(freshStats);
       syncDashboardScreenTime();
-      bindDashboardGamificationEvents();
       return;
     }
     const cachedStatsStr = localStorage.getItem('cached_dashboard_stats_v2');
@@ -451,7 +450,6 @@ function router() {
         pageMount.innerHTML = components.dashboard(stats);
         renderDashboardCharts(stats);
         syncDashboardScreenTime();
-        bindDashboardGamificationEvents();
         hasCache = true;
       } catch (e) {}
     }
@@ -471,7 +469,6 @@ function router() {
       pageMount.innerHTML = components.dashboard(defaultStats);
       renderDashboardCharts(defaultStats);
       syncDashboardScreenTime();
-      bindDashboardGamificationEvents();
     }
     apiFetch('/dashboard/stats')
       .then(stats => {
@@ -481,7 +478,6 @@ function router() {
           pageMount.innerHTML = components.dashboard(stats);
           renderDashboardCharts(stats);
           syncDashboardScreenTime();
-          bindDashboardGamificationEvents();
         }
       })
       .catch(err => {
@@ -490,21 +486,8 @@ function router() {
         console.warn('Live dashboard stats refresh skipped:', err.message);
       });
   } else if (hash === '#/gamification') {
-    viewTitle.textContent = 'Gamification Hub';
-    const cachedStatsStr = localStorage.getItem('cached_dashboard_stats_v2');
-    let stats = {
-      totalSolved: 142,
-      completedTopics: 14,
-      streakDays: 7,
-      studyHoursThisWeek: 8.5
-    };
-    if (cachedStatsStr) {
-      try {
-        stats = { ...stats, ...(JSON.parse(cachedStatsStr).data || {}) };
-      } catch (e) {}
-    }
-    pageMount.innerHTML = components.gamificationHub(stats);
-    bindDashboardGamificationEvents();
+    window.location.hash = '#/dashboard';
+    return;
   } else if (hash === '#/studyplanner') {
     viewTitle.textContent = 'Study Planner';
     pageMount.innerHTML = components.studyPlanner();
@@ -1125,154 +1108,6 @@ function bindLayoutEvents() {
 
   const modeToggle = document.getElementById('dark-mode-toggle');
   if (modeToggle) modeToggle.addEventListener('click', toggleTheme);
-}
-
-// =========================================================================
-// v4.8.0 GAMIFICATION ENGINE CORE FUNCTIONS
-// =========================================================================
-function getGamificationState() {
-  const defaults = {
-    xp: 1240,
-    level: 7,
-    levelTitle: 'Junior Craftsman',
-    nextLevelTitle: 'Senior Problem Solver',
-    nextLevelXp: 1500,
-    prevLevelXp: 1000,
-    streak: 7,
-    streakFreeze: 1,
-    dailyTargetSolved: 3,
-    dailyTargetTotal: 3,
-    weeklyVelocityHours: 8.5,
-    weeklyVelocityTarget: 12,
-    curriculumBalanceCompleted: 14,
-    curriculumBalanceTotal: 20,
-    claimedMissions: ['mission-1']
-  };
-  if (typeof localStorage !== 'undefined') {
-    try {
-      const saved = localStorage.getItem('prepspace_gamification_state');
-      if (saved) return { ...defaults, ...JSON.parse(saved) };
-    } catch (e) {}
-  }
-  return defaults;
-}
-
-function saveGamificationState(gState) {
-  if (typeof localStorage !== 'undefined') {
-    try {
-      localStorage.setItem('prepspace_gamification_state', JSON.stringify(gState));
-    } catch (e) {}
-  }
-}
-
-function playGamificationChime() {
-  if (window.AudioSynth && typeof window.AudioSynth.playChime === 'function') {
-    window.AudioSynth.playChime(660, 880, 0.25);
-    return;
-  }
-  try {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtx) return;
-    const ctx = new AudioCtx();
-    const now = ctx.currentTime;
-    const osc1 = ctx.createOscillator();
-    const osc2 = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc1.type = 'sine';
-    osc2.type = 'triangle';
-    osc1.frequency.setValueAtTime(587.33, now);
-    osc1.frequency.exponentialRampToValueAtTime(880, now + 0.25);
-    osc2.frequency.setValueAtTime(880, now);
-    osc2.frequency.exponentialRampToValueAtTime(1174.66, now + 0.25);
-    gain.gain.setValueAtTime(0.12, now);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
-    osc1.connect(gain);
-    osc2.connect(gain);
-    gain.connect(ctx.destination);
-    osc1.start(now);
-    osc2.start(now);
-    osc1.stop(now + 0.4);
-    osc2.stop(now + 0.4);
-  } catch (e) {}
-}
-
-function updateDashboardGamificationDisplays(gState) {
-  const xpEl = document.getElementById('gamification-xp-display');
-  if (xpEl) xpEl.textContent = gState.xp;
-
-  const lbXpEl = document.getElementById('leaderboard-user-xp');
-  if (lbXpEl) lbXpEl.textContent = `${gState.xp} XP`;
-
-  const streakEl = document.getElementById('gamification-streak-display');
-  if (streakEl) streakEl.textContent = `${gState.streak} Days`;
-
-  const progressPct = Math.min(100, Math.max(0, Math.round(((gState.xp - gState.prevLevelXp) / (gState.nextLevelXp - gState.prevLevelXp)) * 100)));
-  const barEl = document.getElementById('gamification-level-progressbar');
-  if (barEl) {
-    barEl.style.width = `${progressPct}%`;
-    barEl.setAttribute('aria-valuenow', progressPct);
-  }
-
-  const badgeEl = document.getElementById('gamification-progress-pct-badge');
-  if (badgeEl) badgeEl.textContent = `${progressPct}% Tier Complete`;
-}
-
-function bindDashboardGamificationEvents() {
-  document.querySelectorAll('.claim-mission-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const missionId = btn.getAttribute('data-mission-id');
-      const basePoints = parseInt(btn.getAttribute('data-xp') || '30', 10);
-      const isPaid = state.isPaid;
-      const points = isPaid ? basePoints * 2 : basePoints;
-
-      const gState = getGamificationState();
-      if (!gState.claimedMissions) gState.claimedMissions = [];
-      if (!gState.claimedMissions.includes(missionId)) {
-        gState.claimedMissions.push(missionId);
-      }
-      gState.xp = (gState.xp || 1240) + points;
-      saveGamificationState(gState);
-
-      // Update UI
-      const parent = btn.parentElement;
-      if (parent) {
-        parent.innerHTML = '<span class="badge bg-success bg-opacity-20 text-success font-monospace fs-9"><i class="fa-solid fa-check me-1"></i>Claimed</span>';
-      }
-      const item = document.getElementById(missionId === 'mission-1' ? 'mission-item-1' : 'mission-item-2');
-      if (item) {
-        item.classList.remove('claimable');
-        item.classList.add('claimed');
-      }
-
-      updateDashboardGamificationDisplays(gState);
-      playGamificationChime();
-      showToast(`Mission Claimed! +${points} XP added to your profile.${isPaid ? ' (2X Pro Bonus Applied)' : ''}`, 'success');
-    });
-  });
-
-  const btnBoss = document.getElementById('btn-attempt-boss-challenge');
-  if (btnBoss) {
-    btnBoss.addEventListener('click', () => {
-      playGamificationChime();
-      showToast('Weekly Boss Challenge Initiated: "Design Distributed Rate Limiter". 2X XP active!', 'info');
-      window.location.hash = '#/star-vault';
-    });
-  }
-
-  document.querySelectorAll('.achievement-badge-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const title = card.getAttribute('title');
-      const badgeName = card.querySelector('.fw-bold')?.textContent || 'Badge';
-      const isLocked = card.classList.contains('locked');
-      if (isLocked) {
-        showToast(`Locked Achievement: ${badgeName}. Requirement: ${title}`, 'warning');
-      } else {
-        playGamificationChime();
-        showToast(`Unlocked Achievement: ${badgeName}! ${title}`, 'success');
-      }
-    });
-  });
 }
 
 
@@ -5016,9 +4851,9 @@ function bindCodingPracticeEvents(rawQuestions = []) {
         body: code
       }).then(() => {
         showToast('Submission Accepted! O(N) Optimal Runtime Verified.', 'success');
-        showToast('+100 XP Points Awarded to profile!', 'success');
+        showToast('+100 Points Credited to profile!', 'success');
       }).catch(() => {
-        showToast('Submission Verified & Saved! +100 XP Awarded.', 'success');
+        showToast('Submission Verified & Saved! +100 Points Awarded.', 'success');
       });
     });
   }
@@ -5904,7 +5739,7 @@ function finishAndGradeExam(testId, questions, userAnswers, startTime, duration,
   // Submit calculated score to server to update UserStreak and Leaderboard
   apiFetch(`/v1/mocktests/${testId}/submit?score=${score}`, { method: 'POST' })
     .then(res => {
-      showToast(`Exam Graded: ${score}/${total} Correct (${percentage}%). +${earnedXp} XP Points Credited!`, 'success');
+      showToast(`Exam Graded: ${score}/${total} Correct (${percentage}%). +${earnedXp} Points Credited!`, 'success');
       
       // Render Scorecard
       const pageMount = document.getElementById('page-mount');
