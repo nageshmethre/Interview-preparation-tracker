@@ -4740,6 +4740,68 @@ input:-webkit-autofill {
   margin-bottom: 3rem;
 }
 
+.ui-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.85rem 1.85rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #18181b;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border: 1px solid rgba(245, 158, 11, 0.6);
+  border-radius: 10px;
+  text-decoration: none;
+  box-shadow: 0 4px 18px rgba(245, 158, 11, 0.35);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.ui-btn-primary:hover {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(245, 158, 11, 0.45);
+  color: #18181b;
+}
+
+.ui-btn-primary:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.ui-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.85rem 1.85rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f4f4f5;
+  background: rgba(34, 34, 38, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid #323238;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.ui-btn-secondary:hover {
+  background: rgba(42, 42, 47, 0.95);
+  border-color: rgba(245, 158, 11, 0.45);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+}
+
+.ui-btn-secondary:focus-visible {
+  outline: 2px solid #f59e0b;
+  outline-offset: 2px;
+}
+
 @media (max-width: 480px) {
   .ui-hero-actions {
     flex-direction: column;
@@ -5073,5 +5135,162 @@ body.ui-drawer-open {
   flex-shrink: 0;
 }
 
+/* ==========================================================================
+   MASTER UI SYSTEM: 5. CONTAINERS & CENTRALIZED LAYOUT SYSTEM
+   ========================================================================== */
+:root {
+  /* Centralized Design Tokens */
+  --text-title: #f4f4f5;
+  --text-body: #d4d4d8;
+  --text-muted: #a1a1aa;
+  --text-dim: #71717a;
+  --brand-primary: #6366f1;
+  --accent-amber: #f59e0b;
+  --accent-success: #10b981;
+  --accent-danger: #ef4444;
 
+  /* Standardized Border Radii */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
 
+  /* Standardized Component Sizing */
+  --btn-height-sm: 34px;
+  --btn-height-md: 40px;
+  --btn-height-lg: 48px;
+
+  /* Container Widths */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-gutter: clamp(1rem, 3vw, 2rem);
+}
+
+/* Centralized Container Classes */
+.container-sm,
+.container-md,
+.container-lg,
+.container-xl,
+.container-full {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-gutter);
+  padding-right: var(--container-gutter);
+}
+
+.container-sm { max-width: var(--container-sm); }
+.container-md { max-width: var(--container-md); }
+.container-lg { max-width: var(--container-lg); }
+.container-xl { max-width: var(--container-xl); }
+.container-full { max-width: 100%; }
+
+/* Standard Vertical Section Spacing */
+.section-py {
+  padding-top: clamp(2.5rem, 5vw, 5rem);
+  padding-bottom: clamp(2.5rem, 5vw, 5rem);
+}
+
+.section-py-sm {
+  padding-top: clamp(1.5rem, 3vw, 3rem);
+  padding-bottom: clamp(1.5rem, 3vw, 3rem);
+}
+
+/* ==========================================================================
+   SIDEBAR DISCLOSURE GROUPS (USABILITY FIX #6 & #17)
+   ========================================================================== */
+.sidebar-group {
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-group summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  padding: 0.4rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.sidebar-group summary::-webkit-details-marker {
+  display: none;
+}
+
+.sidebar-group summary:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.sidebar-group summary .sidebar-group-chevron {
+  font-size: 0.65rem;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sidebar-group[open] summary .sidebar-group-chevron {
+  transform: rotate(180deg);
+}
+
+.sidebar-group-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+/* ==========================================================================
+   DSA ROADMAP RAIL TOGGLE & CHALLENGE GRID
+   ========================================================================== */
+#dsa-roadmap-main-row.rail-collapsed #roadmap-rail-col {
+  display: none !important;
+}
+
+#dsa-roadmap-main-row.rail-collapsed #dsa-detail-wrapper {
+  width: 100% !important;
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+}
+
+.dsa-challenge-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* ==========================================================================
+   UNIFIED CONTROL HEIGHTS & BUTTON SCALE
+   ========================================================================== */
+.control-height-sm {
+  height: 36px !important;
+  min-height: 36px !important;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  transition: all 0.15s ease;
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.btn-ghost:focus-visible {
+  outline: 2px solid var(--accent-amber);
+  outline-offset: 2px;
+}

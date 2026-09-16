@@ -4206,6 +4206,16 @@ function bindDsaRoadmapEvents(roadmapData) {
     btnBackToTopics.addEventListener('click', () => setRoadmapMobileView('topics'));
   }
 
+  const btnToggleRail = document.getElementById('btn-toggle-roadmap-rail');
+  if (btnToggleRail) {
+    btnToggleRail.addEventListener('click', () => {
+      const mainRow = document.getElementById('dsa-roadmap-main-row');
+      if (mainRow) {
+        mainRow.classList.toggle('rail-collapsed');
+      }
+    });
+  }
+
   nodes.forEach(card => {
     card.addEventListener('click', (e) => {
       const topicId = e.currentTarget.dataset.topicId;

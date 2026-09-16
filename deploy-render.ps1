@@ -1,5 +1,5 @@
 # Render Deployment Automation Script
-$apiKey = "rnd_7oa7u3eHEPZJfQU6XmtIusqvXAq5"
+$apiKey = if ($env:RENDER_API_KEY) { $env:RENDER_API_KEY } else { "rnd_7oa7u3eHEPZJfQU6XmtIusqvXAq5" }
 $headers = @{
     "Authorization" = "Bearer $apiKey"
     "Accept"        = "application/json"

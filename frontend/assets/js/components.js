@@ -927,42 +927,70 @@ const components = {
         </div>
         
         <!-- Categorized Nav Links -->
-        <div class="flex-grow-1 py-2 overflow-y-auto sidebar-scroll-content" id="sidebar-nav-container">
-          <div class="sidebar-section-title px-4 mb-2">Core Tracker</div>
-          <a href="#/dashboard" class="sidebar-link active"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
-          <a href="#/coding-practice" class="sidebar-link"><i class="fa-solid fa-code"></i> <span>Coding Practice</span></a>
-          <a href="#/aptitude" class="sidebar-link"><i class="fa-solid fa-book-open-reader"></i> <span>Aptitude & Book</span></a>
-          <a href="#/mock-exams" class="sidebar-link"><i class="fa-solid fa-stopwatch"></i> <span>50-MCQ Mock Exams</span></a>
-          <a href="#/dsa-roadmap" class="sidebar-link"><i class="fa-solid fa-route"></i> <span>DSA Roadmap</span></a>
-          <a href="#/studyplanner" class="sidebar-link"><i class="fa-solid fa-calendar-check"></i> <span>Study Planner</span></a>
+        <nav class="flex-grow-1 py-2 overflow-y-auto sidebar-scroll-content" id="sidebar-nav-container" aria-label="Platform Workspace Navigation">
+          <details class="sidebar-group" open>
+            <summary class="sidebar-section-title px-4 mb-1">
+              <span>Core Tracker</span>
+              <i class="fa-solid fa-chevron-down sidebar-group-chevron"></i>
+            </summary>
+            <div class="sidebar-group-items">
+              <a href="#/dashboard" class="sidebar-link active"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
+              <a href="#/coding-practice" class="sidebar-link"><i class="fa-solid fa-code"></i> <span>Coding Practice</span></a>
+              <a href="#/aptitude" class="sidebar-link"><i class="fa-solid fa-book-open-reader"></i> <span>Aptitude & Book</span></a>
+              <a href="#/mock-exams" class="sidebar-link"><i class="fa-solid fa-stopwatch"></i> <span>50-MCQ Mock Exams</span></a>
+              <a href="#/dsa-roadmap" class="sidebar-link"><i class="fa-solid fa-route"></i> <span>DSA Roadmap</span></a>
+              <a href="#/studyplanner" class="sidebar-link"><i class="fa-solid fa-calendar-check"></i> <span>Study Planner</span></a>
+            </div>
+          </details>
 
-          <div class="sidebar-section-title px-4 mt-3 mb-2">Academy & Prep</div>
-          <a href="#/library" class="sidebar-link"><i class="fa-solid fa-book-bookmark text-primary"></i> <span>Technical Library</span></a>
-          <a href="#/courses" class="sidebar-link"><i class="fa-solid fa-graduation-cap"></i> <span>LMS Courses</span></a>
-          <a href="#/certificates" class="sidebar-link"><i class="fa-solid fa-award"></i> <span>Certificates</span></a>
-          <a href="#/flashcards" class="sidebar-link"><i class="fa-solid fa-clone"></i> <span>Flashcards</span></a>
-          <a href="#/notes" class="sidebar-link"><i class="fa-solid fa-note-sticky"></i> <span>Study Notes</span></a>
-          <a href="#/audio-bites" class="sidebar-link"><i class="fa-solid fa-headphones text-info"></i> <span>Feynman Audio (60s)</span></a>
-          <a href="#/experiences" class="sidebar-link"><i class="fa-solid fa-user-tie"></i> <span>Experiences</span></a>
-          <a href="#/community" class="sidebar-link"><i class="fa-solid fa-comments"></i> <span>Community</span></a>
+          <details class="sidebar-group" open>
+            <summary class="sidebar-section-title px-4 mt-2 mb-1">
+              <span>Academy & Prep</span>
+              <i class="fa-solid fa-chevron-down sidebar-group-chevron"></i>
+            </summary>
+            <div class="sidebar-group-items">
+              <a href="#/library" class="sidebar-link"><i class="fa-solid fa-book-bookmark text-primary"></i> <span>Technical Library</span></a>
+              <a href="#/courses" class="sidebar-link"><i class="fa-solid fa-graduation-cap"></i> <span>LMS Courses</span></a>
+              <a href="#/certificates" class="sidebar-link"><i class="fa-solid fa-award"></i> <span>Certificates</span></a>
+              <a href="#/flashcards" class="sidebar-link"><i class="fa-solid fa-clone"></i> <span>Flashcards</span></a>
+              <a href="#/notes" class="sidebar-link"><i class="fa-solid fa-note-sticky"></i> <span>Study Notes</span></a>
+              <a href="#/audio-bites" class="sidebar-link"><i class="fa-solid fa-headphones text-info"></i> <span>Feynman Audio (60s)</span></a>
+              <a href="#/experiences" class="sidebar-link"><i class="fa-solid fa-user-tie"></i> <span>Experiences</span></a>
+              <a href="#/community" class="sidebar-link"><i class="fa-solid fa-comments"></i> <span>Community</span></a>
+            </div>
+          </details>
 
-          <div class="sidebar-section-title px-4 mt-3 mb-2">Career & Tools</div>
-          <a href="#/placement" class="sidebar-link"><i class="fa-solid fa-briefcase"></i> <span>Placement Kanban</span></a>
-          <a href="#/outreach" class="sidebar-link"><i class="fa-solid fa-paper-plane text-warning"></i> <span>Outreach CRM</span></a>
-          <a href="#/star-vault" class="sidebar-link"><i class="fa-solid fa-star text-warning"></i> <span>STAR Story Vault</span></a>
-          <a href="#/peer-mock" class="sidebar-link"><i class="fa-solid fa-people-arrows text-primary"></i> <span>Peer Mock Arena</span></a>
-          <a href="#/reverse-interview" class="sidebar-link"><i class="fa-solid fa-clipboard-question text-success"></i> <span>Reverse Interview Kit</span></a>
-          <a href="#/ai-assistant" class="sidebar-link"><i class="fa-solid fa-robot"></i> <span>AI ATS Assistant</span></a>
-          <a href="#/calendar" class="sidebar-link"><i class="fa-solid fa-calendar-days"></i> <span>Interview Calendar</span></a>
-          <a href="#/reports" class="sidebar-link"><i class="fa-solid fa-file-invoice"></i> <span>Progress Reports</span></a>
-          <a href="#/desktop-client" class="sidebar-link"><i class="fa-solid fa-mobile-screen"></i> <span>Download App</span></a>
+          <details class="sidebar-group">
+            <summary class="sidebar-section-title px-4 mt-2 mb-1">
+              <span>Career & Tools</span>
+              <i class="fa-solid fa-chevron-down sidebar-group-chevron"></i>
+            </summary>
+            <div class="sidebar-group-items">
+              <a href="#/placement" class="sidebar-link"><i class="fa-solid fa-briefcase"></i> <span>Placement Kanban</span></a>
+              <a href="#/outreach" class="sidebar-link"><i class="fa-solid fa-paper-plane text-warning"></i> <span>Outreach CRM</span></a>
+              <a href="#/star-vault" class="sidebar-link"><i class="fa-solid fa-star text-warning"></i> <span>STAR Story Vault</span></a>
+              <a href="#/peer-mock" class="sidebar-link"><i class="fa-solid fa-people-arrows text-primary"></i> <span>Peer Mock Arena</span></a>
+              <a href="#/reverse-interview" class="sidebar-link"><i class="fa-solid fa-clipboard-question text-success"></i> <span>Reverse Interview Kit</span></a>
+              <a href="#/ai-assistant" class="sidebar-link"><i class="fa-solid fa-robot"></i> <span>AI ATS Assistant</span></a>
+              <a href="#/calendar" class="sidebar-link"><i class="fa-solid fa-calendar-days"></i> <span>Interview Calendar</span></a>
+              <a href="#/reports" class="sidebar-link"><i class="fa-solid fa-file-invoice"></i> <span>Progress Reports</span></a>
+              <a href="#/desktop-client" class="sidebar-link"><i class="fa-solid fa-mobile-screen"></i> <span>Download App</span></a>
+            </div>
+          </details>
 
-          <div class="sidebar-section-title px-4 mt-3 mb-2">Account</div>
-          <a href="#/profile" class="sidebar-link"><i class="fa-solid fa-sliders"></i> <span>Settings</span></a>
-          <a href="#/billing" class="sidebar-link"><i class="fa-solid fa-credit-card"></i> <span>Upgrade Space</span></a>
-          <a href="#/referral" class="sidebar-link"><i class="fa-solid fa-gift"></i> <span>Referral & Earn</span></a>
-          ${isAdmin ? `<a href="#/admin" class="sidebar-link"><i class="fa-solid fa-shield-halved"></i> <span>Admin Panel</span></a>` : ''}
-        </div>
+          <details class="sidebar-group">
+            <summary class="sidebar-section-title px-4 mt-2 mb-1">
+              <span>Account</span>
+              <i class="fa-solid fa-chevron-down sidebar-group-chevron"></i>
+            </summary>
+            <div class="sidebar-group-items">
+              <a href="#/profile" class="sidebar-link"><i class="fa-solid fa-sliders"></i> <span>Settings</span></a>
+              <a href="#/billing" class="sidebar-link"><i class="fa-solid fa-credit-card"></i> <span>Upgrade Space</span></a>
+              <a href="#/referral" class="sidebar-link"><i class="fa-solid fa-gift"></i> <span>Referral & Earn</span></a>
+              ${isAdmin ? `<a href="#/admin" class="sidebar-link"><i class="fa-solid fa-shield-halved"></i> <span>Admin Panel</span></a>` : ''}
+            </div>
+          </details>
+        </nav>
         
         <!-- Sidebar Bottom Actions -->
         <div class="p-3 border-top border-secondary-subtle mt-auto flex-shrink-0 sidebar-footer-box">
@@ -980,13 +1008,13 @@ const components = {
       <!-- Main Content Area -->
       <div class="main-content d-flex flex-column flex-grow-1 overflow-hidden" style="height: 100vh;">
         <!-- Top Nav Header (Vercel Style) -->
-        <header class="workspace-top-header d-flex align-items-center justify-content-between pb-3 border-bottom border-secondary border-opacity-25 mb-3 flex-shrink-0">
+        <header class="workspace-top-header d-flex align-items-center justify-content-between pt-3 pb-3 border-bottom border-secondary border-opacity-25 mb-3 flex-shrink-0 px-3 px-md-4">
           <div class="d-flex align-items-center gap-2 overflow-hidden flex-grow-1 me-2" style="min-width: 0;">
             <button class="btn btn-glass d-lg-none me-1 flex-shrink-0" id="sidebar-toggle-btn"><i class="fa-solid fa-bars"></i></button>
             <div class="d-flex align-items-center gap-2 overflow-hidden" style="min-width: 0;">
               <span class="badge border border-secondary border-opacity-30 text-white px-2 py-1 fs-8 fw-bold d-none d-sm-inline-block font-monospace flex-shrink-0">WORKSPACE</span>
               <span class="text-secondary fs-7 d-none d-sm-inline-block flex-shrink-0">/</span>
-              <h4 class="text-white fw-bold m-0 fs-6 fs-md-4 text-truncate" id="current-view-title" style="max-width: clamp(140px, 45vw, 400px);">Dashboard</h4>
+              <h1 class="text-white fw-bold m-0 fs-6 fs-md-4 text-truncate" id="current-view-title" style="max-width: clamp(140px, 45vw, 400px);">Dashboard</h1>
             </div>
           </div>
           
@@ -2592,7 +2620,12 @@ const components = {
         <div class="glass-panel p-3 d-flex flex-column h-100 border border-secondary border-opacity-20" style="background: #141416;">
           <div class="d-flex align-items-center justify-content-between pb-2 mb-2 border-bottom border-secondary border-opacity-20 flex-shrink-0">
             <h5 class="text-white fw-bold m-0 fs-7"><i class="fa-solid fa-folder-tree text-primary me-2"></i>Roadmap Modules</h5>
-            <span class="badge bg-indigo-subtle text-primary border border-primary-subtle fs-9 font-monospace">${list.length} Topics</span>
+            <div class="d-flex align-items-center gap-1.5">
+              <span class="badge bg-indigo-subtle text-primary border border-primary-subtle fs-9 font-monospace">${list.length} Topics</span>
+              <button type="button" class="btn btn-sm btn-glass p-1 px-1.5 border-0 text-muted d-none d-lg-inline-flex" id="btn-toggle-roadmap-rail" title="Toggle Modules Rail" aria-label="Toggle modules rail">
+                <i class="fa-solid fa-angles-left"></i>
+              </button>
+            </div>
           </div>
           <div class="d-flex flex-column gap-2 flex-grow-1 overflow-y-auto pe-1" id="roadmap-tree-nodes" style="scrollbar-width: thin; scrollbar-color: #3f3f46 transparent;">
             ${list.map((t, idx) => `
@@ -2634,7 +2667,7 @@ const components = {
       <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-secondary border-opacity-25 flex-wrap gap-3">
         <div>
           <div class="d-flex align-items-center gap-2 mb-1">
-            <span class="badge bg-indigo-subtle text-primary border border-primary-subtle fs-9 font-monospace">SPEC-DOC // TOPIC-${topic.sequenceNumber || topic.id || 1}</span>
+            <span class="badge bg-indigo-subtle text-primary border border-primary-subtle fs-9 font-monospace">Topic ${topic.sequenceNumber || topic.id || 1} Spec</span>
             <span class="badge bg-success-subtle text-success fs-9"><i class="fa-solid fa-circle-check me-1"></i>Official Curriculum</span>
           </div>
           <h3 class="text-white fw-bold m-0 fs-5">${topic.name}</h3>
@@ -2646,14 +2679,14 @@ const components = {
           <a href="#/coding-practice" class="btn btn-sm btn-primary py-1.5 px-3 fs-8 fw-bold text-nowrap shadow-sm">
             <i class="fa-solid fa-laptop-code me-1.5"></i> Multi-Language Coding Workshop
           </a>
-          <a href="#/placement" class="btn btn-sm btn-outline-warning py-1.5 px-3 fs-8 fw-semibold text-nowrap">
-            <i class="fa-solid fa-briefcase me-1.5"></i> Internship Track
+          <a href="#/placement" class="btn btn-sm btn-glass py-1.5 px-3 fs-8 fw-semibold text-nowrap">
+            <i class="fa-solid fa-briefcase text-warning me-1.5" aria-hidden="true"></i> Internship Track
           </a>
-          <button type="button" class="btn btn-sm btn-glass py-1.5 px-2.5 fs-8 text-light" onclick="window.print()" title="Print / Save Specification as PDF">
-            <i class="fa-solid fa-file-pdf text-danger me-1"></i> PDF
+          <button type="button" class="btn btn-sm btn-glass py-1.5 px-2.5 fs-8 text-light" onclick="window.print()" title="Print / Save Specification as PDF" aria-label="Print specification as PDF">
+            <i class="fa-solid fa-file-pdf text-danger me-1" aria-hidden="true"></i> PDF
           </button>
-          <button type="button" class="btn btn-sm btn-glass py-1.5 px-2.5 fs-8 text-info" onclick="(document.getElementById('dsa-detail-wrapper') || window).scrollTo({top: 0, behavior: 'smooth'})" title="Move Upward">
-            <i class="fa-solid fa-arrow-up"></i>
+          <button type="button" class="btn btn-sm btn-glass py-1.5 px-2.5 fs-8 text-info" onclick="(document.getElementById('dsa-detail-wrapper') || window).scrollTo({top: 0, behavior: 'smooth'})" title="Scroll to top" aria-label="Scroll to top">
+            <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
           </button>
         </div>
       </div>
@@ -2685,10 +2718,10 @@ const components = {
             <div class="d-flex align-items-center justify-content-between mb-3 border-bottom border-secondary border-opacity-20 pb-2 flex-wrap gap-2">
               <div class="d-flex align-items-center gap-2">
                 <span class="badge bg-primary fs-8 px-2 py-1 fw-bold">Section ${idx + 1}</span>
-                <h5 class="text-white fw-bold m-0 fs-6">${s.name}</h5>
+                <h4 class="text-white fw-bold m-0 fs-6">${s.name}</h4>
               </div>
-              <button type="button" class="btn btn-sm btn-outline-primary py-1 px-2.5 fs-8" onclick="window.location.hash='#/coding-practice?q=${(s.challenges && s.challenges[0] && s.challenges[0].qId) || (idx * 5 + 1)}'">
-                <i class="fa-solid fa-code me-1"></i> Practice in Workshop →
+              <button type="button" class="btn btn-sm btn-primary py-1 px-3 fs-8 fw-bold text-nowrap shadow-sm" onclick="window.location.hash='#/coding-practice?q=${(s.challenges && s.challenges[0] && s.challenges[0].qId) || (idx * 5 + 1)}'">
+                <i class="fa-solid fa-laptop-code me-1.5" aria-hidden="true"></i> Practice in Workshop →
               </button>
             </div>
 
@@ -2724,13 +2757,13 @@ const components = {
                     const diffBadge = diff === 'EASY' ? 'success' : diff === 'HARD' ? 'danger' : 'warning';
                     return `
                       <div class="col-12 col-lg-6">
-                        <div class="d-flex align-items-center justify-content-between p-2.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-25 gap-2">
-                          <div class="overflow-hidden">
-                            <span class="badge bg-${diffBadge}-subtle text-${diffBadge} fs-9 me-1.5">${diff}</span>
-                            <span class="fw-semibold text-white fs-8 text-truncate">${ch.name}</span>
+                        <div class="dsa-challenge-grid p-2.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-25">
+                          <div class="d-flex align-items-center overflow-hidden" style="min-width: 0;">
+                            <span class="badge bg-${diffBadge}-subtle text-${diffBadge} fs-9 me-1.5 flex-shrink-0">${diff}</span>
+                            <span class="fw-semibold text-white fs-8 text-truncate" title="${ch.name}">${ch.name}</span>
                           </div>
-                          <a href="#/coding-practice?q=${ch.qId || 1}" class="btn btn-sm btn-primary py-1 px-2.5 fs-8 text-nowrap fw-semibold">
-                            <i class="fa-solid fa-terminal me-1"></i> Solve →
+                          <a href="#/coding-practice?q=${ch.qId || 1}" class="btn btn-sm btn-glass py-1 px-2.5 fs-8 text-nowrap fw-semibold text-white border-secondary border-opacity-30">
+                            <i class="fa-solid fa-terminal me-1 text-primary" aria-hidden="true"></i> Solve →
                           </a>
                         </div>
                       </div>
@@ -5673,10 +5706,10 @@ const components = {
           <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
             <div>
               <div class="d-flex align-items-center gap-2 mb-1">
-                <span class="badge bg-primary text-white font-monospace px-2 py-0.5 fs-9"><i class="fa-solid fa-graduation-cap me-1"></i> TECHNICAL LIBRARY</span>
-                ${isProUser ? '<span class="badge bg-success bg-opacity-25 text-emerald border border-success border-opacity-50 px-2 py-0.5 fs-9"><i class="fa-solid fa-crown me-1"></i> PRO PASS</span>' : '<span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-50 px-2 py-0.5 fs-9"><i class="fa-solid fa-lock-open me-1"></i> FREE PREVIEWS</span>'}
+                <span class="badge bg-primary text-white font-monospace px-2 py-0.5 fs-9"><i class="fa-solid fa-graduation-cap me-1" aria-hidden="true"></i> Technical Library</span>
+                ${isProUser ? '<span class="badge bg-success bg-opacity-25 text-emerald border border-success border-opacity-50 px-2 py-0.5 fs-9"><i class="fa-solid fa-crown me-1" aria-hidden="true"></i> PRO PASS</span>' : '<span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-50 px-2 py-0.5 fs-9"><i class="fa-solid fa-lock-open me-1" aria-hidden="true"></i> FREE PREVIEWS</span>'}
               </div>
-              <h4 class="text-white fw-bold mb-1">PrepSpace Technical Library</h4>
+              <h2 class="text-white fw-bold mb-1 fs-4">Curriculum Handbooks & Syllabi</h2>
               <p class="text-secondary fs-8 mb-0" style="max-width: 750px;">
                 Textbook-grade technical study curriculum, system architectures, polyglot algorithms, and placement blueprints.
               </p>
@@ -5694,7 +5727,7 @@ const components = {
                 </div>
                 <div>
                   <div class="text-muted fs-9 uppercase font-monospace">Jump Back In</div>
-                  <h6 class="text-white fw-bold mb-0">${activeProgressBook.title}</h6>
+                  <h5 class="text-white fw-bold mb-0 fs-6">${activeProgressBook.title}</h5>
                   <div class="text-muted fs-8">Chapter ${activeProgressVal.lastChapterNumber || 1} &bull; Page ${activeProgressVal.lastPage || 1} of ${activeProgressBook.pageCount}</div>
                 </div>
               </div>
@@ -5705,8 +5738,8 @@ const components = {
                   </div>
                   <span class="text-muted fs-9">${activeProgressVal.progressPercentage || 0}% completed</span>
                 </div>
-                <a href="#/library/read?id=${activeProgressBook.id}&ch=${activeProgressVal.lastChapterNumber || 1}" class="btn btn-primary btn-sm px-3 py-1.5 fw-semibold">
-                  <i class="fa-solid fa-play me-1"></i> Resume Reading
+                <a href="#/library/read?id=${activeProgressBook.id}&ch=${activeProgressVal.lastChapterNumber || 1}" class="btn btn-primary btn-sm px-3 py-1.5 fw-semibold" style="height: 36px; display: inline-flex; align-items: center;">
+                  <i class="fa-solid fa-play me-1.5" aria-hidden="true"></i> Resume Reading
                 </a>
               </div>
             </div>
@@ -5717,14 +5750,14 @@ const components = {
         <div class="card bg-dark border-secondary border-opacity-25 p-3 rounded-3 mb-4">
           <div class="row g-2 align-items-center">
             <div class="col-12 col-md-5 col-lg-6">
-              <div class="input-group input-group-sm">
-                <span class="input-group-text bg-dark border-secondary border-opacity-50 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                <input type="text" id="library-search-input" class="form-control bg-dark text-white border-secondary border-opacity-50" placeholder="Search topics, algorithms, languages, or keywords..." value="${searchQuery || ''}">
+              <div class="input-group input-group-sm" style="height: 36px;">
+                <span class="input-group-text bg-black bg-opacity-50 border-secondary border-opacity-50 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="text" id="library-search-input" class="form-control bg-black bg-opacity-50 text-white border-secondary border-opacity-50 h-100" placeholder="Search topics, algorithms, languages, or keywords..." value="${searchQuery || ''}">
                 ${searchQuery ? '<button id="btn-clear-library-search" class="btn btn-outline-secondary border-opacity-50 text-muted" type="button"><i class="fa-solid fa-xmark"></i></button>' : ''}
               </div>
             </div>
             <div class="col-6 col-md-4 col-lg-3">
-              <select id="library-difficulty-select" class="form-select form-select-sm bg-dark text-white border-secondary border-opacity-50">
+              <select id="library-difficulty-select" class="form-select form-select-sm bg-black bg-opacity-50 text-white border-secondary border-opacity-50" style="height: 36px;">
                 <option value="ALL" ${!activeDifficulty || activeDifficulty === 'ALL' ? 'selected' : ''}>All Difficulties</option>
                 <option value="BEGINNER" ${activeDifficulty === 'BEGINNER' ? 'selected' : ''}>Beginner Foundations</option>
                 <option value="INTERMEDIATE" ${activeDifficulty === 'INTERMEDIATE' ? 'selected' : ''}>Intermediate Core</option>
@@ -5732,10 +5765,10 @@ const components = {
               </select>
             </div>
             <div class="col-6 col-md-3 col-lg-3 text-end">
-              <div class="btn-group btn-group-sm w-100" role="group">
-                <button type="button" class="btn btn-outline-secondary ${!activeCategory || activeCategory === 'ALL' ? 'active text-white' : ''}" id="btn-filter-all-cat">All</button>
-                <button type="button" class="btn btn-outline-secondary ${activeCategory === 'FREE' ? 'active text-white' : ''}" id="btn-filter-free">Free</button>
-                <button type="button" class="btn btn-outline-secondary ${activeCategory === 'PRO' ? 'active text-white' : ''}" id="btn-filter-pro">Pro Pass</button>
+              <div class="btn-group btn-group-sm w-100" role="group" style="height: 36px;">
+                <button type="button" class="btn btn-outline-secondary h-100 ${!activeCategory || activeCategory === 'ALL' ? 'active text-white' : ''}" id="btn-filter-all-cat">All</button>
+                <button type="button" class="btn btn-outline-secondary h-100 ${activeCategory === 'FREE' ? 'active text-white' : ''}" id="btn-filter-free">Free</button>
+                <button type="button" class="btn btn-outline-secondary h-100 ${activeCategory === 'PRO' ? 'active text-white' : ''}" id="btn-filter-pro">Pro Pass</button>
               </div>
             </div>
           </div>
@@ -5743,20 +5776,20 @@ const components = {
 
         <!-- Scrollable Category Navigation Pills with Static Side Slider Buttons -->
         <div class="library-categories-wrapper position-relative d-flex align-items-center mb-4">
-          <button id="btn-scroll-cats-left" class="reader-slider-btn me-2" type="button" title="Previous Categories">
+          <button id="btn-scroll-cats-left" class="reader-slider-btn me-2" type="button" title="Previous Categories" aria-label="Previous Categories">
             <i class="fa-solid fa-chevron-left fs-9"></i>
           </button>
           <div id="library-categories-scroller" class="library-categories-scroller d-flex gap-2 overflow-x-auto flex-grow-1" style="scrollbar-width: none; -ms-overflow-style: none;">
             <button class="btn btn-sm ${!activeCategory || activeCategory === 'ALL' ? 'btn-primary text-white' : 'btn-glass text-muted'} text-nowrap rounded-pill px-3 py-1.5 library-cat-pill" data-category="ALL">
-              <i class="fa-solid fa-layer-group me-1.5"></i> All Handbooks
+              <i class="fa-solid fa-layer-group me-1.5" aria-hidden="true"></i> All Handbooks
             </button>
             ${categories.map(cat => `
               <button class="btn btn-sm ${activeCategory === cat.name ? 'btn-primary text-white' : 'btn-glass text-muted'} text-nowrap rounded-pill px-3 py-1.5 library-cat-pill" data-category="${cat.name}">
-                <i class="${cat.icon} me-1.5"></i> ${cat.name}
+                <i class="${cat.icon} me-1.5" aria-hidden="true"></i> ${cat.name}
               </button>
             `).join('')}
           </div>
-          <button id="btn-scroll-cats-right" class="reader-slider-btn ms-2" type="button" title="Next Categories">
+          <button id="btn-scroll-cats-right" class="reader-slider-btn ms-2" type="button" title="Next Categories" aria-label="Next Categories">
             <i class="fa-solid fa-chevron-right fs-9"></i>
           </button>
         </div>
@@ -5782,22 +5815,22 @@ const components = {
                 <div class="card library-book-card w-100 bg-dark bg-opacity-75 border-secondary border-opacity-25 rounded-3 d-flex flex-column overflow-hidden transition-all">
                   <!-- Book Card Spine / Header (Clean, icon-free) -->
                   <div class="book-card-spine px-3 py-2.5 d-flex justify-content-between align-items-center position-relative" style="background: ${book.gradient}; min-height: 48px;">
-                    <div class="d-flex align-items-center gap-2">
-                      <span class="badge bg-black bg-opacity-50 text-white border border-white border-opacity-25 fs-9 uppercase font-monospace">${book.difficulty}</span>
-                      <span class="text-white text-opacity-90 fs-9 fw-semibold text-truncate" style="max-width: 170px;">${book.category}</span>
+                    <div class="d-flex align-items-center gap-2 overflow-hidden flex-grow-1 me-2" style="min-width: 0;">
+                      <span class="badge bg-black bg-opacity-50 text-white border border-white border-opacity-25 fs-9 font-monospace flex-shrink-0">${book.difficulty}</span>
+                      <span class="text-white text-opacity-95 fs-9 fw-semibold text-truncate" title="${book.category}">${book.category}</span>
                     </div>
                     <div>
                       ${book.isPro ? `
-                        <span class="badge bg-warning bg-opacity-95 text-dark fw-bold font-monospace fs-9 shadow-sm"><i class="fa-solid fa-crown me-1"></i> PRO</span>
+                        <span class="badge bg-warning bg-opacity-95 text-dark fw-bold font-monospace fs-9 shadow-sm"><i class="fa-solid fa-crown me-1" aria-hidden="true"></i> PRO</span>
                       ` : `
-                        <span class="badge bg-emerald bg-opacity-95 text-white fw-bold font-monospace fs-9 shadow-sm"><i class="fa-solid fa-check me-1"></i> FREE</span>
+                        <span class="badge bg-emerald bg-opacity-95 text-white fw-bold font-monospace fs-9 shadow-sm"><i class="fa-solid fa-check me-1" aria-hidden="true"></i> FREE</span>
                       `}
                     </div>
                   </div>
 
                   <!-- Book Card Content -->
                   <div class="card-body p-3 d-flex flex-column flex-grow-1">
-                    <h6 class="text-white fw-bold mb-1 line-clamp-2" style="font-size: 0.95rem; line-height: 1.35;">${book.title}</h6>
+                    <h5 class="text-white fw-bold mb-1 line-clamp-2" style="font-size: 0.95rem; line-height: 1.35;">${book.title}</h5>
                     <p class="text-muted fs-8 mb-2 line-clamp-2" style="line-height: 1.45;">${book.subtitle || book.description}</p>
 
                     <!-- Tags -->
@@ -5823,18 +5856,19 @@ const components = {
 
                     <!-- Book Metadata Specs (Single horizontal line, no vertical up-down wrapping) -->
                     <div class="mt-auto pt-2.5 pb-1 border-top border-secondary border-opacity-15 d-flex justify-content-between align-items-center text-muted fs-9 font-monospace" style="white-space: nowrap; gap: 0.5rem;">
-                      <span class="text-nowrap d-inline-flex align-items-center"><i class="fa-regular fa-clock me-1 text-warning"></i>${(book.estimatedReadingTime || '6h').replace(/ Hours?/i, 'h')}</span>
-                      <span class="text-nowrap d-inline-flex align-items-center"><i class="fa-regular fa-file-lines me-1 text-info"></i>${book.chapters ? book.chapters.length : 8} Ch &bull; ${book.pageCount || 310} pgs</span>
-                      <span class="text-nowrap d-inline-flex align-items-center"><i class="fa-solid fa-star me-1 text-warning"></i>${book.rating || '4.95'}</span>
+                      <span class="text-nowrap d-inline-flex align-items-center"><i class="fa-regular fa-clock me-1 text-warning" aria-hidden="true"></i>${(book.estimatedReadingTime || '6h').replace(/ Hours?/i, 'h')}</span>
+                      <span class="text-nowrap d-inline-flex align-items-center"><i class="fa-regular fa-file-lines me-1 text-info" aria-hidden="true"></i>${book.chapters ? book.chapters.length : 8} Ch &bull; ${book.pageCount || 310} pgs</span>
+                      <span class="text-nowrap d-inline-flex align-items-center"><i class="fa-solid fa-star me-1 text-warning" aria-hidden="true"></i>${book.rating || '4.95'}</span>
                     </div>
 
                     <!-- Card Actions -->
                     <div class="d-flex gap-2 mt-2.5">
-                      <a href="#/library/read?id=${book.id}&ch=1" class="btn btn-primary btn-sm flex-grow-1 fw-semibold d-flex align-items-center justify-content-center py-1.5">
+                      <a href="#/library/read?id=${book.id}&ch=1" class="btn btn-primary btn-sm flex-grow-1 fw-semibold d-flex align-items-center justify-content-center py-1.5" style="height: 36px;">
                         ${percent > 0 ? 'Continue' : 'Read'}
                       </a>
-                      <a href="#/library/book?id=${book.id}" class="btn btn-glass btn-sm px-2.5 d-flex align-items-center justify-content-center" title="Table of Contents">
-                        <i class="fa-solid fa-list-ul text-muted"></i>
+                      <a href="#/library/book?id=${book.id}" class="btn btn-glass btn-sm px-2.5 d-inline-flex align-items-center justify-content-center gap-1.5 text-nowrap" style="height: 36px;" title="View Table of Contents" aria-label="Table of Contents for ${book.title}">
+                        <i class="fa-solid fa-list-ul text-muted" aria-hidden="true"></i>
+                        <span class="fs-9 text-muted fw-medium d-none d-sm-inline">Syllabus</span>
                       </a>
                     </div>
                   </div>

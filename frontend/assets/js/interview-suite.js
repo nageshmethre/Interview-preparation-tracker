@@ -1697,8 +1697,8 @@
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-15 gap-2">
           <div>
             <div class="d-flex align-items-center gap-2">
-              <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-50 font-monospace fs-9">ARENA ARENA</span>
-              <h4 class="text-white fw-bold m-0 fs-5">Peer Mock Exchange & AI Shadow Interviewer</h4>
+              <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-50 font-monospace fs-9">ARENA</span>
+              <h1 class="text-white fw-bold m-0 fs-5">Peer Mock Exchange & AI Shadow Interviewer</h1>
             </div>
             <p class="text-muted fs-8 mb-0 mt-1">Practice live 60-min reciprocal interview rounds with standardized FAANG rubrics or run solo against an AI Principal Shadow.</p>
           </div>
@@ -1730,12 +1730,12 @@
 
             <!-- Problem Selector -->
             <div class="d-flex align-items-center gap-2 flex-grow-1" style="max-width: 450px;">
-              <select id="mock-problem-select" class="form-select form-select-sm bg-black text-white border-secondary border-opacity-50">
+              <select id="mock-problem-select" class="form-select form-select-sm bg-black text-white border-secondary border-opacity-50" style="height: 36px;">
                 ${DEFAULT_MOCK_ROUNDS.map(r => `
                   <option value="${r.id}">[${r.type}] ${r.title} (${r.difficulty})</option>
                 `).join('')}
               </select>
-              <button class="btn btn-sm btn-glass text-info fs-9 text-nowrap" id="btn-toggle-secret-hints">
+              <button class="btn btn-sm btn-glass text-info fs-9 text-nowrap" id="btn-toggle-secret-hints" style="height: 36px;">
                 <i class="fa-solid fa-eye me-1"></i> Secret Hints
               </button>
             </div>
@@ -1761,18 +1761,22 @@
           <!-- Left: Code & System Design Scratchpad -->
           <div class="col-12 col-xl-7">
             <div class="card bg-dark bg-opacity-70 border-secondary border-opacity-30 rounded-3 p-3 shadow-sm h-100">
-              <div class="d-flex align-items-center justify-content-between mb-2">
+              <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom border-secondary border-opacity-20 gap-2 flex-wrap">
                 <div class="d-flex align-items-center gap-2">
-                  <h6 class="text-white fw-bold m-0 fs-7"><i class="fa-solid fa-terminal text-success me-1.5"></i>Candidate Live Scratchpad</h6>
-                  <select id="scratchpad-lang" class="form-select form-select-sm bg-black text-white border-secondary border-opacity-50 py-0.5" style="width: 120px;">
+                  <h2 class="text-white fw-bold m-0 fs-7 text-nowrap"><i class="fa-solid fa-terminal text-success me-1.5" aria-hidden="true"></i>Candidate Live Scratchpad</h2>
+                  <select id="scratchpad-lang" class="form-select form-select-sm bg-black text-white border-secondary border-opacity-50" style="width: 125px; height: 36px;" aria-label="Programming Language">
                     <option value="java" selected>Java 21</option>
                     <option value="python">Python 3.12</option>
                     <option value="typescript">TypeScript</option>
                   </select>
                 </div>
-                <div class="d-flex gap-1.5">
-                  <button class="btn btn-sm btn-outline-success py-0.5 px-2 fs-9" id="btn-run-mock-tests"><i class="fa-solid fa-play me-1"></i> Run Tests</button>
-                  <button class="btn btn-sm btn-glass py-0.5 px-2 fs-9 text-secondary" id="btn-clear-scratchpad"><i class="fa-solid fa-eraser"></i></button>
+                <div class="d-flex align-items-center gap-2">
+                  <button class="btn btn-sm btn-success px-3 fw-semibold d-inline-flex align-items-center" id="btn-run-mock-tests" style="height: 36px;">
+                    <i class="fa-solid fa-play me-1.5" aria-hidden="true"></i> Run Tests
+                  </button>
+                  <button class="btn btn-sm btn-glass text-secondary px-2.5 d-inline-flex align-items-center justify-content-center" id="btn-clear-scratchpad" style="height: 36px; width: 36px;" title="Clear scratchpad" aria-label="Clear scratchpad">
+                    <i class="fa-solid fa-eraser" aria-hidden="true"></i>
+                  </button>
                 </div>
               </div>
 
@@ -1799,7 +1803,7 @@
               <div class="p-2.5 rounded bg-warning bg-opacity-10 border border-warning border-opacity-30 mb-3" id="ai-shadow-card">
                 <div class="d-flex align-items-center justify-content-between mb-1">
                   <span class="badge bg-warning text-dark fw-bold font-monospace fs-9"><i class="fa-solid fa-robot me-1"></i>AI Principal Shadow Follow-Up:</span>
-                  <button class="btn btn-glass py-0.5 px-1.5 fs-9 text-warning" id="btn-next-shadow-q"><i class="fa-solid fa-rotate me-1"></i> Next Prompt</button>
+                  <button class="btn btn-glass btn-sm px-2 text-muted hover-text-white border-0" id="btn-next-shadow-q" title="Cycle to next interviewer prompt" aria-label="Cycle to next interviewer prompt"><i class="fa-solid fa-rotate me-1" aria-hidden="true"></i> Next Prompt</button>
                 </div>
                 <p class="fs-8 text-light fw-medium mb-0" id="ai-shadow-question-text">
                   "How do you prevent race conditions when two concurrent requests hit different gateway instances simultaneously?"
@@ -1813,7 +1817,7 @@
                 <div>
                   <div class="d-flex justify-content-between fs-9 font-monospace mb-1">
                     <span class="text-white">1. Problem Decomposition & Scope</span>
-                    <span class="text-info fw-bold" id="val-rubric-1">3.5 / 5.0</span>
+                    <span class="text-white fw-bold font-monospace" id="val-rubric-1">3.5 / 5.0</span>
                   </div>
                   <input type="range" class="form-range rubric-slider" id="rubric-1" min="1" max="5" step="0.5" value="3.5">
                 </div>
@@ -1821,7 +1825,7 @@
                 <div>
                   <div class="d-flex justify-content-between fs-9 font-monospace mb-1">
                     <span class="text-white">2. Architecture & Scalability</span>
-                    <span class="text-warning fw-bold" id="val-rubric-2">3.5 / 5.0</span>
+                    <span class="text-white fw-bold font-monospace" id="val-rubric-2">3.5 / 5.0</span>
                   </div>
                   <input type="range" class="form-range rubric-slider" id="rubric-2" min="1" max="5" step="0.5" value="3.5">
                 </div>
@@ -1829,7 +1833,7 @@
                 <div>
                   <div class="d-flex justify-content-between fs-9 font-monospace mb-1">
                     <span class="text-white">3. Code Quality & Correctness</span>
-                    <span class="text-success fw-bold" id="val-rubric-3">3.5 / 5.0</span>
+                    <span class="text-white fw-bold font-monospace" id="val-rubric-3">3.5 / 5.0</span>
                   </div>
                   <input type="range" class="form-range rubric-slider" id="rubric-3" min="1" max="5" step="0.5" value="3.5">
                 </div>
@@ -1837,7 +1841,7 @@
                 <div>
                   <div class="d-flex justify-content-between fs-9 font-monospace mb-1">
                     <span class="text-white">4. Communication & Poise</span>
-                    <span class="text-primary fw-bold" id="val-rubric-4">3.5 / 5.0</span>
+                    <span class="text-white fw-bold font-monospace" id="val-rubric-4">3.5 / 5.0</span>
                   </div>
                   <input type="range" class="form-range rubric-slider" id="rubric-4" min="1" max="5" step="0.5" value="3.5">
                 </div>
