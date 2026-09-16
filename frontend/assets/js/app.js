@@ -65,6 +65,81 @@ function checkCashfreeRedirectReturn() {
   }
 }
 
+// Master UI System Controller: Accordions, Drawers, and Accessibility
+window.UI = {
+  lastFocusedElement: null,
+
+  openDrawer: function(drawerId) {
+    const drawer = document.getElementById(drawerId);
+    if (!drawer) return;
+    this.lastFocusedElement = document.activeElement;
+    drawer.classList.add('active');
+    document.body.classList.add('ui-drawer-open');
+    const closeBtn = drawer.querySelector('.ui-drawer-close, button, a');
+    if (closeBtn) closeBtn.focus();
+  },
+
+  closeDrawer: function(drawerId) {
+    const drawer = document.getElementById(drawerId);
+    if (!drawer) return;
+    drawer.classList.remove('active');
+    const anyOpen = document.querySelector('.ui-drawer.active');
+    if (!anyOpen) {
+      document.body.classList.remove('ui-drawer-open');
+    }
+    if (this.lastFocusedElement && typeof this.lastFocusedElement.focus === 'function') {
+      this.lastFocusedElement.focus();
+    }
+  },
+
+  toggleDrawer: function(drawerId) {
+    const drawer = document.getElementById(drawerId);
+    if (!drawer) return;
+    if (drawer.classList.contains('active')) {
+      this.closeDrawer(drawerId);
+    } else {
+      this.openDrawer(drawerId);
+    }
+  },
+
+  toggleAccordion: function(button) {
+    if (!button) return;
+    const item = button.closest('.ui-accordion-item');
+    if (!item) return;
+    const accordion = item.closest('.ui-accordion');
+    const isCurrentlyActive = item.classList.contains('active');
+
+    // Single-open behavior: collapse siblings within the same accordion
+    if (accordion) {
+      accordion.querySelectorAll('.ui-accordion-item').forEach(sibling => {
+        if (sibling !== item) {
+          sibling.classList.remove('active');
+          const btn = sibling.querySelector('.ui-accordion-button');
+          if (btn) btn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    if (isCurrentlyActive) {
+      item.classList.remove('active');
+      button.setAttribute('aria-expanded', 'false');
+    } else {
+      item.classList.add('active');
+      button.setAttribute('aria-expanded', 'true');
+    }
+  }
+};
+
+// Global Keyboard Dismissal for Drawers
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' || e.key === 'Esc') {
+    const activeDrawer = document.querySelector('.ui-drawer.active');
+    if (activeDrawer && activeDrawer.id) {
+      window.UI.closeDrawer(activeDrawer.id);
+    }
+  }
+});
+
 // Application Init
 document.addEventListener('DOMContentLoaded', () => {
   getReferralCodeFromUrl();
@@ -1001,6 +1076,9 @@ async function apiFetch(endpoint, options = {}) {
     if (!msg && typeof errorData === 'object') {
       const vals = Object.values(errorData).filter(v => typeof v === 'string');
       if (vals.length > 0) msg = vals.join(', ');
+    }
+    if (msg && typeof msg === 'string' && (msg.includes('JPA') || msg.includes('EntityManager') || msg.includes('Hikari') || msg.includes('Connection refused') || msg.includes('communications link failure'))) {
+      msg = 'Database service is warming up. Please wait a few moments and try again.';
     }
     throw new Error(msg || 'API request failed');
   }

@@ -73,8 +73,8 @@ const components = {
       ${components.renderTopPromoTicker()}
 
       <!-- Vercel Minimalist Glass Navigation -->
-      <nav class="navbar navbar-expand-lg navbar-dark py-3 sticky-top border-bottom border-secondary border-opacity-20">
-        <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark py-3 sticky-top border-bottom border-secondary border-opacity-20" style="background: rgba(24, 24, 27, 0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);">
+        <div class="container-xl">
           <a class="navbar-brand d-flex align-items-center gap-2 text-decoration-none" href="#/">
             <img src="assets/prepspace_icon.png?v=2.4.4" alt="PrepSpace Logo" class="brand-logo-img" style="width: 36px; height: 36px; object-fit: contain;">
             <div class="d-flex flex-column text-start">
@@ -82,9 +82,14 @@ const components = {
               <span class="text-secondary" style="font-size: 0.65rem; letter-spacing: 0.8px; margin-top: 2px; font-family: 'Geist Mono', monospace;">(stream-in)</span>
             </div>
           </a>
-          <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-            <span class="navbar-toggler-icon"></span>
-          </button>
+          <div class="d-flex align-items-center gap-2 d-lg-none">
+            <button class="btn btn-glass px-2.5 py-1.5 fs-7 d-inline-flex align-items-center gap-1.5 text-warning border-warning-subtle" onclick="window.UI.openDrawer('platform-drawer')" aria-label="Open Quick Navigation Drawer">
+              <i class="fa-solid fa-sliders"></i>
+            </button>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          </div>
           <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center gap-1">
               <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="#showcase">Platform</a></li>
@@ -93,6 +98,9 @@ const components = {
               <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="#pricing">Pricing</a></li>
               <li class="nav-item"><a class="nav-link px-3 fs-7 text-secondary hover-white" href="/about">About</a></li>
               <li class="nav-item ms-lg-3 d-flex align-items-center gap-2">
+                <button class="btn btn-glass px-2.5 py-1.5 fs-7 d-none d-lg-inline-flex align-items-center gap-1.5 text-warning border-warning-subtle" onclick="window.UI.openDrawer('platform-drawer')" aria-label="Open Quick Navigation Drawer" title="Open Quick Navigation Drawer">
+                  <i class="fa-solid fa-sliders"></i> <span class="d-none d-xl-inline">Quick View</span>
+                </button>
                 <a class="btn btn-glass px-3 py-1 fs-7 text-success border-success-subtle d-inline-flex align-items-center gap-1" href="https://stream-in.app/downloads/PrepSpace.apk" download="PrepSpace.apk" title="Direct Android APK Download">
                   <i class="fa-brands fa-android text-success"></i> <span class="d-none d-sm-inline">App</span>
                 </a>
@@ -106,52 +114,76 @@ const components = {
         </div>
       </nav>
 
-      <!-- Hero Banner Section -->
-      <header class="landing-hero-section pb-5">
-        <div class="container text-center pt-5 pb-4">
-        <div class="row justify-content-center">
-          <div class="col-lg-10 col-xl-9">
-            <a href="#features" class="announcement-pill mb-4">
-              <span class="badge bg-primary px-2 py-1 rounded-pill fw-bold">NEW</span>
-              <span>50-MCQ Timed Exam Engine & AI ATS Audit is Live</span>
-              <i class="fa-solid fa-arrow-right fs-8"></i>
+      <!-- Master Hero Section -->
+      <header class="ui-hero">
+        <div class="ui-hero-bg" aria-hidden="true">
+          <div class="ui-hero-glow"></div>
+          <div class="ui-hero-grid"></div>
+        </div>
+
+        <div class="container-xl ui-hero-content">
+          <a href="#features" class="ui-hero-pill">
+            <span class="ui-hero-pill-badge">NEW</span>
+            <span class="ui-hero-pill-text">50-MCQ Timed Exam Engine & AI ATS Audit is Live</span>
+            <i class="fa-solid fa-arrow-right ui-hero-pill-arrow"></i>
+          </a>
+
+          <h1 class="ui-hero-title">
+            The Career Engine for <br class="d-none d-md-block"/>
+            <span class="ui-text-gradient">Elite Tech Placements</span>
+          </h1>
+
+          <p class="ui-hero-desc">
+            Master Data Structures & Algorithms, test your knowledge with 50-MCQ timed technical screens, audit your resume against AI ATS systems, and manage your entire placement pipeline in one unified platform.
+          </p>
+
+          <div class="ui-hero-actions">
+            <a href="#/register" class="ui-btn-primary">
+              <i class="fa-solid fa-rocket"></i>
+              <span>Initialize Space Free</span>
             </a>
+            <a href="#showcase" class="ui-btn-secondary">
+              <i class="fa-solid fa-layer-group text-warning"></i>
+              <span>Explore Live Platform</span>
+            </a>
+          </div>
 
-            <h1 class="display-3 fw-extrabold text-white mb-4 tracking-tight">
-              The Career Engine for <br class="d-none d-md-block"/>
-              <span class="gradient-text-stripe">Elite Tech Placements</span>
-            </h1>
-
-            <p class="lead text-secondary mb-5 fs-5 mx-auto" style="max-width: 780px;">
-              Master Data Structures & Algorithms, test your knowledge with 50-MCQ timed technical screens, audit your resume against AI ATS systems, and manage your entire placement pipeline in one unified platform.
+          <!-- Master Marquee: Social Proof Strip with Seamless Loop -->
+          <div class="pt-4 border-top border-secondary border-opacity-10 mt-2">
+            <p class="text-muted small text-uppercase tracking-wider mb-3 fs-8 font-monospace">
+              Preparing Candidates for Engineering Roles at
             </p>
-
-            <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap mb-5">
-              <a href="#/register" class="btn btn-premium btn-lg px-5 py-3 fs-5 fw-bold shadow-lg">
-                <i class="fa-solid fa-rocket me-2"></i>Initialize Space Free
-              </a>
-              <a href="#showcase" class="btn btn-glass btn-lg px-4 py-3 fs-5 text-white">
-                <i class="fa-solid fa-layer-group me-2 text-cyan"></i>Explore Live Platform
-              </a>
-            </div>
-
-            <!-- Social Proof Strip -->
-            <div class="pt-4 border-top border-secondary border-opacity-10">
-              <p class="text-muted small text-uppercase tracking-wider mb-3 fs-8">Preparing Candidates for Engineering Roles at</p>
-              <div class="company-logo-strip">
-                <span class="company-badge"><i class="fa-brands fa-google text-danger"></i> Google</span>
-                <span class="company-badge"><i class="fa-brands fa-microsoft text-primary"></i> Microsoft</span>
-                <span class="company-badge"><i class="fa-brands fa-amazon text-warning"></i> Amazon</span>
-                <span class="company-badge"><i class="fa-brands fa-meta text-info"></i> Meta</span>
-                <span class="company-badge"><i class="fa-brands fa-uber text-white"></i> Uber</span>
-                <span class="company-badge"><i class="fa-brands fa-stripe text-indigo"></i> Stripe</span>
-                <span class="company-badge"><i class="fa-brands fa-atlassian text-primary"></i> Atlassian</span>
+            <div class="ui-marquee" aria-label="Top Tech Employers Placement Marquee">
+              <div class="ui-marquee-track">
+                <!-- Group 1 -->
+                <div class="ui-marquee-group">
+                  <span class="ui-marquee-item"><i class="fa-brands fa-google text-danger"></i> Google</span>
+                  <span class="ui-marquee-item"><i class="fa-brands fa-microsoft text-primary"></i> Microsoft</span>
+                  <span class="ui-marquee-item"><i class="fa-brands fa-amazon text-warning"></i> Amazon</span>
+                  <span class="ui-marquee-item"><i class="fa-brands fa-meta text-info"></i> Meta</span>
+                  <span class="ui-marquee-item"><i class="fa-brands fa-uber text-white"></i> Uber</span>
+                  <span class="ui-marquee-item"><i class="fa-brands fa-stripe text-indigo"></i> Stripe</span>
+                  <span class="ui-marquee-item"><i class="fa-brands fa-atlassian text-primary"></i> Atlassian</span>
+                  <span class="ui-marquee-item"><i class="fa-brands fa-apple text-white"></i> Apple</span>
+                  <span class="ui-marquee-item"><i class="fa-solid fa-n text-danger"></i> Netflix</span>
+                </div>
+                <!-- Group 2 (Duplicated for Seamless Infinite Loop) -->
+                <div class="ui-marquee-group" aria-hidden="true">
+                  <span class="ui-marquee-item"><i class="fa-brands fa-google text-danger"></i> Google</span>
+                  <span class="ui-marquee-item"><i class="fa-brands fa-microsoft text-primary"></i> Microsoft</span>
+                  <span class="ui-marquee-item"><i class="fa-brands fa-amazon text-warning"></i> Amazon</span>
+                  <span class="ui-marquee-item"><i class="fa-brands fa-meta text-info"></i> Meta</span>
+                  <span class="ui-marquee-item"><i class="fa-brands fa-uber text-white"></i> Uber</span>
+                  <span class="ui-marquee-item"><i class="fa-brands fa-stripe text-indigo"></i> Stripe</span>
+                  <span class="ui-marquee-item"><i class="fa-brands fa-atlassian text-primary"></i> Atlassian</span>
+                  <span class="ui-marquee-item"><i class="fa-brands fa-apple text-white"></i> Apple</span>
+                  <span class="ui-marquee-item"><i class="fa-solid fa-n text-danger"></i> Netflix</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
 
     <main>
       <!-- 3D Interactive Floating Dashboard Showcase (Stripe-Style) -->
@@ -440,26 +472,92 @@ const components = {
         </div>
       </section>
 
-      <!-- FAQ Section -->
-      <section class="container py-5">
-        <div class="text-center mb-5">
+      <!-- Master Accordion: Frequently Asked Questions -->
+      <section class="ui-section">
+        <div class="container-md text-center mb-5">
+          <span class="badge bg-warning bg-opacity-15 text-warning border border-warning-subtle px-3 py-1 rounded-pill mb-2 font-monospace fs-8">KNOWLEDGE BASE</span>
           <h2 class="display-6 fw-bold text-white mb-2">Frequently Asked Questions</h2>
-          <p class="text-muted">Have questions? We have answers.</p>
+          <p class="text-muted fs-6">Everything you need to know about PrepSpace features, exams, and platform lifetime access.</p>
         </div>
-        <div class="row justify-content-center">
-          <div class="col-lg-8">
-            <div class="accordion d-flex flex-column gap-3" id="landingFaq">
-              <div class="glass-panel p-3">
-                <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-circle-question text-primary me-2"></i>How do the 50-MCQ Mock Exams work?</h6>
-                <p class="text-muted fs-7 mb-0 mt-2">PrepSpace generates a balanced 50-question examination covering Data Structures, Algorithms, Core Java, OOP, and Database concepts. The system auto-grades your submission instantly, calculates exact percentile marks, and records your evaluation score.</p>
+        <div class="container-md">
+          <div class="ui-accordion" id="landingFaq" role="region" aria-label="Frequently Asked Questions">
+            <!-- Item 1 (Active by default) -->
+            <div class="ui-accordion-item active" id="faq-item-1">
+              <h3 class="ui-accordion-header">
+                <button class="ui-accordion-button" type="button" aria-expanded="true" aria-controls="faq-body-1" id="faq-btn-1" onclick="window.UI.toggleAccordion(this)">
+                  <span class="d-flex align-items-center gap-2.5">
+                    <i class="fa-solid fa-circle-question text-warning fs-6"></i>
+                    <span>How do the 50-MCQ Mock Exams work?</span>
+                  </span>
+                  <span class="ui-accordion-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </button>
+              </h3>
+              <div id="faq-body-1" class="ui-accordion-collapse" role="region" aria-labelledby="faq-btn-1">
+                <div class="ui-accordion-body">
+                  <div class="ui-accordion-content">
+                    PrepSpace generates a balanced 50-question examination covering Data Structures, Algorithms, Core Java, OOP, and Database concepts. The system auto-grades your submission instantly, calculates exact percentile marks, and records your evaluation score in your permanent profile dashboard.
+                  </div>
+                </div>
               </div>
-              <div class="glass-panel p-3">
-                <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-circle-question text-primary me-2"></i>Is the ₹399 PrepPro payment a recurring subscription?</h6>
-                <p class="text-muted fs-7 mb-0 mt-2">No. PrepPro is a single one-time payment of ₹399 with lifetime access. You will never be billed again.</p>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="ui-accordion-item" id="faq-item-2">
+              <h3 class="ui-accordion-header">
+                <button class="ui-accordion-button" type="button" aria-expanded="false" aria-controls="faq-body-2" id="faq-btn-2" onclick="window.UI.toggleAccordion(this)">
+                  <span class="d-flex align-items-center gap-2.5">
+                    <i class="fa-solid fa-circle-question text-warning fs-6"></i>
+                    <span>Is the ₹399 PrepPro payment a recurring subscription?</span>
+                  </span>
+                  <span class="ui-accordion-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </button>
+              </h3>
+              <div id="faq-body-2" class="ui-accordion-collapse" role="region" aria-labelledby="faq-btn-2">
+                <div class="ui-accordion-body">
+                  <div class="ui-accordion-content">
+                    No. PrepPro is a single one-time payment of ₹399 with lifetime access. You get unlimited 50-MCQ timed exams, AI ATS resume audits, verified certificates, and all future updates without ever being billed again.
+                  </div>
+                </div>
               </div>
-              <div class="glass-panel p-3">
-                <h6 class="text-white fw-bold mb-1"><i class="fa-solid fa-circle-question text-primary me-2"></i>Can I use PrepSpace offline or on desktop?</h6>
-                <p class="text-muted fs-7 mb-0 mt-2">Yes. We provide a complete Java Swing desktop client that connects directly to the tracker database for lightning-fast, offline placement management.</p>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="ui-accordion-item" id="faq-item-3">
+              <h3 class="ui-accordion-header">
+                <button class="ui-accordion-button" type="button" aria-expanded="false" aria-controls="faq-body-3" id="faq-btn-3" onclick="window.UI.toggleAccordion(this)">
+                  <span class="d-flex align-items-center gap-2.5">
+                    <i class="fa-solid fa-circle-question text-warning fs-6"></i>
+                    <span>Can I use PrepSpace offline or on desktop?</span>
+                  </span>
+                  <span class="ui-accordion-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </button>
+              </h3>
+              <div id="faq-body-3" class="ui-accordion-collapse" role="region" aria-labelledby="faq-btn-3">
+                <div class="ui-accordion-body">
+                  <div class="ui-accordion-content">
+                    Yes. We provide a complete Java Swing desktop client that connects directly to the tracker database for lightning-fast, offline placement management and offline coding practice with automated cloud synchronization.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="ui-accordion-item" id="faq-item-4">
+              <h3 class="ui-accordion-header">
+                <button class="ui-accordion-button" type="button" aria-expanded="false" aria-controls="faq-body-4" id="faq-btn-4" onclick="window.UI.toggleAccordion(this)">
+                  <span class="d-flex align-items-center gap-2.5">
+                    <i class="fa-solid fa-circle-question text-warning fs-6"></i>
+                    <span>How does the AI Resume & ATS Audit score my profile?</span>
+                  </span>
+                  <span class="ui-accordion-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </button>
+              </h3>
+              <div id="faq-body-4" class="ui-accordion-collapse" role="region" aria-labelledby="faq-btn-4">
+                <div class="ui-accordion-body">
+                  <div class="ui-accordion-content">
+                    Our AI ATS engine analyzes your resume keywords against live software engineering job descriptions from Tier-1 tech employers. It flags missing skills, quantifies impact metrics using the Google XYZ formula, and gives you actionable recommendations to pass automated ATS filters.
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -595,6 +693,72 @@ const components = {
         </div>
       </div>
     </footer>
+
+    <!-- Master Responsive Drawer: Platform Overview -->
+    <div id="platform-drawer" class="ui-drawer" role="dialog" aria-modal="true" aria-labelledby="platform-drawer-title">
+      <div class="ui-drawer-backdrop" onclick="window.UI.closeDrawer('platform-drawer')"></div>
+      <div class="ui-drawer-panel">
+        <div class="ui-drawer-header">
+          <h3 class="ui-drawer-title" id="platform-drawer-title">
+            <i class="fa-solid fa-layer-group text-warning"></i>
+            <span>Platform Quick View</span>
+          </h3>
+          <button class="ui-drawer-close" onclick="window.UI.closeDrawer('platform-drawer')" aria-label="Close drawer">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="ui-drawer-body">
+          <div class="d-flex flex-column gap-3">
+            <div class="p-3 rounded-3" style="background: #222226; border: 1px solid #323238;">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="text-white fw-bold fs-7">System Status</span>
+                <span class="badge bg-success bg-opacity-20 text-success border border-success-subtle font-monospace">ONLINE</span>
+              </div>
+              <p class="text-muted fs-8 mb-0">All 19 interview domains, 50-MCQ Exam Engine, and AI ATS Audit are operational.</p>
+            </div>
+
+            <div class="d-flex flex-column gap-1.5">
+              <span class="text-muted fs-8 text-uppercase tracking-wider font-monospace px-1">Navigation</span>
+              <a href="#showcase" class="ui-drawer-link p-2.5 rounded-2 d-flex align-items-center gap-2.5 text-decoration-none text-light hover-bg-dark" onclick="window.UI.closeDrawer('platform-drawer')">
+                <i class="fa-solid fa-desktop text-warning"></i>
+                <span>Live Platform Preview</span>
+              </a>
+              <a href="#features" class="ui-drawer-link p-2.5 rounded-2 d-flex align-items-center gap-2.5 text-decoration-none text-light hover-bg-dark" onclick="window.UI.closeDrawer('platform-drawer')">
+                <i class="fa-solid fa-cubes text-warning"></i>
+                <span>Core Capabilities</span>
+              </a>
+              <a href="#calculator" class="ui-drawer-link p-2.5 rounded-2 d-flex align-items-center gap-2.5 text-decoration-none text-light hover-bg-dark" onclick="window.UI.closeDrawer('platform-drawer')">
+                <i class="fa-solid fa-calculator text-warning"></i>
+                <span>Readiness Simulator</span>
+              </a>
+              <a href="#pricing" class="ui-drawer-link p-2.5 rounded-2 d-flex align-items-center gap-2.5 text-decoration-none text-light hover-bg-dark" onclick="window.UI.closeDrawer('platform-drawer')">
+                <i class="fa-solid fa-tags text-warning"></i>
+                <span>Transparent Pricing</span>
+              </a>
+              <a href="#landingFaq" class="ui-drawer-link p-2.5 rounded-2 d-flex align-items-center gap-2.5 text-decoration-none text-light hover-bg-dark" onclick="window.UI.closeDrawer('platform-drawer')">
+                <i class="fa-solid fa-circle-question text-warning"></i>
+                <span>FAQ & Knowledge Base</span>
+              </a>
+            </div>
+
+            <div class="p-3 rounded-3 mt-2" style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25);">
+              <div class="d-flex align-items-center gap-2 text-warning fw-bold fs-7 mb-1">
+                <i class="fa-solid fa-gem"></i>
+                <span>PrepPro Lifetime Access</span>
+              </div>
+              <p class="text-muted fs-8 mb-2">₹399 one-time payment. Unlimited exams, AI ATS audit, and verified certificates.</p>
+              <a href="#/register" class="btn btn-warning btn-sm w-100 fw-bold text-dark" onclick="window.UI.closeDrawer('platform-drawer')">Claim PrepPro →</a>
+            </div>
+          </div>
+        </div>
+        <div class="ui-drawer-footer">
+          <a href="#/register" class="ui-btn-primary w-100" onclick="window.UI.closeDrawer('platform-drawer')">
+            <i class="fa-solid fa-rocket"></i>
+            <span>Get Started Free</span>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
   `,
 
