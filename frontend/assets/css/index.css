@@ -5294,3 +5294,17 @@ body.ui-drawer-open {
   outline: 2px solid var(--accent-amber);
   outline-offset: 2px;
 }
+
+/* ==========================================================================
+   WORKSPACE HEADER DROPDOWN STYLES
+   ========================================================================== */
+.workspace-top-header .dropdown-menu {
+  min-width: 220px !important;
+  width: max-content !important;
+  max-width: min(90vw, 360px) !important;
+  background: #1c1c20 !important;
+  border: 1px solid #323238 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+  border-radius: var(--radius-md) !important;
+  z-index: 1050 !important;
+}

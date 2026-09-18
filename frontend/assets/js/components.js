@@ -1019,34 +1019,6 @@ const components = {
           </div>
           
           <div class="d-flex align-items-center gap-2 flex-shrink-0">
-            <!-- Smart AI Notification Bell -->
-            <div class="dropdown">
-              <button class="btn btn-glass position-relative py-1 px-2.5" type="button" id="notifBellDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Smart AI Notifications">
-                <i class="fa-solid fa-bell text-secondary"></i>
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger font-monospace" style="font-size: 0.65rem;" id="notif-badge-count">1</span>
-              </button>
-              <ul class="dropdown-menu dropdown-menu-end glass-panel shadow-lg p-2" style="width: 320px; max-width: 90vw;" aria-labelledby="notifBellDropdown">
-                <li class="d-flex justify-content-between align-items-center px-2 py-1 border-bottom border-secondary border-opacity-25 mb-2">
-                  <span class="fs-8 fw-bold text-white font-monospace"><i class="fa-solid fa-bolt text-warning me-1"></i> Smart Behavioral Nudges</span>
-                  <span class="badge bg-primary bg-opacity-25 text-info fs-9" id="notif-unread-count">1 Unread</span>
-                </li>
-                <li class="mb-1.5">
-                  <a class="dropdown-item rounded p-2 text-wrap bg-dark bg-opacity-60 border border-secondary border-opacity-20" href="#/dashboard">
-                    <div class="d-flex align-items-start gap-2">
-                      <i class="fa-solid fa-fire text-danger mt-1 fs-8"></i>
-                      <div>
-                        <div class="text-white fs-8 fw-bold">Daily Streak At Risk</div>
-                        <div class="text-secondary fs-9">Your 7-day streak expires at midnight. Complete 1 daily quest to lock it.</div>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li class="pt-1 text-center border-top border-secondary border-opacity-25">
-                  <small class="text-muted fs-9 font-monospace">Automated behavioral telemetry active</small>
-                </li>
-              </ul>
-            </div>
-
             <!-- User Dropdown -->
             <div class="dropdown">
               <button class="btn btn-glass dropdown-toggle d-flex align-items-center gap-2 py-1 px-2" type="button" id="userDropdown" data-bs-toggle="dropdown">
