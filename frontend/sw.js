@@ -1,21 +1,21 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
-// Version: 5.7.0 (Master UI Styling System: Hero, Marquee, Accordion, Drawer, Containers)
+// Version: 5.7.2 (Remove notification bell, hardened workspace dropdown layout)
 
-const CACHE_NAME = 'prepspace-static-v5.7.0';
-const RUNTIME_CACHE = 'prepspace-runtime-v5.7.0';
+const CACHE_NAME = 'prepspace-static-v5.7.2';
+const RUNTIME_CACHE = 'prepspace-runtime-v5.7.2';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/index.css?v=5.7.0',
-  './assets/js/app.js?v=5.7.0',
-  './assets/js/components.js?v=5.7.0',
-  './assets/js/interview-suite.js?v=5.7.0',
-  './assets/js/technical-library-data.js?v=5.7.0',
-  './assets/js/questions-data.js?v=5.7.0',
-  './assets/js/aptitude-curriculum.js?v=5.7.0',
-  './assets/js/production-pages.js?v=5.7.0',
+  './assets/css/index.css?v=5.7.2',
+  './assets/js/app.js?v=5.7.2',
+  './assets/js/components.js?v=5.7.2',
+  './assets/js/interview-suite.js?v=5.7.2',
+  './assets/js/technical-library-data.js?v=5.7.2',
+  './assets/js/questions-data.js?v=5.7.2',
+  './assets/js/aptitude-curriculum.js?v=5.7.2',
+  './assets/js/production-pages.js?v=5.7.2',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',
