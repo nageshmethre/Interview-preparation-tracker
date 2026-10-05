@@ -2817,8 +2817,15 @@ const components = {
       <div class="lc-workspace-root d-flex flex-column h-100" id="agy-coding-workspace">
         <!-- 1. LeetCode Modern Top Navigation Bar -->
         <header class="lc-top-bar d-flex align-items-center justify-content-between px-3 py-2 flex-shrink-0">
-          <!-- Left: Problem List Dropdown & Fast Navigation -->
+          <!-- Left: Back Navigation, Sidebar Toggle, Problem List Dropdown & Fast Navigation -->
           <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-sm lc-icon-btn d-lg-none" id="lc-sidebar-toggle-btn" title="Toggle Sidebar Navigation">
+              <i class="fa-solid fa-bars"></i>
+            </button>
+            <a href="#/dsa-roadmap" class="btn btn-sm lc-btn-nav d-flex align-items-center gap-1 text-decoration-none" title="Return to DSA Roadmap">
+              <i class="fa-solid fa-chevron-left fs-9 text-muted"></i>
+              <span class="d-none d-md-inline fs-9 text-muted">Roadmap</span>
+            </a>
             <div class="dropdown">
               <button class="btn btn-sm lc-btn-nav d-flex align-items-center gap-2" type="button" id="lcProblemListBtn" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa-solid fa-list-ul text-warning"></i>
@@ -2882,14 +2889,15 @@ const components = {
             <button class="btn btn-sm lc-icon-btn text-warning" id="btn-practice-ai" title="AI Code Assistant & Hints"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
           </div>
 
-          <!-- Right: Status, Settings & Timer -->
+          <!-- Right: Status, Settings, Timer & Profile -->
           <div class="d-flex align-items-center gap-2.5">
             <div class="d-none d-sm-flex align-items-center gap-1 text-muted fs-8 font-monospace" id="lc-timer-display" title="Session Timer">
               <i class="fa-regular fa-clock text-secondary"></i>
               <span id="lc-stopwatch">00:00</span>
             </div>
             <button class="btn btn-sm lc-icon-btn text-secondary" id="btn-editor-settings" title="Editor Preferences"><i class="fa-solid fa-gear"></i></button>
-            <span class="badge bg-primary bg-opacity-20 text-primary border border-primary border-opacity-30 font-monospace py-1 px-2">PRO</span>
+            <span class="badge bg-primary bg-opacity-20 text-primary border border-primary border-opacity-30 font-monospace py-1 px-2 d-none d-sm-inline-block">PRO</span>
+            <a href="#/profile" class="btn btn-sm lc-icon-btn text-secondary" title="Profile Settings"><i class="fa-solid fa-circle-user fs-6"></i></a>
           </div>
         </header>
 

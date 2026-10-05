@@ -5312,10 +5312,46 @@ body.ui-drawer-open {
 /* ==========================================================================
    LEETCODE MODERN SPLIT-PANE CODING WORKSPACE STYLES
    ========================================================================== */
+.main-content.coding-workspace-active {
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  overflow: hidden !important;
+}
+
+.main-content.coding-workspace-active .workspace-top-header {
+  display: none !important;
+}
+
+.main-content.coding-workspace-active #page-mount {
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  overflow: hidden !important;
+  flex: 1 1 100% !important;
+}
+
+.main-content.coding-workspace-active .lc-workspace-root {
+  height: 100vh !important;
+  min-height: 100vh !important;
+  max-height: 100vh !important;
+  width: 100% !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+
+.main-content.coding-workspace-active .lc-main-split {
+  height: calc(100vh - 48px) !important;
+  min-height: calc(100vh - 48px) !important;
+  max-height: calc(100vh - 48px) !important;
+}
+
 .lc-workspace-root {
   background-color: #1a1a1c;
   color: #eff1f6;
-  min-height: calc(100vh - 64px);
+  min-height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   overflow: hidden;
 }

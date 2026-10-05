@@ -494,13 +494,21 @@ function router() {
   updateSidebarSelection(hash);
   updateSidebarPlanBadge(state.isPaid);
 
-  // Manage reader-active state on #app-container to remove layout-on-layout
+  // Manage reader-active and coding-workspace-active states to remove layout-on-layout
   const appContainer = document.getElementById('app-container');
+  const mainContentEl = document.querySelector('.main-content');
   if (appContainer) {
     if (hash.startsWith('#/library/read')) {
       appContainer.classList.add('reader-active');
     } else {
       appContainer.classList.remove('reader-active');
+    }
+  }
+  if (mainContentEl) {
+    if (hash === '#/coding-practice' || hash.startsWith('#/coding-practice')) {
+      mainContentEl.classList.add('coding-workspace-active');
+    } else {
+      mainContentEl.classList.remove('coding-workspace-active');
     }
   }
 
@@ -4628,6 +4636,14 @@ function bindCodingPracticeEvents(rawQuestions = []) {
   document.addEventListener('keydown', keyNavHandler);
 
   // 7. Layout Toggles & Editor Controls
+  const btnSidebarToggle = document.getElementById('lc-sidebar-toggle-btn');
+  if (btnSidebarToggle) {
+    btnSidebarToggle.addEventListener('click', () => {
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar) sidebar.classList.toggle('active');
+    });
+  }
+
   const btnToggleLayout = document.getElementById('btn-toggle-layout');
   if (btnToggleLayout) {
     btnToggleLayout.addEventListener('click', () => {
