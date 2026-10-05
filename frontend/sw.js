@@ -1,21 +1,21 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
-// Version: 5.7.2 (Remove notification bell, hardened workspace dropdown layout)
+// Version: 5.7.3 (Modern LeetCode Split-Pane Workspace & Interactive Terminal)
 
-const CACHE_NAME = 'prepspace-static-v5.7.2';
-const RUNTIME_CACHE = 'prepspace-runtime-v5.7.2';
+const CACHE_NAME = 'prepspace-static-v5.7.3';
+const RUNTIME_CACHE = 'prepspace-runtime-v5.7.3';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/index.css?v=5.7.2',
-  './assets/js/app.js?v=5.7.2',
-  './assets/js/components.js?v=5.7.2',
-  './assets/js/interview-suite.js?v=5.7.2',
-  './assets/js/technical-library-data.js?v=5.7.2',
-  './assets/js/questions-data.js?v=5.7.2',
-  './assets/js/aptitude-curriculum.js?v=5.7.2',
-  './assets/js/production-pages.js?v=5.7.2',
+  './assets/css/index.css?v=5.7.3',
+  './assets/js/app.js?v=5.7.3',
+  './assets/js/components.js?v=5.7.3',
+  './assets/js/interview-suite.js?v=5.7.3',
+  './assets/js/technical-library-data.js?v=5.7.3',
+  './assets/js/questions-data.js?v=5.7.3',
+  './assets/js/aptitude-curriculum.js?v=5.7.3',
+  './assets/js/production-pages.js?v=5.7.3',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',

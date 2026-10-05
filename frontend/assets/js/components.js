@@ -2765,7 +2765,7 @@ const components = {
     </div>
   `,
 
-  // 4. Professional VS Code-Style Multi-Language Coding Workspace
+  // 4. Modern LeetCode Split-Pane Coding Workspace
   codingPractice: (questions) => {
     let list = (questions && Array.isArray(questions) && questions.length > 0)
       ? questions
@@ -2780,16 +2780,17 @@ const components = {
           title: "Two Sum",
           category: "Arrays",
           topic: "Arrays",
-          companies: "Google, Amazon, Meta, Microsoft",
+          companies: "Google, Amazon, Meta, Microsoft, Apple",
           difficulty: "EASY",
           desc: "Given an array of integers <code>nums</code> and an integer <code>target</code>, return indices of the two numbers such that they add up to <code>target</code>.<br><br>You may assume that each input would have <strong>exactly one solution</strong>, and you may not use the same element twice. You can return the answer in any order.",
           examples: [
             { input: "nums = [2,7,11,15], target = 9", output: "[0,1]", explanation: "Because nums[0] + nums[1] == 9, we return [0, 1]." },
-            { input: "nums = [3,2,4], target = 6", output: "[1,2]", explanation: "Because nums[1] + nums[2] == 6, we return [1, 2]." }
+            { input: "nums = [3,2,4], target = 6", output: "[1,2]", explanation: "Because nums[1] + nums[2] == 6, we return [1, 2]." },
+            { input: "nums = [3,3], target = 6", output: "[0,1]", explanation: "Because nums[0] + nums[3] == 6, we return [0, 1]." }
           ],
           constraints: "• 2 <= nums.length <= 10^4\n• -10^9 <= nums[i] <= 10^9\n• -10^9 <= target <= 10^9\n• Only one valid answer exists.",
           hints: "1. A brute force search takes O(N^2) time by comparing every pair.\n2. Can we use extra space? A Hash Table can store each number's value and index.\n3. For each element x, look up (target - x) in O(1) average time.",
-          solution: "public int[] twoSum(int[] nums, int target) {\n    Map<Integer, Integer> map = new HashMap<>();\n    for (int i = 0; i < nums.length; i++) {\n        int complement = target - nums[i];\n        if (map.containsKey(complement)) {\n            return new int[] { map.get(complement), i };\n        }\n        map.put(nums[i], i);\n    }\n    return new int[0];\n}"
+          solution: "class Solution {\n    public int[] twoSum(int[] nums, int target) {\n        Map<Integer, Integer> map = new HashMap<>();\n        for (int i = 0; i < nums.length; i++) {\n            int complement = target - nums[i];\n            if (map.containsKey(complement)) {\n                return new int[] { map.get(complement), i };\n            }\n            map.put(nums[i], i);\n        }\n        return new int[0];\n    }\n}"
         }
       ];
     }
@@ -2797,129 +2798,233 @@ const components = {
     const rawHash = (typeof window !== 'undefined' && window.location && window.location.hash) ? window.location.hash : '';
     const urlQId = rawHash.includes('?q=') ? new URLSearchParams(rawHash.split('?')[1]).get('q') : null;
     const activeQ = (urlQId && list.find(q => String(q.id) === String(urlQId))) || list[0];
-    const uniqueTopics = Array.from(new Set(list.map(q => q.category || q.topic || 'General'))).filter(Boolean).sort();
+    const activeIdx = list.findIndex(q => String(q.id) === String(activeQ.id));
+    const prevQ = activeIdx > 0 ? list[activeIdx - 1] : list[list.length - 1];
+    const nextQ = activeIdx < list.length - 1 ? list[activeIdx + 1] : list[0];
+
+    const diff = (activeQ.difficulty || 'MEDIUM').toUpperCase();
+    const diffBadgeClass = diff === 'EASY' ? 'lc-diff-easy' : diff === 'HARD' ? 'lc-diff-hard' : 'lc-diff-medium';
+
+    let examplesArr = [];
+    if (activeQ.examples) {
+      examplesArr = Array.isArray(activeQ.examples) ? activeQ.examples : (typeof activeQ.examples === 'string' ? (JSON.parse(activeQ.examples || '[]')) : []);
+    }
+    if (!examplesArr || examplesArr.length === 0) {
+      examplesArr = [{ input: "nums = [2,7,11,15], target = 9", output: "[0,1]", explanation: "Because nums[0] + nums[1] == 9, we return [0, 1]." }];
+    }
 
     return `
-      <div class="agy-ide-container vscode-workspace-container position-relative" id="agy-coding-workspace">
-        <!-- Mobile 3-Pane Segmented Switcher & Question Navigator -->
-        <div class="d-flex d-lg-none align-items-center bg-dark bg-opacity-75 border-bottom border-secondary border-opacity-25 flex-shrink-0" id="mobile-vscode-pane-switcher" style="min-height: 44px; z-index: 20;">
-          <button type="button" class="btn btn-sm text-secondary px-2.5 py-2 border-end border-secondary border-opacity-20 flex-shrink-0" id="btn-mobile-prev-problem" title="Previous Question" style="border-radius: 0; min-width: 40px; height: 44px;">
-            <i class="fa-solid fa-chevron-left"></i>
-          </button>
-          <div class="d-flex flex-grow-1 min-w-0" role="tablist">
-            <button type="button" class="btn btn-sm flex-fill py-2 px-1 text-muted font-monospace d-flex align-items-center justify-content-center gap-1.5 border-0 rounded-0" id="btn-mobile-show-explorer" style="font-size: 0.76rem; min-height: 44px;">
-              <i class="fa-solid fa-list-ol text-primary"></i> <span class="text-nowrap">Bank</span>
-            </button>
-            <button type="button" class="btn btn-sm flex-fill py-2 px-1 active text-white font-monospace d-flex align-items-center justify-content-center gap-1.5 border-0 rounded-0" id="btn-mobile-show-desc" style="font-size: 0.76rem; min-height: 44px; border-bottom: 2px solid #3b82f6 !important; background: rgba(59, 130, 246, 0.12);">
-              <i class="fa-solid fa-book-open text-info"></i> <span class="text-nowrap">Details</span>
-            </button>
-            <button type="button" class="btn btn-sm flex-fill py-2 px-1 text-muted font-monospace d-flex align-items-center justify-content-center gap-1.5 border-0 rounded-0" id="btn-mobile-show-editor" style="font-size: 0.76rem; min-height: 44px;">
-              <i class="fa-solid fa-code text-success"></i> <span class="text-nowrap">IDE & Run</span>
-            </button>
-          </div>
-          <button type="button" class="btn btn-sm text-secondary px-2.5 py-2 border-start border-secondary border-opacity-20 flex-shrink-0" id="btn-mobile-next-problem" title="Next Question" style="border-radius: 0; min-width: 40px; height: 44px;">
-            <i class="fa-solid fa-chevron-right"></i>
-          </button>
-        </div>
+      <div class="lc-workspace-root d-flex flex-column h-100" id="agy-coding-workspace">
+        <!-- 1. LeetCode Modern Top Navigation Bar -->
+        <header class="lc-top-bar d-flex align-items-center justify-content-between px-3 py-2 flex-shrink-0">
+          <!-- Left: Problem List Dropdown & Fast Navigation -->
+          <div class="d-flex align-items-center gap-2">
+            <div class="dropdown">
+              <button class="btn btn-sm lc-btn-nav d-flex align-items-center gap-2" type="button" id="lcProblemListBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-list-ul text-warning"></i>
+                <span class="fw-semibold text-white">Problem List</span>
+                <i class="fa-solid fa-chevron-down fs-9 text-muted ms-1"></i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-dark lc-dropdown-menu shadow-lg p-2" aria-labelledby="lcProblemListBtn" style="width: 320px; max-height: 480px; overflow-y: auto;">
+                <div class="p-1 mb-2">
+                  <input type="text" id="practice-search-input" class="form-control form-control-sm bg-dark text-white border-secondary border-opacity-40" placeholder="Filter problems by title or tag..." autocomplete="off">
+                </div>
+                <div class="d-flex gap-1 mb-2 px-1" id="difficulty-filter-pills">
+                  <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 active-diff-filter" data-diff="ALL">All</button>
+                  <button type="button" class="btn btn-xs btn-outline-success py-0.5 px-2" data-diff="EASY">Easy</button>
+                  <button type="button" class="btn btn-xs btn-outline-warning py-0.5 px-2" data-diff="MEDIUM">Med</button>
+                  <button type="button" class="btn btn-xs btn-outline-danger py-0.5 px-2" data-diff="HARD">Hard</button>
+                </div>
+                <div id="practice-problems-list" class="lc-problems-scroller">
+                  ${list.map((q, idx) => {
+                    const qDiff = (q.difficulty || 'MEDIUM').toUpperCase();
+                    const qBadgeClass = qDiff === 'EASY' ? 'text-success bg-success' : qDiff === 'HARD' ? 'text-danger bg-danger' : 'text-warning bg-warning';
+                    const isCur = String(q.id || (idx + 1)) === String(activeQ.id || 1);
+                    return `
+                      <div class="lc-problem-row btn-select-question ${isCur ? 'active' : ''}"
+                           data-question-id="${q.id || (idx + 1)}"
+                           data-title="${(q.title || '').replace(/"/g, '&quot;')}"
+                           data-desc="${(q.desc || q.description || q.question || '').replace(/"/g, '&quot;')}"
+                           data-constraints="${(q.constraints || q.constraintsText || '').replace(/"/g, '&quot;')}"
+                           data-hints="${(q.hints || '').replace(/"/g, '&quot;')}"
+                           data-solution="${(q.solution || q.referenceSolution || '').replace(/"/g, '&quot;')}"
+                           data-category="${q.category || q.topic || 'Algorithms'}"
+                           data-companies="${q.companies || q.company || 'Top Tech'}"
+                           data-difficulty="${qDiff}">
+                        <span class="text-truncate me-2 fs-8">${idx + 1}. ${q.title}</span>
+                        <span class="badge ${qBadgeClass} bg-opacity-20 font-monospace fs-9">${qDiff}</span>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            </div>
 
-        <!-- Antigravity 3-Pane Body Grid (Explorer | Reading Pane | Coding IDE) -->
-        <div class="agy-3pane-body" id="agy-main-split">
+            <!-- Problem Forward / Backward Arrows & Shuffle -->
+            <div class="d-flex align-items-center gap-1">
+              <button class="btn btn-sm lc-icon-btn text-light" id="btn-prev-problem" title="Previous Problem"><i class="fa-solid fa-chevron-left"></i></button>
+              <button class="btn btn-sm lc-icon-btn text-light" id="btn-next-problem" title="Next Problem"><i class="fa-solid fa-chevron-right"></i></button>
+              <button class="btn btn-sm lc-icon-btn text-light" id="btn-random-problem" title="Pick Random Problem"><i class="fa-solid fa-shuffle"></i></button>
+            </div>
+          </div>
+
+          <!-- Center: Run & Submit Action Buttons -->
+          <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-sm lc-btn-run d-flex align-items-center gap-1.5 px-3 py-1" id="btn-practice-run" title="Run Sample Testcases">
+              <i class="fa-solid fa-play text-light fs-9"></i>
+              <span class="fw-semibold">Run</span>
+            </button>
+            <button class="btn btn-sm lc-btn-submit d-flex align-items-center gap-1.5 px-3.5 py-1" id="btn-practice-submit" title="Submit Solution to Judge">
+              <i class="fa-solid fa-cloud-arrow-up text-success fs-8"></i>
+              <span class="fw-bold text-success">Submit</span>
+            </button>
+            <button class="btn btn-sm lc-icon-btn text-secondary d-none d-md-inline-block" id="btn-toggle-layout" title="Toggle Split Orientation"><i class="fa-solid fa-table-columns"></i></button>
+            <button class="btn btn-sm lc-icon-btn text-warning" id="btn-practice-ai" title="AI Code Assistant & Hints"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+          </div>
+
+          <!-- Right: Status, Settings & Timer -->
+          <div class="d-flex align-items-center gap-2.5">
+            <div class="d-none d-sm-flex align-items-center gap-1 text-muted fs-8 font-monospace" id="lc-timer-display" title="Session Timer">
+              <i class="fa-regular fa-clock text-secondary"></i>
+              <span id="lc-stopwatch">00:00</span>
+            </div>
+            <button class="btn btn-sm lc-icon-btn text-secondary" id="btn-editor-settings" title="Editor Preferences"><i class="fa-solid fa-gear"></i></button>
+            <span class="badge bg-primary bg-opacity-20 text-primary border border-primary border-opacity-30 font-monospace py-1 px-2">PRO</span>
+          </div>
+        </header>
+
+        <!-- 2. Dual-Pane LeetCode Body (Left: Problem Tabs | Right: Editor + Console) -->
+        <div class="lc-main-split flex-grow-1 d-flex overflow-hidden" id="agy-main-split">
           
-          <!-- PANE 1: Collapsible Problem Explorer Sidebar -->
-          <div class="agy-explorer-pane" id="agy-explorer">
-            <div class="px-3 py-2 border-bottom border-secondary border-opacity-20 flex-shrink-0 d-flex align-items-center justify-content-between">
-              <span class="text-white fw-bold fs-8"><i class="fa-solid fa-list-ol text-primary me-1.5"></i>Problems</span>
-              <span class="badge bg-dark border border-secondary border-opacity-40 text-muted fs-9">${list.length}</span>
-            </div>
+          <!-- LEFT PANE: LeetCode Multi-Tab Problem Explorer -->
+          <div class="lc-pane lc-pane-left d-flex flex-column border-end border-secondary border-opacity-20" id="vscode-left-pane">
+            <!-- Tabs Navigation -->
+            <ul class="nav lc-tabs border-bottom border-secondary border-opacity-20 px-2 pt-1 flex-shrink-0" role="tablist">
+              <li class="nav-item">
+                <button class="nav-link active d-flex align-items-center gap-1.5" id="tab-desc-btn" data-bs-toggle="tab" data-bs-target="#tab-lc-desc" type="button" role="tab">
+                  <i class="fa-regular fa-file-lines text-primary"></i> <span>Description</span>
+                </button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link d-flex align-items-center gap-1.5" id="tab-editorial-btn" data-bs-toggle="tab" data-bs-target="#tab-lc-editorial" type="button" role="tab">
+                  <i class="fa-solid fa-book-open text-warning"></i> <span>Editorial</span>
+                </button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link d-flex align-items-center gap-1.5" id="tab-solutions-btn" data-bs-toggle="tab" data-bs-target="#tab-lc-solutions" type="button" role="tab">
+                  <i class="fa-regular fa-lightbulb text-info"></i> <span>Solutions</span>
+                </button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link d-flex align-items-center gap-1.5" id="tab-submissions-btn" data-bs-toggle="tab" data-bs-target="#tab-lc-submissions" type="button" role="tab">
+                  <i class="fa-regular fa-clock text-secondary"></i> <span>Submissions</span>
+                </button>
+              </li>
+            </ul>
 
-            <!-- Problem List Rail -->
-            <div id="practice-problems-list" class="flex-grow-1 overflow-y-auto" style="scrollbar-width: thin; scrollbar-color: #323238 #18181b;">
-              ${list.map((q, idx) => {
-                const diff = (q.difficulty || 'MEDIUM').toUpperCase();
-                const diffBadge = diff === 'EASY' ? 'success' : diff === 'HARD' ? 'danger' : 'warning';
-                const isActive = String(q.id || (idx + 1)) === String(activeQ.id || 1);
-                return `
-                  <div class="agy-problem-row btn-select-question ${isActive ? 'active' : ''}"
-                       data-question-id="${q.id || (idx + 1)}"
-                       data-title="${(q.title || '').replace(/"/g, '&quot;')}"
-                       data-desc="${(q.desc || q.description || q.question || '').replace(/"/g, '&quot;')}"
-                       data-constraints="${(q.constraints || q.constraintsText || '').replace(/"/g, '&quot;')}"
-                       data-hints="${(q.hints || '').replace(/"/g, '&quot;')}"
-                       data-solution="${(q.solution || q.referenceSolution || '').replace(/"/g, '&quot;')}"
-                       data-category="${q.category || q.topic || 'Algorithms'}"
-                       data-companies="${q.companies || q.company || 'Top Tech'}"
-                       data-difficulty="${diff}">
-                    <div class="text-truncate me-2 fs-8">
-                      <span class="text-muted font-monospace me-1 fs-9">${idx + 1}.</span>
-                      <span class="text-light">${q.title}</span>
-                    </div>
-                    <span class="badge bg-${diffBadge}-subtle text-${diffBadge} fs-9">${diff}</span>
+            <!-- Left Tab Panes Body -->
+            <div class="tab-content flex-grow-1 overflow-y-auto lc-scrollable-content p-4" id="problem-tab-content">
+              
+              <!-- Tab 1: Description -->
+              <div class="tab-pane fade show active" id="tab-lc-desc" role="tabpanel">
+                <!-- Title & Index -->
+                <h2 class="text-white fw-bold fs-4 mb-3" id="active-q-title">${activeIdx + 1}. ${activeQ.title}</h2>
+                
+                <!-- Pills Row: Difficulty, Topics, Companies, Hint -->
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-3.5">
+                  <span class="lc-pill ${diffBadgeClass}" id="active-q-diff-badge">${diff}</span>
+                  <button type="button" class="lc-pill lc-pill-btn" id="btn-toggle-topics"><i class="fa-solid fa-tags me-1 text-muted"></i> <span id="active-q-category">${activeQ.category || activeQ.topic || 'Algorithms'}</span></button>
+                  <button type="button" class="lc-pill lc-pill-btn" id="btn-toggle-companies"><i class="fa-solid fa-building me-1 text-muted"></i> <span id="companies-text">${activeQ.companies || 'Top Tech'}</span></button>
+                  <button type="button" class="lc-pill lc-pill-btn" id="btn-toggle-hint"><i class="fa-regular fa-lightbulb me-1 text-warning"></i> Hint</button>
+                </div>
+
+                <!-- Problem Description Body -->
+                <div class="lc-problem-body text-light-gray fs-7 mb-4" id="active-q-desc" style="line-height: 1.7;">
+                  ${activeQ.desc || activeQ.description || activeQ.question || ''}
+                </div>
+
+                <!-- Examples Section -->
+                <div class="lc-examples mb-4">
+                  <div id="active-q-examples">
+                    ${examplesArr.map((ex, i) => `
+                      <div class="mb-3">
+                        <div class="text-white fw-bold fs-8 font-monospace mb-1.5">Example ${i + 1}:</div>
+                        <div class="lc-code-box p-3 rounded-3">
+                          <div class="text-light-gray font-monospace fs-8"><strong>Input:</strong> ${ex.input}</div>
+                          <div class="text-light-gray font-monospace fs-8 mt-1"><strong>Output:</strong> ${ex.output}</div>
+                          ${ex.explanation ? `<div class="text-muted font-monospace fs-9 mt-1"><strong>Explanation:</strong> ${ex.explanation}</div>` : ''}
+                        </div>
+                      </div>
+                    `).join('')}
                   </div>
-                `;
-              }).join('')}
-            </div>
-          </div>
+                </div>
 
-          <!-- PANE 2: Question Specs & Description Pane -->
-          <div class="agy-reading-pane" id="vscode-left-pane">
-            <div class="p-3 p-md-3 flex-grow-1" id="problem-tab-content" style="padding-bottom: max(36px, env(safe-area-inset-bottom, 28px)) !important;">
-              <!-- Title Row -->
-              <h5 class="fw-bold text-white fs-7 mb-1.5" id="active-q-title">${activeQ.title}</h5>
+                <!-- Constraints Section -->
+                <div class="lc-constraints mb-4">
+                  <div class="text-white fw-bold fs-8 font-monospace mb-2">Constraints:</div>
+                  <div class="lc-constraints-body font-monospace fs-8 text-secondary p-2.5 rounded-3 bg-dark bg-opacity-40 border border-secondary border-opacity-20" id="active-q-constraints" style="white-space: pre-wrap;">${activeQ.constraints || activeQ.constraintsText || '• Standard interview constraints apply.'}</div>
+                </div>
 
-              <!-- Metadata Row: Category, Difficulty, Subtle Company Tag in Small Letters -->
-              <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
-                <span class="badge bg-primary-subtle text-primary fs-9" id="active-q-category">${activeQ.category || activeQ.topic || 'Algorithms'}</span>
-                <span class="badge bg-${(activeQ.difficulty || 'MEDIUM').toUpperCase() === 'EASY' ? 'success' : (activeQ.difficulty || 'MEDIUM').toUpperCase() === 'HARD' ? 'danger' : 'warning'}-subtle text-${(activeQ.difficulty || 'MEDIUM').toUpperCase() === 'EASY' ? 'success' : (activeQ.difficulty || 'MEDIUM').toUpperCase() === 'HARD' ? 'danger' : 'warning'} fs-9" id="active-q-diff-badge">${activeQ.difficulty || 'MEDIUM'}</span>
-                <span class="text-muted fs-9" id="active-q-companies">Companies: <span id="companies-text">${activeQ.companies || 'Top Tech'}</span></span>
-              </div>
-
-              <!-- Problem Description -->
-              <div class="text-light fs-8 mb-3" id="active-q-desc" style="line-height: 1.65;">
-                ${activeQ.desc || activeQ.description || activeQ.question || ''}
-              </div>
-
-              <!-- Standardized Section Heading: Examples -->
-              <h6 class="text-muted fs-9 text-uppercase fw-bold mb-1.5" style="letter-spacing: 0.05em;">Examples</h6>
-              <div id="active-q-examples" class="mb-3">
-                ${(activeQ.examples || [
-                  { input: "nums = [2,7,11,15], target = 9", output: "[0,1]", explanation: "Because nums[0] + nums[1] == 9, we return [0, 1]." }
-                ]).map((ex, i) => `
-                  <div class="p-2.5 rounded bg-black bg-opacity-40 border border-secondary border-opacity-20 font-monospace fs-8 text-light mb-2">
-                    <div class="text-muted fs-9 mb-1">Example ${i + 1}:</div>
-                    <div><span class="text-info">Input:</span> ${ex.input}</div>
-                    <div><span class="text-success">Output:</span> ${ex.output}</div>
-                    ${ex.explanation ? `<div class="text-muted"><span class="text-warning">Explanation:</span> ${ex.explanation}</div>` : ''}
+                <!-- Collapsible Hints Container -->
+                <div id="active-q-hints-container" class="${activeQ.hints ? '' : 'd-none'} mb-4">
+                  <div class="text-white fw-bold fs-8 font-monospace mb-1.5"><i class="fa-solid fa-lightbulb text-warning me-1"></i>Hints & Invariants:</div>
+                  <div class="p-3 rounded-3 bg-warning bg-opacity-10 border border-warning border-opacity-20 fs-8 text-secondary font-monospace" id="active-q-hints">
+                    ${activeQ.hints || ''}
                   </div>
-                `).join('')}
-              </div>
-
-              <!-- Standardized Section Heading: Constraints -->
-              <h6 class="text-muted fs-9 text-uppercase fw-bold mb-1.5" style="letter-spacing: 0.05em;">Constraints</h6>
-              <div class="p-2.5 rounded bg-black bg-opacity-40 border border-secondary border-opacity-20 font-monospace fs-8 text-secondary mb-3" id="active-q-constraints" style="white-space: pre-wrap;">${activeQ.constraints || activeQ.constraintsText || 'Standard constraints apply.'}</div>
-
-              <!-- Hints Container (Subtle & Compact) -->
-              <div id="active-q-hints-container" class="${activeQ.hints ? '' : 'd-none'} mb-3">
-                <h6 class="text-muted fs-9 text-uppercase fw-bold mb-1.5" style="letter-spacing: 0.05em;"><i class="fa-solid fa-lightbulb text-warning me-1"></i>Hints & Invariants</h6>
-                <div class="p-2.5 rounded bg-warning bg-opacity-10 border border-warning border-opacity-20 fs-8 text-secondary" id="active-q-hints">
-                  ${activeQ.hints || ''}
                 </div>
               </div>
 
-              <!-- Mobile Quick Jump to Code Button -->
-              <div class="d-block d-lg-none my-3 text-center">
-                <button type="button" class="btn btn-premium w-100 py-2 fs-8 fw-bold shadow-sm" id="btn-mobile-jump-code" style="min-height: 42px;">
-                  <i class="fa-solid fa-code me-1.5"></i> Open Code Editor & Run →
-                </button>
+              <!-- Tab 2: Editorial -->
+              <div class="tab-pane fade" id="tab-lc-editorial" role="tabpanel">
+                <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-book-open text-warning me-2"></i>Official Algorithmic Editorial</h5>
+                <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-20 text-light-gray fs-8 lh-lg">
+                  <h6 class="text-white fw-bold">Approach 1: One-Pass Hash Table</h6>
+                  <p>While iterating and inserting elements into the table, we look back to check if the current element's complement already exists in the table. If it exists, we have found a solution and immediately return the corresponding pair of indices.</p>
+                  <div class="lc-code-box p-2.5 rounded-2 font-monospace fs-9 text-muted my-2">
+                    Complexity: Time O(N) single-pass &bull; Space O(N) Hash Table storage.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tab 3: Solutions -->
+              <div class="tab-pane fade" id="tab-lc-solutions" role="tabpanel">
+                <h5 class="text-white fw-bold mb-3"><i class="fa-regular fa-lightbulb text-info me-2"></i>Community Solutions & Polyglot Patterns</h5>
+                <div class="lc-code-box p-3 rounded-3 font-monospace fs-8 text-light-gray" style="white-space: pre-wrap;" id="active-q-community-sol">${activeQ.solution || '// Reference solution template\n'}</div>
+              </div>
+
+              <!-- Tab 4: Submissions -->
+              <div class="tab-pane fade" id="tab-lc-submissions" role="tabpanel">
+                <h5 class="text-white fw-bold mb-3"><i class="fa-regular fa-clock text-secondary me-2"></i>Submission History</h5>
+                <div class="p-3 rounded-3 bg-dark bg-opacity-40 border border-secondary border-opacity-20 text-muted fs-8 text-center" id="lc-submissions-history">
+                  <i class="fa-solid fa-circle-check text-success fs-5 mb-2 d-block"></i>
+                  <span class="text-white fw-bold">Accepted</span> &bull; Runtime: 2 ms (Beats 98.4%) &bull; Memory: 42.8 MB
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Left Pane Footer: Likes, Dislikes, Comments, Favorite, Share -->
+            <div class="lc-pane-footer d-flex align-items-center justify-content-between px-3 py-2 border-top border-secondary border-opacity-20 flex-shrink-0">
+              <div class="d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-sm lc-reaction-btn text-muted" id="btn-lc-like"><i class="fa-regular fa-thumbs-up me-1"></i> <span id="lc-like-count">2.4K</span></button>
+                <button type="button" class="btn btn-sm lc-reaction-btn text-muted" id="btn-lc-dislike"><i class="fa-regular fa-thumbs-down"></i></button>
+                <button type="button" class="btn btn-sm lc-reaction-btn text-muted" id="btn-lc-comments"><i class="fa-regular fa-comment me-1"></i> 161</button>
+              </div>
+              <div class="d-flex align-items-center gap-1.5">
+                <button type="button" class="btn btn-sm lc-icon-btn text-muted" id="btn-lc-star" title="Add to Favorites"><i class="fa-regular fa-star"></i></button>
+                <button type="button" class="btn btn-sm lc-icon-btn text-muted" id="btn-lc-share" title="Share Problem"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
               </div>
             </div>
           </div>
 
-          <!-- PANE 3: Dominant Coding IDE & Terminal -->
-          <div class="agy-coding-pane" id="vscode-right-pane">
-            <!-- Editor Sub-Toolbar -->
-            <div class="d-flex align-items-center justify-content-between p-1.5 px-2 bg-dark bg-opacity-60 border-bottom border-secondary border-opacity-25 flex-nowrap gap-2" style="min-height: 42px;">
-              <div class="d-flex align-items-center flex-shrink-0">
-                <select id="coding-language-select" class="form-select form-select-sm bg-black text-white border-secondary border-opacity-50 fw-semibold shadow-none" style="min-width: 128px; width: auto; height: 32px; font-size: 0.82rem; line-height: 1.25; padding: 4px 28px 4px 10px; cursor: pointer;">
+          <!-- RIGHT PANE: Code Editor (Top) + Testcase/Test Result Console (Bottom) -->
+          <div class="lc-pane lc-pane-right d-flex flex-column" id="vscode-right-pane">
+            
+            <!-- Code Editor Top Bar -->
+            <div class="lc-editor-header d-flex align-items-center justify-content-between px-3 py-1.5 border-bottom border-secondary border-opacity-20 flex-shrink-0">
+              <div class="d-flex align-items-center gap-2">
+                <span class="fs-8 fw-bold text-white d-flex align-items-center gap-1.5"><i class="fa-solid fa-code text-success"></i> Code</span>
+                <select id="coding-language-select" class="form-select form-select-sm lc-lang-select">
                   <option value="java" selected>Java 21</option>
                   <option value="python">Python 3.12</option>
                   <option value="cpp">C++ 20</option>
@@ -2929,65 +3034,99 @@ const components = {
                   <option value="go">Go 1.22</option>
                   <option value="rust">Rust 1.76</option>
                 </select>
+                <span class="badge bg-dark text-muted border border-secondary border-opacity-30 fs-9 d-none d-sm-inline-block"><i class="fa-solid fa-lock me-1"></i> Auto</span>
               </div>
 
-              <!-- Tools: Font Size, Reset, Copy, Maximize, More Options -->
-              <div class="d-flex align-items-center gap-1.5 flex-shrink-0">
-                <button class="btn btn-sm btn-glass d-flex align-items-center justify-content-center" id="btn-editor-font-dec" title="Decrease Font" style="width: 32px; height: 32px; padding: 0; font-size: 0.8rem; font-family: monospace; font-weight: 700;">A-</button>
-                <button class="btn btn-sm btn-glass d-flex align-items-center justify-content-center" id="btn-editor-font-inc" title="Increase Font" style="width: 32px; height: 32px; padding: 0; font-size: 0.8rem; font-family: monospace; font-weight: 700;">A+</button>
-                <button class="btn btn-sm btn-glass d-flex align-items-center justify-content-center" id="btn-editor-reset" title="Reset Code Template" style="width: 32px; height: 32px; padding: 0; font-size: 0.8rem;"><i class="fa-solid fa-rotate-left"></i></button>
-                <button class="btn btn-sm btn-glass d-flex align-items-center justify-content-center" id="btn-editor-copy" title="Copy Code" style="width: 32px; height: 32px; padding: 0; font-size: 0.8rem;"><i class="fa-solid fa-copy"></i></button>
-                <button type="button" class="btn btn-sm btn-glass d-flex align-items-center justify-content-center" id="btn-ide-maximize" title="Maximize / Restore Code Workspace" style="width: 32px; height: 32px; padding: 0; font-size: 0.8rem;">
-                  <i class="fa-solid fa-expand" id="icon-ide-maximize"></i>
-                </button>
-
-                <!-- 3-Dots Extra Actions Dropdown -->
-                <div class="dropdown d-inline-block">
-                  <button type="button" class="btn btn-sm btn-glass d-flex align-items-center justify-content-center" id="btn-ide-more" data-bs-toggle="dropdown" aria-expanded="false" title="More Options" style="width: 32px; height: 32px; padding: 0; font-size: 0.8rem;">
-                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-end agy-dropdown-menu shadow" aria-labelledby="btn-ide-more">
-                    <li><button class="agy-dropdown-item" id="menu-opt-reset"><i class="fa-solid fa-rotate-left text-muted"></i> Reset Template</button></li>
-                    <li><button class="agy-dropdown-item" id="menu-opt-copy"><i class="fa-solid fa-copy text-muted"></i> Copy Code</button></li>
-                    <li><button class="agy-dropdown-item" id="menu-opt-font-inc"><i class="fa-solid fa-magnifying-glass-plus text-muted"></i> Increase Font (A+)</button></li>
-                    <li><button class="agy-dropdown-item" id="menu-opt-font-dec"><i class="fa-solid fa-magnifying-glass-minus text-muted"></i> Decrease Font (A-)</button></li>
-                    <li><hr class="dropdown-divider border-secondary border-opacity-25 my-1"></li>
-                    <li><button class="agy-dropdown-item text-warning" id="btn-practice-hints"><i class="fa-solid fa-lightbulb"></i> View Hint</button></li>
-                  </ul>
-                </div>
+              <!-- Tools: Format, Reset, Copy, Font Size, Maximize -->
+              <div class="d-flex align-items-center gap-1">
+                <button type="button" class="btn btn-sm lc-icon-btn text-muted" id="btn-editor-reset" title="Reset Code Template"><i class="fa-solid fa-rotate-left"></i></button>
+                <button type="button" class="btn btn-sm lc-icon-btn text-muted" id="btn-editor-copy" title="Copy Code"><i class="fa-solid fa-copy"></i></button>
+                <button type="button" class="btn btn-sm lc-icon-btn text-muted" id="btn-editor-font-dec" title="Decrease Font" style="font-family: monospace; font-weight: bold;">A-</button>
+                <button type="button" class="btn btn-sm lc-icon-btn text-muted" id="btn-editor-font-inc" title="Increase Font" style="font-family: monospace; font-weight: bold;">A+</button>
+                <button type="button" class="btn btn-sm lc-icon-btn text-muted" id="btn-ide-maximize" title="Maximize Code Editor"><i class="fa-solid fa-expand" id="icon-ide-maximize"></i></button>
               </div>
             </div>
 
-            <!-- Main Monaco-Style Code Editor (Auto-Expands to fill height) -->
-            <div class="flex-grow-1 position-relative p-1.5 d-flex flex-column" style="background: #18181b;" id="agy-editor-wrapper">
+            <!-- Main Code Editor Area with Line Gutter -->
+            <div class="lc-editor-wrapper flex-grow-1 position-relative d-flex overflow-hidden" id="agy-editor-wrapper">
+              <div class="lc-gutter d-flex flex-column py-3 px-2 text-end user-select-none font-monospace fs-8 text-muted" id="lc-line-gutter">
+                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span>
+              </div>
               <textarea id="code-editor-textarea" 
-                        class="form-control vscode-monaco-editor w-100 flex-grow-1 p-2" 
+                        class="form-control lc-code-input flex-grow-1 p-3 font-monospace border-0 shadow-none" 
                         spellcheck="false" 
-                        placeholder="// Enter your solution here... (Workspace auto-expands while typing)">${activeQ.solution}</textarea>
+                        placeholder="// Enter your solution here...">${activeQ.solution || ''}</textarea>
             </div>
 
-            <!-- Bottom Collapsible VS Code Terminal Tray -->
-            <div class="vscode-terminal-tray" id="vscode-terminal-panel">
-              <div class="vscode-terminal-header py-1 px-2">
-                <div class="d-flex align-items-center gap-1">
-                  <button class="vscode-terminal-tab active py-1 px-2" id="term-tab-output"><i class="fa-solid fa-terminal me-1"></i> OUTPUT</button>
-                  <button class="vscode-terminal-tab py-1 px-1.5" id="term-tab-case1">Case 1</button>
-                  <button class="vscode-terminal-tab py-1 px-1.5" id="term-tab-case2">Case 2</button>
-                </div>
-                <div class="d-flex align-items-center gap-1.5">
-                  <span class="badge bg-success-subtle text-success fs-9 px-2 py-1" id="console-status-badge">Ready</span>
-                  <button type="button" class="btn btn-sm btn-success py-1 px-2.5 fs-8 fw-semibold text-nowrap d-flex align-items-center gap-1" id="btn-practice-run" title="Run Tests" style="min-height: 32px;">
-                    <i class="fa-solid fa-play"></i> Run
-                  </button>
-                  <button type="button" class="btn btn-sm btn-success py-1 px-2.5 fs-8 fw-semibold text-nowrap d-flex align-items-center gap-1" id="btn-practice-submit" title="Submit Solution" style="min-height: 32px;">
-                    <i class="fa-solid fa-cloud-arrow-up"></i> Submit
-                  </button>
+            <!-- Editor Status Footer -->
+            <div class="lc-editor-subfooter d-flex align-items-center justify-content-between px-3 py-1 border-top border-secondary border-opacity-15 fs-9 text-muted font-monospace flex-shrink-0">
+              <span id="lc-editor-status"><i class="fa-solid fa-check text-success me-1"></i>Saved</span>
+              <span id="lc-cursor-pos">ln 1, Col 1</span>
+            </div>
+
+            <!-- Bottom LeetCode Testcase / Test Result Console Tray -->
+            <div class="lc-console-panel border-top border-secondary border-opacity-20 d-flex flex-column flex-shrink-0" id="vscode-terminal-panel">
+              <!-- Console Tabs Bar -->
+              <div class="lc-console-tabs d-flex align-items-center justify-content-between px-2 pt-1 border-bottom border-secondary border-opacity-20 flex-shrink-0">
+                <ul class="nav lc-console-nav gap-1" role="tablist">
+                  <li class="nav-item">
+                    <button class="nav-link py-1 px-2.5 fs-8 active" id="console-tab-testcase-btn" data-bs-toggle="tab" data-bs-target="#console-tab-testcase" type="button" role="tab">
+                      <i class="fa-regular fa-square-check text-success me-1"></i> Testcase
+                    </button>
+                  </li>
+                  <li class="nav-item">
+                    <button class="nav-link py-1 px-2.5 fs-8" id="console-tab-result-btn" data-bs-toggle="tab" data-bs-target="#console-tab-result" type="button" role="tab">
+                      <i class="fa-solid fa-terminal text-primary me-1"></i> Test Result
+                    </button>
+                  </li>
+                </ul>
+                <div class="d-flex align-items-center gap-1.5 pb-1">
+                  <span class="badge bg-success bg-opacity-25 text-success fs-9 font-monospace" id="console-status-badge">Ready</span>
                 </div>
               </div>
-              <div class="p-2 font-monospace fs-9" id="console-output-text" style="color: #22c55e; max-height: 120px; overflow-y: auto; background: #121214;">
-// Ready to compile and run against automated test suite.
+
+              <!-- Console Panes Body -->
+              <div class="tab-content flex-grow-1 p-3 overflow-y-auto" style="min-height: 140px; max-height: 220px; background: #141416;">
+                
+                <!-- Tab 1: Testcase Input Display -->
+                <div class="tab-pane fade show active" id="console-tab-testcase" role="tabpanel">
+                  <div class="d-flex align-items-center gap-2 mb-2" id="lc-case-pills-row">
+                    <button type="button" class="btn btn-xs lc-case-btn active" id="btn-case-1"><i class="fa-solid fa-check text-success me-1"></i>Case 1</button>
+                    <button type="button" class="btn btn-xs lc-case-btn" id="btn-case-2"><i class="fa-solid fa-check text-success me-1"></i>Case 2</button>
+                    <button type="button" class="btn btn-xs lc-case-btn" id="btn-case-3"><i class="fa-solid fa-check text-success me-1"></i>Case 3</button>
+                  </div>
+                  <div class="lc-testcase-card p-2.5 rounded-3 font-monospace fs-8 text-light-gray" id="lc-testcase-content">
+                    <div class="text-muted fs-9 mb-1">nums =</div>
+                    <div class="p-1.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-20 mb-2">[2,7,11,15]</div>
+                    <div class="text-muted fs-9 mb-1">target =</div>
+                    <div class="p-1.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-20">9</div>
+                  </div>
+                </div>
+
+                <!-- Tab 2: Test Result Execution Status -->
+                <div class="tab-pane fade" id="console-tab-result" role="tabpanel">
+                  <div class="d-flex align-items-center gap-3 mb-2">
+                    <span class="text-success fw-bold fs-5" id="lc-result-verdict">Accepted</span>
+                    <span class="text-muted fs-8 font-monospace" id="lc-result-runtime">Runtime: 0 ms</span>
+                  </div>
+                  <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge bg-success bg-opacity-20 text-success font-monospace px-2 py-1 fs-9"><i class="fa-solid fa-check me-1"></i>Case 1</span>
+                    <span class="badge bg-success bg-opacity-20 text-success font-monospace px-2 py-1 fs-9"><i class="fa-solid fa-check me-1"></i>Case 2</span>
+                  </div>
+                  <div class="lc-testcase-card p-2.5 rounded-3 font-monospace fs-8 text-light-gray mb-2">
+                    <div class="text-muted fs-9 mb-1">Output:</div>
+                    <div class="p-1.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-20 text-success mb-2" id="lc-result-output">[0, 1]</div>
+                    <div class="text-muted fs-9 mb-1">Expected:</div>
+                    <div class="p-1.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-20 text-light" id="lc-result-expected">[0, 1]</div>
+                  </div>
+                  <div class="font-monospace fs-9" id="console-output-text" style="color: #22c55e;">
+// Execution finished with 0 errors. All sample test cases passed.
+                  </div>
+                </div>
+
               </div>
             </div>
+
           </div>
         </div>
       </div>

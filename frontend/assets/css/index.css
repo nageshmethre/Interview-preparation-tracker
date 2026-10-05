@@ -5308,3 +5308,420 @@ body.ui-drawer-open {
   border-radius: var(--radius-md) !important;
   z-index: 1050 !important;
 }
+
+/* ==========================================================================
+   LEETCODE MODERN SPLIT-PANE CODING WORKSPACE STYLES
+   ========================================================================== */
+.lc-workspace-root {
+  background-color: #1a1a1c;
+  color: #eff1f6;
+  min-height: calc(100vh - 64px);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  overflow: hidden;
+}
+
+.lc-top-bar {
+  background: #262628;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  height: 48px;
+  user-select: none;
+}
+
+.lc-btn-nav {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f3f4f6;
+  font-size: 13px;
+  border-radius: 6px;
+  padding: 4px 10px;
+  transition: all 0.15s ease;
+}
+
+.lc-btn-nav:hover, .lc-btn-nav:focus {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.lc-icon-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #9ca3af;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 13px;
+  transition: all 0.15s ease;
+}
+
+.lc-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.lc-btn-run {
+  background: #374151;
+  color: #f3f4f6;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.lc-btn-run:hover {
+  background: #4b5563;
+  color: #ffffff;
+}
+
+.lc-btn-submit {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.lc-btn-submit:hover {
+  background: rgba(34, 197, 94, 0.25);
+  color: #4ade80;
+  border-color: rgba(34, 197, 94, 0.5);
+}
+
+.lc-dropdown-menu {
+  background: #222225 !important;
+  border: 1px solid #38383e !important;
+  border-radius: 8px !important;
+}
+
+.lc-problem-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.lc-problem-row:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.lc-problem-row.active {
+  background: rgba(59, 130, 246, 0.18);
+  color: #60a5fa;
+  font-weight: 600;
+}
+
+.lc-main-split {
+  height: calc(100vh - 112px);
+  min-height: 500px;
+  background: #18181b;
+}
+
+.lc-main-split.vertical-layout {
+  flex-direction: column !important;
+}
+
+.lc-main-split.vertical-layout .lc-pane {
+  max-width: 100% !important;
+  width: 100% !important;
+  height: 50% !important;
+}
+
+.lc-pane {
+  flex: 1 1 50%;
+  width: 50%;
+  max-width: 50%;
+  min-width: 320px;
+  height: 100%;
+  position: relative;
+  transition: flex 0.2s ease, max-width 0.2s ease;
+}
+
+.lc-pane-left {
+  background: #202023;
+}
+
+.lc-pane-right {
+  background: #1a1a1c;
+}
+
+.lc-pane-right.maximized {
+  flex: 1 1 100% !important;
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+.lc-pane-left.minimized {
+  display: none !important;
+}
+
+.lc-tabs {
+  background: #262628;
+  height: 40px;
+  user-select: none;
+}
+
+.lc-tabs .nav-link {
+  color: #9ca3af;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 12px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  transition: all 0.15s ease;
+}
+
+.lc-tabs .nav-link:hover {
+  color: #e5e7eb;
+}
+
+.lc-tabs .nav-link.active {
+  color: #ffffff;
+  background: transparent;
+  border-bottom: 2px solid #ffffff;
+}
+
+.lc-scrollable-content {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+.lc-scrollable-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.lc-scrollable-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+.lc-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+  user-select: none;
+}
+
+.lc-diff-easy {
+  background: rgba(0, 184, 163, 0.15);
+  color: #00b8a3;
+  border: 1px solid rgba(0, 184, 163, 0.3);
+}
+
+.lc-diff-medium {
+  background: rgba(255, 192, 30, 0.15);
+  color: #ffc01e;
+  border: 1px solid rgba(255, 192, 30, 0.3);
+}
+
+.lc-diff-hard {
+  background: rgba(255, 55, 95, 0.15);
+  color: #ff375f;
+  border: 1px solid rgba(255, 55, 95, 0.3);
+}
+
+.lc-pill-btn {
+  background: rgba(255, 255, 255, 0.06);
+  color: #9ca3af;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.lc-pill-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.lc-problem-body code {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e5e7eb;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 12.5px;
+}
+
+.lc-code-box {
+  background: #141416;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  font-family: "JetBrains Mono", Menlo, Consolas, monospace;
+}
+
+.lc-pane-footer {
+  background: #242426;
+  height: 44px;
+  user-select: none;
+}
+
+.lc-reaction-btn {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 12.5px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.lc-reaction-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.lc-reaction-btn.active-liked {
+  color: #22c55e !important;
+}
+
+.lc-reaction-btn.active-disliked {
+  color: #ef4444 !important;
+}
+
+.lc-icon-btn.active-starred {
+  color: #eab308 !important;
+}
+
+.lc-editor-header {
+  background: #262628;
+  height: 40px;
+  user-select: none;
+}
+
+.lc-lang-select {
+  background-color: #1a1a1c !important;
+  color: #f3f4f6 !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 6px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  padding: 2px 24px 2px 8px !important;
+  width: auto !important;
+}
+
+.lc-editor-wrapper {
+  background: #18181b;
+  min-height: 240px;
+}
+
+.lc-gutter {
+  width: 44px;
+  background: #18181b;
+  color: #64748b;
+  line-height: 1.6;
+  font-size: 13px;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.lc-code-input {
+  background: #18181b !important;
+  color: #f8fafc !important;
+  font-family: "JetBrains Mono", Menlo, Consolas, monospace !important;
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+  resize: none !important;
+  outline: none !important;
+  tab-size: 4 !important;
+}
+
+.lc-code-input:focus {
+  background: #18181b !important;
+  color: #f8fafc !important;
+  box-shadow: none !important;
+}
+
+.lc-editor-subfooter {
+  background: #242426;
+  height: 26px;
+  user-select: none;
+}
+
+.lc-console-panel {
+  background: #202023;
+}
+
+.lc-console-tabs {
+  background: #242426;
+  height: 36px;
+}
+
+.lc-console-nav .nav-link {
+  color: #9ca3af;
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border: none;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.lc-console-nav .nav-link:hover {
+  color: #ffffff;
+}
+
+.lc-console-nav .nav-link.active {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.lc-case-btn {
+  background: rgba(255, 255, 255, 0.06);
+  color: #9ca3af;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  font-size: 12px;
+  padding: 3px 10px;
+  transition: all 0.15s ease;
+}
+
+.lc-case-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lc-case-btn.active {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+  font-weight: 600;
+}
+
+.lc-testcase-card {
+  background: #141416;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 991px) {
+  .lc-main-split {
+    flex-direction: column !important;
+    height: auto !important;
+    overflow-y: auto !important;
+  }
+  .lc-pane {
+    max-width: 100% !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    height: auto !important;
+  }
+  .lc-pane-left {
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    min-height: 400px;
+  }
+  .lc-pane-right {
+    min-height: 500px;
+  }
+}
+
