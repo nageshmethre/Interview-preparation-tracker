@@ -3002,10 +3002,70 @@ const components = {
 
               <!-- Tab 4: Submissions -->
               <div class="tab-pane fade" id="tab-lc-submissions" role="tabpanel">
-                <h5 class="text-white fw-bold mb-3"><i class="fa-regular fa-clock text-secondary me-2"></i>Submission History</h5>
-                <div class="p-3 rounded-3 bg-dark bg-opacity-40 border border-secondary border-opacity-20 text-muted fs-8 text-center" id="lc-submissions-history">
-                  <i class="fa-solid fa-circle-check text-success fs-5 mb-2 d-block"></i>
-                  <span class="text-white fw-bold">Accepted</span> &bull; Runtime: 2 ms (Beats 98.4%) &bull; Memory: 42.8 MB
+                <div id="lc-submissions-history">
+                  <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="text-success fw-bold fs-5"><i class="fa-solid fa-circle-check me-1.5"></i>Accepted</span>
+                      <span class="text-muted fs-8 font-monospace">86 / 86 testcases passed</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                      <button type="button" class="btn btn-xs btn-primary bg-opacity-25 text-primary border border-primary-subtle px-2.5 py-1" id="btn-sub-analysis"><i class="fa-solid fa-wand-magic-sparkles me-1"></i>Analysis</button>
+                      <button type="button" class="btn btn-xs btn-success bg-opacity-25 text-success border border-success-subtle px-2.5 py-1" id="btn-sub-solution"><i class="fa-solid fa-code me-1"></i>Solution</button>
+                    </div>
+                  </div>
+
+                  <!-- Performance Stats Cards -->
+                  <div class="row g-2 mb-3">
+                    <div class="col-6">
+                      <div class="p-3 rounded-3 bg-dark bg-opacity-40 border border-secondary border-opacity-20">
+                        <div class="text-muted fs-9 font-monospace mb-1"><i class="fa-regular fa-clock me-1"></i>Runtime</div>
+                        <div class="d-flex align-items-baseline gap-2">
+                          <span class="text-white fw-bold fs-5" id="lc-sub-runtime-val">1 ms</span>
+                          <span class="text-success fs-8 fw-semibold font-monospace" id="lc-sub-runtime-beats">Beats 99.1% <i class="fa-solid fa-bolt fs-9"></i></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="p-3 rounded-3 bg-dark bg-opacity-40 border border-secondary border-opacity-20">
+                        <div class="text-muted fs-9 font-monospace mb-1"><i class="fa-solid fa-microchip me-1"></i>Memory</div>
+                        <div class="d-flex align-items-baseline gap-2">
+                          <span class="text-white fw-bold fs-5" id="lc-sub-mem-val">41.5 MB</span>
+                          <span class="text-muted fs-8 fw-semibold font-monospace" id="lc-sub-mem-beats">Beats 95.2%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Distribution Histogram Chart -->
+                  <div class="p-3 rounded-3 bg-dark bg-opacity-40 border border-secondary border-opacity-20 mb-3">
+                    <div class="d-flex align-items-center justify-content-between text-muted fs-9 mb-2">
+                      <span>Runtime Distribution (ms)</span>
+                      <span class="text-info font-monospace"><i class="fa-solid fa-circle-user me-1"></i>You are here (1ms)</span>
+                    </div>
+                    <div class="d-flex align-items-end justify-content-around pt-3 pb-1" style="height: 110px;">
+                      <div class="d-flex flex-column align-items-center" style="width: 18%;">
+                        <div class="w-100 rounded-top bg-primary bg-opacity-40" style="height: 40px;"></div>
+                        <span class="text-muted fs-9 mt-1 font-monospace">&lt;1ms</span>
+                      </div>
+                      <div class="d-flex flex-column align-items-center position-relative" style="width: 22%;">
+                        <span class="badge bg-primary text-white position-absolute" style="top: -24px; font-size: 9px;"><i class="fa-solid fa-user"></i> You</span>
+                        <div class="w-100 rounded-top bg-primary" style="height: 75px; box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);"></div>
+                        <span class="text-white fw-bold fs-9 mt-1 font-monospace">1ms</span>
+                      </div>
+                      <div class="d-flex flex-column align-items-center" style="width: 18%;">
+                        <div class="w-100 rounded-top bg-primary bg-opacity-30" style="height: 25px;"></div>
+                        <span class="text-muted fs-9 mt-1 font-monospace">2ms</span>
+                      </div>
+                      <div class="d-flex flex-column align-items-center" style="width: 18%;">
+                        <div class="w-100 rounded-top bg-primary bg-opacity-20" style="height: 15px;"></div>
+                        <span class="text-muted fs-9 mt-1 font-monospace">4ms</span>
+                      </div>
+                      <div class="d-flex flex-column align-items-center" style="width: 18%;">
+                        <div class="w-100 rounded-top bg-primary bg-opacity-10" style="height: 8px;"></div>
+                        <span class="text-muted fs-9 mt-1 font-monospace">7ms+</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -3023,6 +3083,11 @@ const components = {
                 <button type="button" class="btn btn-sm lc-icon-btn text-muted" id="btn-lc-share" title="Share Problem"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
               </div>
             </div>
+          </div>
+
+          <!-- Vertical Moving Resizer / Splitter Handle -->
+          <div class="lc-resizer lc-resizer-vertical d-none d-lg-flex" id="lc-vertical-resizer" title="Drag left/right to resize panes">
+            <div class="lc-resizer-line"></div>
           </div>
 
           <!-- RIGHT PANE: Code Editor (Top) + Testcase/Test Result Console (Bottom) -->
@@ -3066,14 +3131,26 @@ const components = {
                         placeholder="// Enter your solution here...">${activeQ.solution || ''}</textarea>
             </div>
 
-            <!-- Editor Status Footer -->
-            <div class="lc-editor-subfooter d-flex align-items-center justify-content-between px-3 py-1 border-top border-secondary border-opacity-15 fs-9 text-muted font-monospace flex-shrink-0">
-              <span id="lc-editor-status"><i class="fa-solid fa-check text-success me-1"></i>Saved</span>
-              <span id="lc-cursor-pos">ln 1, Col 1</span>
+            <!-- Horizontal Moving Resizer / Splitter Handle for Console -->
+            <div class="lc-resizer lc-resizer-horizontal" id="lc-horizontal-resizer" title="Drag up/down to resize console">
+              <div class="lc-resizer-line-h"></div>
             </div>
 
-            <!-- Bottom LeetCode Testcase / Test Result Console Tray -->
-            <div class="lc-console-panel border-top border-secondary border-opacity-20 d-flex flex-column flex-shrink-0" id="vscode-terminal-panel">
+            <!-- Editor Status & Console Toggle Footer -->
+            <div class="lc-editor-subfooter d-flex align-items-center justify-content-between px-3 py-1.5 border-top border-secondary border-opacity-15 fs-9 font-monospace flex-shrink-0">
+              <div class="d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-xs lc-btn-console py-0.5 px-2.5 d-flex align-items-center gap-1.5" id="btn-toggle-console" title="Toggle Testcase Console Panel">
+                  <i class="fa-solid fa-terminal fs-9 text-secondary"></i>
+                  <span>Console</span>
+                  <i class="fa-solid fa-chevron-up fs-9" id="icon-console-toggle"></i>
+                </button>
+                <span id="lc-editor-status" class="text-muted"><i class="fa-solid fa-check text-success me-1"></i>Saved</span>
+              </div>
+              <span id="lc-cursor-pos" class="text-muted">ln 1, Col 1</span>
+            </div>
+
+            <!-- Bottom LeetCode Testcase / Test Result Console Tray (Collapsed by default while typing) -->
+            <div class="lc-console-panel border-top border-secondary border-opacity-20 d-flex flex-column flex-shrink-0 collapsed" id="vscode-terminal-panel">
               <!-- Console Tabs Bar -->
               <div class="lc-console-tabs d-flex align-items-center justify-content-between px-2 pt-1 border-bottom border-secondary border-opacity-20 flex-shrink-0">
                 <ul class="nav lc-console-nav gap-1" role="tablist">
@@ -3090,6 +3167,7 @@ const components = {
                 </ul>
                 <div class="d-flex align-items-center gap-1.5 pb-1">
                   <span class="badge bg-success bg-opacity-25 text-success fs-9 font-monospace" id="console-status-badge">Ready</span>
+                  <button type="button" class="btn btn-sm lc-icon-btn py-0 px-1 text-muted" id="btn-close-console" title="Collapse Console Panel"><i class="fa-solid fa-chevron-down fs-9"></i></button>
                 </div>
               </div>
 

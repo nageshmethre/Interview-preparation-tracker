@@ -4669,6 +4669,101 @@ function bindCodingPracticeEvents(rawQuestions = []) {
     });
   }
 
+  // 7b. Interactive Moving Splitters (Vertical & Horizontal Dragging)
+  const verticalResizer = document.getElementById('lc-vertical-resizer');
+  const mainSplit = document.getElementById('agy-main-split');
+  const leftPane = document.getElementById('vscode-left-pane');
+  const rightPane = document.getElementById('vscode-right-pane');
+
+  if (verticalResizer && mainSplit && leftPane && rightPane) {
+    let isDraggingV = false;
+
+    const onMouseDownV = (e) => {
+      isDraggingV = true;
+      verticalResizer.classList.add('resizing');
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    };
+
+    const onMouseMoveV = (e) => {
+      if (!isDraggingV) return;
+      const rect = mainSplit.getBoundingClientRect();
+      const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+      if (!clientX) return;
+      let leftWidthPct = ((clientX - rect.left) / rect.width) * 100;
+      leftWidthPct = Math.max(20, Math.min(80, leftWidthPct));
+      leftPane.style.flex = `0 0 ${leftWidthPct}%`;
+      leftPane.style.maxWidth = `${leftWidthPct}%`;
+      leftPane.style.width = `${leftWidthPct}%`;
+      rightPane.style.flex = `0 0 ${100 - leftWidthPct}%`;
+      rightPane.style.maxWidth = `${100 - leftWidthPct}%`;
+      rightPane.style.width = `${100 - leftWidthPct}%`;
+    };
+
+    const onMouseUpV = () => {
+      if (isDraggingV) {
+        isDraggingV = false;
+        verticalResizer.classList.remove('resizing');
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      }
+    };
+
+    verticalResizer.addEventListener('mousedown', onMouseDownV);
+    verticalResizer.addEventListener('touchstart', onMouseDownV, { passive: true });
+    window.addEventListener('mousemove', onMouseMoveV);
+    window.addEventListener('touchmove', onMouseMoveV, { passive: true });
+    window.addEventListener('mouseup', onMouseUpV);
+    window.addEventListener('touchend', onMouseUpV);
+  }
+
+  const horizontalResizer = document.getElementById('lc-horizontal-resizer');
+  const consolePanelEl = document.getElementById('vscode-terminal-panel');
+
+  if (horizontalResizer && consolePanelEl && rightPane) {
+    let isDraggingH = false;
+
+    const onMouseDownH = (e) => {
+      isDraggingH = true;
+      horizontalResizer.classList.add('resizing');
+      document.body.style.cursor = 'row-resize';
+      document.body.style.userSelect = 'none';
+      if (consolePanelEl.classList.contains('collapsed')) {
+        toggleConsole(true);
+      }
+    };
+
+    const onMouseMoveH = (e) => {
+      if (!isDraggingH) return;
+      const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+      if (!clientY) return;
+      const rightPaneRect = rightPane.getBoundingClientRect();
+      let consoleHeight = rightPaneRect.bottom - clientY;
+      consoleHeight = Math.max(90, Math.min(rightPaneRect.height * 0.85, consoleHeight));
+      consolePanelEl.style.height = `${consoleHeight}px`;
+      const tabContent = consolePanelEl.querySelector('.tab-content');
+      if (tabContent) {
+        tabContent.style.maxHeight = `${consoleHeight - 38}px`;
+      }
+    };
+
+    const onMouseUpH = () => {
+      if (isDraggingH) {
+        isDraggingH = false;
+        horizontalResizer.classList.remove('resizing');
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      }
+    };
+
+    horizontalResizer.addEventListener('mousedown', onMouseDownH);
+    horizontalResizer.addEventListener('touchstart', onMouseDownH, { passive: true });
+    window.addEventListener('mousemove', onMouseMoveH);
+    window.addEventListener('touchmove', onMouseMoveH, { passive: true });
+    window.addEventListener('mouseup', onMouseUpH);
+    window.addEventListener('touchend', onMouseUpH);
+  }
+
   // Font Size, Reset, Copy
   let editorFontSize = 13.5;
   const btnFontInc = document.getElementById('btn-editor-font-inc');
@@ -4762,7 +4857,34 @@ function bindCodingPracticeEvents(rawQuestions = []) {
     });
   }
 
-  // 9. Case Buttons (Case 1, Case 2, Case 3)
+  // 9. Console Drawer Collapse / Expand Controls
+  const btnToggleConsole = document.getElementById('btn-toggle-console');
+  const btnCloseConsole = document.getElementById('btn-close-console');
+  const consolePanel = document.getElementById('vscode-terminal-panel');
+  const iconConsoleToggle = document.getElementById('icon-console-toggle');
+
+  function toggleConsole(forceOpen = null) {
+    if (!consolePanel) return;
+    const willOpen = (forceOpen !== null) ? forceOpen : consolePanel.classList.contains('collapsed');
+    if (willOpen) {
+      consolePanel.classList.remove('collapsed');
+      if (btnToggleConsole) btnToggleConsole.classList.add('active');
+      if (iconConsoleToggle) iconConsoleToggle.className = 'fa-solid fa-chevron-down fs-9';
+    } else {
+      consolePanel.classList.add('collapsed');
+      if (btnToggleConsole) btnToggleConsole.classList.remove('active');
+      if (iconConsoleToggle) iconConsoleToggle.className = 'fa-solid fa-chevron-up fs-9';
+    }
+  }
+
+  if (btnToggleConsole) {
+    btnToggleConsole.addEventListener('click', () => toggleConsole());
+  }
+  if (btnCloseConsole) {
+    btnCloseConsole.addEventListener('click', () => toggleConsole(false));
+  }
+
+  // 9b. Case Buttons (Case 1, Case 2, Case 3)
   document.querySelectorAll('#lc-case-pills-row .lc-case-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       document.querySelectorAll('#lc-case-pills-row .lc-case-btn').forEach(b => b.classList.remove('active'));
@@ -4795,10 +4917,11 @@ function bindCodingPracticeEvents(rawQuestions = []) {
     });
   });
 
-  // 10. Run Tests (Simulate Execution & Switch to Test Result Tab)
+  // 10. Run Tests (Automatically opens Console & Switches to Test Result Tab)
   const btnRun = document.getElementById('btn-practice-run');
   if (btnRun) {
     btnRun.addEventListener('click', () => {
+      toggleConsole(true);
       // Activate Test Result tab
       const resultTabBtn = document.getElementById('console-tab-result-btn');
       if (resultTabBtn && typeof bootstrap !== 'undefined' && bootstrap.Tab) {
