@@ -6170,94 +6170,79 @@ const components = {
 
     return `
       <div class="technical-library-container container-fluid px-0">
-        <!-- 1. Header Bar -->
-        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 pb-3 border-bottom border-secondary border-opacity-20">
-          <div>
-            <div class="d-flex align-items-center gap-2 mb-1">
-              <h2 class="text-white fw-bold m-0 fs-5">Technical Library & Bookshelf</h2>
-              <span class="ps-status-pill ps-status-active">19 Interactive 3D Handbooks</span>
+        <!-- 1. Compact Library Control Deck -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2.5 mb-2.5 pb-2.5 border-bottom border-secondary border-opacity-20">
+          <!-- Search & Filters -->
+          <div class="d-flex flex-wrap align-items-center gap-2 flex-grow-1" style="max-width: 680px;">
+            <div class="input-group input-group-sm flex-grow-1" style="min-width: 200px; max-width: 340px;">
+              <span class="input-group-text bg-black bg-opacity-40 border-secondary border-opacity-25 text-muted px-2.5"><i class="fa-solid fa-magnifying-glass fs-9"></i></span>
+              <input type="text" id="library-search-input" class="form-control bg-black bg-opacity-40 text-white border-secondary border-opacity-25 fs-8 py-1" placeholder="Search handbooks, topics..." value="${searchQuery || ''}">
+              ${searchQuery ? '<button id="btn-clear-library-search" class="btn btn-sm btn-outline-secondary border-opacity-25 text-muted px-2" type="button"><i class="fa-solid fa-xmark fs-9"></i></button>' : ''}
             </div>
-            <p class="text-muted fs-8 mb-0">Select and click any 3D hardcover book below to open its digital textbook and master complete engineering architectures.</p>
+            <select id="library-difficulty-select" class="form-select form-select-sm bg-black bg-opacity-40 text-white border-secondary border-opacity-25 fs-8 py-1" style="width: auto; min-width: 130px;">
+              <option value="ALL" ${!activeDifficulty || activeDifficulty === 'ALL' ? 'selected' : ''}>All Levels</option>
+              <option value="BEGINNER" ${activeDifficulty === 'BEGINNER' ? 'selected' : ''}>Beginner</option>
+              <option value="INTERMEDIATE" ${activeDifficulty === 'INTERMEDIATE' ? 'selected' : ''}>Intermediate</option>
+              <option value="ADVANCED" ${activeDifficulty === 'ADVANCED' ? 'selected' : ''}>Advanced</option>
+            </select>
+            <div class="btn-group btn-group-sm" role="group">
+              <button type="button" class="btn btn-sm ${!activeCategory || activeCategory === 'ALL' ? 'btn-primary' : 'btn-glass'} px-2.5 py-1 fs-9 fw-medium" id="btn-filter-all-cat">All</button>
+              <button type="button" class="btn btn-sm ${activeCategory === 'FREE' ? 'btn-primary' : 'btn-glass'} px-2.5 py-1 fs-9 fw-medium" id="btn-filter-free">Free</button>
+              <button type="button" class="btn btn-sm ${activeCategory === 'PRO' ? 'btn-primary' : 'btn-glass'} px-2.5 py-1 fs-9 fw-medium" id="btn-filter-pro">Pro</button>
+            </div>
           </div>
-          <div class="d-flex align-items-center gap-2">
+
+          <div class="d-flex align-items-center gap-2 flex-shrink-0">
+            <span class="text-muted fs-8 font-monospace">${filtered.length} Handbooks</span>
             ${isProUser 
-              ? '<span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle px-2.5 py-1.5 fs-8 font-monospace"><i class="fa-solid fa-crown me-1.5"></i> Pro Pass Active</span>' 
-              : '<a href="#/billing" class="btn btn-sm btn-primary px-3 py-1.5 fs-8 fw-semibold"><i class="fa-solid fa-gem me-1.5"></i> Unlock Pro Library</a>'}
+              ? '<span class="badge bg-primary bg-opacity-15 text-primary border border-primary border-opacity-20 px-2 py-1 fs-9 font-monospace"><i class="fa-solid fa-crown me-1"></i>PRO PASS</span>' 
+              : '<a href="#/billing" class="btn btn-xs btn-primary px-2.5 py-1 fs-9 fw-semibold"><i class="fa-solid fa-gem me-1"></i>Get Pro</a>'}
           </div>
         </div>
 
         ${activeProgressBook ? `
           <!-- Jump Back In / Resume Banner -->
-          <div class="ps-panel-box p-3 mb-4 d-flex flex-wrap justify-content-between align-items-center gap-3" style="border-left: 3px solid #38bdf8 !important;">
-            <div class="d-flex align-items-center gap-3">
-              <div class="rounded-2 p-2.5 d-flex align-items-center justify-content-center text-white" style="background: #27272a; width: 44px; height: 44px; border: 1px solid #3f3f46;">
-                <i class="fa-solid fa-book-open text-cyan fs-5"></i>
+          <div class="ps-panel-box p-2.5 mb-2.5 d-flex flex-wrap justify-content-between align-items-center gap-2" style="border-left: 3px solid #f59e0b !important;">
+            <div class="d-flex align-items-center gap-2.5">
+              <div class="rounded-2 p-2 d-flex align-items-center justify-content-center text-white" style="background: #27272a; width: 36px; height: 36px; border: 1px solid #3f3f46;">
+                <i class="fa-solid fa-book-open text-primary fs-7"></i>
               </div>
               <div>
-                <div class="text-muted fs-9 text-uppercase font-monospace">Resume Reading</div>
-                <h3 class="text-white fw-bold mb-0 fs-6">${activeProgressBook.title}</h3>
-                <div class="text-muted fs-8">Chapter ${activeProgressVal.lastChapterNumber || 1} &bull; ${activeProgressVal.progressPercentage || 0}% completed</div>
+                <div class="text-muted fs-10 text-uppercase font-monospace">Resume Reading</div>
+                <h3 class="text-white fw-semibold mb-0 fs-7">${activeProgressBook.title}</h3>
               </div>
             </div>
-            <div class="d-flex align-items-center gap-3">
-              <div class="d-none d-sm-block text-end" style="min-width: 110px;">
-                <div class="progress bg-secondary bg-opacity-25" style="height: 5px;">
+            <div class="d-flex align-items-center gap-2.5">
+              <div class="d-none d-sm-block text-end" style="min-width: 90px;">
+                <div class="progress bg-secondary bg-opacity-25" style="height: 4px;">
                   <div class="progress-bar bg-primary" style="width: ${activeProgressVal.progressPercentage || 0}%;"></div>
                 </div>
               </div>
-              <a href="#/library/read?id=${activeProgressBook.id}&ch=${activeProgressVal.lastChapterNumber || 1}" class="btn btn-primary btn-sm px-3 py-1.5 fs-8 fw-semibold d-inline-flex align-items-center gap-1.5">
-                <span>Continue Reading</span>
-                <i class="fa-solid fa-arrow-right fs-9"></i>
+              <a href="#/library/read?id=${activeProgressBook.id}&ch=${activeProgressVal.lastChapterNumber || 1}" class="btn btn-primary btn-xs px-2.5 py-1 fs-9 fw-semibold d-inline-flex align-items-center gap-1">
+                <span>Continue</span>
+                <i class="fa-solid fa-arrow-right fs-10"></i>
               </a>
             </div>
           </div>
         ` : ''}
 
-        <!-- 2. Search & Filter Control Deck -->
-        <div class="ps-panel-box p-3 mb-3">
-          <div class="row g-2 align-items-center">
-            <div class="col-12 col-md-5 col-lg-6">
-              <div class="input-group input-group-sm" style="height: 36px;">
-                <span class="input-group-text bg-black bg-opacity-40 border-secondary border-opacity-30 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                <input type="text" id="library-search-input" class="form-control bg-black bg-opacity-40 text-white border-secondary border-opacity-30 h-100" placeholder="Search topics, algorithms, frameworks, or keywords..." value="${searchQuery || ''}">
-                ${searchQuery ? '<button id="btn-clear-library-search" class="btn btn-outline-secondary border-opacity-30 text-muted" type="button"><i class="fa-solid fa-xmark"></i></button>' : ''}
-              </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-3">
-              <select id="library-difficulty-select" class="form-select form-select-sm bg-black bg-opacity-40 text-white border-secondary border-opacity-30" style="height: 36px;">
-                <option value="ALL" ${!activeDifficulty || activeDifficulty === 'ALL' ? 'selected' : ''}>All Difficulties</option>
-                <option value="BEGINNER" ${activeDifficulty === 'BEGINNER' ? 'selected' : ''}>Beginner Foundations</option>
-                <option value="INTERMEDIATE" ${activeDifficulty === 'INTERMEDIATE' ? 'selected' : ''}>Intermediate Core</option>
-                <option value="ADVANCED" ${activeDifficulty === 'ADVANCED' ? 'selected' : ''}>Advanced & Elite</option>
-              </select>
-            </div>
-            <div class="col-6 col-md-3 col-lg-3 text-end">
-              <div class="btn-group btn-group-sm w-100" role="group" style="height: 36px;">
-                <button type="button" class="btn btn-outline-secondary h-100 ${!activeCategory || activeCategory === 'ALL' ? 'active text-white' : ''}" id="btn-filter-all-cat">All</button>
-                <button type="button" class="btn btn-outline-secondary h-100 ${activeCategory === 'FREE' ? 'active text-white' : ''}" id="btn-filter-free">Free</button>
-                <button type="button" class="btn btn-outline-secondary h-100 ${activeCategory === 'PRO' ? 'active text-white' : ''}" id="btn-filter-pro">Pro Pass</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 3. Category Filter Pills -->
-        <div class="library-categories-wrapper position-relative d-flex align-items-center mb-4">
-          <button id="btn-scroll-cats-left" class="btn btn-sm btn-glass px-2 me-1.5" type="button" title="Previous Categories" aria-label="Previous Categories" style="height: 32px; width: 32px; padding: 0;">
-            <i class="fa-solid fa-chevron-left fs-9"></i>
+        <!-- 2. Category Filter Pills -->
+        <div class="library-categories-wrapper position-relative d-flex align-items-center mb-3">
+          <button id="btn-scroll-cats-left" class="btn btn-xs btn-glass px-1.5 me-1" type="button" title="Previous Categories" aria-label="Previous Categories" style="height: 26px; width: 26px; padding: 0;">
+            <i class="fa-solid fa-chevron-left fs-10"></i>
           </button>
-          <div id="library-categories-scroller" class="library-categories-scroller d-flex gap-1.5 overflow-x-auto flex-grow-1 py-1" style="scrollbar-width: none; -ms-overflow-style: none;">
-            <button class="btn btn-sm ${!activeCategory || activeCategory === 'ALL' ? 'btn-primary text-white' : 'btn-glass text-muted'} text-nowrap rounded-2 px-3 py-1 fs-8 library-cat-pill" data-category="ALL">
+          <div id="library-categories-scroller" class="library-categories-scroller d-flex gap-1 overflow-x-auto flex-grow-1 py-0.5" style="scrollbar-width: none; -ms-overflow-style: none;">
+            <button class="btn btn-xs ${!activeCategory || activeCategory === 'ALL' ? 'btn-primary' : 'btn-glass'} text-nowrap rounded-2 px-2.5 py-1 fs-9 library-cat-pill" data-category="ALL">
               All Books
             </button>
             ${categories.map(cat => `
-              <button class="btn btn-sm ${activeCategory === cat.name ? 'btn-primary text-white' : 'btn-glass text-muted'} text-nowrap rounded-2 px-3 py-1 fs-8 library-cat-pill" data-category="${cat.name}">
+              <button class="btn btn-xs ${activeCategory === cat.name ? 'btn-primary' : 'btn-glass'} text-nowrap rounded-2 px-2.5 py-1 fs-9 library-cat-pill" data-category="${cat.name}">
                 ${cat.name}
               </button>
             `).join('')}
           </div>
-          <button id="btn-scroll-cats-right" class="btn btn-sm btn-glass px-2 ms-1.5" type="button" title="Next Categories" aria-label="Next Categories" style="height: 32px; width: 32px; padding: 0;">
-            <i class="fa-solid fa-chevron-right fs-9"></i>
+          <button id="btn-scroll-cats-right" class="btn btn-xs btn-glass px-1.5 ms-1" type="button" title="Next Categories" aria-label="Next Categories" style="height: 26px; width: 26px; padding: 0;">
+            <i class="fa-solid fa-chevron-right fs-10"></i>
           </button>
         </div>
 

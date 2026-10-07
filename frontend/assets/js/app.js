@@ -722,7 +722,7 @@ function router() {
     viewTitle.textContent = 'Book Details & Syllabus';
     handleLibraryBookDetailsRoute(rawHash, pageMount);
   } else if (hash === '#/library' || hash.startsWith('#/library')) {
-    viewTitle.textContent = 'PrepSpace Technical Library';
+    viewTitle.textContent = 'Technical Library';
     handleLibraryHubRoute(rawHash, pageMount);
   } else if (hash === '#/experiences') {
     viewTitle.textContent = 'Interview Experiences';
