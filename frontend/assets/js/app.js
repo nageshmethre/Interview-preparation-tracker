@@ -537,16 +537,17 @@ function router() {
       } catch (e) {}
     }
     const defaultStats = {
-      totalSolved: 142,
-      easySolved: 80,
-      mediumSolved: 48,
-      hardSolved: 14,
+      totalSolved: 0,
+      easySolved: 0,
+      mediumSolved: 0,
+      hardSolved: 0,
       totalQuestions: 325,
-      streakDays: 19,
-      mockExamsCompleted: 12,
-      averageMockScore: 88,
-      upcomingInterviewsCount: 3,
-      studyHoursThisWeek: 26.5
+      streakDays: 0,
+      mockExamsCompleted: 0,
+      averageMockScore: 0,
+      upcomingInterviewsCount: 0,
+      studyHoursThisWeek: 0,
+      applicationsCount: 0
     };
     if (!hasCache) {
       pageMount.innerHTML = components.dashboard(defaultStats);
@@ -1744,7 +1745,7 @@ function bindResetPasswordEvents() {
 }
 window.bindResetPasswordEvents = bindResetPasswordEvents;
 
-// Render dashboard graphs with executive gradient styling
+// Render dashboard graphs with clean enterprise SaaS styling
 function renderDashboardCharts(stats = {}) {
   const weeklyCanvas = document.getElementById('weeklyHoursChart');
   if (!weeklyCanvas) return;
@@ -1753,7 +1754,7 @@ function renderDashboardCharts(stats = {}) {
   // Generate dynamic last 7 days dates (MM-DD)
   const today = new Date();
   const defaultLabels = [];
-  const defaultValues = [45, 90, 120, 75, 135, 180, 110];
+  const defaultValues = [0, 0, 0, 0, 0, 0, 0];
   for (let i = 6; i >= 0; i--) {
     const d = new Date();
     d.setDate(today.getDate() - i);
@@ -1779,11 +1780,11 @@ function renderDashboardCharts(stats = {}) {
     try { window._weeklyHoursChartInstance.destroy(); } catch (e) {}
   }
 
-  // Create subtle vertical area gradient
-  const gradient = weeklyCtx.createLinearGradient(0, 0, 0, 200);
-  gradient.addColorStop(0, 'rgba(236, 72, 153, 0.35)');
-  gradient.addColorStop(0.6, 'rgba(99, 102, 241, 0.12)');
-  gradient.addColorStop(1, 'rgba(99, 102, 241, 0.0)');
+  // Create clean subtle area gradient
+  const gradient = weeklyCtx.createLinearGradient(0, 0, 0, 190);
+  gradient.addColorStop(0, 'rgba(56, 189, 248, 0.18)');
+  gradient.addColorStop(0.7, 'rgba(56, 189, 248, 0.04)');
+  gradient.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
 
   window._weeklyHoursChartInstance = new Chart(weeklyCtx, {
     type: 'line',
@@ -1792,18 +1793,18 @@ function renderDashboardCharts(stats = {}) {
       datasets: [{
         label: 'Study Minutes',
         data: weeklyData,
-        borderColor: '#f43f5e',
+        borderColor: '#38bdf8',
         backgroundColor: gradient,
-        tension: 0.42,
+        tension: 0.3,
         fill: true,
-        borderWidth: 2.5,
-        pointRadius: 4,
-        pointBackgroundColor: '#fb7185',
-        pointBorderColor: '#181922',
-        pointBorderWidth: 2,
-        pointHoverRadius: 6,
+        borderWidth: 2,
+        pointRadius: 3.5,
+        pointBackgroundColor: '#38bdf8',
+        pointBorderColor: '#18181b',
+        pointBorderWidth: 1.5,
+        pointHoverRadius: 5,
         pointHoverBackgroundColor: '#ffffff',
-        pointHoverBorderColor: '#f43f5e'
+        pointHoverBorderColor: '#38bdf8'
       }]
     },
     options: {
@@ -1816,13 +1817,13 @@ function renderDashboardCharts(stats = {}) {
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: 'rgba(18, 20, 28, 0.95)',
+          backgroundColor: '#18181b',
           titleColor: '#ffffff',
-          bodyColor: '#cbd5e1',
-          borderColor: 'rgba(244, 63, 94, 0.3)',
+          bodyColor: '#a1a1aa',
+          borderColor: '#27272a',
           borderWidth: 1,
           padding: 10,
-          cornerRadius: 8,
+          cornerRadius: 6,
           displayColors: false,
           callbacks: {
             label: function(context) {
@@ -1837,11 +1838,11 @@ function renderDashboardCharts(stats = {}) {
       scales: {
         y: {
           min: 0,
-          suggestedMax: 150,
+          suggestedMax: 60,
           grid: { color: 'rgba(255, 255, 255, 0.04)' },
           ticks: {
             color: '#71717a',
-            font: { size: 10, family: "'Geist Mono', monospace" },
+            font: { size: 10, family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" },
             callback: function(val) {
               return val + 'm';
             }
@@ -1851,7 +1852,7 @@ function renderDashboardCharts(stats = {}) {
           grid: { display: false },
           ticks: {
             color: '#71717a',
-            font: { size: 10, family: "'Geist Mono', monospace" }
+            font: { size: 10, family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }
           }
         }
       }
@@ -1870,8 +1871,11 @@ function renderDashboardCharts(stats = {}) {
   const rawPipelineData = Object.values(statusCounts);
   const hasData = rawPipelineData.some(v => v > 0);
 
-  const pipelineLabels = hasData ? rawPipelineLabels : ['Applied', 'OA Screen', 'Technical Round', 'Offer'];
-  const pipelineData = hasData ? rawPipelineData : [4, 2, 2, 1];
+  const pipelineLabels = hasData ? rawPipelineLabels : ['No Applications Tracked'];
+  const pipelineData = hasData ? rawPipelineData : [1];
+  const pipelineColors = hasData 
+    ? ['#38bdf8', '#fbbf24', '#a855f7', '#34d399', '#f43f5e']
+    : ['#27272a'];
 
   if (window._pipelineStatusChartInstance) {
     try { window._pipelineStatusChartInstance.destroy(); } catch (e) {}
@@ -1883,22 +1887,22 @@ function renderDashboardCharts(stats = {}) {
       labels: pipelineLabels,
       datasets: [{
         data: pipelineData,
-        backgroundColor: ['#3b82f6', '#f59e0b', '#8b5cf6', '#10b981', '#ec4899'],
+        backgroundColor: pipelineColors,
         borderWidth: 2,
-        borderColor: '#181922',
-        hoverOffset: 4
+        borderColor: '#18181b',
+        hoverOffset: hasData ? 4 : 0
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      cutout: '72%',
+      cutout: '74%',
       plugins: {
         legend: {
           position: 'bottom',
           labels: {
-            color: '#94a3b8',
-            font: { size: 10, family: "'Geist Mono', monospace" },
+            color: '#a1a1aa',
+            font: { size: 10, family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" },
             boxWidth: 8,
             boxHeight: 8,
             usePointStyle: true,
@@ -1906,10 +1910,11 @@ function renderDashboardCharts(stats = {}) {
           }
         },
         tooltip: {
-          backgroundColor: 'rgba(18, 20, 28, 0.95)',
+          enabled: hasData,
+          backgroundColor: '#18181b',
           titleColor: '#ffffff',
-          bodyColor: '#cbd5e1',
-          borderColor: 'rgba(255, 255, 255, 0.1)',
+          bodyColor: '#a1a1aa',
+          borderColor: '#27272a',
           borderWidth: 1,
           padding: 8,
           cornerRadius: 6
