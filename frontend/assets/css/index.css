@@ -84,9 +84,29 @@ h1, h2, h3, h4, h5, h6,
   color: #a1a1aa !important;
 }
 
-/* Antigravity Primary & Semantic Colors */
-.text-primary, .text-cyan, .text-purple {
-  color: #f59e0b !important;
+/* Precision Typography Scale */
+.fs-1 { font-size: 2.25rem !important; }   /* 36px */
+.fs-2 { font-size: 1.75rem !important; }   /* 28px */
+.fs-3 { font-size: 1.5rem !important; }    /* 24px */
+.fs-4 { font-size: 1.25rem !important; }   /* 20px */
+.fs-5 { font-size: 1.1rem !important; }    /* 17.6px */
+.fs-6 { font-size: 0.95rem !important; }   /* 15.2px */
+.fs-7 { font-size: 0.875rem !important; }  /* 14px */
+.fs-8 { font-size: 0.8125rem !important; } /* 13px */
+.fs-9 { font-size: 0.75rem !important; }   /* 12px */
+.fs-10 { font-size: 0.6875rem !important; }/* 11px */
+
+/* Professional Semantic Colors */
+.text-primary {
+  color: #38bdf8 !important;
+}
+
+.text-cyan {
+  color: #22d3ee !important;
+}
+
+.text-purple {
+  color: #c084fc !important;
 }
 
 .text-warning {
@@ -127,24 +147,28 @@ h1, h2, h3, h4, h5, h6,
   border-color: #323238 !important;
 }
 
-/* Warning / Gold elements: Strictly Dark Text on Bright Yellow/Amber */
-.bg-warning,
-.badge.bg-warning,
-.badge.bg-warning.text-dark,
-.btn-warning {
+/* Warning & Status Badges (Clean translucent styling) */
+.bg-warning:not([class*="bg-opacity-"]) {
   background-color: #f59e0b !important;
   color: #18181b !important;
-  border-color: #f59e0b !important;
 }
-
-.bg-warning *,
-.badge.bg-warning *,
-.badge.bg-warning.text-dark *,
-.btn-warning * {
+.badge.bg-warning:not([class*="bg-opacity-"]) {
+  background-color: #f59e0b !important;
   color: #18181b !important;
 }
 
-/* Light buttons & White backgrounds: Strictly Dark Text */
+.bg-warning.bg-opacity-10,
+.bg-warning.bg-opacity-15,
+.bg-warning.bg-opacity-20,
+.badge.bg-warning.bg-opacity-20,
+.badge.bg-warning.bg-opacity-10,
+.badge.bg-warning-subtle {
+  background-color: rgba(245, 158, 11, 0.12) !important;
+  color: #fbbf24 !important;
+  border: 1px solid rgba(245, 158, 11, 0.25) !important;
+}
+
+/* Light buttons & White backgrounds */
 .btn-light,
 .btn-light.text-dark,
 .bg-white {
@@ -163,15 +187,41 @@ h1, h2, h3, h4, h5, h6,
 .bg-primary.bg-opacity-25,
 .bg-primary.bg-opacity-20,
 .bg-primary.bg-opacity-15,
-.bg-primary.bg-opacity-10 {
-  background-color: rgba(245, 158, 11, 0.15) !important;
-  color: #fbbf24 !important;
-  border-color: rgba(245, 158, 11, 0.3) !important;
+.bg-primary.bg-opacity-10,
+.badge.bg-primary.bg-opacity-20,
+.badge.bg-indigo-subtle {
+  background-color: rgba(56, 189, 248, 0.12) !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.25) !important;
+}
+
+/* Success Badges */
+.bg-success.bg-opacity-25,
+.bg-success.bg-opacity-20,
+.bg-success.bg-opacity-15,
+.bg-success.bg-opacity-10,
+.badge.bg-success.bg-opacity-20,
+.badge.bg-success-subtle {
+  background-color: rgba(52, 211, 153, 0.12) !important;
+  color: #34d399 !important;
+  border-color: rgba(52, 211, 153, 0.25) !important;
+}
+
+/* Danger Badges */
+.bg-danger.bg-opacity-25,
+.bg-danger.bg-opacity-20,
+.bg-danger.bg-opacity-15,
+.bg-danger.bg-opacity-10,
+.badge.bg-danger.bg-opacity-20,
+.badge.bg-danger-subtle {
+  background-color: rgba(248, 113, 113, 0.12) !important;
+  color: #f87171 !important;
+  border-color: rgba(248, 113, 113, 0.25) !important;
 }
 
 .border-primary,
 .border-primary-subtle {
-  border-color: rgba(245, 158, 11, 0.3) !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
 }
 
 /* Standalone .text-dark (only inverts when not inside a light container) */
@@ -249,47 +299,69 @@ input:-webkit-autofill:focus,
   transition: background-color 5000s ease-in-out 0s;
 }
 
-/* Antigravity Action Buttons (Solid Warm Amber & Solid Zinc) */
-.btn-premium, .btn-vercel-primary, .btn-primary {
-  background: #f59e0b !important;
-  color: #18181b !important;
-  border: 1px solid #f59e0b !important;
-  font-weight: 700 !important;
-  border-radius: 8px !important;
-  padding: 8px 18px !important;
-  font-size: 0.88rem !important;
-  transition: filter 0.15s ease !important;
+/* SaaS Buttons (Clean, High-Precision Sizing) */
+.btn {
+  font-size: 0.84rem !important;
+  font-weight: 500 !important;
+  border-radius: 6px !important;
+  transition: all 0.15s ease !important;
   box-shadow: none !important;
   text-decoration: none !important;
 }
 
-.btn-premium:hover, .btn-vercel-primary:hover, .btn-primary:hover {
-  filter: brightness(1.1) !important;
-  background: #f59e0b !important;
-  border-color: #f59e0b !important;
-  color: #18181b !important;
-  transform: none !important;
-  box-shadow: none !important;
+.btn-primary, .btn-premium {
+  background: #38bdf8 !important;
+  color: #09090b !important;
+  border: 1px solid #38bdf8 !important;
+  font-weight: 600 !important;
+  padding: 6px 14px !important;
+}
+
+.btn-primary:hover, .btn-premium:hover {
+  background: #7dd3fc !important;
+  border-color: #7dd3fc !important;
+  color: #09090b !important;
 }
 
 .btn-glass, .btn-vercel-secondary, .btn-secondary {
   background: #27272a !important;
-  border: 1px solid #323238 !important;
+  border: 1px solid #3f3f46 !important;
   color: #f4f4f5 !important;
-  border-radius: 8px !important;
-  font-weight: 600 !important;
-  padding: 8px 18px !important;
-  font-size: 0.88rem !important;
-  transition: background-color 0.15s ease, border-color 0.15s ease !important;
-  box-shadow: none !important;
-  text-decoration: none !important;
+  padding: 6px 14px !important;
+  font-weight: 500 !important;
 }
 
 .btn-glass:hover, .btn-vercel-secondary:hover, .btn-secondary:hover {
   background: #323238 !important;
-  border-color: #484852 !important;
+  border-color: #52525b !important;
   color: #ffffff !important;
-  transform: none !important;
+}
+
+.btn-sm, .btn.btn-sm {
+  padding: 4px 10px !important;
+  font-size: 0.78rem !important;
+  line-height: 1.35 !important;
+  border-radius: 5px !important;
+}
+
+.btn-xs, .btn.btn-xs {
+  padding: 2px 7px !important;
+  font-size: 0.72rem !important;
+  line-height: 1.3 !important;
+  border-radius: 4px !important;
+}
+
+.btn-outline-primary {
+  background: transparent !important;
+  color: #38bdf8 !important;
+  border: 1px solid rgba(56, 189, 248, 0.4) !important;
+  font-weight: 500 !important;
+}
+
+.btn-outline-primary:hover {
+  background: rgba(56, 189, 248, 0.12) !important;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
 }
 
 /* Antigravity Tables */

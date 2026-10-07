@@ -2719,7 +2719,7 @@ const components = {
       </button>
     </div>
 
-    <div class="row g-3 dsa-roadmap-container" id="dsa-roadmap-main-row" style="height: calc(100vh - 90px); overflow: hidden;">
+    <div class="row g-3 dsa-roadmap-container" id="dsa-roadmap-main-row" style="height: calc(100vh - 100px); overflow: hidden;">
       <!-- Left: Fixed Topic Navigation Rail -->
       <div class="col-12 col-lg-4 col-xl-3 h-100 d-flex flex-column" id="roadmap-rail-col" style="position: sticky; top: 0;">
         <div class="p-3 d-flex flex-column h-100 border border-secondary border-opacity-20 rounded-3" style="background: #18181b;">
@@ -2842,24 +2842,24 @@ const components = {
 
             <!-- Theory & Core Invariants -->
             <div class="mb-3">
-              <div class="text-muted fs-9 text-uppercase font-monospace fw-bold mb-1">1. Theory & Algorithmic Invariants</div>
+              <h6 class="text-white fw-bold fs-8 mb-1.5"><i class="fa-solid fa-book-open text-primary me-2"></i>1. Theory & Algorithmic Invariants</h6>
               <p class="text-secondary fs-8 mb-0" style="line-height: 1.7;">${s.theory}</p>
             </div>
 
             <!-- Complexity Matrix -->
             <div class="mb-3">
-              <div class="text-muted fs-9 text-uppercase font-monospace fw-bold mb-1">2. Asymptotic Complexity Breakdown</div>
+              <h6 class="text-white fw-bold fs-8 mb-1.5"><i class="fa-solid fa-calculator text-cyan me-2"></i>2. Time & Space Complexity Breakdown</h6>
               <div class="p-2.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-20 font-monospace fs-8 text-cyan d-flex align-items-center gap-2">
-                <i class="fa-solid fa-calculator text-muted"></i>
+                <i class="fa-solid fa-gauge-high text-muted"></i>
                 <span>${s.complexityAnalysis}</span>
               </div>
             </div>
 
             <!-- Interview Pitfalls & Edge Cases -->
             <div class="mb-3">
-              <div class="text-muted fs-9 text-uppercase font-monospace fw-bold mb-1">3. Critical Interview Insights & Traps</div>
-              <div class="p-3 rounded bg-warning bg-opacity-10 border border-warning border-opacity-20 text-light fs-8" style="line-height: 1.65;">
-                <i class="fa-solid fa-triangle-exclamation text-warning me-1.5"></i>
+              <h6 class="text-white fw-bold fs-8 mb-1.5"><i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>3. Critical Interview Insights & Traps</h6>
+              <div class="p-3 rounded border border-warning border-opacity-20 text-light fs-8" style="background: rgba(245, 158, 11, 0.07); line-height: 1.65;">
+                <i class="fa-solid fa-lightbulb text-warning me-1.5"></i>
                 ${s.interviewTips}
               </div>
             </div>
@@ -2867,16 +2867,16 @@ const components = {
             <!-- Curated Challenges -->
             ${s.challenges && s.challenges.length > 0 ? `
               <div class="mt-3 pt-2.5 border-top border-secondary border-opacity-15">
-                <div class="text-muted fs-9 text-uppercase font-monospace fw-bold mb-2">4. Curated Practice Challenges</div>
+                <h6 class="text-white fw-bold fs-8 mb-2"><i class="fa-solid fa-code text-success me-2"></i>4. Curated Coding Challenges</h6>
                 <div class="row g-2">
                   ${s.challenges.map(ch => {
                     const diff = (ch.difficulty || 'MEDIUM').toUpperCase();
-                    const diffBadgeClass = diff === 'EASY' ? 'text-success bg-success' : diff === 'HARD' ? 'text-danger bg-danger' : 'text-warning bg-warning';
+                    const diffBadgeClass = diff === 'EASY' ? 'bg-success bg-opacity-15 text-success border border-success border-opacity-25' : diff === 'HARD' ? 'bg-danger bg-opacity-15 text-danger border border-danger border-opacity-25' : 'bg-warning bg-opacity-15 text-warning border border-warning border-opacity-25';
                     return `
                       <div class="col-12 col-md-6">
                         <div class="dsa-challenge-row">
                           <div class="d-flex align-items-center overflow-hidden me-2" style="min-width: 0;">
-                            <span class="badge ${diffBadgeClass} bg-opacity-20 font-monospace fs-9 me-2 flex-shrink-0">${diff}</span>
+                            <span class="badge ${diffBadgeClass} font-monospace fs-9 me-2 flex-shrink-0">${diff}</span>
                             <span class="fw-semibold text-white fs-8 text-truncate" title="${ch.name}">${ch.name}</span>
                           </div>
                           <a href="#/coding-practice?q=${ch.qId || 1}" class="btn btn-sm btn-primary py-0.5 px-2.5 fs-8 text-nowrap fw-semibold">
