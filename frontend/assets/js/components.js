@@ -2712,34 +2712,42 @@ const components = {
     <!-- Mobile Segmented Switcher (< 992px) -->
     <div class="d-flex d-lg-none align-items-center bg-dark bg-opacity-75 border border-secondary border-opacity-25 rounded-3 p-1 mb-2.5 flex-shrink-0" id="roadmap-mobile-switcher">
       <button type="button" class="btn btn-sm flex-fill py-1.5 px-2 active btn-primary font-monospace fw-semibold" id="btn-show-roadmap-topics" style="font-size: 0.78rem;">
-        <i class="fa-solid fa-list-check me-1.5"></i>Modules (${list.length})
+        <i class="fa-solid fa-list me-1.5"></i>Modules (${list.length})
       </button>
       <button type="button" class="btn btn-sm flex-fill py-1.5 px-2 text-muted font-monospace fw-semibold" id="btn-show-roadmap-reader" style="font-size: 0.78rem;">
-        <i class="fa-solid fa-book-open me-1.5"></i>Topic Reader
+        <i class="fa-solid fa-file-lines me-1.5"></i>Specification
       </button>
     </div>
 
     <div class="row g-3 dsa-roadmap-container" id="dsa-roadmap-main-row" style="height: calc(100vh - 90px); overflow: hidden;">
       <!-- Left: Fixed Topic Navigation Rail -->
       <div class="col-12 col-lg-4 col-xl-3 h-100 d-flex flex-column" id="roadmap-rail-col" style="position: sticky; top: 0;">
-        <div class="glass-panel p-3 d-flex flex-column h-100 border border-secondary border-opacity-20" style="background: #141416;">
+        <div class="p-3 d-flex flex-column h-100 border border-secondary border-opacity-20 rounded-3" style="background: #18181b;">
+          <!-- Rail Header -->
           <div class="d-flex align-items-center justify-content-between pb-2 mb-2 border-bottom border-secondary border-opacity-20 flex-shrink-0">
-            <h5 class="text-white fw-bold m-0 fs-7"><i class="fa-solid fa-folder-tree text-primary me-2"></i>Roadmap Modules</h5>
-            <div class="d-flex align-items-center gap-1.5">
-              <span class="badge bg-indigo-subtle text-primary border border-primary-subtle fs-9 font-monospace">${list.length} Topics</span>
-              <button type="button" class="btn btn-sm btn-glass p-1 px-1.5 border-0 text-muted d-none d-lg-inline-flex" id="btn-toggle-roadmap-rail" title="Toggle Modules Rail" aria-label="Toggle modules rail">
-                <i class="fa-solid fa-angles-left"></i>
-              </button>
+            <div>
+              <h5 class="text-white fw-bold m-0 fs-7">Curriculum Modules</h5>
+              <div class="text-muted fs-9 font-monospace">16 Structured Topics</div>
             </div>
+            <button type="button" class="btn btn-sm btn-glass p-1 px-1.5 border-0 text-muted d-none d-lg-inline-flex" id="btn-toggle-roadmap-rail" title="Toggle Modules Rail" aria-label="Toggle modules rail">
+              <i class="fa-solid fa-angles-left fs-9"></i>
+            </button>
           </div>
-          <div class="d-flex flex-column gap-2 flex-grow-1 overflow-y-auto pe-1" id="roadmap-tree-nodes" style="scrollbar-width: thin; scrollbar-color: #3f3f46 transparent;">
+
+          <!-- Quick Topic Search Filter -->
+          <div class="mb-2 flex-shrink-0">
+            <input type="text" id="roadmap-topic-search" class="form-control form-control-sm bg-black bg-opacity-40 text-white border-secondary border-opacity-30 fs-8" placeholder="Filter topics...">
+          </div>
+
+          <!-- Topic Nodes List -->
+          <div class="d-flex flex-column gap-1.5 flex-grow-1 overflow-y-auto pe-1" id="roadmap-tree-nodes" style="scrollbar-width: thin; scrollbar-color: #3f3f46 transparent;">
             ${list.map((t, idx) => `
-              <div class="roadmap-node-card p-2.5 rounded-3 border border-secondary border-opacity-25 ${idx === 0 ? 'border-primary bg-dark shadow-sm active-topic' : ''}" style="cursor: pointer; transition: all 0.15s ease;" data-topic-id="${t.id || (idx + 1)}">
-                <div class="d-flex align-items-center justify-content-between mb-1.5">
-                  <span class="badge bg-indigo-subtle text-primary border border-primary-subtle fs-9 font-monospace"><i class="fa-solid fa-circle-dot me-1 text-primary"></i>Topic ${idx + 1}</span>
-                  <span class="badge bg-dark text-muted border border-secondary border-opacity-20 fs-9">${(t.subtopics || []).length} Modules</span>
+              <div class="roadmap-node-card p-2.5 rounded-2 border border-secondary border-opacity-20 ${idx === 0 ? 'active-topic' : ''}" style="cursor: pointer;" data-topic-id="${t.id || (idx + 1)}" data-topic-name="${(t.name || t.title || '').toLowerCase()}">
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                  <span class="ps-topic-num font-monospace">${String(idx + 1).padStart(2, '0')}. TOPIC</span>
+                  <span class="ps-topic-units">${(t.subtopics || []).length} units</span>
                 </div>
-                <div class="fw-semibold text-white fs-8 ps-0.5" style="line-height: 1.35; word-break: break-word; white-space: normal;">
+                <div class="ps-topic-title text-truncate" title="${t.name || t.title || 'Module'}">
                   ${t.name || t.title || 'Module'}
                 </div>
               </div>
@@ -2747,6 +2755,7 @@ const components = {
           </div>
         </div>
       </div>
+
       <!-- Right: Scrollable Document Reader -->
       <div class="col-12 col-lg-8 col-xl-9 h-100 overflow-y-auto pe-1 d-none d-lg-block" id="dsa-detail-wrapper" style="scrollbar-width: thin; scrollbar-color: #3f3f46 transparent;">
         <!-- Mobile Back Button (< 992px) -->
@@ -2755,10 +2764,10 @@ const components = {
             <i class="fa-solid fa-arrow-left"></i> Back to Modules List
           </button>
         </div>
-        <div class="glass-panel p-3.5 p-md-4" id="dsa-detail-panel" style="min-height: 100%;">
+        <div class="p-3.5 p-md-4 rounded-3 border border-secondary border-opacity-20" id="dsa-detail-panel" style="min-height: 100%; background: #18181b;">
           <div class="text-center py-5 text-muted">
-            <i class="fa-solid fa-route display-5 mb-3"></i>
-            <p>Select a roadmap node on the left to load its curriculum, complexity analysis, and practice challenges.</p>
+            <i class="fa-solid fa-folder-open display-6 mb-3 opacity-50"></i>
+            <p class="fs-8">Select a topic from the curriculum rail to inspect specifications and challenges.</p>
           </div>
         </div>
       </div>
@@ -2767,108 +2776,111 @@ const components = {
   },
 
   dsaTopicDetail: (topic) => `
-    <div class="dsa-document-sheet p-3 p-md-4 rounded-3 border border-secondary border-opacity-30 bg-black bg-opacity-40 shadow-lg">
-      <!-- 1. Technical Document Header / Cover Strip -->
-      <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-secondary border-opacity-25 flex-wrap gap-3">
+    <div class="dsa-document-sheet p-3 p-md-4">
+      <!-- 1. Header Strip -->
+      <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom border-secondary border-opacity-20 flex-wrap gap-3">
         <div>
           <div class="d-flex align-items-center gap-2 mb-1">
-            <span class="badge bg-indigo-subtle text-primary border border-primary-subtle fs-9 font-monospace">Topic ${topic.sequenceNumber || topic.id || 1} Spec</span>
-            <span class="badge bg-success-subtle text-success fs-9"><i class="fa-solid fa-circle-check me-1"></i>Official Curriculum</span>
+            <span class="badge bg-secondary bg-opacity-25 text-primary border border-secondary border-opacity-30 fs-9 font-monospace">TOPIC ${String(topic.sequenceNumber || topic.id || 1).padStart(2, '0')}</span>
+            <span class="badge bg-secondary bg-opacity-15 text-muted border border-secondary border-opacity-20 fs-9 font-monospace">CORE CURRICULUM</span>
           </div>
-          <h3 class="text-white fw-bold m-0 fs-5">${topic.name}</h3>
-          <p class="text-muted fs-8 m-0 mt-1">Complete engineering curriculum, algorithmic proofs, complexity bounds, and curated workshop challenges.</p>
+          <h2 class="text-white fw-bold m-0 fs-5">${topic.name}</h2>
+          <p class="text-muted fs-8 m-0 mt-1">${topic.description || 'Algorithmic invariants, time-space asymptotic proofs, and curated workshop benchmarks.'}</p>
         </div>
 
-        <!-- Document Action Bar: Workshop, Internship, Print PDF, Scroll Up -->
+        <!-- Action Toolbar -->
         <div class="d-flex align-items-center gap-2 flex-wrap">
-          <a href="#/coding-practice" class="btn btn-sm btn-primary py-1.5 px-3 fs-8 fw-bold text-nowrap shadow-sm">
-            <i class="fa-solid fa-laptop-code me-1.5"></i> Multi-Language Coding Workshop
+          <a href="#/coding-practice?topic=${encodeURIComponent(topic.name)}" class="btn btn-sm btn-primary py-1.5 px-3 fs-8 fw-semibold text-nowrap shadow-sm d-inline-flex align-items-center gap-1.5">
+            <i class="fa-solid fa-laptop-code"></i>
+            <span>Open Code Workshop</span>
           </a>
-          <a href="#/placement" class="btn btn-sm btn-glass py-1.5 px-3 fs-8 fw-semibold text-nowrap">
-            <i class="fa-solid fa-briefcase text-warning me-1.5" aria-hidden="true"></i> Internship Track
-          </a>
-          <button type="button" class="btn btn-sm btn-glass py-1.5 px-2.5 fs-8 text-light" onclick="window.print()" title="Print / Save Specification as PDF" aria-label="Print specification as PDF">
-            <i class="fa-solid fa-file-pdf text-danger me-1" aria-hidden="true"></i> PDF
+          <button type="button" class="btn btn-sm btn-glass py-1.5 px-2.5 fs-8 text-light d-inline-flex align-items-center gap-1" onclick="window.print()" title="Print or Save as PDF" aria-label="Print specification as PDF">
+            <i class="fa-solid fa-file-pdf text-danger"></i>
+            <span>PDF</span>
           </button>
-          <button type="button" class="btn btn-sm btn-glass py-1.5 px-2.5 fs-8 text-info" onclick="(document.getElementById('dsa-detail-wrapper') || window).scrollTo({top: 0, behavior: 'smooth'})" title="Scroll to top" aria-label="Scroll to top">
-            <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+          <button type="button" class="btn btn-sm btn-glass py-1.5 px-2.5 fs-8 text-muted" onclick="(document.getElementById('dsa-detail-wrapper') || window).scrollTo({top: 0, behavior: 'smooth'})" title="Scroll to top" aria-label="Scroll to top">
+            <i class="fa-solid fa-arrow-up"></i>
           </button>
         </div>
       </div>
 
-      <!-- 2. Document Page Meta Bar (Modules count, FAANG Frequency, Time Estimation) -->
-      <div class="row g-2 mb-4 p-2.5 rounded bg-dark bg-opacity-60 border border-secondary border-opacity-20 fs-8 text-secondary">
-        <div class="col-6 col-md-3">
-          <span class="text-muted d-block fs-9 text-uppercase fw-bold">Curriculum Units</span>
+      <!-- 2. Technical Metrics Rail -->
+      <div class="dsa-spec-rail mb-4">
+        <div class="ps-spec-item">
+          <span class="text-muted me-1.5 font-monospace fs-9">UNITS:</span>
           <span class="text-white fw-semibold">${(topic.subtopics || []).length} In-Depth Sections</span>
         </div>
-        <div class="col-6 col-md-3">
-          <span class="text-muted d-block fs-9 text-uppercase fw-bold">Interview Weight</span>
-          <span class="text-warning fw-semibold"><i class="fa-solid fa-star me-1"></i>Very High (FAANG / Tier-1)</span>
+        <div class="ps-spec-item">
+          <span class="text-muted me-1.5 font-monospace fs-9">STUDY TIME:</span>
+          <span class="text-white fw-semibold">15 - 20 Minutes</span>
         </div>
-        <div class="col-6 col-md-3">
-          <span class="text-muted d-block fs-9 text-uppercase fw-bold">Estimated Reading</span>
-          <span class="text-info fw-semibold"><i class="fa-solid fa-clock me-1"></i>15 - 20 Minutes</span>
+        <div class="ps-spec-item">
+          <span class="text-muted me-1.5 font-monospace fs-9">TIER-1 WEIGHT:</span>
+          <span class="text-warning fw-semibold"><i class="fa-solid fa-star me-1"></i>High Frequency</span>
         </div>
-        <div class="col-6 col-md-3">
-          <span class="text-muted d-block fs-9 text-uppercase fw-bold">Workshop Mode</span>
-          <span class="text-success fw-semibold"><i class="fa-solid fa-terminal me-1"></i>325+ Interactive Tests</span>
+        <div class="ps-spec-item">
+          <span class="text-muted me-1.5 font-monospace fs-9">BENCHMARK:</span>
+          <span class="text-success fw-semibold"><i class="fa-solid fa-terminal me-1"></i>Standard Suite</span>
         </div>
       </div>
 
-      <!-- 3. Continuous Document Page Content -->
-      <div class="dsa-document-body d-flex flex-column gap-4">
+      <!-- 3. Continuous Sections -->
+      <div class="d-flex flex-column gap-3">
         ${(topic.subtopics || []).map((s, idx) => `
-          <article class="dsa-document-section p-3.5 p-md-4 rounded-3 bg-dark bg-opacity-30 border border-secondary border-opacity-20 position-relative">
-            <div class="d-flex align-items-center justify-content-between mb-3 border-bottom border-secondary border-opacity-20 pb-2 flex-wrap gap-2">
+          <article class="dsa-document-section p-3.5 p-md-4 rounded-3 border border-secondary border-opacity-20 position-relative">
+            <!-- Section Header -->
+            <div class="d-flex align-items-center justify-content-between mb-3 border-bottom border-secondary border-opacity-15 pb-2 flex-wrap gap-2">
               <div class="d-flex align-items-center gap-2">
-                <span class="badge bg-primary fs-8 px-2 py-1 fw-bold">Section ${idx + 1}</span>
-                <h4 class="text-white fw-bold m-0 fs-6">${s.name}</h4>
+                <span class="badge bg-secondary bg-opacity-25 text-white fs-9 font-monospace">SECTION ${idx + 1}</span>
+                <h3 class="text-white fw-bold m-0 fs-6">${s.name}</h3>
               </div>
-              <button type="button" class="btn btn-sm btn-primary py-1 px-3 fs-8 fw-bold text-nowrap shadow-sm" onclick="window.location.hash='#/coding-practice?q=${(s.challenges && s.challenges[0] && s.challenges[0].qId) || (idx * 5 + 1)}'">
-                <i class="fa-solid fa-laptop-code me-1.5" aria-hidden="true"></i> Practice in Workshop →
-              </button>
+              <a href="#/coding-practice?q=${(s.challenges && s.challenges[0] && s.challenges[0].qId) || (idx * 5 + 1)}" class="btn btn-sm btn-outline-primary py-1 px-3 fs-8 fw-semibold text-nowrap d-inline-flex align-items-center gap-1">
+                <span>Practice in Workshop</span>
+                <i class="fa-solid fa-arrow-right fs-9"></i>
+              </a>
             </div>
 
-            <!-- Theory & Concept -->
+            <!-- Theory & Core Invariants -->
             <div class="mb-3">
-              <h6 class="text-light fw-bold fs-7 mb-1.5"><i class="fa-solid fa-book-open text-primary me-2"></i>1. Theory & Core Concept</h6>
-              <p class="text-secondary fs-7 mb-0" style="line-height: 1.75;">${s.theory}</p>
+              <div class="text-muted fs-9 text-uppercase font-monospace fw-bold mb-1">1. Theory & Algorithmic Invariants</div>
+              <p class="text-secondary fs-8 mb-0" style="line-height: 1.7;">${s.theory}</p>
             </div>
 
             <!-- Complexity Matrix -->
             <div class="mb-3">
-              <h6 class="text-light fw-bold fs-7 mb-1.5"><i class="fa-solid fa-chart-simple text-cyan me-2"></i>2. Time & Space Complexity Analysis</h6>
-              <div class="p-2.5 rounded bg-black bg-opacity-60 border border-secondary border-opacity-25 font-monospace fs-8 text-primary">
-                <i class="fa-solid fa-calculator text-muted me-2"></i>${s.complexityAnalysis}
+              <div class="text-muted fs-9 text-uppercase font-monospace fw-bold mb-1">2. Asymptotic Complexity Breakdown</div>
+              <div class="p-2.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-20 font-monospace fs-8 text-cyan d-flex align-items-center gap-2">
+                <i class="fa-solid fa-calculator text-muted"></i>
+                <span>${s.complexityAnalysis}</span>
               </div>
             </div>
 
-            <!-- Interview Pitfalls & Advice -->
+            <!-- Interview Pitfalls & Edge Cases -->
             <div class="mb-3">
-              <h6 class="text-light fw-bold fs-7 mb-1.5"><i class="fa-solid fa-lightbulb text-warning me-2"></i>3. Technical Interview Insights & Traps</h6>
-              <div class="p-2.5 rounded bg-warning bg-opacity-10 border border-warning border-opacity-25 text-light fs-7" style="line-height: 1.7;">
-                <i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>${s.interviewTips}
+              <div class="text-muted fs-9 text-uppercase font-monospace fw-bold mb-1">3. Critical Interview Insights & Traps</div>
+              <div class="p-3 rounded bg-warning bg-opacity-10 border border-warning border-opacity-20 text-light fs-8" style="line-height: 1.65;">
+                <i class="fa-solid fa-triangle-exclamation text-warning me-1.5"></i>
+                ${s.interviewTips}
               </div>
             </div>
 
-            <!-- Curated Practice Challenges -->
+            <!-- Curated Challenges -->
             ${s.challenges && s.challenges.length > 0 ? `
-              <div class="mt-3 pt-2 border-top border-secondary border-opacity-20">
-                <h6 class="text-light fw-bold fs-7 mb-2"><i class="fa-solid fa-code text-success me-2"></i>4. Curated Coding Challenges</h6>
+              <div class="mt-3 pt-2.5 border-top border-secondary border-opacity-15">
+                <div class="text-muted fs-9 text-uppercase font-monospace fw-bold mb-2">4. Curated Practice Challenges</div>
                 <div class="row g-2">
                   ${s.challenges.map(ch => {
                     const diff = (ch.difficulty || 'MEDIUM').toUpperCase();
-                    const diffBadge = diff === 'EASY' ? 'success' : diff === 'HARD' ? 'danger' : 'warning';
+                    const diffBadgeClass = diff === 'EASY' ? 'text-success bg-success' : diff === 'HARD' ? 'text-danger bg-danger' : 'text-warning bg-warning';
                     return `
-                      <div class="col-12 col-lg-6">
-                        <div class="dsa-challenge-grid p-2.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-25">
-                          <div class="d-flex align-items-center overflow-hidden" style="min-width: 0;">
-                            <span class="badge bg-${diffBadge}-subtle text-${diffBadge} fs-9 me-1.5 flex-shrink-0">${diff}</span>
+                      <div class="col-12 col-md-6">
+                        <div class="dsa-challenge-row">
+                          <div class="d-flex align-items-center overflow-hidden me-2" style="min-width: 0;">
+                            <span class="badge ${diffBadgeClass} bg-opacity-20 font-monospace fs-9 me-2 flex-shrink-0">${diff}</span>
                             <span class="fw-semibold text-white fs-8 text-truncate" title="${ch.name}">${ch.name}</span>
                           </div>
-                          <a href="#/coding-practice?q=${ch.qId || 1}" class="btn btn-sm btn-glass py-1 px-2.5 fs-8 text-nowrap fw-semibold text-white border-secondary border-opacity-30">
-                            <i class="fa-solid fa-terminal me-1 text-primary" aria-hidden="true"></i> Solve →
+                          <a href="#/coding-practice?q=${ch.qId || 1}" class="btn btn-sm btn-primary py-0.5 px-2.5 fs-8 text-nowrap fw-semibold">
+                            Solve <i class="fa-solid fa-arrow-right fs-9 ms-1"></i>
                           </a>
                         </div>
                       </div>
@@ -2881,17 +2893,18 @@ const components = {
         `).join('')}
       </div>
 
-      <!-- 4. Document Page Footer Actions -->
-      <div class="d-flex align-items-center justify-content-between pt-4 mt-4 border-top border-secondary border-opacity-25 flex-wrap gap-3">
-        <div class="text-muted fs-8">
-          <i class="fa-solid fa-check-double text-success me-1"></i> You have read all sections of <strong>${topic.name}</strong>. Ready to test your skills?
+      <!-- 4. Footer Summary -->
+      <div class="d-flex align-items-center justify-content-between pt-3 mt-4 border-top border-secondary border-opacity-20 flex-wrap gap-3">
+        <div class="text-muted fs-8 font-monospace">
+          <i class="fa-solid fa-check-double text-success me-1"></i> Module complete &bull; Ready to write code in workshop
         </div>
         <div class="d-flex align-items-center gap-2">
-          <button type="button" class="btn btn-sm btn-glass text-info fs-8 py-1.5 px-3" onclick="(document.getElementById('dsa-detail-wrapper') || window).scrollTo({top: 0, behavior: 'smooth'})">
-            <i class="fa-solid fa-arrow-up me-1"></i> Back to Top
+          <button type="button" class="btn btn-sm btn-glass text-muted fs-8 py-1.5 px-3" onclick="(document.getElementById('dsa-detail-wrapper') || window).scrollTo({top: 0, behavior: 'smooth'})">
+            <i class="fa-solid fa-arrow-up me-1"></i> Top
           </button>
-          <a href="#/coding-practice" class="btn btn-sm btn-primary fs-8 fw-bold py-1.5 px-3">
-            <i class="fa-solid fa-laptop-code me-1"></i> Open Multi-Language Workshop →
+          <a href="#/coding-practice" class="btn btn-sm btn-primary fs-8 fw-semibold py-1.5 px-3">
+            <span>Next: Coding Workshop</span>
+            <i class="fa-solid fa-arrow-right ms-1 fs-9"></i>
           </a>
         </div>
       </div>

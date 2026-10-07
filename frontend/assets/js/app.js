@@ -4310,6 +4310,21 @@ function bindDsaRoadmapEvents(roadmapData) {
     });
   }
 
+  const topicSearch = document.getElementById('roadmap-topic-search');
+  if (topicSearch) {
+    topicSearch.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      nodes.forEach(card => {
+        const name = (card.getAttribute('data-topic-name') || card.textContent || '').toLowerCase();
+        if (!q || name.includes(q)) {
+          card.classList.remove('d-none');
+        } else {
+          card.classList.add('d-none');
+        }
+      });
+    });
+  }
+
   nodes.forEach(card => {
     card.addEventListener('click', (e) => {
       const topicId = e.currentTarget.dataset.topicId;

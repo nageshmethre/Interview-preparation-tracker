@@ -781,14 +781,13 @@ input:-webkit-autofill:focus,
   box-shadow: 0 4px 10px rgba(245, 158, 11, 0.2);
 }
 
-/* Interactive Roadmap node hover animations */
+/* Interactive Roadmap Node Styles */
 .roadmap-node-card {
-  transition: var(--transition-smooth);
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
 .roadmap-node-card:hover {
-  transform: translateX(5px);
-  border-color: var(--accent-primary) !important;
-  background: rgba(245, 158, 11, 0.2);
+  background: #222226;
+  border-color: #3f3f46 !important;
 }
 
 /* Active Mock Timer clock warning state */
@@ -1960,13 +1959,14 @@ input:-webkit-autofill {
 }
 
 .roadmap-node-card:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(99, 102, 241, 0.4) !important;
+  background: #222226 !important;
+  border-color: #3f3f46 !important;
 }
 
 .roadmap-node-card.active-topic {
-  border-color: #6366f1 !important;
-  background: rgba(99, 102, 241, 0.12) !important;
+  border-color: #3f3f46 !important;
+  border-left: 3px solid #38bdf8 !important;
+  background: #27272a !important;
 }
 
 /* ==========================================================================
@@ -3430,25 +3430,58 @@ input:-webkit-autofill {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* Continuous PDF-Style Document Reader for DSA Topics */
+/* Continuous Specification Document Reader for DSA Topics */
 .dsa-document-sheet {
-  background: linear-gradient(180deg, rgba(18, 18, 22, 0.95) 0%, rgba(12, 12, 15, 0.98) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  background: #18181b;
+  border: 1px solid #27272a;
+  border-radius: var(--radius-md, 8px);
+  box-shadow: none;
   position: relative;
 }
 
+.dsa-spec-rail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.75rem 1rem;
+  background: #202024;
+  border: 1px solid #2e2e33;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  color: #a1a1aa;
+}
+
+.dsa-spec-rail .ps-spec-item {
+  display: inline-flex;
+  align-items: center;
+}
+
 .dsa-document-sheet .dsa-document-section {
-  background: rgba(24, 24, 30, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 10px;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  background: #1e1e22;
+  border: 1px solid #2b2b30;
+  border-radius: 6px;
+  transition: border-color 0.15s ease;
 }
 
 .dsa-document-sheet .dsa-document-section:hover {
-  border-color: rgba(99, 102, 241, 0.3);
-  background: rgba(28, 28, 36, 0.6);
+  border-color: #3f3f46;
+}
+
+.dsa-challenge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.85rem;
+  background: #161619;
+  border: 1px solid #27272a;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.dsa-challenge-row:hover {
+  border-color: #38bdf8;
+  background: #1a1a1e;
 }
 
 @media print {
