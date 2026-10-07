@@ -1,21 +1,21 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
-// Version: 5.7.5 (Interactive Moving Splitters & Collapsible Console Drawer)
+// Version: 5.7.6 (Brand New High-Resolution 3D Logo & Complete Branding Suite)
 
-const CACHE_NAME = 'prepspace-static-v5.7.5';
-const RUNTIME_CACHE = 'prepspace-runtime-v5.7.5';
+const CACHE_NAME = 'prepspace-static-v5.7.6';
+const RUNTIME_CACHE = 'prepspace-runtime-v5.7.6';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/index.css?v=5.7.5',
-  './assets/js/app.js?v=5.7.5',
-  './assets/js/components.js?v=5.7.5',
-  './assets/js/interview-suite.js?v=5.7.5',
-  './assets/js/technical-library-data.js?v=5.7.5',
-  './assets/js/questions-data.js?v=5.7.5',
-  './assets/js/aptitude-curriculum.js?v=5.7.5',
-  './assets/js/production-pages.js?v=5.7.5',
+  './assets/css/index.css?v=5.7.6',
+  './assets/js/app.js?v=5.7.6',
+  './assets/js/components.js?v=5.7.6',
+  './assets/js/interview-suite.js?v=5.7.6',
+  './assets/js/technical-library-data.js?v=5.7.6',
+  './assets/js/questions-data.js?v=5.7.6',
+  './assets/js/aptitude-curriculum.js?v=5.7.6',
+  './assets/js/production-pages.js?v=5.7.6',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',
