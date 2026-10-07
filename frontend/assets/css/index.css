@@ -98,11 +98,11 @@ h1, h2, h3, h4, h5, h6,
 
 /* Professional Semantic Colors */
 .text-primary {
-  color: #38bdf8 !important;
+  color: #f59e0b !important;
 }
 
 .text-cyan {
-  color: #22d3ee !important;
+  color: #38bdf8 !important;
 }
 
 .text-purple {
@@ -190,9 +190,9 @@ h1, h2, h3, h4, h5, h6,
 .bg-primary.bg-opacity-10,
 .badge.bg-primary.bg-opacity-20,
 .badge.bg-indigo-subtle {
-  background-color: rgba(56, 189, 248, 0.12) !important;
-  color: #38bdf8 !important;
-  border-color: rgba(56, 189, 248, 0.25) !important;
+  background-color: rgba(245, 158, 11, 0.12) !important;
+  color: #f59e0b !important;
+  border-color: rgba(245, 158, 11, 0.25) !important;
 }
 
 /* Success Badges */
@@ -221,7 +221,7 @@ h1, h2, h3, h4, h5, h6,
 
 .border-primary,
 .border-primary-subtle {
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  border-color: rgba(245, 158, 11, 0.3) !important;
 }
 
 /* Standalone .text-dark (only inverts when not inside a light container) */
@@ -310,17 +310,17 @@ input:-webkit-autofill:focus,
 }
 
 .btn-primary, .btn-premium {
-  background: #38bdf8 !important;
-  color: #09090b !important;
-  border: 1px solid #38bdf8 !important;
+  background: #f59e0b !important;
+  color: #18181b !important;
+  border: 1px solid #f59e0b !important;
   font-weight: 600 !important;
   padding: 6px 14px !important;
 }
 
 .btn-primary:hover, .btn-premium:hover {
-  background: #7dd3fc !important;
-  border-color: #7dd3fc !important;
-  color: #09090b !important;
+  background: #fbbf24 !important;
+  border-color: #fbbf24 !important;
+  color: #18181b !important;
 }
 
 .btn-glass, .btn-vercel-secondary, .btn-secondary {
@@ -353,15 +353,15 @@ input:-webkit-autofill:focus,
 
 .btn-outline-primary {
   background: transparent !important;
-  color: #38bdf8 !important;
-  border: 1px solid rgba(56, 189, 248, 0.4) !important;
+  color: #f59e0b !important;
+  border: 1px solid rgba(245, 158, 11, 0.4) !important;
   font-weight: 500 !important;
 }
 
 .btn-outline-primary:hover {
-  background: rgba(56, 189, 248, 0.12) !important;
-  border-color: #38bdf8 !important;
-  color: #ffffff !important;
+  background: rgba(245, 158, 11, 0.12) !important;
+  border-color: #f59e0b !important;
+  color: #fbbf24 !important;
 }
 
 /* Antigravity Tables */
@@ -2042,18 +2042,18 @@ input:-webkit-autofill {
 }
 
 .roadmap-node-card.active-topic {
-  border-color: rgba(56, 189, 248, 0.4) !important;
-  border-left: 3px solid #38bdf8 !important;
-  background: rgba(56, 189, 248, 0.08) !important;
+  border-color: rgba(245, 158, 11, 0.4) !important;
+  border-left: 3px solid #f59e0b !important;
+  background: rgba(245, 158, 11, 0.08) !important;
 }
 
 .roadmap-node-card.active-topic .text-white {
-  color: #38bdf8 !important;
+  color: #f59e0b !important;
 }
 
 .roadmap-node-card.active-topic .opacity-75 {
   opacity: 1 !important;
-  color: #38bdf8 !important;
+  color: #f59e0b !important;
 }
 
 /* ==========================================================================

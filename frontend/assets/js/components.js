@@ -2827,7 +2827,7 @@ const components = {
             <!-- Section Header -->
             <div class="d-flex align-items-center justify-content-between mb-3 border-bottom border-secondary border-opacity-15 pb-2 flex-wrap gap-2">
               <div class="d-flex align-items-center gap-2">
-                <span class="badge bg-secondary bg-opacity-30 text-cyan border border-secondary border-opacity-25 fs-10 font-monospace">${String(idx + 1).padStart(2, '0')}</span>
+                <span class="badge bg-secondary bg-opacity-30 text-warning border border-secondary border-opacity-25 fs-10 font-monospace">${String(idx + 1).padStart(2, '0')}</span>
                 <h3 class="text-white fw-bold m-0 fs-6">${s.name}</h3>
               </div>
               <a href="#/coding-practice?q=${(s.challenges && s.challenges[0] && s.challenges[0].qId) || (idx * 5 + 1)}" class="btn btn-sm btn-outline-primary py-1 px-3 fs-8 fw-semibold text-nowrap d-inline-flex align-items-center gap-1">
@@ -2844,8 +2844,8 @@ const components = {
 
             <!-- Complexity Matrix -->
             <div class="mb-3">
-              <h6 class="text-white fw-bold fs-8 mb-1.5"><i class="fa-solid fa-calculator text-cyan me-2"></i>2. Time & Space Complexity Breakdown</h6>
-              <div class="p-2.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-20 font-monospace fs-8 text-cyan d-flex align-items-center gap-2">
+              <h6 class="text-white fw-bold fs-8 mb-1.5"><i class="fa-solid fa-calculator text-primary me-2"></i>2. Time & Space Complexity Breakdown</h6>
+              <div class="p-2.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-20 font-monospace fs-8 text-warning d-flex align-items-center gap-2">
                 <i class="fa-solid fa-gauge-high text-muted"></i>
                 <span>${s.complexityAnalysis}</span>
               </div>
