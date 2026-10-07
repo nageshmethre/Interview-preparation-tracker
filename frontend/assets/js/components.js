@@ -5989,7 +5989,7 @@ const components = {
     </div>
   `,
 
-  // PrepSpace Technical Library - Library Hub
+  // PrepSpace Technical Library - Clean Engineering Hub
   libraryHub: (catalog, progressMap, activeCategory, searchQuery, activeDifficulty, isProUser) => {
     const books = catalog || (window.PREPSPACE_LIBRARY ? window.PREPSPACE_LIBRARY.books : []);
     const categories = window.PREPSPACE_LIBRARY ? window.PREPSPACE_LIBRARY.categories : [];
@@ -6030,64 +6030,62 @@ const components = {
     }
 
     return `
-      <div class="container-fluid py-3 px-3 px-md-4 technical-library-container">
-        <!-- Hero Header (Compact & Streamlined) -->
-        <div class="library-hero-banner px-3 px-md-4 py-3 rounded-3 mb-3 position-relative overflow-hidden">
-          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
-            <div>
-              <div class="d-flex align-items-center gap-2 mb-1">
-                <span class="badge bg-primary text-white font-monospace px-2 py-0.5 fs-9"><i class="fa-solid fa-graduation-cap me-1" aria-hidden="true"></i> Technical Library</span>
-                ${isProUser ? '<span class="badge bg-success bg-opacity-25 text-emerald border border-success border-opacity-50 px-2 py-0.5 fs-9"><i class="fa-solid fa-crown me-1" aria-hidden="true"></i> PRO PASS</span>' : '<span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-50 px-2 py-0.5 fs-9"><i class="fa-solid fa-lock-open me-1" aria-hidden="true"></i> FREE PREVIEWS</span>'}
-              </div>
-              <h2 class="text-white fw-bold mb-1 fs-4">Curriculum Handbooks & Syllabi</h2>
-              <p class="text-secondary fs-8 mb-0" style="max-width: 750px;">
-                Textbook-grade technical study curriculum, system architectures, polyglot algorithms, and placement blueprints.
-              </p>
+      <div class="technical-library-container container-fluid px-0">
+        <!-- 1. Header Bar -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 pb-3 border-bottom border-secondary border-opacity-20">
+          <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <h2 class="text-white fw-bold m-0 fs-5">Technical Library & Handbooks</h2>
+              <span class="ps-status-pill ps-status-active">19 Curated Guides</span>
             </div>
+            <p class="text-muted fs-8 mb-0">Textbook-grade technical study curriculum, system architectures, polyglot algorithms, and placement blueprints.</p>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            ${isProUser 
+              ? '<span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle px-2.5 py-1.5 fs-8 font-monospace"><i class="fa-solid fa-crown me-1.5"></i> Pro Pass Active</span>' 
+              : '<a href="#/billing" class="btn btn-sm btn-primary px-3 py-1.5 fs-8 fw-semibold"><i class="fa-solid fa-gem me-1.5"></i> Unlock Pro Library</a>'}
           </div>
         </div>
 
         ${activeProgressBook ? `
-          <!-- Continue Reading Banner -->
-          <div class="card bg-dark bg-opacity-75 border-primary border-opacity-50 rounded-3 p-3 mb-4 shadow-sm">
-            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
-              <div class="d-flex align-items-center gap-3">
-                <div class="rounded-3 p-2.5 d-flex align-items-center justify-content-center" style="background: ${activeProgressBook.gradient}; width: 48px; height: 48px;">
-                  <i class="${activeProgressBook.icon} text-white fs-5"></i>
-                </div>
-                <div>
-                  <div class="text-muted fs-9 uppercase font-monospace">Jump Back In</div>
-                  <h5 class="text-white fw-bold mb-0 fs-6">${activeProgressBook.title}</h5>
-                  <div class="text-muted fs-8">Chapter ${activeProgressVal.lastChapterNumber || 1} &bull; Page ${activeProgressVal.lastPage || 1} of ${activeProgressBook.pageCount}</div>
+          <!-- Jump Back In / Resume Banner -->
+          <div class="ps-panel-box p-3 mb-4 d-flex flex-wrap justify-content-between align-items-center gap-3" style="border-left: 3px solid #38bdf8 !important;">
+            <div class="d-flex align-items-center gap-3">
+              <div class="rounded-2 p-2.5 d-flex align-items-center justify-content-center text-white" style="background: #27272a; width: 44px; height: 44px; border: 1px solid #3f3f46;">
+                <i class="fa-solid fa-book-open text-cyan fs-5"></i>
+              </div>
+              <div>
+                <div class="text-muted fs-9 text-uppercase font-monospace">Resume Reading</div>
+                <h3 class="text-white fw-bold mb-0 fs-6">${activeProgressBook.title}</h3>
+                <div class="text-muted fs-8">Chapter ${activeProgressVal.lastChapterNumber || 1} &bull; ${activeProgressVal.progressPercentage || 0}% completed</div>
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+              <div class="d-none d-sm-block text-end" style="min-width: 110px;">
+                <div class="progress bg-secondary bg-opacity-25" style="height: 5px;">
+                  <div class="progress-bar bg-primary" style="width: ${activeProgressVal.progressPercentage || 0}%;"></div>
                 </div>
               </div>
-              <div class="d-flex align-items-center gap-3 w-100 w-md-auto justify-content-between justify-content-md-end">
-                <div class="d-none d-sm-block text-end" style="min-width: 120px;">
-                  <div class="progress bg-secondary bg-opacity-25" style="height: 6px;">
-                    <div class="progress-bar bg-primary" style="width: ${activeProgressVal.progressPercentage || 0}%;"></div>
-                  </div>
-                  <span class="text-muted fs-9">${activeProgressVal.progressPercentage || 0}% completed</span>
-                </div>
-                <a href="#/library/read?id=${activeProgressBook.id}&ch=${activeProgressVal.lastChapterNumber || 1}" class="btn btn-primary btn-sm px-3 py-1.5 fw-semibold" style="height: 36px; display: inline-flex; align-items: center;">
-                  <i class="fa-solid fa-play me-1.5" aria-hidden="true"></i> Resume Reading
-                </a>
-              </div>
+              <a href="#/library/read?id=${activeProgressBook.id}&ch=${activeProgressVal.lastChapterNumber || 1}" class="btn btn-primary btn-sm px-3 py-1.5 fs-8 fw-semibold d-inline-flex align-items-center gap-1.5">
+                <span>Continue Reading</span>
+                <i class="fa-solid fa-arrow-right fs-9"></i>
+              </a>
             </div>
           </div>
         ` : ''}
 
-        <!-- Search & Control Bar -->
-        <div class="card bg-dark border-secondary border-opacity-25 p-3 rounded-3 mb-4">
+        <!-- 2. Search & Filter Control Deck -->
+        <div class="ps-panel-box p-3 mb-3">
           <div class="row g-2 align-items-center">
             <div class="col-12 col-md-5 col-lg-6">
               <div class="input-group input-group-sm" style="height: 36px;">
-                <span class="input-group-text bg-black bg-opacity-50 border-secondary border-opacity-50 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                <input type="text" id="library-search-input" class="form-control bg-black bg-opacity-50 text-white border-secondary border-opacity-50 h-100" placeholder="Search topics, algorithms, languages, or keywords..." value="${searchQuery || ''}">
-                ${searchQuery ? '<button id="btn-clear-library-search" class="btn btn-outline-secondary border-opacity-50 text-muted" type="button"><i class="fa-solid fa-xmark"></i></button>' : ''}
+                <span class="input-group-text bg-black bg-opacity-40 border-secondary border-opacity-30 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="text" id="library-search-input" class="form-control bg-black bg-opacity-40 text-white border-secondary border-opacity-30 h-100" placeholder="Search topics, algorithms, frameworks, or keywords..." value="${searchQuery || ''}">
+                ${searchQuery ? '<button id="btn-clear-library-search" class="btn btn-outline-secondary border-opacity-30 text-muted" type="button"><i class="fa-solid fa-xmark"></i></button>' : ''}
               </div>
             </div>
             <div class="col-6 col-md-4 col-lg-3">
-              <select id="library-difficulty-select" class="form-select form-select-sm bg-black bg-opacity-50 text-white border-secondary border-opacity-50" style="height: 36px;">
+              <select id="library-difficulty-select" class="form-select form-select-sm bg-black bg-opacity-40 text-white border-secondary border-opacity-30" style="height: 36px;">
                 <option value="ALL" ${!activeDifficulty || activeDifficulty === 'ALL' ? 'selected' : ''}>All Difficulties</option>
                 <option value="BEGINNER" ${activeDifficulty === 'BEGINNER' ? 'selected' : ''}>Beginner Foundations</option>
                 <option value="INTERMEDIATE" ${activeDifficulty === 'INTERMEDIATE' ? 'selected' : ''}>Intermediate Core</option>
@@ -6104,33 +6102,33 @@ const components = {
           </div>
         </div>
 
-        <!-- Scrollable Category Navigation Pills with Static Side Slider Buttons -->
+        <!-- 3. Category Filter Pills -->
         <div class="library-categories-wrapper position-relative d-flex align-items-center mb-4">
-          <button id="btn-scroll-cats-left" class="reader-slider-btn me-2" type="button" title="Previous Categories" aria-label="Previous Categories">
+          <button id="btn-scroll-cats-left" class="btn btn-sm btn-glass px-2 me-1.5" type="button" title="Previous Categories" aria-label="Previous Categories" style="height: 32px; width: 32px; padding: 0;">
             <i class="fa-solid fa-chevron-left fs-9"></i>
           </button>
-          <div id="library-categories-scroller" class="library-categories-scroller d-flex gap-2 overflow-x-auto flex-grow-1" style="scrollbar-width: none; -ms-overflow-style: none;">
-            <button class="btn btn-sm ${!activeCategory || activeCategory === 'ALL' ? 'btn-primary text-white' : 'btn-glass text-muted'} text-nowrap rounded-pill px-3 py-1.5 library-cat-pill" data-category="ALL">
-              <i class="fa-solid fa-layer-group me-1.5" aria-hidden="true"></i> All Handbooks
+          <div id="library-categories-scroller" class="library-categories-scroller d-flex gap-1.5 overflow-x-auto flex-grow-1 py-1" style="scrollbar-width: none; -ms-overflow-style: none;">
+            <button class="btn btn-sm ${!activeCategory || activeCategory === 'ALL' ? 'btn-primary text-white' : 'btn-glass text-muted'} text-nowrap rounded-2 px-3 py-1 fs-8 library-cat-pill" data-category="ALL">
+              All Handbooks
             </button>
             ${categories.map(cat => `
-              <button class="btn btn-sm ${activeCategory === cat.name ? 'btn-primary text-white' : 'btn-glass text-muted'} text-nowrap rounded-pill px-3 py-1.5 library-cat-pill" data-category="${cat.name}">
-                <i class="${cat.icon} me-1.5" aria-hidden="true"></i> ${cat.name}
+              <button class="btn btn-sm ${activeCategory === cat.name ? 'btn-primary text-white' : 'btn-glass text-muted'} text-nowrap rounded-2 px-3 py-1 fs-8 library-cat-pill" data-category="${cat.name}">
+                ${cat.name}
               </button>
             `).join('')}
           </div>
-          <button id="btn-scroll-cats-right" class="reader-slider-btn ms-2" type="button" title="Next Categories" aria-label="Next Categories">
+          <button id="btn-scroll-cats-right" class="btn btn-sm btn-glass px-2 ms-1.5" type="button" title="Next Categories" aria-label="Next Categories" style="height: 32px; width: 32px; padding: 0;">
             <i class="fa-solid fa-chevron-right fs-9"></i>
           </button>
         </div>
 
-        <!-- Books Catalog Grid -->
-        <div class="row g-3 g-md-4">
+        <!-- 4. Books Catalog Grid -->
+        <div class="row g-3">
           ${filtered.length === 0 ? `
             <div class="col-12 text-center py-5">
-              <div class="p-5 rounded-4 bg-dark bg-opacity-50 border border-secondary border-opacity-25">
-                <i class="fa-solid fa-book-open text-muted display-4 mb-3"></i>
-                <h5 class="text-white fw-bold">No books found matching your criteria</h5>
+              <div class="ps-panel-box p-5">
+                <i class="fa-solid fa-book-open text-muted fs-1 mb-3"></i>
+                <h3 class="text-white fw-bold fs-6">No handbooks found matching your criteria</h3>
                 <p class="text-muted fs-8 mb-3">Try adjusting your search keywords or resetting category filters.</p>
                 <button id="btn-reset-library-filters" class="btn btn-primary btn-sm px-4">Reset All Filters</button>
               </div>
@@ -6142,63 +6140,62 @@ const components = {
 
             return `
               <div class="col-12 col-md-6 col-xl-4 d-flex">
-                <div class="card library-book-card w-100 bg-dark bg-opacity-75 border-secondary border-opacity-25 rounded-3 d-flex flex-column overflow-hidden transition-all">
-                  <!-- Book Card Spine / Header (Clean, icon-free) -->
-                  <div class="book-card-spine px-3 py-2.5 d-flex justify-content-between align-items-center position-relative" style="background: ${book.gradient}; min-height: 48px;">
-                    <div class="d-flex align-items-center gap-2 overflow-hidden flex-grow-1 me-2" style="min-width: 0;">
-                      <span class="badge bg-black bg-opacity-50 text-white border border-white border-opacity-25 fs-9 font-monospace flex-shrink-0">${book.difficulty}</span>
-                      <span class="text-white text-opacity-95 fs-9 fw-semibold text-truncate" title="${book.category}">${book.category}</span>
+                <div class="ps-workspace-card w-100 p-3 d-flex flex-column justify-content-between">
+                  <!-- Header: Category + Difficulty + Access Tag -->
+                  <div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <span class="ps-stat-title text-truncate me-2">${book.category}</span>
+                      <div class="d-flex align-items-center gap-1.5 flex-shrink-0">
+                        <span class="badge bg-secondary bg-opacity-25 text-light border border-secondary border-opacity-30 fs-9 font-monospace">${book.difficulty}</span>
+                        ${book.isPro ? `
+                          <span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-30 fs-9 font-monospace">PRO</span>
+                        ` : `
+                          <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-30 fs-9 font-monospace">FREE</span>
+                        `}
+                      </div>
                     </div>
-                    <div>
-                      ${book.isPro ? `
-                        <span class="badge bg-warning bg-opacity-95 text-dark fw-bold font-monospace fs-9 shadow-sm"><i class="fa-solid fa-crown me-1" aria-hidden="true"></i> PRO</span>
-                      ` : `
-                        <span class="badge bg-emerald bg-opacity-95 text-white fw-bold font-monospace fs-9 shadow-sm"><i class="fa-solid fa-check me-1" aria-hidden="true"></i> FREE</span>
-                      `}
-                    </div>
-                  </div>
 
-                  <!-- Book Card Content -->
-                  <div class="card-body p-3 d-flex flex-column flex-grow-1">
-                    <h5 class="text-white fw-bold mb-1 line-clamp-2" style="font-size: 0.95rem; line-height: 1.35;">${book.title}</h5>
+                    <!-- Book Title -->
+                    <h3 class="text-white fw-bold mb-1 line-clamp-2 fs-6" style="line-height: 1.35;">${book.title}</h3>
                     <p class="text-muted fs-8 mb-2 line-clamp-2" style="line-height: 1.45;">${book.subtitle || book.description}</p>
 
                     <!-- Tags -->
                     <div class="d-flex flex-wrap gap-1 mb-3">
                       ${(book.tags || []).slice(0, 3).map(tag => `
-                        <span class="badge bg-secondary bg-opacity-20 text-light border border-secondary border-opacity-25 fs-9 px-1.5 py-0.5">${tag}</span>
+                        <span class="badge bg-secondary bg-opacity-15 text-secondary border border-secondary border-opacity-20 fs-9 px-1.5 py-0.5">${tag}</span>
                       `).join('')}
-                      ${(book.tags && book.tags.length > 3) ? `<span class="badge bg-secondary bg-opacity-20 text-muted fs-9">+${book.tags.length - 3}</span>` : ''}
+                      ${(book.tags && book.tags.length > 3) ? `<span class="badge bg-secondary bg-opacity-15 text-muted fs-9">+${book.tags.length - 3}</span>` : ''}
                     </div>
 
-                    <!-- Progress Bar if user has interacted -->
+                    <!-- Progress Bar if interacted -->
                     ${percent > 0 ? `
-                      <div class="mb-3">
+                      <div class="mb-2.5">
                         <div class="d-flex justify-content-between text-muted fs-9 mb-1">
-                          <span>Progress</span>
-                          <span>${percent}%</span>
+                          <span>Reading Progress</span>
+                          <span class="text-white font-monospace">${percent}%</span>
                         </div>
-                        <div class="progress bg-secondary bg-opacity-20" style="height: 4px;">
-                          <div class="progress-bar ${isCompleted ? 'bg-success' : 'bg-primary'}" style="width: ${percent}%;"></div>
+                        <div class="ps-clean-progress">
+                          <div class="progress-bar ${isCompleted ? 'bg-success' : 'bg-primary'}" style="width: ${percent}%; height: 100%;"></div>
                         </div>
                       </div>
                     ` : ''}
+                  </div>
 
-                    <!-- Book Metadata Specs (Single horizontal line, no vertical up-down wrapping) -->
-                    <div class="mt-auto pt-2.5 pb-1 border-top border-secondary border-opacity-15 d-flex justify-content-between align-items-center text-muted fs-9 font-monospace" style="white-space: nowrap; gap: 0.5rem;">
-                      <span class="text-nowrap d-inline-flex align-items-center"><i class="fa-regular fa-clock me-1 text-warning" aria-hidden="true"></i>${(book.estimatedReadingTime || '6h').replace(/ Hours?/i, 'h')}</span>
-                      <span class="text-nowrap d-inline-flex align-items-center"><i class="fa-regular fa-file-lines me-1 text-info" aria-hidden="true"></i>${book.chapters ? book.chapters.length : 8} Ch &bull; ${book.pageCount || 310} pgs</span>
-                      <span class="text-nowrap d-inline-flex align-items-center"><i class="fa-solid fa-star me-1 text-warning" aria-hidden="true"></i>${book.rating || '4.95'}</span>
+                  <!-- Footer: Specs & Actions -->
+                  <div class="mt-3 pt-2.5 border-top border-secondary border-opacity-15">
+                    <div class="d-flex justify-content-between align-items-center text-muted fs-9 font-monospace mb-2.5">
+                      <span><i class="fa-regular fa-clock me-1 text-muted"></i>${(book.estimatedReadingTime || '6h').replace(/ Hours?/i, 'h')}</span>
+                      <span>${book.chapters ? book.chapters.length : 8} Chapters &bull; ${book.pageCount || 310} pgs</span>
+                      <span><i class="fa-solid fa-star me-1 text-warning"></i>${book.rating || '4.95'}</span>
                     </div>
 
-                    <!-- Card Actions -->
-                    <div class="d-flex gap-2 mt-2.5">
-                      <a href="#/library/read?id=${book.id}&ch=1" class="btn btn-primary btn-sm flex-grow-1 fw-semibold d-flex align-items-center justify-content-center py-1.5" style="height: 36px;">
-                        ${percent > 0 ? 'Continue' : 'Read'}
+                    <div class="d-flex gap-2">
+                      <a href="#/library/read?id=${book.id}&ch=1" class="btn btn-primary btn-sm flex-grow-1 fw-semibold d-flex align-items-center justify-content-center py-1.5 fs-8" style="height: 34px;">
+                        <span>${percent > 0 ? 'Continue Reading' : 'Read Handbook'}</span>
+                        <i class="fa-solid fa-arrow-right ms-1.5 fs-9"></i>
                       </a>
-                      <a href="#/library/book?id=${book.id}" class="btn btn-glass btn-sm px-2.5 d-inline-flex align-items-center justify-content-center gap-1.5 text-nowrap" style="height: 36px;" title="View Table of Contents" aria-label="Table of Contents for ${book.title}">
-                        <i class="fa-solid fa-list-ul text-muted" aria-hidden="true"></i>
-                        <span class="fs-9 text-muted fw-medium d-none d-sm-inline">Syllabus</span>
+                      <a href="#/library/book?id=${book.id}" class="btn btn-glass btn-sm px-2.5 d-inline-flex align-items-center justify-content-center gap-1 text-nowrap fs-8" style="height: 34px;" title="View Table of Contents" aria-label="Table of Contents for ${book.title}">
+                        <span>Syllabus</span>
                       </a>
                     </div>
                   </div>
@@ -6226,33 +6223,33 @@ const components = {
     const canAccessAll = isProUser || !book.isPro;
 
     return `
-      <div class="container-fluid py-3 px-3 px-md-4 technical-library-book-details">
+      <div class="technical-library-book-details container-fluid px-0">
         <!-- Breadcrumbs -->
         <nav aria-label="breadcrumb" class="mb-3">
           <ol class="breadcrumb fs-8 mb-0">
-            <li class="breadcrumb-item"><a href="#/library" class="text-primary text-decoration-none"><i class="fa-solid fa-arrow-left me-1"></i> Technical Library</a></li>
+            <li class="breadcrumb-item"><a href="#/library" class="text-muted text-decoration-none"><i class="fa-solid fa-arrow-left me-1"></i> Technical Library</a></li>
             <li class="breadcrumb-item text-muted">${book.category}</li>
             <li class="breadcrumb-item active text-white" aria-current="page">${book.title}</li>
           </ol>
         </nav>
 
         <!-- Book Header Banner -->
-        <div class="card bg-dark bg-opacity-75 border-secondary border-opacity-25 rounded-4 p-4 p-md-5 mb-4 position-relative overflow-hidden">
+        <div class="ps-panel-box p-4 p-md-5 mb-4">
           <div class="row g-4 align-items-center">
-            <!-- Book Cover 3D Tile -->
+            <!-- Book Cover Tile -->
             <div class="col-12 col-md-4 col-lg-3 text-center">
-              <div class="book-cover-showcase mx-auto rounded-3 p-4 d-flex flex-column justify-content-between text-start shadow-lg position-relative" style="background: ${book.gradient}; width: 210px; min-height: 290px; border-left: 6px solid rgba(0,0,0,0.35);">
+              <div class="ps-stat-box p-4 d-flex flex-column justify-content-between text-start mx-auto" style="width: 210px; min-height: 280px; border-left: 4px solid #38bdf8 !important;">
                 <div>
                   <div class="d-flex justify-content-between align-items-center mb-3">
-                    <i class="${book.icon} text-white fs-3"></i>
-                    ${book.isPro ? '<span class="badge bg-warning text-dark font-monospace fs-9">PRO</span>' : '<span class="badge bg-emerald text-white font-monospace fs-9">FREE</span>'}
+                    <span class="badge bg-secondary bg-opacity-25 text-white fs-9 font-monospace">${book.difficulty}</span>
+                    ${book.isPro ? '<span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-30 font-monospace fs-9">PRO</span>' : '<span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-30 font-monospace fs-9">FREE</span>'}
                   </div>
-                  <div class="text-white text-opacity-75 fs-9 uppercase font-monospace mb-1">${book.category}</div>
-                  <h6 class="text-white fw-bold mb-1" style="font-size: 1rem; line-height: 1.3;">${book.title}</h6>
+                  <div class="ps-stat-title mb-1">${book.category}</div>
+                  <h4 class="text-white fw-bold mb-1 fs-6" style="line-height: 1.3;">${book.title}</h4>
                 </div>
-                <div class="pt-3 border-top border-white border-opacity-20 text-white text-opacity-80 fs-9 font-monospace">
-                  ${book.author || 'PrepSpace Learning Group'}<br>
-                  <span class="text-white text-opacity-50">EDITION 2026</span>
+                <div class="pt-3 border-top border-secondary border-opacity-20 text-muted fs-9 font-monospace">
+                  ${book.author || 'PrepSpace Engineering Curriculum'}<br>
+                  <span class="text-muted">2026 EDITION</span>
                 </div>
               </div>
             </div>
@@ -6260,66 +6257,66 @@ const components = {
             <!-- Book Metadata & Description -->
             <div class="col-12 col-md-8 col-lg-9">
               <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-50 fs-9">${book.difficulty}</span>
-                <span class="badge bg-dark border border-secondary border-opacity-50 text-warning fs-9"><i class="fa-solid fa-star me-1"></i> ${book.rating || 4.9} Rating</span>
-                <span class="badge bg-dark border border-secondary border-opacity-50 text-muted fs-9"><i class="fa-regular fa-clock me-1"></i> ${book.estimatedReadingTime || '6 Hours'}</span>
-                <span class="badge bg-dark border border-secondary border-opacity-50 text-muted fs-9"><i class="fa-regular fa-file-lines me-1"></i> ${book.pageCount || 120} Pages</span>
-                <span class="badge bg-dark border border-secondary border-opacity-50 text-muted fs-9"><i class="fa-solid fa-certificate me-1 text-success"></i> ${book.licenseType || 'ORIGINAL'} LICENSE</span>
+                <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-30 fs-9">${book.difficulty}</span>
+                <span class="badge bg-dark border border-secondary border-opacity-30 text-warning fs-9"><i class="fa-solid fa-star me-1"></i> ${book.rating || 4.9} Rating</span>
+                <span class="badge bg-dark border border-secondary border-opacity-30 text-muted fs-9"><i class="fa-regular fa-clock me-1"></i> ${book.estimatedReadingTime || '6 Hours'}</span>
+                <span class="badge bg-dark border border-secondary border-opacity-30 text-muted fs-9"><i class="fa-regular fa-file-lines me-1"></i> ${book.pageCount || 120} Pages</span>
+                <span class="badge bg-dark border border-secondary border-opacity-30 text-muted fs-9"><i class="fa-solid fa-certificate me-1 text-success"></i> ${book.licenseType || 'ORIGINAL'} LICENSE</span>
               </div>
 
-              <h3 class="text-white fw-extrabold mb-2">${book.title}</h3>
-              <p class="text-info fs-7 mb-3">${book.subtitle || ''}</p>
+              <h2 class="text-white fw-bold mb-2 fs-4">${book.title}</h2>
+              <p class="text-secondary fs-7 mb-2">${book.subtitle || ''}</p>
               <p class="text-muted fs-8 mb-3" style="line-height: 1.6;">${book.description}</p>
 
               <div class="d-flex flex-wrap gap-1 mb-4">
                 ${(book.tags || []).map(tag => `
-                  <span class="badge bg-dark text-light border border-secondary border-opacity-25 fs-9 px-2 py-1">${tag}</span>
+                  <span class="badge bg-secondary bg-opacity-20 text-secondary border border-secondary border-opacity-25 fs-9 px-2 py-1">${tag}</span>
                 `).join('')}
               </div>
 
               <!-- Primary CTA Row -->
               <div class="d-flex flex-wrap align-items-center gap-3">
-                <a href="#/library/read?id=${book.id}&ch=${progress ? (progress.lastChapterNumber || 1) : 1}" class="btn btn-primary btn-lg px-4 fs-7 fw-bold">
+                <a href="#/library/read?id=${book.id}&ch=${progress ? (progress.lastChapterNumber || 1) : 1}" class="btn btn-primary px-4 py-2 fs-7 fw-semibold">
                   <i class="fa-solid fa-play me-2"></i> ${percent > 0 ? `Resume at Chapter ${progress.lastChapterNumber || 1}` : 'Start Reading Chapter 1'}
                 </a>
                 ${!canAccessAll ? `
-                  <a href="#/billing" class="btn btn-premium btn-lg px-4 fs-7 fw-bold">
-                    <i class="fa-solid fa-bolt me-2"></i> Unlock Complete Book with Pro
+                  <a href="#/billing" class="btn btn-glass text-warning border-warning border-opacity-30 px-4 py-2 fs-7 fw-semibold">
+                    <i class="fa-solid fa-gem me-2"></i> Unlock All Chapters with Pro
                   </a>
                 ` : ''}
               </div>
 
               <div class="mt-3 text-muted fs-9">
-                <i class="fa-regular fa-copyright me-1"></i> ${book.copyrightNotice || '© 2026 PrepSpace (stream-in.app). All rights reserved.'}
+                ${book.copyrightNotice || '© 2026 PrepSpace (stream-in.app). All rights reserved.'}
               </div>
             </div>
           </div>
         </div>
 
         <!-- Table of Contents Section -->
-        <div class="card bg-dark bg-opacity-75 border-secondary border-opacity-25 rounded-4 p-4 mb-4">
+        <div class="ps-panel-box p-4 mb-4">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
-              <h5 class="text-white fw-bold mb-0"><i class="fa-solid fa-list-ol me-2 text-primary"></i> Complete Curriculum & Chapters</h5>
-              <div class="text-muted fs-8">Step-by-step textbook chapters covering all core topics</div>
+              <h3 class="text-white fw-bold mb-0 fs-6">Complete Curriculum & Chapters</h3>
+              <div class="text-muted fs-8">Step-by-step textbook chapters covering all core concepts</div>
             </div>
             <span class="badge bg-secondary bg-opacity-25 text-white fs-8">${chapters.length} Chapters</span>
           </div>
 
-          <div class="list-group list-group-flush border-top border-secondary border-opacity-25">
+          <div class="list-group list-group-flush border-top border-secondary border-opacity-20">
             ${chapters.map((ch, idx) => {
               const isLocked = !canAccessAll && !ch.isFreePreview;
 
               return `
                 <div class="list-group-item bg-transparent border-secondary border-opacity-15 px-0 py-3 d-flex flex-wrap justify-content-between align-items-center gap-3">
                   <div class="d-flex align-items-start gap-3 col-12 col-md-8">
-                    <div class="chapter-number-badge rounded-circle d-flex align-items-center justify-content-center text-white fw-bold fs-8 flex-shrink-0" style="width: 32px; height: 32px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold fs-8 flex-shrink-0" style="width: 32px; height: 32px; background: #27272a; border: 1px solid #3f3f46;">
                       ${ch.chapterNumber || (idx + 1)}
                     </div>
                     <div>
                       <div class="d-flex align-items-center gap-2 mb-0.5">
-                        <h6 class="text-white fw-bold mb-0 fs-7">${ch.title}</h6>
-                        ${ch.isFreePreview ? '<span class="badge bg-emerald text-white fs-9 py-0.5">FREE PREVIEW</span>' : (isLocked ? '<span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-50 fs-9 py-0.5"><i class="fa-solid fa-lock me-1"></i> PRO</span>' : '<span class="badge bg-success bg-opacity-25 text-emerald fs-9 py-0.5">UNLOCKED</span>')}
+                        <h4 class="text-white fw-bold mb-0 fs-7">${ch.title}</h4>
+                        ${ch.isFreePreview ? '<span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-30 fs-9 py-0.5">FREE PREVIEW</span>' : (isLocked ? '<span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-30 fs-9 py-0.5"><i class="fa-solid fa-lock me-1"></i> PRO</span>' : '<span class="badge bg-secondary bg-opacity-25 text-light fs-9 py-0.5">UNLOCKED</span>')}
                       </div>
                       <p class="text-muted fs-8 mb-1">${ch.subtitle || ch.summary}</p>
                       <div class="text-muted fs-9"><i class="fa-regular fa-clock me-1"></i> ${ch.readingTimeMinutes || 20} mins reading time</div>
@@ -6328,7 +6325,7 @@ const components = {
 
                   <div class="d-flex align-items-center gap-2 ms-auto ms-md-0">
                     ${isLocked ? `
-                      <a href="#/billing" class="btn btn-glass btn-sm text-warning border-warning border-opacity-50 fs-8">
+                      <a href="#/billing" class="btn btn-glass btn-sm text-warning border-warning border-opacity-30 fs-8">
                         <i class="fa-solid fa-lock me-1"></i> Unlock with Pro
                       </a>
                     ` : `

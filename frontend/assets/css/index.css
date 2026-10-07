@@ -3482,12 +3482,6 @@ input:-webkit-autofill {
   margin: 0 auto;
 }
 
-.library-hero-banner {
-  background: linear-gradient(135deg, rgba(30, 58, 138, 0.3) 0%, rgba(15, 23, 42, 0.9) 100%);
-  border: 1px solid rgba(59, 130, 246, 0.25);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-}
-
 .library-categories-scroller {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -3497,22 +3491,16 @@ input:-webkit-autofill {
 }
 
 .library-book-card {
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+  transition: border-color 0.15s ease, background 0.15s ease;
 }
 .library-book-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
-  border-color: rgba(245, 158, 11, 0.4) !important;
-}
-
-.book-card-spine {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-color: #3f3f46 !important;
 }
 
 /* Digital Reader Workspace */
 .technical-reader-wrapper {
   background-color: var(--bg-body, #18181b);
-  color: #d4d4d8;
+  color: #e4e4e7;
   position: relative;
 }
 
@@ -3520,8 +3508,8 @@ input:-webkit-autofill {
   position: fixed;
   top: 0;
   left: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #f59e0b, #10b981);
+  height: 2px;
+  background: #38bdf8;
   z-index: 1060;
   transition: width 0.1s linear;
 }
