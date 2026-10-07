@@ -1007,37 +1007,35 @@ const components = {
 
       <!-- Main Content Area -->
       <div class="main-content d-flex flex-column flex-grow-1 overflow-hidden" style="height: 100vh;">
-        <!-- Top Nav Header (Vercel Style) -->
-        <header class="workspace-top-header d-flex align-items-center justify-content-between pt-3 pb-3 border-bottom border-secondary border-opacity-25 mb-3 flex-shrink-0 px-3 px-md-4">
+        <!-- Top Nav Header (Compact Modern SaaS Header) -->
+        <header class="workspace-top-header d-flex align-items-center justify-content-between py-2 border-bottom border-secondary border-opacity-20 mb-2 flex-shrink-0 px-3 px-md-4" style="min-height: 46px;">
           <div class="d-flex align-items-center gap-2 overflow-hidden flex-grow-1 me-2" style="min-width: 0;">
-            <button class="btn btn-glass d-lg-none me-1 flex-shrink-0" id="sidebar-toggle-btn"><i class="fa-solid fa-bars"></i></button>
+            <button class="btn btn-glass btn-sm d-lg-none me-1 flex-shrink-0 px-2 py-1" id="sidebar-toggle-btn" aria-label="Toggle Navigation"><i class="fa-solid fa-bars fs-8"></i></button>
             <div class="d-flex align-items-center gap-2 overflow-hidden" style="min-width: 0;">
-              <span class="badge border border-secondary border-opacity-30 text-white px-2 py-1 fs-8 fw-bold d-none d-sm-inline-block font-monospace flex-shrink-0">WORKSPACE</span>
-              <span class="text-secondary fs-7 d-none d-sm-inline-block flex-shrink-0">/</span>
-              <h1 class="text-white fw-bold m-0 fs-6 fs-md-4 text-truncate" id="current-view-title" style="max-width: clamp(140px, 45vw, 400px);">Dashboard</h1>
+              <h1 class="text-white fw-semibold m-0 fs-7 fs-md-6 text-truncate" id="current-view-title" style="max-width: clamp(160px, 50vw, 450px);">Dashboard</h1>
             </div>
           </div>
           
           <div class="d-flex align-items-center gap-2 flex-shrink-0">
             <!-- User Dropdown -->
             <div class="dropdown">
-              <button class="btn btn-glass dropdown-toggle d-flex align-items-center gap-2 py-1 px-2" type="button" id="userDropdown" data-bs-toggle="dropdown">
-                <i class="fa-solid fa-circle-user fs-5 text-secondary"></i>
-                <span class="d-none d-md-inline" id="user-display-name">${userName}</span>
+              <button class="btn btn-glass btn-sm dropdown-toggle d-flex align-items-center gap-2 py-1 px-2.5" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-circle-user fs-7 text-secondary"></i>
+                <span class="d-none d-md-inline fs-8 fw-medium" id="user-display-name">${userName}</span>
               </button>
-              <ul class="dropdown-menu dropdown-menu-end glass-panel" aria-labelledby="userDropdown">
-                <li class="px-3 py-1 border-bottom border-secondary border-opacity-25 mb-1" id="dropdown-plan-info">
-                  <div class="fs-8 text-muted font-monospace">MEMBERSHIP</div>
-                  <div class="fw-bold ${isPaid ? 'text-primary' : 'text-secondary'} fs-7 d-flex align-items-center gap-1">
+              <ul class="dropdown-menu dropdown-menu-end glass-panel shadow-lg" aria-labelledby="userDropdown">
+                <li class="px-3 py-1.5 border-bottom border-secondary border-opacity-20 mb-1" id="dropdown-plan-info">
+                  <div class="fs-9 text-muted font-monospace">PLAN</div>
+                  <div class="fw-semibold ${isPaid ? 'text-primary' : 'text-secondary'} fs-8 d-flex align-items-center gap-1 mt-0.5">
                     ${isPaid 
-                      ? '<span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle font-monospace me-1">PRO</span> PrepPro Active' 
-                      : '<span class="badge bg-secondary bg-opacity-25 text-muted border border-secondary font-monospace me-1">FREE</span> Starter Workspace'}
+                      ? '<span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle font-monospace me-1 fs-10">PRO</span> PrepPro Active' 
+                      : '<span class="badge bg-secondary bg-opacity-25 text-muted border border-secondary font-monospace me-1 fs-10">FREE</span> Free Plan'}
                   </div>
                 </li>
-                <li><a class="dropdown-item text-white" href="#/profile"><i class="fa-solid fa-gear me-2 text-secondary"></i>Settings</a></li>
-                ${!isPaid ? `<li><a class="dropdown-item text-primary fw-semibold" href="#/billing"><i class="fa-solid fa-gem me-2"></i>Upgrade to Pro</a></li>` : ''}
-                <li><hr class="dropdown-divider border-secondary border-opacity-25"></li>
-                <li><button class="dropdown-item text-danger" id="dropdown-logout"><i class="fa-solid fa-right-from-bracket me-2 text-danger"></i>Logout</button></li>
+                <li><a class="dropdown-item text-white fs-8 py-1.5" href="#/profile"><i class="fa-solid fa-gear me-2 text-secondary"></i>Settings</a></li>
+                ${!isPaid ? `<li><a class="dropdown-item text-primary fw-semibold fs-8 py-1.5" href="#/billing"><i class="fa-solid fa-gem me-2"></i>Upgrade to Pro</a></li>` : ''}
+                <li><hr class="dropdown-divider border-secondary border-opacity-20 my-1"></li>
+                <li><button class="dropdown-item text-danger fs-8 py-1.5" id="dropdown-logout"><i class="fa-solid fa-right-from-bracket me-2 text-danger"></i>Logout</button></li>
               </ul>
             </div>
           </div>
@@ -1069,11 +1067,11 @@ const components = {
     return `
     <div class="ps-professional-dashboard container-fluid px-0">
       <!-- 1. Top Executive Control Bar -->
-      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 pb-3 border-bottom border-secondary border-opacity-20">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 pb-2.5 border-bottom border-secondary border-opacity-20">
         <div>
-          <div class="d-flex align-items-center gap-2 mb-1">
-            <h2 class="text-white fw-bold m-0 fs-5">${userName}'s Workspace</h2>
-            <span class="ps-status-pill ps-status-active">Active Session</span>
+          <div class="d-flex align-items-center gap-2 mb-0.5">
+            <h2 class="text-white fw-semibold m-0 fs-6">${userName}'s Dashboard</h2>
+            <span class="ps-status-pill ps-status-active">Active</span>
           </div>
           <p class="text-muted fs-8 mb-0">Track preparation velocity, solve coding challenges, and manage recruitment pipeline.</p>
         </div>
@@ -2719,7 +2717,7 @@ const components = {
       </button>
     </div>
 
-    <div class="row g-3 dsa-roadmap-container" id="dsa-roadmap-main-row" style="height: calc(100vh - 100px); overflow: hidden;">
+    <div class="row g-3 dsa-roadmap-container" id="dsa-roadmap-main-row" style="height: calc(100vh - 75px); overflow: hidden;">
       <!-- Left: Fixed Topic Navigation Rail -->
       <div class="col-12 col-lg-4 col-xl-3 h-100 d-flex flex-column" id="roadmap-rail-col" style="position: sticky; top: 0;">
         <div class="p-3 d-flex flex-column h-100 border border-secondary border-opacity-20 rounded-3" style="background: #18181b;">
@@ -2727,7 +2725,7 @@ const components = {
           <div class="d-flex align-items-center justify-content-between pb-2 mb-2 border-bottom border-secondary border-opacity-20 flex-shrink-0">
             <div>
               <h5 class="text-white fw-bold m-0 fs-7">Curriculum Modules</h5>
-              <div class="text-muted fs-9 font-monospace">16 Structured Topics</div>
+              <div class="text-muted fs-9 font-monospace">${list.length} Topics</div>
             </div>
             <button type="button" class="btn btn-sm btn-glass p-1 px-1.5 border-0 text-muted d-none d-lg-inline-flex" id="btn-toggle-roadmap-rail" title="Toggle Modules Rail" aria-label="Toggle modules rail">
               <i class="fa-solid fa-angles-left fs-9"></i>
@@ -2740,16 +2738,14 @@ const components = {
           </div>
 
           <!-- Topic Nodes List -->
-          <div class="d-flex flex-column gap-1.5 flex-grow-1 overflow-y-auto pe-1" id="roadmap-tree-nodes" style="scrollbar-width: thin; scrollbar-color: #3f3f46 transparent;">
+          <div class="d-flex flex-column gap-1 flex-grow-1 overflow-y-auto pe-1" id="roadmap-tree-nodes" style="scrollbar-width: thin; scrollbar-color: #3f3f46 transparent;">
             ${list.map((t, idx) => `
-              <div class="roadmap-node-card p-2.5 rounded-2 border border-secondary border-opacity-20 ${idx === 0 ? 'active-topic' : ''}" style="cursor: pointer;" data-topic-id="${t.id || (idx + 1)}" data-topic-name="${(t.name || t.title || '').toLowerCase()}">
-                <div class="d-flex align-items-center justify-content-between mb-1">
-                  <span class="ps-topic-num font-monospace">${String(idx + 1).padStart(2, '0')}. TOPIC</span>
-                  <span class="ps-topic-units">${(t.subtopics || []).length} units</span>
+              <div class="roadmap-node-card py-2 px-2.5 rounded-2 border border-secondary border-opacity-20 d-flex align-items-center justify-content-between ${idx === 0 ? 'active-topic' : ''}" style="cursor: pointer;" data-topic-id="${t.id || (idx + 1)}" data-topic-name="${(t.name || t.title || '').toLowerCase()}">
+                <div class="d-flex align-items-center gap-2 overflow-hidden" style="min-width: 0;">
+                  <span class="font-monospace fs-9 text-muted flex-shrink-0 opacity-75">${String(idx + 1).padStart(2, '0')}</span>
+                  <span class="text-white fw-medium fs-8 text-truncate" title="${t.name || t.title || 'Module'}">${t.name || t.title || 'Module'}</span>
                 </div>
-                <div class="ps-topic-title text-truncate" title="${t.name || t.title || 'Module'}">
-                  ${t.name || t.title || 'Module'}
-                </div>
+                <i class="fa-solid fa-chevron-right text-secondary fs-10 opacity-40 flex-shrink-0 ms-1.5"></i>
               </div>
             `).join('')}
           </div>
@@ -2781,8 +2777,8 @@ const components = {
       <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom border-secondary border-opacity-20 flex-wrap gap-3">
         <div>
           <div class="d-flex align-items-center gap-2 mb-1">
-            <span class="badge bg-secondary bg-opacity-25 text-primary border border-secondary border-opacity-30 fs-9 font-monospace">TOPIC ${String(topic.sequenceNumber || topic.id || 1).padStart(2, '0')}</span>
-            <span class="badge bg-secondary bg-opacity-15 text-muted border border-secondary border-opacity-20 fs-9 font-monospace">CORE CURRICULUM</span>
+            <span class="badge bg-primary bg-opacity-15 text-primary border border-primary border-opacity-25 fs-9 font-monospace">${String(topic.sequenceNumber || topic.id || 1).padStart(2, '0')}</span>
+            <span class="badge bg-secondary bg-opacity-20 text-muted border border-secondary border-opacity-20 fs-9 font-monospace">CURRICULUM</span>
           </div>
           <h2 class="text-white fw-bold m-0 fs-5">${topic.name}</h2>
           <p class="text-muted fs-8 m-0 mt-1">${topic.description || 'Algorithmic invariants, time-space asymptotic proofs, and curated workshop benchmarks.'}</p>
@@ -2805,22 +2801,22 @@ const components = {
       </div>
 
       <!-- 2. Technical Metrics Rail -->
-      <div class="dsa-spec-rail mb-4">
+      <div class="dsa-spec-rail mb-3">
         <div class="ps-spec-item">
-          <span class="text-muted me-1.5 font-monospace fs-9">UNITS:</span>
-          <span class="text-white fw-semibold">${(topic.subtopics || []).length} In-Depth Sections</span>
+          <span class="text-muted me-1.5 font-monospace fs-9">MODULES:</span>
+          <span class="text-white fw-semibold">${(topic.subtopics || []).length} Sections</span>
         </div>
         <div class="ps-spec-item">
           <span class="text-muted me-1.5 font-monospace fs-9">STUDY TIME:</span>
-          <span class="text-white fw-semibold">15 - 20 Minutes</span>
+          <span class="text-white fw-semibold">15 - 20 Min</span>
         </div>
         <div class="ps-spec-item">
-          <span class="text-muted me-1.5 font-monospace fs-9">TIER-1 WEIGHT:</span>
+          <span class="text-muted me-1.5 font-monospace fs-9">FREQUENCY:</span>
           <span class="text-warning fw-semibold"><i class="fa-solid fa-star me-1"></i>High Frequency</span>
         </div>
         <div class="ps-spec-item">
-          <span class="text-muted me-1.5 font-monospace fs-9">BENCHMARK:</span>
-          <span class="text-success fw-semibold"><i class="fa-solid fa-terminal me-1"></i>Standard Suite</span>
+          <span class="text-muted me-1.5 font-monospace fs-9">SUITE:</span>
+          <span class="text-success fw-semibold"><i class="fa-solid fa-terminal me-1"></i>Standard Benchmarks</span>
         </div>
       </div>
 
@@ -2831,7 +2827,7 @@ const components = {
             <!-- Section Header -->
             <div class="d-flex align-items-center justify-content-between mb-3 border-bottom border-secondary border-opacity-15 pb-2 flex-wrap gap-2">
               <div class="d-flex align-items-center gap-2">
-                <span class="badge bg-secondary bg-opacity-25 text-white fs-9 font-monospace">SECTION ${idx + 1}</span>
+                <span class="badge bg-secondary bg-opacity-30 text-cyan border border-secondary border-opacity-25 fs-10 font-monospace">${String(idx + 1).padStart(2, '0')}</span>
                 <h3 class="text-white fw-bold m-0 fs-6">${s.name}</h3>
               </div>
               <a href="#/coding-practice?q=${(s.challenges && s.challenges[0] && s.challenges[0].qId) || (idx * 5 + 1)}" class="btn btn-sm btn-outline-primary py-1 px-3 fs-8 fw-semibold text-nowrap d-inline-flex align-items-center gap-1">

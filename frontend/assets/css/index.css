@@ -2030,15 +2030,30 @@ input:-webkit-autofill {
   border-color: rgba(99, 102, 241, 0.45) !important;
 }
 
+.roadmap-node-card {
+  background: #18181b;
+  border: 1px solid #27272a !important;
+  transition: background 0.15s ease, border-color 0.15s ease !important;
+}
+
 .roadmap-node-card:hover {
   background: #222226 !important;
   border-color: #3f3f46 !important;
 }
 
 .roadmap-node-card.active-topic {
-  border-color: #3f3f46 !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
   border-left: 3px solid #38bdf8 !important;
-  background: #27272a !important;
+  background: rgba(56, 189, 248, 0.08) !important;
+}
+
+.roadmap-node-card.active-topic .text-white {
+  color: #38bdf8 !important;
+}
+
+.roadmap-node-card.active-topic .opacity-75 {
+  opacity: 1 !important;
+  color: #38bdf8 !important;
 }
 
 /* ==========================================================================
