@@ -5989,11 +5989,141 @@ const components = {
     </div>
   `,
 
-  // PrepSpace Technical Library - Clean Engineering Hub
+  // PrepSpace Technical Library - 3D Bookshelf & Engineering Hub
   libraryHub: (catalog, progressMap, activeCategory, searchQuery, activeDifficulty, isProUser) => {
     const books = catalog || (window.PREPSPACE_LIBRARY ? window.PREPSPACE_LIBRARY.books : []);
     const categories = window.PREPSPACE_LIBRARY ? window.PREPSPACE_LIBRARY.categories : [];
     const pMap = progressMap || {};
+
+    const getBookCoverTheme = (book) => {
+      const cat = (book.category || '').toLowerCase();
+      const title = (book.title || '').toLowerCase();
+      
+      if (cat.includes('advanced data') || cat.includes('advanced dsa') || title.includes('advanced data')) {
+        return {
+          bgGradient: 'linear-gradient(150deg, #064e3b 0%, #022c22 60%, #011812 100%)',
+          accentColor: '#34d399',
+          spineColor: '#04382a',
+          badge: 'ADVANCED ALGORITHMS',
+          icon: 'fa-solid fa-network-wired'
+        };
+      }
+      if (cat.includes('data structures') || cat.includes('algorithm') || title.includes('data structures')) {
+        return {
+          bgGradient: 'linear-gradient(150deg, #1e1b4b 0%, #0f172a 60%, #090d16 100%)',
+          accentColor: '#38bdf8',
+          spineColor: '#16133a',
+          badge: 'CORE FOUNDATIONS',
+          icon: 'fa-solid fa-cubes-stacked'
+        };
+      }
+      if (cat.includes('java') || title.includes('java')) {
+        return {
+          bgGradient: 'linear-gradient(150deg, #4c0519 0%, #2b030e 60%, #140106 100%)',
+          accentColor: '#f43f5e',
+          spineColor: '#3b0413',
+          badge: 'ENTERPRISE JAVA',
+          icon: 'fa-brands fa-java'
+        };
+      }
+      if (cat.includes('python') || title.includes('python')) {
+        return {
+          bgGradient: 'linear-gradient(150deg, #3b0764 0%, #200438 60%, #0e021a 100%)',
+          accentColor: '#c084fc',
+          spineColor: '#2b054a',
+          badge: 'PYTHON MASTERY',
+          icon: 'fa-brands fa-python'
+        };
+      }
+      if (cat.includes('c++') || cat.includes('modern c') || title.includes('c++')) {
+        return {
+          bgGradient: 'linear-gradient(150deg, #0f2744 0%, #081729 60%, #030a13 100%)',
+          accentColor: '#60a5fa',
+          spineColor: '#0a1d33',
+          badge: 'SYSTEMS & C++',
+          icon: 'fa-solid fa-microchip'
+        };
+      }
+      if (cat.includes('javascript') || cat.includes('typescript') || title.includes('typescript') || title.includes('javascript')) {
+        return {
+          bgGradient: 'linear-gradient(150deg, #451a03 0%, #260e02 60%, #120601 100%)',
+          accentColor: '#fbbf24',
+          spineColor: '#331302',
+          badge: 'JS & TYPESCRIPT',
+          icon: 'fa-brands fa-js'
+        };
+      }
+      if (cat.includes('react') || title.includes('react') || cat.includes('frontend') || title.includes('frontend')) {
+        return {
+          bgGradient: 'linear-gradient(150deg, #0e7490 0%, #064050 60%, #021e27 100%)',
+          accentColor: '#22d3ee',
+          spineColor: '#0a566b',
+          badge: 'FRONTEND ARCHITECTURE',
+          icon: 'fa-brands fa-react'
+        };
+      }
+      if (cat.includes('backend') || cat.includes('api') || title.includes('backend')) {
+        return {
+          bgGradient: 'linear-gradient(150deg, #134e4a 0%, #092c2a 60%, #031615 100%)',
+          accentColor: '#2dd4bf',
+          spineColor: '#0d3835',
+          badge: 'BACKEND & APIS',
+          icon: 'fa-solid fa-server'
+        };
+      }
+      if (cat.includes('database') || cat.includes('sql') || title.includes('database') || title.includes('sql')) {
+        return {
+          bgGradient: 'linear-gradient(150deg, #78350f 0%, #451d07 60%, #200d02 100%)',
+          accentColor: '#fb923c',
+          spineColor: '#59260a',
+          badge: 'RDBMS & INDEXING',
+          icon: 'fa-solid fa-database'
+        };
+      }
+      if (cat.includes('operating') || cat.includes('os') || title.includes('operating')) {
+        return {
+          bgGradient: 'linear-gradient(150deg, #1e293b 0%, #0f172a 60%, #070a10 100%)',
+          accentColor: '#94a3b8',
+          spineColor: '#151e2c',
+          badge: 'SYSTEM INTERNALS',
+          icon: 'fa-solid fa-gears'
+        };
+      }
+      if (cat.includes('network') || title.includes('network')) {
+        return {
+          bgGradient: 'linear-gradient(150deg, #1e3a8a 0%, #102257 60%, #070e26 100%)',
+          accentColor: '#60a5fa',
+          spineColor: '#152963',
+          badge: 'NETWORKING & PROTOCOLS',
+          icon: 'fa-solid fa-diagram-project'
+        };
+      }
+      if (cat.includes('object-oriented') || cat.includes('design patterns') || cat.includes('oop') || title.includes('design pattern')) {
+        return {
+          bgGradient: 'linear-gradient(150deg, #2e1065 0%, #190838 60%, #0a0317 100%)',
+          accentColor: '#c084fc',
+          spineColor: '#200a47',
+          badge: 'DESIGN PATTERNS',
+          icon: 'fa-solid fa-sitemap'
+        };
+      }
+      if (cat.includes('aptitude') || cat.includes('quantitative') || cat.includes('logical') || cat.includes('verbal') || title.includes('aptitude') || title.includes('reasoning')) {
+        return {
+          bgGradient: 'linear-gradient(150deg, #1f2937 0%, #111827 60%, #090d14 100%)',
+          accentColor: '#38bdf8',
+          spineColor: '#161e29',
+          badge: 'PLACEMENT APTITUDE',
+          icon: 'fa-solid fa-brain'
+        };
+      }
+      return {
+        bgGradient: 'linear-gradient(150deg, #27272a 0%, #18181b 60%, #09090b 100%)',
+        accentColor: '#fbbf24',
+        spineColor: '#1c1c1f',
+        badge: 'MASTER HANDBOOK',
+        icon: 'fa-solid fa-book-bookmark'
+      };
+    };
 
     // Filter books
     let filtered = books.filter(b => {
@@ -6035,10 +6165,10 @@ const components = {
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 pb-3 border-bottom border-secondary border-opacity-20">
           <div>
             <div class="d-flex align-items-center gap-2 mb-1">
-              <h2 class="text-white fw-bold m-0 fs-5">Technical Library & Handbooks</h2>
-              <span class="ps-status-pill ps-status-active">19 Curated Guides</span>
+              <h2 class="text-white fw-bold m-0 fs-5">Technical Library & Bookshelf</h2>
+              <span class="ps-status-pill ps-status-active">19 Interactive 3D Handbooks</span>
             </div>
-            <p class="text-muted fs-8 mb-0">Textbook-grade technical study curriculum, system architectures, polyglot algorithms, and placement blueprints.</p>
+            <p class="text-muted fs-8 mb-0">Select and click any 3D hardcover book below to open its digital textbook and master complete engineering architectures.</p>
           </div>
           <div class="d-flex align-items-center gap-2">
             ${isProUser 
@@ -6109,7 +6239,7 @@ const components = {
           </button>
           <div id="library-categories-scroller" class="library-categories-scroller d-flex gap-1.5 overflow-x-auto flex-grow-1 py-1" style="scrollbar-width: none; -ms-overflow-style: none;">
             <button class="btn btn-sm ${!activeCategory || activeCategory === 'ALL' ? 'btn-primary text-white' : 'btn-glass text-muted'} text-nowrap rounded-2 px-3 py-1 fs-8 library-cat-pill" data-category="ALL">
-              All Handbooks
+              All Books
             </button>
             ${categories.map(cat => `
               <button class="btn btn-sm ${activeCategory === cat.name ? 'btn-primary text-white' : 'btn-glass text-muted'} text-nowrap rounded-2 px-3 py-1 fs-8 library-cat-pill" data-category="${cat.name}">
@@ -6122,10 +6252,10 @@ const components = {
           </button>
         </div>
 
-        <!-- 4. Books Catalog Grid -->
-        <div class="row g-3">
+        <!-- 4. 3D Digital Bookshelf Grid -->
+        <div class="ps-bookshelf-container">
           ${filtered.length === 0 ? `
-            <div class="col-12 text-center py-5">
+            <div class="text-center py-5">
               <div class="ps-panel-box p-5">
                 <i class="fa-solid fa-book-open text-muted fs-1 mb-3"></i>
                 <h3 class="text-white fw-bold fs-6">No handbooks found matching your criteria</h3>
@@ -6133,76 +6263,86 @@ const components = {
                 <button id="btn-reset-library-filters" class="btn btn-primary btn-sm px-4">Reset All Filters</button>
               </div>
             </div>
-          ` : filtered.map(book => {
-            const userProg = pMap[book.id];
-            const percent = userProg ? userProg.progressPercentage : 0;
-            const isCompleted = userProg && userProg.isCompleted;
+          ` : `
+            <div class="ps-bookshelf-row-wrapper">
+              <div class="ps-bookshelf-grid">
+                ${filtered.map(book => {
+                  const userProg = pMap[book.id];
+                  const percent = userProg ? userProg.progressPercentage : 0;
+                  const isCompleted = userProg && userProg.isCompleted;
+                  const theme = getBookCoverTheme(book);
+                  const lastCh = userProg && userProg.lastChapterNumber ? userProg.lastChapterNumber : 1;
 
-            return `
-              <div class="col-12 col-md-6 col-xl-4 d-flex">
-                <div class="ps-workspace-card w-100 p-3 d-flex flex-column justify-content-between">
-                  <!-- Header: Category + Difficulty + Access Tag -->
-                  <div>
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                      <span class="ps-stat-title text-truncate me-2">${book.category}</span>
-                      <div class="d-flex align-items-center gap-1.5 flex-shrink-0">
-                        <span class="badge bg-secondary bg-opacity-25 text-light border border-secondary border-opacity-30 fs-9 font-monospace">${book.difficulty}</span>
-                        ${book.isPro ? `
-                          <span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-30 fs-9 font-monospace">PRO</span>
-                        ` : `
-                          <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-30 fs-9 font-monospace">FREE</span>
-                        `}
+                  return `
+                    <div class="ps-book-item-3d" data-book-id="${book.id}">
+                      <div class="ps-book-3d-card" onclick="window.location.hash='#/library/read?id=${book.id}&ch=${lastCh}'" role="button" tabindex="0" title="Click to Open ${book.title}" aria-label="Open Book: ${book.title}">
+                        <!-- Silk Bookmark Ribbon -->
+                        <div class="ps-book-ribbon" style="background: ${theme.accentColor};"></div>
+                        
+                        <!-- Spine Crease Lighting Effect -->
+                        <div class="ps-book-spine-crease"></div>
+
+                        <!-- Background Subject Emblem -->
+                        <div class="ps-book-emblem"><i class="${theme.icon}"></i></div>
+
+                        <!-- Hardcover Face -->
+                        <div class="ps-book-cover-inner" style="background: ${theme.bgGradient}; border-left-color: ${theme.spineColor};">
+                          <!-- Header Badge -->
+                          <div>
+                            <div class="ps-book-header-badge">
+                              <span style="color: ${theme.accentColor};"><i class="${theme.icon} me-1"></i> ${theme.badge}</span>
+                              ${book.isPro 
+                                ? '<span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-30 fs-9 px-1.5 py-0.5">PRO</span>' 
+                                : '<span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-30 fs-9 px-1.5 py-0.5">FREE</span>'}
+                            </div>
+
+                            <!-- Book Title & Subtitle -->
+                            <h3 class="ps-book-title">${book.title}</h3>
+                            <p class="ps-book-subtitle">${book.subtitle || book.description}</p>
+                          </div>
+
+                          <!-- Footer Info -->
+                          <div class="ps-book-footer-info">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                              <div class="ps-book-author">PrepSpace Master Series</div>
+                              <div class="text-white fs-9 font-monospace"><i class="fa-solid fa-star text-warning me-1"></i>${book.rating || '4.95'}</div>
+                            </div>
+                            <div class="ps-book-meta-row">
+                              <span>${book.chapters ? book.chapters.length : 8} Chapters &bull; ${book.pageCount || 310} pgs</span>
+                              <span><i class="fa-regular fa-clock me-1"></i>${(book.estimatedReadingTime || '6h').replace(/ Hours?/i, 'h')}</span>
+                            </div>
+
+                            ${percent > 0 ? `
+                              <div class="ps-book-progress-wrap">
+                                <div class="ps-book-progress-fill ${isCompleted ? 'bg-success' : 'bg-primary'}" style="width: ${percent}%;"></div>
+                              </div>
+                              <div class="d-flex justify-content-between align-items-center text-muted fs-9 font-monospace mt-1">
+                                <span>Progress</span>
+                                <span class="text-white">${percent}%</span>
+                              </div>
+                            ` : ''}
+                          </div>
+                        </div>
+
+                        <!-- Hover Action Overlay -->
+                        <div class="ps-book-hover-action">
+                          <button class="btn btn-primary btn-sm w-100 py-2 fs-8 fw-semibold d-flex align-items-center justify-content-center gap-1.5 shadow" onclick="event.stopPropagation(); window.location.hash='#/library/read?id=${book.id}&ch=${lastCh}';">
+                            <i class="fa-solid fa-book-open"></i>
+                            <span>${percent > 0 ? 'Continue Reading' : 'Open & Read Book'}</span>
+                          </button>
+                          <button class="btn btn-glass btn-sm w-100 py-1.5 fs-8 text-white d-flex align-items-center justify-content-center gap-1.5" onclick="event.stopPropagation(); window.location.hash='#/library/book?id=${book.id}';">
+                            <i class="fa-solid fa-list-ul text-warning"></i>
+                            <span>Table of Contents</span>
+                          </button>
+                        </div>
                       </div>
                     </div>
-
-                    <!-- Book Title -->
-                    <h3 class="text-white fw-bold mb-1 line-clamp-2 fs-6" style="line-height: 1.35;">${book.title}</h3>
-                    <p class="text-muted fs-8 mb-2 line-clamp-2" style="line-height: 1.45;">${book.subtitle || book.description}</p>
-
-                    <!-- Tags -->
-                    <div class="d-flex flex-wrap gap-1 mb-3">
-                      ${(book.tags || []).slice(0, 3).map(tag => `
-                        <span class="badge bg-secondary bg-opacity-15 text-secondary border border-secondary border-opacity-20 fs-9 px-1.5 py-0.5">${tag}</span>
-                      `).join('')}
-                      ${(book.tags && book.tags.length > 3) ? `<span class="badge bg-secondary bg-opacity-15 text-muted fs-9">+${book.tags.length - 3}</span>` : ''}
-                    </div>
-
-                    <!-- Progress Bar if interacted -->
-                    ${percent > 0 ? `
-                      <div class="mb-2.5">
-                        <div class="d-flex justify-content-between text-muted fs-9 mb-1">
-                          <span>Reading Progress</span>
-                          <span class="text-white font-monospace">${percent}%</span>
-                        </div>
-                        <div class="ps-clean-progress">
-                          <div class="progress-bar ${isCompleted ? 'bg-success' : 'bg-primary'}" style="width: ${percent}%; height: 100%;"></div>
-                        </div>
-                      </div>
-                    ` : ''}
-                  </div>
-
-                  <!-- Footer: Specs & Actions -->
-                  <div class="mt-3 pt-2.5 border-top border-secondary border-opacity-15">
-                    <div class="d-flex justify-content-between align-items-center text-muted fs-9 font-monospace mb-2.5">
-                      <span><i class="fa-regular fa-clock me-1 text-muted"></i>${(book.estimatedReadingTime || '6h').replace(/ Hours?/i, 'h')}</span>
-                      <span>${book.chapters ? book.chapters.length : 8} Chapters &bull; ${book.pageCount || 310} pgs</span>
-                      <span><i class="fa-solid fa-star me-1 text-warning"></i>${book.rating || '4.95'}</span>
-                    </div>
-
-                    <div class="d-flex gap-2">
-                      <a href="#/library/read?id=${book.id}&ch=1" class="btn btn-primary btn-sm flex-grow-1 fw-semibold d-flex align-items-center justify-content-center py-1.5 fs-8" style="height: 34px;">
-                        <span>${percent > 0 ? 'Continue Reading' : 'Read Handbook'}</span>
-                        <i class="fa-solid fa-arrow-right ms-1.5 fs-9"></i>
-                      </a>
-                      <a href="#/library/book?id=${book.id}" class="btn btn-glass btn-sm px-2.5 d-inline-flex align-items-center justify-content-center gap-1 text-nowrap fs-8" style="height: 34px;" title="View Table of Contents" aria-label="Table of Contents for ${book.title}">
-                        <span>Syllabus</span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
+                  `;
+                }).join('')}
               </div>
-            `;
-          }).join('')}
+              <div class="ps-bookshelf-ledge"></div>
+            </div>
+          `}
         </div>
       </div>
     `;
@@ -6222,6 +6362,26 @@ const components = {
     const percent = progress ? progress.progressPercentage : 0;
     const canAccessAll = isProUser || !book.isPro;
 
+    const cat = (book.category || '').toLowerCase();
+    let theme = {
+      bgGradient: 'linear-gradient(150deg, #1e1b4b 0%, #0f172a 60%, #090d16 100%)',
+      accentColor: '#38bdf8',
+      spineColor: '#16133a',
+      badge: 'PREPSPACE MASTER SERIES',
+      icon: 'fa-solid fa-book-bookmark'
+    };
+    if (cat.includes('advanced data') || cat.includes('advanced dsa')) {
+      theme = { bgGradient: 'linear-gradient(150deg, #064e3b 0%, #022c22 60%, #011812 100%)', accentColor: '#34d399', spineColor: '#04382a', badge: 'ADVANCED ALGORITHMS', icon: 'fa-solid fa-network-wired' };
+    } else if (cat.includes('java')) {
+      theme = { bgGradient: 'linear-gradient(150deg, #4c0519 0%, #2b030e 60%, #140106 100%)', accentColor: '#f43f5e', spineColor: '#3b0413', badge: 'ENTERPRISE JAVA', icon: 'fa-brands fa-java' };
+    } else if (cat.includes('python')) {
+      theme = { bgGradient: 'linear-gradient(150deg, #3b0764 0%, #200438 60%, #0e021a 100%)', accentColor: '#c084fc', spineColor: '#2b054a', badge: 'PYTHON MASTERY', icon: 'fa-brands fa-python' };
+    } else if (cat.includes('database') || cat.includes('sql')) {
+      theme = { bgGradient: 'linear-gradient(150deg, #78350f 0%, #451d07 60%, #200d02 100%)', accentColor: '#fb923c', spineColor: '#59260a', badge: 'RDBMS & INDEXING', icon: 'fa-solid fa-database' };
+    } else if (cat.includes('react') || cat.includes('frontend')) {
+      theme = { bgGradient: 'linear-gradient(150deg, #0e7490 0%, #064050 60%, #021e27 100%)', accentColor: '#22d3ee', spineColor: '#0a566b', badge: 'FRONTEND ARCHITECTURE', icon: 'fa-brands fa-react' };
+    }
+
     return `
       <div class="technical-library-book-details container-fluid px-0">
         <!-- Breadcrumbs -->
@@ -6236,20 +6396,37 @@ const components = {
         <!-- Book Header Banner -->
         <div class="ps-panel-box p-4 p-md-5 mb-4">
           <div class="row g-4 align-items-center">
-            <!-- Book Cover Tile -->
+            <!-- 3D Realistic Book Cover Tile -->
             <div class="col-12 col-md-4 col-lg-3 text-center">
-              <div class="ps-stat-box p-4 d-flex flex-column justify-content-between text-start mx-auto" style="width: 210px; min-height: 280px; border-left: 4px solid #38bdf8 !important;">
-                <div>
-                  <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="badge bg-secondary bg-opacity-25 text-white fs-9 font-monospace">${book.difficulty}</span>
-                    ${book.isPro ? '<span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-30 font-monospace fs-9">PRO</span>' : '<span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-30 font-monospace fs-9">FREE</span>'}
+              <div class="ps-book-item-3d">
+                <div class="ps-book-3d-detail position-relative" style="cursor: pointer;" onclick="window.location.hash='#/library/read?id=${book.id}&ch=${progress ? (progress.lastChapterNumber || 1) : 1}'" title="Click to Open ${book.title}">
+                  <!-- Silk Ribbon Bookmark -->
+                  <div class="ps-book-ribbon" style="background: ${theme.accentColor};"></div>
+                  <!-- Spine Crease -->
+                  <div class="ps-book-spine-crease"></div>
+                  <!-- Background Emblem -->
+                  <div class="ps-book-emblem"><i class="${theme.icon}"></i></div>
+                  
+                  <!-- Hardcover Face -->
+                  <div class="ps-book-cover-inner" style="background: ${theme.bgGradient}; border-left-color: ${theme.spineColor};">
+                    <div>
+                      <div class="ps-book-header-badge">
+                        <span style="color: ${theme.accentColor};"><i class="${theme.icon} me-1"></i> ${theme.badge}</span>
+                        ${book.isPro 
+                          ? '<span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-30 fs-9 px-1.5 py-0.5">PRO</span>' 
+                          : '<span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-30 fs-9 px-1.5 py-0.5">FREE</span>'}
+                      </div>
+                      <h4 class="ps-book-title fs-6">${book.title}</h4>
+                      <p class="ps-book-subtitle">${book.subtitle || book.description}</p>
+                    </div>
+                    <div class="ps-book-footer-info">
+                      <div class="ps-book-author">PrepSpace Master Series</div>
+                      <div class="ps-book-meta-row">
+                        <span>${chapters.length} Chapters &bull; ${book.pageCount || 120} pgs</span>
+                        <span>★ ${book.rating || 4.95}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div class="ps-stat-title mb-1">${book.category}</div>
-                  <h4 class="text-white fw-bold mb-1 fs-6" style="line-height: 1.3;">${book.title}</h4>
-                </div>
-                <div class="pt-3 border-top border-secondary border-opacity-20 text-muted fs-9 font-monospace">
-                  ${book.author || 'PrepSpace Engineering Curriculum'}<br>
-                  <span class="text-muted">2026 EDITION</span>
                 </div>
               </div>
             </div>

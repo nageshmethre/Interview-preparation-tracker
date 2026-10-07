@@ -1,21 +1,21 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
-// Version: 5.7.9 (Professional Technical Library & Digital Reader UI Redesign)
+// Version: 5.8.0 (3D Physical Books & Digital Bookshelf Library Interface)
 
-const CACHE_NAME = 'prepspace-static-v5.7.9';
-const RUNTIME_CACHE = 'prepspace-runtime-v5.7.9';
+const CACHE_NAME = 'prepspace-static-v5.8.0';
+const RUNTIME_CACHE = 'prepspace-runtime-v5.8.0';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/index.css?v=5.7.9',
-  './assets/js/app.js?v=5.7.9',
-  './assets/js/components.js?v=5.7.9',
-  './assets/js/interview-suite.js?v=5.7.9',
-  './assets/js/technical-library-data.js?v=5.7.9',
-  './assets/js/questions-data.js?v=5.7.9',
-  './assets/js/aptitude-curriculum.js?v=5.7.9',
-  './assets/js/production-pages.js?v=5.7.9',
+  './assets/css/index.css?v=5.8.0',
+  './assets/js/app.js?v=5.8.0',
+  './assets/js/components.js?v=5.8.0',
+  './assets/js/interview-suite.js?v=5.8.0',
+  './assets/js/technical-library-data.js?v=5.8.0',
+  './assets/js/questions-data.js?v=5.8.0',
+  './assets/js/aptitude-curriculum.js?v=5.8.0',
+  './assets/js/production-pages.js?v=5.8.0',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',
