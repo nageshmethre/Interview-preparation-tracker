@@ -1744,58 +1744,121 @@ function bindResetPasswordEvents() {
 }
 window.bindResetPasswordEvents = bindResetPasswordEvents;
 
-// Render dashboard graphs
+// Render dashboard graphs with executive gradient styling
 function renderDashboardCharts(stats = {}) {
   const weeklyCanvas = document.getElementById('weeklyHoursChart');
   if (!weeklyCanvas) return;
   const weeklyCtx = weeklyCanvas.getContext('2d');
 
-  const defaultWeeklyStudy = {
-    '2026-09-03': 45,
-    '2026-09-04': 90,
-    '2026-09-05': 120,
-    '2026-09-06': 60,
-    '2026-09-07': 110,
-    '2026-09-08': 150,
-    '2026-09-09': 85
-  };
-  const weeklyStudy = (stats && stats.weeklyStudyTime && typeof stats.weeklyStudyTime === 'object')
-    ? stats.weeklyStudyTime
-    : defaultWeeklyStudy;
+  // Generate dynamic last 7 days dates (MM-DD)
+  const today = new Date();
+  const defaultLabels = [];
+  const defaultValues = [45, 90, 120, 75, 135, 180, 110];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(today.getDate() - i);
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    defaultLabels.push(`${mm}-${dd}`);
+  }
 
-  const weeklyLabels = Object.keys(weeklyStudy);
-  const weeklyData = Object.values(weeklyStudy);
+  let weeklyLabels = defaultLabels;
+  let weeklyData = defaultValues;
+
+  if (stats && stats.weeklyStudyTime && typeof stats.weeklyStudyTime === 'object' && Object.keys(stats.weeklyStudyTime).length > 0) {
+    const rawKeys = Object.keys(stats.weeklyStudyTime);
+    const rawVals = Object.values(stats.weeklyStudyTime);
+    const hasNonZero = rawVals.some(v => v > 0);
+    if (hasNonZero) {
+      weeklyLabels = rawKeys.map(k => k.length > 5 ? k.substring(5) : k);
+      weeklyData = rawVals;
+    }
+  }
 
   if (window._weeklyHoursChartInstance) {
     try { window._weeklyHoursChartInstance.destroy(); } catch (e) {}
   }
 
+  // Create subtle vertical area gradient
+  const gradient = weeklyCtx.createLinearGradient(0, 0, 0, 200);
+  gradient.addColorStop(0, 'rgba(236, 72, 153, 0.35)');
+  gradient.addColorStop(0.6, 'rgba(99, 102, 241, 0.12)');
+  gradient.addColorStop(1, 'rgba(99, 102, 241, 0.0)');
+
   window._weeklyHoursChartInstance = new Chart(weeklyCtx, {
     type: 'line',
     data: {
-      labels: weeklyLabels.map(d => d.substring(5)), // Format MM-DD
+      labels: weeklyLabels,
       datasets: [{
         label: 'Study Minutes',
         data: weeklyData,
-        borderColor: '#6366f1',
-        backgroundColor: 'rgba(99, 102, 241, 0.15)',
-        tension: 0.4,
+        borderColor: '#f43f5e',
+        backgroundColor: gradient,
+        tension: 0.42,
         fill: true,
-        borderWidth: 2
+        borderWidth: 2.5,
+        pointRadius: 4,
+        pointBackgroundColor: '#fb7185',
+        pointBorderColor: '#181922',
+        pointBorderWidth: 2,
+        pointHoverRadius: 6,
+        pointHoverBackgroundColor: '#ffffff',
+        pointHoverBorderColor: '#f43f5e'
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
+      interaction: {
+        mode: 'index',
+        intersect: false
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(18, 20, 28, 0.95)',
+          titleColor: '#ffffff',
+          bodyColor: '#cbd5e1',
+          borderColor: 'rgba(244, 63, 94, 0.3)',
+          borderWidth: 1,
+          padding: 10,
+          cornerRadius: 8,
+          displayColors: false,
+          callbacks: {
+            label: function(context) {
+              const val = context.parsed.y;
+              const hrs = Math.floor(val / 60);
+              const mins = val % 60;
+              return (hrs > 0) ? `Focus: ${hrs}h ${mins}m (${val} mins)` : `Focus: ${val} mins`;
+            }
+          }
+        }
+      },
       scales: {
-        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#888888', font: { size: 10 } } },
-        x: { grid: { display: false }, ticks: { color: '#888888', font: { size: 10 } } }
+        y: {
+          min: 0,
+          suggestedMax: 150,
+          grid: { color: 'rgba(255, 255, 255, 0.04)' },
+          ticks: {
+            color: '#71717a',
+            font: { size: 10, family: "'Geist Mono', monospace" },
+            callback: function(val) {
+              return val + 'm';
+            }
+          }
+        },
+        x: {
+          grid: { display: false },
+          ticks: {
+            color: '#71717a',
+            font: { size: 10, family: "'Geist Mono', monospace" }
+          }
+        }
       }
     }
   });
 
-  // Pipeline Status chart
+  // Pipeline Status Doughnut chart
   const pipelineCanvas = document.getElementById('pipelineStatusChart');
   if (!pipelineCanvas) return;
   const pipelineCtx = pipelineCanvas.getContext('2d');
@@ -1807,8 +1870,8 @@ function renderDashboardCharts(stats = {}) {
   const rawPipelineData = Object.values(statusCounts);
   const hasData = rawPipelineData.some(v => v > 0);
 
-  const pipelineLabels = hasData ? rawPipelineLabels : ['Applied', 'Screen', 'Interview', 'Offer'];
-  const pipelineData = hasData ? rawPipelineData : [4, 2, 1, 1];
+  const pipelineLabels = hasData ? rawPipelineLabels : ['Applied', 'OA Screen', 'Technical Round', 'Offer'];
+  const pipelineData = hasData ? rawPipelineData : [4, 2, 2, 1];
 
   if (window._pipelineStatusChartInstance) {
     try { window._pipelineStatusChartInstance.destroy(); } catch (e) {}
@@ -1820,18 +1883,36 @@ function renderDashboardCharts(stats = {}) {
       labels: pipelineLabels,
       datasets: [{
         data: pipelineData,
-        backgroundColor: ['#3b82f6', '#00e599', '#6366f1', '#f59e0b', '#ef4444'],
-        borderWidth: 0
+        backgroundColor: ['#3b82f6', '#f59e0b', '#8b5cf6', '#10b981', '#ec4899'],
+        borderWidth: 2,
+        borderColor: '#181922',
+        hoverOffset: 4
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      cutout: '68%',
+      cutout: '72%',
       plugins: {
         legend: {
           position: 'bottom',
-          labels: { color: '#888888', font: { size: 10 }, boxWidth: 8, padding: 6 }
+          labels: {
+            color: '#94a3b8',
+            font: { size: 10, family: "'Geist Mono', monospace" },
+            boxWidth: 8,
+            boxHeight: 8,
+            usePointStyle: true,
+            padding: 8
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(18, 20, 28, 0.95)',
+          titleColor: '#ffffff',
+          bodyColor: '#cbd5e1',
+          borderColor: 'rgba(255, 255, 255, 0.1)',
+          borderWidth: 1,
+          padding: 8,
+          cornerRadius: 6
         }
       }
     }

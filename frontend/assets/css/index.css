@@ -5845,4 +5845,196 @@ body.ui-drawer-open {
   }
 }
 
+/* ==========================================================================
+   PREPSPACE ENTERPRISE DASHBOARD UI/UX (V5.7.6)
+   ========================================================================== */
+.ps-dashboard-root {
+  position: relative;
+}
+
+.ps-dash-card {
+  background: linear-gradient(145deg, #181922 0%, #12131a 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.05) !important;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.ps-dash-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(236, 72, 153, 0.35) !important;
+  box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.6), 0 0 24px -2px rgba(236, 72, 153, 0.12) !important;
+}
+
+.ps-dash-card-highlight {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.08) 0%, rgba(249, 115, 22, 0.06) 50%, #14151e 100%) !important;
+  border: 1px solid rgba(236, 72, 153, 0.25) !important;
+}
+
+.ps-stat-icon-wrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.ps-icon-orange {
+  background: rgba(249, 115, 22, 0.12);
+  border: 1px solid rgba(249, 115, 22, 0.25);
+  color: #fb923c;
+}
+
+.ps-icon-pink {
+  background: rgba(236, 72, 153, 0.12);
+  border: 1px solid rgba(236, 72, 153, 0.25);
+  color: #f472b6;
+}
+
+.ps-icon-cyan {
+  background: rgba(6, 182, 212, 0.12);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  color: #22d3ee;
+}
+
+.ps-icon-emerald {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #34d399;
+}
+
+.ps-icon-purple {
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  color: #c084fc;
+}
+
+.ps-stat-num {
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.ps-stat-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+}
+
+.ps-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+}
+
+.ps-hero-badge-live {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+}
+
+.ps-hero-badge-streak {
+  background: linear-gradient(90deg, rgba(236, 72, 153, 0.15) 0%, rgba(249, 115, 22, 0.15) 100%);
+  border: 1px solid rgba(249, 115, 22, 0.35);
+  color: #fdba74;
+}
+
+/* Activity Heatmap Matrix */
+.ps-heatmap-container {
+  display: flex;
+  gap: 3px;
+  overflow-x: auto;
+  padding: 4px 0;
+}
+
+.ps-heatmap-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ps-heatmap-cell {
+  width: 11px;
+  height: 11px;
+  border-radius: 2.5px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  transition: transform 0.15s ease, background 0.15s ease;
+  cursor: pointer;
+}
+
+.ps-heatmap-cell:hover {
+  transform: scale(1.3);
+  border-color: #ffffff;
+  z-index: 2;
+}
+
+.ps-heatmap-cell.level-1 { background: rgba(16, 185, 129, 0.35); border-color: rgba(16, 185, 129, 0.5); }
+.ps-heatmap-cell.level-2 { background: rgba(16, 185, 129, 0.65); border-color: rgba(16, 185, 129, 0.8); }
+.ps-heatmap-cell.level-3 { background: #10b981; border-color: #34d399; }
+.ps-heatmap-cell.level-4 { background: #34d399; border-color: #6ee7b7; box-shadow: 0 0 6px rgba(52, 211, 153, 0.6); }
+
+/* Progress Tracks */
+.ps-prog-track {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.ps-prog-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.ps-prog-fill-orange { background: linear-gradient(90deg, #ea580c, #f97316); }
+.ps-prog-fill-pink { background: linear-gradient(90deg, #db2777, #f43f5e); }
+.ps-prog-fill-cyan { background: linear-gradient(90deg, #0284c7, #06b6d4); }
+.ps-prog-fill-emerald { background: linear-gradient(90deg, #059669, #10b981); }
+.ps-prog-fill-purple { background: linear-gradient(90deg, #7c3aed, #a855f7); }
+
+/* Checklist Items */
+.ps-todo-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  margin-bottom: 6px;
+  transition: background 0.15s ease;
+}
+
+.ps-todo-row:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ps-todo-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #f43f5e;
+}
+
+
 

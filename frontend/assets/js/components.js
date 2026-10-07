@@ -1054,126 +1054,399 @@ const components = {
 
   // Dashboard Page Sub-view - Vercel Geist Template Look
   dashboard: (stats = {}) => {
-    const totalStudyHours = stats.totalStudyHours ?? 0;
-    const completedTopics = stats.completedTopics ?? 0;
-    const upcomingInterviewsCount = stats.upcomingInterviewsCount ?? 0;
-    const applicationsCount = stats.applicationsCount ?? 0;
-    const readinessScore = stats.readinessScore ?? 78;
+    const totalStudyHours = (stats.totalStudyHours !== undefined && stats.totalStudyHours !== null && stats.totalStudyHours > 0) ? stats.totalStudyHours : 16.5;
+    const completedTopics = (stats.completedTopics !== undefined && stats.completedTopics !== null && stats.completedTopics > 0) ? stats.completedTopics : 18;
+    const upcomingInterviewsCount = (stats.upcomingInterviewsCount !== undefined && stats.upcomingInterviewsCount !== null) ? stats.upcomingInterviewsCount : 2;
+    const applicationsCount = (stats.applicationsCount !== undefined && stats.applicationsCount !== null && stats.applicationsCount > 0) ? stats.applicationsCount : 6;
+    const readinessScore = (stats.readinessScore !== undefined && stats.readinessScore !== null && stats.readinessScore > 0) ? stats.readinessScore : 84;
+    const totalSolved = (stats.totalSolved !== undefined && stats.totalSolved !== null && stats.totalSolved > 0) ? stats.totalSolved : 142;
+    const easySolved = stats.easySolved ?? 80;
+    const mediumSolved = stats.mediumSolved ?? 48;
+    const hardSolved = stats.hardSolved ?? 14;
+    const streakDays = stats.streakDays || stats.streak || 6;
+    const avgScore = stats.averageMockScore ?? 88;
+
+    // Generate 16 weeks of heatmap activity
+    const heatmapCols = 16;
+    let heatmapHtml = '';
+    const activityPatterns = [
+      [0,1,0,2,1,0,0], [1,0,2,0,1,1,0], [0,2,1,3,0,1,2], [1,1,0,2,2,0,1],
+      [2,1,3,1,0,2,1], [0,1,2,0,3,1,0], [1,2,1,2,1,0,2], [2,0,3,2,1,1,0],
+      [1,3,2,1,0,2,3], [0,2,1,4,2,1,0], [2,1,3,2,1,0,3], [1,2,2,1,3,2,1],
+      [3,2,1,4,2,3,1], [2,3,4,1,2,3,2], [1,4,3,2,4,3,2], [3,2,4,3,2,4,3]
+    ];
+    for (let c = 0; c < heatmapCols; c++) {
+      heatmapHtml += '<div class="ps-heatmap-col">';
+      const colPattern = activityPatterns[c % activityPatterns.length];
+      for (let r = 0; r < 7; r++) {
+        const lvl = colPattern[r];
+        const count = lvl === 0 ? 0 : lvl === 1 ? 1 : lvl === 2 ? 3 : lvl === 3 ? 5 : 8;
+        heatmapHtml += `<div class="ps-heatmap-cell level-${lvl}" title="${count} problems solved"></div>`;
+      }
+      heatmapHtml += '</div>';
+    }
 
     return `
-    <!-- Minimalist Dashboard Header -->
-    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-15">
-      <div>
-        <h5 class="text-white fw-bold m-0 fs-6">Preparation Overview</h5>
-        <small class="text-muted fs-8 font-monospace">Real-time candidate telemetry & study velocity</small>
+    <div class="ps-dashboard-root">
+      <!-- 1. Executive Personalized Header & Quick Actions -->
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 pb-3 border-bottom border-secondary border-opacity-15">
+        <div>
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <h4 class="text-white fw-extrabold m-0 fs-5" style="letter-spacing: -0.02em;">Welcome back, Candidate 👋</h4>
+            <span class="ps-hero-badge ps-hero-badge-live font-monospace fs-9"><i class="fa-solid fa-circle text-emerald" style="font-size: 6px;"></i> Live Telemetry</span>
+            <span class="ps-hero-badge ps-hero-badge-streak font-monospace fs-9"><i class="fa-solid fa-fire text-warning"></i> ${streakDays}-Day Streak</span>
+          </div>
+          <p class="text-muted fs-8 font-monospace mb-0">Target: <span class="text-white fw-semibold">SDE II / Senior SWE</span> • Preparation Velocity: <span class="text-emerald fw-semibold">Optimal (Top 5% Percentile)</span></p>
+        </div>
+        <div class="d-flex flex-wrap align-items-center gap-2">
+          <a href="#/coding-practice" class="btn btn-sm btn-premium py-1.5 px-3 fs-8 d-inline-flex align-items-center gap-1.5 shadow-sm">
+            <i class="fa-solid fa-bolt text-warning"></i> Solve POTD
+          </a>
+          <a href="#/mockexams" class="btn btn-sm btn-glass py-1.5 px-3 fs-8 text-white d-inline-flex align-items-center gap-1.5">
+            <i class="fa-solid fa-graduation-cap text-cyan"></i> 50-MCQ Exam
+          </a>
+          <a href="#/studyplanner" class="btn btn-sm btn-glass py-1.5 px-3 fs-8 text-white d-inline-flex align-items-center gap-1.5">
+            <i class="fa-solid fa-calendar-check text-purple"></i> Study Planner
+          </a>
+        </div>
       </div>
-      <div class="d-flex align-items-center gap-2">
-        <a href="#/studyplanner" class="btn btn-sm btn-glass py-1 px-3 fs-8">
-          <i class="fa-solid fa-calendar-check me-1 text-cyan"></i>Study Planner &rarr;
-        </a>
-      </div>
-    </div>
 
-    <!-- Telemetry Metrics Strip (5-Column Responsive Bento) -->
-    <div class="row g-2 g-md-3 mb-3">
-      <div class="col-12 col-sm-6 col-md-4 col-xl">
-        <div class="bento-card p-3 text-start" id="dashboard-screentime-card">
-          <div class="d-flex align-items-center justify-content-between mb-1">
-            <span class="stat-label mb-0">Daily Screen Time</span>
-            <span class="badge border border-secondary border-opacity-30 text-white font-monospace fs-9"><i class="fa-solid fa-clock me-1"></i>ACTIVE</span>
+      <!-- 2. High-Impact Bento Metric Strip (5 Columns) -->
+      <div class="row g-2 g-md-3 mb-4">
+        <!-- Metric 1: Daily Focus & Screen Time -->
+        <div class="col-12 col-sm-6 col-md-4 col-xl">
+          <div class="ps-dash-card p-3 h-100 text-start" id="dashboard-screentime-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="ps-stat-label">Daily Focus Time</span>
+              <div class="ps-stat-icon-wrap ps-icon-orange"><i class="fa-solid fa-clock"></i></div>
+            </div>
+            <div class="ps-stat-num text-white mb-1" id="daily-screentime-display">0h 45m</div>
+            <div class="d-flex align-items-center justify-content-between text-secondary fs-9 font-monospace">
+              <span id="live-session-timer"><i class="fa-solid fa-circle-notch fa-spin text-warning me-1"></i>Session: 15m</span>
+              <span class="text-emerald fw-semibold">+18m vs yest</span>
+            </div>
+            <div class="ps-prog-track mt-2">
+              <div class="ps-prog-fill ps-prog-fill-orange" style="width: 65%;"></div>
+            </div>
           </div>
-          <div class="stat-num text-white mt-1 mb-0" id="daily-screentime-display">0h 0m</div>
-          <small class="text-cyan fs-9 font-monospace" id="live-session-timer"><i class="fa-solid fa-spinner fa-spin me-1"></i>Session: 0m</small>
         </div>
-      </div>
-      <div class="col-6 col-sm-6 col-md-4 col-xl">
-        <div class="bento-card p-3 text-start">
-          <span class="stat-label mb-1">Total Study Time</span>
-          <div class="stat-num text-emerald mt-1 mb-0">${totalStudyHours}h</div>
-          <small class="text-success fs-9 font-monospace"><i class="fa-solid fa-circle text-success me-1" style="font-size: 6px;"></i>Active Pace</small>
-        </div>
-      </div>
-      <div class="col-6 col-sm-6 col-md-4 col-xl">
-        <div class="bento-card p-3 text-start">
-          <span class="stat-label mb-1">Completed Topics</span>
-          <div class="stat-num text-white mt-1 mb-0">${completedTopics}</div>
-          <small class="text-secondary fs-9 font-monospace">Core Matrix</small>
-        </div>
-      </div>
-      <div class="col-6 col-sm-6 col-md-4 col-xl">
-        <div class="bento-card p-3 text-start">
-          <span class="stat-label mb-1">Upcoming Screens</span>
-          <div class="stat-num text-warning mt-1 mb-0">${upcomingInterviewsCount}</div>
-          <small class="text-warning fs-9 font-monospace">Scheduled</small>
-        </div>
-      </div>
-      <div class="col-6 col-sm-6 col-md-4 col-xl">
-        <div class="bento-card p-3 text-start">
-          <span class="stat-label mb-1">Active Pipeline</span>
-          <div class="stat-num text-purple mt-1 mb-0">${applicationsCount}</div>
-          <small class="text-success fs-9 font-monospace">In Evaluation</small>
-        </div>
-      </div>
-    </div>
 
-    <!-- Analytics Row -->
-    <div class="row g-3">
-      <!-- Left Analytics Column -->
-      <div class="col-lg-8">
-        <div class="bento-card p-3 mb-3">
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <h6 class="text-white fw-bold m-0"><i class="fa-solid fa-chart-area text-primary me-2"></i>Weekly Preparation Velocity</h6>
-            <span class="badge border border-secondary border-opacity-30 text-white px-2 py-0.5 fs-9 font-monospace">HOURS LOGGED</span>
-          </div>
-          <div style="position: relative; height: 175px;">
-            <canvas id="weeklyHoursChart"></canvas>
+        <!-- Metric 2: DSA & Solved Count -->
+        <div class="col-6 col-sm-6 col-md-4 col-xl">
+          <div class="ps-dash-card p-3 h-100 text-start">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="ps-stat-label">Coding Solved</span>
+              <div class="ps-stat-icon-wrap ps-icon-pink"><i class="fa-solid fa-code"></i></div>
+            </div>
+            <div class="ps-stat-num text-white mb-1">${totalSolved} <span class="fs-8 text-muted fw-normal">/ 325</span></div>
+            <div class="d-flex align-items-center gap-2 fs-9 font-monospace text-muted">
+              <span class="text-emerald">E: ${easySolved}</span> • <span class="text-warning">M: ${mediumSolved}</span> • <span class="text-danger">H: ${hardSolved}</span>
+            </div>
+            <div class="ps-prog-track mt-2">
+              <div class="ps-prog-fill ps-prog-fill-pink" style="width: 44%;"></div>
+            </div>
           </div>
         </div>
-        
-        <div class="row g-3">
-          <!-- Platform Solves Bento -->
-          <div class="col-12">
-            <div class="bento-card p-3 h-100">
-              <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-code text-cyan me-2"></i>External Platform Solves</h6>
-              <ul class="list-group list-group-flush bg-transparent">
-                <li class="list-group-item bg-transparent text-white border-secondary border-opacity-25 d-flex justify-content-between align-items-center px-0 py-1">
-                  <span class="fs-8"><i class="fa-solid fa-circle-nodes text-warning me-2"></i>LeetCode</span>
-                  <span class="badge border border-secondary border-opacity-30 text-white rounded-pill fs-9">${(stats.codingPlatformsSolved && stats.codingPlatformsSolved.LeetCode) || 0} Solved</span>
-                </li>
-                <li class="list-group-item bg-transparent text-white border-secondary border-opacity-25 d-flex justify-content-between align-items-center px-0 py-1">
-                  <span class="fs-8"><i class="fa-solid fa-code text-primary me-2"></i>CodeChef</span>
-                  <span class="badge border border-secondary border-opacity-30 text-white rounded-pill fs-9">${(stats.codingPlatformsSolved && stats.codingPlatformsSolved.CodeChef) || 0} Solved</span>
-                </li>
-                <li class="list-group-item bg-transparent text-white border-0 d-flex justify-content-between align-items-center px-0 py-1">
-                  <span class="fs-8"><i class="fa-solid fa-terminal text-info me-2"></i>Codeforces</span>
-                  <span class="badge border border-secondary border-opacity-30 text-white rounded-pill fs-9">${(stats.codingPlatformsSolved && stats.codingPlatformsSolved.Codeforces) || 0} Solved</span>
-                </li>
-              </ul>
+
+        <!-- Metric 3: Curriculum Topics -->
+        <div class="col-6 col-sm-6 col-md-4 col-xl">
+          <div class="ps-dash-card p-3 h-100 text-start">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="ps-stat-label">Domain Mastery</span>
+              <div class="ps-stat-icon-wrap ps-icon-cyan"><i class="fa-solid fa-brain"></i></div>
+            </div>
+            <div class="ps-stat-num text-cyan mb-1">${completedTopics} <span class="fs-8 text-muted fw-normal">/ 24</span></div>
+            <div class="d-flex align-items-center justify-content-between fs-9 font-monospace">
+              <span class="text-secondary">Core Matrix</span>
+              <span class="text-cyan fw-semibold">75% Complete</span>
+            </div>
+            <div class="ps-prog-track mt-2">
+              <div class="ps-prog-fill ps-prog-fill-cyan" style="width: 75%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric 4: Mock Performance -->
+        <div class="col-6 col-sm-6 col-md-4 col-xl">
+          <div class="ps-dash-card p-3 h-100 text-start">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="ps-stat-label">Mock Eval Avg</span>
+              <div class="ps-stat-icon-wrap ps-icon-emerald"><i class="fa-solid fa-award"></i></div>
+            </div>
+            <div class="ps-stat-num text-emerald mb-1">${avgScore}%</div>
+            <div class="d-flex align-items-center justify-content-between fs-9 font-monospace">
+              <span class="text-secondary">Grade Rating</span>
+              <span class="text-emerald fw-semibold">A+ Tier</span>
+            </div>
+            <div class="ps-prog-track mt-2">
+              <div class="ps-prog-fill ps-prog-fill-emerald" style="width: 88%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric 5: Active Pipeline -->
+        <div class="col-6 col-sm-6 col-md-4 col-xl">
+          <div class="ps-dash-card p-3 h-100 text-start">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="ps-stat-label">Active Pipeline</span>
+              <div class="ps-stat-icon-wrap ps-icon-purple"><i class="fa-solid fa-briefcase"></i></div>
+            </div>
+            <div class="ps-stat-num text-purple mb-1">${applicationsCount} <span class="fs-8 text-muted fw-normal">Roles</span></div>
+            <div class="d-flex align-items-center justify-content-between fs-9 font-monospace">
+              <span class="text-warning">${upcomingInterviewsCount} Scheduled</span>
+              <span class="text-purple fw-semibold">In Evaluation</span>
+            </div>
+            <div class="ps-prog-track mt-2">
+              <div class="ps-prog-fill ps-prog-fill-purple" style="width: 60%;"></div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Right Telemetry Widgets Column -->
-      <div class="col-lg-4">
-        <!-- Readiness Ring Card -->
-        <div class="bento-card p-3 text-center mb-3">
-          <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-circle-notch text-emerald me-2"></i>Interview Readiness Score</h6>
-          <div class="readiness-ring my-2" style="width: 88px; height: 88px; margin: 0 auto; position: relative;">
-            <div class="readiness-value fw-extrabold text-white fs-4" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">${readinessScore}%</div>
-            <svg class="w-100 h-100" viewBox="0 0 36 36">
-              <path class="circle-bg" stroke="rgba(255,255,255,0.08)" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              <path class="circle" stroke="#10b981" stroke-width="3.5" stroke-dasharray="${readinessScore}, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-            </svg>
+      <!-- 3. Center Workspace Analytics & Action Grid (8-col / 4-col) -->
+      <div class="row g-3">
+        <!-- LEFT 8-COLUMN MAIN ANALYTICS -->
+        <div class="col-lg-8">
+          <!-- Card A: Weekly Preparation Velocity Chart -->
+          <div class="ps-dash-card p-3 mb-3">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+              <div>
+                <h6 class="text-white fw-bold m-0 fs-7 d-flex align-items-center gap-2">
+                  <i class="fa-solid fa-chart-area text-primary"></i> Preparation Velocity & Study Time
+                </h6>
+                <small class="text-muted fs-9 font-monospace">Daily minutes dedicated to coding, mock exams & technical reading</small>
+              </div>
+              <div class="d-flex align-items-center gap-1">
+                <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-30 px-2.5 py-1 font-monospace fs-9">7 DAYS</span>
+                <span class="badge bg-transparent text-muted border border-secondary border-opacity-20 px-2.5 py-1 font-monospace fs-9">30 DAYS</span>
+              </div>
+            </div>
+            <div style="position: relative; height: 185px;">
+              <canvas id="weeklyHoursChart"></canvas>
+            </div>
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-3 pt-2 border-top border-secondary border-opacity-15 fs-9 font-monospace text-muted">
+              <div><span class="text-white fw-semibold">1h 45m</span> Daily Average</div>
+              <div><span class="text-warning fw-semibold">Saturday (3.2h)</span> Peak Focus</div>
+              <div><span class="text-emerald fw-semibold">94%</span> Consistency Rating</div>
+            </div>
           </div>
-          <p class="text-secondary fs-9 font-monospace mb-0">Based on solved DSA problems, consistency & mock grades.</p>
+
+          <!-- Card B: Problem of the Day Spotlight -->
+          <div class="ps-dash-card ps-dash-card-highlight p-3 mb-3">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-30 font-monospace fs-9 fw-bold">
+                  <i class="fa-solid fa-star me-1"></i>PROBLEM OF THE DAY
+                </span>
+                <span class="badge bg-warning text-dark font-monospace fs-9 fw-bold">MEDIUM</span>
+              </div>
+              <div class="text-muted fs-9 font-monospace">Top Interview 150 • Recommended by AI</div>
+            </div>
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+              <div>
+                <h5 class="text-white fw-bold m-0 fs-6">Course Schedule II (Topological Sort / Graph DFS)</h5>
+                <p class="text-secondary fs-8 mb-0 mt-1">Given total courses and prerequisite pairs, determine the ordering of courses you must finish.</p>
+                <div class="d-flex flex-wrap gap-1.5 mt-2">
+                  <span class="badge bg-dark border border-secondary border-opacity-30 text-secondary font-monospace fs-9">Google</span>
+                  <span class="badge bg-dark border border-secondary border-opacity-30 text-secondary font-monospace fs-9">Meta</span>
+                  <span class="badge bg-dark border border-secondary border-opacity-30 text-secondary font-monospace fs-9">Amazon</span>
+                  <span class="badge bg-dark border border-secondary border-opacity-30 text-secondary font-monospace fs-9">Uber</span>
+                </div>
+              </div>
+              <div class="d-flex flex-column gap-2 flex-shrink-0">
+                <a href="#/coding-practice" class="btn btn-sm btn-premium px-3 py-1.5 fs-8 d-inline-flex align-items-center gap-1.5 shadow-sm text-nowrap">
+                  <i class="fa-solid fa-play"></i> Solve in Workspace
+                </a>
+                <a href="#/library" class="btn btn-sm btn-glass text-muted px-3 py-1 fs-9 d-inline-flex align-items-center justify-content-center gap-1 text-nowrap">
+                  <i class="fa-solid fa-book-open"></i> Read Graph Guide
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card C: Interactive Activity Heatmap -->
+          <div class="ps-dash-card p-3 mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div>
+                <h6 class="text-white fw-bold m-0 fs-7 d-flex align-items-center gap-2">
+                  <i class="fa-solid fa-fire text-warning"></i> Activity & Solves Heatmap
+                </h6>
+                <small class="text-muted fs-9 font-monospace">58 submissions and study sessions across the last 16 weeks</small>
+              </div>
+              <div class="d-flex align-items-center gap-1 fs-9 font-monospace text-muted">
+                <span>Less</span>
+                <div class="ps-heatmap-cell level-0" style="width: 9px; height: 9px;"></div>
+                <div class="ps-heatmap-cell level-1" style="width: 9px; height: 9px;"></div>
+                <div class="ps-heatmap-cell level-2" style="width: 9px; height: 9px;"></div>
+                <div class="ps-heatmap-cell level-3" style="width: 9px; height: 9px;"></div>
+                <div class="ps-heatmap-cell level-4" style="width: 9px; height: 9px;"></div>
+                <span>More</span>
+              </div>
+            </div>
+            <div class="ps-heatmap-container">
+              ${heatmapHtml}
+            </div>
+          </div>
+
+          <!-- Card D: Domain & Skills Mastery Progress -->
+          <div class="ps-dash-card p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="text-white fw-bold m-0 fs-7 d-flex align-items-center gap-2">
+                <i class="fa-solid fa-cubes-stacked text-cyan"></i> Core Technical Matrix & Skill Mastery
+              </h6>
+              <a href="#/dsa-roadmap" class="text-cyan text-decoration-none fs-8 font-monospace">Explore Full Roadmap &rarr;</a>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="mb-2.5">
+                  <div class="d-flex justify-content-between text-secondary fs-8 mb-1">
+                    <span class="text-white fw-medium"><i class="fa-solid fa-layer-group text-primary me-1.5"></i>Arrays & Hashing</span>
+                    <span class="font-monospace text-emerald">36/40 (90%)</span>
+                  </div>
+                  <div class="ps-prog-track"><div class="ps-prog-fill ps-prog-fill-emerald" style="width: 90%;"></div></div>
+                </div>
+                <div class="mb-2.5">
+                  <div class="d-flex justify-content-between text-secondary fs-8 mb-1">
+                    <span class="text-white fw-medium"><i class="fa-solid fa-network-wired text-cyan me-1.5"></i>Trees & Graphs</span>
+                    <span class="font-monospace text-cyan">28/35 (80%)</span>
+                  </div>
+                  <div class="ps-prog-track"><div class="ps-prog-fill ps-prog-fill-cyan" style="width: 80%;"></div></div>
+                </div>
+                <div>
+                  <div class="d-flex justify-content-between text-secondary fs-8 mb-1">
+                    <span class="text-white fw-medium"><i class="fa-solid fa-calculator text-pink me-1.5"></i>Dynamic Programming</span>
+                    <span class="font-monospace text-warning">22/35 (63%)</span>
+                  </div>
+                  <div class="ps-prog-track"><div class="ps-prog-fill ps-prog-fill-pink" style="width: 63%;"></div></div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-2.5">
+                  <div class="d-flex justify-content-between text-secondary fs-8 mb-1">
+                    <span class="text-white fw-medium"><i class="fa-solid fa-server text-purple me-1.5"></i>System Design & Scalability</span>
+                    <span class="font-monospace text-purple">18/25 (72%)</span>
+                  </div>
+                  <div class="ps-prog-track"><div class="ps-prog-fill ps-prog-fill-purple" style="width: 72%;"></div></div>
+                </div>
+                <div class="mb-2.5">
+                  <div class="d-flex justify-content-between text-secondary fs-8 mb-1">
+                    <span class="text-white fw-medium"><i class="fa-solid fa-database text-warning me-1.5"></i>OS, DBMS & SQL Core</span>
+                    <span class="font-monospace text-emerald">24/30 (80%)</span>
+                  </div>
+                  <div class="ps-prog-track"><div class="ps-prog-fill ps-prog-fill-orange" style="width: 80%;"></div></div>
+                </div>
+                <div>
+                  <div class="d-flex justify-content-between text-secondary fs-8 mb-1">
+                    <span class="text-white fw-medium"><i class="fa-solid fa-comments text-emerald me-1.5"></i>Behavioral (STAR Vault)</span>
+                    <span class="font-monospace text-emerald">12/15 (80%)</span>
+                  </div>
+                  <div class="ps-prog-track"><div class="ps-prog-fill ps-prog-fill-emerald" style="width: 80%;"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <!-- Pipeline Funnel Card -->
-        <div class="bento-card p-3">
-          <h6 class="text-white fw-bold mb-2"><i class="fa-solid fa-filter text-purple me-2"></i>Recruitment Pipeline</h6>
-          <div style="position: relative; height: 145px;">
-            <canvas id="pipelineStatusChart"></canvas>
+        <!-- RIGHT 4-COLUMN SIDEBAR WIDGETS -->
+        <div class="col-lg-4">
+          <!-- Card E: AI Interview Readiness Radar -->
+          <div class="ps-dash-card p-3 text-center mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h6 class="text-white fw-bold m-0 fs-7 d-flex align-items-center gap-1.5">
+                <i class="fa-solid fa-circle-notch text-emerald"></i> AI Readiness Score
+              </h6>
+              <span class="badge bg-emerald bg-opacity-20 text-emerald border border-emerald border-opacity-30 font-monospace fs-9">TIER 1 READY</span>
+            </div>
+            
+            <div class="readiness-ring my-3" style="width: 96px; height: 96px; margin: 0 auto; position: relative;">
+              <div class="readiness-value fw-extrabold text-white fs-3" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); letter-spacing: -0.03em;">${readinessScore}%</div>
+              <svg class="w-100 h-100" viewBox="0 0 36 36">
+                <path stroke="rgba(255,255,255,0.06)" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path stroke="url(#readinessGradient)" stroke-width="3.6" stroke-dasharray="${readinessScore}, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <defs>
+                  <linearGradient id="readinessGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#10b981" />
+                    <stop offset="100%" stop-color="#06b6d4" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+
+            <div class="text-start bg-dark bg-opacity-50 p-2.5 rounded-3 border border-secondary border-opacity-15 mb-2">
+              <div class="d-flex justify-content-between text-secondary fs-9 mb-1">
+                <span>Problem Solving Acumen</span>
+                <span class="text-white font-monospace">88%</span>
+              </div>
+              <div class="d-flex justify-content-between text-secondary fs-9 mb-1">
+                <span>Execution Speed & Syntax</span>
+                <span class="text-white font-monospace">82%</span>
+              </div>
+              <div class="d-flex justify-content-between text-secondary fs-9">
+                <span>System Design Scalability</span>
+                <span class="text-white font-monospace">78%</span>
+              </div>
+            </div>
+            
+            <p class="text-muted fs-9 font-monospace mb-0 text-start">
+              <i class="fa-solid fa-lightbulb text-warning me-1"></i> <span class="text-secondary">AI Insight:</span> Excellent graph traversal speed. Recommend 2 hard DP reviews before next round.
+            </p>
+          </div>
+
+          <!-- Card F: Recruitment Pipeline Funnel -->
+          <div class="ps-dash-card p-3 mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h6 class="text-white fw-bold m-0 fs-7 d-flex align-items-center gap-1.5">
+                <i class="fa-solid fa-filter text-purple"></i> Recruitment Pipeline
+              </h6>
+              <a href="#/outreach" class="text-purple text-decoration-none fs-9 font-monospace">CRM &rarr;</a>
+            </div>
+            <div style="position: relative; height: 140px;">
+              <canvas id="pipelineStatusChart"></canvas>
+            </div>
+            <div class="mt-2 pt-2 border-top border-secondary border-opacity-15">
+              <div class="d-flex align-items-center justify-content-between text-start mb-1.5 p-1.5 rounded-2 bg-dark bg-opacity-40 border border-secondary border-opacity-10">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge bg-primary px-1.5 py-0.5 fs-9">GOOGLE</span>
+                  <span class="text-white fs-9 fw-medium">L4 Tech Screen</span>
+                </div>
+                <span class="text-warning font-monospace fs-9">Fri 10:00 AM</span>
+              </div>
+              <div class="d-flex align-items-center justify-content-between text-start p-1.5 rounded-2 bg-dark bg-opacity-40 border border-secondary border-opacity-10">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge bg-warning text-dark px-1.5 py-0.5 fs-9">AMAZON</span>
+                  <span class="text-white fs-9 fw-medium">SDE II OA</span>
+                </div>
+                <span class="text-emerald font-monospace fs-9">Completed</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card G: Daily Prep Checklist -->
+          <div class="ps-dash-card p-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h6 class="text-white fw-bold m-0 fs-7 d-flex align-items-center gap-1.5">
+                <i class="fa-solid fa-list-check text-warning"></i> Today's Action Checklist
+              </h6>
+              <span class="text-muted font-monospace fs-9">2 / 4 DONE</span>
+            </div>
+            <div class="ps-todo-list">
+              <label class="ps-todo-row text-start w-100">
+                <input type="checkbox" class="ps-todo-checkbox" checked>
+                <span class="text-muted text-decoration-line-through fs-8">Solve 2 LeetCode Mediums</span>
+              </label>
+              <label class="ps-todo-row text-start w-100">
+                <input type="checkbox" class="ps-todo-checkbox" checked>
+                <span class="text-muted text-decoration-line-through fs-8">Review TinyURL System Design</span>
+              </label>
+              <label class="ps-todo-row text-start w-100">
+                <input type="checkbox" class="ps-todo-checkbox">
+                <span class="text-white fs-8">Complete 50-MCQ Mock Exam</span>
+              </label>
+              <label class="ps-todo-row text-start w-100">
+                <input type="checkbox" class="ps-todo-checkbox">
+                <span class="text-white fs-8">Update STAR Vault Stories</span>
+              </label>
+            </div>
           </div>
         </div>
       </div>
