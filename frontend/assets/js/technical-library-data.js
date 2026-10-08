@@ -1,13 +1,4 @@
-/**
- * PrepSpace Technical Library - Official Comprehensive Curriculum
- * 19 Canonical Domains for Software Engineering & Placement Excellence
- * © 2026 PrepSpace (stream-in.app). All rights reserved.
- */
-
-(function(window) {
-  'use strict';
-
-  const PREPSPACE_LIBRARY = {
+window.PREPSPACE_LIBRARY = {
   "version": "1.0.0",
   "categories": [
     {
@@ -123,6 +114,18 @@
       "name": "High-Yield Placement Roadmap & Rapid Cheat Sheets",
       "icon": "fa-solid fa-road",
       "count": 1
+    },
+    {
+      "id": 10,
+      "name": "System Design & Architecture",
+      "description": "Scalable microservices, distributed consensus, and cloud platforms",
+      "icon": "fa-solid fa-server"
+    },
+    {
+      "id": 11,
+      "name": "Machine Learning & AI Engineering",
+      "description": "Applied LLMs, vector search, RAG pipelines, and agentic workflows",
+      "icon": "fa-solid fa-brain"
     }
   ],
   "books": [
@@ -2420,10 +2423,246 @@
           "contentHtml": "\n        <h3>8.1 The 48-Hour T-Minus Preparation Protocol</h3>\n        <p>In the final 48 hours before a major interview loop (e.g. Google Onsite, Amazon Final Rounds), cramming hundreds of new algorithmic problems is counter-productive. Cognitive fatigue and sleep deprivation degrade working memory, causing severe performance drops in live interviews.</p>\n\n        \n    <div class=\"book-callout-theorem\">\n      <h5><i class=\"fa-solid fa-square-root-variable me-2\"></i>Theorem 8.1: Cognitive Readiness Invariant</h5>\n      <div>\n          Optimal interview performance is a function of <strong>Cognitive Peak Readiness</strong>:\n          \\[\n          \\text{Performance} = \\text{Competence} \\times \\text{Cognitive Stamina} \\times \\text{Composure}\n          \\]\n          Sacrificing 3 hours of sleep to study 5 extra LeetCode problems reduces cognitive processing speed by 30%, making you 5x more likely to make careless syntax errors or freeze under pressure.\n        </div>\n    </div>\n  \n\n        <h3>8.2 Architectural Diagram: 48-Hour Countdown Schedule</h3>\n        \n    <div class=\"my-3\">\n      <div class=\"text-info fs-8 fw-semibold mb-1\"><i class=\"fa-solid fa-microchip me-1.5\"></i>The 48-Hour Pre-Interview Countdown Architecture</div>\n      <pre><code>T-MINUS 48 HOURS: REVISION &amp; REPOSITORY FREEZE\n- Stop solving brand new Hard problems!\n- Review your 5 STAR behavioral stories.\n- Review Rapid Cheat Sheets (DSA Patterns, System Design Latency Numbers).\n\nT-MINUS 24 HOURS: ENVIRONMENT &amp; HARDWARE CALIBRATION\n- Test webcam, microphone, lighting, and wired Ethernet connection.\n- Install backup hotspot on mobile phone.\n- Configure CoderPad / IDE font sizes (clean dark mode, 16px+ font).\n- Review \"Tell Me About Yourself\" 90-second pitch.\n\nT-MINUS 12 HOURS: COGNITIVE RESET &amp; SLEEP\n- Mandatory 8 hours of sleep. Zero screen time 1 hour before bed.\n\nINTERVIEW DAY (T-Minus 2 Hours to T-0):\n- Light meal + hydration.\n- Warm up fingers: Solve 1 trivially easy 5-minute problem (e.g. Reverse String) to get in the zone!\n- Review your 2 high-signal reverse questions for the interviewer.</code></pre>\n    </div>\n  \n\n        <h3>8.3 Polyglot Implementation: Pre-Interview Automated Environment Check</h3>\n        <h5>Node.js / TypeScript (Automated Pre-Flight Check Script)</h5>\n        <pre><code class=\"language-typescript\">import os from 'node:os';\nimport dns from 'node:dns/promises';\n\nexport async function preFlightSystemCheck() {\n  console.log('=== PREPSPACE INTERVIEW PRE-FLIGHT SYSTEM AUDIT ===');\n  console.log(`OS: ${os.type()} ${os.release()} (${os.arch()})`);\n  console.log(`Available Memory: ${Math.round(os.freemem() / (1024 ** 2))} MB free`);\n\n  // Check network latency to Google DNS\n  const start = Date.now();\n  try {\n    await dns.lookup('google.com');\n    console.log(`DNS Resolution Latency: ${Date.now() - start} ms (HEALTHY)`);\n  } catch (err) {\n    console.error('NETWORK WARNING: DNS lookup failed! Check your connection!');\n  }\n\n  console.log('STATUS: Virtual Interview Environment Validated.');\n}\n\npreFlightSystemCheck();</code></pre>\n\n        <h3>8.4 The Pre-Flight Checklist Table</h3>\n        \n    <div class=\"table-responsive my-4\">\n      <table class=\"table table-bordered table-dark align-middle\">\n        <thead>\n          <tr class=\"table-primary text-dark font-monospace fs-9\">\n            <th>Item / Category</th><th>Checklist Requirement</th><th>Status</th>\n          </tr>\n        </thead>\n        <tbody class=\"fs-8\">\n          <tr><td>Hardware Audio</td><td>Noise-canceling headset; verified in Zoom / Google Meet settings</td><td>VERIFIED</td></tr><tr><td>Internet Redundancy</td><td>Primary Wi-Fi/Ethernet + mobile hotspot tethering tested</td><td>VERIFIED</td></tr><tr><td>Coding Environment</td><td>Browser tabs closed; IDE or scratchpad ready; notifications muted</td><td>VERIFIED</td></tr><tr><td>Physical Setup</td><td>Water bottle ready; notepad and pen for quick memory math</td><td>VERIFIED</td></tr><tr><td>STAR Stories</td><td>5 core stories refreshed in memory with quantified metrics</td><td>VERIFIED</td></tr>\n        </tbody>\n      </table>\n    </div>\n  \n\n        <h3>8.5 Real-World Enterprise Case Study</h3>\n        \n    <div class=\"book-callout-insight\">\n      <h5><i class=\"fa-solid fa-lightbulb me-2\"></i>Naval Ravikant on Calmness and Judgement in High-Stakes Moments</h5>\n      <div>\n          Naval Ravikant (founder of AngelList) observed: <em>\"A calm mind, a fit body, and a house full of love. These things cannot be bought. They must be earned.\"</em>\n          In senior engineering interviews, interviewers look for <strong>Calmness under Fire</strong>. When an unexpected system design curveball or algorithmic edge case arrives, taking a deep breath, smiling, and calmly reasoning aloud through the problem conveys immense senior confidence.\n        </div>\n    </div>\n  \n\n        <h3>8.6 Interview Failure Modes & Gotchas</h3>\n        \n    <div class=\"book-callout-warning\">\n      <h5><i class=\"fa-solid fa-triangle-exclamation me-2\"></i>The Caffeine & Panicked Cramming Spiral</h5>\n      <div>\n          Drinking 4 energy drinks or espresso shots 30 minutes before your interview causes heart rate spikes, jittery hands, and rapid disjointed speech.\n          <strong>Stick to your normal routine.</strong>\n          Hydrate with water, do 5 minutes of box breathing (inhale 4s, hold 4s, exhale 4s, hold 4s), and enter the virtual room with confidence.\n        </div>\n    </div>\n  \n\n        <h3>8.7 Practice Workshop Challenge</h3>\n        \n    <div class=\"book-callout-algorithm\">\n      <h5><i class=\"fa-solid fa-code me-2\"></i>Challenge: Complete Pre-Flight Readiness Protocol</h5>\n      <div>\n          <strong>Protocol:</strong>\n          1. Verify that your GitHub profile and LinkedIn match your submitted resume.\n          2. Open the PrepSpace reader and review Books 101 through 119 summary callouts.\n          3. Deliver your 90-second self-introduction in front of a mirror with open, smiling body language.\n          4. You are prepared. Enter the arena and claim your offer!\n        </div>\n    </div>\n  \n      "
         }
       ]
+    },
+    {
+      "id": 120,
+      "slug": "system-design-planet-scale",
+      "title": "System Design at Planet Scale: Microservices, Caches & Event Streaming",
+      "subtitle": "Battle-tested architectural patterns for high-throughput, fault-tolerant distributed systems",
+      "description": "Comprehensive blueprint for designing multi-region architectures, distributed consensus, write-heavy event streams, rate limiting, and zero-downtime databases.",
+      "author": "PrepSpace Distributed Systems Engineering Group",
+      "category": "System Design & Architecture",
+      "subcategory": "Distributed Systems & Cloud Architecture",
+      "difficulty": "ADVANCED",
+      "pageCount": 380,
+      "estimatedReadingTime": "10 Hours",
+      "tags": [
+        "System Design",
+        "Distributed Systems",
+        "Kafka",
+        "Microservices",
+        "Consensus",
+        "High Availability"
+      ],
+      "licenseType": "ORIGINAL",
+      "copyrightNotice": "© 2026 PrepSpace (stream-in.app). All rights reserved.",
+      "isPro": true,
+      "badge": "FLAGSHIP MASTERCLASS",
+      "rating": 4.99,
+      "readerCount": 3840,
+      "icon": "fa-solid fa-server",
+      "gradient": "linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%)",
+      "chapters": [
+        {
+          "id": 12001,
+          "chapterNumber": 1,
+          "title": "Distributed Consensus: Raft, Paxos & Split-Brain Mitigation",
+          "subtitle": "State Machine Replication, Leader Election & Quorum Mathematics",
+          "summary": "Understand how distributed clusters maintain consistency across network partitions using Raft, Paxos, and quorum arithmetic.",
+          "readingTimeMinutes": 28,
+          "isFreePreview": true,
+          "sortOrder": 1,
+          "contentHtml": "\n        <h3>1.1 The Fundamental Challenge of Distributed Agreement</h3>\n        <p>In a distributed system where network partitions, packet delays, and node crashes are inevitable, achieving consensus across independent nodes without a single point of failure is one of computer science's most difficult problems. The FLP Impossibility Theorem (Fischer, Lynch, Paterson, 1985) mathematically proves that in an asynchronous network, no deterministic consensus protocol can guarantee both safety and liveness in the presence of even a single unannounced crash failure.</p>\n        \n        <div class=\"book-callout-theorem\">\n          <div class=\"book-callout-title\"><i class=\"fa-solid fa-square-root-variable me-2\"></i>CAP Theorem & Quorum Formula</div>\n          <p>In a cluster of ( N ) nodes, strong consistency requires read and write quorums satisfying:</p>\n          <div class=\"font-monospace text-center py-2 text-warning fs-6\">( R + W > N ) and ( W > \frac{N}{2} )</div>\n          <p class=\"mb-0 text-muted fs-8\">Where ( R ) is the number of nodes required for a read quorum, and ( W ) is the number required for a write quorum. If ( W le \frac{N}{2} ), two disjoint partitions could both accept writes simultaneously, producing catastrophic split-brain state divergence.</p>\n        </div>\n\n        <h3>1.2 The Raft Consensus Algorithm Mechanics</h3>\n        <p>Raft breaks consensus into three cleanly separated sub-problems:</p>\n        <ol>\n          <li><strong>Leader Election:</strong> When an active leader fails, nodes transition to Candidate state, increment the <code>currentTerm</code>, and request votes. Randomized election timeouts (150ms–300ms) prevent split-vote deadlocks.</li>\n          <li><strong>Log Replication:</strong> The leader accepts client write commands, appends them to its local log as uncommitted entries, and replicates them to follower nodes via <code>AppendEntries</code> RPCs. Once a majority of followers acknowledge, the entry is committed and applied to the state machine.</li>\n          <li><strong>Safety Invariant:</strong> A leader will never overwrite or truncate its own log entries; it only appends. A candidate can only be elected if its log is at least as up-to-date as any other node in the majority quorum.</li>\n        </ol>\n\n        <div class=\"book-callout-algorithm\">\n          <div class=\"book-callout-title\"><i class=\"fa-solid fa-code me-2\"></i>Raft Leader Election State Machine (Go Implementation)</div>\n          <pre><code class=\"language-go\">type NodeState int\nconst (\n    Follower NodeState = iota\n    Candidate\n    Leader\n)\n\ntype RaftNode struct {\n    mu          sync.Mutex\n    peers       []*rpc.Client\n    id          int\n    currentTerm int\n    votedFor    int\n    log         []LogEntry\n    commitIndex int\n    lastApplied int\n    state       NodeState\n    heartbeat   chan bool\n}\n\nfunc (rf *RaftNode) RunElectionTimer() {\n    for {\n        timeout := time.Duration(150+rand.Intn(150)) * time.Millisecond\n        select {\n        case <-time.After(timeout):\n            rf.mu.Lock()\n            if rf.state != Leader {\n                rf.startElection()\n            }\n            rf.mu.Unlock()\n        case <-rf.heartbeat:\n            // Heartbeat received from valid leader, reset timer\n        }\n    }\n}</code></pre>\n        </div>\n      "
+        },
+        {
+          "id": 12002,
+          "chapterNumber": 2,
+          "title": "Rate Limiting & Traffic Shaping at Global Edge",
+          "subtitle": "Token Bucket, Leaky Bucket, Sliding Window Counter & Distributed Redis Clusters",
+          "summary": "Explore high-throughput rate limiting algorithms with atomic Redis Lua scripts and memory-efficient sliding window counters.",
+          "readingTimeMinutes": 24,
+          "isFreePreview": false,
+          "sortOrder": 2,
+          "contentHtml": "\n        <h3>2.1 Why Rate Limiting is Critical for High Availability</h3>\n        <p>Rate limiting protects backend systems from Denial of Service (DoS) attacks, brute-force credential stuffing, abusive API consumers, and cascading failure cascades caused by retry storms. A robust rate limiter must enforce strict rate guarantees with sub-millisecond overhead and zero race conditions.</p>\n\n        <h3>2.2 Algorithmic Comparison</h3>\n        <div class=\"table-responsive my-3\">\n          <table class=\"table table-dark table-bordered fs-8 font-monospace\">\n            <thead>\n              <tr class=\"text-primary\">\n                <th>Algorithm</th>\n                <th>Time Complexity</th>\n                <th>Memory Overhead</th>\n                <th>Burst Handling</th>\n                <th>Accuracy</th>\n              </tr>\n            </thead>\n            <tbody>\n              <tr><td>Token Bucket</td><td>O(1)</td><td>O(1) per user</td><td>Allows bursts up to capacity</td><td>High</td></tr>\n              <tr><td>Leaky Bucket</td><td>O(1)</td><td>O(1) per user</td><td>Smooths traffic at constant rate</td><td>High</td></tr>\n              <tr><td>Fixed Window Counter</td><td>O(1)</td><td>O(1) per user</td><td>Vulnerable to 2x boundary spike</td><td>Low</td></tr>\n              <tr><td>Sliding Window Log</td><td>O(log N)</td><td>O(N) per timestamp</td><td>No boundary spikes</td><td>100% Exact</td></tr>\n              <tr><td>Sliding Window Counter</td><td>O(1)</td><td>O(1) per user</td><td>Smooth estimation curve</td><td>99.5% Exact</td></tr>\n            </tbody>\n          </table>\n        </div>\n\n        <div class=\"book-callout-insight\">\n          <div class=\"book-callout-title\"><i class=\"fa-solid fa-bolt me-2\"></i>Atomic Sliding Window Counter with Redis Lua</div>\n          <pre><code class=\"language-lua\">-- KEYS[1]: Rate limit key (e.g., 'rate:user_1024:api')\n-- ARGV[1]: Current UNIX timestamp in ms\n-- ARGV[2]: Window size in ms (e.g., 60000 for 1 min)\n-- ARGV[3]: Max requests allowed in window (e.g., 100)\n\nlocal key = KEYS[1]\nlocal now = tonumber(ARGV[1])\nlocal window = tonumber(ARGV[2])\nlocal limit = tonumber(ARGV[3])\nlocal clearBefore = now - window\n\n-- Remove timestamps outside the sliding window\nredis.call('ZREMRANGEBYSCORE', key, 0, clearBefore)\n\n-- Count remaining requests in active window\nlocal currentRequests = redis.call('ZCARD', key)\n\nif currentRequests < limit then\n    redis.call('ZADD', key, now, now)\n    redis.call('PEXPIRE', key, window)\n    return {1, limit - currentRequests - 1} -- Allowed, remaining quota\nelse\n    return {0, 0} -- Blocked, 429 Too Many Requests\nend</code></pre>\n        </div>\n      "
+        },
+        {
+          "id": 12003,
+          "chapterNumber": 3,
+          "title": "Event-Driven Architecture & Change Data Capture (CDC)",
+          "subtitle": "Kafka Partitions, Consumer Groups, Debezium, and Outbox Pattern",
+          "summary": "Design scalable event-driven systems using Apache Kafka, idempotent consumers, transactional outbox, and zero-loss CDC.",
+          "readingTimeMinutes": 30,
+          "isFreePreview": false,
+          "sortOrder": 3,
+          "contentHtml": "\n        <h3>3.1 The Dual-Write Problem in Microservices</h3>\n        <p>When a business operation requires updating a relational database (e.g., PostgreSQL) and notifying downstream services via a message broker (e.g., Apache Kafka), executing two separate network calls creates an unavoidable inconsistency window. If the database commit succeeds but the message broker publish fails, downstream systems will never receive the update.</p>\n\n        <div class=\"book-callout-warning\">\n          <div class=\"book-callout-title\"><i class=\"fa-solid fa-triangle-exclamation me-2\"></i>The Solution: Transactional Outbox Pattern</div>\n          <p>Instead of writing to Kafka directly from the application layer, write both the domain entity and an <code>outbox_events</code> record inside the <strong>same atomic local database transaction</strong>. A dedicated CDC engine (such as Debezium reading Postgres Write-Ahead Logs) streams committed outbox events to Kafka with exactly-once database semantics.</p>\n        </div>\n      "
+        },
+        {
+          "id": 12004,
+          "chapterNumber": 4,
+          "title": "Multi-Region Active-Active Replication & Conflict Resolution",
+          "subtitle": "CRDTs, Vector Clocks, Dynamo Architecture & Global Latency Optimization",
+          "summary": "Master conflict-free replicated data types, last-write-wins hazards, and multi-region database routing topologies.",
+          "readingTimeMinutes": 26,
+          "isFreePreview": false,
+          "sortOrder": 4,
+          "contentHtml": "\n        <h3>4.1 Overcoming the Speed of Light in Global Deployments</h3>\n        <p>Network latency between transatlantic data centers (e.g., US-East to EU-West) is physically bounded by fiber optic propagation time ((approx 70\text{ms}) round-trip). Multi-Region Active-Active architectures allow local read and write operations at edge data centers while asynchronously synchronizing state across continents.</p>\n      "
+        },
+        {
+          "id": 12005,
+          "chapterNumber": 5,
+          "title": "Distributed Caching & Cache Invalidation at Scale",
+          "subtitle": "Thundering Herd, Cache Stampede, Consistent Hashing & Two-Tier In-Memory Architectures",
+          "summary": "Eliminate cache stampedes using probabilistic early expiration, mutex locking, and consistent hashing with virtual nodes.",
+          "readingTimeMinutes": 24,
+          "isFreePreview": false,
+          "sortOrder": 5,
+          "contentHtml": "\n        <h3>5.1 The Thundering Herd Problem</h3>\n        <p>When a hot cache key expires in a system receiving 100,000 queries per second, hundreds of concurrent requests will simultaneously detect a cache miss and hit the underlying database, overwhelming connection pools and triggering an instant cascading outage.</p>\n      "
+        },
+        {
+          "id": 12006,
+          "chapterNumber": 6,
+          "title": "Database Sharding, Partitioning & Zero-Downtime Migration",
+          "subtitle": "Range, Hash & Directory Sharding, Online Schema Migrations with Ghost & pt-online-schema-change",
+          "summary": "Scale relational databases horizontally with custom sharding keys, scatter-gather queries, and live schema migrations.",
+          "readingTimeMinutes": 27,
+          "isFreePreview": false,
+          "sortOrder": 6,
+          "contentHtml": "\n        <h3>6.1 Horizontal Sharding vs Vertical Partitioning</h3>\n        <p>When a database table exceeds single-node storage or IOPS boundaries, horizontal sharding distributes rows across independent physical nodes based on a deterministic partition key.</p>\n      "
+        },
+        {
+          "id": 12007,
+          "chapterNumber": 7,
+          "title": "Full-Stack Observability: OpenTelemetry, Tracing & SLIs/SLOs",
+          "subtitle": "Distributed Context Propagation, RED Metrics, Log Aggregation & Anomaly Detection",
+          "summary": "Implement production-grade observability across microservices using OpenTelemetry traces, distributed context headers, and error budget tracking.",
+          "readingTimeMinutes": 22,
+          "isFreePreview": false,
+          "sortOrder": 7,
+          "contentHtml": "\n        <h3>7.1 The Golden Signals of Distributed Systems</h3>\n        <p>According to Google SRE engineering standards, every production service must continuously track the four Golden Signals: Latency, Traffic, Errors, and Saturation.</p>\n      "
+        },
+        {
+          "id": 12008,
+          "chapterNumber": 8,
+          "title": "Chaos Engineering & Fault Injection in Production",
+          "subtitle": "Blast Radius Containment, Network Partition Simulation & Graceful Degradation",
+          "summary": "Proactively uncover hidden failure modes by injecting latency, terminating pods, and simulating datacenter dropouts safely.",
+          "readingTimeMinutes": 25,
+          "isFreePreview": false,
+          "sortOrder": 8,
+          "contentHtml": "\n        <h3>8.1 Principles of Chaos Engineering</h3>\n        <p>Chaos engineering is the discipline of experimenting on a system in order to build confidence in the system's capability to withstand turbulent conditions in production.</p>\n      "
+        }
+      ]
+    },
+    {
+      "id": 121,
+      "slug": "ai-engineering-applied-llms",
+      "title": "AI Engineering & Applied LLM Systems for Full-Stack Developers",
+      "subtitle": "Vector Search, RAG Pipelines, Structured Outputs, Agentic Loops & Production Deployment",
+      "description": "End-to-end engineering guide to building production GenAI applications with vector embeddings, hybrid search, semantic caching, guardrails, and autonomous agents.",
+      "author": "PrepSpace AI & Systems Engineering Group",
+      "category": "Machine Learning & AI Engineering",
+      "subcategory": "Applied Generative AI & Vector Systems",
+      "difficulty": "ADVANCED",
+      "pageCount": 350,
+      "estimatedReadingTime": "9 Hours",
+      "tags": [
+        "LLM",
+        "Vector Search",
+        "RAG",
+        "Embeddings",
+        "HNSW",
+        "AI Agents",
+        "LangChain",
+        "OpenAI"
+      ],
+      "licenseType": "ORIGINAL",
+      "copyrightNotice": "© 2026 PrepSpace (stream-in.app). All rights reserved.",
+      "isPro": true,
+      "badge": "AI SPECIALIZATION",
+      "rating": 4.98,
+      "readerCount": 2920,
+      "icon": "fa-solid fa-brain",
+      "gradient": "linear-gradient(135deg, #18181b 0%, #3b0764 50%, #581c87 100%)",
+      "chapters": [
+        {
+          "id": 12101,
+          "chapterNumber": 1,
+          "title": "Vector Embeddings & Approximate Nearest Neighbor (ANN) Indexing",
+          "subtitle": "HNSW, IVFFlat, Cosine Similarity & Vector Math Foundations",
+          "summary": "Understand high-dimensional vector representations, cosine distance metrics, and graph-based indexing with Hierarchical Navigable Small World (HNSW).",
+          "readingTimeMinutes": 25,
+          "isFreePreview": true,
+          "sortOrder": 1,
+          "contentHtml": "\n        <h3>1.1 High-Dimensional Vector Representations</h3>\n        <p>Vector embeddings convert unstructured data (text, code, images, audio) into dense numerical vectors in continuous vector spaces ((mathbb{R}^d), where (d in [384, 1536, 3072])). Semantic similarity corresponds to geometric proximity in vector space.</p>\n        \n        <div class=\"book-callout-theorem\">\n          <div class=\"book-callout-title\"><i class=\"fa-solid fa-compass-drafting me-2\"></i>Cosine Similarity Formulation</div>\n          <p>For two normalized vectors (mathbf{u}) and (mathbf{v}):</p>\n          <div class=\"font-monospace text-center py-2 text-warning fs-6\">(\text{Cosine Similarity}(mathbf{u}, mathbf{v}) = \frac{mathbf{u} cdot mathbf{v}}{|mathbf{u}|_2 |mathbf{v}|_2} = sum_{i=1}^d u_i v_i)</div>\n          <p class=\"mb-0 text-muted fs-8\">When vectors are L2-normalized ((|mathbf{u}|_2 = 1)), Cosine Similarity equals the simple Dot Product, drastically accelerating SIMD hardware vector multiplications on modern CPUs/GPUs.</p>\n        </div>\n      "
+        },
+        {
+          "id": 12102,
+          "chapterNumber": 2,
+          "title": "Production RAG Architecture: Chunking, Reranking & Hybrid Search",
+          "subtitle": "BM25 Sparse + Dense Retrieval, Cross-Encoder Rerankers & Context Compression",
+          "summary": "Build high-accuracy Retrieval-Augmented Generation systems using semantic chunking, reciprocal rank fusion (RRF), and cross-encoder rerankers.",
+          "readingTimeMinutes": 28,
+          "isFreePreview": false,
+          "sortOrder": 2,
+          "contentHtml": "\n        <h3>2.1 Why Pure Vector Search Fails in Production</h3>\n        <p>Pure dense vector search struggles with exact keyword matching (e.g. SKU numbers, function names, specific error codes). Hybrid search combines sparse lexical search (BM25) with dense vector retrieval using Reciprocal Rank Fusion (RRF) to capture both semantic intent and exact phrase matches.</p>\n      "
+        },
+        {
+          "id": 12103,
+          "chapterNumber": 3,
+          "title": "Structured Outputs & JSON Schema Validation",
+          "subtitle": "Constrained Decoding, Function Calling, Pydantic & Zod Validations",
+          "summary": "Guarantee 100% deterministic JSON outputs from language models using grammar-constrained sampling and schema enforcement.",
+          "readingTimeMinutes": 22,
+          "isFreePreview": false,
+          "sortOrder": 3,
+          "contentHtml": "\n        <h3>3.1 Constrained Sampling at Token Generation Time</h3>\n        <p>Instead of relying on prompt engineering and post-generation regex parsing, modern LLM inference engines mask out invalid tokens at each generation step according to a formal context-free grammar or JSON schema, guaranteeing zero parse errors.</p>\n      "
+        },
+        {
+          "id": 12104,
+          "chapterNumber": 4,
+          "title": "Agentic Loops: ReAct Framework, Tool Calling & Plan-and-Solve",
+          "subtitle": "Reasoning Traces, Tool Execution Sandboxes, Error Recovery & Multi-Agent Collaboration",
+          "summary": "Design autonomous AI agents capable of multi-step planning, tool execution, memory management, and self-correcting loops.",
+          "readingTimeMinutes": 30,
+          "isFreePreview": false,
+          "sortOrder": 4,
+          "contentHtml": "\n        <h3>4.1 The ReAct Pattern (Reasoning + Acting)</h3>\n        <p>ReAct prompts prompt the LLM to interleave reasoning thoughts with explicit action tool calls, observing the environment before deciding the next step.</p>\n      "
+        },
+        {
+          "id": 12105,
+          "chapterNumber": 5,
+          "title": "Semantic Caching & Token Cost Optimization",
+          "subtitle": "Vector Caches with Redis, Exact vs Fuzzy Match Thresholds & LLM Gateway Routing",
+          "summary": "Reduce API costs and cut latency by 90% by implementing semantic caching layers that recognize semantically equivalent user queries.",
+          "readingTimeMinutes": 20,
+          "isFreePreview": false,
+          "sortOrder": 5,
+          "contentHtml": "\n        <h3>5.1 Semantic Vector Cache Mechanics</h3>\n        <p>Traditional caches require exact string matches. A semantic cache embeds the incoming query, queries a vector index of prior responses, and returns the cached answer if cosine similarity exceeds a high confidence threshold (e.g., (ge 0.96)).</p>\n      "
+        },
+        {
+          "id": 12106,
+          "chapterNumber": 6,
+          "title": "AI Safety, Guardrails & Jailbreak Defense",
+          "subtitle": "Prompt Injection Mitigation, Output Toxicity Filtering & PII Redaction",
+          "summary": "Harden LLM applications against indirect prompt injections, data exfiltration attacks, and toxic output generation.",
+          "readingTimeMinutes": 24,
+          "isFreePreview": false,
+          "sortOrder": 6,
+          "contentHtml": "\n        <h3>6.1 Threat Vectors in Production LLM Applications</h3>\n        <p>Unlike traditional SQL injection where input is separated from code, LLMs treat user inputs and system instructions in the same linguistic context window, creating significant prompt injection risks.</p>\n      "
+        },
+        {
+          "id": 12107,
+          "chapterNumber": 7,
+          "title": "Evaluation Metrics for GenAI: RAG Triad & LLM-as-a-Judge",
+          "subtitle": "Context Relevance, Groundedness, Answer Relevance & Synthetic Test Datasets",
+          "summary": "Systematically benchmark and evaluate GenAI pipelines using automated scoring frameworks, golden datasets, and statistical correlation.",
+          "readingTimeMinutes": 22,
+          "isFreePreview": false,
+          "sortOrder": 7,
+          "contentHtml": "\n        <h3>7.1 The RAG Triad Evaluation Framework</h3>\n        <p>Evaluating RAG systems requires measuring three distinct pillars: Context Relevance (did we retrieve the right information?), Groundedness (is the answer supported by the retrieved context?), and Answer Relevance (did the answer satisfy the user's query?).</p>\n      "
+        },
+        {
+          "id": 12108,
+          "chapterNumber": 8,
+          "title": "Fine-Tuning, LoRA & Model Distillation",
+          "subtitle": "Low-Rank Adaptation, Quantization (QLoRA), Dataset Curation & Deployment",
+          "summary": "Learn when and how to fine-tune open-weight models (Llama 3, Mistral) using parameter-efficient fine-tuning (PEFT) and quantized LoRA.",
+          "readingTimeMinutes": 26,
+          "isFreePreview": false,
+          "sortOrder": 8,
+          "contentHtml": "\n        <h3>8.1 Fine-Tuning vs In-Context Learning (RAG)</h3>\n        <p>RAG provides dynamic knowledge retrieval, while fine-tuning teaches models specific stylistic formats, specialized domain languages, or compact distillation for latency-sensitive edge deployment.</p>\n      "
+        }
+      ]
     }
   ]
 };
-
-  // Expose globally
-  window.PREPSPACE_LIBRARY = PREPSPACE_LIBRARY;
-})(typeof window !== 'undefined' ? window : globalThis);

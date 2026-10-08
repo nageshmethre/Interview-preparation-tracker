@@ -3312,40 +3312,46 @@ const components = {
               </div>
 
               <!-- Console Panes Body -->
-              <div class="tab-content flex-grow-1 p-3 overflow-y-auto" style="min-height: 140px; max-height: 220px; background: #141416;">
+              <div class="tab-content flex-grow-1 p-3 overflow-y-auto" style="min-height: 140px; max-height: 240px; background: #141416;">
                 
                 <!-- Tab 1: Testcase Input Display -->
                 <div class="tab-pane fade show active" id="console-tab-testcase" role="tabpanel">
                   <div class="d-flex align-items-center gap-2 mb-2" id="lc-case-pills-row">
-                    <button type="button" class="btn btn-xs lc-case-btn active" id="btn-case-1"><i class="fa-solid fa-check text-success me-1"></i>Case 1</button>
-                    <button type="button" class="btn btn-xs lc-case-btn" id="btn-case-2"><i class="fa-solid fa-check text-success me-1"></i>Case 2</button>
-                    <button type="button" class="btn btn-xs lc-case-btn" id="btn-case-3"><i class="fa-solid fa-check text-success me-1"></i>Case 3</button>
+                    <button type="button" class="btn btn-xs lc-case-btn active" data-case-index="0" id="btn-case-1"><i class="fa-solid fa-circle-check text-success me-1"></i>Case 1</button>
+                    <button type="button" class="btn btn-xs lc-case-btn" data-case-index="1" id="btn-case-2"><i class="fa-solid fa-circle-check text-success me-1"></i>Case 2</button>
+                    <button type="button" class="btn btn-xs lc-case-btn" data-case-index="2" id="btn-case-3"><i class="fa-solid fa-circle-check text-success me-1"></i>Case 3</button>
                   </div>
                   <div class="lc-testcase-card p-2.5 rounded-3 font-monospace fs-8 text-light-gray" id="lc-testcase-content">
-                    <div class="text-muted fs-9 mb-1">nums =</div>
-                    <div class="p-1.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-20 mb-2">[2,7,11,15]</div>
-                    <div class="text-muted fs-9 mb-1">target =</div>
-                    <div class="p-1.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-20">9</div>
+                    <div class="text-muted fs-9 mb-1">Input =</div>
+                    <div class="p-1.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-20 mb-2 font-monospace" id="lc-case-input-display">nums = [2,7,11,15], target = 9</div>
+                    <div class="text-muted fs-9 mb-1">Expected Output =</div>
+                    <div class="p-1.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-20 text-emerald font-monospace" id="lc-case-expected-display">[0, 1]</div>
                   </div>
                 </div>
 
                 <!-- Tab 2: Test Result Execution Status -->
                 <div class="tab-pane fade" id="console-tab-result" role="tabpanel">
-                  <div class="d-flex align-items-center gap-3 mb-2">
-                    <span class="text-success fw-bold fs-5" id="lc-result-verdict">Accepted</span>
-                    <span class="text-muted fs-8 font-monospace" id="lc-result-runtime">Runtime: 0 ms</span>
+                  <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+                    <div class="d-flex align-items-center gap-3">
+                      <span class="text-success fw-bold fs-5" id="lc-result-verdict">Accepted</span>
+                      <span class="text-muted fs-8 font-monospace" id="lc-result-runtime">Runtime: 0 ms</span>
+                    </div>
+                    <span class="badge bg-dark border border-secondary border-opacity-30 text-muted fs-9 font-monospace" id="lc-result-summary-badge">Sample cases passed</span>
                   </div>
-                  <div class="d-flex align-items-center gap-2 mb-2">
-                    <span class="badge bg-success bg-opacity-20 text-success font-monospace px-2 py-1 fs-9"><i class="fa-solid fa-check me-1"></i>Case 1</span>
-                    <span class="badge bg-success bg-opacity-20 text-success font-monospace px-2 py-1 fs-9"><i class="fa-solid fa-check me-1"></i>Case 2</span>
+                  <div class="d-flex align-items-center gap-2 mb-2" id="lc-result-cases-row">
+                    <button type="button" class="btn btn-xs lc-case-btn active" data-res-case-index="0" id="res-case-btn-1"><i class="fa-solid fa-circle-check text-success me-1"></i>Case 1</button>
+                    <button type="button" class="btn btn-xs lc-case-btn" data-res-case-index="1" id="res-case-btn-2"><i class="fa-solid fa-circle-check text-success me-1"></i>Case 2</button>
+                    <button type="button" class="btn btn-xs lc-case-btn" data-res-case-index="2" id="res-case-btn-3"><i class="fa-solid fa-circle-check text-success me-1"></i>Case 3</button>
                   </div>
-                  <div class="lc-testcase-card p-2.5 rounded-3 font-monospace fs-8 text-light-gray mb-2">
-                    <div class="text-muted fs-9 mb-1">Output:</div>
-                    <div class="p-1.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-20 text-success mb-2" id="lc-result-output">[0, 1]</div>
+                  <div class="lc-testcase-card p-2.5 rounded-3 font-monospace fs-8 text-light-gray mb-2" id="lc-result-diff-box">
+                    <div class="text-muted fs-9 mb-1">Input:</div>
+                    <div class="p-1.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-20 mb-2 font-monospace" id="lc-result-input">nums = [2,7,11,15], target = 9</div>
+                    <div class="text-muted fs-9 mb-1">Your Output:</div>
+                    <div class="p-1.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-20 text-success mb-2 font-monospace" id="lc-result-output">[0, 1]</div>
                     <div class="text-muted fs-9 mb-1">Expected:</div>
-                    <div class="p-1.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-20 text-light" id="lc-result-expected">[0, 1]</div>
+                    <div class="p-1.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-20 text-light font-monospace" id="lc-result-expected">[0, 1]</div>
                   </div>
-                  <div class="font-monospace fs-9" id="console-output-text" style="color: #22c55e;">
+                  <div class="font-monospace fs-9 p-2 rounded bg-black bg-opacity-40 border border-secondary border-opacity-15" id="console-output-text" style="color: #22c55e; white-space: pre-wrap;">
 // Execution finished with 0 errors. All sample test cases passed.
                   </div>
                 </div>
