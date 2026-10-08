@@ -481,7 +481,7 @@
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
               <div class="d-flex align-items-center gap-3">
                 <a href="#/" class="text-decoration-none d-flex align-items-center gap-2">
-                  <img src="assets/prepspace_full_logo.png?v=5.8.7" alt="PrepSpace" style="width: 32px; height: 32px; border-radius: 6px; object-fit: contain;">
+                  <img src="assets/prepspace_icon.png?v=5.8.8" alt="PrepSpace" style="width: 32px; height: 32px; object-fit: contain;">
                   <span class="text-white fw-bold fs-6">PrepSpace</span>
                 </a>
                 <span class="text-secondary fs-7">/</span>
