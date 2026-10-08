@@ -1,21 +1,21 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
-// Version: 5.8.12 (Enterprise Admin Command Center UI/UX & Candidate Inspector)
+// Version: 5.8.13 (Fulfill All Technical Library Books & Master Engineering Handbooks)
 
-const CACHE_NAME = 'prepspace-static-v5.8.12';
-const RUNTIME_CACHE = 'prepspace-runtime-v5.8.12';
+const CACHE_NAME = 'prepspace-static-v5.8.13';
+const RUNTIME_CACHE = 'prepspace-runtime-v5.8.13';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/index.css?v=5.8.12',
-  './assets/js/app.js?v=5.8.12',
-  './assets/js/components.js?v=5.8.12',
-  './assets/js/interview-suite.js?v=5.8.12',
-  './assets/js/technical-library-data.js?v=5.8.12',
-  './assets/js/questions-data.js?v=5.8.12',
-  './assets/js/aptitude-curriculum.js?v=5.8.12',
-  './assets/js/production-pages.js?v=5.8.12',
+  './assets/css/index.css?v=5.8.13',
+  './assets/js/app.js?v=5.8.13',
+  './assets/js/components.js?v=5.8.13',
+  './assets/js/interview-suite.js?v=5.8.13',
+  './assets/js/technical-library-data.js?v=5.8.13',
+  './assets/js/questions-data.js?v=5.8.13',
+  './assets/js/aptitude-curriculum.js?v=5.8.13',
+  './assets/js/production-pages.js?v=5.8.13',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',
