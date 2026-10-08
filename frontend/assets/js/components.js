@@ -4779,19 +4779,20 @@ const components = {
             <thead>
               <tr>
                 <th style="width: 40px;">#</th>
-                <th>Candidate & Contact</th>
+                <th>Candidate & Contact <i class="fa-solid fa-arrow-down-a-z ms-1 text-muted fs-9"></i></th>
                 <th>Access & Role</th>
                 <th>Affiliate</th>
                 <th>Joined</th>
-                <th class="text-end" style="min-width: 130px;">Actions</th>
+                <th class="text-end" style="min-width: 150px;">Actions & Inspector</th>
               </tr>
             </thead>
             <tbody id="admin-users-table-body">
               ${users.map(u => {
                 const isAdmin = u.role && u.role.includes('ADMIN');
                 const isSuper = u.role === 'ADMIN_SUPER';
+                const userJson = encodeURIComponent(JSON.stringify(u));
                 return `
-                <tr class="user-table-row" data-id="${u.id}" data-name="${(u.name || '').toLowerCase()}" data-email="${(u.email || '').toLowerCase()}" data-role="${(u.role || '').toLowerCase()}" data-paid="${u.isPaid ? 'true' : 'false'}" data-suspended="${u.isSuspended ? 'true' : 'false'}">
+                <tr class="user-table-row" data-id="${u.id}" data-user="${userJson}" data-name="${(u.name || '').toLowerCase()}" data-email="${(u.email || '').toLowerCase()}" data-role="${(u.role || '').toLowerCase()}" data-paid="${u.isPaid ? 'true' : 'false'}" data-suspended="${u.isSuspended ? 'true' : 'false'}">
                   <td class="text-muted font-monospace fs-8">#${u.id}</td>
                   <td>
                     <div class="d-flex align-items-center gap-2">
@@ -4821,8 +4822,13 @@ const components = {
                     <div class="text-muted fs-9 font-monospace">${u.referralCode ? 'Ref: ' + u.referralCode : 'Direct'}</div>
                   </td>
                   <td class="text-muted fs-8">${u.createdAt ? new Date(u.createdAt).toLocaleDateString() : 'N/A'}</td>
-                  <td class="text-end">
+                  <td class="text-end" onclick="event.stopPropagation()">
                     <div class="d-inline-flex align-items-center gap-1">
+                      <!-- Inspect Drawer Trigger -->
+                      <button class="btn btn-admin-action btn-glass btn-inspect-user" data-id="${u.id}" data-user="${userJson}" title="Inspect candidate telemetry & activity">
+                        <i class="fa-solid fa-magnifying-glass-chart text-cyan"></i>
+                      </button>
+
                       <!-- Pro Pass Toggle -->
                       <button class="btn btn-admin-action btn-glass btn-toggle-pro" data-id="${u.id}" data-current="${u.isPaid ? 'true' : 'false'}" title="${u.isPaid ? 'Revoke Pro Pass' : 'Grant Lifetime Pro Pass'}">
                         <i class="fa-solid fa-gem ${u.isPaid ? 'text-warning' : 'text-muted'}"></i>
@@ -5706,20 +5712,32 @@ const components = {
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
           <div>
             <div class="d-flex align-items-center gap-2 mb-1">
-              <span class="badge badge-super-admin px-2 py-0.5 fs-9"><i class="fa-solid fa-crown me-1"></i> SUPER ADMIN COMMAND CENTER</span>
-              <span id="admin-live-clock" class="font-monospace text-emerald fs-9"></span>
+              <span class="badge badge-super-admin px-2.5 py-1 fs-9"><i class="fa-solid fa-crown me-1 text-warning"></i> SUPER ADMIN COMMAND CENTER</span>
+              <span class="badge bg-dark text-muted border border-secondary border-opacity-25 px-2 py-1 fs-9 font-monospace"><i class="fa-solid fa-shield-halved text-info me-1"></i> ENTERPRISE SUITE</span>
             </div>
             <h4 class="text-white fw-bold mb-0">Global Operations & Enterprise Control</h4>
           </div>
 
-          <!-- Quick Actions & Global Controls -->
+          <!-- Dual Clocks, Telemetry & Global Controls -->
           <div class="d-flex flex-wrap align-items-center gap-2">
+            <!-- Dual Clocks (UTC & IST) -->
+            <div class="admin-dual-clock d-flex align-items-center gap-3 px-3 py-1 font-monospace fs-8">
+              <div>
+                <span class="text-muted fs-9 uppercase d-block" style="line-height: 1;">UTC</span>
+                <span id="admin-clock-utc" class="text-white fw-bold">--:--:--</span>
+              </div>
+              <div class="border-start border-secondary border-opacity-25 ps-3">
+                <span class="text-muted fs-9 uppercase d-block" style="line-height: 1;">IST</span>
+                <span id="admin-clock-ist" class="text-emerald fw-bold">--:--:--</span>
+              </div>
+            </div>
+
             <!-- Telemetry Indicator Badges -->
-            <div class="d-none d-xl-flex align-items-center gap-1 me-2">
-              <span class="admin-pill-status emerald"><span class="admin-pulse-dot emerald"></span> API 200</span>
-              <span class="admin-pill-status cyan"><span class="admin-pulse-dot cyan"></span> Neon PG</span>
-              <span class="admin-pill-status purple"><span class="admin-pulse-dot purple"></span> Resend Active</span>
-              <span class="admin-pill-status amber"><span class="admin-pulse-dot amber"></span> CF Proxied</span>
+            <div class="d-none d-xl-flex align-items-center gap-1.5 ms-1">
+              <span class="admin-pill-status"><span class="admin-pulse-dot emerald"></span> API 200</span>
+              <span class="admin-pill-status"><span class="admin-pulse-dot cyan"></span> Neon PG</span>
+              <span class="admin-pill-status"><span class="admin-pulse-dot amber"></span> WAF Defense</span>
+              <span class="admin-pill-status"><span class="admin-pulse-dot purple"></span> Resend Active</span>
             </div>
 
             <!-- Export Dropdown -->
@@ -5727,10 +5745,12 @@ const components = {
               <button class="btn btn-glass btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
                 <i class="fa-solid fa-download me-1 text-success"></i> Reports
               </button>
-              <ul class="dropdown-menu dropdown-menu-dark">
+              <ul class="dropdown-menu dropdown-menu-dark shadow-lg">
                 <li><a class="dropdown-item fs-8" href="/api/admin/reports/users"><i class="fa-solid fa-users me-2 text-primary"></i>Candidates CSV</a></li>
                 <li><a class="dropdown-item fs-8" href="/api/admin/reports/payments"><i class="fa-solid fa-receipt me-2 text-success"></i>Transactions CSV</a></li>
                 <li><a class="dropdown-item fs-8" href="/api/admin/reports/referrals"><i class="fa-solid fa-network-wired me-2 text-warning"></i>Affiliates CSV</a></li>
+                <li><hr class="dropdown-divider border-secondary border-opacity-20"></li>
+                <li><button class="dropdown-item fs-8" id="btn-admin-print-report" onclick="window.print()"><i class="fa-solid fa-file-pdf me-2 text-danger"></i>Export Executive PDF</button></li>
               </ul>
             </div>
 
@@ -5747,102 +5767,157 @@ const components = {
         </div>
       </div>
 
-      <!-- High-Density Executive KPI Metrics Row -->
+      <!-- High-Density Executive KPI Metrics Row with Sparklines -->
       <div class="row g-2 g-md-3 mb-3">
         <!-- Total Registered Candidates -->
         <div class="col-6 col-md-4 col-xl-2">
           <div class="admin-box admin-kpi-tile p-3">
-            <div class="admin-kpi-label mb-1">Total Candidates</div>
-            <div class="admin-kpi-num">${stats.totalUsers || 0}</div>
-            <div class="admin-kpi-caption mt-1"><i class="fa-solid fa-user-check text-primary me-1"></i>Registered profiles</div>
-          </div>
-        </div>
-
-        <!-- Pro Subscribers -->
-        <div class="col-6 col-md-4 col-xl-2">
-          <div class="admin-box admin-kpi-tile p-3">
-            <div class="admin-kpi-label mb-1">Pro Pass Members</div>
-            <div class="admin-kpi-num text-emerald">${stats.paidUsers || 0}</div>
-            <div class="admin-kpi-caption text-emerald mt-1">
-              ${stats.totalUsers ? Math.round(((stats.paidUsers || 0) / stats.totalUsers) * 100) : 0}% conversion rate
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <div class="admin-kpi-label">Total Candidates</div>
+              <i class="fa-solid fa-users text-primary fs-8"></i>
             </div>
+            <div class="admin-kpi-num">${stats.totalUsers || 0}</div>
+            <div class="admin-kpi-caption mt-1 text-muted"><i class="fa-solid fa-user-check text-primary me-1"></i>Registered profiles</div>
           </div>
         </div>
 
-        <!-- Gross Platform Sales -->
+        <!-- Pro Subscribers & Conversion Rate -->
         <div class="col-6 col-md-4 col-xl-2">
           <div class="admin-box admin-kpi-tile p-3">
-            <div class="admin-kpi-label mb-1">Gross Revenue</div>
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <div class="admin-kpi-label">Pro Pass Rate</div>
+              <i class="fa-solid fa-crown text-warning fs-8"></i>
+            </div>
+            <div class="admin-kpi-num text-emerald">${stats.totalUsers ? Math.round(((stats.paidUsers || 0) / stats.totalUsers) * 100) : 0}%</div>
+            <div class="admin-kpi-caption text-emerald mt-1"><i class="fa-solid fa-arrow-trend-up me-1"></i>${stats.paidUsers || 0} pro subscribers</div>
+          </div>
+        </div>
+
+        <!-- Gross Platform Sales & Dynamic Sparkline -->
+        <div class="col-6 col-md-4 col-xl-2">
+          <div class="admin-box admin-kpi-tile p-3 position-relative">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <div class="admin-kpi-label">Gross Revenue</div>
+              <i class="fa-solid fa-arrow-trend-up text-success fs-8"></i>
+            </div>
             <div class="admin-kpi-num text-success">₹${stats.totalRevenue || 0}</div>
-            <div class="admin-kpi-caption mt-1">Cashfree sales</div>
+            <svg class="admin-kpi-sparkline mt-1" viewBox="0 0 100 25" preserveAspectRatio="none">
+              <path d="M0,22 Q20,18 40,14 T70,8 T100,2" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M0,22 Q20,18 40,14 T70,8 T100,2 L100,25 L0,25 Z" fill="rgba(16, 185, 129, 0.12)"/>
+            </svg>
           </div>
         </div>
 
         <!-- Referral Bounties Ledger -->
         <div class="col-6 col-md-4 col-xl-2">
           <div class="admin-box admin-kpi-tile p-3">
-            <div class="admin-kpi-label mb-1">Referral Bounties</div>
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <div class="admin-kpi-label">Referral Bounties</div>
+              <i class="fa-solid fa-hand-holding-dollar text-warning fs-8"></i>
+            </div>
             <div class="admin-kpi-num text-warning">₹${stats.totalReferralPayouts || 0}</div>
-            <div class="admin-kpi-caption mt-1">₹199 per verified invite</div>
+            <div class="admin-kpi-caption mt-1 text-muted">₹199 per invite</div>
           </div>
         </div>
 
         <!-- Cloudflare Edge & Anti-Cheat -->
         <div class="col-6 col-md-4 col-xl-2">
           <div class="admin-box admin-kpi-tile p-3">
-            <div class="admin-kpi-label mb-1">Threat Defense</div>
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <div class="admin-kpi-label">Threat Defense</div>
+              <i class="fa-solid fa-shield-virus text-info fs-8"></i>
+            </div>
             <div class="admin-kpi-num text-info">ACTIVE</div>
-            <div class="admin-kpi-caption mt-1">Cloudflare WAF / Anti-Shodan</div>
+            <div class="admin-kpi-caption mt-1 text-muted">Cloudflare WAF / Anti-Cheat</div>
           </div>
         </div>
 
-        <!-- System Uptime / Health -->
+        <!-- System Uptime / Cluster Health -->
         <div class="col-6 col-md-4 col-xl-2">
           <div class="admin-box admin-kpi-tile p-3">
-            <div class="admin-kpi-label mb-1">Cluster Health</div>
-            <div class="admin-kpi-num text-purple">99.98%</div>
-            <div class="admin-kpi-caption mt-1">Zero critical outages</div>
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <div class="admin-kpi-label">Cluster Uptime</div>
+              <i class="fa-solid fa-server text-purple fs-8"></i>
+            </div>
+            <div class="admin-kpi-num text-purple">99.99%</div>
+            <div class="admin-kpi-caption mt-1 text-muted">Zero Outages</div>
           </div>
         </div>
       </div>
 
-      <!-- 9 Super Admin Navigation Tabs -->
+      <!-- Categorized Domain Navigation Tabs -->
       <div class="admin-tab-bar mb-3" id="admin-tabs-nav">
-        <button class="admin-tab-btn active" id="tab-overview" onclick="loadAdminPanelTab('overview')">
-          <i class="fa-solid fa-chart-line text-info me-1"></i> Overview
-        </button>
-        <button class="admin-tab-btn" id="tab-users" onclick="loadAdminPanelTab('users')">
-          <i class="fa-solid fa-users text-primary me-1"></i> Candidates
-        </button>
-        <button class="admin-tab-btn" id="tab-leaderboard" onclick="loadAdminPanelTab('leaderboard')">
-          <i class="fa-solid fa-trophy text-warning me-1"></i> Leaderboard
-        </button>
-        <button class="admin-tab-btn" id="tab-payments" onclick="loadAdminPanelTab('payments')">
-          <i class="fa-solid fa-receipt text-emerald me-1"></i> Transactions
-        </button>
-        <button class="admin-tab-btn" id="tab-referrals" onclick="loadAdminPanelTab('referrals')">
-          <i class="fa-solid fa-network-wired text-purple me-1"></i> Affiliates & Risk
-        </button>
-        <button class="admin-tab-btn" id="tab-rules" onclick="loadAdminPanelTab('rules')">
-          <i class="fa-solid fa-sliders text-warning me-1"></i> Rules & Flags
-        </button>
-        <button class="admin-tab-btn" id="tab-broadcast" onclick="loadAdminPanelTab('broadcast')">
-          <i class="fa-solid fa-bullhorn text-danger me-1"></i> Communicator
-        </button>
-        <button class="admin-tab-btn" id="tab-audit-logs" onclick="loadAdminPanelTab('audit-logs')">
-          <i class="fa-solid fa-shield-halved text-info me-1"></i> Audit Trail
-        </button>
-        <button class="admin-tab-btn" id="tab-health" onclick="loadAdminPanelTab('health')">
-          <i class="fa-solid fa-server text-success me-1"></i> Infrastructure
-        </button>
-        <button class="admin-tab-btn" id="tab-library" onclick="loadAdminPanelTab('library')">
-          <i class="fa-solid fa-book-bookmark text-primary me-1"></i> Library
-        </button>
+        <!-- Domain 1: Analytics & Finance -->
+        <div class="admin-domain-group">
+          <span class="admin-domain-title"><i class="fa-solid fa-chart-pie me-1"></i>Analytics</span>
+          <button class="admin-tab-btn active" id="tab-overview" onclick="loadAdminPanelTab('overview')">
+            <i class="fa-solid fa-chart-line text-info me-1"></i> Overview
+          </button>
+          <button class="admin-tab-btn" id="tab-payments" onclick="loadAdminPanelTab('payments')">
+            <i class="fa-solid fa-receipt text-emerald me-1"></i> Transactions
+          </button>
+          <button class="admin-tab-btn" id="tab-referrals" onclick="loadAdminPanelTab('referrals')">
+            <i class="fa-solid fa-network-wired text-purple me-1"></i> Affiliates & Risk
+          </button>
+        </div>
+
+        <!-- Domain 2: Candidates & Talent -->
+        <div class="admin-domain-group">
+          <span class="admin-domain-title"><i class="fa-solid fa-users me-1"></i>Talent</span>
+          <button class="admin-tab-btn" id="tab-users" onclick="loadAdminPanelTab('users')">
+            <i class="fa-solid fa-user-gear text-primary me-1"></i> Candidates
+          </button>
+          <button class="admin-tab-btn" id="tab-leaderboard" onclick="loadAdminPanelTab('leaderboard')">
+            <i class="fa-solid fa-trophy text-warning me-1"></i> Leaderboard
+          </button>
+        </div>
+
+        <!-- Domain 3: Curriculum & Content -->
+        <div class="admin-domain-group">
+          <span class="admin-domain-title"><i class="fa-solid fa-book-bookmark me-1"></i>Content</span>
+          <button class="admin-tab-btn" id="tab-library" onclick="loadAdminPanelTab('library')">
+            <i class="fa-solid fa-book-open text-primary me-1"></i> Library
+          </button>
+        </div>
+
+        <!-- Domain 4: Operations & Security -->
+        <div class="admin-domain-group">
+          <span class="admin-domain-title"><i class="fa-solid fa-sliders me-1"></i>Operations</span>
+          <button class="admin-tab-btn" id="tab-rules" onclick="loadAdminPanelTab('rules')">
+            <i class="fa-solid fa-sliders text-warning me-1"></i> Rules & Flags
+          </button>
+          <button class="admin-tab-btn" id="tab-broadcast" onclick="loadAdminPanelTab('broadcast')">
+            <i class="fa-solid fa-bullhorn text-danger me-1"></i> Communicator
+          </button>
+          <button class="admin-tab-btn" id="tab-audit-logs" onclick="loadAdminPanelTab('audit-logs')">
+            <i class="fa-solid fa-shield-halved text-info me-1"></i> Audit Trail
+          </button>
+          <button class="admin-tab-btn" id="tab-health" onclick="loadAdminPanelTab('health')">
+            <i class="fa-solid fa-server text-success me-1"></i> Infrastructure
+          </button>
+        </div>
       </div>
 
       <!-- Tab Content Area -->
       <div id="admin-tab-content">
         <!-- Injected Dynamically by loadAdminPanelTab -->
+      </div>
+    </div>
+
+    <!-- Candidate Slide-Over Inspector Drawer & Backdrop -->
+    <div id="admin-inspector-backdrop" class="admin-inspector-backdrop" onclick="closeAdminCandidateInspector()"></div>
+    <div id="admin-candidate-inspector-drawer" class="admin-inspector-drawer">
+      <div class="admin-inspector-header d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge bg-primary px-2.5 py-1 fs-9"><i class="fa-solid fa-magnifying-glass-chart me-1"></i> Candidate Inspector</span>
+          <span id="inspector-user-id" class="text-muted font-monospace fs-9">#--</span>
+        </div>
+        <button type="button" class="btn btn-sm btn-glass px-2 py-0.5 text-muted hover-text-white" onclick="closeAdminCandidateInspector()">
+          <i class="fa-solid fa-xmark fs-7"></i>
+        </button>
+      </div>
+      <div class="admin-inspector-body" id="admin-inspector-body-content">
+        <!-- Injected Dynamically by openAdminCandidateInspector -->
       </div>
     </div>
 
