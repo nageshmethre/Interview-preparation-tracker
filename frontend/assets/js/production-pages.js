@@ -1641,7 +1641,7 @@
                     <strong class="text-primary fs-7">Prefer to pause instead?</strong>
                     <p class="text-muted fs-8 mb-0">Pause billing for 30 or 60 days with zero charges, preserving your progress.</p>
                   </div>
-                  <button class="btn btn-sm btn-primary rounded-pill px-3 fs-8" onclick="showToast('Subscription paused for 30 days. No renewals will occur.', 'success'); bootstrap.Modal.getInstance(document.getElementById('cancel-subscription-modal')).hide();">Pause Plan</button>
+                  <button class="btn btn-sm btn-primary rounded-pill px-3 fs-8" onclick="showToast('Subscription paused for 30 days. No renewals will occur.', 'success'); try { const m = bootstrap.Modal.getInstance(document.getElementById('cancel-subscription-modal')); if (m) m.hide(); } catch(e){}">Pause Plan</button>
                 </div>
               </div>
             </div>
@@ -1708,7 +1708,7 @@
                   <input type="password" class="form-control bg-white border-secondary border-opacity-15 text-dark rounded-3 fs-7" id="session-refresh-password" placeholder="••••••••" required>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
-                  <a href="#/login" class="text-secondary text-decoration-none fs-8" onclick="bootstrap.Modal.getInstance(document.getElementById('session-expired-modal')).hide();">Sign in with different account</a>
+                  <a href="#/login" class="text-secondary text-decoration-none fs-8" onclick="try { const m = bootstrap.Modal.getInstance(document.getElementById('session-expired-modal')); if (m) m.hide(); } catch(e){}">Sign in with different account</a>
                   <button type="submit" id="btn-session-resume-submit" class="btn btn-premium rounded-pill px-4 py-2 fw-bold">Resume Session</button>
                 </div>
               </form>

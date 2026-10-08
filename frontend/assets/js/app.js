@@ -2157,7 +2157,7 @@ function fetchFilteredQuestions() {
         return `
           <tr class="border-secondary-subtle">
             <td>
-              <a href="#" class="text-white fw-semibold text-decoration-none question-details-trigger" data-id="${q.id}">
+              <a href="javascript:void(0)" class="text-white fw-semibold text-decoration-none question-details-trigger" data-id="${q.id}">
                 ${q.title}
               </a>
               ${q.noteContent ? '<i class="fa-solid fa-note-sticky text-info ms-2 fs-7" title="Has Personal Note"></i>' : ''}
@@ -2257,7 +2257,7 @@ function bindQuestionsEvents() {
           const bookmarkIcon = q.bookmarked ? 'fa-solid fa-bookmark text-warning' : 'fa-regular fa-bookmark';
           return `
             <tr class="border-secondary-subtle">
-              <td><a href="#" class="text-white fw-semibold text-decoration-none question-details-trigger" data-id="${q.id}">${q.title}</a></td>
+              <td><a href="javascript:void(0)" class="text-white fw-semibold text-decoration-none question-details-trigger" data-id="${q.id}">${q.title}</a></td>
               <td>${q.company}</td>
               <td>${q.category}</td>
               <td class="${diffColor} fw-bold">${q.difficulty}</td>
@@ -4338,7 +4338,11 @@ function bindDsaRoadmapEvents(roadmapData) {
       const data = activeRoadmapStore || COMPREHENSIVE_DSA_ROADMAP;
       const topic = data.find(t => t.id == topicId) || COMPREHENSIVE_DSA_ROADMAP.find(t => t.id == topicId);
       if (topic) {
-        document.getElementById('dsa-detail-panel').innerHTML = components.dsaTopicDetail(topic);
+        const detailPanel = document.getElementById('dsa-detail-panel');
+        if (detailPanel) {
+          detailPanel.innerHTML = components.dsaTopicDetail(topic);
+        }
+        document.title = `${topic.name || 'Topic'} | DSA Roadmap - PrepSpace`;
         const detailWrapper = document.getElementById('dsa-detail-wrapper') || document.getElementById('page-mount');
         if (detailWrapper) detailWrapper.scrollTo({ top: 0, behavior: 'smooth' });
       }
@@ -4358,7 +4362,10 @@ function bindDsaRoadmapEvents(roadmapData) {
     const data = activeRoadmapStore || COMPREHENSIVE_DSA_ROADMAP;
     const firstTopic = data[0];
     if (firstTopic) {
-      document.getElementById('dsa-detail-panel').innerHTML = components.dsaTopicDetail(firstTopic);
+      const detailPanel = document.getElementById('dsa-detail-panel');
+      if (detailPanel) {
+        detailPanel.innerHTML = components.dsaTopicDetail(firstTopic);
+      }
     }
   }
 
@@ -4580,6 +4587,9 @@ function bindCodingPracticeEvents(rawQuestions = []) {
     const communitySolEl = document.getElementById('active-q-community-sol');
 
     if (titleEl) titleEl.textContent = `${data.questionId || 1}. ${data.title}`;
+    if (data.title) {
+      document.title = `${data.title} - PrepSpace`;
+    }
     if (catEl) catEl.textContent = data.category || 'Algorithms';
     if (companiesEl) companiesEl.textContent = data.companies || 'Top Tech';
 
@@ -4668,8 +4678,22 @@ function bindCodingPracticeEvents(rawQuestions = []) {
   const rawHash = window.location.hash || '';
   const queryParams = new URLSearchParams(rawHash.includes('?') ? rawHash.split('?')[1] : '');
   const targetQId = queryParams.get('q');
+  const targetTopic = queryParams.get('topic');
 
-  if (targetQId && questionCards.length > 0) {
+  if (targetTopic && searchInput) {
+    searchInput.value = targetTopic;
+    applyBankFilters();
+    const matchingCard = Array.from(questionCards).find(c => {
+      const cat = (c.dataset.category || '').toLowerCase();
+      const title = (c.dataset.title || '').toLowerCase();
+      return cat.includes(targetTopic.toLowerCase()) || title.includes(targetTopic.toLowerCase());
+    });
+    if (matchingCard) {
+      selectQuestion(matchingCard.dataset);
+    } else if (questionCards.length > 0) {
+      selectQuestion(questionCards[0].dataset);
+    }
+  } else if (targetQId && questionCards.length > 0) {
     const targetCard = Array.from(questionCards).find(c => String(c.dataset.questionId) === String(targetQId));
     if (targetCard) {
       selectQuestion(targetCard.dataset);
