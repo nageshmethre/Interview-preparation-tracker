@@ -76,7 +76,7 @@ const components = {
       <nav class="navbar navbar-expand-lg navbar-dark py-3 sticky-top border-bottom border-secondary border-opacity-20" style="background: rgba(24, 24, 27, 0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);">
         <div class="container-xl">
           <a class="navbar-brand d-flex align-items-center gap-2 text-decoration-none" href="#/">
-            <img src="assets/prepspace_icon.png?v=5.7.6" alt="PrepSpace Logo" class="brand-logo-img" style="width: 36px; height: 36px; object-fit: contain;">
+            <img src="assets/prepspace_full_logo.png?v=5.8.7" alt="PrepSpace Logo" class="brand-logo-img" style="width: 36px; height: 36px; border-radius: 8px; object-fit: contain;">
             <div class="d-flex flex-column text-start">
               <span class="fw-bold fs-5 text-white lh-1">PrepSpace</span>
               <span class="text-secondary" style="font-size: 0.65rem; letter-spacing: 0.8px; margin-top: 2px; font-family: 'Geist Mono', monospace;">(stream-in)</span>
@@ -595,7 +595,7 @@ const components = {
           <!-- Brand & Mission Column -->
           <div class="col-lg-3 text-start">
             <div class="d-flex align-items-center gap-2 mb-3">
-              <img src="assets/prepspace_icon.png?v=5.7.6" alt="PrepSpace Logo" style="width: 38px; height: 38px; object-fit: contain;">
+              <img src="assets/prepspace_full_logo.png?v=5.8.7" alt="PrepSpace Logo" style="width: 38px; height: 38px; border-radius: 8px; object-fit: contain;">
               <div class="d-flex flex-column text-start">
                 <span class="text-white fw-bold fs-5 lh-1">PrepSpace</span>
                 <span class="text-primary fw-semibold" style="font-size: 0.65rem; letter-spacing: 0.5px;">(stream-in.app)</span>
@@ -767,7 +767,7 @@ const components = {
     <div class="vercel-auth-wrapper">
       <div class="vercel-auth-card text-center">
         <a href="#/" class="d-inline-block mb-3 text-decoration-none">
-          <img src="assets/prepspace_icon.png?v=5.7.6" alt="PrepSpace" style="width: 44px; height: 44px; object-fit: contain;">
+          <img src="assets/prepspace_full_logo.png?v=5.8.7" alt="PrepSpace" style="width: 52px; height: 52px; border-radius: 12px; object-fit: contain; box-shadow: 0 8px 24px rgba(0,0,0,0.35);">
         </a>
         <h1 class="vercel-auth-title">Welcome Back</h1>
         <p class="vercel-auth-sub">Enter your credentials to access your workspace</p>
@@ -812,7 +812,7 @@ const components = {
     <div class="vercel-auth-wrapper">
       <div class="vercel-auth-card text-center">
         <a href="#/" class="d-inline-block mb-3 text-decoration-none">
-          <img src="assets/prepspace_icon.png?v=5.7.6" alt="PrepSpace" style="width: 44px; height: 44px; object-fit: contain;">
+          <img src="assets/prepspace_full_logo.png?v=5.8.7" alt="PrepSpace" style="width: 52px; height: 52px; border-radius: 12px; object-fit: contain; box-shadow: 0 8px 24px rgba(0,0,0,0.35);">
         </a>
         <h1 class="vercel-auth-title" id="auth-card-title">Create Space</h1>
         <p class="vercel-auth-sub" id="auth-card-subtitle">Start your technical interview preparation journey</p>
@@ -912,7 +912,7 @@ const components = {
         <!-- Brand Header -->
         <div class="p-3 border-bottom border-secondary-subtle d-flex align-items-center justify-content-between brand-header-box flex-shrink-0">
           <a class="navbar-brand d-flex align-items-center brand-text text-decoration-none" href="#/dashboard">
-            <img src="assets/prepspace_icon.png?v=5.7.6" alt="PrepSpace Logo" class="me-2 brand-logo-img" style="width: 36px; height: 36px; object-fit: contain;">
+            <img src="assets/prepspace_full_logo.png?v=5.8.7" alt="PrepSpace Logo" class="me-2 brand-logo-img" style="width: 36px; height: 36px; border-radius: 8px; object-fit: contain;">
             <div class="d-flex flex-column text-start brand-name">
               <span class="fw-extrabold fs-5 text-white lh-1">PrepSpace</span>
               <span class="text-primary fw-bold" style="font-size: 0.65rem; letter-spacing: 0.8px; margin-top: 2px;">(stream-in)</span>
@@ -2473,7 +2473,7 @@ const components = {
 
   settingsAbout: () => `
     <div class="text-center py-4">
-      <img src="assets/prepspace_icon.png?v=5.7.6" alt="PrepSpace Logo" class="mb-3" style="width: 64px; height: 64px; object-fit: contain;">
+      <img src="assets/prepspace_full_logo.png?v=5.8.7" alt="PrepSpace Logo" class="mb-3" style="width: 64px; height: 64px; border-radius: 14px; object-fit: contain; box-shadow: 0 8px 24px rgba(0,0,0,0.35);">
       <h4 class="text-white fw-bold mb-1">PrepSpace Enterprise</h4>
       <p class="text-muted fs-7 mb-2">Version 2.6.7 (Production SaaS Edition)</p>
       
@@ -2727,9 +2727,6 @@ const components = {
               <h5 class="text-white fw-bold m-0 fs-7">Curriculum Modules</h5>
               <div class="text-muted fs-9 font-monospace">${list.length} Topics</div>
             </div>
-            <button type="button" class="btn btn-sm btn-glass p-1 px-1.5 border-0 text-muted d-none d-lg-inline-flex" id="btn-toggle-roadmap-rail" title="Toggle Modules Rail" aria-label="Toggle modules rail">
-              <i class="fa-solid fa-angles-left fs-9"></i>
-            </button>
           </div>
 
           <!-- Quick Topic Search Filter -->
