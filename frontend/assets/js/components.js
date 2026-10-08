@@ -3261,12 +3261,13 @@ const components = {
 
             <!-- Main Code Editor Area with Line Gutter -->
             <div class="lc-editor-wrapper flex-grow-1 position-relative d-flex overflow-hidden" id="agy-editor-wrapper">
-              <div class="lc-gutter d-flex flex-column py-3 px-2 text-end user-select-none font-monospace fs-8 text-muted" id="lc-line-gutter">
-                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span>
+              <div class="lc-gutter d-flex flex-column text-end user-select-none" id="lc-line-gutter">
+                <span>1</span>
               </div>
               <textarea id="code-editor-textarea" 
-                        class="form-control lc-code-input flex-grow-1 p-3 font-monospace border-0 shadow-none" 
+                        class="form-control lc-code-input flex-grow-1 border-0 shadow-none" 
                         spellcheck="false" 
+                        wrap="off"
                         placeholder="// Enter your solution here...">${activeQ.solution || ''}</textarea>
             </div>
 

@@ -6088,33 +6088,70 @@ body.ui-drawer-open {
 .lc-editor-wrapper {
   background: #18181b;
   min-height: 240px;
+  position: relative;
+  display: flex;
+  overflow: hidden;
 }
 
 .lc-gutter {
-  width: 44px;
+  width: 48px;
+  min-width: 48px;
+  max-width: 48px;
   background: #18181b;
-  color: #64748b;
-  line-height: 1.6;
-  font-size: 13px;
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  color: #71717a;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
   overflow: hidden;
+  user-select: none;
+  box-sizing: border-box;
+  padding: 14px 8px 14px 4px !important;
+  font-family: "JetBrains Mono", Menlo, Monaco, Consolas, "Courier New", monospace !important;
+  font-size: 13.5px !important;
+  line-height: 24px !important;
+}
+
+.lc-gutter span {
+  display: block;
+  height: 24px !important;
+  line-height: 24px !important;
+  font-family: "JetBrains Mono", Menlo, Monaco, Consolas, "Courier New", monospace !important;
+  font-size: 13.5px !important;
+  text-align: right;
+  color: #52525b;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  transition: color 0.1s ease;
+}
+
+.lc-gutter span.active-line-num {
+  color: #f1f5f9 !important;
+  font-weight: 700 !important;
 }
 
 .lc-code-input {
   background: #18181b !important;
   color: #f8fafc !important;
-  font-family: "JetBrains Mono", Menlo, Consolas, monospace !important;
+  font-family: "JetBrains Mono", Menlo, Monaco, Consolas, "Courier New", monospace !important;
   font-size: 13.5px !important;
-  line-height: 1.6 !important;
+  line-height: 24px !important;
+  padding: 14px 14px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-sizing: border-box !important;
   resize: none !important;
   outline: none !important;
   tab-size: 4 !important;
+  white-space: pre !important;
+  word-wrap: normal !important;
+  overflow-wrap: normal !important;
+  overflow: auto !important;
 }
 
 .lc-code-input:focus {
   background: #18181b !important;
   color: #f8fafc !important;
   box-shadow: none !important;
+  outline: none !important;
 }
 
 .lc-editor-subfooter {

@@ -1,21 +1,21 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
-// Version: 5.8.9 (Interactive Clicks & Full Platform Reliability Suite)
+// Version: 5.8.10 (Precise Editor Line Number Alignment & Gutter Sync)
 
-const CACHE_NAME = 'prepspace-static-v5.8.9';
-const RUNTIME_CACHE = 'prepspace-runtime-v5.8.9';
+const CACHE_NAME = 'prepspace-static-v5.8.10';
+const RUNTIME_CACHE = 'prepspace-runtime-v5.8.10';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/index.css?v=5.8.9',
-  './assets/js/app.js?v=5.8.9',
-  './assets/js/components.js?v=5.8.9',
-  './assets/js/interview-suite.js?v=5.8.9',
-  './assets/js/technical-library-data.js?v=5.8.9',
-  './assets/js/questions-data.js?v=5.8.9',
-  './assets/js/aptitude-curriculum.js?v=5.8.9',
-  './assets/js/production-pages.js?v=5.8.9',
+  './assets/css/index.css?v=5.8.10',
+  './assets/js/app.js?v=5.8.10',
+  './assets/js/components.js?v=5.8.10',
+  './assets/js/interview-suite.js?v=5.8.10',
+  './assets/js/technical-library-data.js?v=5.8.10',
+  './assets/js/questions-data.js?v=5.8.10',
+  './assets/js/aptitude-curriculum.js?v=5.8.10',
+  './assets/js/production-pages.js?v=5.8.10',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',

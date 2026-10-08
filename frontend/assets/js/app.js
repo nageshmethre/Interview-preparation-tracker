@@ -4448,16 +4448,28 @@ function bindCodingPracticeEvents(rawQuestions = []) {
   const consoleText = document.getElementById('console-output-text');
   let lastConsoleOutput = '// Ready to compile and run against automated test suite.';
 
-  // 1. Line Gutter and Cursor Tracker
+  // 1. Line Gutter, Active Line Highlight, and Cursor Tracker
+  let currentEditorFontSize = 13.5;
+  let currentEditorLineHeight = 24;
+
   function updateLineGutter() {
     if (!editorTextarea || !gutterEl) return;
-    const linesCount = (editorTextarea.value || '').split('\n').length;
-    const totalLines = Math.max(15, linesCount);
+    const lines = (editorTextarea.value || '').split('\n');
+    const linesCount = lines.length;
+    const totalLines = Math.max(30, linesCount + 10);
+
+    const val = editorTextarea.value.substring(0, editorTextarea.selectionStart);
+    const currentLine = val.split('\n').length;
+    const lh = `${currentEditorLineHeight}px`;
+    const fs = `${currentEditorFontSize}px`;
+
     let spansHtml = '';
     for (let i = 1; i <= totalLines; i++) {
-      spansHtml += `<span>${i}</span>`;
+      const isActive = (i === currentLine);
+      spansHtml += `<span class="${isActive ? 'active-line-num' : ''}" style="height:${lh}; line-height:${lh}; font-size:${fs};">${i}</span>`;
     }
     gutterEl.innerHTML = spansHtml;
+    gutterEl.scrollTop = editorTextarea.scrollTop;
   }
 
   function updateCursorPos() {
@@ -4467,9 +4479,37 @@ function bindCodingPracticeEvents(rawQuestions = []) {
     const lineNum = lines.length;
     const colNum = lines[lines.length - 1].length + 1;
     cursorPosEl.textContent = `ln ${lineNum}, Col ${colNum}`;
+
+    if (gutterEl) {
+      const spans = gutterEl.querySelectorAll('span');
+      spans.forEach((sp, idx) => {
+        if (idx + 1 === lineNum) {
+          sp.classList.add('active-line-num');
+        } else {
+          sp.classList.remove('active-line-num');
+        }
+      });
+    }
+  }
+
+  function applyEditorFontSize(size) {
+    currentEditorFontSize = size;
+    currentEditorLineHeight = Math.round(currentEditorFontSize * 1.78);
+    if (editorTextarea) {
+      editorTextarea.style.fontSize = `${currentEditorFontSize}px`;
+      editorTextarea.style.lineHeight = `${currentEditorLineHeight}px`;
+    }
+    if (gutterEl) {
+      gutterEl.style.fontSize = `${currentEditorFontSize}px`;
+      gutterEl.style.lineHeight = `${currentEditorLineHeight}px`;
+    }
+    updateLineGutter();
   }
 
   if (editorTextarea) {
+    editorTextarea.addEventListener('scroll', () => {
+      if (gutterEl) gutterEl.scrollTop = editorTextarea.scrollTop;
+    });
     editorTextarea.addEventListener('input', () => {
       updateLineGutter();
       updateCursorPos();
@@ -4496,7 +4536,7 @@ function bindCodingPracticeEvents(rawQuestions = []) {
         updateCursorPos();
       }
     });
-    updateLineGutter();
+    applyEditorFontSize(13.5);
   }
 
   // 2. Stopwatch Session Timer
@@ -4890,7 +4930,6 @@ function bindCodingPracticeEvents(rawQuestions = []) {
   }
 
   // Font Size, Reset, Copy
-  let editorFontSize = 13.5;
   const btnFontInc = document.getElementById('btn-editor-font-inc');
   const btnFontDec = document.getElementById('btn-editor-font-dec');
   const btnReset = document.getElementById('btn-editor-reset');
@@ -4898,17 +4937,15 @@ function bindCodingPracticeEvents(rawQuestions = []) {
 
   if (btnFontInc) {
     btnFontInc.addEventListener('click', () => {
-      if (editorFontSize < 22) {
-        editorFontSize += 1.5;
-        if (editorTextarea) editorTextarea.style.fontSize = `${editorFontSize}px`;
+      if (currentEditorFontSize < 22) {
+        applyEditorFontSize(currentEditorFontSize + 1.5);
       }
     });
   }
   if (btnFontDec) {
     btnFontDec.addEventListener('click', () => {
-      if (editorFontSize > 11) {
-        editorFontSize -= 1.5;
-        if (editorTextarea) editorTextarea.style.fontSize = `${editorFontSize}px`;
+      if (currentEditorFontSize > 11) {
+        applyEditorFontSize(currentEditorFontSize - 1.5);
       }
     });
   }
