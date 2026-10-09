@@ -6311,6 +6311,60 @@ const components = {
           icon: 'fa-solid fa-sitemap'
         };
       }
+      if (cat.includes('penetration') || cat.includes('ethical hacking') || title.includes('playbook') || title.includes('exploitation') || title.includes('ctf')) {
+        return {
+          bgGradient: 'linear-gradient(150deg, #831843 0%, #4c0519 60%, #140106 100%)',
+          accentColor: '#f43f5e',
+          spineColor: '#500724',
+          badge: 'OFFENSIVE SECURITY & CTF',
+          icon: 'fa-solid fa-user-secret'
+        };
+      }
+      if (cat.includes('mobile security') || title.includes('android')) {
+        return {
+          bgGradient: 'linear-gradient(150deg, #064e3b 0%, #022c22 60%, #011812 100%)',
+          accentColor: '#10b981',
+          spineColor: '#032e22',
+          badge: 'MOBILE & REVERSE ENG',
+          icon: 'fa-brands fa-android'
+        };
+      }
+      if (cat.includes('wireless') || cat.includes('wifi') || title.includes('wifi')) {
+        return {
+          bgGradient: 'linear-gradient(150deg, #0c4a6e 0%, #082f49 60%, #02131f 100%)',
+          accentColor: '#38bdf8',
+          spineColor: '#063652',
+          badge: 'WIRELESS & RF DEFENSE',
+          icon: 'fa-solid fa-wifi'
+        };
+      }
+      if (cat.includes('cyber defense') || cat.includes('cyber security projects') || title.includes('projects')) {
+        return {
+          bgGradient: 'linear-gradient(150deg, #701a75 0%, #4a044e 60%, #1c021e 100%)',
+          accentColor: '#ec4899',
+          spineColor: '#530d57',
+          badge: 'DEFENSE PROJECTS',
+          icon: 'fa-solid fa-shield-halved'
+        };
+      }
+      if (cat.includes('intelligence') || cat.includes('tradecraft') || title.includes('intelligence') || title.includes('guerrilla')) {
+        return {
+          bgGradient: 'linear-gradient(150deg, #1e1e24 0%, #0f172a 60%, #020617 100%)',
+          accentColor: '#94a3b8',
+          spineColor: '#141724',
+          badge: 'THREAT INTEL & STRATEGY',
+          icon: 'fa-solid fa-crosshairs'
+        };
+      }
+      if (cat.includes('linux security') || title.includes('linux')) {
+        return {
+          bgGradient: 'linear-gradient(150deg, #3b0764 0%, #1e1b4b 60%, #08071a 100%)',
+          accentColor: '#a855f7',
+          spineColor: '#280545',
+          badge: 'LINUX HARDENING',
+          icon: 'fa-brands fa-linux'
+        };
+      }
       if (cat.includes('aptitude') || cat.includes('quantitative') || cat.includes('logical') || cat.includes('verbal') || title.includes('aptitude') || title.includes('reasoning')) {
         return {
           bgGradient: 'linear-gradient(150deg, #1f2937 0%, #111827 60%, #090d14 100%)',
@@ -6345,9 +6399,10 @@ const components = {
         const q = searchQuery.toLowerCase().trim();
         const matchesTitle = b.title.toLowerCase().includes(q);
         const matchesDesc = b.description && b.description.toLowerCase().includes(q);
+        const matchesAuthor = b.author && b.author.toLowerCase().includes(q);
         const matchesCat = b.category && b.category.toLowerCase().includes(q);
         const matchesTags = b.tags && b.tags.some(t => t.toLowerCase().includes(q));
-        if (!matchesTitle && !matchesDesc && !matchesCat && !matchesTags) return false;
+        if (!matchesTitle && !matchesDesc && !matchesAuthor && !matchesCat && !matchesTags) return false;
       }
       return true;
     });
@@ -6552,6 +6607,7 @@ const components = {
     const canAccessAll = isProUser || !book.isPro;
 
     const cat = (book.category || '').toLowerCase();
+    const title = (book.title || '').toLowerCase();
     let theme = {
       bgGradient: 'linear-gradient(150deg, #1e1b4b 0%, #0f172a 60%, #090d16 100%)',
       accentColor: '#38bdf8',
@@ -6569,6 +6625,18 @@ const components = {
       theme = { bgGradient: 'linear-gradient(150deg, #78350f 0%, #451d07 60%, #200d02 100%)', accentColor: '#fb923c', spineColor: '#59260a', badge: 'RDBMS & INDEXING', icon: 'fa-solid fa-database' };
     } else if (cat.includes('react') || cat.includes('frontend')) {
       theme = { bgGradient: 'linear-gradient(150deg, #0e7490 0%, #064050 60%, #021e27 100%)', accentColor: '#22d3ee', spineColor: '#0a566b', badge: 'FRONTEND ARCHITECTURE', icon: 'fa-brands fa-react' };
+    } else if (cat.includes('penetration') || cat.includes('ethical hacking') || title.includes('playbook') || title.includes('exploitation') || title.includes('ctf')) {
+      theme = { bgGradient: 'linear-gradient(150deg, #831843 0%, #4c0519 60%, #140106 100%)', accentColor: '#f43f5e', spineColor: '#500724', badge: 'OFFENSIVE SECURITY & CTF', icon: 'fa-solid fa-user-secret' };
+    } else if (cat.includes('mobile security') || title.includes('android')) {
+      theme = { bgGradient: 'linear-gradient(150deg, #064e3b 0%, #022c22 60%, #011812 100%)', accentColor: '#10b981', spineColor: '#032e22', badge: 'MOBILE & REVERSE ENG', icon: 'fa-brands fa-android' };
+    } else if (cat.includes('wireless') || cat.includes('wifi') || title.includes('wifi')) {
+      theme = { bgGradient: 'linear-gradient(150deg, #0c4a6e 0%, #082f49 60%, #02131f 100%)', accentColor: '#38bdf8', spineColor: '#063652', badge: 'WIRELESS & RF DEFENSE', icon: 'fa-solid fa-wifi' };
+    } else if (cat.includes('cyber defense') || cat.includes('cyber security projects') || title.includes('projects')) {
+      theme = { bgGradient: 'linear-gradient(150deg, #701a75 0%, #4a044e 60%, #1c021e 100%)', accentColor: '#ec4899', spineColor: '#530d57', badge: 'DEFENSE PROJECTS', icon: 'fa-solid fa-shield-halved' };
+    } else if (cat.includes('intelligence') || cat.includes('tradecraft') || title.includes('intelligence') || title.includes('guerrilla')) {
+      theme = { bgGradient: 'linear-gradient(150deg, #1e1e24 0%, #0f172a 60%, #020617 100%)', accentColor: '#94a3b8', spineColor: '#141724', badge: 'THREAT INTEL & STRATEGY', icon: 'fa-solid fa-crosshairs' };
+    } else if (cat.includes('linux security') || title.includes('linux')) {
+      theme = { bgGradient: 'linear-gradient(150deg, #3b0764 0%, #1e1b4b 60%, #08071a 100%)', accentColor: '#a855f7', spineColor: '#280545', badge: 'LINUX HARDENING', icon: 'fa-brands fa-linux' };
     }
 
     return `
@@ -6609,7 +6677,7 @@ const components = {
                       <p class="ps-book-subtitle">${book.subtitle || book.description}</p>
                     </div>
                     <div class="ps-book-footer-info">
-                      <div class="ps-book-author">PrepSpace Master Series</div>
+                      <div class="ps-book-author text-truncate" title="${book.author || 'PrepSpace Master Series'}">${book.author || 'PrepSpace Master Series'}</div>
                       <div class="ps-book-meta-row">
                         <span>${chapters.length} Chapters &bull; ${book.pageCount || 120} pgs</span>
                         <span>★ ${book.rating || 4.95}</span>
@@ -6643,8 +6711,14 @@ const components = {
               <!-- Primary CTA Row -->
               <div class="d-flex flex-wrap align-items-center gap-3">
                 <a href="#/library/read?id=${book.id}&ch=${progress ? (progress.lastChapterNumber || 1) : 1}" class="btn btn-primary px-4 py-2 fs-7 fw-semibold">
-                  <i class="fa-solid fa-play me-2"></i> ${percent > 0 ? `Resume at Chapter ${progress.lastChapterNumber || 1}` : 'Start Reading Chapter 1'}
+                  <i class="fa-solid fa-play me-2"></i> ${percent > 0 ? `Resume at Chapter ${progress.lastChapterNumber || 1}` : 'Start Reading Online'}
                 </a>
+                ${book.downloadUrl ? `
+                  <a href="${book.downloadUrl}" download="${book.downloadUrl.split('/').pop()}" class="btn btn-outline-info px-4 py-2 fs-7 fw-semibold d-inline-flex align-items-center gap-2" target="_blank" rel="noopener noreferrer">
+                    <i class="fa-solid fa-file-pdf text-danger fs-6"></i>
+                    <span>Download PDF (${book.fileSize || 'PDF'})</span>
+                  </a>
+                ` : ''}
                 ${!canAccessAll ? `
                   <a href="#/billing" class="btn btn-glass text-warning border-warning border-opacity-30 px-4 py-2 fs-7 fw-semibold">
                     <i class="fa-solid fa-gem me-2"></i> Unlock All Chapters with Pro
@@ -6779,6 +6853,13 @@ const components = {
             <button id="btn-reader-print" class="reader-tool-btn flex-shrink-0 d-none d-sm-inline-flex" title="Print Chapter / Save as PDF">
               <i class="fa-solid fa-print"></i>
             </button>
+
+            ${book.downloadUrl ? `
+              <!-- Download Original PDF -->
+              <a href="${book.downloadUrl}" download="${book.downloadUrl.split('/').pop()}" class="reader-tool-btn flex-shrink-0 text-info d-inline-flex align-items-center justify-content-center" title="Download Full PDF Edition (${book.fileSize || 'PDF'})" target="_blank" rel="noopener noreferrer">
+                <i class="fa-solid fa-download"></i>
+              </a>
+            ` : ''}
 
             <!-- Reader Theme Selector -->
             <div class="dropdown d-inline-block flex-shrink-0">
