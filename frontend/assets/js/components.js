@@ -4048,58 +4048,174 @@ const components = {
     </div>
   `,
 
-  // 8. Study Notes Folders & Markdown
-  notes: (noteList, folders) => `
-    <div class="row g-4">
-      <!-- Folder Directories list -->
-      <div class="col-md-3">
-        <div class="glass-panel p-4 h-100">
-          <h5 class="text-white fw-bold mb-4">Note Folders</h5>
-          <div class="mb-3">
-            <button class="btn btn-premium w-100 btn-sm" id="btn-create-folder"><i class="fa-solid fa-plus-circle me-1"></i> New Folder</button>
-          </div>
-          <div class="list-group list-group-flush" id="folders-mount-list">
-            <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-3 btn-select-folder active" data-folder-id="">
-              <i class="fa-solid fa-folder-open text-indigo me-2"></i> All Notes
-            </button>
-            ${folders.map(f => `
-              <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-7 py-3 btn-select-folder" data-folder-id="${f.id}">
-                <i class="fa-solid fa-folder text-indigo me-2"></i> ${f.name}
-              </button>
-            `).join('')}
+  // 8. Study Notes Folders, Markdown & Curated DSA Master Notes (21 Topics)
+  notes: (noteList, folders) => {
+    const dsaData = (typeof window !== 'undefined' && window.PREPSPACE_DSA_NOTES) ? window.PREPSPACE_DSA_NOTES : { topics: [], categories: [] };
+    const topics = dsaData.topics || [];
+    const categories = dsaData.categories || [];
+    const firstTopic = topics[0] || {
+      id: 1,
+      title: "Data Structure Introduction & Fundamentals",
+      subtitle: "Definition, Abstract Data Types (ADT), Characteristics & Real-World Use Cases",
+      categoryName: "Core Foundations & Complexity",
+      readTime: "12 min read",
+      tags: ["Foundations", "Memory", "ADT", "Basics"],
+      summary: "Explore data structure definitions and ADT abstractions.",
+      contentHtml: "<p class='text-muted'>Select a topic from the left sidebar to view comprehensive notes.</p>"
+    };
+
+    return `
+    <div class="d-flex flex-column gap-3">
+      <!-- Top Mode Switcher Banner -->
+      <div class="glass-panel p-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+        <div class="d-flex align-items-center gap-2">
+          <div class="ps-icon-square bg-warning-subtle text-warning"><i class="fa-solid fa-graduation-cap"></i></div>
+          <div>
+            <h5 class="text-white fw-bold m-0">DSA Master Notes & Study Hub</h5>
+            <p class="text-muted fs-8 m-0">21 Handcrafted DSA Domains, Master Formulas, Code Blueprints & Personal Study Notes</p>
           </div>
         </div>
+        <div class="btn-group p-1 bg-dark rounded border border-secondary" role="group">
+          <button type="button" class="btn btn-sm btn-premium active" id="btn-tab-curated-dsa">
+            <i class="fa-solid fa-book-bookmark me-1.5"></i> 📚 Curated DSA Notes (21 Topics)
+          </button>
+          <button type="button" class="btn btn-sm btn-glass text-white" id="btn-tab-personal-notes">
+            <i class="fa-solid fa-feather me-1.5 text-info"></i> 📝 My Personal Notes (${noteList ? noteList.length : 0})
+          </button>
+        </div>
       </div>
-      <!-- Notes list and Editor -->
-      <div class="col-md-9">
+
+      <!-- VIEW 1: Curated DSA Master Notes (Default Active) -->
+      <div id="pane-curated-dsa" class="d-block">
         <div class="row g-3">
-          <div class="col-lg-4">
-            <div class="glass-panel p-4 overflow-y-auto" style="max-height: 70vh;" id="notes-cards-container">
-              <button class="btn btn-glass w-100 mb-3 py-2 btn-sm" id="btn-new-note"><i class="fa-solid fa-file-signature me-1 text-indigo"></i> Compose Note</button>
-              <div class="d-flex flex-column gap-2" id="notes-cards-list">
-                ${noteList.map(n => `
-                  <div class="p-3 rounded border border-secondary note-preview-card" style="cursor:pointer;" data-id="${n.id}" data-title="${n.title}" data-content="${n.content}" data-tags="${n.tags || ''}">
-                    <h6 class="text-white fw-bold mb-1">${n.title}</h6>
-                    <div class="text-muted fs-8">${n.updatedAt ? n.updatedAt.substring(0,10) : 'Just now'}</div>
+          <!-- Left Topic Navigation Sidebar -->
+          <div class="col-lg-4 col-xl-3">
+            <div class="glass-panel p-3 d-flex flex-column h-100" style="max-height: 80vh;">
+              <div class="mb-3">
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text bg-dark border-secondary text-secondary"><i class="fa-solid fa-search"></i></span>
+                  <input type="text" id="dsa-notes-search" class="form-control glass-input fs-8" placeholder="Filter 21 DSA Topics...">
+                </div>
+              </div>
+
+              <!-- Categories Filter Dropdown / Pills -->
+              <div class="mb-2">
+                <select id="dsa-category-filter" class="form-select form-select-sm glass-input fs-8 text-white">
+                  <option value="all">All 6 Domains (21 Topics)</option>
+                  ${categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
+                </select>
+              </div>
+
+              <!-- Topics List -->
+              <div class="flex-grow-1 overflow-y-auto d-flex flex-column gap-1.5 pe-1" id="dsa-topics-list">
+                ${topics.map((t, idx) => `
+                  <div class="p-2.5 rounded border border-secondary dsa-topic-card ${idx === 0 ? 'active-dsa-topic border-warning bg-warning-subtle text-white' : 'bg-dark-subtle text-light'}" 
+                       style="cursor: pointer; transition: all 0.2s;" 
+                       data-topic-id="${t.id}">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <span class="badge bg-dark border border-secondary text-warning font-monospace fs-9">Topic #${t.id}</span>
+                      <span class="text-secondary fs-9"><i class="fa-regular fa-clock me-1"></i>${t.readTime}</span>
+                    </div>
+                    <h6 class="fw-bold fs-7 mb-1 text-truncate">${t.title}</h6>
+                    <div class="text-muted fs-8 text-truncate">${t.subtitle}</div>
                   </div>
                 `).join('')}
               </div>
             </div>
           </div>
-          <div class="col-lg-8">
-            <div class="glass-panel p-4 d-flex flex-column" style="min-height: 500px;">
-              <div class="mb-3">
-                <input type="text" id="note-editor-title" class="form-control glass-input fw-bold fs-5 text-white" placeholder="Document Title...">
-              </div>
-              <div class="flex-grow-1 mb-3">
-                <textarea id="note-editor-content" class="form-control font-monospace text-white bg-dark border-secondary p-3 h-100 fs-7" style="resize:none; min-height: 350px;" placeholder="# Document Content..."></textarea>
-              </div>
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <input type="text" id="note-editor-tags" class="form-control glass-input fs-8" placeholder="Tags (comma separated)">
+
+          <!-- Right Content Viewer Pane -->
+          <div class="col-lg-8 col-xl-9">
+            <div class="glass-panel p-4 overflow-y-auto" style="max-height: 80vh;" id="dsa-topic-content-mount">
+              <!-- Active Topic Header -->
+              <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 pb-3 mb-4 border-bottom border-secondary">
+                <div>
+                  <div class="d-flex align-items-center gap-2 mb-1">
+                    <span class="badge bg-warning text-dark fw-bold font-monospace fs-8" id="active-topic-badge">Topic #${firstTopic.id}</span>
+                    <span class="badge bg-dark border border-secondary text-info fs-8" id="active-topic-category">${firstTopic.categoryName}</span>
+                    <span class="text-muted fs-8" id="active-topic-time"><i class="fa-regular fa-clock me-1"></i>${firstTopic.readTime}</span>
+                  </div>
+                  <h3 class="text-white fw-bold m-0" id="active-topic-title">${firstTopic.title}</h3>
+                  <p class="text-secondary fs-7 m-0 mt-1" id="active-topic-subtitle">${firstTopic.subtitle}</p>
                 </div>
-                <div class="col-4 text-end">
-                  <button class="btn btn-premium w-100 py-2 fs-7" id="btn-save-note">Save Document</button>
+                <div class="d-flex align-items-center gap-2">
+                  <button class="btn btn-sm btn-outline-light" id="btn-copy-dsa-note" title="Copy Markdown to Clipboard">
+                    <i class="fa-solid fa-copy me-1"></i> Copy
+                  </button>
+                  <button class="btn btn-sm btn-premium" id="btn-clone-to-personal" title="Clone this topic to your personal notes">
+                    <i class="fa-solid fa-clone me-1"></i> Clone to My Notes
+                  </button>
+                </div>
+              </div>
+
+              <!-- Content Body -->
+              <div class="text-light fs-7 dsa-rendered-content" id="active-topic-body" style="line-height: 1.75;">
+                ${firstTopic.contentHtml}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 2: Personal Markdown Notes (Hidden by default, toggled via tab) -->
+      <div id="pane-personal-notes" class="d-none">
+        <div class="row g-3">
+          <!-- Folder Directories list -->
+          <div class="col-md-3">
+            <div class="glass-panel p-3 h-100">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <h6 class="text-white fw-bold m-0">Note Folders</h6>
+                <button class="btn btn-outline-warning btn-xs" id="btn-create-folder"><i class="fa-solid fa-plus"></i></button>
+              </div>
+              <div class="list-group list-group-flush" id="folders-mount-list">
+                <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-8 py-2.5 btn-select-folder active" data-folder-id="">
+                  <i class="fa-solid fa-folder-open text-warning me-2"></i> All Notes
+                </button>
+                ${(folders || []).map(f => `
+                  <button class="list-group-item list-group-item-action bg-transparent text-white border-secondary fs-8 py-2.5 btn-select-folder" data-folder-id="${f.id}">
+                    <i class="fa-solid fa-folder text-warning me-2"></i> ${f.name}
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+          <!-- Notes list and Editor -->
+          <div class="col-md-9">
+            <div class="row g-3">
+              <div class="col-lg-4">
+                <div class="glass-panel p-3 overflow-y-auto" style="max-height: 70vh;" id="notes-cards-container">
+                  <button class="btn btn-premium w-100 mb-3 py-2 btn-sm" id="btn-new-note">
+                    <i class="fa-solid fa-plus-circle me-1"></i> Compose New Note
+                  </button>
+                  <div class="d-flex flex-column gap-2" id="notes-cards-list">
+                    ${(noteList || []).map(n => `
+                      <div class="p-2.5 rounded border border-secondary note-preview-card" style="cursor:pointer;" data-id="${n.id}" data-title="${n.title}" data-content="${n.content || ''}" data-tags="${n.tags || ''}">
+                        <h6 class="text-white fw-bold mb-1 fs-8 text-truncate">${n.title}</h6>
+                        <div class="text-muted fs-9">${n.updatedAt ? n.updatedAt.substring(0,10) : 'Just now'}</div>
+                      </div>
+                    `).join('')}
+                    ${(!noteList || noteList.length === 0) ? `<div class="text-center py-4 text-muted fs-8">No personal notes yet. Compose one or clone from Curated DSA Notes!</div>` : ''}
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-8">
+                <div class="glass-panel p-4 d-flex flex-column" style="min-height: 520px;">
+                  <div class="mb-3">
+                    <input type="text" id="note-editor-title" class="form-control glass-input fw-bold fs-6 text-white" placeholder="Note Title...">
+                  </div>
+                  <div class="flex-grow-1 mb-3">
+                    <textarea id="note-editor-content" class="form-control font-monospace text-white bg-dark border-secondary p-3 h-100 fs-8" style="resize:none; min-height: 320px;" placeholder="# Write in Markdown..."></textarea>
+                  </div>
+                  <div class="row align-items-center g-2">
+                    <div class="col-8">
+                      <input type="text" id="note-editor-tags" class="form-control glass-input fs-8" placeholder="Tags (e.g. Trees, BFS, Hard)">
+                    </div>
+                    <div class="col-4 text-end">
+                      <button class="btn btn-premium w-100 py-2 fs-8 fw-semibold" id="btn-save-note">
+                        <i class="fa-solid fa-floppy-disk me-1"></i> Save Note
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -4107,7 +4223,8 @@ const components = {
         </div>
       </div>
     </div>
-  `,
+    `;
+  },
 
   // 9. Placement Tracker Kanban Pipeline
   placement: (apps) => {

@@ -7040,7 +7040,157 @@ function bindCommunityEvents() {
 }
 
 function bindNotesEvents() {
-  // 0. Compose New Note
+  const dsaData = (typeof window !== 'undefined' && window.PREPSPACE_DSA_NOTES) ? window.PREPSPACE_DSA_NOTES : { topics: [], categories: [] };
+  const topics = dsaData.topics || [];
+  let currentTopicId = 1;
+
+  // 1. Top Mode Switcher Tabs
+  const btnTabCurated = document.getElementById('btn-tab-curated-dsa');
+  const btnTabPersonal = document.getElementById('btn-tab-personal-notes');
+  const paneCurated = document.getElementById('pane-curated-dsa');
+  const panePersonal = document.getElementById('pane-personal-notes');
+
+  function showCuratedTab() {
+    if (btnTabCurated) {
+      btnTabCurated.classList.add('btn-premium', 'active');
+      btnTabCurated.classList.remove('btn-glass');
+    }
+    if (btnTabPersonal) {
+      btnTabPersonal.classList.remove('btn-premium', 'active');
+      btnTabPersonal.classList.add('btn-glass');
+    }
+    if (paneCurated) paneCurated.classList.remove('d-none');
+    if (panePersonal) panePersonal.classList.add('d-none');
+  }
+
+  function showPersonalTab() {
+    if (btnTabPersonal) {
+      btnTabPersonal.classList.add('btn-premium', 'active');
+      btnTabPersonal.classList.remove('btn-glass');
+    }
+    if (btnTabCurated) {
+      btnTabCurated.classList.remove('btn-premium', 'active');
+      btnTabCurated.classList.add('btn-glass');
+    }
+    if (panePersonal) panePersonal.classList.remove('d-none');
+    if (paneCurated) paneCurated.classList.add('d-none');
+  }
+
+  if (btnTabCurated) btnTabCurated.addEventListener('click', showCuratedTab);
+  if (btnTabPersonal) btnTabPersonal.addEventListener('click', showPersonalTab);
+
+  // 2. Select Topic from Left Sidebar
+  function selectDsaTopic(topicId) {
+    const topic = topics.find(t => t.id === Number(topicId));
+    if (!topic) return;
+    currentTopicId = topic.id;
+
+    // Highlight active card
+    document.querySelectorAll('.dsa-topic-card').forEach(card => {
+      if (Number(card.dataset.topicId) === topic.id) {
+        card.classList.add('active-dsa-topic', 'border-warning', 'bg-warning-subtle', 'text-white');
+        card.classList.remove('bg-dark-subtle', 'text-light');
+      } else {
+        card.classList.remove('active-dsa-topic', 'border-warning', 'bg-warning-subtle', 'text-white');
+        card.classList.add('bg-dark-subtle', 'text-light');
+      }
+    });
+
+    // Update Header
+    const badgeEl = document.getElementById('active-topic-badge');
+    const catEl = document.getElementById('active-topic-category');
+    const timeEl = document.getElementById('active-topic-time');
+    const titleEl = document.getElementById('active-topic-title');
+    const subtitleEl = document.getElementById('active-topic-subtitle');
+    const bodyEl = document.getElementById('active-topic-body');
+
+    if (badgeEl) badgeEl.textContent = `Topic #${topic.id}`;
+    if (catEl) catEl.textContent = topic.categoryName;
+    if (timeEl) timeEl.innerHTML = `<i class="fa-regular fa-clock me-1"></i>${topic.readTime}`;
+    if (titleEl) titleEl.textContent = topic.title;
+    if (subtitleEl) subtitleEl.textContent = topic.subtitle;
+    if (bodyEl) {
+      bodyEl.innerHTML = topic.contentHtml;
+      // Scroll mount to top
+      const mount = document.getElementById('dsa-topic-content-mount');
+      if (mount) mount.scrollTop = 0;
+    }
+  }
+
+  document.querySelectorAll('.dsa-topic-card').forEach(card => {
+    card.addEventListener('click', () => {
+      selectDsaTopic(card.dataset.topicId);
+    });
+  });
+
+  // 3. Search & Filter Topics
+  const searchInput = document.getElementById('dsa-notes-search');
+  const categoryFilter = document.getElementById('dsa-category-filter');
+
+  function filterDsaTopics() {
+    const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
+    const cat = categoryFilter ? categoryFilter.value : 'all';
+
+    document.querySelectorAll('.dsa-topic-card').forEach(card => {
+      const topicId = Number(card.dataset.topicId);
+      const topic = topics.find(t => t.id === topicId);
+      if (!topic) return;
+
+      const matchesCat = (cat === 'all' || topic.categoryId === cat);
+      const matchesQuery = !query || 
+        topic.title.toLowerCase().includes(query) || 
+        topic.subtitle.toLowerCase().includes(query) || 
+        (topic.tags && topic.tags.some(tg => tg.toLowerCase().includes(query))) ||
+        (topic.summary && topic.summary.toLowerCase().includes(query));
+
+      if (matchesCat && matchesQuery) {
+        card.classList.remove('d-none');
+      } else {
+        card.classList.add('d-none');
+      }
+    });
+  }
+
+  if (searchInput) searchInput.addEventListener('input', filterDsaTopics);
+  if (categoryFilter) categoryFilter.addEventListener('change', filterDsaTopics);
+
+  // 4. Copy Note Content
+  const copyBtn = document.getElementById('btn-copy-dsa-note');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      const topic = topics.find(t => t.id === currentTopicId);
+      if (!topic) return;
+      const text = `${topic.title}\n${topic.subtitle}\n\n${topic.summary}\n\nCategory: ${topic.categoryName} (${topic.readTime})`;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Topic overview copied to clipboard!', 'success');
+      });
+    });
+  }
+
+  // 5. Clone to Personal Notes
+  const cloneBtn = document.getElementById('btn-clone-to-personal');
+  if (cloneBtn) {
+    cloneBtn.addEventListener('click', () => {
+      const topic = topics.find(t => t.id === currentTopicId);
+      if (!topic) return;
+
+      showPersonalTab();
+      activeNoteId = null;
+
+      const titleInput = document.getElementById('note-editor-title');
+      const contentTextarea = document.getElementById('note-editor-content');
+      const tagsInput = document.getElementById('note-editor-tags');
+
+      if (titleInput) titleInput.value = `[DSA #${topic.id}] ${topic.title}`;
+      if (contentTextarea) contentTextarea.value = `# ${topic.title}\n## ${topic.subtitle}\n\n> **Summary**: ${topic.summary}\n\n### Core Notes & Invariants:\n- Category: ${topic.categoryName}\n- Estimated Study Time: ${topic.readTime}\n\n(Add your personal notes, code snippets, and review questions here...)`;
+      if (tagsInput) tagsInput.value = (topic.tags || []).join(', ');
+
+      showToast(`Topic #${topic.id} loaded into personal editor. Click 'Save Note' to store.`, 'info');
+      if (titleInput) titleInput.focus();
+    });
+  }
+
+  // 6. Personal Notes - Compose New Note
   const newNoteBtn = document.getElementById('btn-new-note');
   if (newNoteBtn) {
     newNoteBtn.addEventListener('click', () => {
@@ -7056,13 +7206,13 @@ function bindNotesEvents() {
     });
   }
 
-  // 1. Create Folder
+  // 7. Personal Notes - Create Folder
   const createFolderBtn = document.getElementById('btn-create-folder');
   if (createFolderBtn) {
     createFolderBtn.addEventListener('click', () => {
       const name = prompt('Enter Folder Name:');
       if (name) {
-        apiFetch(`/v1/notes/folders?name=${name}`, { method: 'POST' })
+        apiFetch(`/v1/notes/folders?name=${encodeURIComponent(name)}`, { method: 'POST' })
           .then(() => {
             showToast('Folder directory registered!', 'success');
             redirectTo('#/dashboard');
@@ -7072,45 +7222,59 @@ function bindNotesEvents() {
     });
   }
 
-  // 2. Select note previews
+  // 8. Personal Notes - Select note previews
   let activeNoteId = null;
   document.querySelectorAll('.note-preview-card').forEach(card => {
     card.addEventListener('click', (e) => {
       const data = e.currentTarget.dataset;
       activeNoteId = data.id;
 
-      document.getElementById('note-editor-title').value = data.title;
-      document.getElementById('note-editor-content').value = data.content;
-      document.getElementById('note-editor-tags').value = data.tags;
+      const titleEl = document.getElementById('note-editor-title');
+      const contentEl = document.getElementById('note-editor-content');
+      const tagsEl = document.getElementById('note-editor-tags');
+      if (titleEl) titleEl.value = data.title || '';
+      if (contentEl) contentEl.value = data.content || '';
+      if (tagsEl) tagsEl.value = data.tags || '';
     });
   });
 
-  // 3. Save Document Changes
-  document.getElementById('btn-save-note').addEventListener('click', () => {
-    const title = document.getElementById('note-editor-title').value;
-    const content = document.getElementById('note-editor-content').value;
-    const tags = document.getElementById('note-editor-tags').value;
+  // 9. Personal Notes - Save Document Changes
+  const saveBtn = document.getElementById('btn-save-note');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', () => {
+      const titleEl = document.getElementById('note-editor-title');
+      const contentEl = document.getElementById('note-editor-content');
+      const tagsEl = document.getElementById('note-editor-tags');
+      const title = titleEl ? titleEl.value : '';
+      const content = contentEl ? contentEl.value : '';
+      const tags = tagsEl ? tagsEl.value : '';
 
-    if (activeNoteId) {
-      apiFetch(`/v1/notes/${activeNoteId}?title=${title}&tags=${tags}`, {
-        method: 'PUT',
-        body: content
-      }).then(() => {
-        showToast('Note changes persisted successfully.', 'success');
-        redirectTo('#/dashboard');
-        setTimeout(() => redirectTo('#/notes'), 100);
-      }).catch(err => showToast(err.message, 'danger'));
-    } else {
-      apiFetch(`/v1/notes?title=${title}&tags=${tags}`, {
-        method: 'POST',
-        body: content
-      }).then(() => {
-        showToast('New study notes recorded!', 'success');
-        redirectTo('#/dashboard');
-        setTimeout(() => redirectTo('#/notes'), 100);
-      }).catch(err => showToast(err.message, 'danger'));
-    }
-  });
+      if (!title) {
+        showToast('Please enter a note title', 'warning');
+        return;
+      }
+
+      if (activeNoteId) {
+        apiFetch(`/v1/notes/${activeNoteId}?title=${encodeURIComponent(title)}&tags=${encodeURIComponent(tags)}`, {
+          method: 'PUT',
+          body: content
+        }).then(() => {
+          showToast('Note changes persisted successfully.', 'success');
+          redirectTo('#/dashboard');
+          setTimeout(() => redirectTo('#/notes'), 100);
+        }).catch(err => showToast(err.message, 'danger'));
+      } else {
+        apiFetch(`/v1/notes?title=${encodeURIComponent(title)}&tags=${encodeURIComponent(tags)}`, {
+          method: 'POST',
+          body: content
+        }).then(() => {
+          showToast('New study notes recorded!', 'success');
+          redirectTo('#/dashboard');
+          setTimeout(() => redirectTo('#/notes'), 100);
+        }).catch(err => showToast(err.message, 'danger'));
+      }
+    });
+  }
 }
 
 function bindPlacementEvents() {
