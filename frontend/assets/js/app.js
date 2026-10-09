@@ -7000,55 +7000,62 @@ function bindExperiencesEvents() {
       const isRejected = exp.verdict === 'REJECTED';
 
       return `
-        <div class="glass-panel p-3 p-md-4 rounded-3 border border-secondary border-opacity-25 mb-2">
-          <!-- Header Row -->
-          <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3 pb-3 border-bottom border-secondary border-opacity-20">
+        <div class="exp-card mb-3">
+          <!-- Top Candidate & Company Info Header -->
+          <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pb-3 border-bottom border-secondary border-opacity-15">
             <div class="d-flex align-items-center gap-3">
-              <div class="rounded-3 d-flex align-items-center justify-content-center text-white flex-shrink-0" style="width: 44px; height: 44px; background: #1e1e24; border: 1px solid #3f3f46; font-size: 1.25rem;">
+              <div class="exp-company-badge">
                 <i class="${exp.companyIcon || 'fa-solid fa-building'} text-warning"></i>
               </div>
               <div>
-                <div class="d-flex flex-wrap align-items-center gap-2">
-                  <h5 class="text-white fw-bold mb-0 fs-6">${exp.company}</h5>
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+                  <span class="text-white fw-bold fs-6">${exp.company}</span>
                   <span class="badge ${isOffer ? 'bg-success bg-opacity-20 text-success border border-success border-opacity-30' : (isRejected ? 'bg-danger bg-opacity-20 text-danger border border-danger border-opacity-30' : 'bg-warning bg-opacity-20 text-warning border border-warning border-opacity-30')} fs-9 py-0.5">
                     ${isOffer ? '✓ OFFER RECEIVED' : (isRejected ? '✗ REJECTED' : '⏳ IN PROGRESS')}
                   </span>
                   ${exp.ctc ? `<span class="badge bg-dark text-info border border-secondary border-opacity-30 fs-9 py-0.5 font-monospace">${exp.ctc}</span>` : ''}
                 </div>
-                <div class="text-secondary fs-8 mt-0.5">${exp.role} &bull; <span class="text-muted">${exp.level || 'Candidate'} &bull; ${exp.date || 'Recent'}</span></div>
+                <div class="text-secondary fs-8">
+                  <span class="text-light fw-medium">${exp.role}</span> &bull; <span>${exp.level || 'Candidate'}</span> &bull; <span>${exp.date || 'Recent'}</span>
+                </div>
               </div>
             </div>
 
-            <button class="btn btn-sm ${isLiked ? 'btn-primary text-white shadow-sm' : 'btn-glass text-secondary'} py-1 px-2.5 fs-9 btn-like-experience" data-id="${exp.id}" title="${isLiked ? 'Helpful (Liked)' : 'Mark as Helpful'}">
-              <i class="fa-solid fa-thumbs-up ${isLiked ? 'text-white' : 'text-primary'} me-1"></i> Helpful (${exp.likesCount || 0})
+            <button class="btn btn-sm ${isLiked ? 'btn-primary text-white shadow-sm' : 'btn-glass text-secondary'} py-1 px-3 fs-9 btn-like-experience rounded-pill" data-id="${exp.id}" title="${isLiked ? 'Helpful (Liked)' : 'Mark as Helpful'}">
+              <i class="fa-solid fa-thumbs-up ${isLiked ? 'text-white' : 'text-warning'} me-1.5"></i> Helpful (${exp.likesCount || 0})
             </button>
           </div>
 
-          <!-- Rounds Accordion / Breakdown -->
-          <div class="mb-3">
-            <h6 class="text-warning fw-bold fs-8 text-uppercase font-monospace mb-2"><i class="fa-solid fa-list-check me-1.5"></i>Interview Rounds & Questions</h6>
-            <div class="d-flex flex-column gap-2">
-              ${(exp.rounds || []).map((rnd, rIdx) => `
-                <div class="p-2.5 rounded bg-black bg-opacity-40 border border-secondary border-opacity-20">
-                  <div class="fw-semibold text-white fs-8 mb-1"><span class="badge bg-secondary bg-opacity-30 text-light me-1.5 font-monospace">R${rIdx + 1}</span>${rnd.name}</div>
-                  <p class="text-light fs-8 mb-0" style="line-height: 1.6;">${rnd.desc}</p>
+          <!-- Continuous Timeline of Rounds (No nested boxes) -->
+          <div class="exp-timeline">
+            ${(exp.rounds || []).map((rnd, rIdx) => `
+              <div class="exp-timeline-item">
+                <span class="exp-timeline-dot"></span>
+                <div class="exp-round-title">
+                  <span class="text-warning fw-semibold me-1 font-monospace fs-9">R${rIdx + 1} &bull;</span> ${rnd.name}
                 </div>
-              `).join('')}
-            </div>
+                <p class="exp-round-desc">${rnd.desc}</p>
+              </div>
+            `).join('')}
           </div>
 
-          <!-- Key Tips & Advice -->
+          <!-- Key Tips & Candidate Strategy -->
           ${exp.tips ? `
-            <div class="p-2.5 rounded bg-primary bg-opacity-10 border border-primary border-opacity-20">
-              <div class="text-primary fw-bold fs-9 text-uppercase font-monospace mb-1"><i class="fa-solid fa-lightbulb me-1"></i>Candidate Preparation Advice:</div>
-              <p class="text-light fs-8 mb-0" style="line-height: 1.5;">${exp.tips}</p>
+            <div class="exp-tips-block">
+              <div class="exp-tips-title"><i class="fa-solid fa-lightbulb me-1.5"></i>Candidate Preparation Strategy & Advice</div>
+              <p class="exp-tips-text">${exp.tips}</p>
             </div>
           ` : ''}
 
-          <!-- Footer Author & Timestamp -->
-          <div class="d-flex justify-content-between align-items-center mt-3 pt-2 text-muted fs-9 border-top border-secondary border-opacity-10">
-            <span>Submitted by <strong class="text-light">${exp.author || 'Anonymous'}</strong></span>
-            <span>PrepSpace Verified Interview Debrief</span>
+          <!-- Footer Metadata -->
+          <div class="d-flex flex-wrap justify-content-between align-items-center mt-3 pt-2 text-muted fs-9 border-top border-secondary border-opacity-10">
+            <div class="d-flex align-items-center gap-1.5">
+              <i class="fa-solid fa-circle-check text-success fs-9"></i>
+              <span>Shared by <strong class="text-light">${exp.author || 'Anonymous'}</strong></span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="text-secondary"><i class="fa-solid fa-shield-halved me-1 text-primary"></i>Verified Debrief</span>
+            </div>
           </div>
         </div>
       `;

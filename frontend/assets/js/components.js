@@ -3992,25 +3992,25 @@ const components = {
   experiences: (experiencesList) => {
     return `
       <div class="interview-experiences-hub d-flex flex-column gap-3">
-        <!-- Top Banner & Metrics -->
-        <div class="glass-panel p-3 p-md-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
-          <div class="d-flex align-items-center gap-3">
-            <div class="ps-icon-square bg-primary-subtle text-primary" style="width: 46px; height: 46px; font-size: 1.25rem;">
-              <i class="fa-solid fa-user-tie"></i>
+        <!-- Top Banner & Metrics Toolbar in Single Clean Panel -->
+        <div class="exp-card p-3 p-md-4">
+          <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+            <div class="d-flex align-items-center gap-3">
+              <div class="exp-company-badge text-warning" style="width: 44px; height: 44px;">
+                <i class="fa-solid fa-user-tie"></i>
+              </div>
+              <div>
+                <h5 class="text-white fw-bold m-0 fs-6">Interview Experiences Hub</h5>
+                <p class="text-muted fs-8 m-0">Authentic round-by-round debriefs, technical coding problems, and compensation packages from top engineers.</p>
+              </div>
             </div>
-            <div>
-              <h5 class="text-white fw-bold m-0">Real Interview Experiences & Debriefs</h5>
-              <p class="text-muted fs-8 m-0">Verified round-by-round breakdown, questions asked, DSA topics, and offer details from FAANG & top tech companies.</p>
-            </div>
+            <button class="btn btn-premium px-3.5 py-2 fs-8 fw-semibold" id="btn-open-share-exp-modal">
+              <i class="fa-solid fa-plus me-1.5"></i> Share Your Experience
+            </button>
           </div>
-          <button class="btn btn-premium px-3.5 py-2 fs-8 fw-semibold" id="btn-open-share-exp-modal">
-            <i class="fa-solid fa-plus me-1.5"></i> Share Your Experience
-          </button>
-        </div>
 
-        <!-- Controls: Filters & Search -->
-        <div class="glass-panel p-3">
-          <div class="row g-2 align-items-center">
+          <!-- Controls: Filters & Search -->
+          <div class="row g-2 align-items-center pt-2 border-top border-secondary border-opacity-15">
             <div class="col-12 col-md-4">
               <div class="input-group input-group-sm">
                 <span class="input-group-text bg-dark border-secondary text-secondary"><i class="fa-solid fa-magnifying-glass"></i></span>
@@ -4043,7 +4043,7 @@ const components = {
               </select>
             </div>
             <div class="col-12 col-md-2 text-md-end">
-              <span class="text-muted fs-8 font-monospace" id="exp-count-badge">Showing Debriefs</span>
+              <span class="badge bg-dark text-warning border border-secondary border-opacity-30 fs-8 px-2.5 py-1 font-monospace" id="exp-count-badge">Showing Debriefs</span>
             </div>
           </div>
         </div>
