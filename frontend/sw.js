@@ -1,22 +1,22 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
-// Version: 5.8.14 (Transcribed DSA Master Notes Hub & 21 Core Topic Modules)
+// Version: 5.8.15 (High-Contrast DSA Notes & Study Hub UI)
 
-const CACHE_NAME = 'prepspace-static-v5.8.14';
-const RUNTIME_CACHE = 'prepspace-runtime-v5.8.14';
+const CACHE_NAME = 'prepspace-static-v5.8.15';
+const RUNTIME_CACHE = 'prepspace-runtime-v5.8.15';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/index.css?v=5.8.14',
-  './assets/js/dsa-notes-data.js?v=5.8.14',
-  './assets/js/app.js?v=5.8.14',
-  './assets/js/components.js?v=5.8.14',
-  './assets/js/interview-suite.js?v=5.8.14',
-  './assets/js/technical-library-data.js?v=5.8.14',
-  './assets/js/questions-data.js?v=5.8.14',
-  './assets/js/aptitude-curriculum.js?v=5.8.14',
-  './assets/js/production-pages.js?v=5.8.14',
+  './assets/css/index.css?v=5.8.15',
+  './assets/js/dsa-notes-data.js?v=5.8.15',
+  './assets/js/app.js?v=5.8.15',
+  './assets/js/components.js?v=5.8.15',
+  './assets/js/interview-suite.js?v=5.8.15',
+  './assets/js/technical-library-data.js?v=5.8.15',
+  './assets/js/questions-data.js?v=5.8.15',
+  './assets/js/aptitude-curriculum.js?v=5.8.15',
+  './assets/js/production-pages.js?v=5.8.15',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',

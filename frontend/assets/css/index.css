@@ -6575,6 +6575,89 @@ body.ui-drawer-open {
   overflow: hidden;
 }
 
+/* DSA Master Notes High-Contrast Topic Cards & Content Styling */
+.dsa-topic-card {
+  background: #1e1e24 !important;
+  border: 1px solid #323238 !important;
+  color: #f4f4f5 !important;
+  border-radius: 8px !important;
+  padding: 10px 12px !important;
+  cursor: pointer;
+  transition: all 0.18s ease-in-out;
+}
+
+.dsa-topic-card h6,
+.dsa-topic-card .dsa-topic-title {
+  color: #f4f4f5 !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  margin-bottom: 2px !important;
+}
+
+.dsa-topic-card .dsa-topic-sub {
+  color: #94a3b8 !important;
+  font-size: 0.775rem !important;
+}
+
+.dsa-topic-card .dsa-topic-time {
+  color: #a1a1aa !important;
+  font-size: 0.75rem !important;
+}
+
+.dsa-topic-card:hover {
+  background: #27272f !important;
+  border-color: #52525b !important;
+  transform: translateY(-1px);
+}
+
+.dsa-topic-card.active-dsa-topic {
+  background: #282218 !important;
+  border: 1.5px solid #f59e0b !important;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.15) !important;
+}
+
+.dsa-topic-card.active-dsa-topic h6,
+.dsa-topic-card.active-dsa-topic .dsa-topic-title {
+  color: #fbbf24 !important;
+  font-weight: 700 !important;
+}
+
+.dsa-topic-card.active-dsa-topic .dsa-topic-sub {
+  color: #fde68a !important;
+  opacity: 0.95;
+}
+
+.dsa-topic-card.active-dsa-topic .dsa-topic-time {
+  color: #fbbf24 !important;
+}
+
+.dsa-rendered-content {
+  color: #e2e8f0 !important;
+}
+
+.dsa-rendered-content h3 {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.4rem;
+}
+
+.dsa-rendered-content p {
+  color: #cbd5e1 !important;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.dsa-rendered-content li {
+  color: #cbd5e1 !important;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 0.4rem;
+}
+
 
 
 

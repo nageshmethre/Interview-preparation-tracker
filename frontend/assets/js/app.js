@@ -7088,11 +7088,9 @@ function bindNotesEvents() {
     // Highlight active card
     document.querySelectorAll('.dsa-topic-card').forEach(card => {
       if (Number(card.dataset.topicId) === topic.id) {
-        card.classList.add('active-dsa-topic', 'border-warning', 'bg-warning-subtle', 'text-white');
-        card.classList.remove('bg-dark-subtle', 'text-light');
+        card.classList.add('active-dsa-topic');
       } else {
-        card.classList.remove('active-dsa-topic', 'border-warning', 'bg-warning-subtle', 'text-white');
-        card.classList.add('bg-dark-subtle', 'text-light');
+        card.classList.remove('active-dsa-topic');
       }
     });
 

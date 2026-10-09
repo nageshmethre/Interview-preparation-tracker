@@ -4109,15 +4109,14 @@ const components = {
               <!-- Topics List -->
               <div class="flex-grow-1 overflow-y-auto d-flex flex-column gap-1.5 pe-1" id="dsa-topics-list">
                 ${topics.map((t, idx) => `
-                  <div class="p-2.5 rounded border border-secondary dsa-topic-card ${idx === 0 ? 'active-dsa-topic border-warning bg-warning-subtle text-white' : 'bg-dark-subtle text-light'}" 
-                       style="cursor: pointer; transition: all 0.2s;" 
+                  <div class="dsa-topic-card ${idx === 0 ? 'active-dsa-topic' : ''}" 
                        data-topic-id="${t.id}">
                     <div class="d-flex align-items-center justify-content-between mb-1">
                       <span class="badge bg-dark border border-secondary text-warning font-monospace fs-9">Topic #${t.id}</span>
-                      <span class="text-secondary fs-9"><i class="fa-regular fa-clock me-1"></i>${t.readTime}</span>
+                      <span class="dsa-topic-time"><i class="fa-regular fa-clock me-1"></i>${t.readTime}</span>
                     </div>
-                    <h6 class="fw-bold fs-7 mb-1 text-truncate">${t.title}</h6>
-                    <div class="text-muted fs-8 text-truncate">${t.subtitle}</div>
+                    <h6 class="dsa-topic-title text-truncate">${t.title}</h6>
+                    <div class="dsa-topic-sub text-truncate">${t.subtitle}</div>
                   </div>
                 `).join('')}
               </div>
