@@ -954,7 +954,6 @@ const components = {
               <a href="#/certificates" class="sidebar-link"><i class="fa-solid fa-award"></i> <span>Certificates</span></a>
               <a href="#/flashcards" class="sidebar-link"><i class="fa-solid fa-clone"></i> <span>Flashcards</span></a>
               <a href="#/notes" class="sidebar-link"><i class="fa-solid fa-note-sticky"></i> <span>Study Notes</span></a>
-              <a href="#/audio-bites" class="sidebar-link"><i class="fa-solid fa-headphones text-info"></i> <span>Feynman Audio (60s)</span></a>
               <a href="#/experiences" class="sidebar-link"><i class="fa-solid fa-user-tie"></i> <span>Experiences</span></a>
               <a href="#/community" class="sidebar-link"><i class="fa-solid fa-comments"></i> <span>Community</span></a>
             </div>
@@ -967,10 +966,6 @@ const components = {
             </summary>
             <div class="sidebar-group-items">
               <a href="#/placement" class="sidebar-link"><i class="fa-solid fa-briefcase"></i> <span>Placement Kanban</span></a>
-              <a href="#/outreach" class="sidebar-link"><i class="fa-solid fa-paper-plane text-warning"></i> <span>Outreach CRM</span></a>
-              <a href="#/star-vault" class="sidebar-link"><i class="fa-solid fa-star text-warning"></i> <span>STAR Story Vault</span></a>
-              <a href="#/peer-mock" class="sidebar-link"><i class="fa-solid fa-people-arrows text-primary"></i> <span>Peer Mock Arena</span></a>
-              <a href="#/reverse-interview" class="sidebar-link"><i class="fa-solid fa-clipboard-question text-success"></i> <span>Reverse Interview Kit</span></a>
               <a href="#/ai-assistant" class="sidebar-link"><i class="fa-solid fa-robot"></i> <span>AI ATS Assistant</span></a>
               <a href="#/calendar" class="sidebar-link"><i class="fa-solid fa-calendar-days"></i> <span>Interview Calendar</span></a>
               <a href="#/reports" class="sidebar-link"><i class="fa-solid fa-file-invoice"></i> <span>Progress Reports</span></a>
@@ -3993,7 +3988,136 @@ const components = {
     </div>
   `,
 
-  // 7. Community Discussion Forum
+  // 7A. Real Candidate Interview Experiences & Debriefs Hub
+  experiences: (experiencesList) => {
+    return `
+      <div class="interview-experiences-hub d-flex flex-column gap-3">
+        <!-- Top Banner & Metrics -->
+        <div class="glass-panel p-3 p-md-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
+          <div class="d-flex align-items-center gap-3">
+            <div class="ps-icon-square bg-primary-subtle text-primary" style="width: 46px; height: 46px; font-size: 1.25rem;">
+              <i class="fa-solid fa-user-tie"></i>
+            </div>
+            <div>
+              <h5 class="text-white fw-bold m-0">Real Interview Experiences & Debriefs</h5>
+              <p class="text-muted fs-8 m-0">Verified round-by-round breakdown, questions asked, DSA topics, and offer details from FAANG & top tech companies.</p>
+            </div>
+          </div>
+          <button class="btn btn-premium px-3.5 py-2 fs-8 fw-semibold" id="btn-open-share-exp-modal">
+            <i class="fa-solid fa-plus me-1.5"></i> Share Your Experience
+          </button>
+        </div>
+
+        <!-- Controls: Filters & Search -->
+        <div class="glass-panel p-3">
+          <div class="row g-2 align-items-center">
+            <div class="col-12 col-md-4">
+              <div class="input-group input-group-sm">
+                <span class="input-group-text bg-dark border-secondary text-secondary"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="text" id="exp-search-input" class="form-control glass-input fs-8" placeholder="Search company, role, DSA question...">
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <select id="exp-company-filter" class="form-select form-select-sm glass-input fs-8 text-white">
+                <option value="ALL">All Companies</option>
+                <option value="Google">Google</option>
+                <option value="Amazon">Amazon</option>
+                <option value="Microsoft">Microsoft</option>
+                <option value="Meta">Meta</option>
+                <option value="TCS">TCS (Digital / Prime)</option>
+                <option value="Infosys">Infosys (SP / DSE)</option>
+                <option value="Atlassian">Atlassian</option>
+                <option value="Adobe">Adobe</option>
+                <option value="Uber">Uber</option>
+                <option value="Oracle">Oracle</option>
+                <option value="Flipkart">Flipkart</option>
+                <option value="Walmart">Walmart</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-3">
+              <select id="exp-verdict-filter" class="form-select form-select-sm glass-input fs-8 text-white">
+                <option value="ALL">All Verdicts</option>
+                <option value="OFFER">Offer Received / Selected</option>
+                <option value="REJECTED">Rejected</option>
+                <option value="IN_PROGRESS">In Progress</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-2 text-md-end">
+              <span class="text-muted fs-8 font-monospace" id="exp-count-badge">Showing Debriefs</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Experiences List Container -->
+        <div class="d-flex flex-column gap-3" id="experiences-cards-container">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+
+        <!-- Share Experience Modal -->
+        <div class="modal fade" id="shareExperienceModal" tabindex="-1" aria-labelledby="shareExperienceModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content bg-dark border-secondary text-light">
+              <div class="modal-header border-secondary">
+                <h5 class="modal-title text-white fw-bold" id="shareExperienceModalLabel"><i class="fa-solid fa-pen-to-square me-2 text-primary"></i>Share Your Interview Experience</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form id="form-share-experience">
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                      <label class="form-label fs-8 text-muted fw-semibold">COMPANY NAME *</label>
+                      <input type="text" id="modal-exp-company" class="form-control glass-input fs-8" placeholder="e.g. Amazon, Google, TCS" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label fs-8 text-muted fw-semibold">TARGET ROLE *</label>
+                      <input type="text" id="modal-exp-role" class="form-control glass-input fs-8" placeholder="e.g. SDE-1, Full Stack Engineer" required>
+                    </div>
+                  </div>
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                      <label class="form-label fs-8 text-muted fw-semibold">EXPERIENCE LEVEL</label>
+                      <select id="modal-exp-level" class="form-select glass-input fs-8 text-white">
+                        <option value="College / Fresher">College / Fresher</option>
+                        <option value="1 - 3 YOE">1 - 3 YOE</option>
+                        <option value="3 - 6 YOE">3 - 6 YOE</option>
+                        <option value="Senior / Staff">Senior / Staff</option>
+                      </select>
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label fs-8 text-muted fw-semibold">INTERVIEW VERDICT *</label>
+                      <select id="modal-exp-verdict" class="form-select glass-input fs-8 text-white">
+                        <option value="OFFER">Offer Received / Selected</option>
+                        <option value="REJECTED">Rejected</option>
+                        <option value="IN_PROGRESS">Waiting for Result</option>
+                      </select>
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label fs-8 text-muted fw-semibold">COMPENSATION / PACKAGE</label>
+                      <input type="text" id="modal-exp-ctc" class="form-control glass-input fs-8" placeholder="e.g. ₹28 LPA or Undisclosed">
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label fs-8 text-muted fw-semibold">ROUND-BY-ROUND BREAKDOWN & QUESTIONS *</label>
+                    <textarea id="modal-exp-rounds" class="form-control glass-input fs-8" rows="6" placeholder="Detail each round:&#10;Round 1 (OA): 2 LeetCode Mediums on Graphs & DP...&#10;Round 2 (Tech 1): LRU Cache, Binary Tree traversal...&#10;Round 3 (System Design / LLD): Design Rate Limiter...&#10;Round 4 (HR/Managerial): Conflict with team member..." required></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label fs-8 text-muted fw-semibold">KEY PREPARATION TIPS & TRAPS</label>
+                    <textarea id="modal-exp-tips" class="form-control glass-input fs-8" rows="2" placeholder="Advice for peers preparing for this company..."></textarea>
+                  </div>
+                  <div class="d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-glass btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-premium btn-sm px-4 fw-semibold"><i class="fa-solid fa-paper-plane me-1.5"></i>Publish Experience</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  // 7B. Community Discussion Forum
   community: (posts) => `
     <div class="row g-4">
       <div class="col-lg-4">
@@ -4111,11 +4235,7 @@ const components = {
                 ${topics.map((t, idx) => `
                   <div class="dsa-topic-card ${idx === 0 ? 'active-dsa-topic' : ''}" 
                        data-topic-id="${t.id}">
-                    <div class="d-flex align-items-center justify-content-between mb-1">
-                      <span class="badge bg-dark border border-secondary text-warning font-monospace fs-9">Topic #${t.id}</span>
-                      <span class="dsa-topic-time"><i class="fa-regular fa-clock me-1"></i>${t.readTime}</span>
-                    </div>
-                    <h6 class="dsa-topic-title text-truncate">${t.title}</h6>
+                    <h6 class="dsa-topic-title text-truncate mb-1">${t.title}</h6>
                     <div class="dsa-topic-sub text-truncate">${t.subtitle}</div>
                   </div>
                 `).join('')}
@@ -4129,10 +4249,8 @@ const components = {
               <!-- Active Topic Header -->
               <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 pb-3 mb-4 border-bottom border-secondary">
                 <div>
-                  <div class="d-flex align-items-center gap-2 mb-1">
-                    <span class="badge bg-warning text-dark fw-bold font-monospace fs-8" id="active-topic-badge">Topic #${firstTopic.id}</span>
+                  <div class="d-flex align-items-center gap-2 mb-1.5">
                     <span class="badge bg-dark border border-secondary text-info fs-8" id="active-topic-category">${firstTopic.categoryName}</span>
-                    <span class="text-muted fs-8" id="active-topic-time"><i class="fa-regular fa-clock me-1"></i>${firstTopic.readTime}</span>
                   </div>
                   <h3 class="text-white fw-bold m-0" id="active-topic-title">${firstTopic.title}</h3>
                   <p class="text-secondary fs-7 m-0 mt-1" id="active-topic-subtitle">${firstTopic.subtitle}</p>

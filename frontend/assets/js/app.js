@@ -726,10 +726,8 @@ function router() {
     handleLibraryHubRoute(rawHash, pageMount);
   } else if (hash === '#/experiences') {
     viewTitle.textContent = 'Interview Experiences';
-    pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
-    // Simulated experiences array
-    pageMount.innerHTML = components.community([]);
-    bindCommunityEvents();
+    pageMount.innerHTML = components.experiences ? components.experiences([]) : '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
+    bindExperiencesEvents();
   } else if (hash === '#/mock-exams') {
     viewTitle.textContent = 'Mock Assessment Platform';
     const cachedLeaderboard = getCachedData('cached_mock_leaderboard', 180000) || [];
@@ -6761,6 +6759,415 @@ function bindFlashcardsEvents() {
   });
 }
 
+const DEFAULT_INTERVIEW_EXPERIENCES = [
+  {
+    id: 'exp-1',
+    company: 'Google',
+    companyIcon: 'fa-brands fa-google',
+    role: 'Software Engineer (L3 - Full Stack / Backend)',
+    level: 'College / Fresher',
+    verdict: 'OFFER',
+    ctc: '₹36 LPA Base + $55,000 RSUs + ₹3L Joining Bonus',
+    date: 'August 2026',
+    author: 'Arunav Sengupta',
+    likesCount: 64,
+    likedBy: [],
+    rounds: [
+      {
+        name: 'Round 1: Online Assessment (OA)',
+        desc: '2 Coding questions on Google internal test portal. Q1: Capacity to Ship Packages Within D Days (Binary Search on Answer, LC 1011). Q2: Min Cost to Connect All Points (Kruskal with Disjoint Set Union). Passed all test cases in 45 mins.'
+      },
+      {
+        name: 'Round 2: Technical Interview 1 (DSA & Problem Solving)',
+        desc: '45-minute live Google Meet session. Problem: Given a stream of log events with timestamps and user IDs, find the 5-minute sliding window with the highest peak concurrent users. Implemented Monotonic Deque solution with O(1) amortized window queries. Discussed memory constraints when log stream exceeds 10M events.'
+      },
+      {
+        name: 'Round 3: Technical Interview 2 (Tree DP & Graph Traversal)',
+        desc: 'Problem: Dynamic Programming on Binary Tree — Find the maximum path sum between any two nodes where nodes can contain negative values. Handled edge cases (all negative nodes, single node tree). The interviewer asked to extend this to an N-ary tree.'
+      },
+      {
+        name: 'Round 4: Technical Interview 3 (Data Structure Design)',
+        desc: 'Design an in-memory Autocomplete Trie system with Top-K query ranking and dynamic word frequency updates. Implemented Trie with a Min-Heap of size K stored at each prefix node for O(K) lookup speed.'
+      },
+      {
+        name: 'Round 5: Googliness & Leadership Principles',
+        desc: 'Behavioral round with Engineering Manager: Discussed navigating ambiguity when feature specifications change mid-sprint, handling constructive criticism during PR reviews, and promoting code accessibility.'
+      }
+    ],
+    tips: '1. Never jump directly into coding. Spend the first 5 minutes confirming constraints, input ranges, and edge cases. 2. Dry run with a small sample input before telling the interviewer you are done. 3. Google interviewers place huge value on clean, production-level code structure.'
+  },
+  {
+    id: 'exp-2',
+    company: 'Amazon',
+    companyIcon: 'fa-brands fa-amazon',
+    role: 'Software Development Engineer - I (SDE-1)',
+    level: '1 - 3 YOE',
+    verdict: 'OFFER',
+    ctc: '₹28.5 LPA Base + ₹16L RSUs',
+    date: 'September 2026',
+    author: 'Divya M.',
+    likesCount: 52,
+    likedBy: [],
+    rounds: [
+      {
+        name: 'Round 1: Online Assessment (OA 1 & 2)',
+        desc: 'Debugging (7 questions in 20 mins) + 2 Coding Problems (Rotting Oranges multi-source BFS & Critical Connections in a Network / Tarjan Bridge algorithm) + Work Style Assessment (Amazon 16 Leadership Principles).'
+      },
+      {
+        name: 'Round 2: Technical Interview 1 (DSA + Customer Obsession)',
+        desc: 'Problem: Word Ladder II (Find all shortest transformation sequences). Implemented BFS for shortest distance levels followed by DFS backtracking for path reconstruction. LP Question: Tell me about a time you went above and beyond for a customer.'
+      },
+      {
+        name: 'Round 3: Technical Interview 2 (Concurrency & Data Structures)',
+        desc: 'Problem: Implement an LRU Cache with Thread-Safety / Read-Write Locks in Java. Discussed lock granularity, ConcurrentHashMap vs synchronized blocks, and race conditions.'
+      },
+      {
+        name: 'Round 4: Bar Raiser Round (Low-Level Design & Bias for Action)',
+        desc: 'LLD Problem: Design an Amazon Hub Locker Delivery & Pickup System. Modeled entities (Locker, Package, LockerSize, AccessCode, Customer, DeliveryAgent). Wrote clean Strategy Pattern for locker allocation by package dimensions. LP Question: Tell me about a decision you made without complete data.'
+      }
+    ],
+    tips: 'Amazon weighs Leadership Principles (LP) equally with DSA! Prepare 2 distinct STAR stories for every single LP. Use measurable metrics (e.g. reduced latency by 35%, increased test coverage by 20%).'
+  },
+  {
+    id: 'exp-3',
+    company: 'Microsoft',
+    companyIcon: 'fa-brands fa-microsoft',
+    role: 'Software Engineer - II (SDE-2)',
+    level: '3 - 6 YOE',
+    verdict: 'OFFER',
+    ctc: '₹44 LPA Base + $60,000 Stocks',
+    date: 'July 2026',
+    author: 'Siddharth R.',
+    likesCount: 48,
+    likedBy: [],
+    rounds: [
+      {
+        name: 'Round 1: Online Assessment (Codility)',
+        desc: '3 Coding questions: Longest Substring Without Repeating Characters, Graph Bipartite Check (2-Coloring BFS), and 2D Matrix DP.'
+      },
+      {
+        name: 'Round 2: Technical 1 (Data Structures & Memory)',
+        desc: 'Serialize and Deserialize a Binary Tree (Preorder DFS with delimiter markers). Then optimized space for complete binary trees using array indexing.'
+      },
+      {
+        name: 'Round 3: Technical 2 (Advanced Algorithms)',
+        desc: 'Median of Two Sorted Arrays in O(log(min(N, M))) time complexity using binary search partition on smaller array.'
+      },
+      {
+        name: 'Round 4: System Design (HLD)',
+        desc: 'Design a Globally Distributed Rate Limiter with 99.99% Availability. Covered Token Bucket vs Leaky Bucket vs Sliding Window Counter. Used Redis clusters with local in-memory token cache fallback to mitigate network overhead.'
+      },
+      {
+        name: 'Round 5: As Appropriate (AA) / Partner Director Round',
+        desc: 'Discussion on architectural mistakes in past production systems, handling high severity live outages (SEV-1), and mentoring junior engineers.'
+      }
+    ],
+    tips: 'Microsoft interviewers love clean OOP design patterns and modular code. Mention unit tests, boundary validations, and concurrency implications in your code solutions.'
+  },
+  {
+    id: 'exp-4',
+    company: 'TCS',
+    companyIcon: 'fa-solid fa-building',
+    role: 'Prime / Digital Engineer',
+    level: 'College / Fresher',
+    verdict: 'OFFER',
+    ctc: '₹9.2 LPA',
+    date: 'September 2026',
+    author: 'Neha Deshmukh',
+    likesCount: 39,
+    likedBy: [],
+    rounds: [
+      {
+        name: 'Round 1: TCS National Qualifier Test (NQT)',
+        desc: 'Cognitive (Numerical, Verbal, Reasoning) + Advanced Coding Section: Q1: Array Subsegment Maximum XOR. Q2: DP on Subsequences.'
+      },
+      {
+        name: 'Round 2: Technical + Managerial Interview (Combined)',
+        desc: 'Live coding: Implement Min-Heap from scratch without built-in libraries. Core CS: SQL Indexing (B-Tree vs Hash index), ACID properties, OS Deadlock conditions & Banker Algorithm, REST vs GraphQL.'
+      },
+      {
+        name: 'Round 3: HR Round',
+        desc: 'Willingness to relocate, bond policies, discussion on background verification.'
+      }
+    ],
+    tips: 'For TCS Digital/Prime, solving both coding questions with 100% test cases in NQT guarantees the Prime interview shortlist. In the interview, explain DBMS indexes and your final year project architecture clearly.'
+  },
+  {
+    id: 'exp-5',
+    company: 'Atlassian',
+    companyIcon: 'fa-brands fa-atlassian',
+    role: 'Software Engineer (Backend)',
+    level: '1 - 3 YOE',
+    verdict: 'OFFER',
+    ctc: '₹52 LPA Total Target Compensation',
+    date: 'August 2026',
+    author: 'Karan Joshi',
+    likesCount: 45,
+    likedBy: [],
+    rounds: [
+      {
+        name: 'Round 1: Karat Technical Screen',
+        desc: '45 mins live pair programming: 3 problems covering interval scheduling, graph course schedule dependency resolution.'
+      },
+      {
+        name: 'Round 2: Data Structures & Real-World Coding',
+        desc: 'Design an in-memory multi-tenant Rate Limiting & Quota Management service with per-user burst thresholds.'
+      },
+      {
+        name: 'Round 3: System Design (Collaborative Architecture)',
+        desc: 'Design a Real-Time Collaborative Document Editor (like Confluence). Discussed Operational Transformation (OT) vs Conflict-free Replicated Data Types (CRDT), WebSockets connection pooling, and message deduplication.'
+      },
+      {
+        name: 'Round 4: Values & Cultural Fit',
+        desc: 'Extensive discussion around Atlassian core values: Open company no bullshit, Play as a team, Be the change you seek.'
+      }
+    ],
+    tips: 'Atlassian evaluates code quality heavily. Write modular classes, define custom exceptions, and write clear helper methods instead of giant 80-line functions.'
+  }
+];
+
+function getStoredExperiences() {
+  const stored = localStorage.getItem('prepspace_interview_experiences');
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed.map(exp => ({
+          ...exp,
+          likedBy: Array.isArray(exp.likedBy) ? exp.likedBy : [],
+          likesCount: typeof exp.likesCount === 'number' ? exp.likesCount : 0
+        }));
+      }
+    } catch(e) {}
+  }
+  const defaults = DEFAULT_INTERVIEW_EXPERIENCES.map(exp => ({
+    ...exp,
+    likedBy: Array.isArray(exp.likedBy) ? exp.likedBy : []
+  }));
+  localStorage.setItem('prepspace_interview_experiences', JSON.stringify(defaults));
+  return defaults;
+}
+
+function saveStoredExperiences(experiences) {
+  localStorage.setItem('prepspace_interview_experiences', JSON.stringify(experiences));
+}
+
+function bindExperiencesEvents() {
+  const container = document.getElementById('experiences-cards-container');
+  const countBadge = document.getElementById('exp-count-badge');
+  const searchInput = document.getElementById('exp-search-input');
+  const companyFilter = document.getElementById('exp-company-filter');
+  const verdictFilter = document.getElementById('exp-verdict-filter');
+  const currentUser = (state && (state.email || state.name)) || localStorage.getItem('prepspace_user_email') || 'current_user';
+
+  function renderExperiences() {
+    if (!container) return;
+    const allExp = getStoredExperiences();
+    const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
+    const selectedCompany = companyFilter ? companyFilter.value : 'ALL';
+    const selectedVerdict = verdictFilter ? verdictFilter.value : 'ALL';
+
+    const filtered = allExp.filter(exp => {
+      if (selectedCompany !== 'ALL' && exp.company.toLowerCase() !== selectedCompany.toLowerCase()) return false;
+      if (selectedVerdict !== 'ALL' && exp.verdict !== selectedVerdict) return false;
+      if (query) {
+        const matchComp = exp.company.toLowerCase().includes(query);
+        const matchRole = exp.role.toLowerCase().includes(query);
+        const matchRounds = exp.rounds && exp.rounds.some(r => r.name.toLowerCase().includes(query) || r.desc.toLowerCase().includes(query));
+        const matchTips = exp.tips && exp.tips.toLowerCase().includes(query);
+        if (!matchComp && !matchRole && !matchRounds && !matchTips) return false;
+      }
+      return true;
+    });
+
+    if (countBadge) {
+      countBadge.textContent = `${filtered.length} ${filtered.length === 1 ? 'Debrief' : 'Debriefs'}`;
+    }
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div class="glass-panel p-5 text-center text-muted font-monospace fs-8">
+          <i class="fa-solid fa-user-tie display-6 mb-3 text-secondary"></i>
+          <p class="mb-0">No interview debriefs found matching the filter criteria. Be the first to share your experience!</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = filtered.map(exp => {
+      const isLiked = Array.isArray(exp.likedBy) && exp.likedBy.includes(currentUser);
+      const isOffer = exp.verdict === 'OFFER';
+      const isRejected = exp.verdict === 'REJECTED';
+
+      return `
+        <div class="glass-panel p-3 p-md-4 rounded-3 border border-secondary border-opacity-25 mb-2">
+          <!-- Header Row -->
+          <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3 pb-3 border-bottom border-secondary border-opacity-20">
+            <div class="d-flex align-items-center gap-3">
+              <div class="rounded-3 d-flex align-items-center justify-content-center text-white flex-shrink-0" style="width: 44px; height: 44px; background: #1e1e24; border: 1px solid #3f3f46; font-size: 1.25rem;">
+                <i class="${exp.companyIcon || 'fa-solid fa-building'} text-warning"></i>
+              </div>
+              <div>
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                  <h5 class="text-white fw-bold mb-0 fs-6">${exp.company}</h5>
+                  <span class="badge ${isOffer ? 'bg-success bg-opacity-20 text-success border border-success border-opacity-30' : (isRejected ? 'bg-danger bg-opacity-20 text-danger border border-danger border-opacity-30' : 'bg-warning bg-opacity-20 text-warning border border-warning border-opacity-30')} fs-9 py-0.5">
+                    ${isOffer ? '✓ OFFER RECEIVED' : (isRejected ? '✗ REJECTED' : '⏳ IN PROGRESS')}
+                  </span>
+                  ${exp.ctc ? `<span class="badge bg-dark text-info border border-secondary border-opacity-30 fs-9 py-0.5 font-monospace">${exp.ctc}</span>` : ''}
+                </div>
+                <div class="text-secondary fs-8 mt-0.5">${exp.role} &bull; <span class="text-muted">${exp.level || 'Candidate'} &bull; ${exp.date || 'Recent'}</span></div>
+              </div>
+            </div>
+
+            <button class="btn btn-sm ${isLiked ? 'btn-primary text-white shadow-sm' : 'btn-glass text-secondary'} py-1 px-2.5 fs-9 btn-like-experience" data-id="${exp.id}" title="${isLiked ? 'Helpful (Liked)' : 'Mark as Helpful'}">
+              <i class="fa-solid fa-thumbs-up ${isLiked ? 'text-white' : 'text-primary'} me-1"></i> Helpful (${exp.likesCount || 0})
+            </button>
+          </div>
+
+          <!-- Rounds Accordion / Breakdown -->
+          <div class="mb-3">
+            <h6 class="text-warning fw-bold fs-8 text-uppercase font-monospace mb-2"><i class="fa-solid fa-list-check me-1.5"></i>Interview Rounds & Questions</h6>
+            <div class="d-flex flex-column gap-2">
+              ${(exp.rounds || []).map((rnd, rIdx) => `
+                <div class="p-2.5 rounded bg-black bg-opacity-40 border border-secondary border-opacity-20">
+                  <div class="fw-semibold text-white fs-8 mb-1"><span class="badge bg-secondary bg-opacity-30 text-light me-1.5 font-monospace">R${rIdx + 1}</span>${rnd.name}</div>
+                  <p class="text-light fs-8 mb-0" style="line-height: 1.6;">${rnd.desc}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Key Tips & Advice -->
+          ${exp.tips ? `
+            <div class="p-2.5 rounded bg-primary bg-opacity-10 border border-primary border-opacity-20">
+              <div class="text-primary fw-bold fs-9 text-uppercase font-monospace mb-1"><i class="fa-solid fa-lightbulb me-1"></i>Candidate Preparation Advice:</div>
+              <p class="text-light fs-8 mb-0" style="line-height: 1.5;">${exp.tips}</p>
+            </div>
+          ` : ''}
+
+          <!-- Footer Author & Timestamp -->
+          <div class="d-flex justify-content-between align-items-center mt-3 pt-2 text-muted fs-9 border-top border-secondary border-opacity-10">
+            <span>Submitted by <strong class="text-light">${exp.author || 'Anonymous'}</strong></span>
+            <span>PrepSpace Verified Interview Debrief</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Bind Like / Helpful buttons
+    container.querySelectorAll('.btn-like-experience').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = e.currentTarget.dataset.id;
+        const allExp = getStoredExperiences();
+        const target = allExp.find(x => x.id === id);
+        if (target) {
+          if (!Array.isArray(target.likedBy)) target.likedBy = [];
+          const uIdx = target.likedBy.indexOf(currentUser);
+          if (uIdx === -1) {
+            target.likedBy.push(currentUser);
+            target.likesCount = (target.likesCount || 0) + 1;
+            saveStoredExperiences(allExp);
+            renderExperiences();
+            showToast('Marked interview experience as helpful!', 'success');
+          } else {
+            target.likedBy.splice(uIdx, 1);
+            target.likesCount = Math.max(0, (target.likesCount || 1) - 1);
+            saveStoredExperiences(allExp);
+            renderExperiences();
+            showToast('Removed helpful reaction.', 'info');
+          }
+        }
+      });
+    });
+  }
+
+  // Filter Event Listeners
+  if (searchInput) searchInput.addEventListener('input', renderExperiences);
+  if (companyFilter) companyFilter.addEventListener('change', renderExperiences);
+  if (verdictFilter) verdictFilter.addEventListener('change', renderExperiences);
+
+  // Modal Open Trigger
+  const btnOpenModal = document.getElementById('btn-open-share-exp-modal');
+  if (btnOpenModal) {
+    btnOpenModal.addEventListener('click', () => {
+      const modalEl = document.getElementById('shareExperienceModal');
+      if (modalEl && typeof bootstrap !== 'undefined') {
+        const bsModal = new bootstrap.Modal(modalEl);
+        bsModal.show();
+      }
+    });
+  }
+
+  // Form Submit
+  const form = document.getElementById('form-share-experience');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const company = document.getElementById('modal-exp-company').value.trim();
+      const role = document.getElementById('modal-exp-role').value.trim();
+      const level = document.getElementById('modal-exp-level').value;
+      const verdict = document.getElementById('modal-exp-verdict').value;
+      const ctc = document.getElementById('modal-exp-ctc').value.trim();
+      const roundsText = document.getElementById('modal-exp-rounds').value.trim();
+      const tipsText = document.getElementById('modal-exp-tips').value.trim();
+
+      if (!company || !role || !roundsText) {
+        showToast('Please fill out Company, Role, and Rounds breakdown.', 'warning');
+        return;
+      }
+
+      const compIconMap = {
+        'google': 'fa-brands fa-google',
+        'amazon': 'fa-brands fa-amazon',
+        'microsoft': 'fa-brands fa-microsoft',
+        'meta': 'fa-brands fa-meta',
+        'apple': 'fa-brands fa-apple',
+        'atlassian': 'fa-brands fa-atlassian',
+        'uber': 'fa-brands fa-uber',
+        'adobe': 'fa-solid fa-file-code',
+        'tcs': 'fa-solid fa-building',
+        'infosys': 'fa-solid fa-building'
+      };
+
+      const newExp = {
+        id: 'exp-' + Date.now(),
+        company: company,
+        companyIcon: compIconMap[company.toLowerCase()] || 'fa-solid fa-building',
+        role: role,
+        level: level,
+        verdict: verdict,
+        ctc: ctc,
+        date: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
+        author: (state && (state.name || state.email)) || localStorage.getItem('prepspace_user_name') || 'Student Developer',
+        likesCount: 0,
+        likedBy: [],
+        rounds: [
+          { name: 'Full Interview Process & Questions', desc: roundsText }
+        ],
+        tips: tipsText
+      };
+
+      const allExp = getStoredExperiences();
+      allExp.unshift(newExp);
+      saveStoredExperiences(allExp);
+
+      // Close modal
+      const modalEl = document.getElementById('shareExperienceModal');
+      if (modalEl && typeof bootstrap !== 'undefined') {
+        const bsModal = bootstrap.Modal.getInstance(modalEl);
+        if (bsModal) bsModal.hide();
+      }
+
+      form.reset();
+      renderExperiences();
+      showToast('Interview experience published successfully!', 'success');
+    });
+  }
+
+  // Initial Render
+  renderExperiences();
+}
+
 const DEFAULT_COMMUNITY_THREADS = [
   {
     id: 't-1',
@@ -7095,16 +7502,12 @@ function bindNotesEvents() {
     });
 
     // Update Header
-    const badgeEl = document.getElementById('active-topic-badge');
     const catEl = document.getElementById('active-topic-category');
-    const timeEl = document.getElementById('active-topic-time');
     const titleEl = document.getElementById('active-topic-title');
     const subtitleEl = document.getElementById('active-topic-subtitle');
     const bodyEl = document.getElementById('active-topic-body');
 
-    if (badgeEl) badgeEl.textContent = `Topic #${topic.id}`;
     if (catEl) catEl.textContent = topic.categoryName;
-    if (timeEl) timeEl.innerHTML = `<i class="fa-regular fa-clock me-1"></i>${topic.readTime}`;
     if (titleEl) titleEl.textContent = topic.title;
     if (subtitleEl) subtitleEl.textContent = topic.subtitle;
     if (bodyEl) {
