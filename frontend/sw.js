@@ -1,22 +1,22 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
-// Version: 5.8.18 (Unified Single-Box Interview Experiences Architecture)
+// Version: 5.8.19 (Real-Time Admin Operations Telemetry & High-Fidelity Cache Engine)
 
-const CACHE_NAME = 'prepspace-static-v5.8.18';
-const RUNTIME_CACHE = 'prepspace-runtime-v5.8.18';
+const CACHE_NAME = 'prepspace-static-v5.8.19';
+const RUNTIME_CACHE = 'prepspace-runtime-v5.8.19';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/index.css?v=5.8.18',
-  './assets/js/dsa-notes-data.js?v=5.8.18',
-  './assets/js/app.js?v=5.8.18',
-  './assets/js/components.js?v=5.8.18',
-  './assets/js/interview-suite.js?v=5.8.18',
-  './assets/js/technical-library-data.js?v=5.8.18',
-  './assets/js/questions-data.js?v=5.8.18',
-  './assets/js/aptitude-curriculum.js?v=5.8.18',
-  './assets/js/production-pages.js?v=5.8.18',
+  './assets/css/index.css?v=5.8.19',
+  './assets/js/dsa-notes-data.js?v=5.8.19',
+  './assets/js/app.js?v=5.8.19',
+  './assets/js/components.js?v=5.8.19',
+  './assets/js/interview-suite.js?v=5.8.19',
+  './assets/js/technical-library-data.js?v=5.8.19',
+  './assets/js/questions-data.js?v=5.8.19',
+  './assets/js/aptitude-curriculum.js?v=5.8.19',
+  './assets/js/production-pages.js?v=5.8.19',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',
