@@ -570,7 +570,7 @@ input:-webkit-autofill:focus,
   color: #f59e0b !important;
 }
 
-/* Main Content: Rock-Solid Flex Child Grid */
+/* Main Content: Rock-Solid Flex Child Grid (Edge-to-Edge Widescreen Layout) */
 .main-content {
   flex: 1 1 0% !important;
   min-width: 0 !important;
@@ -578,7 +578,7 @@ input:-webkit-autofill:focus,
   min-height: 100vh !important;
   display: flex !important;
   flex-direction: column !important;
-  padding: 24px 32px !important;
+  padding: 0 !important;
   background-color: #18181b !important;
   overflow-x: hidden !important;
 }
@@ -588,6 +588,8 @@ input:-webkit-autofill:focus,
   width: 100% !important;
   min-width: 0 !important;
   flex: 1 1 auto !important;
+  padding: 10px 16px 20px 16px !important;
+  overflow-y: auto !important;
 }
 
 /* Proper Grid Column Flow */
@@ -6664,11 +6666,13 @@ body.ui-drawer-open {
 .exp-card {
   background: #18181c !important;
   border: 1px solid #2e2e38 !important;
-  border-radius: 14px !important;
-  padding: 24px 28px !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+  border-radius: 12px !important;
+  padding: 16px 20px !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2) !important;
   transition: all 0.2s ease-in-out;
   position: relative;
+  width: 100% !important;
+  margin-bottom: 14px !important;
 }
 
 .exp-card:hover {
@@ -6677,28 +6681,28 @@ body.ui-drawer-open {
 }
 
 .exp-company-badge {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
   background: #22222a;
   border: 1px solid #383846;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   flex-shrink: 0;
 }
 
 .exp-timeline {
   position: relative;
-  margin: 20px 0 18px 8px;
-  padding-left: 26px;
+  margin: 14px 0 14px 4px;
+  padding-left: 22px;
   border-left: 2px solid rgba(245, 158, 11, 0.3);
 }
 
 .exp-timeline-item {
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 
 .exp-timeline-item:last-child {
@@ -6707,8 +6711,8 @@ body.ui-drawer-open {
 
 .exp-timeline-dot {
   position: absolute;
-  left: -32px;
-  top: 5px;
+  left: -28px;
+  top: 4px;
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -6720,38 +6724,38 @@ body.ui-drawer-open {
 .exp-round-title {
   color: #ffffff;
   font-weight: 600;
-  font-size: 0.92rem;
-  margin-bottom: 5px;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
   letter-spacing: -0.01em;
 }
 
 .exp-round-desc {
   color: #cbd5e1;
-  font-size: 0.865rem;
-  line-height: 1.65;
+  font-size: 0.86rem;
+  line-height: 1.6;
   margin: 0;
 }
 
 .exp-tips-block {
-  background: rgba(245, 158, 11, 0.06);
+  background: rgba(245, 158, 11, 0.05);
   border-left: 3px solid #f59e0b;
-  padding: 12px 16px;
+  padding: 10px 14px;
   border-radius: 0 8px 8px 0;
-  margin-top: 18px;
+  margin-top: 14px;
 }
 
 .exp-tips-title {
   color: #fbbf24;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.6px;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 
 .exp-tips-text {
   color: #e2e8f0;
-  font-size: 0.85rem;
-  line-height: 1.6;
+  font-size: 0.84rem;
+  line-height: 1.55;
   margin: 0;
 }

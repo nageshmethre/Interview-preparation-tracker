@@ -3991,34 +3991,34 @@ const components = {
   // 7A. Real Candidate Interview Experiences & Debriefs Hub
   experiences: (experiencesList) => {
     return `
-      <div class="interview-experiences-hub d-flex flex-column gap-3">
-        <!-- Top Banner & Metrics Toolbar in Single Clean Panel -->
-        <div class="exp-card p-3 p-md-4">
-          <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
-            <div class="d-flex align-items-center gap-3">
-              <div class="exp-company-badge text-warning" style="width: 44px; height: 44px;">
+      <div class="interview-experiences-hub d-flex flex-column gap-2 w-100">
+        <!-- Sleek High-Density Toolbar (Edge-to-Edge Compact Layout) -->
+        <div class="exp-card p-2.5 p-md-3 mb-1">
+          <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2 pb-2 border-bottom border-secondary border-opacity-15">
+            <div class="d-flex align-items-center gap-2">
+              <div class="exp-company-badge text-warning" style="width: 34px; height: 34px; font-size: 1rem;">
                 <i class="fa-solid fa-user-tie"></i>
               </div>
               <div>
-                <h5 class="text-white fw-bold m-0 fs-6">Interview Experiences Hub</h5>
-                <p class="text-muted fs-8 m-0">Authentic round-by-round debriefs, technical coding problems, and compensation packages from top engineers.</p>
+                <h6 class="text-white fw-bold m-0 fs-7">Interview Experiences Hub</h6>
+                <span class="text-muted fs-9 d-none d-md-inline">Verified technical debriefs, rounds, and compensation from real engineers.</span>
               </div>
             </div>
-            <button class="btn btn-premium px-3.5 py-2 fs-8 fw-semibold" id="btn-open-share-exp-modal">
-              <i class="fa-solid fa-plus me-1.5"></i> Share Your Experience
+            <button class="btn btn-premium btn-sm px-3 py-1 fs-8 fw-semibold" id="btn-open-share-exp-modal">
+              <i class="fa-solid fa-plus me-1"></i> Share Experience
             </button>
           </div>
 
-          <!-- Controls: Filters & Search -->
-          <div class="row g-2 align-items-center pt-2 border-top border-secondary border-opacity-15">
-            <div class="col-12 col-md-4">
+          <!-- Controls: Filters & Search in One Compact Line -->
+          <div class="row g-2 align-items-center">
+            <div class="col-12 col-md-5 col-xl-6">
               <div class="input-group input-group-sm">
-                <span class="input-group-text bg-dark border-secondary text-secondary"><i class="fa-solid fa-magnifying-glass"></i></span>
-                <input type="text" id="exp-search-input" class="form-control glass-input fs-8" placeholder="Search company, role, DSA question...">
+                <span class="input-group-text bg-dark border-secondary text-secondary py-1"><i class="fa-solid fa-magnifying-glass fs-9"></i></span>
+                <input type="text" id="exp-search-input" class="form-control glass-input fs-8 py-1" placeholder="Search company, role, DSA question...">
               </div>
             </div>
-            <div class="col-6 col-md-3">
-              <select id="exp-company-filter" class="form-select form-select-sm glass-input fs-8 text-white">
+            <div class="col-6 col-md-3 col-xl-2">
+              <select id="exp-company-filter" class="form-select form-select-sm glass-input fs-8 py-1 text-white">
                 <option value="ALL">All Companies</option>
                 <option value="Google">Google</option>
                 <option value="Amazon">Amazon</option>
@@ -4034,22 +4034,22 @@ const components = {
                 <option value="Walmart">Walmart</option>
               </select>
             </div>
-            <div class="col-6 col-md-3">
-              <select id="exp-verdict-filter" class="form-select form-select-sm glass-input fs-8 text-white">
+            <div class="col-6 col-md-2 col-xl-2">
+              <select id="exp-verdict-filter" class="form-select form-select-sm glass-input fs-8 py-1 text-white">
                 <option value="ALL">All Verdicts</option>
-                <option value="OFFER">Offer Received / Selected</option>
+                <option value="OFFER">Offer Received</option>
                 <option value="REJECTED">Rejected</option>
                 <option value="IN_PROGRESS">In Progress</option>
               </select>
             </div>
-            <div class="col-12 col-md-2 text-md-end">
-              <span class="badge bg-dark text-warning border border-secondary border-opacity-30 fs-8 px-2.5 py-1 font-monospace" id="exp-count-badge">Showing Debriefs</span>
+            <div class="col-12 col-md-2 col-xl-2 text-md-end">
+              <span class="badge bg-dark text-warning border border-secondary border-opacity-30 fs-9 px-2 py-1 font-monospace" id="exp-count-badge">Showing Debriefs</span>
             </div>
           </div>
         </div>
 
-        <!-- Experiences List Container -->
-        <div class="d-flex flex-column gap-3" id="experiences-cards-container">
+        <!-- Experiences List Container (Edge to Edge) -->
+        <div class="d-flex flex-column gap-2.5 w-100" id="experiences-cards-container">
           <!-- Rendered dynamically by app.js -->
         </div>
 
@@ -5946,7 +5946,7 @@ const components = {
   },
 
   admin: (stats) => `
-    <div class="container-fluid py-3 px-3 px-md-4">
+    <div class="container-fluid px-0 py-1">
       <!-- Executive Telemetry & Global Actions Header -->
       <div class="border-bottom border-secondary border-opacity-10 pb-3 mb-3">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
