@@ -1499,6 +1499,16 @@ function fetchUserProfile() {
       state.referralCode = profile.referralCode;
 
       updateSidebarPlanBadge(isPaidUser);
+
+      upsertLocalCandidateAccount({
+        id: profile.id,
+        name: profile.name || state.name,
+        email: profile.email || state.email,
+        role: profile.role || state.role,
+        isPaid: isPaidUser,
+        referralCode: profile.referralCode,
+        referralEarnings: profile.referralEarnings
+      });
     });
 }
 
@@ -1605,6 +1615,13 @@ function handleGoogleCredentialResponse(response) {
     state.email = res.email || '';
     state.role = res.role || 'ROLE_USER';
 
+    upsertLocalCandidateAccount({
+      name: res.name || 'User',
+      email: res.email,
+      role: res.role || 'STUDENT',
+      googleId: true
+    });
+
     let postLoginRoute = sessionStorage.getItem('redirect_after_login') || '#/dashboard';
     sessionStorage.removeItem('redirect_after_login');
     if (postLoginRoute.startsWith('#/login') || postLoginRoute.startsWith('#/register') || postLoginRoute === '#/' || postLoginRoute === '') {
@@ -1687,6 +1704,12 @@ function bindAuthEvents(mode) {
         state.name = res.name || 'User';
         state.email = res.email || email;
         state.role = res.role || 'ROLE_USER';
+
+        upsertLocalCandidateAccount({
+          name: res.name || email.split('@')[0],
+          email: res.email || email,
+          role: res.role || 'STUDENT'
+        });
 
         let postLoginRoute = sessionStorage.getItem('redirect_after_login') || '#/dashboard';
         sessionStorage.removeItem('redirect_after_login');
@@ -1908,28 +1931,13 @@ function bindAuthEvents(mode) {
           body: JSON.stringify(pendingRegistration)
         }).then(res => {
           showToast('Email verified & account created! Initializing space...', 'success');
-          try {
-            const candidateList = getLiveRegisteredUsers();
-            if (!candidateList.some(u => (u.email || '').toLowerCase() === (pendingRegistration.email || '').toLowerCase())) {
-              candidateList.push({
-                id: (res && res.id) ? res.id : Date.now(),
-                name: pendingRegistration.name,
-                email: pendingRegistration.email,
-                role: 'STUDENT',
-                isPaid: false,
-                paid: false,
-                referralCode: 'REF-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
-                referralEarnings: 0,
-                isSuspended: false,
-                suspended: false,
-                createdAt: new Date().toISOString(),
-                lastActive: 'Online Now',
-                questionsSolved: 0,
-                testsAttempted: 0
-              });
-              localStorage.setItem('prepspace_candidate_accounts', JSON.stringify(candidateList));
-            }
-          } catch(e) {}
+          upsertLocalCandidateAccount({
+            id: (res && res.id) ? res.id : Date.now(),
+            name: pendingRegistration.name,
+            email: pendingRegistration.email,
+            role: 'STUDENT',
+            isPaid: false
+          });
           // Auto login upon successful verification
           apiFetch('/auth/login', {
             method: 'POST',
@@ -9014,6 +9022,101 @@ function markCandidateAsDeleted(email, id) {
   return candidateList;
 }
 
+function upsertLocalCandidateAccount(candidateData) {
+  if (!candidateData || !candidateData.email) return;
+  const email = (candidateData.email || '').toLowerCase().trim();
+  if (!email) return;
+
+  // If candidate was marked deleted previously, unmark if they explicitly registered or logged in anew
+  try {
+    const storedDeleted = localStorage.getItem('prepspace_deleted_candidate_emails');
+    if (storedDeleted) {
+      let parsed = JSON.parse(storedDeleted);
+      if (Array.isArray(parsed)) {
+        parsed = parsed.filter(e => {
+          const norm = String(e).toLowerCase().trim();
+          if (norm === email) return false;
+          if (candidateData.id && norm === String(candidateData.id).trim()) return false;
+          return true;
+        });
+        localStorage.setItem('prepspace_deleted_candidate_emails', JSON.stringify(parsed));
+      }
+    }
+  } catch(e) {}
+
+  // Retrieve stored candidate accounts
+  let candidateAccounts = [];
+  try {
+    const raw = localStorage.getItem('prepspace_candidate_accounts');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) candidateAccounts = parsed;
+    }
+  } catch(e) {
+    candidateAccounts = [];
+  }
+
+  // Find if already exists
+  const existingIdx = candidateAccounts.findIndex(u => {
+    const uEmail = (u.email || '').toLowerCase().trim();
+    if (uEmail === email) return true;
+    if (candidateData.id && String(u.id).trim() === String(candidateData.id).trim()) return true;
+    return false;
+  });
+
+  const nowIso = new Date().toISOString();
+  const existing = existingIdx >= 0 ? candidateAccounts[existingIdx] : null;
+
+  const candidateRecord = {
+    id: candidateData.id || (existing ? existing.id : Date.now()),
+    name: candidateData.name || (existing ? existing.name : email.split('@')[0]),
+    email: email,
+    role: candidateData.role || (existing ? existing.role : 'STUDENT'),
+    googleId: candidateData.googleId || (existing ? existing.googleId : null),
+    isPaid: Boolean(candidateData.isPaid ?? candidateData.paid ?? (existing ? existing.isPaid : false)),
+    paid: Boolean(candidateData.isPaid ?? candidateData.paid ?? (existing ? existing.isPaid : false)),
+    referralCode: candidateData.referralCode || (existing ? existing.referralCode : ('REF-' + Math.random().toString(36).substring(2, 8).toUpperCase())),
+    referralEarnings: Number(candidateData.referralEarnings ?? (existing ? existing.referralEarnings : 0)) || 0,
+    isSuspended: Boolean(candidateData.isSuspended ?? candidateData.suspended ?? (existing ? existing.isSuspended : false)),
+    suspended: Boolean(candidateData.isSuspended ?? candidateData.suspended ?? (existing ? existing.isSuspended : false)),
+    createdAt: candidateData.createdAt || (existing ? existing.createdAt : nowIso),
+    lastActive: 'Online Now',
+    questionsSolved: candidateData.questionsSolved ?? (existing ? existing.questionsSolved : 0),
+    testsAttempted: candidateData.testsAttempted ?? (existing ? existing.testsAttempted : 0)
+  };
+
+  if (existingIdx >= 0) {
+    candidateAccounts[existingIdx] = { ...existing, ...candidateRecord, lastActive: 'Online Now' };
+  } else {
+    // Insert new candidate at the very front
+    candidateAccounts.unshift(candidateRecord);
+  }
+
+  try {
+    localStorage.setItem('prepspace_candidate_accounts', JSON.stringify(candidateAccounts));
+  } catch(e) {}
+
+  // Update window.currentAdminStats if present
+  try {
+    if (typeof computeLiveAdminStats === 'function') {
+      window.currentAdminStats = computeLiveAdminStats(window.currentAdminStats);
+    }
+  } catch(e) {}
+
+  // If admin candidates tab is currently active and not being searched, reactively update candidate roster
+  try {
+    const activeTabBtn = document.querySelector('.admin-tab-btn.active');
+    const curTab = activeTabBtn ? activeTabBtn.id.replace('tab-', '') : null;
+    if (curTab === 'users' && typeof window.renderAdminUsersTab === 'function') {
+      const searchInput = document.getElementById('admin-user-search-input');
+      if (!searchInput || !searchInput.value.trim()) {
+        window.renderAdminUsersTab(getLiveRegisteredUsers());
+      }
+    }
+  } catch(e) {}
+}
+window.upsertLocalCandidateAccount = upsertLocalCandidateAccount;
+
 function getLiveRegisteredUsers(serverUsers = null) {
   const userMap = new Map();
   const deletedSet = getDeletedCandidateIdentifiers();
@@ -9069,9 +9172,9 @@ function getLiveRegisteredUsers(serverUsers = null) {
   }
 
   // 4. Ensure current active user / admin session is properly merged
-  const currentEmail = ((state && state.email) || localStorage.getItem('email') || localStorage.getItem('prepspace_user_email') || 'nagesh@stream-in.app').toLowerCase().trim();
-  const currentName = (state && state.name) || localStorage.getItem('name') || localStorage.getItem('prepspace_user_name') || 'Super Admin';
-  const currentRole = (state && state.role) || localStorage.getItem('role') || 'SUPER_ADMIN';
+  const currentEmail = ((state && state.email) || localStorage.getItem('email') || localStorage.getItem('prepspace_user_email') || '').toLowerCase().trim();
+  const currentName = (state && state.name) || localStorage.getItem('name') || localStorage.getItem('prepspace_user_name') || 'User';
+  const currentRole = (state && state.role) || localStorage.getItem('role') || 'STUDENT';
   const currentIsPaid = Boolean((state && state.isPaid) || localStorage.getItem('isPaid') === 'true' || localStorage.getItem('user_is_paid') === 'true');
 
   if (currentEmail) {
@@ -9083,32 +9186,40 @@ function getLiveRegisteredUsers(serverUsers = null) {
       existingCurrent.paid = existingCurrent.isPaid;
       existingCurrent.lastActive = 'Online Now';
     } else {
+      const isAdminAccount = Boolean(currentRole && (currentRole.includes('ADMIN') || currentRole.startsWith('ROLE_ADMIN')));
       userMap.set(currentEmail, {
-        id: 1,
+        id: isAdminAccount ? 1 : Date.now(),
         name: currentName,
         email: currentEmail,
         role: currentRole,
         isPaid: currentIsPaid,
         paid: currentIsPaid,
-        referralCode: 'ADMIN-PRO',
+        referralCode: isAdminAccount ? 'ADMIN-PRO' : ('REF-' + Math.random().toString(36).substring(2, 8).toUpperCase()),
         referralEarnings: 0,
         isSuspended: false,
         suspended: false,
-        createdAt: '2026-08-01T08:00:00.000Z',
+        createdAt: isAdminAccount ? '2026-08-01T08:00:00.000Z' : new Date().toISOString(),
         lastActive: 'Online Now',
-        questionsSolved: 42,
-        testsAttempted: 3
+        questionsSolved: isAdminAccount ? 42 : 0,
+        testsAttempted: isAdminAccount ? 3 : 0
       });
     }
   }
 
   const combinedList = Array.from(userMap.values());
-  // Sort so admins / super admins are first, then sorted by ID or createdAt
+  // Sort so super admins & admins are first, then candidates sorted newest first
   combinedList.sort((a, b) => {
     const aAdmin = (a.role && a.role.includes('ADMIN')) ? 1 : 0;
     const bAdmin = (b.role && b.role.includes('ADMIN')) ? 1 : 0;
     if (aAdmin !== bAdmin) return bAdmin - aAdmin;
-    return (Number(a.id) || 999) - (Number(b.id) || 999);
+
+    // For students/candidates, newest first!
+    const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+    if (bTime !== aTime && !isNaN(bTime) && !isNaN(aTime) && bTime > 0 && aTime > 0) {
+      return bTime - aTime;
+    }
+    return (Number(b.id) || 0) - (Number(a.id) || 0);
   });
 
   // Persist the combined candidate list to localStorage so it is never wiped
@@ -9580,12 +9691,13 @@ function loadAdminPanelTab(tab) {
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
           const id = e.currentTarget.dataset.id;
+          const email = (e.currentTarget.dataset.email || '').toLowerCase().trim();
           const current = e.currentTarget.dataset.current === 'true';
           const actionPrompt = current ? 'Revoke Pro Pass and return account to Free Tier?' : 'Grant Free Lifetime Pro Pass to this candidate?';
           if (confirm(actionPrompt)) {
             const nextPaidState = !current;
             const localUsers = getLiveRegisteredUsers();
-            const target = localUsers.find(u => String(u.id) === String(id));
+            const target = localUsers.find(u => String(u.id) === String(id) || (email && (u.email || '').toLowerCase().trim() === email));
             if (target) {
               target.isPaid = nextPaidState;
               target.paid = nextPaidState;
@@ -9607,11 +9719,12 @@ function loadAdminPanelTab(tab) {
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
           const id = e.currentTarget.dataset.id;
+          const email = (e.currentTarget.dataset.email || '').toLowerCase().trim();
           const curRole = e.currentTarget.dataset.role || 'STUDENT';
           const nextRole = curRole.includes('ADMIN') ? 'STUDENT' : 'ADMIN';
           if (confirm(`Change administrative authorization for user #${id} from ${curRole} to ${nextRole}?`)) {
             const localUsers = getLiveRegisteredUsers();
-            const target = localUsers.find(u => String(u.id) === String(id));
+            const target = localUsers.find(u => String(u.id) === String(id) || (email && (u.email || '').toLowerCase().trim() === email));
             if (target) {
               target.role = nextRole;
               localStorage.setItem('prepspace_candidate_accounts', JSON.stringify(localUsers));
@@ -9631,9 +9744,10 @@ function loadAdminPanelTab(tab) {
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
           const id = e.currentTarget.dataset.id;
+          const email = (e.currentTarget.dataset.email || '').toLowerCase().trim();
           const action = e.currentTarget.dataset.action;
           const localUsers = getLiveRegisteredUsers();
-          const target = localUsers.find(u => String(u.id) === String(id));
+          const target = localUsers.find(u => String(u.id) === String(id) || (email && (u.email || '').toLowerCase().trim() === email));
           if (target) {
             target.isSuspended = (action === 'suspend');
             target.suspended = target.isSuspended;
@@ -9971,6 +10085,10 @@ function loadAdminPanelTab(tab) {
 
     window.renderAdminUsersTab = renderUsers;
 
+    // 1. Immediately render candidate directory with cached users so table is instantly interactive
+    renderUsers(getLiveRegisteredUsers());
+
+    // 2. Fetch fresh live users from backend and update
     apiFetch('/admin/users')
       .then(serverUsers => {
         const fullUsers = getLiveRegisteredUsers(serverUsers);
@@ -9981,9 +10099,14 @@ function loadAdminPanelTab(tab) {
         if (kpiProRateEl) kpiProRateEl.textContent = `${Math.round((paidCount / fullUsers.length) * 100)}%`;
         const kpiProCaptionEl = document.getElementById('admin-kpi-pro-caption');
         if (kpiProCaptionEl) kpiProCaptionEl.innerHTML = `<i class="fa-solid fa-arrow-trend-up me-1"></i>${paidCount} pro subscribers`;
-        renderUsers(fullUsers);
+        
+        // Re-render candidates if search input is not active
+        const searchInput = document.getElementById('admin-user-search-input');
+        if (!searchInput || !searchInput.value.trim()) {
+          renderUsers(fullUsers);
+        }
       })
-      .catch(() => renderUsers(getLiveRegisteredUsers()));
+      .catch(() => {});
 
   } else if (tab === 'leaderboard') {
     apiFetch('/v1/mocktests/all')
@@ -11200,5 +11323,24 @@ function bindTechnicalReaderEvents(book, chapter, isProUser) {
 if (typeof window !== 'undefined') {
   window.router = router;
   window.state = state;
+
+  // Cross-tab real-time candidate roster and telemetry synchronizer
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'prepspace_candidate_accounts' || e.key === 'prepspace_deleted_candidate_emails') {
+      if (window.location.hash.split('?')[0] === '#/admin') {
+        const activeTabBtn = document.querySelector('.admin-tab-btn.active');
+        const curTab = activeTabBtn ? activeTabBtn.id.replace('tab-', '') : null;
+        if (curTab === 'users' && typeof window.renderAdminUsersTab === 'function') {
+          const searchInput = document.getElementById('admin-user-search-input');
+          if (!searchInput || !searchInput.value.trim()) {
+            window.renderAdminUsersTab(getLiveRegisteredUsers());
+          }
+        }
+        if (typeof syncLiveAdminTelemetry === 'function') {
+          syncLiveAdminTelemetry(false);
+        }
+      }
+    }
+  });
 }
 

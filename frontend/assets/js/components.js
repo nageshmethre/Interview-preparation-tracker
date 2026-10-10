@@ -5125,13 +5125,13 @@ const components = {
                       </button>
 
                       <!-- Pro Pass Toggle -->
-                      <button class="btn btn-admin-action btn-glass btn-toggle-pro" data-id="${u.id}" data-current="${u.isPaid ? 'true' : 'false'}" title="${u.isPaid ? 'Revoke Pro Pass' : 'Grant Lifetime Pro Pass'}">
+                      <button class="btn btn-admin-action btn-glass btn-toggle-pro" data-id="${u.id}" data-email="${u.email}" data-current="${u.isPaid ? 'true' : 'false'}" title="${u.isPaid ? 'Revoke Pro Pass' : 'Grant Lifetime Pro Pass'}">
                         <i class="fa-solid fa-gem ${u.isPaid ? 'text-warning' : 'text-muted'}"></i>
                       </button>
 
                       <!-- Role Changer -->
                       ${!isSuper ? `
-                        <button class="btn btn-admin-action btn-glass btn-toggle-role" data-id="${u.id}" data-role="${u.role}" title="${isAdmin ? 'Demote to Student' : 'Promote to Admin'}">
+                        <button class="btn btn-admin-action btn-glass btn-toggle-role" data-id="${u.id}" data-email="${u.email}" data-role="${u.role}" title="${isAdmin ? 'Demote to Student' : 'Promote to Admin'}">
                           <i class="fa-solid fa-user-shield ${isAdmin ? 'text-primary' : 'text-muted'}"></i>
                         </button>
                       ` : ''}
@@ -5143,9 +5143,9 @@ const components = {
 
                       <!-- Suspend / Unsuspend -->
                       ${!isSuper ? (u.isSuspended ? `
-                        <button class="btn btn-admin-action btn-outline-success btn-user-action" data-id="${u.id}" data-action="unsuspend" title="Unsuspend account"><i class="fa-solid fa-user-check"></i></button>
+                        <button class="btn btn-admin-action btn-outline-success btn-user-action" data-id="${u.id}" data-email="${u.email}" data-action="unsuspend" title="Unsuspend account"><i class="fa-solid fa-user-check"></i></button>
                       ` : `
-                        <button class="btn btn-admin-action btn-outline-warning btn-user-action" data-id="${u.id}" data-action="suspend" title="Suspend account"><i class="fa-solid fa-user-slash"></i></button>
+                        <button class="btn btn-admin-action btn-outline-warning btn-user-action" data-id="${u.id}" data-email="${u.email}" data-action="suspend" title="Suspend account"><i class="fa-solid fa-user-slash"></i></button>
                       `) : ''}
 
                       <!-- Delete Account -->
@@ -5212,7 +5212,7 @@ const components = {
                 <span class="text-muted font-monospace fs-9">#${u.id}</span>
                 <div class="d-flex align-items-center gap-1.5">
                   <!-- Pro Pass Toggle -->
-                  <button class="btn btn-sm btn-glass btn-toggle-pro py-1 px-2.5 fs-8 fw-semibold" data-id="${u.id}" data-current="${u.isPaid ? 'true' : 'false'}" title="${u.isPaid ? 'Revoke Pro Pass' : 'Grant Lifetime Pro Pass'}">
+                  <button class="btn btn-sm btn-glass btn-toggle-pro py-1 px-2.5 fs-8 fw-semibold" data-id="${u.id}" data-email="${u.email}" data-current="${u.isPaid ? 'true' : 'false'}" title="${u.isPaid ? 'Revoke Pro Pass' : 'Grant Lifetime Pro Pass'}">
                     <i class="fa-solid fa-gem ${u.isPaid ? 'text-warning' : 'text-muted'} me-1"></i> ${u.isPaid ? 'Pro Pass' : 'Grant Pro'}
                   </button>
 
@@ -5228,16 +5228,16 @@ const components = {
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end agy-dropdown-menu">
                       ${!isSuper ? `
-                        <li><button class="agy-dropdown-item btn-toggle-role" data-id="${u.id}" data-role="${u.role}">
+                        <li><button class="agy-dropdown-item btn-toggle-role" data-id="${u.id}" data-email="${u.email}" data-role="${u.role}">
                           <i class="fa-solid fa-user-shield text-primary"></i> ${isAdmin ? 'Demote to Student' : 'Promote to Admin'}
                         </button></li>
                       ` : ''}
                       ${!isSuper ? (u.isSuspended ? `
-                        <li><button class="agy-dropdown-item text-success btn-user-action" data-id="${u.id}" data-action="unsuspend">
+                        <li><button class="agy-dropdown-item text-success btn-user-action" data-id="${u.id}" data-email="${u.email}" data-action="unsuspend">
                           <i class="fa-solid fa-user-check"></i> Unsuspend Candidate
                         </button></li>
                       ` : `
-                        <li><button class="agy-dropdown-item text-warning btn-user-action" data-id="${u.id}" data-action="suspend">
+                        <li><button class="agy-dropdown-item text-warning btn-user-action" data-id="${u.id}" data-email="${u.email}" data-action="suspend">
                           <i class="fa-solid fa-user-slash"></i> Suspend Candidate
                         </button></li>
                       `) : ''}

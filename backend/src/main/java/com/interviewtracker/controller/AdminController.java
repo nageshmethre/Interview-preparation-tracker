@@ -73,6 +73,20 @@ public class AdminController {
     @PreAuthorize("hasAnyRole('ADMIN', 'ADMIN_SUPER', 'SUPER_ADMIN', 'ADMIN_SUPPORT')")
     public ResponseEntity<?> getAllUsersList() {
         List<User> users = userRepository.findAll();
+        users.sort((a, b) -> {
+            boolean aAdmin = a.getRole() != null && a.getRole().contains("ADMIN");
+            boolean bAdmin = b.getRole() != null && b.getRole().contains("ADMIN");
+            if (aAdmin != bAdmin) {
+                return bAdmin ? 1 : -1;
+            }
+            if (a.getCreatedAt() != null && b.getCreatedAt() != null) {
+                return b.getCreatedAt().compareTo(a.getCreatedAt());
+            }
+            if (a.getId() != null && b.getId() != null) {
+                return b.getId().compareTo(a.getId());
+            }
+            return 0;
+        });
         List<Map<String, Object>> response = users.stream().map(u -> {
             Map<String, Object> map = new HashMap<>();
             map.put("id", u.getId());
