@@ -70,41 +70,41 @@ h1, h2, h3, h4, h5, h6,
 }
 
 h1, .h1 {
-  font-size: clamp(1.85rem, 3.5vw, 2.5rem) !important;
-  font-weight: 800 !important;
-  line-height: 1.2 !important;
-  letter-spacing: -0.03em !important;
-}
-
-h2, .h2 {
-  font-size: clamp(1.5rem, 2.8vw, 2rem) !important;
+  font-size: clamp(1.35rem, 2.2vw, 1.65rem) !important;
   font-weight: 750 !important;
   line-height: 1.25 !important;
   letter-spacing: -0.025em !important;
 }
 
-h3, .h3 {
-  font-size: clamp(1.3rem, 2.2vw, 1.65rem) !important;
+h2, .h2 {
+  font-size: clamp(1.2rem, 1.8vw, 1.4rem) !important;
   font-weight: 700 !important;
   line-height: 1.3 !important;
   letter-spacing: -0.02em !important;
 }
 
-h4, .h4 {
-  font-size: clamp(1.15rem, 1.8vw, 1.4rem) !important;
-  font-weight: 700 !important;
+h3, .h3 {
+  font-size: clamp(1.08rem, 1.5vw, 1.25rem) !important;
+  font-weight: 650 !important;
   line-height: 1.35 !important;
   letter-spacing: -0.015em !important;
 }
 
-h5, .h5 {
-  font-size: clamp(1.05rem, 1.5vw, 1.25rem) !important;
+h4, .h4 {
+  font-size: clamp(1.0rem, 1.3vw, 1.125rem) !important;
   font-weight: 650 !important;
+  line-height: 1.4 !important;
+  letter-spacing: -0.01em !important;
+}
+
+h5, .h5 {
+  font-size: clamp(0.9rem, 1.1vw, 1.0rem) !important;
+  font-weight: 600 !important;
   line-height: 1.4 !important;
 }
 
 h6, .h6 {
-  font-size: clamp(0.95rem, 1.2vw, 1.1rem) !important;
+  font-size: clamp(0.825rem, 0.95vw, 0.9rem) !important;
   font-weight: 600 !important;
   line-height: 1.4 !important;
 }
@@ -125,17 +125,17 @@ h6, .h6 {
   color: #a1a1aa !important;
 }
 
-/* Precision Typography Scale */
-.fs-1 { font-size: 2.25rem !important; }   /* 36px */
-.fs-2 { font-size: 1.75rem !important; }   /* 28px */
-.fs-3 { font-size: 1.5rem !important; }    /* 24px */
-.fs-4 { font-size: 1.25rem !important; }   /* 20px */
-.fs-5 { font-size: 1.1rem !important; }    /* 17.6px */
-.fs-6 { font-size: 0.95rem !important; }   /* 15.2px */
-.fs-7 { font-size: 0.875rem !important; }  /* 14px */
-.fs-8 { font-size: 0.8125rem !important; } /* 13px */
-.fs-9 { font-size: 0.75rem !important; }   /* 12px */
-.fs-10 { font-size: 0.6875rem !important; }/* 11px */
+/* Precision Typography Scale (Balanced & Readable) */
+.fs-1 { font-size: 1.65rem !important; }   /* 26.4px */
+.fs-2 { font-size: 1.38rem !important; }   /* 22px */
+.fs-3 { font-size: 1.22rem !important; }   /* 19.5px */
+.fs-4 { font-size: 1.1rem !important; }    /* 17.6px */
+.fs-5 { font-size: 1.0rem !important; }    /* 16px */
+.fs-6 { font-size: 0.925rem !important; }  /* 14.8px */
+.fs-7 { font-size: 0.85rem !important; }   /* 13.6px */
+.fs-8 { font-size: 0.775rem !important; }  /* 12.4px */
+.fs-9 { font-size: 0.725rem !important; }  /* 11.6px */
+.fs-10 { font-size: 0.675rem !important; } /* 10.8px */
 
 /* Professional Semantic Colors */
 .text-primary {
@@ -7128,14 +7128,14 @@ header.lc-top-bar,
   border-bottom: none !important;
 }
 
-/* 2. Global Large Header Typography Rules */
+/* 2. Proportional Header Typography Rules (Balanced Scale) */
 #current-view-title,
 .current-view-title {
-  font-size: clamp(1.45rem, 2.8vw, 1.95rem) !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.025em !important;
+  font-size: clamp(1.1rem, 1.8vw, 1.3rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
   color: #ffffff !important;
-  line-height: 1.25 !important;
+  line-height: 1.3 !important;
 }
 
 /* Page Hero Headings (e.g. Super Admin's Dashboard, Course Titles, etc.) */
@@ -7143,34 +7143,25 @@ header.lc-top-bar,
 .page-hero-title,
 .page-title,
 .view-title {
-  font-size: clamp(1.65rem, 3.2vw, 2.25rem) !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.03em !important;
+  font-size: clamp(1.25rem, 2.0vw, 1.5rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.025em !important;
   color: #ffffff !important;
-  line-height: 1.2 !important;
-}
-
-/* Prevent accidental small fs- utility classes on heading elements from shrinking headers */
-h1.fs-5, h1.fs-6, h1.fs-7, h1.fs-8, h1.fs-9,
-h2.fs-5, h2.fs-6, h2.fs-7, h2.fs-8, h2.fs-9,
-h3.fs-6, h3.fs-7, h3.fs-8, h3.fs-9,
-h4.fs-6, h4.fs-7, h4.fs-8, h4.fs-9,
-h5.fs-7, h5.fs-8, h5.fs-9 {
-  font-size: inherit !important;
+  line-height: 1.25 !important;
 }
 
 /* Specific Section Titles & Card Headers */
 .ps-stat-title {
-  font-size: 0.95rem !important;
+  font-size: 0.875rem !important;
   font-weight: 600 !important;
   color: #a1a1aa !important;
   letter-spacing: -0.01em !important;
 }
 
 .ps-stat-value {
-  font-size: clamp(1.6rem, 2.5vw, 2.25rem) !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.025em !important;
+  font-size: clamp(1.35rem, 2.0vw, 1.75rem) !important;
+  font-weight: 750 !important;
+  letter-spacing: -0.02em !important;
 }
 
 /* Sidebar Brand Title */

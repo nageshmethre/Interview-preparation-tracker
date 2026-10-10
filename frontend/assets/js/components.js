@@ -1012,7 +1012,7 @@ const components = {
           <div class="d-flex align-items-center gap-2.5 overflow-hidden flex-grow-1 me-2" style="min-width: 0;">
             <button class="btn btn-glass btn-sm d-lg-none me-1 flex-shrink-0 px-2 py-1" id="sidebar-toggle-btn" aria-label="Toggle Navigation"><i class="fa-solid fa-bars fs-7"></i></button>
             <div class="d-flex align-items-center gap-2 overflow-hidden" style="min-width: 0;">
-              <h1 class="text-white fw-bold m-0 fs-3 current-view-title text-truncate" id="current-view-title" style="max-width: clamp(220px, 60vw, 650px);">Dashboard</h1>
+              <h1 class="text-white fw-bold m-0 fs-4 current-view-title text-truncate" id="current-view-title" style="max-width: clamp(220px, 60vw, 650px);">Dashboard</h1>
             </div>
           </div>
           
@@ -1070,7 +1070,7 @@ const components = {
       <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
           <div class="d-flex align-items-center gap-2.5 mb-1">
-            <h2 class="text-white fw-bold m-0 fs-2 dashboard-hero-title">${userName}'s Dashboard</h2>
+            <h2 class="text-white fw-bold m-0 fs-3 dashboard-hero-title">${userName}'s Dashboard</h2>
             <span class="ps-status-pill ps-status-active">Active</span>
           </div>
           <p class="text-muted fs-7 mb-0">Track preparation velocity, solve coding challenges, and manage recruitment pipeline.</p>
@@ -2521,7 +2521,7 @@ const components = {
       <!-- Header Strip (Borderless Clean) -->
       <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
         <div>
-          <h2 class="fw-bold text-white mb-1 fs-2">Learn. Build. Master.</h2>
+          <h2 class="fw-bold text-white mb-1 fs-4">Learn. Build. Master.</h2>
           <small class="text-muted fs-7">Master programming, AI, web development, and computer science skills.</small>
         </div>
         <span class="badge border border-secondary border-opacity-30 text-white font-monospace fs-8 px-2.5 py-1">COURSE CATALOG</span>
@@ -2615,7 +2615,7 @@ const components = {
           <i class="fa-solid fa-arrow-left text-primary"></i> <span class="fw-bold">Back to Courses Catalog</span>
         </button>
         <div>
-          <h2 class="text-white fw-bold mb-1 fs-2">${course.title}</h2>
+          <h2 class="text-white fw-bold mb-1 fs-4">${course.title}</h2>
           <span class="text-muted fs-7">Instructor: ${course.instructor || 'Senior Architect'}</span>
         </div>
       </div>
@@ -2777,7 +2777,7 @@ const components = {
             <span class="badge bg-primary bg-opacity-15 text-primary border border-primary border-opacity-25 fs-8 font-monospace">${String(topic.sequenceNumber || topic.id || 1).padStart(2, '0')}</span>
             <span class="badge bg-secondary bg-opacity-20 text-muted border border-secondary border-opacity-20 fs-8 font-monospace">CURRICULUM</span>
           </div>
-          <h2 class="text-white fw-bold m-0 fs-2">${topic.name}</h2>
+          <h2 class="text-white fw-bold m-0 fs-4">${topic.name}</h2>
           <p class="text-muted fs-7 m-0 mt-1">${topic.description || 'Algorithmic invariants, time-space asymptotic proofs, and curated workshop benchmarks.'}</p>
         </div>
 
@@ -3510,7 +3510,7 @@ const components = {
               </div>
 
               <!-- Chapter Title -->
-              <h2 class="book-chapter-title mb-3 fs-2 text-white fw-bold" id="book-chap-title">
+              <h2 class="book-chapter-title mb-3 fs-4 text-white fw-bold" id="book-chap-title">
                 Chapter ${firstChap.chapterNumber}: ${firstChap.title}
               </h2>
 
@@ -3713,7 +3713,7 @@ const components = {
       <!-- Create Exam form -->
       <div class="col-lg-4">
         <div class="glass-panel p-4 h-100">
-          <h3 class="text-white fw-bold mb-4 fs-3"><i class="fa-solid fa-stopwatch text-indigo me-2"></i>Start Timed Assessment</h3>
+          <h3 class="text-white fw-bold mb-4 fs-4"><i class="fa-solid fa-stopwatch text-indigo me-2"></i>Start Timed Assessment</h3>
           <form id="mock-exam-form">
             <div class="mb-3">
               <label class="form-label text-muted fs-7">TOPIC CATEGORY</label>
@@ -3752,7 +3752,7 @@ const components = {
       <!-- Leaderboard & Past attempts -->
       <div class="col-lg-8">
         <div class="glass-panel p-4 mb-4">
-          <h3 class="text-white fw-bold mb-4 fs-3"><i class="fa-solid fa-trophy text-warning me-2"></i>Global Leaderboard</h3>
+          <h3 class="text-white fw-bold mb-4 fs-4"><i class="fa-solid fa-trophy text-warning me-2"></i>Global Leaderboard</h3>
           <div class="table-responsive">
             <table class="table table-dark table-hover align-middle m-0">
               <thead>
@@ -4017,7 +4017,7 @@ const components = {
                 <i class="fa-solid fa-user-tie"></i>
               </div>
               <div>
-                <h3 class="text-white fw-bold m-0 fs-3">Interview Experiences Hub</h3>
+                <h3 class="text-white fw-bold m-0 fs-4">Interview Experiences Hub</h3>
                 <span class="text-muted fs-7 d-none d-md-inline">Verified technical debriefs, rounds, and compensation from real engineers.</span>
               </div>
             </div>
@@ -4140,8 +4140,8 @@ const components = {
       <div class="col-lg-4">
         <div class="glass-panel p-4">
           <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fa-solid fa-comments text-primary fs-3"></i>
-            <h3 class="text-white fw-bold mb-0 fs-3">Start Discussion Thread</h3>
+            <i class="fa-solid fa-comments text-primary fs-4"></i>
+            <h3 class="text-white fw-bold mb-0 fs-4">Start Discussion Thread</h3>
           </div>
           <p class="text-muted fs-7 mb-4">Share interview experiences, ask technical questions, and discuss compensation with peers.</p>
           <form id="forum-post-form">
@@ -4269,7 +4269,7 @@ const components = {
                   <div class="d-flex align-items-center gap-2 mb-1.5">
                     <span class="badge bg-dark border border-secondary text-info fs-8" id="active-topic-category">${firstTopic.categoryName}</span>
                   </div>
-                  <h2 class="text-white fw-bold m-0 fs-2" id="active-topic-title">${firstTopic.title}</h2>
+                  <h2 class="text-white fw-bold m-0 fs-4" id="active-topic-title">${firstTopic.title}</h2>
                   <p class="text-secondary fs-7 m-0 mt-1" id="active-topic-subtitle">${firstTopic.subtitle}</p>
                 </div>
                 <div class="d-flex align-items-center gap-2">
@@ -6020,7 +6020,7 @@ const components = {
               <span class="badge badge-super-admin px-2.5 py-1 fs-9"><i class="fa-solid fa-crown me-1 text-warning"></i> SUPER ADMIN COMMAND CENTER</span>
               <span class="badge bg-dark text-muted border border-secondary border-opacity-25 px-2 py-1 fs-9 font-monospace"><i class="fa-solid fa-shield-halved text-info me-1"></i> ENTERPRISE SUITE</span>
             </div>
-            <h2 class="text-white fw-bold mb-0 fs-2">Global Operations & Enterprise Control</h2>
+            <h2 class="text-white fw-bold mb-0 fs-4">Global Operations & Enterprise Control</h2>
           </div>
 
           <!-- Dual Clocks, Telemetry & Global Controls -->
