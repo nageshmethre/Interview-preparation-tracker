@@ -20,6 +20,18 @@ const state = {
   theme: localStorage.getItem('theme') || 'dark'
 };
 
+function prewarmBackendServer() {
+  try {
+    if (typeof window === 'undefined' || typeof fetch === 'undefined') return;
+    fetch(`${API_BASE}/auth/login`, {
+      method: 'OPTIONS',
+      mode: 'cors'
+    }).catch(() => {});
+  } catch (e) {}
+}
+// Initiate immediate pre-warm handshake on initial load
+prewarmBackendServer();
+
 function getReferralCodeFromUrl() {
   const urlParams = new URLSearchParams(window.location.search);
   let ref = urlParams.get('ref');
@@ -346,6 +358,7 @@ function router() {
     return;
   }
   if (hash.startsWith('#/login')) {
+    prewarmBackendServer();
     if (isAuthenticated()) { redirectTo('#/dashboard'); return; }
     appRoot.innerHTML = components.login();
     bindAuthEvents('login');
@@ -353,6 +366,7 @@ function router() {
     return;
   }
   if (hash.startsWith('#/register')) {
+    prewarmBackendServer();
     if (isAuthenticated()) { redirectTo('#/dashboard'); return; }
     appRoot.innerHTML = components.register();
     bindAuthEvents('register');
@@ -1216,7 +1230,7 @@ function router() {
 
 // Session Validation Helper
 function isAuthenticated() {
-  return state.token !== null && state.token !== undefined;
+  return state.token !== null && state.token !== undefined && typeof state.token === 'string' && state.token.trim() !== '' && state.token !== 'null' && state.token !== 'undefined';
 }
 
 function redirectTo(hash) {
@@ -1258,22 +1272,43 @@ function setCachedData(key, data) {
   localStorage.setItem(key, JSON.stringify(cacheObj));
 }
 
-// API client wrapper
+// Resilient API client wrapper with timeout & cold-start recovery
 async function apiFetch(endpoint, options = {}) {
   const headers = new Headers(options.headers || {});
-  headers.set('Content-Type', 'application/json');
-  if (state.token && state.token !== 'HTTP-ONLY-SECURED') {
+  if (!headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json');
+  }
+  if (state.token && state.token !== 'HTTP-ONLY-SECURED' && state.token !== 'null' && state.token !== 'undefined') {
     headers.set('Authorization', `Bearer ${state.token}`);
   }
+
+  const controller = new AbortController();
+  const reqTimeout = options.timeout || 35000;
+  const timeoutId = setTimeout(() => controller.abort(), reqTimeout);
 
   const fetchOptions = {
     ...options,
     headers,
-    credentials: 'include'
+    credentials: 'include',
+    signal: options.signal || controller.signal
   };
 
-  const response = await fetch(`${API_BASE}${endpoint}`, fetchOptions);
-
+  let response;
+  try {
+    response = await fetch(`${API_BASE}${endpoint}`, fetchOptions);
+  } catch (netErr) {
+    clearTimeout(timeoutId);
+    if (netErr.name === 'AbortError') {
+      throw new Error('Server request timed out. The backend is waking up; please try again in a few seconds.');
+    }
+    const isNetworkDown = netErr.message && (netErr.message.includes('Failed to fetch') || netErr.message.includes('NetworkError') || netErr.message.includes('Load failed'));
+    if (isNetworkDown) {
+      throw new Error('Connecting to server... Please check your internet or retry in a moment.');
+    }
+    throw new Error(netErr.message || 'API request failed');
+  } finally {
+    clearTimeout(timeoutId);
+  }
 
   if (response.status === 401) {
     if (!endpoint.includes('/auth/')) {
@@ -1522,6 +1557,10 @@ function handleGoogleCredentialResponse(response) {
     return;
   }
   const referralCode = localStorage.getItem('referral_code') || '';
+  const googleBtn = document.getElementById('google-login-btn');
+  if (googleBtn) {
+    googleBtn.innerHTML = '<div class="text-center py-2 text-warning fs-8"><span class="spinner-border spinner-border-sm me-2"></span> Authenticating Google Account...</div>';
+  }
   
   apiFetch('/auth/google', {
     method: 'POST',
@@ -1530,25 +1569,33 @@ function handleGoogleCredentialResponse(response) {
       referralCode: referralCode
     })
   }).then(res => {
+    if (!res || !res.token) {
+      throw new Error('Invalid authentication response from Google auth service.');
+    }
     localStorage.setItem('token', res.token);
-    localStorage.setItem('name', res.name);
-    localStorage.setItem('email', res.email);
-    localStorage.setItem('role', res.role);
+    localStorage.setItem('name', res.name || 'User');
+    localStorage.setItem('email', res.email || '');
+    localStorage.setItem('role', res.role || 'ROLE_USER');
 
     state.token = res.token;
-    state.name = res.name;
-    state.email = res.email;
-    state.role = res.role;
+    state.name = res.name || 'User';
+    state.email = res.email || '';
+    state.role = res.role || 'ROLE_USER';
 
-    fetchUserProfile().then(() => {
-      showToast(`Welcome back, ${res.name}!`, 'success');
-      redirectTo('#/dashboard');
-    }).catch(() => {
-      showToast(`Welcome back, ${res.name}!`, 'success');
-      redirectTo('#/dashboard');
-    });
+    let postLoginRoute = sessionStorage.getItem('redirect_after_login') || '#/dashboard';
+    sessionStorage.removeItem('redirect_after_login');
+    if (postLoginRoute.startsWith('#/login') || postLoginRoute.startsWith('#/register') || postLoginRoute === '#/' || postLoginRoute === '') {
+      postLoginRoute = '#/dashboard';
+    }
+
+    showToast(`Welcome back, ${res.name || 'Engineer'}!`, 'success');
+    redirectTo(postLoginRoute);
+    
+    // Hydrate secondary profile in background
+    fetchUserProfile().catch(() => {});
   }).catch(err => {
     console.error('Google Auth backend error:', err);
+    initGoogleSignIn();
     showToast(err.message || 'Google sign-in failed. Please try standard sign-in.', 'danger');
   });
 }
@@ -1572,10 +1619,15 @@ function bindAuthEvents(mode) {
 
   if (mode === 'login') {
     const form = document.getElementById('login-form');
+    if (!form) return;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const emailInput = document.getElementById('login-email');
+    const passInput = document.getElementById('login-password');
+
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const email = document.getElementById('login-email').value.trim();
-      const password = document.getElementById('login-password').value;
+      const email = emailInput ? emailInput.value.trim() : '';
+      const password = passInput ? passInput.value : '';
 
       // Validate email format
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -1584,32 +1636,56 @@ function bindAuthEvents(mode) {
         return;
       }
 
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Authenticating...';
+      }
+      if (emailInput) emailInput.disabled = true;
+      if (passInput) passInput.disabled = true;
+
       apiFetch('/auth/login', {
         method: 'POST',
         body: JSON.stringify({ email, password })
       }).then(res => {
+        if (!res || !res.token) {
+          throw new Error('Invalid authentication response from server.');
+        }
+
+        if (submitBtn) {
+          submitBtn.innerHTML = '<i class="fa-solid fa-check me-2 text-success"></i> Success! Opening Workspace...';
+        }
+
         localStorage.setItem('token', res.token);
-        localStorage.setItem('name', res.name);
-        localStorage.setItem('email', res.email);
-        localStorage.setItem('role', res.role);
+        localStorage.setItem('name', res.name || 'User');
+        localStorage.setItem('email', res.email || email);
+        localStorage.setItem('role', res.role || 'ROLE_USER');
         
         state.token = res.token;
-        state.name = res.name;
-        state.email = res.email;
-        state.role = res.role;
+        state.name = res.name || 'User';
+        state.email = res.email || email;
+        state.role = res.role || 'ROLE_USER';
 
-        const postLoginRoute = sessionStorage.getItem('redirect_after_login') || '#/dashboard';
+        let postLoginRoute = sessionStorage.getItem('redirect_after_login') || '#/dashboard';
         sessionStorage.removeItem('redirect_after_login');
+        if (postLoginRoute.startsWith('#/login') || postLoginRoute.startsWith('#/register') || postLoginRoute === '#/' || postLoginRoute === '') {
+          postLoginRoute = '#/dashboard';
+        }
 
-        fetchUserProfile().then(() => {
-          showToast(`Welcome back, ${res.name}!`, 'success');
-          redirectTo(postLoginRoute);
-        }).catch(() => {
-          showToast(`Welcome back, ${res.name}!`, 'success');
-          redirectTo(postLoginRoute);
-        });
+        showToast(`Welcome back, ${res.name || 'Engineer'}!`, 'success');
+        
+        // Immediate redirection
+        redirectTo(postLoginRoute);
+
+        // Fetch remaining profile asynchronously in background
+        fetchUserProfile().catch(() => {});
       }).catch(err => {
-        showToast(err.message, 'danger');
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = 'Sign In';
+        }
+        if (emailInput) emailInput.disabled = false;
+        if (passInput) passInput.disabled = false;
+        showToast(err.message || 'Login failed. Please check your credentials.', 'danger');
       });
     });
   } else if (mode === 'register') {
@@ -1800,6 +1876,9 @@ function bindAuthEvents(mode) {
           return;
         }
 
+        btnConfirmOtp.disabled = true;
+        btnConfirmOtp.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Creating Space...';
+
         // OTP Verified successfully! Register account
         apiFetch('/auth/register', {
           method: 'POST',
@@ -1812,20 +1891,23 @@ function bindAuthEvents(mode) {
             body: JSON.stringify({ email: pendingRegistration.email, password: pendingRegistration.password })
           }).then(loginRes => {
             localStorage.setItem('token', loginRes.token);
-            localStorage.setItem('name', loginRes.name);
-            localStorage.setItem('email', loginRes.email);
-            localStorage.setItem('role', loginRes.role);
+            localStorage.setItem('name', loginRes.name || pendingRegistration.name);
+            localStorage.setItem('email', loginRes.email || pendingRegistration.email);
+            localStorage.setItem('role', loginRes.role || 'ROLE_USER');
             state.token = loginRes.token;
-            state.name = loginRes.name;
-            state.email = loginRes.email;
-            state.role = loginRes.role;
-            fetchUserProfile().finally(() => {
-              redirectTo('#/dashboard');
-            });
+            state.name = loginRes.name || pendingRegistration.name;
+            state.email = loginRes.email || pendingRegistration.email;
+            state.role = loginRes.role || 'ROLE_USER';
+            
+            showToast(`Welcome to PrepSpace, ${loginRes.name || pendingRegistration.name}!`, 'success');
+            redirectTo('#/dashboard');
+            fetchUserProfile().catch(() => {});
           }).catch(() => {
             redirectTo('#/login');
           });
         }).catch(err => {
+          btnConfirmOtp.disabled = false;
+          btnConfirmOtp.innerHTML = 'Verify & Launch Workspace';
           showToast(err.message, 'danger');
         });
       });

@@ -789,7 +789,7 @@ const components = {
               </button>
             </div>
           </div>
-          <button type="submit" class="vercel-btn-primary mb-3">Sign In</button>
+          <button type="submit" id="btn-login-submit" class="vercel-btn-primary mb-3">Sign In</button>
         </form>
 
         <div class="my-3 d-flex align-items-center">
@@ -849,7 +849,7 @@ const components = {
             </div>
           </div>
 
-          <button type="submit" class="vercel-btn-primary mb-3">Continue to Verification</button>
+          <button type="submit" id="btn-register-submit" class="vercel-btn-primary mb-3">Continue to Verification</button>
         </form>
 
         <!-- Registration Step 2: Vercel Segmented 6-Digit OTP Verification Card -->
