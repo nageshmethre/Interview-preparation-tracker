@@ -9665,6 +9665,26 @@ function loadAdminPanelTab(tab) {
           }
         }
 
+        // Real-time visual row selection highlights
+        document.querySelectorAll('.user-table-row').forEach(row => {
+          const cb = row.querySelector('.candidate-select-checkbox');
+          if (cb && cb.checked) {
+            row.classList.add('row-selected');
+          } else {
+            row.classList.remove('row-selected');
+          }
+        });
+        document.querySelectorAll('.user-card-item').forEach(card => {
+          const cb = card.querySelector('.candidate-select-checkbox');
+          if (cb && cb.checked) {
+            card.style.borderColor = 'rgba(99, 102, 241, 0.6)';
+            card.style.background = 'rgba(30, 27, 75, 0.4)';
+          } else {
+            card.style.borderColor = '';
+            card.style.background = '';
+          }
+        });
+
         const visibleCbs = Array.from(document.querySelectorAll('#admin-users-table-body .candidate-select-checkbox')).filter(cb => {
           const row = cb.closest('.user-table-row');
           return row && row.style.display !== 'none';

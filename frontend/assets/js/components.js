@@ -4990,40 +4990,41 @@ const components = {
           </div>
           <div class="d-flex gap-2 align-items-center flex-wrap">
             <div class="dropdown">
-              <button class="btn btn-sm btn-outline-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="btn-bulk-dropdown-menu">
-                <i class="fa-solid fa-list-check me-1"></i> Bulk Select
+              <button class="btn btn-sm btn-admin-header-indigo dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="btn-bulk-dropdown-menu">
+                <i class="fa-solid fa-list-check me-1.5 text-indigo-400"></i> Bulk Select
               </button>
-              <ul class="dropdown-menu dropdown-menu-dark shadow-lg fs-8">
-                <li><button class="dropdown-item" type="button" id="btn-select-all-visible"><i class="fa-solid fa-check-double me-2 text-primary"></i>Select All Visible</button></li>
-                <li><button class="dropdown-item" type="button" id="btn-select-all-free"><i class="fa-solid fa-user me-2 text-info"></i>Select All Free Candidates</button></li>
-                <li><button class="dropdown-item" type="button" id="btn-select-all-pro"><i class="fa-solid fa-gem me-2 text-warning"></i>Select All Pro Members</button></li>
-                <li><hr class="dropdown-divider border-secondary border-opacity-25"></li>
-                <li><button class="dropdown-item text-muted" type="button" id="btn-deselect-all-quick"><i class="fa-solid fa-xmark me-2"></i>Clear Selection</button></li>
+              <ul class="dropdown-menu dropdown-menu-dark shadow-lg fs-8 border-secondary border-opacity-25" style="background: #0f172a; backdrop-filter: blur(12px);">
+                <li><button class="dropdown-item py-1.5" type="button" id="btn-select-all-visible"><i class="fa-solid fa-check-double me-2 text-primary"></i>Select All Visible</button></li>
+                <li><button class="dropdown-item py-1.5" type="button" id="btn-select-all-free"><i class="fa-solid fa-user me-2 text-info"></i>Select All Free Candidates</button></li>
+                <li><button class="dropdown-item py-1.5" type="button" id="btn-select-all-pro"><i class="fa-solid fa-crown me-2 text-warning"></i>Select All Pro Members</button></li>
+                <li><hr class="dropdown-divider border-secondary border-opacity-25 my-1"></li>
+                <li><button class="dropdown-item py-1.5 text-muted hover-text-white" type="button" id="btn-deselect-all-quick"><i class="fa-solid fa-xmark me-2"></i>Clear Selection</button></li>
               </ul>
             </div>
-            <a href="/api/admin/reports/users" class="btn btn-sm btn-glass"><i class="fa-solid fa-file-csv me-1 text-success"></i> Export CSV</a>
-            <button class="btn btn-sm btn-outline-warning" id="btn-admin-open-compose-global"><i class="fa-solid fa-paper-plane me-1"></i> Message Candidates</button>
+            <a href="/api/admin/reports/users" class="btn btn-sm btn-admin-header-emerald"><i class="fa-solid fa-file-csv me-1.5"></i> Export CSV</a>
+            <button class="btn btn-sm btn-admin-header-cyan" id="btn-admin-open-compose-global"><i class="fa-solid fa-paper-plane me-1.5"></i> Message Candidates</button>
           </div>
         </div>
 
-        <!-- Sticky Bulk Selection & Action Control Bar -->
-        <div id="admin-bulk-actions-bar" class="p-2.5 px-3 rounded-3 mb-3 d-none align-items-center justify-content-between flex-wrap gap-2 border border-warning border-opacity-40 shadow-lg" style="background: linear-gradient(135deg, rgba(20, 20, 32, 0.95), rgba(35, 25, 50, 0.95)); backdrop-filter: blur(10px);">
+        <!-- Sleek Enterprise Bulk Actions Command Bar -->
+        <div id="admin-bulk-actions-bar" class="admin-bulk-command-bar d-none align-items-center justify-content-between flex-wrap gap-2.5 mb-3">
           <div class="d-flex align-items-center gap-2">
-            <span class="badge bg-warning text-dark font-monospace fw-bold fs-8" id="bulk-selected-badge"><i class="fa-solid fa-check-double me-1"></i><span id="bulk-selected-count">0</span> Selected</span>
-            <span class="text-white fs-8 d-none d-md-inline-block">Bulk operations on chosen candidates:</span>
+            <span class="bulk-counter-pill"><span class="bulk-pulse-dot"></span><span id="bulk-selected-count">0</span> Candidates Selected</span>
+            <span class="text-muted fs-8 d-none d-lg-inline-block">Quick operations:</span>
           </div>
-          <div class="d-flex align-items-center gap-1.5 flex-wrap">
-            <button class="btn btn-sm btn-warning fw-semibold fs-8 px-2.5 py-1" id="btn-bulk-grant-pro" title="Grant Free Lifetime Pro Pass to selected candidates">
-              <i class="fa-solid fa-gem me-1"></i> Grant Pro Pass
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <button class="btn-bulk-op btn-bulk-grant" id="btn-bulk-grant-pro" title="Grant Free Lifetime Pro Pass to selected candidates">
+              <i class="fa-solid fa-crown fs-9"></i> Grant Pro Pass
             </button>
-            <button class="btn btn-sm btn-outline-warning fs-8 px-2.5 py-1" id="btn-bulk-revoke-pro" title="Revoke Pro Pass and return selected to Free Tier">
-              <i class="fa-solid fa-ban me-1"></i> Revoke Pro
+            <button class="btn-bulk-op btn-bulk-revoke" id="btn-bulk-revoke-pro" title="Revoke Pro Pass and return selected to Free Tier">
+              <i class="fa-solid fa-arrow-rotate-left fs-9"></i> Revoke Pro
             </button>
-            <button class="btn btn-sm btn-danger fw-semibold fs-8 px-2.5 py-1" id="btn-bulk-delete-users" title="Permanently delete all selected candidates">
-              <i class="fa-solid fa-trash me-1"></i> Delete Selected
+            <button class="btn-bulk-op btn-bulk-danger" id="btn-bulk-delete-users" title="Permanently delete all selected candidates">
+              <i class="fa-solid fa-trash-can fs-9"></i> Delete Selected
             </button>
-            <button class="btn btn-sm btn-glass text-muted hover-text-white fs-8 px-2 py-1" id="btn-bulk-clear-selection" title="Clear selection">
-              <i class="fa-solid fa-xmark me-1"></i> Deselect
+            <div class="vr bg-secondary bg-opacity-30 mx-1 d-none d-sm-block" style="height: 20px;"></div>
+            <button class="btn-bulk-op btn-bulk-cancel" id="btn-bulk-clear-selection" title="Clear selection">
+              <i class="fa-solid fa-xmark fs-9"></i> Deselect
             </button>
           </div>
         </div>
