@@ -859,9 +859,14 @@ const components = {
               <i class="fa-solid fa-envelope-circle-check text-success"></i>
               <span>Verification Email Dispatched</span>
             </div>
-            <p class="text-secondary mb-0" style="font-size: 0.8rem; line-height: 1.5;">
-              We sent an official 6-digit verification code to <span id="otp-target-email" class="text-white font-monospace fw-semibold"></span>. Check your Gmail inbox and enter the code below.
+            <p class="text-secondary mb-2" style="font-size: 0.8rem; line-height: 1.5;">
+              We sent an official 6-digit verification code to <span id="otp-target-email" class="text-white font-monospace fw-semibold"></span>. Please check your Gmail inbox and enter the code below.
             </p>
+            <div class="d-flex align-items-center gap-2 text-muted" style="font-size: 0.76rem;">
+              <i class="fa-solid fa-circle-info text-warning"></i>
+              <span>Can't find it in Primary? Check your <strong>Spam</strong> or <strong>Promotions</strong> folder.</span>
+            </div>
+            <div id="otp-fallback-container" class="mt-2.5"></div>
           </div>
 
           <div class="mb-4 text-center">

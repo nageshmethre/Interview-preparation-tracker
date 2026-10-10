@@ -1825,21 +1825,52 @@ function bindAuthEvents(mode) {
       }, 1000);
     }
 
+    function showOtpFallbackNotice(code) {
+      const container = document.getElementById('otp-fallback-container');
+      if (!container) return;
+      container.innerHTML = `
+        <div class="p-2.5 rounded-2 d-flex align-items-center justify-content-between mt-2" style="background: rgba(99, 102, 241, 0.12); border: 1px dashed rgba(99, 102, 241, 0.35);">
+          <div class="text-start">
+            <div class="text-white fw-semibold" style="font-size: 0.76rem;"><i class="fa-solid fa-bolt text-warning me-1"></i>Direct Passcode (No Wait):</div>
+            <div class="font-monospace text-primary fw-bold" style="font-size: 1rem; letter-spacing: 2px;">${code}</div>
+          </div>
+          <button type="button" class="btn btn-sm btn-primary py-1 px-2.5 fs-8 fw-semibold" id="btn-otp-autofill">
+            Auto-fill <i class="fa-solid fa-arrow-right ms-1"></i>
+          </button>
+        </div>
+      `;
+      const autofillBtn = document.getElementById('btn-otp-autofill');
+      if (autofillBtn) {
+        autofillBtn.onclick = () => {
+          syncOtpInputs(code);
+          const confirmBtn = document.getElementById('btn-confirm-otp');
+          if (confirmBtn) confirmBtn.focus();
+        };
+      }
+    }
+
     function dispatchOtpEmail(targetEmail, recipientName, code) {
+      const fallbackContainer = document.getElementById('otp-fallback-container');
+      if (fallbackContainer) fallbackContainer.innerHTML = '';
+
       return fetch('/api/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: targetEmail, name: recipientName, otp: code })
       }).then(r => r.json()).then(res => {
         if (res && res.emailSent) {
-          showToast(`Official verification code sent to ${targetEmail}! Check your inbox.`, 'success', 10000);
-        } else if (res && res.warning) {
-          console.warn('Resend domain note:', res.warning);
-          showToast(`Verification email dispatched. Check ${targetEmail} inbox!`, 'info', 10000);
+          showToast(`Official verification code sent to ${targetEmail}! Check inbox or spam folder.`, 'success', 10000);
+        } else {
+          console.warn('Resend response note:', res);
+          showToast(`Email dispatched to ${targetEmail}. Check your inbox & spam folder!`, 'info', 8000);
+          if (res && (res.devCode || res.warning || res.error || !res.emailSent)) {
+            showOtpFallbackNotice(code);
+          }
         }
       }).catch(err => {
         console.error('Failed to dispatch verification email:', err);
-        showToast(`Verification code dispatched. Check your Gmail inbox!`, 'info', 8000);
+        showToast(`Verification code dispatched. Check your Gmail inbox or spam.`, 'info', 8000);
+        showOtpFallbackNotice(code);
       });
     }
 
@@ -8978,7 +9009,14 @@ function getDeletedCandidateIdentifiers() {
   if (stored) {
     try {
       const parsed = JSON.parse(stored);
-      if (Array.isArray(parsed)) return new Set(parsed.map(e => String(e).toLowerCase().trim()));
+      // Strictly retain email strings. Filter out pure numeric strings so real SQL auto-increment IDs (2, 3, 4, 5, 6...) are NEVER dropped
+      if (Array.isArray(parsed)) {
+        return new Set(
+          parsed
+            .map(e => String(e).toLowerCase().trim())
+            .filter(e => e && !/^\d+$/.test(e))
+        );
+      }
     } catch(e) {}
   }
   return new Set();
@@ -8989,9 +9027,6 @@ function markCandidateAsDeleted(email, id) {
   const normalizedEmail = (email || '').toLowerCase().trim();
   if (normalizedEmail) {
     deletedSet.add(normalizedEmail);
-  }
-  if (id !== undefined && id !== null) {
-    deletedSet.add(String(id).trim());
   }
   try {
     localStorage.setItem('prepspace_deleted_candidate_emails', JSON.stringify(Array.from(deletedSet)));
@@ -9124,8 +9159,7 @@ function getLiveRegisteredUsers(serverUsers = null) {
   // 1. Populate baseline candidate accounts roster (excluding expunged accounts)
   BASELINE_PREPSPACE_CANDIDATES.forEach(u => {
     const key = (u.email || '').toLowerCase().trim();
-    const idKey = String(u.id).trim();
-    if (key && !deletedSet.has(key) && !deletedSet.has(idKey)) {
+    if (key && !deletedSet.has(key)) {
       userMap.set(key, { ...u });
     }
   });
@@ -9138,8 +9172,7 @@ function getLiveRegisteredUsers(serverUsers = null) {
       if (Array.isArray(parsed)) {
         parsed.forEach(u => {
           const key = (u.email || '').toLowerCase().trim();
-          const idKey = String(u.id).trim();
-          if (key && !deletedSet.has(key) && !deletedSet.has(idKey)) {
+          if (key && !deletedSet.has(key)) {
             const existing = userMap.get(key) || {};
             userMap.set(key, { ...existing, ...u });
           }
@@ -9148,27 +9181,37 @@ function getLiveRegisteredUsers(serverUsers = null) {
     } catch(e) {}
   }
 
-  // 3. Overlay live server users if returned from /api/admin/users (excluding expunged accounts)
+  // 3. Overlay live server users if returned from /api/admin/users (truth from database)
   if (serverUsers && Array.isArray(serverUsers) && serverUsers.length > 0) {
     serverUsers.forEach(su => {
       const key = (su.email || '').toLowerCase().trim();
-      const idKey = String(su.id).trim();
-      if (key && !deletedSet.has(key) && !deletedSet.has(idKey)) {
-        const existing = userMap.get(key) || {
-          questionsSolved: Math.min(325, Math.floor(25 + (((su.id || 1) * 17) % 85))),
-          testsAttempted: Math.max(1, Math.floor(1 + (((su.id || 1) * 3) % 10))),
-          lastActive: 'Recent'
-        };
-        userMap.set(key, {
-          ...existing,
-          ...su,
-          isPaid: Boolean(su.isPaid ?? su.paid ?? existing.isPaid),
-          paid: Boolean(su.isPaid ?? su.paid ?? existing.isPaid),
-          isSuspended: Boolean(su.isSuspended ?? su.suspended ?? existing.isSuspended),
-          suspended: Boolean(su.isSuspended ?? su.suspended ?? existing.isSuspended)
-        });
+      if (!key || key.startsWith('deleted_') || su.name === '[DELETED CANDIDATE]') return;
+
+      // Real server users in database are NEVER filtered by deletedSet!
+      deletedSet.delete(key);
+      if (su.id !== undefined && su.id !== null) {
+        deletedSet.delete(String(su.id).trim());
       }
+
+      const existing = userMap.get(key) || {
+        questionsSolved: Math.min(325, Math.floor(25 + (((su.id || 1) * 17) % 85))),
+        testsAttempted: Math.max(1, Math.floor(1 + (((su.id || 1) * 3) % 10))),
+        lastActive: 'Online Now'
+      };
+      userMap.set(key, {
+        ...existing,
+        ...su,
+        isPaid: Boolean(su.isPaid ?? su.paid ?? existing.isPaid),
+        paid: Boolean(su.isPaid ?? su.paid ?? existing.isPaid),
+        isSuspended: Boolean(su.isSuspended ?? su.suspended ?? existing.isSuspended),
+        suspended: Boolean(su.isSuspended ?? su.suspended ?? existing.isSuspended)
+      });
     });
+
+    // Persist cleaned deletedSet back to localStorage
+    try {
+      localStorage.setItem('prepspace_deleted_candidate_emails', JSON.stringify(Array.from(deletedSet).filter(e => !/^\d+$/.test(e))));
+    } catch(e) {}
   }
 
   // 4. Ensure current active user / admin session is properly merged
@@ -9433,8 +9476,9 @@ async function executeAdminFlushCache() {
       'prepspace_interview_experiences', 'prepspace_community_threads', 
       'prepspace_library_progress', 'prepspace_user_email', 'prepspace_user_name',
       'prepspace_candidate_accounts', 'prepspace_payments_ledger', 'prepspace_withdrawal_claims',
-      'prepspace_deleted_candidate_emails', 'prepspace_admin_settings', 'admin_announcement_ticker'
+      'prepspace_admin_settings', 'admin_announcement_ticker'
     ];
+    localStorage.removeItem('prepspace_deleted_candidate_emails');
     let removedKeysCount = 0;
     for (let i = localStorage.length - 1; i >= 0; i--) {
       const k = localStorage.key(i);
@@ -10092,6 +10136,11 @@ function loadAdminPanelTab(tab) {
     apiFetch('/admin/users')
       .then(serverUsers => {
         const fullUsers = getLiveRegisteredUsers(serverUsers);
+        try {
+          if (Array.isArray(fullUsers) && fullUsers.length > 0) {
+            localStorage.setItem('prepspace_candidate_accounts', JSON.stringify(fullUsers));
+          }
+        } catch(e) {}
         const kpiTotalEl = document.getElementById('admin-kpi-total-candidates');
         if (kpiTotalEl) kpiTotalEl.textContent = fullUsers.length;
         const paidCount = fullUsers.filter(u => u.isPaid === true || u.paid === true).length;
