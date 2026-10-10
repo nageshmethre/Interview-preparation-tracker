@@ -474,9 +474,8 @@
 
     return `
       <div class="google-legal-hub d-flex flex-column" style="background: #18181b !important; height: 100vh; max-height: 100vh; overflow: hidden;">
-        <!-- Top Google-Style Header with Dark Grey Background & White Text -->
-        <div class="border-bottom border-secondary border-opacity-10 sticky-top flex-shrink-0" style="background: #1c1c20 !important; border-bottom: 1px solid #323238 !important; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 100;">
-          <div class="google-four-color-bar" style="height: 2px; background: #323238;"></div>
+        <!-- Top Google-Style Header (Borderless Clean) -->
+        <div class="sticky-top flex-shrink-0" style="background: #1c1c20 !important; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 100;">
           <div class="container py-3">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
               <div class="d-flex align-items-center gap-3">
@@ -561,8 +560,8 @@
             <!-- Document Content Viewer: Only this page moves with its own grey slider -->
             <div class="col-lg-8 col-xl-9 h-100 d-flex flex-column" style="min-height: 0;">
               <div class="google-glass-card p-4 p-md-5 position-relative legal-doc-viewer flex-grow-1 overflow-y-auto" id="legal-content-card" style="background: #222226; border: 1px solid #323238;">
-                <!-- Document Header -->
-                <div class="border-bottom border-secondary border-opacity-10 pb-4 mb-4">
+                <!-- Document Header (Borderless Clean) -->
+                <div class="mb-4">
                   <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
                     <span class="badge bg-${activeDoc.badgeColor === 'green' ? 'success' : activeDoc.badgeColor === 'yellow' ? 'warning' : activeDoc.badgeColor === 'red' ? 'danger' : 'primary'} bg-opacity-15 text-${activeDoc.badgeColor === 'green' ? 'success' : activeDoc.badgeColor === 'yellow' ? 'warning' : activeDoc.badgeColor === 'red' ? 'danger' : 'primary'} px-3 py-1 rounded-pill fs-8">
                       <i class="fa-solid ${activeDoc.icon} me-1"></i> ${activeDoc.category}

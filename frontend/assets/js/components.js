@@ -73,7 +73,7 @@ const components = {
       ${components.renderTopPromoTicker()}
 
       <!-- Vercel Minimalist Glass Navigation -->
-      <nav class="navbar navbar-expand-lg navbar-dark py-3 sticky-top border-bottom border-secondary border-opacity-20" style="background: rgba(24, 24, 27, 0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);">
+      <nav class="navbar navbar-expand-lg navbar-dark py-3 sticky-top" style="background: rgba(24, 24, 27, 0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);">
         <div class="container-xl">
           <a class="navbar-brand d-flex align-items-center gap-2 text-decoration-none" href="#/">
             <img src="assets/prepspace_icon.png?v=5.8.8" alt="PrepSpace Logo" class="brand-logo-img" style="width: 36px; height: 36px; object-fit: contain;">
@@ -915,7 +915,7 @@ const components = {
       <!-- Sidebar -->
       <div id="sidebar" class="sidebar glass-panel border-top-0 border-bottom-0 border-start-0 rounded-0 d-flex flex-column">
         <!-- Brand Header -->
-        <div class="p-3 border-bottom border-secondary-subtle d-flex align-items-center justify-content-between brand-header-box flex-shrink-0">
+        <div class="p-3 d-flex align-items-center justify-content-between brand-header-box flex-shrink-0">
           <a class="navbar-brand d-flex align-items-center brand-text text-decoration-none" href="#/dashboard">
             <img src="assets/prepspace_icon.png?v=5.8.8" alt="PrepSpace Logo" class="me-2 brand-logo-img" style="width: 36px; height: 36px; object-fit: contain;">
             <div class="d-flex flex-column text-start brand-name">
@@ -1007,21 +1007,21 @@ const components = {
 
       <!-- Main Content Area -->
       <div class="main-content d-flex flex-column flex-grow-1 overflow-hidden" style="height: 100vh;">
-        <!-- Top Nav Header (Compact Modern SaaS Header) -->
-        <header class="workspace-top-header d-flex align-items-center justify-content-between py-2 border-bottom border-secondary border-opacity-20 mb-2 flex-shrink-0 px-3 px-md-4" style="min-height: 46px;">
-          <div class="d-flex align-items-center gap-2 overflow-hidden flex-grow-1 me-2" style="min-width: 0;">
-            <button class="btn btn-glass btn-sm d-lg-none me-1 flex-shrink-0 px-2 py-1" id="sidebar-toggle-btn" aria-label="Toggle Navigation"><i class="fa-solid fa-bars fs-8"></i></button>
+        <!-- Top Nav Header (Borderless Premium SaaS Header) -->
+        <header class="workspace-top-header d-flex align-items-center justify-content-between py-2.5 mb-2 flex-shrink-0 px-3 px-md-4" style="min-height: 54px;">
+          <div class="d-flex align-items-center gap-2.5 overflow-hidden flex-grow-1 me-2" style="min-width: 0;">
+            <button class="btn btn-glass btn-sm d-lg-none me-1 flex-shrink-0 px-2 py-1" id="sidebar-toggle-btn" aria-label="Toggle Navigation"><i class="fa-solid fa-bars fs-7"></i></button>
             <div class="d-flex align-items-center gap-2 overflow-hidden" style="min-width: 0;">
-              <h1 class="text-white fw-semibold m-0 fs-7 fs-md-6 text-truncate" id="current-view-title" style="max-width: clamp(160px, 50vw, 450px);">Dashboard</h1>
+              <h1 class="text-white fw-bold m-0 fs-3 current-view-title text-truncate" id="current-view-title" style="max-width: clamp(220px, 60vw, 650px);">Dashboard</h1>
             </div>
           </div>
           
           <div class="d-flex align-items-center gap-2 flex-shrink-0">
             <!-- User Dropdown -->
             <div class="dropdown">
-              <button class="btn btn-glass btn-sm dropdown-toggle d-flex align-items-center gap-2 py-1 px-2.5" type="button" id="userDropdown" data-bs-toggle="dropdown">
-                <i class="fa-solid fa-circle-user fs-7 text-secondary"></i>
-                <span class="d-none d-md-inline fs-8 fw-medium" id="user-display-name">${userName}</span>
+              <button class="btn btn-glass btn-sm dropdown-toggle d-flex align-items-center gap-2 py-1.5 px-3" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-circle-user fs-6 text-secondary"></i>
+                <span class="d-none d-md-inline fs-7 fw-semibold" id="user-display-name">${userName}</span>
               </button>
               <ul class="dropdown-menu dropdown-menu-end glass-panel shadow-lg" aria-labelledby="userDropdown">
                 <li class="px-3 py-1.5 border-bottom border-secondary border-opacity-20 mb-1" id="dropdown-plan-info">
@@ -1066,14 +1066,14 @@ const components = {
 
     return `
     <div class="ps-professional-dashboard container-fluid px-0">
-      <!-- 1. Top Executive Control Bar -->
-      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 pb-2.5 border-bottom border-secondary border-opacity-20">
+      <!-- 1. Top Executive Control Bar (Borderless Clean Hero) -->
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
-          <div class="d-flex align-items-center gap-2 mb-0.5">
-            <h2 class="text-white fw-semibold m-0 fs-6">${userName}'s Dashboard</h2>
+          <div class="d-flex align-items-center gap-2.5 mb-1">
+            <h2 class="text-white fw-bold m-0 fs-2 dashboard-hero-title">${userName}'s Dashboard</h2>
             <span class="ps-status-pill ps-status-active">Active</span>
           </div>
-          <p class="text-muted fs-8 mb-0">Track preparation velocity, solve coding challenges, and manage recruitment pipeline.</p>
+          <p class="text-muted fs-7 mb-0">Track preparation velocity, solve coding challenges, and manage recruitment pipeline.</p>
         </div>
         <div class="d-flex flex-wrap align-items-center gap-2">
           <a href="#/coding-practice" class="btn btn-sm btn-primary px-3 py-1.5 fs-8 fw-semibold d-inline-flex align-items-center gap-1.5 shadow-sm">
@@ -1152,7 +1152,7 @@ const components = {
           <div class="ps-panel-box p-3 mb-3">
             <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
               <div>
-                <h3 class="text-white fw-bold m-0 fs-6">Study Velocity (Minutes)</h3>
+                <h3 class="text-white fw-bold m-0 fs-4">Study Velocity (Minutes)</h3>
                 <p class="text-muted fs-8 mb-0">Daily active focus time recorded over the last 7 days</p>
               </div>
             </div>
@@ -1167,7 +1167,7 @@ const components = {
               <div class="ps-workspace-card p-3 h-100 d-flex flex-column justify-content-between">
                 <div>
                   <div class="d-flex justify-content-between align-items-center mb-1">
-                    <h4 class="text-white fw-bold fs-6 m-0">Coding Practice IDE</h4>
+                    <h4 class="text-white fw-bold fs-5 m-0">Coding Practice IDE</h4>
                     <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-30 fs-9 font-monospace">300+ Problems</span>
                   </div>
                   <p class="text-muted fs-8 mb-3">In-browser code editor with multi-language execution (Java, Python, C++, JS), testcase validation, and LeetCode-standard challenges.</p>
@@ -1182,7 +1182,7 @@ const components = {
               <div class="ps-workspace-card p-3 h-100 d-flex flex-column justify-content-between">
                 <div>
                   <div class="d-flex justify-content-between align-items-center mb-1">
-                    <h4 class="text-white fw-bold fs-6 m-0">50-MCQ Timed Mock Exam</h4>
+                    <h4 class="text-white fw-bold fs-5 m-0">50-MCQ Timed Mock Exam</h4>
                     <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-30 fs-9 font-monospace">50 Questions</span>
                   </div>
                   <p class="text-muted fs-8 mb-3">Full-length timed screening engine testing Core Java, DSA, DBMS, OOP, and System Design with automated score calculation.</p>
@@ -1197,7 +1197,7 @@ const components = {
               <div class="ps-workspace-card p-3 h-100 d-flex flex-column justify-content-between">
                 <div>
                   <div class="d-flex justify-content-between align-items-center mb-1">
-                    <h4 class="text-white fw-bold fs-6 m-0">Technical Library & Guides</h4>
+                    <h4 class="text-white fw-bold fs-5 m-0">Technical Library & Guides</h4>
                     <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-30 fs-9 font-monospace">E-Books & Articles</span>
                   </div>
                   <p class="text-muted fs-8 mb-3">Curated engineering textbooks, interview guides, and high-yield cheat sheets formatted for deep, distraction-free reading.</p>
@@ -1212,7 +1212,7 @@ const components = {
               <div class="ps-workspace-card p-3 h-100 d-flex flex-column justify-content-between">
                 <div>
                   <div class="d-flex justify-content-between align-items-center mb-1">
-                    <h4 class="text-white fw-bold fs-6 m-0">Interactive DSA Syllabus</h4>
+                    <h4 class="text-white fw-bold fs-5 m-0">Interactive DSA Syllabus</h4>
                     <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-30 fs-9 font-monospace">16 Domains</span>
                   </div>
                   <p class="text-muted fs-8 mb-3">Structured curriculum covering Arrays, Linked Lists, Binary Trees, Dynamic Programming, Graphs, and System Design.</p>
@@ -1230,7 +1230,7 @@ const components = {
           <!-- Placement Pipeline Breakdown -->
           <div class="ps-panel-box p-3 mb-3">
             <div class="d-flex justify-content-between align-items-center mb-3">
-              <h3 class="text-white fw-bold m-0 fs-6">Recruitment Pipeline</h3>
+              <h3 class="text-white fw-bold m-0 fs-4">Recruitment Pipeline</h3>
               <a href="#/placement" class="ps-card-link fs-8 text-decoration-none">Open Board &rarr;</a>
             </div>
             <div style="position: relative; height: 140px;" class="mb-3">
@@ -1245,7 +1245,7 @@ const components = {
           <!-- Curriculum Progress -->
           <div class="ps-panel-box p-3 mb-3">
             <div class="d-flex justify-content-between align-items-center mb-3">
-              <h3 class="text-white fw-bold m-0 fs-6">Core Curriculum Matrix</h3>
+              <h3 class="text-white fw-bold m-0 fs-4">Core Curriculum Matrix</h3>
               <a href="#/dsa-roadmap" class="ps-card-link fs-8 text-decoration-none">All Topics &rarr;</a>
             </div>
             
@@ -1285,7 +1285,7 @@ const components = {
           <!-- Essential Tools Direct Links -->
           <div class="ps-panel-box p-3">
             <div class="d-flex justify-content-between align-items-center mb-2">
-              <h3 class="text-white fw-bold m-0 fs-6">Candidate Utilities</h3>
+              <h3 class="text-white fw-bold m-0 fs-4">Candidate Utilities</h3>
             </div>
             <div class="d-flex flex-column gap-1.5 mt-2">
               <a href="#/ai-assistant" class="p-2 rounded d-flex justify-content-between align-items-center text-decoration-none text-light" style="background: rgba(255,255,255,0.03); border: 1px solid #27272a;">
@@ -2518,13 +2518,13 @@ const components = {
   // 1. Learning Platform (LMS)
   courses: (list) => {
     return `
-      <!-- Compact Header (Replaces Huge Hero Area) -->
-      <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom border-secondary border-opacity-15">
+      <!-- Header Strip (Borderless Clean) -->
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
         <div>
-          <h5 class="fw-bold text-white mb-0">Learn. Build. Master.</h5>
-          <small class="text-muted fs-8">Master programming, AI, web development, and computer science skills.</small>
+          <h2 class="fw-bold text-white mb-1 fs-2">Learn. Build. Master.</h2>
+          <small class="text-muted fs-7">Master programming, AI, web development, and computer science skills.</small>
         </div>
-        <span class="badge border border-secondary border-opacity-30 text-white font-monospace fs-9 px-2.5 py-1">COURSE CATALOG</span>
+        <span class="badge border border-secondary border-opacity-30 text-white font-monospace fs-8 px-2.5 py-1">COURSE CATALOG</span>
       </div>
 
       <!-- Filters & Search Toolbar -->
@@ -2608,15 +2608,15 @@ const components = {
   },
 
   courseDetail: (course, enrollment) => `
-    <!-- Top Action Bar with Back Button -->
-    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 pb-3 border-bottom border-secondary">
+    <!-- Top Action Bar with Back Button (Borderless Clean) -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
       <div class="d-flex align-items-center gap-3">
         <button id="btn-back-to-courses-top" class="btn btn-glass py-2 px-3 fs-7 text-white d-flex align-items-center gap-2" style="border: 1px solid rgba(255,255,255,0.25); background: rgba(99, 102, 241, 0.15); border-radius: 8px;">
           <i class="fa-solid fa-arrow-left text-primary"></i> <span class="fw-bold">Back to Courses Catalog</span>
         </button>
         <div>
-          <h4 class="text-white fw-bold mb-0">${course.title}</h4>
-          <span class="text-muted fs-8">Instructor: ${course.instructor || 'Senior Architect'}</span>
+          <h2 class="text-white fw-bold mb-1 fs-2">${course.title}</h2>
+          <span class="text-muted fs-7">Instructor: ${course.instructor || 'Senior Architect'}</span>
         </div>
       </div>
       <div class="d-flex align-items-center gap-2">
@@ -2721,11 +2721,11 @@ const components = {
       <!-- Left: Fixed Topic Navigation Rail -->
       <div class="col-12 col-lg-4 col-xl-3 h-100 d-flex flex-column" id="roadmap-rail-col" style="position: sticky; top: 0;">
         <div class="p-3 d-flex flex-column h-100 border border-secondary border-opacity-20 rounded-3" style="background: #18181b;">
-          <!-- Rail Header -->
-          <div class="d-flex align-items-center justify-content-between pb-2 mb-2 border-bottom border-secondary border-opacity-20 flex-shrink-0">
+          <!-- Rail Header (Borderless Clean) -->
+          <div class="d-flex align-items-center justify-content-between pb-2 mb-2 flex-shrink-0">
             <div>
-              <h5 class="text-white fw-bold m-0 fs-7">Curriculum Modules</h5>
-              <div class="text-muted fs-9 font-monospace">${list.length} Topics</div>
+              <h4 class="text-white fw-bold m-0 fs-5">Curriculum Modules</h4>
+              <div class="text-muted fs-8 font-monospace">${list.length} Topics</div>
             </div>
           </div>
 
@@ -2770,15 +2770,15 @@ const components = {
 
   dsaTopicDetail: (topic) => `
     <div class="dsa-document-sheet p-3 p-md-4">
-      <!-- 1. Header Strip -->
-      <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom border-secondary border-opacity-20 flex-wrap gap-3">
+      <!-- 1. Header Strip (Borderless Clean) -->
+      <div class="d-flex align-items-center justify-content-between pb-3 mb-3 flex-wrap gap-3">
         <div>
           <div class="d-flex align-items-center gap-2 mb-1">
-            <span class="badge bg-primary bg-opacity-15 text-primary border border-primary border-opacity-25 fs-9 font-monospace">${String(topic.sequenceNumber || topic.id || 1).padStart(2, '0')}</span>
-            <span class="badge bg-secondary bg-opacity-20 text-muted border border-secondary border-opacity-20 fs-9 font-monospace">CURRICULUM</span>
+            <span class="badge bg-primary bg-opacity-15 text-primary border border-primary border-opacity-25 fs-8 font-monospace">${String(topic.sequenceNumber || topic.id || 1).padStart(2, '0')}</span>
+            <span class="badge bg-secondary bg-opacity-20 text-muted border border-secondary border-opacity-20 fs-8 font-monospace">CURRICULUM</span>
           </div>
-          <h2 class="text-white fw-bold m-0 fs-5">${topic.name}</h2>
-          <p class="text-muted fs-8 m-0 mt-1">${topic.description || 'Algorithmic invariants, time-space asymptotic proofs, and curated workshop benchmarks.'}</p>
+          <h2 class="text-white fw-bold m-0 fs-2">${topic.name}</h2>
+          <p class="text-muted fs-7 m-0 mt-1">${topic.description || 'Algorithmic invariants, time-space asymptotic proofs, and curated workshop benchmarks.'}</p>
         </div>
 
         <!-- Action Toolbar -->
@@ -2821,11 +2821,11 @@ const components = {
       <div class="d-flex flex-column gap-3">
         ${(topic.subtopics || []).map((s, idx) => `
           <article class="dsa-document-section p-3.5 p-md-4 rounded-3 border border-secondary border-opacity-20 position-relative">
-            <!-- Section Header -->
-            <div class="d-flex align-items-center justify-content-between mb-3 border-bottom border-secondary border-opacity-15 pb-2 flex-wrap gap-2">
+            <!-- Section Header (Borderless Clean) -->
+            <div class="d-flex align-items-center justify-content-between mb-3 pb-2 flex-wrap gap-2">
               <div class="d-flex align-items-center gap-2">
-                <span class="badge bg-secondary bg-opacity-30 text-warning border border-secondary border-opacity-25 fs-10 font-monospace">${String(idx + 1).padStart(2, '0')}</span>
-                <h3 class="text-white fw-bold m-0 fs-6">${s.name}</h3>
+                <span class="badge bg-secondary bg-opacity-30 text-warning border border-secondary border-opacity-25 fs-9 font-monospace">${String(idx + 1).padStart(2, '0')}</span>
+                <h3 class="text-white fw-bold m-0 fs-4">${s.name}</h3>
               </div>
               <a href="#/coding-practice?q=${(s.challenges && s.challenges[0] && s.challenges[0].qId) || (idx * 5 + 1)}" class="btn btn-sm btn-outline-primary py-1 px-3 fs-8 fw-semibold text-nowrap d-inline-flex align-items-center gap-1">
                 <span>Practice in Workshop</span>
@@ -3038,7 +3038,7 @@ const components = {
         </header>
 
         <!-- Mobile Segmented View Mode Switcher (Description / Code / Console) -->
-        <div class="lc-mobile-tab-bar d-flex d-lg-none align-items-center justify-content-center px-2 py-1.5 border-bottom border-secondary border-opacity-20 flex-shrink-0" id="lc-mobile-mode-switcher">
+        <div class="lc-mobile-tab-bar d-flex d-lg-none align-items-center justify-content-center px-2 py-1.5 flex-shrink-0" id="lc-mobile-mode-switcher">
           <div class="btn-group w-100 p-0.5 rounded-2" role="group" style="background: rgba(255,255,255,0.06); max-width: 440px;">
             <button type="button" class="btn btn-sm py-1 px-2 text-white fw-semibold rounded-2 lc-mobile-pane-toggle active" id="btn-mobile-pane-desc" data-pane="desc">
               <i class="fa-regular fa-file-lines me-1 text-primary"></i> <span>Problem</span>
@@ -3058,7 +3058,7 @@ const components = {
           <!-- LEFT PANE: LeetCode Multi-Tab Problem Explorer -->
           <div class="lc-pane lc-pane-left d-flex flex-column border-end border-secondary border-opacity-20" id="vscode-left-pane">
             <!-- Tabs Navigation -->
-            <ul class="nav lc-tabs border-bottom border-secondary border-opacity-20 px-2 pt-1 flex-shrink-0 flex-nowrap" role="tablist">
+            <ul class="nav lc-tabs px-2 pt-1 flex-shrink-0 flex-nowrap" role="tablist">
               <li class="nav-item">
                 <button class="nav-link active d-flex align-items-center gap-1.5" id="tab-desc-btn" data-bs-toggle="tab" data-bs-target="#tab-lc-desc" type="button" role="tab">
                   <i class="fa-regular fa-file-lines text-primary"></i> <span>Description</span>
@@ -3244,8 +3244,8 @@ const components = {
           <!-- RIGHT PANE: Code Editor (Top) + Testcase/Test Result Console (Bottom) -->
           <div class="lc-pane lc-pane-right d-flex flex-column" id="vscode-right-pane">
             
-            <!-- Code Editor Top Bar -->
-            <div class="lc-editor-header d-flex align-items-center justify-content-between px-3 py-1.5 border-bottom border-secondary border-opacity-20 flex-shrink-0">
+            <!-- Code Editor Top Bar (Borderless Clean) -->
+            <div class="lc-editor-header d-flex align-items-center justify-content-between px-3 py-1.5 flex-shrink-0">
               <div class="d-flex align-items-center gap-2">
                 <span class="fs-8 fw-bold text-white d-flex align-items-center gap-1.5"><i class="fa-solid fa-code text-success"></i> Code</span>
                 <select id="coding-language-select" class="form-select form-select-sm lc-lang-select">
@@ -3303,8 +3303,8 @@ const components = {
 
             <!-- Bottom LeetCode Testcase / Test Result Console Tray (Collapsed by default while typing) -->
             <div class="lc-console-panel border-top border-secondary border-opacity-20 d-flex flex-column flex-shrink-0 collapsed" id="vscode-terminal-panel">
-              <!-- Console Tabs Bar -->
-              <div class="lc-console-tabs d-flex align-items-center justify-content-between px-2 pt-1 border-bottom border-secondary border-opacity-20 flex-shrink-0">
+              <!-- Console Tabs Bar (Borderless Clean) -->
+              <div class="lc-console-tabs d-flex align-items-center justify-content-between px-2 pt-1 flex-shrink-0">
                 <ul class="nav lc-console-nav gap-1" role="tablist">
                   <li class="nav-item">
                     <button class="nav-link py-1 px-2.5 fs-8 active" id="console-tab-testcase-btn" data-bs-toggle="tab" data-bs-target="#console-tab-testcase" type="button" role="tab">
@@ -3499,9 +3499,9 @@ const components = {
             <div class="book-spine-line"></div>
             
             <div class="book-page-content" id="book-content-container">
-              <!-- Header Meta -->
-              <div class="d-flex align-items-center justify-content-between mb-3 border-bottom border-secondary border-opacity-25 pb-2">
-                <span class="text-primary fw-bold fs-8 text-uppercase tracking-wider" id="book-chap-category">
+              <!-- Header Meta (Borderless Clean) -->
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <span class="text-primary fw-bold fs-7 text-uppercase tracking-wider" id="book-chap-category">
                   ${firstChap.section || firstChap.category}
                 </span>
                 <span class="text-muted fs-8 book-meta-text" id="book-chap-readtime">
@@ -3510,7 +3510,7 @@ const components = {
               </div>
 
               <!-- Chapter Title -->
-              <h2 class="book-chapter-title mb-3 fs-4" id="book-chap-title">
+              <h2 class="book-chapter-title mb-3 fs-2 text-white fw-bold" id="book-chap-title">
                 Chapter ${firstChap.chapterNumber}: ${firstChap.title}
               </h2>
 
@@ -3650,11 +3650,11 @@ const components = {
         <div class="modal fade" id="aptitudeChaptersModal" tabindex="-1" aria-labelledby="aptitudeChaptersModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
             <div class="modal-content bg-dark border border-secondary border-opacity-30 text-white shadow-lg" style="background: #141418 !important;">
-              <div class="modal-header border-bottom border-secondary border-opacity-20 pb-3">
+              <div class="modal-header pb-2">
                 <div class="d-flex align-items-center gap-2">
-                  <i class="fa-solid fa-book-open-reader text-primary fs-5"></i>
-                  <h5 class="modal-title fw-bold fs-6 m-0" id="aptitudeChaptersModalLabel">Select Curriculum Module</h5>
-                  <span class="badge bg-indigo-subtle text-primary border border-primary-subtle fs-9">${safeChapters.length} Chapters</span>
+                  <i class="fa-solid fa-book-open-reader text-primary fs-4"></i>
+                  <h4 class="modal-title fw-bold fs-4 m-0" id="aptitudeChaptersModalLabel">Select Curriculum Module</h4>
+                  <span class="badge bg-indigo-subtle text-primary border border-primary-subtle fs-8">${safeChapters.length} Chapters</span>
                 </div>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
@@ -3713,7 +3713,7 @@ const components = {
       <!-- Create Exam form -->
       <div class="col-lg-4">
         <div class="glass-panel p-4 h-100">
-          <h5 class="text-white fw-bold mb-4"><i class="fa-solid fa-stopwatch text-indigo me-2"></i>Start Timed Assessment</h5>
+          <h3 class="text-white fw-bold mb-4 fs-3"><i class="fa-solid fa-stopwatch text-indigo me-2"></i>Start Timed Assessment</h3>
           <form id="mock-exam-form">
             <div class="mb-3">
               <label class="form-label text-muted fs-7">TOPIC CATEGORY</label>
@@ -3752,7 +3752,7 @@ const components = {
       <!-- Leaderboard & Past attempts -->
       <div class="col-lg-8">
         <div class="glass-panel p-4 mb-4">
-          <h5 class="text-white fw-bold mb-4"><i class="fa-solid fa-trophy text-warning me-2"></i>Global Leaderboard</h5>
+          <h3 class="text-white fw-bold mb-4 fs-3"><i class="fa-solid fa-trophy text-warning me-2"></i>Global Leaderboard</h3>
           <div class="table-responsive">
             <table class="table table-dark table-hover align-middle m-0">
               <thead>
@@ -4011,14 +4011,14 @@ const components = {
       <div class="interview-experiences-hub d-flex flex-column gap-2 w-100">
         <!-- Sleek High-Density Toolbar (Edge-to-Edge Compact Layout) -->
         <div class="exp-card p-2.5 p-md-3 mb-1">
-          <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2 pb-2 border-bottom border-secondary border-opacity-15">
-            <div class="d-flex align-items-center gap-2">
-              <div class="exp-company-badge text-warning" style="width: 34px; height: 34px; font-size: 1rem;">
+          <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+            <div class="d-flex align-items-center gap-2.5">
+              <div class="exp-company-badge text-warning" style="width: 38px; height: 38px; font-size: 1.15rem;">
                 <i class="fa-solid fa-user-tie"></i>
               </div>
               <div>
-                <h6 class="text-white fw-bold m-0 fs-7">Interview Experiences Hub</h6>
-                <span class="text-muted fs-9 d-none d-md-inline">Verified technical debriefs, rounds, and compensation from real engineers.</span>
+                <h3 class="text-white fw-bold m-0 fs-3">Interview Experiences Hub</h3>
+                <span class="text-muted fs-7 d-none d-md-inline">Verified technical debriefs, rounds, and compensation from real engineers.</span>
               </div>
             </div>
             <button class="btn btn-premium btn-sm px-3 py-1 fs-8 fw-semibold" id="btn-open-share-exp-modal">
@@ -4140,10 +4140,10 @@ const components = {
       <div class="col-lg-4">
         <div class="glass-panel p-4">
           <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fa-solid fa-comments text-primary fs-4"></i>
-            <h5 class="text-white fw-bold mb-0">Start Discussion Thread</h5>
+            <i class="fa-solid fa-comments text-primary fs-3"></i>
+            <h3 class="text-white fw-bold mb-0 fs-3">Start Discussion Thread</h3>
           </div>
-          <p class="text-muted fs-8 mb-4">Share interview experiences, ask technical questions, and discuss compensation with peers.</p>
+          <p class="text-muted fs-7 mb-4">Share interview experiences, ask technical questions, and discuss compensation with peers.</p>
           <form id="forum-post-form">
             <div class="mb-3">
               <label class="form-label text-muted fs-7 fw-semibold">TOPIC TITLE</label>
@@ -4169,8 +4169,8 @@ const components = {
       <!-- Threads List -->
       <div class="col-lg-8">
         <div class="glass-panel p-4 d-flex flex-column gap-3">
-          <!-- Feed Controls -->
-          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pb-3 border-bottom border-secondary border-opacity-25">
+          <!-- Feed Controls (Borderless Clean) -->
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
             <div class="d-flex align-items-center gap-2">
               <button class="btn btn-sm btn-glass btn-community-filter active" data-category="ALL">All Topics</button>
               <button class="btn btn-sm btn-glass btn-community-filter" data-category="INTERVIEWS">Interviews</button>
@@ -4263,13 +4263,13 @@ const components = {
           <!-- Right Content Viewer Pane -->
           <div class="col-lg-8 col-xl-9">
             <div class="glass-panel p-4 overflow-y-auto" style="max-height: 80vh;" id="dsa-topic-content-mount">
-              <!-- Active Topic Header -->
-              <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 pb-3 mb-4 border-bottom border-secondary">
+              <!-- Active Topic Header (Borderless Clean) -->
+              <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
                 <div>
                   <div class="d-flex align-items-center gap-2 mb-1.5">
                     <span class="badge bg-dark border border-secondary text-info fs-8" id="active-topic-category">${firstTopic.categoryName}</span>
                   </div>
-                  <h3 class="text-white fw-bold m-0" id="active-topic-title">${firstTopic.title}</h3>
+                  <h2 class="text-white fw-bold m-0 fs-2" id="active-topic-title">${firstTopic.title}</h2>
                   <p class="text-secondary fs-7 m-0 mt-1" id="active-topic-subtitle">${firstTopic.subtitle}</p>
                 </div>
                 <div class="d-flex align-items-center gap-2">
@@ -4370,8 +4370,8 @@ const components = {
           return `
             <div class="col-12 col-md-4 col-lg-3" style="min-width: 280px;">
               <div class="glass-panel p-3 h-100 d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-between mb-3 border-bottom border-secondary pb-2">
-                  <span class="fw-bold text-white fs-7"><i class="fa-solid fa-circle-dot me-2 text-indigo"></i>${stage.replace('_', ' ')}</span>
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                  <span class="fw-bold text-white fs-5"><i class="fa-solid fa-circle-dot me-2 text-indigo"></i>${stage.replace('_', ' ')}</span>
                   <span class="badge bg-indigo-subtle text-primary fs-8">${stageApps.length}</span>
                 </div>
                 <div class="flex-grow-1 d-flex flex-column gap-2 overflow-y-auto" style="max-height: 50vh;">
@@ -6012,15 +6012,15 @@ const components = {
 
   admin: (stats) => `
     <div class="container-fluid px-0 py-1">
-      <!-- Executive Telemetry & Global Actions Header -->
-      <div class="border-bottom border-secondary border-opacity-10 pb-3 mb-3">
+      <!-- Executive Telemetry & Global Actions Header (Borderless Clean) -->
+      <div class="mb-4">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
           <div>
-            <div class="d-flex align-items-center gap-2 mb-1">
+            <div class="d-flex align-items-center gap-2 mb-1.5">
               <span class="badge badge-super-admin px-2.5 py-1 fs-9"><i class="fa-solid fa-crown me-1 text-warning"></i> SUPER ADMIN COMMAND CENTER</span>
               <span class="badge bg-dark text-muted border border-secondary border-opacity-25 px-2 py-1 fs-9 font-monospace"><i class="fa-solid fa-shield-halved text-info me-1"></i> ENTERPRISE SUITE</span>
             </div>
-            <h4 class="text-white fw-bold mb-0">Global Operations & Enterprise Control</h4>
+            <h2 class="text-white fw-bold mb-0 fs-2">Global Operations & Enterprise Control</h2>
           </div>
 
           <!-- Dual Clocks, Telemetry & Global Controls -->
@@ -6603,8 +6603,8 @@ const components = {
 
     return `
       <div class="technical-library-container container-fluid px-0">
-        <!-- 1. Compact Library Control Deck -->
-        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2.5 mb-2.5 pb-2.5 border-bottom border-secondary border-opacity-20">
+        <!-- 1. Compact Library Control Deck (Borderless Clean) -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2.5 mb-3">
           <!-- Search & Filters -->
           <div class="d-flex flex-wrap align-items-center gap-2 flex-grow-1" style="max-width: 680px;">
             <div class="input-group input-group-sm flex-grow-1" style="min-width: 200px; max-width: 340px;">
@@ -6987,8 +6987,8 @@ const components = {
         <!-- Top Reading Progress Bar -->
         <div class="reader-scroll-progress-bar" id="reader-scroll-bar" style="width: 0%;"></div>
 
-        <!-- Sticky Reader Control Navbar (Single-Line Unified Layout) -->
-        <header class="reader-navbar px-3 py-2 border-bottom border-secondary border-opacity-25 d-flex justify-content-between align-items-center sticky-top flex-nowrap gap-2" style="min-height: 52px;">
+        <!-- Sticky Reader Control Navbar (Borderless Clean) -->
+        <header class="reader-navbar px-3 py-2 d-flex justify-content-between align-items-center sticky-top flex-nowrap gap-2" style="min-height: 52px;">
           <!-- Left: Compact Navigation & Drawer Toggle (Symbolic Buttons) -->
           <div class="d-flex align-items-center gap-2 flex-shrink-0" style="max-width: 320px;">
             <a href="#/library" class="reader-tool-btn flex-shrink-0" title="Back to Technical Library">
@@ -7081,8 +7081,8 @@ const components = {
         <div class="reader-layout d-flex flex-grow-1 position-relative">
           <!-- Collapsible Table of Contents Drawer (The ONE Static Sidebar) -->
           <aside class="reader-toc-drawer border-end border-secondary border-opacity-25" id="reader-toc-drawer">
-            <div class="p-3 border-bottom border-secondary border-opacity-25 d-flex justify-content-between align-items-center flex-shrink-0" style="min-height: 52px;">
-              <h6 class="text-white fw-bold mb-0 fs-8"><i class="fa-solid fa-list-ul me-2 text-primary"></i> Table of Contents</h6>
+            <div class="p-3 d-flex justify-content-between align-items-center flex-shrink-0" style="min-height: 52px;">
+              <h6 class="text-white fw-bold mb-0 fs-7"><i class="fa-solid fa-list-ul me-2 text-primary"></i> Table of Contents</h6>
               <button id="btn-close-toc-drawer" class="reader-tool-btn" style="width: 28px !important; height: 28px !important; min-width: 28px !important;" title="Close Table of Contents"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="p-2 overflow-y-auto flex-grow-1">
@@ -7102,8 +7102,8 @@ const components = {
           <!-- Main Reader Reading Canvas (Static Centered Layout with Dedicated Single Scrollbar) -->
           <main class="reader-content-pane" id="reader-content-pane">
             <div class="reader-content-pane-inner mx-auto">
-              <!-- Chapter Metadata Heading -->
-              <div class="mb-4 pb-3 border-bottom border-secondary border-opacity-25">
+              <!-- Chapter Metadata Heading (Borderless Clean) -->
+              <div class="mb-4">
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
                   <div class="d-flex align-items-center gap-2">
                     <span class="badge bg-primary text-white font-monospace fs-9">CHAPTER ${chapter.chapterNumber}</span>

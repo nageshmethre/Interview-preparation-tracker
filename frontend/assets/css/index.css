@@ -65,7 +65,48 @@ h1, h2, h3, h4, h5, h6,
 [data-theme="light"] h1, [data-theme="light"] h2, [data-theme="light"] h3,
 [data-theme="light"] h4, [data-theme="light"] h5, [data-theme="light"] h6 {
   color: #f4f4f5 !important;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
+  font-weight: 750;
+}
+
+h1, .h1 {
+  font-size: clamp(1.85rem, 3.5vw, 2.5rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.03em !important;
+}
+
+h2, .h2 {
+  font-size: clamp(1.5rem, 2.8vw, 2rem) !important;
+  font-weight: 750 !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.025em !important;
+}
+
+h3, .h3 {
+  font-size: clamp(1.3rem, 2.2vw, 1.65rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.02em !important;
+}
+
+h4, .h4 {
+  font-size: clamp(1.15rem, 1.8vw, 1.4rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+  letter-spacing: -0.015em !important;
+}
+
+h5, .h5 {
+  font-size: clamp(1.05rem, 1.5vw, 1.25rem) !important;
+  font-weight: 650 !important;
+  line-height: 1.4 !important;
+}
+
+h6, .h6 {
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem) !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
 }
 
 .text-white {
@@ -1766,7 +1807,7 @@ input:-webkit-autofill {
 
 .admin-inspector-header {
   padding: 16px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: none !important;
   background: #161922;
   position: sticky;
   top: 0;
@@ -6709,9 +6750,9 @@ body.ui-drawer-open {
   font-weight: 700 !important;
   margin-top: 1.75rem;
   margin-bottom: 0.75rem;
-  font-size: 1.25rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  padding-bottom: 0.4rem;
+  font-size: 1.35rem;
+  border-bottom: none !important;
+  padding-bottom: 0;
 }
 
 .dsa-rendered-content p {
@@ -7041,3 +7082,106 @@ body.ui-drawer-open {
   background: rgba(99, 102, 241, 0.08) !important;
   border-left: 2px solid #6366f1 !important;
 }
+
+/* ==========================================================================
+   GLOBAL ZERO-LINE BORDERLESS HEADER STYLING & ENLARGED TYPOGRAPHY (v5.8.31)
+   ========================================================================== */
+
+/* 1. Complete Removal of Horizontal Divider Lines Under Headers Across Website */
+.workspace-top-header,
+header.workspace-top-header,
+.brand-header-box,
+.reader-navbar,
+header.reader-navbar,
+.lc-top-bar,
+header.lc-top-bar,
+.admin-inspector-header,
+.page-header,
+.view-header,
+.section-header,
+.dashboard-header,
+.admin-header,
+.google-legal-hub .sticky-top,
+.google-four-color-bar {
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+.google-four-color-bar {
+  display: none !important;
+}
+
+/* Remove bottom borders on executive bars, subheaders, and hero strips */
+.ps-professional-dashboard > .d-flex.border-bottom,
+.dsa-document-sheet .border-bottom,
+.exp-card .border-bottom,
+.glass-panel .border-bottom,
+.modal-header.border-bottom,
+.suite-scroll-container .border-bottom,
+.bento-card .border-bottom,
+.admin-box .border-bottom {
+  border-bottom: none !important;
+}
+
+/* Also eliminate any trailing horizontal border line below brand headers */
+.sidebar .brand-header-box {
+  border-bottom: none !important;
+}
+
+/* 2. Global Large Header Typography Rules */
+#current-view-title,
+.current-view-title {
+  font-size: clamp(1.45rem, 2.8vw, 1.95rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.025em !important;
+  color: #ffffff !important;
+  line-height: 1.25 !important;
+}
+
+/* Page Hero Headings (e.g. Super Admin's Dashboard, Course Titles, etc.) */
+.dashboard-hero-title,
+.page-hero-title,
+.page-title,
+.view-title {
+  font-size: clamp(1.65rem, 3.2vw, 2.25rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.03em !important;
+  color: #ffffff !important;
+  line-height: 1.2 !important;
+}
+
+/* Prevent accidental small fs- utility classes on heading elements from shrinking headers */
+h1.fs-5, h1.fs-6, h1.fs-7, h1.fs-8, h1.fs-9,
+h2.fs-5, h2.fs-6, h2.fs-7, h2.fs-8, h2.fs-9,
+h3.fs-6, h3.fs-7, h3.fs-8, h3.fs-9,
+h4.fs-6, h4.fs-7, h4.fs-8, h4.fs-9,
+h5.fs-7, h5.fs-8, h5.fs-9 {
+  font-size: inherit !important;
+}
+
+/* Specific Section Titles & Card Headers */
+.ps-stat-title {
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  color: #a1a1aa !important;
+  letter-spacing: -0.01em !important;
+}
+
+.ps-stat-value {
+  font-size: clamp(1.6rem, 2.5vw, 2.25rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.025em !important;
+}
+
+/* Sidebar Brand Title */
+.sidebar .brand-name span.fw-extrabold {
+  font-size: 1.35rem !important;
+}
+
+/* Top Workspace Navbar Layout Polish */
+.workspace-top-header {
+  min-height: 54px !important;
+  padding-top: 0.65rem !important;
+  padding-bottom: 0.65rem !important;
+}
+
