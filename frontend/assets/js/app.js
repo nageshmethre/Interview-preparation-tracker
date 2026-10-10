@@ -538,9 +538,11 @@ function router() {
     }
   }
 
-  // Mount targeted page views
+  // Mount targeted page views & reset scroll positions
   const pageMount = document.getElementById('page-mount');
   const viewTitle = document.getElementById('current-view-title');
+  if (pageMount) pageMount.scrollTop = 0;
+  window.scrollTo({ top: 0, behavior: 'instant' });
 
   if (hash === '#/dashboard') {
     viewTitle.textContent = 'Dashboard';

@@ -1006,7 +1006,7 @@ const components = {
       </div>
 
       <!-- Main Content Area -->
-      <div class="main-content d-flex flex-column flex-grow-1 overflow-hidden" style="height: 100vh;">
+      <div class="main-content d-flex flex-column flex-grow-1" id="main-content">
         <!-- Top Nav Header (Borderless Premium SaaS Header) -->
         <header class="workspace-top-header d-flex align-items-center justify-content-between py-2.5 mb-2 flex-shrink-0 px-3 px-md-4" style="min-height: 54px;">
           <div class="d-flex align-items-center gap-2.5 overflow-hidden flex-grow-1 me-2" style="min-width: 0;">

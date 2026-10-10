@@ -52,12 +52,20 @@
   padding: 0;
 }
 
+html {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
 body, [data-theme="light"], [data-theme="dark"] {
   font-family: 'Geist', 'Inter', system-ui, -apple-system, sans-serif;
   background-color: #18181b !important;
   color: #d4d4d8 !important;
   min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y pinch-zoom;
   letter-spacing: -0.01em;
 }
 
@@ -640,8 +648,25 @@ input:-webkit-autofill:focus,
   margin-right: 0 !important;
 }
 
-/* Mobile Sidebar Drawer */
+/* Mobile Smooth Scrolling & Responsive Layout (width <= 991.98px) */
 @media (max-width: 991.98px) {
+  html, body {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y pinch-zoom !important;
+    height: auto !important;
+    min-height: 100% !important;
+    position: relative !important;
+  }
+
+  #app-root {
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    overflow-x: hidden !important;
+    height: auto !important;
+  }
+
   .sidebar {
     width: 260px !important;
     min-width: 260px !important;
@@ -651,19 +676,89 @@ input:-webkit-autofill:focus,
     left: 0 !important;
     bottom: 0 !important;
     height: 100vh !important;
+    height: 100dvh !important;
     z-index: 1050 !important;
     transform: translateX(-100%) !important;
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
     box-shadow: 8px 0 32px rgba(0, 0, 0, 0.6) !important;
+    -webkit-overflow-scrolling: touch !important;
   }
   
   .sidebar.active {
     transform: translateX(0) !important;
   }
-  
-  .main-content {
-    padding: 16px !important;
+
+  .sidebar-scroll-content {
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-y: contain !important;
+  }
+
+  /* Release fixed viewport constraints on mobile so the whole page scrolls smoothly */
+  #app-container:not(.reader-active) {
+    height: auto !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    max-height: none !important;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .main-content:not(.coding-workspace-active) {
+    height: auto !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    max-height: none !important;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
     width: 100% !important;
+  }
+
+  #page-mount:not(.isolated-scroll) {
+    height: auto !important;
+    max-height: none !important;
+    overflow-y: visible !important;
+    overflow-x: hidden !important;
+    padding: 6px 12px 64px 12px !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Pinned Header on Mobile: clean sticky with blur backdrop */
+  .workspace-top-header {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1020 !important;
+    background-color: rgba(24, 24, 27, 0.95) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Unchain nested scroll containers that trap mobile swipes */
+  .suite-scroll-container,
+  #dsa-topic-content-mount,
+  #forum-posts-container,
+  #notes-cards-container,
+  .kanban-col .flex-grow-1,
+  .legal-doc-viewer:not(#legal-content-card) {
+    max-height: none !important;
+    height: auto !important;
+    overflow-y: visible !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Any remaining nested scrollable cards or panels */
+  .glass-panel.overflow-y-auto,
+  .d-flex.overflow-y-auto {
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-y: auto !important;
   }
 }
 
@@ -2440,17 +2535,29 @@ input:-webkit-autofill {
   background: #1c1c20 !important;
 }
 
-/* Fixed Layout Containers & Isolated Scrolling */
-#app-container {
-  height: 100vh !important;
-  max-height: 100vh !important;
-  overflow: hidden !important;
-}
+/* Fixed Layout Containers & Isolated Scrolling for Desktop (width >= 992px) */
+@media (min-width: 992px) {
+  #app-container:not(.reader-active) {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    overflow: hidden !important;
+  }
 
-#page-mount {
-  overflow-y: auto !important;
-  scrollbar-width: thin;
-  scrollbar-color: #3f3f46 #1c1c20;
+  .main-content:not(.coding-workspace-active) {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+  }
+
+  #page-mount {
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #3f3f46 #1c1c20;
+  }
 }
 
 #page-mount::-webkit-scrollbar {
