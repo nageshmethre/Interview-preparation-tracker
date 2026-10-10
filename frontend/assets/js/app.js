@@ -9156,44 +9156,57 @@ function getLiveRegisteredUsers(serverUsers = null) {
   const userMap = new Map();
   const deletedSet = getDeletedCandidateIdentifiers();
 
-  // 1. Populate baseline candidate accounts roster (excluding expunged accounts)
-  BASELINE_PREPSPACE_CANDIDATES.forEach(u => {
-    const key = (u.email || '').toLowerCase().trim();
-    if (key && !deletedSet.has(key)) {
-      userMap.set(key, { ...u });
-    }
-  });
-
-  // 2. Overlay existing candidate accounts saved in localStorage (excluding expunged accounts)
-  const stored = localStorage.getItem('prepspace_candidate_accounts');
-  if (stored) {
+  const hasLiveServerUsers = Array.isArray(serverUsers) && serverUsers.length > 0;
+  const storedRaw = localStorage.getItem('prepspace_candidate_accounts');
+  let storedList = [];
+  if (storedRaw) {
     try {
-      const parsed = JSON.parse(stored);
-      if (Array.isArray(parsed)) {
-        parsed.forEach(u => {
-          const key = (u.email || '').toLowerCase().trim();
-          if (key && !deletedSet.has(key)) {
-            const existing = userMap.get(key) || {};
-            userMap.set(key, { ...existing, ...u });
-          }
-        });
-      }
+      const parsed = JSON.parse(storedRaw);
+      if (Array.isArray(parsed) && parsed.length > 0) storedList = parsed;
     } catch(e) {}
   }
 
+  // Determine if we have real registered candidate accounts (from server or previously cached from server)
+  const hasRealAccounts = hasLiveServerUsers || storedList.some(u => u && !String(u.id).startsWith('mock-') && (u.googleId || (u.email && u.email.includes('gmail')) || u.role));
+
+  // 1. Only load baseline demo accounts if there are NO real server/stored accounts at all
+  if (!hasRealAccounts && !hasLiveServerUsers && storedList.length === 0) {
+    BASELINE_PREPSPACE_CANDIDATES.forEach(u => {
+      const key = (u.email || '').toLowerCase().trim();
+      if (key && !deletedSet.has(key)) {
+        userMap.set(key, { ...u, id: `mock-${u.id}` });
+      }
+    });
+  }
+
+  // 2. Overlay existing candidate accounts saved in localStorage (excluding expunged accounts)
+  if (storedList.length > 0) {
+    storedList.forEach(u => {
+      const key = (u.email || '').toLowerCase().trim();
+      // If we have live server users, skip any stale mock candidates
+      if (hasLiveServerUsers && String(u.id).startsWith('mock-')) return;
+      if (key && !deletedSet.has(key)) {
+        const existing = userMap.get(key) || {};
+        userMap.set(key, { ...existing, ...u });
+      }
+    });
+  }
+
   // 3. Overlay live server users if returned from /api/admin/users (truth from database)
-  if (serverUsers && Array.isArray(serverUsers) && serverUsers.length > 0) {
+  if (hasLiveServerUsers) {
+    // When live server users are present, real database records are the absolute source of truth
+    userMap.clear();
+
     serverUsers.forEach(su => {
       const key = (su.email || '').toLowerCase().trim();
       if (!key || key.startsWith('deleted_') || su.name === '[DELETED CANDIDATE]') return;
 
-      // Real server users in database are NEVER filtered by deletedSet!
       deletedSet.delete(key);
       if (su.id !== undefined && su.id !== null) {
         deletedSet.delete(String(su.id).trim());
       }
 
-      const existing = userMap.get(key) || {
+      const existing = {
         questionsSolved: Math.min(325, Math.floor(25 + (((su.id || 1) * 17) % 85))),
         testsAttempted: Math.max(1, Math.floor(1 + (((su.id || 1) * 3) % 10))),
         lastActive: 'Online Now'
@@ -9478,6 +9491,7 @@ async function executeAdminFlushCache() {
       'prepspace_candidate_accounts', 'prepspace_payments_ledger', 'prepspace_withdrawal_claims',
       'prepspace_admin_settings', 'admin_announcement_ticker'
     ];
+    localStorage.removeItem('prepspace_candidate_accounts');
     localStorage.removeItem('prepspace_deleted_candidate_emails');
     let removedKeysCount = 0;
     for (let i = localStorage.length - 1; i >= 0; i--) {
@@ -9675,6 +9689,9 @@ function loadAdminPanelTab(tab) {
 
       document.querySelectorAll('.user-table-row').forEach(row => {
         row.addEventListener('click', (e) => {
+          if (e.target && (e.target.matches('input[type="checkbox"]') || e.target.closest('.candidate-select-checkbox') || e.target.closest('button') || e.target.closest('a'))) {
+            return;
+          }
           try {
             const u = JSON.parse(decodeURIComponent(row.dataset.user));
             window.openAdminCandidateInspector(u);
@@ -9741,7 +9758,7 @@ function loadAdminPanelTab(tab) {
           if (confirm(actionPrompt)) {
             const nextPaidState = !current;
             const localUsers = getLiveRegisteredUsers();
-            const target = localUsers.find(u => String(u.id) === String(id) || (email && (u.email || '').toLowerCase().trim() === email));
+            const target = localUsers.find(u => (email && (u.email || '').toLowerCase().trim() === email) || String(u.id) === String(id));
             if (target) {
               target.isPaid = nextPaidState;
               target.paid = nextPaidState;
@@ -9768,7 +9785,7 @@ function loadAdminPanelTab(tab) {
           const nextRole = curRole.includes('ADMIN') ? 'STUDENT' : 'ADMIN';
           if (confirm(`Change administrative authorization for user #${id} from ${curRole} to ${nextRole}?`)) {
             const localUsers = getLiveRegisteredUsers();
-            const target = localUsers.find(u => String(u.id) === String(id) || (email && (u.email || '').toLowerCase().trim() === email));
+            const target = localUsers.find(u => (email && (u.email || '').toLowerCase().trim() === email) || String(u.id) === String(id));
             if (target) {
               target.role = nextRole;
               localStorage.setItem('prepspace_candidate_accounts', JSON.stringify(localUsers));
@@ -9791,7 +9808,7 @@ function loadAdminPanelTab(tab) {
           const email = (e.currentTarget.dataset.email || '').toLowerCase().trim();
           const action = e.currentTarget.dataset.action;
           const localUsers = getLiveRegisteredUsers();
-          const target = localUsers.find(u => String(u.id) === String(id) || (email && (u.email || '').toLowerCase().trim() === email));
+          const target = localUsers.find(u => (email && (u.email || '').toLowerCase().trim() === email) || String(u.id) === String(id));
           if (target) {
             target.isSuspended = (action === 'suspend');
             target.suspended = target.isSuspended;
@@ -9833,11 +9850,13 @@ function loadAdminPanelTab(tab) {
 
       function getSelectedCandidates() {
         const selected = [];
-        const seenIds = new Set();
+        const seenKeys = new Set();
         document.querySelectorAll('.candidate-select-checkbox:checked').forEach(cb => {
+          const email = (cb.dataset.email || '').toLowerCase().trim();
           const id = cb.dataset.id;
-          if (id && !seenIds.has(id)) {
-            seenIds.add(id);
+          const key = email || id;
+          if (key && !seenKeys.has(key)) {
+            seenKeys.add(key);
             selected.push({
               id: id,
               email: cb.dataset.email || '',
@@ -9904,13 +9923,17 @@ function loadAdminPanelTab(tab) {
         }
       }
 
-      // Checkbox Change Event
+      // Checkbox Change Event - strictly synchronizes by UNIQUE email (or unique id fallback)
       document.querySelectorAll('.candidate-select-checkbox').forEach(cb => {
         cb.addEventListener('change', () => {
+          const email = (cb.dataset.email || '').toLowerCase().trim();
           const id = cb.dataset.id;
-          // Synchronize desktop table and mobile card checkboxes for the same candidate
-          document.querySelectorAll(`.candidate-select-checkbox[data-id="${id}"]`).forEach(other => {
-            other.checked = cb.checked;
+          // Synchronize desktop table and mobile card checkboxes for the EXACT same candidate only
+          document.querySelectorAll('.candidate-select-checkbox').forEach(other => {
+            const otherEmail = (other.dataset.email || '').toLowerCase().trim();
+            if ((email && otherEmail && otherEmail === email) || (!email && id && other.dataset.id === id)) {
+              other.checked = cb.checked;
+            }
           });
           updateBulkActionsBar();
         });
@@ -9922,9 +9945,13 @@ function loadAdminPanelTab(tab) {
           const isChecked = e.target.checked;
           document.querySelectorAll('.user-table-row').forEach(row => {
             if (row.style.display !== 'none') {
+              const email = (row.dataset.email || '').toLowerCase().trim();
               const id = row.dataset.id;
-              document.querySelectorAll(`.candidate-select-checkbox[data-id="${id}"]`).forEach(cb => {
-                cb.checked = isChecked;
+              document.querySelectorAll('.candidate-select-checkbox').forEach(cb => {
+                const cbEmail = (cb.dataset.email || '').toLowerCase().trim();
+                if ((email && cbEmail === email) || (!email && id && cb.dataset.id === id)) {
+                  cb.checked = isChecked;
+                }
               });
             }
           });
@@ -9938,9 +9965,13 @@ function loadAdminPanelTab(tab) {
         btnSelectAllVisible.addEventListener('click', () => {
           document.querySelectorAll('.user-table-row').forEach(row => {
             if (row.style.display !== 'none') {
+              const email = (row.dataset.email || '').toLowerCase().trim();
               const id = row.dataset.id;
-              document.querySelectorAll(`.candidate-select-checkbox[data-id="${id}"]`).forEach(cb => {
-                cb.checked = true;
+              document.querySelectorAll('.candidate-select-checkbox').forEach(cb => {
+                const cbEmail = (cb.dataset.email || '').toLowerCase().trim();
+                if ((email && cbEmail === email) || (!email && id && cb.dataset.id === id)) {
+                  cb.checked = true;
+                }
               });
             }
           });
@@ -9956,9 +9987,13 @@ function loadAdminPanelTab(tab) {
           document.querySelectorAll('.candidate-select-checkbox').forEach(cb => { cb.checked = false; });
           document.querySelectorAll('.user-table-row').forEach(row => {
             if (row.style.display !== 'none' && row.dataset.paid === 'false') {
+              const email = (row.dataset.email || '').toLowerCase().trim();
               const id = row.dataset.id;
-              document.querySelectorAll(`.candidate-select-checkbox[data-id="${id}"]`).forEach(cb => {
-                cb.checked = true;
+              document.querySelectorAll('.candidate-select-checkbox').forEach(cb => {
+                const cbEmail = (cb.dataset.email || '').toLowerCase().trim();
+                if ((email && cbEmail === email) || (!email && id && cb.dataset.id === id)) {
+                  cb.checked = true;
+                }
               });
             }
           });
@@ -9975,9 +10010,13 @@ function loadAdminPanelTab(tab) {
           document.querySelectorAll('.candidate-select-checkbox').forEach(cb => { cb.checked = false; });
           document.querySelectorAll('.user-table-row').forEach(row => {
             if (row.style.display !== 'none' && row.dataset.paid === 'true') {
+              const email = (row.dataset.email || '').toLowerCase().trim();
               const id = row.dataset.id;
-              document.querySelectorAll(`.candidate-select-checkbox[data-id="${id}"]`).forEach(cb => {
-                cb.checked = true;
+              document.querySelectorAll('.candidate-select-checkbox').forEach(cb => {
+                const cbEmail = (cb.dataset.email || '').toLowerCase().trim();
+                if ((email && cbEmail === email) || (!email && id && cb.dataset.id === id)) {
+                  cb.checked = true;
+                }
               });
             }
           });
@@ -10016,7 +10055,7 @@ function loadAdminPanelTab(tab) {
             localUsers.forEach(u => {
               const uId = String(u.id);
               const uEmail = (u.email || '').toLowerCase().trim();
-              if (selectedIds.has(uId) || (uEmail && selectedEmails.has(uEmail))) {
+              if ((uEmail && selectedEmails.has(uEmail)) || (!uEmail && selectedIds.has(uId))) {
                 u.isPaid = true;
                 u.paid = true;
                 if (uEmail === String(state.email || '').toLowerCase()) {
@@ -10064,7 +10103,7 @@ function loadAdminPanelTab(tab) {
             localUsers.forEach(u => {
               const uId = String(u.id);
               const uEmail = (u.email || '').toLowerCase().trim();
-              if (selectedIds.has(uId) || (uEmail && selectedEmails.has(uEmail))) {
+              if ((uEmail && selectedEmails.has(uEmail)) || (!uEmail && selectedIds.has(uId))) {
                 u.isPaid = false;
                 u.paid = false;
                 if (uEmail === String(state.email || '').toLowerCase()) {
