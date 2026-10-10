@@ -46,7 +46,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/v1/library/books/**", "/api/library/books/**", "/api/v1/library/categories", "/api/library/categories", "/api/v1/library/stats", "/api/library/stats").permitAll()
                 .requestMatchers("/api/payments/webhook", "/api/payments/cashfree/webhook").permitAll()
                 .requestMatchers("/api/v1/certificates/verify/**").permitAll()
-                .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "ADMIN_SUPER", "ADMIN_FINANCE", "ADMIN_SUPPORT", "ADMIN_CONTENT", "ADMIN_MARKETING")
+                .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "ADMIN_SUPER", "SUPER_ADMIN", "ADMIN_FINANCE", "ADMIN_SUPPORT", "ADMIN_CONTENT", "ADMIN_MARKETING")
                 .anyRequest().authenticated()
             );
 

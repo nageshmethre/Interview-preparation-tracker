@@ -6016,7 +6016,7 @@ const components = {
               <div class="admin-kpi-label">Total Candidates</div>
               <i class="fa-solid fa-users text-primary fs-8"></i>
             </div>
-            <div class="admin-kpi-num">${stats.totalUsers || 0}</div>
+            <div class="admin-kpi-num" id="admin-kpi-total-candidates">${stats.totalUsers || 0}</div>
             <div class="admin-kpi-caption mt-1 text-muted"><i class="fa-solid fa-user-check text-primary me-1"></i>Registered profiles</div>
           </div>
         </div>
@@ -6028,8 +6028,8 @@ const components = {
               <div class="admin-kpi-label">Pro Pass Rate</div>
               <i class="fa-solid fa-crown text-warning fs-8"></i>
             </div>
-            <div class="admin-kpi-num text-emerald">${stats.totalUsers ? Math.round(((stats.paidUsers || 0) / stats.totalUsers) * 100) : 0}%</div>
-            <div class="admin-kpi-caption text-emerald mt-1"><i class="fa-solid fa-arrow-trend-up me-1"></i>${stats.paidUsers || 0} pro subscribers</div>
+            <div class="admin-kpi-num text-emerald" id="admin-kpi-pro-rate">${stats.totalUsers ? Math.round(((stats.paidUsers || 0) / stats.totalUsers) * 100) : 0}%</div>
+            <div class="admin-kpi-caption text-emerald mt-1" id="admin-kpi-pro-caption"><i class="fa-solid fa-arrow-trend-up me-1"></i>${stats.paidUsers || 0} pro subscribers</div>
           </div>
         </div>
 
@@ -6040,7 +6040,7 @@ const components = {
               <div class="admin-kpi-label">Gross Revenue</div>
               <i class="fa-solid fa-arrow-trend-up text-success fs-8"></i>
             </div>
-            <div class="admin-kpi-num text-success">₹${stats.totalRevenue || 0}</div>
+            <div class="admin-kpi-num text-success" id="admin-kpi-revenue">₹${stats.totalRevenue || 0}</div>
             <svg class="admin-kpi-sparkline mt-1" viewBox="0 0 100 25" preserveAspectRatio="none">
               <path d="M0,22 Q20,18 40,14 T70,8 T100,2" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
               <path d="M0,22 Q20,18 40,14 T70,8 T100,2 L100,25 L0,25 Z" fill="rgba(16, 185, 129, 0.12)"/>
@@ -6055,7 +6055,7 @@ const components = {
               <div class="admin-kpi-label">Referral Bounties</div>
               <i class="fa-solid fa-hand-holding-dollar text-warning fs-8"></i>
             </div>
-            <div class="admin-kpi-num text-warning">₹${stats.totalReferralPayouts || 0}</div>
+            <div class="admin-kpi-num text-warning" id="admin-kpi-bounties">₹${stats.totalReferralPayouts || 0}</div>
             <div class="admin-kpi-caption mt-1 text-muted">₹199 per invite</div>
           </div>
         </div>

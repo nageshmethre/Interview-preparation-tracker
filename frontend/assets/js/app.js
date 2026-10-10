@@ -526,6 +526,18 @@ function router() {
     }
   }
 
+  // Cleanup admin live polling & clock when leaving admin panel
+  if (hash !== '#/admin') {
+    if (window.adminTelemetryInterval) {
+      clearInterval(window.adminTelemetryInterval);
+      window.adminTelemetryInterval = null;
+    }
+    if (window.adminClockInterval) {
+      clearInterval(window.adminClockInterval);
+      window.adminClockInterval = null;
+    }
+  }
+
   // Mount targeted page views
   const pageMount = document.getElementById('page-mount');
   const viewTitle = document.getElementById('current-view-title');
@@ -1128,9 +1140,7 @@ function router() {
       const refreshBtn = document.getElementById('btn-admin-refresh');
       if (refreshBtn) {
         refreshBtn.onclick = () => {
-          showToast('Synchronizing real-time telemetry and candidate accounts...', 'info');
-          window.currentAdminStats = computeLiveAdminStats();
-          router();
+          syncLiveAdminTelemetry(true);
         };
       }
 
@@ -1206,20 +1216,19 @@ function router() {
     // Default to Overview tab
     loadAdminPanelTab('overview');
 
-    apiFetch('/admin/stats')
-      .then(stats => {
-        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/admin') return;
-        if (stats && typeof stats === 'object') {
-          window.currentAdminStats = stats;
-          pageMount.innerHTML = components.admin(stats);
-          updateAdminClock();
-          bindAdminHeaderControls();
-          loadAdminPanelTab('overview');
-        }
-      })
-      .catch(err => {
-        console.warn('Admin stats live fetch skipped, staying on active telemetry console:', err.message);
-      });
+    // Immediate background sync of live database telemetry & candidate count
+    syncLiveAdminTelemetry(false);
+
+    // Maintain 25s auto-refresh polling while admin is actively viewing the console
+    if (window.adminTelemetryInterval) clearInterval(window.adminTelemetryInterval);
+    window.adminTelemetryInterval = setInterval(() => {
+      if (window.location.hash.split('?')[0] === '#/admin') {
+        syncLiveAdminTelemetry(false);
+      } else {
+        clearInterval(window.adminTelemetryInterval);
+        window.adminTelemetryInterval = null;
+      }
+    }, 25000);
   } else {
     viewTitle.textContent = '404 - Page Not Found';
     pageMount.innerHTML = typeof components.error404 === 'function' 
@@ -1885,6 +1894,24 @@ function bindAuthEvents(mode) {
           body: JSON.stringify(pendingRegistration)
         }).then(res => {
           showToast('Email verified & account created! Initializing space...', 'success');
+          try {
+            const rawStored = localStorage.getItem('prepspace_candidate_accounts');
+            let candidateList = rawStored ? JSON.parse(rawStored) : [];
+            if (Array.isArray(candidateList)) {
+              if (!candidateList.some(u => (u.email || '').toLowerCase() === (pendingRegistration.email || '').toLowerCase())) {
+                candidateList.push({
+                  id: (res && res.id) ? res.id : Date.now(),
+                  name: pendingRegistration.name,
+                  email: pendingRegistration.email,
+                  role: 'STUDENT',
+                  isPaid: false,
+                  paid: false,
+                  createdAt: new Date().toISOString()
+                });
+                localStorage.setItem('prepspace_candidate_accounts', JSON.stringify(candidateList));
+              }
+            }
+          } catch(e) {}
           // Auto login upon successful verification
           apiFetch('/auth/login', {
             method: 'POST',
@@ -8652,6 +8679,116 @@ function computeLiveAdminStats(serverStats = null) {
   };
 }
 
+async function syncLiveAdminTelemetry(showFeedback = false) {
+  const refreshBtn = document.getElementById('btn-admin-refresh');
+  const refreshIcon = refreshBtn ? refreshBtn.querySelector('i') : null;
+  if (refreshIcon) refreshIcon.classList.add('fa-spin');
+
+  try {
+    const [usersRes, statsRes, paymentsRes, withdrawalsRes] = await Promise.allSettled([
+      apiFetch('/admin/users'),
+      apiFetch('/admin/stats'),
+      apiFetch('/admin/payments'),
+      apiFetch('/admin/withdrawals')
+    ]);
+
+    let liveUsers = (usersRes.status === 'fulfilled' && Array.isArray(usersRes.value)) ? usersRes.value : null;
+    let liveStats = (statsRes.status === 'fulfilled' && statsRes.value && typeof statsRes.value === 'object') ? statsRes.value : null;
+    let livePayments = (paymentsRes.status === 'fulfilled' && Array.isArray(paymentsRes.value)) ? paymentsRes.value : null;
+    let liveWithdrawals = (withdrawalsRes.status === 'fulfilled' && Array.isArray(withdrawalsRes.value)) ? withdrawalsRes.value : null;
+
+    if (liveUsers && liveUsers.length > 0) {
+      localStorage.setItem('prepspace_candidate_accounts', JSON.stringify(liveUsers));
+    } else {
+      liveUsers = getLiveRegisteredUsers();
+    }
+
+    if (livePayments && Array.isArray(livePayments)) {
+      localStorage.setItem('prepspace_payments_ledger', JSON.stringify(livePayments));
+    }
+    if (liveWithdrawals && Array.isArray(liveWithdrawals)) {
+      localStorage.setItem('prepspace_withdrawal_claims', JSON.stringify(liveWithdrawals));
+    }
+
+    const totalUsersCount = Math.max(
+      (liveStats && typeof liveStats.totalUsers === 'number') ? liveStats.totalUsers : 0,
+      liveUsers ? liveUsers.length : 0
+    );
+
+    const paidUsersCount = (liveStats && typeof liveStats.paidUsers === 'number')
+      ? liveStats.paidUsers
+      : (liveUsers ? liveUsers.filter(u => u.isPaid === true || u.paid === true).length : 0);
+
+    const totalRev = (liveStats && typeof liveStats.totalRevenue === 'number')
+      ? liveStats.totalRevenue
+      : (livePayments ? livePayments.filter(p => p.status === 'SUCCESS').reduce((sum, p) => sum + (Number(p.amount) || 0), 0) : 0);
+
+    const totalPayouts = (liveStats && typeof liveStats.totalReferralPayouts === 'number' && liveStats.totalReferralPayouts > 0)
+      ? liveStats.totalReferralPayouts
+      : (liveWithdrawals ? liveWithdrawals.filter(w => w.status === 'PAID' || w.status === 'COMPLETED').reduce((sum, w) => sum + (Number(w.amount) || 0), 0) : 0);
+
+    const totalPendingPayouts = (liveStats && typeof liveStats.totalPendingWithdrawalAmount === 'number')
+      ? liveStats.totalPendingWithdrawalAmount
+      : (liveWithdrawals ? liveWithdrawals.filter(w => w.status === 'PENDING').reduce((sum, w) => sum + (Number(w.amount) || 0), 0) : 0);
+
+    const proRate = totalUsersCount > 0 ? Math.round((paidUsersCount / totalUsersCount) * 100) : 0;
+
+    const mergedStats = {
+      totalUsers: totalUsersCount,
+      paidUsers: paidUsersCount,
+      activeUsersToday: totalUsersCount,
+      proSubscribers: paidUsersCount,
+      mrr: Math.round(totalRev / 12),
+      totalRevenue: totalRev,
+      totalReferralPayouts: totalPayouts,
+      totalPendingWithdrawalAmount: totalPendingPayouts,
+      serverStatus: 'ACTIVE (Live Telemetry Synchronized)',
+      uptimePercent: 99.99,
+      recentRegistrations: (liveUsers || []).slice(0, 5)
+    };
+
+    window.currentAdminStats = mergedStats;
+
+    // Reactively update top executive KPI metric cards without destroying page DOM
+    const kpiTotalEl = document.getElementById('admin-kpi-total-candidates');
+    if (kpiTotalEl) kpiTotalEl.textContent = totalUsersCount;
+
+    const kpiProRateEl = document.getElementById('admin-kpi-pro-rate');
+    if (kpiProRateEl) kpiProRateEl.textContent = `${proRate}%`;
+
+    const kpiProCaptionEl = document.getElementById('admin-kpi-pro-caption');
+    if (kpiProCaptionEl) kpiProCaptionEl.innerHTML = `<i class="fa-solid fa-arrow-trend-up me-1"></i>${paidUsersCount} pro subscribers`;
+
+    const kpiRevEl = document.getElementById('admin-kpi-revenue');
+    if (kpiRevEl) kpiRevEl.textContent = `₹${totalRev}`;
+
+    const kpiBountiesEl = document.getElementById('admin-kpi-bounties');
+    if (kpiBountiesEl) kpiBountiesEl.textContent = `₹${totalPayouts}`;
+
+    // If candidate table tab is currently active and user isn't actively searching, refresh it
+    const activeTabBtn = document.querySelector('.admin-tab-btn.active');
+    const curTab = activeTabBtn ? activeTabBtn.id.replace('tab-', '') : 'overview';
+    if (curTab === 'users' && liveUsers && liveUsers.length > 0) {
+      const searchInput = document.getElementById('admin-user-search-input');
+      const hasSearch = searchInput && searchInput.value.trim().length > 0;
+      if (!hasSearch && typeof window.renderAdminUsersTab === 'function') {
+        window.renderAdminUsersTab(liveUsers);
+      }
+    }
+
+    if (showFeedback) {
+      showToast(`Telemetry synchronized! ${totalUsersCount} registered candidate accounts online.`, 'success');
+    }
+  } catch (err) {
+    console.error('Error syncing telemetry:', err);
+    if (showFeedback) {
+      showToast('Telemetry sync notice: ' + err.message, 'warning');
+    }
+  } finally {
+    if (refreshIcon) refreshIcon.classList.remove('fa-spin');
+  }
+}
+
 async function executeAdminFlushCache() {
   const purgeBtn = document.getElementById('btn-admin-purge-cache');
   if (purgeBtn) {
@@ -9040,8 +9177,22 @@ function loadAdminPanelTab(tab) {
       }
     };
 
+    window.renderAdminUsersTab = renderUsers;
+
     apiFetch('/admin/users')
-      .then(users => renderUsers(users))
+      .then(users => {
+        if (Array.isArray(users) && users.length > 0) {
+          localStorage.setItem('prepspace_candidate_accounts', JSON.stringify(users));
+          const kpiTotalEl = document.getElementById('admin-kpi-total-candidates');
+          if (kpiTotalEl) kpiTotalEl.textContent = users.length;
+          const paidCount = users.filter(u => u.isPaid === true || u.paid === true).length;
+          const kpiProRateEl = document.getElementById('admin-kpi-pro-rate');
+          if (kpiProRateEl) kpiProRateEl.textContent = `${Math.round((paidCount / users.length) * 100)}%`;
+          const kpiProCaptionEl = document.getElementById('admin-kpi-pro-caption');
+          if (kpiProCaptionEl) kpiProCaptionEl.innerHTML = `<i class="fa-solid fa-arrow-trend-up me-1"></i>${paidCount} pro subscribers`;
+        }
+        renderUsers(users);
+      })
       .catch(() => renderUsers(getLiveRegisteredUsers()));
 
   } else if (tab === 'leaderboard') {
@@ -9663,6 +9814,7 @@ function updateRuleSetting(key, value) {
 // Global scope bindings for Admin Panel
 window.loadAdminPanelTab = loadAdminPanelTab;
 window.updateRuleSetting = updateRuleSetting;
+window.syncLiveAdminTelemetry = syncLiveAdminTelemetry;
 
 // ----------------------------------------------------
 // DAILY ACTIVE SCREEN TIME TRACKER

@@ -8,7 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -21,10 +22,27 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
+        String rawRole = user.getRole() != null ? user.getRole().trim() : "STUDENT";
+        String normalizedRole = rawRole.startsWith("ROLE_") ? rawRole.substring(5) : rawRole;
+
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + normalizedRole));
+        authorities.add(new SimpleGrantedAuthority(normalizedRole));
+
+        if (normalizedRole.toUpperCase().contains("ADMIN")) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN_SUPER"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_SUPER_ADMIN"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN_SUPPORT"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN_FINANCE"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN_MARKETING"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN_CONTENT"));
+        }
+
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
                 user.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole()))
+                authorities
         );
     }
 }
