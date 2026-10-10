@@ -1,22 +1,22 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
-// Version: 5.8.26 (Enterprise Professional Bulk Operation Toolbar & Button Styling)
+// Version: 5.8.27 (Mobile & Desktop Dual Interface Optimization & Coding Workspace Fix)
 
-const CACHE_NAME = 'prepspace-static-v5.8.26';
-const RUNTIME_CACHE = 'prepspace-runtime-v5.8.26';
+const CACHE_NAME = 'prepspace-static-v5.8.27';
+const RUNTIME_CACHE = 'prepspace-runtime-v5.8.27';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/index.css?v=5.8.26',
-  './assets/js/dsa-notes-data.js?v=5.8.26',
-  './assets/js/app.js?v=5.8.26',
-  './assets/js/components.js?v=5.8.26',
-  './assets/js/interview-suite.js?v=5.8.26',
-  './assets/js/technical-library-data.js?v=5.8.26',
-  './assets/js/questions-data.js?v=5.8.26',
-  './assets/js/aptitude-curriculum.js?v=5.8.26',
-  './assets/js/production-pages.js?v=5.8.26',
+  './assets/css/index.css?v=5.8.27',
+  './assets/js/dsa-notes-data.js?v=5.8.27',
+  './assets/js/app.js?v=5.8.27',
+  './assets/js/components.js?v=5.8.27',
+  './assets/js/interview-suite.js?v=5.8.27',
+  './assets/js/technical-library-data.js?v=5.8.27',
+  './assets/js/questions-data.js?v=5.8.27',
+  './assets/js/aptitude-curriculum.js?v=5.8.27',
+  './assets/js/production-pages.js?v=5.8.27',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',

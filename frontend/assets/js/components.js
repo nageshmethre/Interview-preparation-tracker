@@ -908,7 +908,7 @@ const components = {
   appLayout: (userName, isAdmin, isPaid = false) => `
     <div id="app-container" class="d-flex w-100 position-relative">
       <!-- Sidebar -->
-      <div class="sidebar glass-panel border-top-0 border-bottom-0 border-start-0 rounded-0 d-flex flex-column">
+      <div id="sidebar" class="sidebar glass-panel border-top-0 border-bottom-0 border-start-0 rounded-0 d-flex flex-column">
         <!-- Brand Header -->
         <div class="p-3 border-bottom border-secondary-subtle d-flex align-items-center justify-content-between brand-header-box flex-shrink-0">
           <a class="navbar-brand d-flex align-items-center brand-text text-decoration-none" href="#/dashboard">
@@ -2950,23 +2950,24 @@ const components = {
     return `
       <div class="lc-workspace-root d-flex flex-column h-100" id="agy-coding-workspace">
         <!-- 1. LeetCode Modern Top Navigation Bar -->
-        <header class="lc-top-bar d-flex align-items-center justify-content-between px-3 py-2 flex-shrink-0">
+        <header class="lc-top-bar d-flex align-items-center justify-content-between px-2 px-md-3 py-1.5 flex-shrink-0">
           <!-- Left: Back Navigation, Sidebar Toggle, Problem List Dropdown & Fast Navigation -->
-          <div class="d-flex align-items-center gap-2">
-            <button class="btn btn-sm lc-icon-btn d-lg-none" id="lc-sidebar-toggle-btn" title="Toggle Sidebar Navigation">
+          <div class="d-flex align-items-center gap-1 gap-md-2 flex-shrink-0">
+            <button class="btn btn-sm lc-icon-btn d-lg-none px-2" id="lc-sidebar-toggle-btn" title="Toggle Sidebar Navigation">
               <i class="fa-solid fa-bars"></i>
             </button>
-            <a href="#/dsa-roadmap" class="btn btn-sm lc-btn-nav d-flex align-items-center gap-1 text-decoration-none" title="Return to DSA Roadmap">
+            <a href="#/dsa-roadmap" class="btn btn-sm lc-btn-nav d-flex align-items-center gap-1 text-decoration-none px-2" title="Return to DSA Roadmap">
               <i class="fa-solid fa-chevron-left fs-9 text-muted"></i>
               <span class="d-none d-md-inline fs-9 text-muted">Roadmap</span>
             </a>
             <div class="dropdown">
-              <button class="btn btn-sm lc-btn-nav d-flex align-items-center gap-2" type="button" id="lcProblemListBtn" data-bs-toggle="dropdown" aria-expanded="false">
+              <button class="btn btn-sm lc-btn-nav d-flex align-items-center gap-1.5 px-2 px-md-2.5" type="button" id="lcProblemListBtn" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa-solid fa-list-ul text-warning"></i>
-                <span class="fw-semibold text-white">Problem List</span>
+                <span class="fw-semibold text-white d-none d-sm-inline">Problem List</span>
+                <span class="fw-semibold text-white d-sm-none fs-8">Problems</span>
                 <i class="fa-solid fa-chevron-down fs-9 text-muted ms-1"></i>
               </button>
-              <div class="dropdown-menu dropdown-menu-dark lc-dropdown-menu shadow-lg p-2" aria-labelledby="lcProblemListBtn" style="width: 320px; max-height: 480px; overflow-y: auto;">
+              <div class="dropdown-menu dropdown-menu-dark lc-dropdown-menu shadow-lg p-2" aria-labelledby="lcProblemListBtn" style="width: min(320px, 92vw); max-height: 480px; overflow-y: auto;">
                 <div class="p-1 mb-2">
                   <input type="text" id="practice-search-input" class="form-control form-control-sm bg-dark text-white border-secondary border-opacity-40" placeholder="Filter problems by title or tag..." autocomplete="off">
                 </div>
@@ -3002,46 +3003,57 @@ const components = {
             </div>
 
             <!-- Problem Forward / Backward Arrows & Shuffle -->
-            <div class="d-flex align-items-center gap-1">
-              <button class="btn btn-sm lc-icon-btn text-light" id="btn-prev-problem" title="Previous Problem"><i class="fa-solid fa-chevron-left"></i></button>
-              <button class="btn btn-sm lc-icon-btn text-light" id="btn-next-problem" title="Next Problem"><i class="fa-solid fa-chevron-right"></i></button>
-              <button class="btn btn-sm lc-icon-btn text-light" id="btn-random-problem" title="Pick Random Problem"><i class="fa-solid fa-shuffle"></i></button>
+            <div class="d-flex align-items-center gap-0.5">
+              <button class="btn btn-sm lc-icon-btn text-light px-1.5" id="btn-prev-problem" title="Previous Problem"><i class="fa-solid fa-chevron-left"></i></button>
+              <button class="btn btn-sm lc-icon-btn text-light px-1.5" id="btn-next-problem" title="Next Problem"><i class="fa-solid fa-chevron-right"></i></button>
+              <button class="btn btn-sm lc-icon-btn text-light px-1.5 d-none d-sm-inline-block" id="btn-random-problem" title="Pick Random Problem"><i class="fa-solid fa-shuffle"></i></button>
             </div>
           </div>
 
-          <!-- Center: Run & Submit Action Buttons -->
-          <div class="d-flex align-items-center gap-2">
-            <button class="btn btn-sm lc-btn-run d-flex align-items-center gap-1.5 px-3 py-1" id="btn-practice-run" title="Run Sample Testcases">
+          <!-- Right: Run, Submit, AI Assistant & Settings -->
+          <div class="d-flex align-items-center gap-1.5 gap-md-2 flex-shrink-0">
+            <button class="btn btn-sm lc-btn-run d-flex align-items-center gap-1 px-2.5 py-1" id="btn-practice-run" title="Run Sample Testcases">
               <i class="fa-solid fa-play text-light fs-9"></i>
-              <span class="fw-semibold">Run</span>
+              <span class="fw-semibold fs-8">Run</span>
             </button>
-            <button class="btn btn-sm lc-btn-submit d-flex align-items-center gap-1.5 px-3.5 py-1" id="btn-practice-submit" title="Submit Solution to Judge">
+            <button class="btn btn-sm lc-btn-submit d-flex align-items-center gap-1 px-2.5 px-md-3 py-1" id="btn-practice-submit" title="Submit Solution to Judge">
               <i class="fa-solid fa-cloud-arrow-up text-success fs-8"></i>
-              <span class="fw-bold text-success">Submit</span>
+              <span class="fw-bold text-success fs-8">Submit</span>
             </button>
-            <button class="btn btn-sm lc-icon-btn text-secondary d-none d-md-inline-block" id="btn-toggle-layout" title="Toggle Split Orientation"><i class="fa-solid fa-table-columns"></i></button>
-            <button class="btn btn-sm lc-icon-btn text-warning" id="btn-practice-ai" title="AI Code Assistant & Hints"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
-          </div>
-
-          <!-- Right: Status, Settings, Timer & Profile -->
-          <div class="d-flex align-items-center gap-2.5">
-            <div class="d-none d-sm-flex align-items-center gap-1 text-muted fs-8 font-monospace" id="lc-timer-display" title="Session Timer">
+            <button class="btn btn-sm lc-icon-btn text-secondary d-none d-lg-inline-block px-2" id="btn-toggle-layout" title="Toggle Split Orientation"><i class="fa-solid fa-table-columns"></i></button>
+            <button class="btn btn-sm lc-icon-btn text-warning px-1.5" id="btn-practice-ai" title="AI Code Assistant & Hints"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+            <div class="d-none d-md-flex align-items-center gap-1 text-muted fs-8 font-monospace ms-1" id="lc-timer-display" title="Session Timer">
               <i class="fa-regular fa-clock text-secondary"></i>
               <span id="lc-stopwatch">00:00</span>
             </div>
-            <button class="btn btn-sm lc-icon-btn text-secondary" id="btn-editor-settings" title="Editor Preferences"><i class="fa-solid fa-gear"></i></button>
-            <span class="badge bg-primary bg-opacity-20 text-primary border border-primary border-opacity-30 font-monospace py-1 px-2 d-none d-sm-inline-block">PRO</span>
-            <a href="#/profile" class="btn btn-sm lc-icon-btn text-secondary" title="Profile Settings"><i class="fa-solid fa-circle-user fs-6"></i></a>
+            <button class="btn btn-sm lc-icon-btn text-secondary px-1.5 d-none d-sm-inline-block" id="btn-editor-settings" title="Editor Preferences"><i class="fa-solid fa-gear"></i></button>
+            <span class="badge bg-primary bg-opacity-20 text-primary border border-primary border-opacity-30 font-monospace py-1 px-2 d-none d-md-inline-block">PRO</span>
+            <a href="#/profile" class="btn btn-sm lc-icon-btn text-secondary px-1.5 d-none d-sm-inline-block" title="Profile Settings"><i class="fa-solid fa-circle-user fs-6"></i></a>
           </div>
         </header>
 
+        <!-- Mobile Segmented View Mode Switcher (Description / Code / Console) -->
+        <div class="lc-mobile-tab-bar d-flex d-lg-none align-items-center justify-content-center px-2 py-1.5 border-bottom border-secondary border-opacity-20 flex-shrink-0" id="lc-mobile-mode-switcher">
+          <div class="btn-group w-100 p-0.5 rounded-2" role="group" style="background: rgba(255,255,255,0.06); max-width: 440px;">
+            <button type="button" class="btn btn-sm py-1 px-2 text-white fw-semibold rounded-2 lc-mobile-pane-toggle active" id="btn-mobile-pane-desc" data-pane="desc">
+              <i class="fa-regular fa-file-lines me-1 text-primary"></i> <span>Problem</span>
+            </button>
+            <button type="button" class="btn btn-sm py-1 px-2 text-secondary fw-semibold rounded-2 lc-mobile-pane-toggle" id="btn-mobile-pane-code" data-pane="code">
+              <i class="fa-solid fa-code me-1 text-success"></i> <span>Code</span>
+            </button>
+            <button type="button" class="btn btn-sm py-1 px-2 text-secondary fw-semibold rounded-2 lc-mobile-pane-toggle" id="btn-mobile-pane-console" data-pane="console">
+              <i class="fa-solid fa-terminal me-1 text-warning"></i> <span>Console</span>
+            </button>
+          </div>
+        </div>
+
         <!-- 2. Dual-Pane LeetCode Body (Left: Problem Tabs | Right: Editor + Console) -->
-        <div class="lc-main-split flex-grow-1 d-flex overflow-hidden" id="agy-main-split">
+        <div class="lc-main-split flex-grow-1 d-flex overflow-hidden" id="agy-main-split" data-mobile-pane="desc">
           
           <!-- LEFT PANE: LeetCode Multi-Tab Problem Explorer -->
           <div class="lc-pane lc-pane-left d-flex flex-column border-end border-secondary border-opacity-20" id="vscode-left-pane">
             <!-- Tabs Navigation -->
-            <ul class="nav lc-tabs border-bottom border-secondary border-opacity-20 px-2 pt-1 flex-shrink-0" role="tablist">
+            <ul class="nav lc-tabs border-bottom border-secondary border-opacity-20 px-2 pt-1 flex-shrink-0 flex-nowrap" role="tablist">
               <li class="nav-item">
                 <button class="nav-link active d-flex align-items-center gap-1.5" id="tab-desc-btn" data-bs-toggle="tab" data-bs-target="#tab-lc-desc" type="button" role="tab">
                   <i class="fa-regular fa-file-lines text-primary"></i> <span>Description</span>
@@ -3250,7 +3262,7 @@ const components = {
                 <button type="button" class="btn btn-sm lc-icon-btn text-muted" id="btn-editor-copy" title="Copy Code"><i class="fa-solid fa-copy"></i></button>
                 <button type="button" class="btn btn-sm lc-icon-btn text-muted" id="btn-editor-font-dec" title="Decrease Font" style="font-family: monospace; font-weight: bold;">A-</button>
                 <button type="button" class="btn btn-sm lc-icon-btn text-muted" id="btn-editor-font-inc" title="Increase Font" style="font-family: monospace; font-weight: bold;">A+</button>
-                <button type="button" class="btn btn-sm lc-icon-btn text-muted" id="btn-ide-maximize" title="Maximize Code Editor"><i class="fa-solid fa-expand" id="icon-ide-maximize"></i></button>
+                <button type="button" class="btn btn-sm lc-icon-btn text-muted d-none d-lg-inline-block" id="btn-ide-maximize" title="Maximize Code Editor"><i class="fa-solid fa-expand" id="icon-ide-maximize"></i></button>
               </div>
             </div>
 

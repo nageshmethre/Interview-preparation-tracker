@@ -4996,8 +4996,9 @@ function bindCodingPracticeEvents(rawQuestions = []) {
   let lastConsoleOutput = '// Ready to compile and run against automated test suite.';
 
   // 1. Line Gutter, Active Line Highlight, and Cursor Tracker
-  let currentEditorFontSize = 13.5;
-  let currentEditorLineHeight = 24;
+  const isMobileScreen = (typeof window !== 'undefined' && window.innerWidth < 992);
+  let currentEditorFontSize = isMobileScreen ? 12.5 : 13.5;
+  let currentEditorLineHeight = isMobileScreen ? 22 : 24;
 
   function updateLineGutter() {
     if (!editorTextarea || !gutterEl) return;
@@ -5396,7 +5397,7 @@ function bindCodingPracticeEvents(rawQuestions = []) {
   const btnSidebarToggle = document.getElementById('lc-sidebar-toggle-btn');
   if (btnSidebarToggle) {
     btnSidebarToggle.addEventListener('click', () => {
-      const sidebar = document.getElementById('sidebar');
+      const sidebar = document.getElementById('sidebar') || document.querySelector('.sidebar');
       if (sidebar) sidebar.classList.toggle('active');
     });
   }
@@ -5639,6 +5640,39 @@ function bindCodingPracticeEvents(rawQuestions = []) {
     btnCloseConsole.addEventListener('click', () => toggleConsole(false));
   }
 
+  // Mobile Segmented View Mode Switcher Logic
+  const mobilePaneButtons = document.querySelectorAll('.lc-mobile-pane-toggle');
+  const mainSplitEl = document.getElementById('agy-main-split');
+
+  function setMobilePane(pane) {
+    if (!mainSplitEl) return;
+    mainSplitEl.setAttribute('data-mobile-pane', pane);
+    mobilePaneButtons.forEach(btn => {
+      const isMatch = (btn.dataset.pane === pane);
+      btn.classList.toggle('active', isMatch);
+      btn.classList.toggle('text-white', isMatch);
+      btn.classList.toggle('text-secondary', !isMatch);
+    });
+    if (pane === 'console') {
+      toggleConsole(true);
+      const resultTabBtn = document.getElementById('console-tab-result-btn');
+      if (resultTabBtn && typeof bootstrap !== 'undefined' && bootstrap.Tab) {
+        try { bootstrap.Tab.getOrCreateInstance(resultTabBtn).show(); } catch (e) { resultTabBtn.click(); }
+      }
+    } else if (pane === 'code') {
+      setTimeout(() => {
+        if (editorTextarea) editorTextarea.focus();
+      }, 50);
+    }
+  }
+
+  mobilePaneButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      setMobilePane(btn.dataset.pane);
+    });
+  });
+
   // 10. Run Tests with Real Automated DSA Judge
   const btnRun = document.getElementById('btn-practice-run');
   if (btnRun) {
@@ -5646,6 +5680,10 @@ function bindCodingPracticeEvents(rawQuestions = []) {
       if (!activeQuestionFullObj) {
         showToast('Please select a problem first.', 'warning');
         return;
+      }
+
+      if (window.innerWidth < 992) {
+        setMobilePane('console');
       }
 
       toggleConsole(true);
@@ -5761,6 +5799,10 @@ function bindCodingPracticeEvents(rawQuestions = []) {
       if (!activeQuestionFullObj) {
         showToast('Please select a problem first.', 'danger');
         return;
+      }
+
+      if (window.innerWidth < 992) {
+        setMobilePane('console');
       }
 
       toggleConsole(true);
