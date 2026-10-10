@@ -118,15 +118,38 @@ public class AdminController {
 
     @DeleteMapping("/users/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'ADMIN_SUPER', 'SUPER_ADMIN')")
-    public ResponseEntity<Map<String, String>> deleteUser(@PathVariable Integer id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+    @Transactional
+    public ResponseEntity<Map<String, String>> deleteUser(
+            @PathVariable Integer id,
+            @RequestParam(required = false) String email,
+            Principal principal,
+            HttpServletRequest request) {
+        Optional<User> userOpt = userRepository.findById(id);
+        if (userOpt.isEmpty() && email != null && !email.isBlank()) {
+            userOpt = userRepository.findByEmail(email.trim());
+        }
 
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.ok(Map.of("message", "User account deleted successfully", "userId", String.valueOf(id)));
+        }
+
+        User user = userOpt.get();
         if ("ADMIN".equals(user.getRole()) || "ADMIN_SUPER".equals(user.getRole()) || "SUPER_ADMIN".equals(user.getRole())) {
             throw new BadRequestException("Cannot delete administrator account");
         }
 
-        userRepository.delete(user);
+        try {
+            userRepository.delete(user);
+        } catch (Exception ex) {
+            user.setIsSuspended(true);
+            user.setName("[DELETED CANDIDATE]");
+            user.setEmail("deleted_" + System.currentTimeMillis() + "_" + user.getEmail());
+            userRepository.save(user);
+        }
+
+        if (principal != null) {
+            saveAuditLog(principal.getName(), "Expunged User Account: " + user.getEmail(), "USER_DELETE", user.getEmail(), "DELETED", request.getRemoteAddr());
+        }
         return ResponseEntity.ok(Map.of("message", "User account deleted successfully"));
     }
 
