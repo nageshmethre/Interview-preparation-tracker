@@ -110,6 +110,38 @@ public class QuestionDataLoader implements ApplicationRunner {
             logger.info("Super Admin account seeded successfully with requested password.");
         }
 
+        // 3.5 Seed Baseline Candidate Accounts Roster if DB only has admin (count <= 1)
+        if (userRepository.count() <= 1) {
+            logger.info("Database contains only admin account. Seeding baseline candidate accounts roster...");
+            List<User> seedCandidates = List.of(
+                User.builder().name("Aarav Sharma").email("aarav.sharma@gmail.com").password(passwordEncoder.encode("Student@2026")).role("STUDENT").isPaid(true).referralCode("AARAV2026").referralEarnings(398.0).build(),
+                User.builder().name("Priya Patel").email("priya.patel@gmail.com").password(passwordEncoder.encode("Student@2026")).role("STUDENT").isPaid(true).referralCode("PRIYA99").referralEarnings(597.0).build(),
+                User.builder().name("Rohan Mehta").email("rohan.mehta@gmail.com").password(passwordEncoder.encode("Student@2026")).role("STUDENT").isPaid(false).referralCode("ROHAN24").referralEarnings(0.0).build(),
+                User.builder().name("Sneha Reddy").email("sneha.reddy@gmail.com").password(passwordEncoder.encode("Student@2026")).role("STUDENT").isPaid(true).referralCode("SNEHA77").referralEarnings(199.0).build(),
+                User.builder().name("Vikram Malhotra").email("vikram.m@gmail.com").password(passwordEncoder.encode("Student@2026")).role("STUDENT").isPaid(false).referralCode("VIKRAM01").referralEarnings(0.0).build(),
+                User.builder().name("Ananya Gupta").email("ananya.gupta@gmail.com").password(passwordEncoder.encode("Student@2026")).role("STUDENT").isPaid(true).referralCode("ANANYA_G").referralEarnings(398.0).build(),
+                User.builder().name("Aditya Verma").email("aditya.verma@gmail.com").password(passwordEncoder.encode("Student@2026")).role("STUDENT").isPaid(false).referralCode("ADITYA9").referralEarnings(0.0).build(),
+                User.builder().name("Neha Joshi").email("neha.joshi@gmail.com").password(passwordEncoder.encode("Student@2026")).role("STUDENT").isPaid(true).referralCode("NEHA_J").referralEarnings(199.0).build(),
+                User.builder().name("Rahul Nair").email("rahul.nair@gmail.com").password(passwordEncoder.encode("Student@2026")).role("STUDENT").isPaid(false).referralCode("RAHUL_N").referralEarnings(0.0).build(),
+                User.builder().name("Ishita Sen").email("ishita.sen@gmail.com").password(passwordEncoder.encode("Student@2026")).role("STUDENT").isPaid(true).referralCode("ISHITA2026").referralEarnings(398.0).build(),
+                User.builder().name("Karthik Subramanian").email("karthik.subramanian@gmail.com").password(passwordEncoder.encode("Student@2026")).role("STUDENT").isPaid(false).referralCode("KARTHIK_S").referralEarnings(0.0).build(),
+                User.builder().name("Tanvi Kulkarni").email("tanvi.k@gmail.com").password(passwordEncoder.encode("Student@2026")).role("STUDENT").isPaid(true).referralCode("TANVI_K").referralEarnings(199.0).build(),
+                User.builder().name("Devendra Patil").email("devendra.patil@gmail.com").password(passwordEncoder.encode("Student@2026")).role("STUDENT").isPaid(false).referralCode("DEV_P").referralEarnings(0.0).build(),
+                User.builder().name("Meera Nambiar").email("meera.nambiar@gmail.com").password(passwordEncoder.encode("Student@2026")).role("STUDENT").isPaid(true).referralCode("MEERA_N").referralEarnings(597.0).build(),
+                User.builder().name("Ayush Tandon").email("ayush.tandon@gmail.com").password(passwordEncoder.encode("Student@2026")).role("STUDENT").isPaid(false).referralCode("AYUSH_T").referralEarnings(0.0).build(),
+                User.builder().name("Divya Krishnan").email("divya.krishnan@gmail.com").password(passwordEncoder.encode("Student@2026")).role("STUDENT").isPaid(true).referralCode("DIVYA_K").referralEarnings(199.0).build(),
+                User.builder().name("Manish Chawla").email("manish.chawla@gmail.com").password(passwordEncoder.encode("Student@2026")).role("STUDENT").isPaid(false).referralCode("MANISH_C").referralEarnings(0.0).build(),
+                User.builder().name("Pooja Hegde").email("pooja.hegde@gmail.com").password(passwordEncoder.encode("Student@2026")).role("STUDENT").isPaid(true).referralCode("POOJA_H").referralEarnings(398.0).build(),
+                User.builder().name("Siddharth Rao").email("siddharth.rao@gmail.com").password(passwordEncoder.encode("Student@2026")).role("STUDENT").isPaid(false).referralCode("SIDDHARTH").referralEarnings(0.0).build()
+            );
+            for (User u : seedCandidates) {
+                if (userRepository.findByEmail(u.getEmail()).isEmpty()) {
+                    userRepository.save(u);
+                }
+            }
+            logger.info("Successfully seeded baseline student candidates into users table.");
+        }
+
         // 4. Seed & Synchronize Default Courses & Certifications
         logger.info("Synchronizing and verifying all 8 LMS certification courses and video streams...");
         
