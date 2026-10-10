@@ -310,7 +310,7 @@
           <div>
             <div class="d-flex align-items-center gap-2 mb-1">
               <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-50 font-monospace fs-9">CAREER ACCELERATOR</span>
-              <h2 class="text-white fw-bold m-0 fs-4">AI Recruiter Outreach & Pipeline Kanban</h2>
+              <h2 class="text-white fw-bold m-0 fs-2">AI Recruiter Outreach & Pipeline Kanban</h2>
             </div>
             <p class="text-muted fs-7 mb-0">Generate high-converting executive cold messages, score deliverability, and drag-track referral pipelines.</p>
           </div>
@@ -1075,7 +1075,7 @@
           <div>
             <div class="d-flex align-items-center gap-2 mb-1">
               <span class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-50 font-monospace fs-9">BEHAVIORAL MASTERY</span>
-              <h2 class="text-white fw-bold m-0 fs-4">STAR Story Vault & Behavioral Teleprompter</h2>
+              <h2 class="text-white fw-bold m-0 fs-2">STAR Story Vault & Behavioral Teleprompter</h2>
             </div>
             <p class="text-muted fs-7 mb-0">Structure real career stories into high-impact STAR responses mapped to Amazon Leadership & Google Principles.</p>
           </div>
@@ -1698,7 +1698,7 @@
           <div>
             <div class="d-flex align-items-center gap-2 mb-1">
               <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-50 font-monospace fs-9">ARENA</span>
-              <h2 class="text-white fw-bold m-0 fs-4">Peer Mock Exchange & AI Shadow Interviewer</h2>
+              <h2 class="text-white fw-bold m-0 fs-2">Peer Mock Exchange & AI Shadow Interviewer</h2>
             </div>
             <p class="text-muted fs-7 mb-0">Practice live 60-min reciprocal interview rounds with standardized FAANG rubrics or run solo against an AI Principal Shadow.</p>
           </div>
@@ -2129,7 +2129,7 @@
           <div>
             <div class="d-flex align-items-center gap-2 mb-1">
               <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-50 font-monospace fs-9">STUDIO AUDIO PODCAST</span>
-              <h2 class="text-white fw-bold m-0 fs-4">60-Second Feynman Audio Bites</h2>
+              <h2 class="text-white fw-bold m-0 fs-2">60-Second Feynman Audio Bites</h2>
             </div>
             <p class="text-muted fs-7 mb-0">Master distributed systems, database internals, and OS concurrency with high-definition studio podcast narration.</p>
           </div>
@@ -2660,7 +2660,7 @@
           <div>
             <div class="d-flex align-items-center gap-2 mb-1">
               <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-50 font-monospace fs-9">EXECUTIVE DUE DILIGENCE</span>
-              <h2 class="text-white fw-bold m-0 fs-4">Reverse Interview Kit & Cultural Risk Radar</h2>
+              <h2 class="text-white fw-bold m-0 fs-2">Reverse Interview Kit & Cultural Risk Radar</h2>
             </div>
             <p class="text-muted fs-7 mb-0">Interview your interviewer: detect toxic engineering cultures, decode red flags, and build your Pocket Deck.</p>
           </div>
