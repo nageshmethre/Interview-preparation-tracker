@@ -9459,6 +9459,7 @@ function loadAdminPanelTab(tab) {
             const match = name.includes(query) || email.includes(query) || role.includes(query);
             row.style.display = match ? '' : 'none';
           });
+          if (typeof updateBulkActionsBar === 'function') updateBulkActionsBar();
         });
       }
 
@@ -9506,6 +9507,7 @@ function loadAdminPanelTab(tab) {
               row.style.display = row.dataset.suspended === 'true' ? '' : 'none';
             }
           });
+          if (typeof updateBulkActionsBar === 'function') updateBulkActionsBar();
         });
       });
 
@@ -9620,6 +9622,288 @@ function loadAdminPanelTab(tab) {
       const composeGlobalBtn = document.getElementById('btn-admin-open-compose-global');
       if (composeGlobalBtn) {
         composeGlobalBtn.addEventListener('click', () => loadAdminPanelTab('broadcast'));
+      }
+
+      // ----------------------------------------------------
+      // BULK CANDIDATE OPERATIONS (PRO PASS & EXPUNGE)
+      // ----------------------------------------------------
+      const masterCb = document.getElementById('bulk-candidate-master-checkbox');
+      const bulkBar = document.getElementById('admin-bulk-actions-bar');
+      const bulkCountEl = document.getElementById('bulk-selected-count');
+
+      function getSelectedCandidates() {
+        const selected = [];
+        const seenIds = new Set();
+        document.querySelectorAll('.candidate-select-checkbox:checked').forEach(cb => {
+          const id = cb.dataset.id;
+          if (id && !seenIds.has(id)) {
+            seenIds.add(id);
+            selected.push({
+              id: id,
+              email: cb.dataset.email || '',
+              name: cb.dataset.name || 'Candidate',
+              role: cb.dataset.role || 'STUDENT',
+              paid: cb.dataset.paid === 'true'
+            });
+          }
+        });
+        return selected;
+      }
+
+      function updateBulkActionsBar() {
+        const selected = getSelectedCandidates();
+        const count = selected.length;
+        if (bulkCountEl) bulkCountEl.textContent = count;
+
+        if (bulkBar) {
+          if (count > 0) {
+            bulkBar.classList.remove('d-none');
+            bulkBar.classList.add('d-flex');
+          } else {
+            bulkBar.classList.remove('d-flex');
+            bulkBar.classList.add('d-none');
+          }
+        }
+
+        const visibleCbs = Array.from(document.querySelectorAll('#admin-users-table-body .candidate-select-checkbox')).filter(cb => {
+          const row = cb.closest('.user-table-row');
+          return row && row.style.display !== 'none';
+        });
+
+        if (masterCb) {
+          if (visibleCbs.length > 0 && visibleCbs.every(cb => cb.checked)) {
+            masterCb.checked = true;
+            masterCb.indeterminate = false;
+          } else if (visibleCbs.some(cb => cb.checked)) {
+            masterCb.checked = false;
+            masterCb.indeterminate = true;
+          } else {
+            masterCb.checked = false;
+            masterCb.indeterminate = false;
+          }
+        }
+      }
+
+      // Checkbox Change Event
+      document.querySelectorAll('.candidate-select-checkbox').forEach(cb => {
+        cb.addEventListener('change', () => {
+          const id = cb.dataset.id;
+          // Synchronize desktop table and mobile card checkboxes for the same candidate
+          document.querySelectorAll(`.candidate-select-checkbox[data-id="${id}"]`).forEach(other => {
+            other.checked = cb.checked;
+          });
+          updateBulkActionsBar();
+        });
+      });
+
+      // Master Checkbox Toggle
+      if (masterCb) {
+        masterCb.addEventListener('change', (e) => {
+          const isChecked = e.target.checked;
+          document.querySelectorAll('.user-table-row').forEach(row => {
+            if (row.style.display !== 'none') {
+              const id = row.dataset.id;
+              document.querySelectorAll(`.candidate-select-checkbox[data-id="${id}"]`).forEach(cb => {
+                cb.checked = isChecked;
+              });
+            }
+          });
+          updateBulkActionsBar();
+        });
+      }
+
+      // Quick Selector: Select All Visible
+      const btnSelectAllVisible = document.getElementById('btn-select-all-visible');
+      if (btnSelectAllVisible) {
+        btnSelectAllVisible.addEventListener('click', () => {
+          document.querySelectorAll('.user-table-row').forEach(row => {
+            if (row.style.display !== 'none') {
+              const id = row.dataset.id;
+              document.querySelectorAll(`.candidate-select-checkbox[data-id="${id}"]`).forEach(cb => {
+                cb.checked = true;
+              });
+            }
+          });
+          updateBulkActionsBar();
+          showToast('Selected all visible candidates.', 'info');
+        });
+      }
+
+      // Quick Selector: Select All Free Candidates
+      const btnSelectAllFree = document.getElementById('btn-select-all-free');
+      if (btnSelectAllFree) {
+        btnSelectAllFree.addEventListener('click', () => {
+          document.querySelectorAll('.candidate-select-checkbox').forEach(cb => { cb.checked = false; });
+          document.querySelectorAll('.user-table-row').forEach(row => {
+            if (row.style.display !== 'none' && row.dataset.paid === 'false') {
+              const id = row.dataset.id;
+              document.querySelectorAll(`.candidate-select-checkbox[data-id="${id}"]`).forEach(cb => {
+                cb.checked = true;
+              });
+            }
+          });
+          updateBulkActionsBar();
+          const count = getSelectedCandidates().length;
+          showToast(`Selected ${count} Free Tier candidate(s).`, 'info');
+        });
+      }
+
+      // Quick Selector: Select All Pro Members
+      const btnSelectAllPro = document.getElementById('btn-select-all-pro');
+      if (btnSelectAllPro) {
+        btnSelectAllPro.addEventListener('click', () => {
+          document.querySelectorAll('.candidate-select-checkbox').forEach(cb => { cb.checked = false; });
+          document.querySelectorAll('.user-table-row').forEach(row => {
+            if (row.style.display !== 'none' && row.dataset.paid === 'true') {
+              const id = row.dataset.id;
+              document.querySelectorAll(`.candidate-select-checkbox[data-id="${id}"]`).forEach(cb => {
+                cb.checked = true;
+              });
+            }
+          });
+          updateBulkActionsBar();
+          const count = getSelectedCandidates().length;
+          showToast(`Selected ${count} Pro subscriber(s).`, 'info');
+        });
+      }
+
+      // Clear Selection
+      const clearAllSelections = () => {
+        document.querySelectorAll('.candidate-select-checkbox').forEach(cb => { cb.checked = false; });
+        if (masterCb) { masterCb.checked = false; masterCb.indeterminate = false; }
+        updateBulkActionsBar();
+      };
+      const btnClearSelection = document.getElementById('btn-bulk-clear-selection');
+      if (btnClearSelection) btnClearSelection.addEventListener('click', clearAllSelections);
+      const btnDeselectQuick = document.getElementById('btn-deselect-all-quick');
+      if (btnDeselectQuick) btnDeselectQuick.addEventListener('click', clearAllSelections);
+
+      // BULK ACTION 1: GRANT PRO PASS
+      const btnBulkGrantPro = document.getElementById('btn-bulk-grant-pro');
+      if (btnBulkGrantPro) {
+        btnBulkGrantPro.addEventListener('click', () => {
+          const selected = getSelectedCandidates();
+          if (selected.length === 0) {
+            showToast('Please select at least one candidate.', 'warning');
+            return;
+          }
+          if (confirm(`Grant Free Lifetime Pro Pass to ${selected.length} selected candidate(s)?`)) {
+            const selectedIds = new Set(selected.map(s => String(s.id)));
+            const selectedEmails = new Set(selected.map(s => (s.email || '').toLowerCase().trim()));
+
+            // Optimistic update
+            const localUsers = getLiveRegisteredUsers();
+            localUsers.forEach(u => {
+              const uId = String(u.id);
+              const uEmail = (u.email || '').toLowerCase().trim();
+              if (selectedIds.has(uId) || (uEmail && selectedEmails.has(uEmail))) {
+                u.isPaid = true;
+                u.paid = true;
+                if (uEmail === String(state.email || '').toLowerCase()) {
+                  state.isPaid = true;
+                  localStorage.setItem('isPaid', 'true');
+                }
+              }
+            });
+            localStorage.setItem('prepspace_candidate_accounts', JSON.stringify(localUsers));
+
+            showToast(`Lifetime Pro Pass granted to ${selected.length} candidate(s)!`, 'success');
+            loadAdminPanelTab('users');
+
+            apiFetch('/admin/users/bulk-pro', {
+              method: 'POST',
+              body: JSON.stringify({
+                userIds: Array.from(selectedIds),
+                emails: Array.from(selectedEmails),
+                isPaid: true
+              })
+            }).catch(() => {
+              selected.forEach(s => {
+                apiFetch(`/admin/users/${s.id}/toggle-pro`, { method: 'POST' }).catch(() => {});
+              });
+            });
+          }
+        });
+      }
+
+      // BULK ACTION 2: REVOKE PRO PASS
+      const btnBulkRevokePro = document.getElementById('btn-bulk-revoke-pro');
+      if (btnBulkRevokePro) {
+        btnBulkRevokePro.addEventListener('click', () => {
+          const selected = getSelectedCandidates();
+          if (selected.length === 0) {
+            showToast('Please select at least one candidate.', 'warning');
+            return;
+          }
+          if (confirm(`Revoke Pro Pass and return ${selected.length} selected candidate(s) to Free Tier?`)) {
+            const selectedIds = new Set(selected.map(s => String(s.id)));
+            const selectedEmails = new Set(selected.map(s => (s.email || '').toLowerCase().trim()));
+
+            // Optimistic update
+            const localUsers = getLiveRegisteredUsers();
+            localUsers.forEach(u => {
+              const uId = String(u.id);
+              const uEmail = (u.email || '').toLowerCase().trim();
+              if (selectedIds.has(uId) || (uEmail && selectedEmails.has(uEmail))) {
+                u.isPaid = false;
+                u.paid = false;
+                if (uEmail === String(state.email || '').toLowerCase()) {
+                  state.isPaid = false;
+                  localStorage.setItem('isPaid', 'false');
+                }
+              }
+            });
+            localStorage.setItem('prepspace_candidate_accounts', JSON.stringify(localUsers));
+
+            showToast(`Pro Pass revoked from ${selected.length} candidate(s).`, 'info');
+            loadAdminPanelTab('users');
+
+            apiFetch('/admin/users/bulk-pro', {
+              method: 'POST',
+              body: JSON.stringify({
+                userIds: Array.from(selectedIds),
+                emails: Array.from(selectedEmails),
+                isPaid: false
+              })
+            }).catch(() => {});
+          }
+        });
+      }
+
+      // BULK ACTION 3: BULK DELETION
+      const btnBulkDelete = document.getElementById('btn-bulk-delete-users');
+      if (btnBulkDelete) {
+        btnBulkDelete.addEventListener('click', () => {
+          const selected = getSelectedCandidates();
+          if (selected.length === 0) {
+            showToast('Please select at least one candidate.', 'warning');
+            return;
+          }
+          if (confirm(`CRITICAL: Permanently delete ${selected.length} selected candidate account(s)? This action cannot be undone.`)) {
+            const selectedIds = selected.map(s => String(s.id));
+            const selectedEmails = selected.map(s => (s.email || '').toLowerCase().trim());
+
+            // Mark each as deleted permanently
+            selected.forEach(s => {
+              markCandidateAsDeleted(s.email, s.id);
+            });
+
+            showToast(`Permanently expunged ${selected.length} candidate account(s).`, 'warning');
+            loadAdminPanelTab('users');
+
+            apiFetch('/admin/users/bulk-delete', {
+              method: 'POST',
+              body: JSON.stringify({
+                userIds: selectedIds,
+                emails: selectedEmails
+              })
+            }).catch(() => {
+              selected.forEach(s => {
+                apiFetch(`/admin/users/${s.id}?email=${encodeURIComponent(s.email || '')}`, { method: 'DELETE' }).catch(() => {});
+              });
+            });
+          }
+        });
       }
     };
 

@@ -165,6 +165,119 @@ public class AdminController {
         return ResponseEntity.ok(Map.of("message", "User Pro status updated to " + (newStatus ? "ACTIVE" : "REVOKED"), "isPaid", newStatus, "userId", id));
     }
 
+    @PostMapping("/users/bulk-pro")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ADMIN_SUPER', 'SUPER_ADMIN')")
+    @Transactional
+    public ResponseEntity<?> bulkToggleProPass(
+            @RequestBody Map<String, Object> body,
+            Principal principal,
+            HttpServletRequest request) {
+        boolean isPaid = Boolean.TRUE.equals(body.get("isPaid"));
+        List<?> rawIds = (List<?>) body.get("userIds");
+        List<?> rawEmails = (List<?>) body.get("emails");
+
+        Set<Integer> targetIds = new HashSet<>();
+        if (rawIds != null) {
+            for (Object idObj : rawIds) {
+                try {
+                    targetIds.add(Integer.parseInt(idObj.toString()));
+                } catch (Exception ignored) {}
+            }
+        }
+
+        Set<String> targetEmails = new HashSet<>();
+        if (rawEmails != null) {
+            for (Object emailObj : rawEmails) {
+                if (emailObj != null && !emailObj.toString().isBlank()) {
+                    targetEmails.add(emailObj.toString().trim().toLowerCase());
+                }
+            }
+        }
+
+        List<User> allUsers = userRepository.findAll();
+        int updatedCount = 0;
+        for (User u : allUsers) {
+            boolean match = (u.getId() != null && targetIds.contains(u.getId())) ||
+                    (u.getEmail() != null && targetEmails.contains(u.getEmail().trim().toLowerCase()));
+            if (match) {
+                u.setIsPaid(isPaid);
+                userRepository.save(u);
+                updatedCount++;
+            }
+        }
+
+        if (principal != null) {
+            saveAuditLog(principal.getName(), "Bulk Pro Update: " + (isPaid ? "GRANTED" : "REVOKED") + " for " + updatedCount + " users", "BULK_PRO_PASS", "N/A", String.valueOf(isPaid), request.getRemoteAddr());
+        }
+
+        return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "Pro Pass " + (isPaid ? "granted to" : "revoked from") + " " + updatedCount + " candidates successfully",
+                "count", updatedCount
+        ));
+    }
+
+    @PostMapping("/users/bulk-delete")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ADMIN_SUPER', 'SUPER_ADMIN')")
+    @Transactional
+    public ResponseEntity<?> bulkDeleteUsers(
+            @RequestBody Map<String, Object> body,
+            Principal principal,
+            HttpServletRequest request) {
+        List<?> rawIds = (List<?>) body.get("userIds");
+        List<?> rawEmails = (List<?>) body.get("emails");
+
+        Set<Integer> targetIds = new HashSet<>();
+        if (rawIds != null) {
+            for (Object idObj : rawIds) {
+                try {
+                    targetIds.add(Integer.parseInt(idObj.toString()));
+                } catch (Exception ignored) {}
+            }
+        }
+
+        Set<String> targetEmails = new HashSet<>();
+        if (rawEmails != null) {
+            for (Object emailObj : rawEmails) {
+                if (emailObj != null && !emailObj.toString().isBlank()) {
+                    targetEmails.add(emailObj.toString().trim().toLowerCase());
+                }
+            }
+        }
+
+        List<User> allUsers = userRepository.findAll();
+        int deletedCount = 0;
+        for (User u : allUsers) {
+            boolean match = (u.getId() != null && targetIds.contains(u.getId())) ||
+                    (u.getEmail() != null && targetEmails.contains(u.getEmail().trim().toLowerCase()));
+            if (match) {
+                String role = u.getRole();
+                if ("ADMIN".equals(role) || "ADMIN_SUPER".equals(role) || "SUPER_ADMIN".equals(role)) {
+                    continue; // Safeguard administrator accounts
+                }
+                try {
+                    userRepository.delete(u);
+                } catch (Exception ex) {
+                    u.setIsSuspended(true);
+                    u.setName("[DELETED CANDIDATE]");
+                    u.setEmail("deleted_" + System.currentTimeMillis() + "_" + u.getEmail());
+                    userRepository.save(u);
+                }
+                deletedCount++;
+            }
+        }
+
+        if (principal != null) {
+            saveAuditLog(principal.getName(), "Bulk User Expunge: " + deletedCount + " candidate accounts deleted", "BULK_USER_DELETE", "N/A", "DELETED", request.getRemoteAddr());
+        }
+
+        return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "Permanently expunged " + deletedCount + " candidate accounts successfully",
+                "count", deletedCount
+        ));
+    }
+
     @PostMapping("/users/{id}/role")
     @PreAuthorize("hasAnyRole('ADMIN', 'ADMIN_SUPER', 'SUPER_ADMIN')")
     public ResponseEntity<?> updateUserRole(@PathVariable Integer id, @RequestBody Map<String, String> body, Principal principal, HttpServletRequest request) {
