@@ -2192,6 +2192,13 @@ input:-webkit-autofill {
   }
 }
 
+.chapter-modal-item {
+  width: fit-content !important;
+  max-width: 100% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
 .chapter-modal-item:hover {
   background: rgba(255, 255, 255, 0.08) !important;
   border-color: rgba(99, 102, 241, 0.45) !important;
@@ -2898,6 +2905,8 @@ input:-webkit-autofill {
   border-radius: 10px;
   padding: 1rem 1.25rem;
   margin: 1.25rem 0;
+  width: fit-content;
+  max-width: 100%;
 }
 
 .book-example-card {
@@ -2906,6 +2915,8 @@ input:-webkit-autofill {
   border-radius: 0 10px 10px 0;
   padding: 1.25rem;
   margin: 1.5rem 0;
+  width: fit-content;
+  max-width: 100%;
 }
 
 .book-nav-btn {

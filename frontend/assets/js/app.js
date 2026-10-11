@@ -726,20 +726,26 @@ function router() {
       });
   } else if (hash === '#/aptitude') {
     viewTitle.textContent = 'Aptitude & Technical Reasoning Hub';
-    pageMount.innerHTML = components.aptitudeHub([], []);
-    bindAptitudeEvents([], []);
+    const allModules = (typeof window !== 'undefined' && window.APTITUDE_TRIAD_CURRICULUM && window.APTITUDE_TRIAD_CURRICULUM.length > 0)
+      ? window.APTITUDE_TRIAD_CURRICULUM
+      : [];
+    pageMount.innerHTML = components.aptitudeHub(allModules, []);
+    bindAptitudeEvents(allModules, []);
 
     Promise.allSettled([
       apiFetch('/v1/aptitude/topics'),
       apiFetch('/v1/aptitude/questions')
     ]).then(results => {
       if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/aptitude') return;
-      const topics = (results[0].status === 'fulfilled' && Array.isArray(results[0].value) && results[0].value.length > 0) ? results[0].value : [];
+      const apiTopics = (results[0].status === 'fulfilled' && Array.isArray(results[0].value) && results[0].value.length > 0) ? results[0].value : [];
       const questions = (results[1].status === 'fulfilled' && Array.isArray(results[1].value) && results[1].value.length > 0) ? results[1].value : [];
-      if (topics.length > 0 || questions.length > 0) {
-        pageMount.innerHTML = components.aptitudeHub(topics, questions);
-        bindAptitudeEvents(topics, questions);
-      }
+      
+      const topics = (allModules.length >= 40)
+        ? allModules
+        : (apiTopics.length >= 40 ? apiTopics : (allModules.length > 0 ? allModules : apiTopics));
+      
+      pageMount.innerHTML = components.aptitudeHub(topics, questions);
+      bindAptitudeEvents(topics, questions);
     }).catch(() => {
       // Fallback already rendered smoothly
     });
@@ -6430,11 +6436,12 @@ function bindCodingPracticeEvents(rawQuestions = []) {
 
 // Aptitude & Book Reading Events Handler
 function bindAptitudeEvents(topics = [], questions = []) {
-  const chapters = (topics && topics.length > 0)
-    ? topics
-    : ((typeof window !== 'undefined' && window.APTITUDE_TRIAD_CURRICULUM && window.APTITUDE_TRIAD_CURRICULUM.length > 0)
-        ? window.APTITUDE_TRIAD_CURRICULUM
-        : []);
+  const allModules = (typeof window !== 'undefined' && window.APTITUDE_TRIAD_CURRICULUM && window.APTITUDE_TRIAD_CURRICULUM.length > 0)
+    ? window.APTITUDE_TRIAD_CURRICULUM
+    : [];
+  const chapters = (allModules.length >= 40)
+    ? allModules
+    : ((topics && topics.length >= 40) ? topics : (allModules.length > 0 ? allModules : topics));
 
   let currentChapIdx = 0;
   const savedChapId = localStorage.getItem('aptitude_bookmark_chapter');
@@ -6493,7 +6500,7 @@ function bindAptitudeEvents(topics = [], questions = []) {
       return `
       <div class="p-3 rounded bg-black bg-opacity-30 border border-secondary border-opacity-25 chapter-mcq-card" data-correct="${correctIdx}">
         <div class="d-flex align-items-center justify-content-between mb-2">
-          <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle fs-9">Challenge ${qIdx + 1}</span>
+          <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle fs-9" style="width: fit-content;">Challenge ${qIdx + 1}</span>
           <button type="button" class="btn btn-sm btn-glass text-warning py-0 px-2 fs-9 btn-toggle-mcq-sol" data-target="sol-${chap.id}-${qIdx}">
             <i class="fa-solid fa-lightbulb me-1"></i> Solution
           </button>
@@ -6511,10 +6518,10 @@ function bindAptitudeEvents(topics = [], questions = []) {
             </div>
           `).join('')}
         </div>
-        <div id="sol-${chap.id}-${qIdx}" class="d-none p-2 rounded bg-black bg-opacity-50 border border-secondary border-opacity-25 fs-8 text-secondary mt-2">
+        <div id="sol-${chap.id}-${qIdx}" class="d-none p-2.5 rounded bg-black bg-opacity-50 border border-secondary border-opacity-25 fs-8 text-secondary mt-2" style="width: fit-content; max-width: 100%;">
           <div class="text-success fw-bold mb-1"><i class="fa-solid fa-check me-1"></i> Correct Answer: Option ${String.fromCharCode(65 + correctIdx)}</div>
           <div style="line-height: 1.6;">${explanationText}</div>
-          ${pq.shortcut ? `<div class="text-warning mt-1 font-monospace fs-9">⚡ Shortcut: ${pq.shortcut}</div>` : ''}
+          ${pq.shortcut ? `<div class="text-warning mt-1 font-monospace fs-9 d-inline-block p-1 px-2 rounded bg-warning bg-opacity-10 border border-warning border-opacity-25" style="width: fit-content;">⚡ Shortcut: ${pq.shortcut}</div>` : ''}
         </div>
       </div>
     `;
@@ -6565,9 +6572,7 @@ function bindAptitudeEvents(topics = [], questions = []) {
     const chapTitleEl = document.getElementById('book-chap-title');
     const chapConceptsEl = document.getElementById('book-chap-concepts');
     const formulasListEl = document.getElementById('book-formulas-list');
-    const exampleQEl = document.getElementById('book-example-q');
-    const exampleStepsEl = document.getElementById('book-example-steps');
-    const exampleAnsEl = document.getElementById('book-example-ans');
+    const examplesContainer = document.getElementById('book-examples-container');
     const pageIndicator = document.getElementById('book-page-indicator');
     const selectEl = document.getElementById('book-chapter-select');
     const btnPrev = document.getElementById('btn-book-prev');
@@ -6575,17 +6580,26 @@ function bindAptitudeEvents(topics = [], questions = []) {
 
     if (chapCategoryEl) chapCategoryEl.textContent = chap.section || chap.category;
     if (chapReadTimeEl) chapReadTimeEl.innerHTML = `<i class="fa-regular fa-clock me-1"></i> ${chap.readTime}`;
-    if (chapTitleEl) chapTitleEl.textContent = `Chapter ${chap.chapterNumber}: ${chap.title}`;
-    if (chapConceptsEl) chapConceptsEl.textContent = chap.concepts;
+    if (chapTitleEl) chapTitleEl.textContent = `${chap.chapterNumber}. ${chap.title}`;
+    if (chapConceptsEl) {
+      chapConceptsEl.textContent = chap.concepts;
+      chapConceptsEl.style.whiteSpace = 'pre-line';
+      chapConceptsEl.style.lineHeight = '1.85';
+    }
 
     if (formulasListEl && Array.isArray(chap.formulas)) {
       formulasListEl.innerHTML = chap.formulas.map(f => `<li class="mb-1"><code>${f}</code></li>`).join('');
     }
 
-    if (chap.examples && chap.examples[0]) {
-      if (exampleQEl) exampleQEl.textContent = chap.examples[0].question;
-      if (exampleStepsEl) exampleStepsEl.textContent = chap.examples[0].stepByStep;
-      if (exampleAnsEl) exampleAnsEl.textContent = chap.examples[0].answer;
+    if (examplesContainer) {
+      const examples = Array.isArray(chap.examples) ? chap.examples : [];
+      examplesContainer.innerHTML = examples.map((ex, exIdx) => `
+        <div class="book-example-card p-3 rounded" style="background: rgba(24, 24, 27, 0.6); border-left: 4px solid #3b82f6; width: fit-content; max-width: 100%;">
+          <div class="fw-bold mb-2 fs-7 text-white">${(examples.length > 1) ? `<span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle me-1.5 fs-9">Exemplar ${exIdx + 1}</span> ` : ''}${ex.question}</div>
+          <pre class="font-monospace fs-8 p-3 rounded bg-black bg-opacity-40 border border-secondary border-opacity-25 mb-2 text-light" style="white-space: pre-wrap; line-height: 1.6; width: fit-content; max-width: 100%;">${ex.stepByStep}</pre>
+          <div class="text-success fw-bold fs-8">Correct Answer: <span class="badge bg-success-subtle text-success border border-success-subtle fs-8">${ex.answer}</span></div>
+        </div>
+      `).join('');
     }
 
     renderChapterMCQs(chap);
@@ -6595,7 +6609,7 @@ function bindAptitudeEvents(topics = [], questions = []) {
 
     const currentBtnLabel = document.getElementById('current-chapter-btn-label');
     if (currentBtnLabel) {
-      currentBtnLabel.textContent = `Ch ${chap.chapterNumber}: ${chap.title}`;
+      currentBtnLabel.textContent = `${chap.chapterNumber}. ${chap.title}`;
     }
 
     if (btnPrev) btnPrev.disabled = (idx === 0);
@@ -6622,7 +6636,7 @@ function bindAptitudeEvents(topics = [], questions = []) {
         const title = item.dataset.title || '';
         const chapId = item.dataset.chapId || '';
         const match = title.includes(query) || chapId.includes(query);
-        item.style.display = match ? '' : 'none';
+        item.style.setProperty('display', match ? 'inline-flex' : 'none', 'important');
       });
     });
   }
@@ -6633,11 +6647,8 @@ function bindAptitudeEvents(topics = [], questions = []) {
       e.currentTarget.classList.add('active', 'btn-primary');
       const sec = e.currentTarget.dataset.section;
       document.querySelectorAll('.chapter-modal-item').forEach(item => {
-        if (sec === 'all' || item.dataset.sec === sec) {
-          item.style.display = '';
-        } else {
-          item.style.display = 'none';
-        }
+        const shouldShow = (sec === 'all' || item.dataset.sec === sec);
+        item.style.setProperty('display', shouldShow ? 'inline-flex' : 'none', 'important');
       });
     });
   });

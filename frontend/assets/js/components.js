@@ -3434,11 +3434,12 @@ const components = {
 
   // 4b. Comprehensive Aptitude & Technical Reasoning Hub (Curriculum from The Aptitude Triad - 42 Modules)
   aptitudeHub: (topics = [], questions = []) => {
-    const chaptersList = (topics && topics.length > 0)
-      ? topics
-      : ((typeof window !== 'undefined' && window.APTITUDE_TRIAD_CURRICULUM && window.APTITUDE_TRIAD_CURRICULUM.length > 0)
-          ? window.APTITUDE_TRIAD_CURRICULUM
-          : []);
+    const fullCurriculum = (typeof window !== 'undefined' && window.APTITUDE_TRIAD_CURRICULUM && window.APTITUDE_TRIAD_CURRICULUM.length > 0)
+      ? window.APTITUDE_TRIAD_CURRICULUM
+      : [];
+    const chaptersList = (fullCurriculum.length >= 40)
+      ? fullCurriculum
+      : ((topics && topics.length >= 40) ? topics : (fullCurriculum.length > 0 ? fullCurriculum : topics));
 
     // Fallback if not loaded
     const safeChapters = (chaptersList.length > 0) ? chaptersList : [
@@ -3512,19 +3513,19 @@ const components = {
             <!-- Chapter Selector Trigger & Searchable Modal -->
             <div class="d-flex align-items-center gap-2 flex-wrap min-w-0">
               <span class="text-muted fs-8 fw-semibold d-none d-sm-inline">Chapter:</span>
-              <button type="button" class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-between gap-2 text-start px-2.5 py-1.5 rounded-3" id="btn-open-chapter-selector" style="min-width: 220px; max-width: 360px; background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.15);">
-                <span class="text-truncate fw-semibold text-white fs-8" id="current-chapter-btn-label">Ch ${firstChap.chapterNumber}: ${firstChap.title}</span>
-                <i class="fa-solid fa-chevron-down text-muted fs-9 flex-shrink-0 ms-2"></i>
+              <button type="button" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-2 text-start px-2.5 py-1.5 rounded-3" id="btn-open-chapter-selector" style="width: fit-content; max-width: 100%; background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.15);">
+                <span class="text-truncate fw-semibold text-white fs-8" id="current-chapter-btn-label">${firstChap.chapterNumber}. ${firstChap.title}</span>
+                <i class="fa-solid fa-chevron-down text-muted fs-9 flex-shrink-0 ms-1"></i>
               </button>
               <select id="book-chapter-select" class="d-none" aria-hidden="true">
                 <optgroup label="Section A: Quantitative Aptitude (${quantChapters.length} Modules)">
-                  ${quantChapters.map(chap => `<option value="${chap.id}">Ch ${chap.chapterNumber}: ${chap.title}</option>`).join('')}
+                  ${quantChapters.map(chap => `<option value="${chap.id}">${chap.chapterNumber}. ${chap.title}</option>`).join('')}
                 </optgroup>
                 <optgroup label="Section B: Logical Reasoning (${logicalChapters.length} Modules)">
-                  ${logicalChapters.map(chap => `<option value="${chap.id}">Ch ${chap.chapterNumber}: ${chap.title}</option>`).join('')}
+                  ${logicalChapters.map(chap => `<option value="${chap.id}">${chap.chapterNumber}. ${chap.title}</option>`).join('')}
                 </optgroup>
                 <optgroup label="Section C: Verbal Ability (${verbalChapters.length} Modules)">
-                  ${verbalChapters.map(chap => `<option value="${chap.id}">Ch ${chap.chapterNumber}: ${chap.title}</option>`).join('')}
+                  ${verbalChapters.map(chap => `<option value="${chap.id}">${chap.chapterNumber}. ${chap.title}</option>`).join('')}
                 </optgroup>
               </select>
             </div>
@@ -3566,18 +3567,18 @@ const components = {
 
               <!-- Chapter Title -->
               <h2 class="book-chapter-title mb-3 fs-2 text-white fw-bold" id="book-chap-title">
-                Chapter ${firstChap.chapterNumber}: ${firstChap.title}
+                ${firstChap.chapterNumber}. ${firstChap.title}
               </h2>
 
               <!-- Theory / Concept in Plain English -->
               <div class="mb-4">
-                <p class="fs-7" id="book-chap-concepts" style="line-height: 1.8;">
+                <div class="fs-7 text-light" id="book-chap-concepts" style="white-space: pre-line; line-height: 1.85;">
                   ${firstChap.concepts}
-                </p>
+                </div>
               </div>
 
               <!-- Formula Box Callout -->
-              <div class="book-formula-card mb-4" id="book-formulas-container">
+              <div class="book-formula-card mb-4" id="book-formulas-container" style="width: fit-content; max-width: 100%;">
                 <div class="d-flex align-items-center gap-2 mb-2">
                   <i class="fa-solid fa-square-root-variable text-warning fs-6"></i>
                   <strong class="fs-7 text-uppercase tracking-wide">Key Formulas & Shortcuts</strong>
@@ -3588,14 +3589,18 @@ const components = {
               </div>
 
               <!-- Solved Examples Breakdown -->
-              <div class="mt-4 mb-4">
-                <h6 class="fw-bold fs-7 text-uppercase mb-2" style="letter-spacing: 0.05em;">
-                  <i class="fa-solid fa-pen-to-square text-info me-1"></i> Solved Exemplar Problem
+              <div class="mt-4 mb-4" id="book-examples-section">
+                <h6 class="fw-bold fs-7 text-uppercase mb-2 text-info" style="letter-spacing: 0.05em;">
+                  <i class="fa-solid fa-pen-to-square me-1"></i> Solved Exemplar Problems & Step-by-Step Solutions
                 </h6>
-                <div class="book-example-card" id="book-example-container">
-                  <div class="fw-bold mb-2 fs-7" id="book-example-q">${firstChap.examples && firstChap.examples[0] ? firstChap.examples[0].question : ''}</div>
-                  <pre class="font-monospace fs-8 p-2 rounded bg-black bg-opacity-25 border border-secondary border-opacity-25 mb-2" id="book-example-steps" style="white-space: pre-wrap;">${firstChap.examples && firstChap.examples[0] ? firstChap.examples[0].stepByStep : ''}</pre>
-                  <div class="text-success fw-bold fs-8">Correct Answer: <span id="book-example-ans" class="badge bg-success-subtle text-success">${firstChap.examples && firstChap.examples[0] ? firstChap.examples[0].answer : ''}</span></div>
+                <div id="book-examples-container" class="d-flex flex-column gap-3">
+                  ${(firstChap.examples || []).map((ex, exIdx) => `
+                    <div class="book-example-card p-3 rounded" style="background: rgba(24, 24, 27, 0.6); border-left: 4px solid #3b82f6; width: fit-content; max-width: 100%;">
+                      <div class="fw-bold mb-2 fs-7 text-white">${(firstChap.examples && firstChap.examples.length > 1) ? `<span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle me-1.5 fs-9">Exemplar ${exIdx + 1}</span> ` : ''}${ex.question}</div>
+                      <pre class="font-monospace fs-8 p-3 rounded bg-black bg-opacity-40 border border-secondary border-opacity-25 mb-2 text-light" style="white-space: pre-wrap; line-height: 1.6; width: fit-content; max-width: 100%;">${ex.stepByStep}</pre>
+                      <div class="text-success fw-bold fs-8">Correct Answer: <span class="badge bg-success-subtle text-success border border-success-subtle fs-8">${ex.answer}</span></div>
+                    </div>
+                  `).join('')}
                 </div>
               </div>
 
@@ -3728,27 +3733,19 @@ const components = {
                   </div>
                 </div>
 
-                <!-- Chapters List -->
-                <div class="d-flex flex-column gap-1.5" id="modal-chapters-list" style="max-height: 55vh; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #3f3f46 transparent;">
+                <!-- Chapters List (Snug boxes fit till text only) -->
+                <div class="d-flex flex-column gap-2 align-items-start" id="modal-chapters-list" style="max-height: 55vh; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #3f3f46 transparent;">
                   ${safeChapters.map((chap, cIdx) => {
                     const sec = (chap.section || chap.category || '').toLowerCase();
                     const secTag = sec.includes('quant') ? 'quant' : sec.includes('logic') ? 'logical' : 'verbal';
-                    const secBadge = secTag === 'quant' ? 'primary' : secTag === 'logical' ? 'info' : 'warning';
                     return `
-                      <div class="chapter-modal-item p-2.5 rounded border border-secondary border-opacity-20 d-flex align-items-center justify-content-between gap-2" 
-                           style="cursor: pointer; transition: all 0.15s ease; background: rgba(255,255,255,0.02);"
+                      <div class="chapter-modal-item py-1.5 px-3 rounded-2 border border-secondary border-opacity-25 d-inline-flex align-items-center" 
+                           style="cursor: pointer; width: fit-content; max-width: 100%; transition: all 0.15s ease; background: rgba(255,255,255,0.03);"
                            data-chap-id="${chap.id}"
                            data-chap-idx="${cIdx}"
                            data-sec="${secTag}"
                            data-title="${(chap.title || '').toLowerCase()}">
-                        <div class="d-flex align-items-center gap-2.5 min-w-0">
-                          <span class="badge bg-${secBadge}-subtle text-${secBadge} border border-${secBadge}-subtle fs-9 font-monospace flex-shrink-0">Ch ${chap.chapterNumber}</span>
-                          <span class="text-light fw-medium fs-8 text-truncate">${chap.title}</span>
-                        </div>
-                        <div class="d-flex align-items-center gap-2 flex-shrink-0">
-                          <span class="text-muted fs-9 d-none d-sm-inline"><i class="fa-regular fa-clock me-1"></i>${chap.readTime || '8 min'}</span>
-                          <i class="fa-solid fa-chevron-right text-muted fs-9"></i>
-                        </div>
+                        <span class="text-light fw-medium fs-8">${chap.chapterNumber}. ${chap.title}</span>
                       </div>
                     `;
                   }).join('')}
