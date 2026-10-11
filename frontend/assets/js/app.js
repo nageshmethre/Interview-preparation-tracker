@@ -5228,6 +5228,424 @@ function bindCodingPracticeEvents(rawQuestions = []) {
     if (resExpected) resExpected.textContent = r.expected;
   }
 
+  // Safe HTML escape helper
+  function safeEscapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  // Render LeetCode-style Official Algorithmic Editorial
+  function renderQuestionEditorial(q) {
+    const mount = document.getElementById('active-q-editorial-mount');
+    if (!mount || !q) return;
+
+    const ed = q.editorial || {};
+    const intuition = ed.intuition || 'Examine problem invariants, symmetries, and constraints. Identify the core algorithmic paradigm (Hashing, Two Pointers, Dynamic Programming, or Graph traversal). By caching previously computed states, we prevent redundant computations and achieve an optimal asymptotic bound.';
+    const approach = ed.approach || '1. Parse input collections and validate boundary conditions (empty, singleton).\\n2. Maintain auxiliary tracking structures (hash map, frequency table, or pointers).\\n3. Perform a single linear pass or divide-and-conquer partition.\\n4. Formulate the final return value matching the signature.';
+    const timeComplexity = ed.timeComplexity || 'O(N)';
+    const spaceComplexity = ed.spaceComplexity || 'O(N)';
+    const complexityExplanation = ed.complexityExplanation || 'Time complexity is strictly proportional to input size under optimal traversal. Space is bounded by auxiliary state storage.';
+    const edgeCases = ed.edgeCases || '• Empty, single-element, or duplicate arrays.\\n• Extreme numeric constraints approaching integer bounds.\\n• Negative values and zero edge conditions.';
+
+    const poly = (ed.polyglotCode) || {
+      python: (q.starterTemplates && q.starterTemplates.python) || '',
+      java: (q.starterTemplates && q.starterTemplates.java) || '',
+      cpp: (q.starterTemplates && q.starterTemplates.cpp) || '',
+      javascript: q.solution || (q.starterTemplates && q.starterTemplates.javascript) || ''
+    };
+
+    const diff = (q.difficulty || 'MEDIUM').toUpperCase();
+    const diffColor = diff === 'EASY' ? 'success' : diff === 'HARD' ? 'danger' : 'warning';
+
+    mount.innerHTML = `
+      <div class="editorial-container">
+        <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom border-secondary border-opacity-20">
+          <div>
+            <h4 class="text-white fw-bold mb-1 fs-5">
+              <i class="fa-solid fa-book-open text-warning me-2"></i>Editorial: ${safeEscapeHtml(q.title)}
+            </h4>
+            <span class="text-muted fs-8 font-monospace"><i class="fa-solid fa-code-branch me-1 text-primary"></i>LeetCode Canonical Analysis & Formal Proofs</span>
+          </div>
+          <span class="badge bg-${diffColor} bg-opacity-20 text-${diffColor} border border-${diffColor} border-opacity-25 px-2.5 py-1 font-monospace fs-8">
+            ${diff}
+          </span>
+        </div>
+
+        <!-- Section: Intuition -->
+        <div class="mb-4">
+          <h5 class="text-white fw-bold fs-7 mb-2 d-flex align-items-center gap-2">
+            <span class="badge bg-primary bg-opacity-20 text-primary border border-primary border-opacity-25 rounded-circle p-1" style="width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;">1</span>
+            Intuition & Theoretical Insight
+          </h5>
+          <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-20 text-light-gray fs-8 lh-lg">
+            ${intuition.replace(/\\n/g, '<br>')}
+          </div>
+        </div>
+
+        <!-- Section: Approach -->
+        <div class="mb-4">
+          <h5 class="text-white fw-bold fs-7 mb-2 d-flex align-items-center gap-2">
+            <span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-25 rounded-circle p-1" style="width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;">2</span>
+            Algorithmic Step-by-Step Approach
+          </h5>
+          <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-20 text-light-gray fs-8 lh-lg">
+            ${approach.replace(/\\n/g, '<br>')}
+          </div>
+        </div>
+
+        <!-- Section: Complexity Analysis -->
+        <div class="mb-4">
+          <h5 class="text-white fw-bold fs-7 mb-2 d-flex align-items-center gap-2">
+            <span class="badge bg-info bg-opacity-20 text-info border border-info border-opacity-25 rounded-circle p-1" style="width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;">3</span>
+            Complexity Analysis
+          </h5>
+          <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-20 text-light-gray fs-8">
+            <div class="d-flex flex-wrap gap-3 mb-2.5">
+              <div class="p-2 px-3 rounded-2 bg-black bg-opacity-40 border border-secondary border-opacity-20 font-monospace">
+                <span class="text-muted fs-9">TIME: </span><strong class="text-warning">${timeComplexity}</strong>
+              </div>
+              <div class="p-2 px-3 rounded-2 bg-black bg-opacity-40 border border-secondary border-opacity-20 font-monospace">
+                <span class="text-muted fs-9">SPACE: </span><strong class="text-info">${spaceComplexity}</strong>
+              </div>
+            </div>
+            <p class="mb-0 text-secondary fs-8 lh-base">${complexityExplanation}</p>
+          </div>
+        </div>
+
+        <!-- Section: Edge Cases -->
+        <div class="mb-4">
+          <h5 class="text-white fw-bold fs-7 mb-2 d-flex align-items-center gap-2">
+            <span class="badge bg-danger bg-opacity-20 text-danger border border-danger border-opacity-25 rounded-circle p-1" style="width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;">4</span>
+            Critical Edge Cases & Invariants
+          </h5>
+          <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-20 text-light-gray fs-8 lh-lg">
+            ${edgeCases.replace(/\\n/g, '<br>')}
+          </div>
+        </div>
+
+        <!-- Section: Multi-Language Official Solutions -->
+        <div class="mb-3">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <h5 class="text-white fw-bold fs-7 mb-0 d-flex align-items-center gap-2">
+              <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-25 rounded-circle p-1" style="width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;">5</span>
+              Multi-Language Implementation Solutions
+            </h5>
+            <div class="btn-group btn-group-sm" id="editorial-lang-toggle-group">
+              <button type="button" class="btn btn-outline-secondary btn-ed-lang active py-0.5 px-2 fs-9 font-monospace" data-edlang="python">Python</button>
+              <button type="button" class="btn btn-outline-secondary btn-ed-lang py-0.5 px-2 fs-9 font-monospace" data-edlang="java">Java</button>
+              <button type="button" class="btn btn-outline-secondary btn-ed-lang py-0.5 px-2 fs-9 font-monospace" data-edlang="cpp">C++</button>
+              <button type="button" class="btn btn-outline-secondary btn-ed-lang py-0.5 px-2 fs-9 font-monospace" data-edlang="javascript">JavaScript</button>
+            </div>
+          </div>
+          <div class="position-relative">
+            <pre class="lc-code-box p-3 rounded-3 font-monospace fs-8 text-light-gray mb-2" id="editorial-code-display" style="white-space: pre; overflow-x: auto; max-height: 380px;">${safeEscapeHtml(poly.python || poly.javascript || '// Solution')}</pre>
+            <div class="d-flex justify-content-end gap-2 mt-2">
+              <button type="button" class="btn btn-xs btn-outline-secondary py-1 px-2.5 fs-8" id="btn-copy-editorial-code">
+                <i class="fa-regular fa-copy me-1"></i>Copy Code
+              </button>
+              <button type="button" class="btn btn-xs btn-success py-1 px-2.5 fs-8 fw-semibold" id="btn-load-editorial-into-editor">
+                <i class="fa-solid fa-code me-1"></i>Load into Editor
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Wire language toggle for editorial
+    let activeEdLang = 'python';
+    mount.querySelectorAll('.btn-ed-lang').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        mount.querySelectorAll('.btn-ed-lang').forEach(b => {
+          b.classList.remove('active', 'btn-primary');
+          b.classList.add('btn-outline-secondary');
+        });
+        e.currentTarget.classList.add('active', 'btn-primary');
+        e.currentTarget.classList.remove('btn-outline-secondary');
+        activeEdLang = e.currentTarget.dataset.edlang;
+        const codeEl = document.getElementById('editorial-code-display');
+        if (codeEl) {
+          codeEl.textContent = poly[activeEdLang] || poly.javascript || '// Solution';
+        }
+      });
+    });
+
+    const copyBtn = document.getElementById('btn-copy-editorial-code');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        const code = poly[activeEdLang] || poly.javascript || '';
+        navigator.clipboard.writeText(code).then(() => {
+          showToast('Official solution copied to clipboard!', 'success');
+        });
+      });
+    }
+
+    const loadBtn = document.getElementById('btn-load-editorial-into-editor');
+    if (loadBtn) {
+      loadBtn.addEventListener('click', () => {
+        const code = poly[activeEdLang] || poly.javascript || '';
+        if (editorTextarea) {
+          editorTextarea.value = code;
+          updateLineGutter();
+          updateCursorPos();
+          if (langSelect && ['javascript', 'python', 'java', 'cpp'].includes(activeEdLang)) {
+            langSelect.value = activeEdLang;
+            currentLanguage = activeEdLang;
+            localStorage.setItem('preferred_coding_lang', currentLanguage);
+          }
+          showToast('Solution loaded into code editor! Switch to Description/Editor tab to run test suite.', 'success');
+        }
+      });
+    }
+  }
+
+  // Render Polyglot Solutions
+  function renderQuestionSolutions(q) {
+    const mount = document.getElementById('active-q-solutions-mount');
+    if (!mount || !q) return;
+
+    const poly = (q.editorial && q.editorial.polyglotCode) || {
+      python: (q.starterTemplates && q.starterTemplates.python) || '',
+      java: (q.starterTemplates && q.starterTemplates.java) || '',
+      cpp: (q.starterTemplates && q.starterTemplates.cpp) || '',
+      javascript: q.solution || (q.starterTemplates && q.starterTemplates.javascript) || ''
+    };
+
+    mount.innerHTML = `
+      <div>
+        <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom border-secondary border-opacity-20">
+          <div>
+            <h4 class="text-white fw-bold mb-1 fs-5">
+              <i class="fa-regular fa-lightbulb text-info me-2"></i>Polyglot Solutions
+            </h4>
+            <span class="text-muted fs-8">Verified implementations across all supported runtimes</span>
+          </div>
+          <div class="btn-group btn-group-sm" id="solutions-lang-pills">
+            <button type="button" class="btn btn-outline-info btn-sol-lang active py-0.5 px-2.5 fs-9 font-monospace" data-sollang="javascript">JavaScript</button>
+            <button type="button" class="btn btn-outline-info btn-sol-lang py-0.5 px-2.5 fs-9 font-monospace" data-sollang="python">Python</button>
+            <button type="button" class="btn btn-outline-info btn-sol-lang py-0.5 px-2.5 fs-9 font-monospace" data-sollang="java">Java</button>
+            <button type="button" class="btn btn-outline-info btn-sol-lang py-0.5 px-2.5 fs-9 font-monospace" data-sollang="cpp">C++</button>
+          </div>
+        </div>
+
+        <div class="position-relative">
+          <pre class="lc-code-box p-3 rounded-3 font-monospace fs-8 text-light-gray mb-3" id="solutions-code-display" style="white-space: pre; overflow-x: auto; max-height: 450px;">${safeEscapeHtml(poly.javascript || q.solution || '// Reference solution')}</pre>
+          <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary py-1 px-3 fs-8" id="btn-copy-solutions-code">
+              <i class="fa-regular fa-copy me-1"></i>Copy Code
+            </button>
+            <button type="button" class="btn btn-sm btn-primary py-1 px-3 fs-8 fw-semibold" id="btn-load-solutions-code">
+              <i class="fa-solid fa-arrow-right-to-bracket me-1"></i>Insert into Editor
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    let activeSolLang = 'javascript';
+    mount.querySelectorAll('.btn-sol-lang').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        mount.querySelectorAll('.btn-sol-lang').forEach(b => {
+          b.classList.remove('active', 'btn-info', 'text-black');
+          b.classList.add('btn-outline-info');
+        });
+        e.currentTarget.classList.add('active', 'btn-info', 'text-black');
+        e.currentTarget.classList.remove('btn-outline-info');
+        activeSolLang = e.currentTarget.dataset.sollang;
+        const codeEl = document.getElementById('solutions-code-display');
+        if (codeEl) {
+          codeEl.textContent = poly[activeSolLang] || poly.javascript || '// Solution';
+        }
+      });
+    });
+
+    const copyBtn = document.getElementById('btn-copy-solutions-code');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        const code = poly[activeSolLang] || poly.javascript || '';
+        navigator.clipboard.writeText(code).then(() => {
+          showToast('Solution code copied to clipboard!', 'success');
+        });
+      });
+    }
+
+    const loadBtn = document.getElementById('btn-load-solutions-code');
+    if (loadBtn) {
+      loadBtn.addEventListener('click', () => {
+        const code = poly[activeSolLang] || poly.javascript || '';
+        if (editorTextarea) {
+          editorTextarea.value = code;
+          updateLineGutter();
+          updateCursorPos();
+          if (langSelect && ['javascript', 'python', 'java', 'cpp'].includes(activeSolLang)) {
+            langSelect.value = activeSolLang;
+            currentLanguage = activeSolLang;
+            localStorage.setItem('preferred_coding_lang', currentLanguage);
+          }
+          showToast('Solution loaded into code editor!', 'success');
+        }
+      });
+    }
+  }
+
+  // Render Question Discussion Community
+  function renderQuestionDiscussions(qId) {
+    const mount = document.getElementById('active-q-discussions-mount');
+    const countBadge = document.getElementById('q-discussion-count-badge');
+    const footerCountBadge = document.getElementById('btn-lc-comments');
+    const composerBox = document.getElementById('q-discussion-composer-box');
+    const toggleBtn = document.getElementById('btn-toggle-q-discussion-composer');
+    const cancelBtn = document.getElementById('btn-cancel-q-discussion');
+    const form = document.getElementById('q-discussion-form');
+    if (!mount) return;
+
+    const storageKey = 'prepspace_question_discussions';
+    let allDisc = {};
+    try {
+      allDisc = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    } catch (e) {
+      allDisc = {};
+    }
+
+    // Seed realistic discussions for question if empty
+    if (!allDisc[qId] || allDisc[qId].length === 0) {
+      const qObj = (window.DSA_QUESTIONS_BANK || []).find(q => String(q.id) === String(qId)) || {};
+      allDisc[qId] = [
+        {
+          id: `disc-${qId}-1`,
+          title: `Optimal ${qObj.category || 'DSA'} approach - Beats 99% in runtime`,
+          author: 'Alex_Chen_FAANG',
+          authorBadge: 'Staff Engineer',
+          tag: 'Approach',
+          content: `When solving "${qObj.title || 'this problem'}", the crucial invariant is avoiding redundant passes. Storing visited states in a hash map gives instantaneous O(1) lookups. Remember to handle negative elements and single-element inputs!`,
+          upvotes: 42,
+          userUpvoted: false,
+          timestamp: '2 hours ago'
+        },
+        {
+          id: `disc-${qId}-2`,
+          title: `Edge Case Warning: Boundary constraints & index overflow`,
+          author: 'Priya_Algorithms',
+          authorBadge: 'PrepSpace Pro',
+          tag: 'Edge Cases',
+          content: `Be careful during technical interviews with the constraint boundaries. If the input array has length 1 or target is at the edge, make sure your loop termination condition doesn't index out of bounds. Also test with duplicate values!`,
+          upvotes: 28,
+          userUpvoted: false,
+          timestamp: '5 hours ago'
+        }
+      ];
+      localStorage.setItem(storageKey, JSON.stringify(allDisc));
+    }
+
+    const list = allDisc[qId] || [];
+    if (countBadge) countBadge.textContent = `${list.length} Discussions`;
+    if (footerCountBadge) {
+      footerCountBadge.innerHTML = `<i class="fa-regular fa-comment me-1"></i> ${list.length}`;
+    }
+
+    // Render Discussion Cards
+    mount.innerHTML = list.map(item => `
+      <div class="p-3 rounded-3 bg-dark bg-opacity-40 border border-secondary border-opacity-20 d-flex flex-column gap-2" id="q-disc-card-${item.id}">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center gap-2">
+            <div class="rounded-circle bg-primary bg-opacity-20 text-primary fw-bold d-flex align-items-center justify-content-center fs-8" style="width: 28px; height: 28px;">
+              ${(item.author || 'U')[0].toUpperCase()}
+            </div>
+            <div>
+              <div class="d-flex align-items-center gap-1.5">
+                <span class="text-white fw-semibold fs-8">${safeEscapeHtml(item.author || 'PrepSpace Coder')}</span>
+                ${item.authorBadge ? `<span class="badge bg-secondary bg-opacity-30 text-light-gray fs-9 font-monospace">${item.authorBadge}</span>` : ''}
+              </div>
+              <span class="text-muted fs-9">${item.timestamp || 'Just now'}</span>
+            </div>
+          </div>
+          <span class="badge bg-info bg-opacity-15 text-info border border-info border-opacity-20 fs-9">${item.tag || 'Discussion'}</span>
+        </div>
+
+        <h6 class="text-white fw-bold fs-7 mb-1 mt-1">${safeEscapeHtml(item.title)}</h6>
+        <div class="text-light-gray fs-8 lh-base font-sans" style="white-space: pre-wrap;">${safeEscapeHtml(item.content)}</div>
+
+        <div class="d-flex align-items-center justify-content-between pt-2 border-top border-secondary border-opacity-10 mt-1">
+          <button type="button" class="btn btn-xs btn-outline-secondary d-flex align-items-center gap-1.5 py-1 px-2.5 fs-8 btn-q-disc-upvote ${item.userUpvoted ? 'btn-primary text-white border-primary' : ''}" data-discid="${item.id}">
+            <i class="fa-solid fa-arrow-up"></i> <span class="fw-bold">${item.upvotes || 0}</span>
+          </button>
+          <span class="text-muted fs-9"><i class="fa-regular fa-comment me-1"></i>Verified Community Post</span>
+        </div>
+      </div>
+    `).join('');
+
+    // Wire upvoting
+    mount.querySelectorAll('.btn-q-disc-upvote').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const discId = e.currentTarget.dataset.discid;
+        const target = list.find(d => d.id === discId);
+        if (target) {
+          if (target.userUpvoted) {
+            target.upvotes = Math.max(0, (target.upvotes || 1) - 1);
+            target.userUpvoted = false;
+          } else {
+            target.upvotes = (target.upvotes || 0) + 1;
+            target.userUpvoted = true;
+          }
+          allDisc[qId] = list;
+          localStorage.setItem(storageKey, JSON.stringify(allDisc));
+          renderQuestionDiscussions(qId);
+        }
+      });
+    });
+
+    // Wire toggle composer
+    if (toggleBtn && composerBox) {
+      toggleBtn.onclick = () => {
+        composerBox.classList.toggle('d-none');
+      };
+    }
+    if (cancelBtn && composerBox) {
+      cancelBtn.onclick = () => {
+        composerBox.classList.add('d-none');
+      };
+    }
+
+    // Wire post submission
+    if (form) {
+      form.onsubmit = (e) => {
+        e.preventDefault();
+        const title = document.getElementById('q-disc-title')?.value.trim();
+        const tag = document.getElementById('q-disc-tag')?.value;
+        const author = document.getElementById('q-disc-author')?.value.trim() || 'PrepSpace Coder';
+        const content = document.getElementById('q-disc-content')?.value.trim();
+
+        if (!title || !content) return;
+
+        const newPost = {
+          id: `disc-${qId}-${Date.now()}`,
+          title,
+          author,
+          authorBadge: 'Community Member',
+          tag: tag || 'Discussion',
+          content,
+          upvotes: 1,
+          userUpvoted: true,
+          timestamp: 'Just now'
+        };
+
+        list.unshift(newPost);
+        allDisc[qId] = list;
+        localStorage.setItem(storageKey, JSON.stringify(allDisc));
+
+        form.reset();
+        composerBox.classList.add('d-none');
+        renderQuestionDiscussions(qId);
+        showToast('Discussion published to Question Community!', 'success');
+      };
+    }
+  }
+
   // 5. Select Question Function
   function selectQuestion(data) {
     if (!data) return;
@@ -5338,6 +5756,11 @@ function bindCodingPracticeEvents(rawQuestions = []) {
         c.classList.remove('active');
       }
     });
+
+    // Render LeetCode-style Editorial, Polyglot Solutions, and Community Discussions
+    renderQuestionEditorial(activeQuestionFullObj);
+    renderQuestionSolutions(activeQuestionFullObj);
+    renderQuestionDiscussions(activeQuestionFullObj.id || data.questionId);
   }
 
   // Bind Problem selection from dropdown list
@@ -5608,6 +6031,20 @@ function bindCodingPracticeEvents(rawQuestions = []) {
   const btnShare = document.getElementById('btn-lc-share');
   const btnAi = document.getElementById('btn-practice-ai');
   const btnHint = document.getElementById('btn-toggle-hint');
+  const btnComments = document.getElementById('btn-lc-comments');
+
+  if (btnComments) {
+    btnComments.addEventListener('click', () => {
+      const discTabBtn = document.getElementById('tab-discussion-btn');
+      if (discTabBtn) {
+        if (window.bootstrap && bootstrap.Tab) {
+          bootstrap.Tab.getOrCreateInstance(discTabBtn).show();
+        } else {
+          discTabBtn.click();
+        }
+      }
+    });
+  }
 
   if (btnLike) {
     btnLike.addEventListener('click', () => {
@@ -7415,6 +7852,28 @@ const DEFAULT_COMMUNITY_THREADS = [
     author: 'Vikram Mehta',
     createdAt: new Date(Date.now() - 48 * 3600 * 1000).toISOString(),
     likesCount: 42,
+    comments: []
+  },
+  {
+    id: 't-dsa-1',
+    title: 'Two Sum & Hashing Patterns: Why O(N) Hash Table beats Two Pointers for unsorted arrays',
+    category: 'DSA_QUESTIONS',
+    content: 'In Question #1 (Two Sum), interviewers often test if you will sort the array first. Remember: sorting takes O(N log N) time and alters indices! A single-pass Hash Map gives O(N) time and O(N) space while preserving original element positions.',
+    author: 'Arjun Verma (Google SWE)',
+    createdAt: new Date(Date.now() - 4 * 3600 * 1000).toISOString(),
+    likesCount: 56,
+    comments: [
+      { author: 'Kavya S', text: 'Also remember to check for duplicate numbers when testing complement!' }
+    ]
+  },
+  {
+    id: 't-dsa-2',
+    title: 'Sliding Window Mastery: When to use dynamic vs fixed size window across the 825 Question Bank',
+    category: 'DSA_QUESTIONS',
+    content: 'Across our 825 questions bank, sliding window questions usually fall into two categories: 1) Fixed size k (maintain sum/frequency array and slide right) and 2) Dynamic size (expand right pointer until condition violates, contract left pointer until valid again). Always check boundary condition when left > right!',
+    author: 'Neha Sharma (Meta L5)',
+    createdAt: new Date(Date.now() - 14 * 3600 * 1000).toISOString(),
+    likesCount: 71,
     comments: []
   }
 ];

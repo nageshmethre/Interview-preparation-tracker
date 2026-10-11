@@ -3075,6 +3075,11 @@ const components = {
                 </button>
               </li>
               <li class="nav-item">
+                <button class="nav-link d-flex align-items-center gap-1.5" id="tab-discussion-btn" data-bs-toggle="tab" data-bs-target="#tab-lc-discussion" type="button" role="tab">
+                  <i class="fa-regular fa-comments text-success"></i> <span>Discussion</span>
+                </button>
+              </li>
+              <li class="nav-item">
                 <button class="nav-link d-flex align-items-center gap-1.5" id="tab-submissions-btn" data-bs-toggle="tab" data-bs-target="#tab-lc-submissions" type="button" role="tab">
                   <i class="fa-regular fa-clock text-secondary"></i> <span>Submissions</span>
                 </button>
@@ -3135,20 +3140,70 @@ const components = {
 
               <!-- Tab 2: Editorial -->
               <div class="tab-pane fade" id="tab-lc-editorial" role="tabpanel">
-                <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-book-open text-warning me-2"></i>Official Algorithmic Editorial</h5>
-                <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-20 text-light-gray fs-8 lh-lg">
-                  <h6 class="text-white fw-bold">Approach 1: One-Pass Hash Table</h6>
-                  <p>While iterating and inserting elements into the table, we look back to check if the current element's complement already exists in the table. If it exists, we have found a solution and immediately return the corresponding pair of indices.</p>
-                  <div class="lc-code-box p-2.5 rounded-2 font-monospace fs-9 text-muted my-2">
-                    Complexity: Time O(N) single-pass &bull; Space O(N) Hash Table storage.
+                <div id="active-q-editorial-mount">
+                  <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-book-open text-warning me-2"></i>Official Algorithmic Editorial</h5>
+                  <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-20 text-light-gray fs-8 lh-lg">
+                    <p class="text-muted mb-0">Select a problem to load its comprehensive LeetCode-style algorithmic editorial, intuition breakdown, and multi-language solutions.</p>
                   </div>
                 </div>
               </div>
 
               <!-- Tab 3: Solutions -->
               <div class="tab-pane fade" id="tab-lc-solutions" role="tabpanel">
-                <h5 class="text-white fw-bold mb-3"><i class="fa-regular fa-lightbulb text-info me-2"></i>Community Solutions & Polyglot Patterns</h5>
-                <div class="lc-code-box p-3 rounded-3 font-monospace fs-8 text-light-gray" style="white-space: pre-wrap;" id="active-q-community-sol">${activeQ.solution || '// Reference solution template\n'}</div>
+                <div id="active-q-solutions-mount">
+                  <h5 class="text-white fw-bold mb-3"><i class="fa-regular fa-lightbulb text-info me-2"></i>Community Solutions & Polyglot Implementations</h5>
+                  <div class="lc-code-box p-3 rounded-3 font-monospace fs-8 text-light-gray" style="white-space: pre-wrap;" id="active-q-community-sol">${activeQ.solution || '// Reference solution template\n'}</div>
+                </div>
+              </div>
+
+              <!-- Tab 4: Question Discussion Community -->
+              <div class="tab-pane fade" id="tab-lc-discussion" role="tabpanel">
+                <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom border-secondary border-opacity-20">
+                  <div class="d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-comments text-success fs-5"></i>
+                    <h5 class="text-white fw-bold mb-0">Question Community</h5>
+                    <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-25 rounded-pill px-2 py-0.5 fs-9" id="q-discussion-count-badge">Discussions</span>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-outline-success px-2.5 py-1 fs-8" id="btn-toggle-q-discussion-composer">
+                    <i class="fa-solid fa-plus me-1"></i>New Discussion
+                  </button>
+                </div>
+
+                <!-- Discussion Composer (Collapsible) -->
+                <div id="q-discussion-composer-box" class="p-3 mb-3 rounded-3 bg-dark bg-opacity-60 border border-success border-opacity-30 d-none">
+                  <h6 class="text-white fw-bold fs-7 mb-2"><i class="fa-solid fa-pen-to-square me-1.5 text-success"></i>Share Solution, Approach or Question</h6>
+                  <form id="q-discussion-form">
+                    <div class="mb-2">
+                      <input type="text" id="q-disc-title" class="form-control form-control-sm glass-input text-white fs-8" placeholder="Title (e.g., Clean O(N) Python solution with intuitive explanation)" required>
+                    </div>
+                    <div class="row g-2 mb-2">
+                      <div class="col-6">
+                        <select id="q-disc-tag" class="form-select form-select-sm glass-input text-white fs-8">
+                          <option value="Solution">Solution / Code</option>
+                          <option value="Approach">Intuition & Approach</option>
+                          <option value="Complexity">Complexity Analysis</option>
+                          <option value="Edge Cases">Edge Cases & Gotchas</option>
+                          <option value="Question">Doubt / Question</option>
+                        </select>
+                      </div>
+                      <div class="col-6">
+                        <input type="text" id="q-disc-author" class="form-control form-control-sm glass-input text-white fs-8" placeholder="Your Name or Alias" value="PrepSpace Coder">
+                      </div>
+                    </div>
+                    <div class="mb-2">
+                      <textarea id="q-disc-content" class="form-control form-control-sm glass-input text-white fs-8" rows="4" placeholder="Write markdown breakdown or code..." required></textarea>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2">
+                      <button type="button" class="btn btn-sm btn-glass fs-8" id="btn-cancel-q-discussion">Cancel</button>
+                      <button type="submit" class="btn btn-sm btn-success px-3 fs-8 fw-semibold"><i class="fa-solid fa-paper-plane me-1"></i>Post Discussion</button>
+                    </div>
+                  </form>
+                </div>
+
+                <!-- Discussions List Mount -->
+                <div id="active-q-discussions-mount" class="d-flex flex-column gap-3">
+                  <!-- Populated by app.js -->
+                </div>
               </div>
 
               <!-- Tab 4: Submissions -->
@@ -4153,6 +4208,7 @@ const components = {
               <label class="form-label text-muted fs-7 fw-semibold">FORUM CATEGORY</label>
               <select id="forum-category" class="form-select glass-input">
                 <option value="GENERAL">General Discussions</option>
+                <option value="DSA_QUESTIONS">DSA Problem Discussions</option>
                 <option value="INTERVIEWS">Interview Experiences</option>
                 <option value="CODING">Coding Questions</option>
                 <option value="COURSES">LMS & Tutorials</option>
@@ -4171,8 +4227,9 @@ const components = {
         <div class="glass-panel p-4 d-flex flex-column gap-3">
           <!-- Feed Controls (Borderless Clean) -->
           <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
-            <div class="d-flex align-items-center gap-2">
+            <div class="d-flex align-items-center gap-2 flex-wrap">
               <button class="btn btn-sm btn-glass btn-community-filter active" data-category="ALL">All Topics</button>
+              <button class="btn btn-sm btn-glass btn-community-filter" data-category="DSA_QUESTIONS"><i class="fa-solid fa-code me-1 text-primary"></i>DSA Questions</button>
               <button class="btn btn-sm btn-glass btn-community-filter" data-category="INTERVIEWS">Interviews</button>
               <button class="btn btn-sm btn-glass btn-community-filter" data-category="CODING">Coding</button>
               <button class="btn btn-sm btn-glass btn-community-filter" data-category="GENERAL">General</button>

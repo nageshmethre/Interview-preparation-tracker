@@ -6,8 +6,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section A: Quantitative",
     "title": "Number System & Divisibility Hacks",
     "category": "Quantitative Aptitude",
-    "readTime": "9 min read",
-    "concepts": "Number systems form the foundation of technical assessment aptitude. A number is classified as Natural {1,2,3...}, Whole {0,1,2,3...}, or Integer. Prime numbers have exactly two distinct factors (1 and itself). There are exactly 25 prime numbers between 1 and 100.\n\nCyclicity of Unit Digits: When a number is raised to power n, its unit digit repeats in cycles of 1, 2, or 4. Powers of 7 cycle in 4: (7^1=7, 7^2=9, 7^3=3, 7^4=1). To find the unit digit of 7^95, divide 95 by 4: remainder is 3, so unit digit is 7^3 which ends in 3!",
+    "readTime": "15-20 min read",
+    "concepts": "Number systems form the bedrock of quantitative aptitude and computational complexity. A number is categorized into Natural Numbers N = {1, 2, 3...}, Whole Numbers W = {0, 1, 2...}, Integers Z = {..., -2, -1, 0, 1, 2...}, Rational Numbers Q = {p/q | q ≠ 0}, and Real Numbers R. \n\n1. Prime Factorization & Fundamental Theorem of Arithmetic:\nEvery integer greater than 1 can be represented uniquely as a product of prime powers: N = p1^a1 * p2^a2 * ... * pk^ak.\n• Total number of factors = (a1 + 1)(a2 + 1)...(ak + 1)\n• Sum of factors = [(p1^(a1+1) - 1)/(p1 - 1)] * [(p2^(a2+1) - 1)/(p2 - 1)] * ...\n• Number of coprime pairs: Use Euler's Totient function φ(N) = N * (1 - 1/p1) * (1 - 1/p2)...\n\n2. Cyclicity and Unit Digits Engine:\nWhen an integer is raised to power k, its last digit follows a periodic cycle governed by modulo arithmetic.\n• Cyclicity 1: Numbers ending in 0, 1, 5, 6 always end in 0, 1, 5, 6 respectively for any positive integer exponent.\n• Cyclicity 2: Numbers ending in 4 cycle as (4, 6) for odd/even powers. Numbers ending in 9 cycle as (9, 1).\n• Cyclicity 4: Numbers ending in 2 (2, 4, 8, 6), 3 (3, 9, 7, 1), 7 (7, 9, 3, 1), and 8 (8, 4, 2, 6).\nRule of Exponent Modulo: To compute the unit digit of A^B, evaluate B mod 4. If remainder r > 0, unit digit is the r-th element in the cycle. If remainder is 0, unit digit is the 4th element (even power cycle termination).\n\n3. Fast Divisibility Rules & Remainder Theorems:\n• Divisibility by 7: Multiply unit digit by 2 and subtract from remaining number; repeat until verifiable.\n• Divisibility by 11: Alternating sum |(Sum of odd place digits) - (Sum of even place digits)| must equal 0 or a multiple of 11.\n• Divisibility by Composite Numbers (Co-prime Split): To test divisibility by 72, test simultaneously for 8 (last 3 digits divisible by 8) and 9 (sum of all digits divisible by 9).\n• Wilson's Theorem: For prime p, (p - 1)! ≡ -1 (mod p).\n• Fermat's Little Theorem: If p is prime and gcd(a, p) = 1, then a^(p-1) ≡ 1 (mod p). This reduces colossal exponential remainders in O(1) mental steps.",
     "formulas": [
       "Sum of first N natural numbers = N(N + 1) / 2",
       "Sum of squares of first N numbers = N(N + 1)(2N + 1) / 6",
@@ -76,8 +76,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section A: Quantitative",
     "title": "HCF and LCM Fundamentals",
     "category": "Quantitative Aptitude",
-    "readTime": "8 min read",
-    "concepts": "HCF (Highest Common Factor / GCD) is the largest integer dividing all given numbers without a remainder. LCM (Least Common Multiple) is the smallest positive integer divisible by all given numbers. Two numbers with HCF = 1 are called Co-primes.",
+    "readTime": "15-20 min read",
+    "concepts": "Highest Common Factor (HCF / GCD) and Least Common Multiple (LCM) are fundamental dual operations that govern modular arithmetic, concurrency synchronizations, and fractional simplifications.\n\n1. Mathematical Definitions & Invariants:\n• HCF (Highest Common Factor): The greatest positive integer that divides each given number without remainder. In prime factor terms, HCF takes the minimum power of each common prime base: HCF = ∏ pi^(min(ai, bi)).\n• LCM (Least Common Multiple): The smallest positive integer divisible by all given numbers. In prime factor terms, LCM takes the maximum power across all prime bases: LCM = ∏ pi^(max(ai, bi)).\n• Fundamental Invariant: For any two numbers A and B: HCF(A, B) * LCM(A, B) = A * B.\n(Note: This product identity applies strictly to two numbers; for 3+ numbers, use inclusion-exclusion).\n\n2. Euclidean Algorithm for Ultra-Fast GCD:\nThe Euclidean division theorem states that GCD(A, B) = GCD(B, A mod B).\nThis logarithmic reduction algorithm computes GCD in O(log(min(A, B))) steps, vastly outperforming prime factorization for large numbers.\n\n3. Fractions & Decimal HCF / LCM Rules:\n• HCF of Fractions = HCF of Numerators / LCM of Denominators\n• LCM of Fractions = LCM of Numerators / HCF of Denominators\nBefore applying fraction formulas, always ensure every fraction is reduced to its simplest irreducible form (coprime numerator and denominator).\n\n4. Real-World Assessment Word-Problem Patterns:\n• Ringing Bells / Flashing Traffic Lights Together: Whenever repetitive cyclical events trigger simultaneously, the meeting interval is given by the LCM of their cycle periods.\n• Maximum Tile Size / Measuring Jar: When tiling a rectangular room of dimensions L x W with minimum identical square tiles, side of tile = HCF(L, W), and total tiles needed = (L * W) / (HCF^2).\n• Remainder Patterns: \n  - Largest number dividing X, Y, Z leaving remainder R in each case = HCF(X - R, Y - R, Z - R).\n  - Smallest number which when divided by X, Y, Z leaves remainder R in each case = LCM(X, Y, Z) + R.",
     "formulas": [
       "Product of two numbers = HCF × LCM",
       "HCF of Fractions = (HCF of Numerators) / (LCM of Denominators)",
@@ -134,8 +134,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section A: Quantitative",
     "title": "Decimal Fractions & Recurring Decimals",
     "category": "Quantitative Aptitude",
-    "readTime": "7 min read",
-    "concepts": "Decimal fractions have denominators as powers of 10. Terminating decimals end after finite digits. Recurring decimals repeat a sequence indefinitely (e.g. 0.333... = 1/3, 0.123123... = 123/999). Pure recurring decimals convert by placing the repeating block over that many 9s.",
+    "readTime": "15-20 min read",
+    "concepts": "Fractions represent exact divisions of the continuum, categorized into Proper fractions (p < q), Improper fractions (p > q), Mixed fractions, and Decimal Fractions where denominators are powers of 10.\n\n1. Terminating vs Recurring Decimals:\nA reduced rational fraction p/q terminates if and only if the prime factorization of denominator q contains only powers of 2 and/or 5: q = 2^m * 5^n. If any other prime factor exists (such as 3, 7, 11, 13), the decimal expansion repeats infinitely as a recurring decimal (periodicity / repetend).\n\n2. Converting Recurring Decimals to Rational Fractions (Algebraic Proof & Shortcut):\n• Pure Recurring Decimals: 0.aaaa... = a/9. \n  Example: 0.777... = 7/9.\n  For multi-digit period: 0.abab... = ab/99, 0.abcabc... = abc/999.\n• Mixed Recurring Decimals: 0.a_nonrep bcd_rep...\n  Formula: (Full number formed by non-repeating and repeating digits - Non-repeating portion) / (Nines equal to number of repeating digits followed by Zeros equal to number of non-repeating digits).\n  Example: 0.47272... = (472 - 4) / 990 = 468 / 990 = 26 / 55.\n\n3. Rapid Fraction Comparison Without Cross-Multiplication:\n• Equal Difference Rule: For proper fractions a/b < 1, adding a positive constant k to both numerator and denominator increases the fraction: (a + k)/(b + k) > a/b.\n• Percentage Conversion: Mentally convert reciprocal fractions: 1/7 ≈ 14.28%, 1/8 = 12.5%, 1/9 ≈ 11.11%, 1/11 ≈ 9.09%, 1/12 ≈ 8.33%, 1/13 ≈ 7.69%, 1/16 = 6.25%.\n• Base 10 Shift Mechanics: Multiplication by 10^k shifts the decimal point k places right; division shifts k places left.",
     "formulas": [
       "Pure recurring: 0.aaaa... = a / 9",
       "Two repeating digits: 0.abab... = ab / 99",
@@ -180,8 +180,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section A: Quantitative",
     "title": "Simplification & Algebraic Systems",
     "category": "Quantitative Aptitude",
-    "readTime": "8 min read",
-    "concepts": "Simplification tests rule precedence (BODMAS: Brackets, Orders, Division, Multiplication, Addition, Subtraction) and algebraic factorization shortcuts like (a+b)^2, (a-b)^2, a^3+b^3, and linear equation systems.",
+    "readTime": "15-20 min read",
+    "concepts": "Algebraic simplification transforms complex symbolic and arithmetic expressions into minimal, evaluated forms using strict operational precedence and identity expansions.\n\n1. Order of Operations (VBODMAS Protocol):\n• V: Vinculum (Bar bracket, e.g. ‾8 - 3‾ evaluated first)\n• B: Brackets in order: Inner Parentheses ( ), Curly Braces { }, Box Brackets [ ]\n• O: Orders / Powers / Roots / 'Of' (multiplication precedence over general operators)\n• D: Division & M: Multiplication (Evaluated Left-to-Right)\n• A: Addition & S: Subtraction (Evaluated Left-to-Right)\nWarning: Common trap is evaluating multiplication before division when division appears to the left. 36 ÷ 6 * 3 = 6 * 3 = 18, NOT 36 ÷ 18 = 2!\n\n2. Core Algebraic Identities for Mental Computation:\n• (a + b)^2 = a^2 + 2ab + b^2, (a - b)^2 = a^2 - 2ab + b^2\n• (a + b)^2 + (a - b)^2 = 2(a^2 + b^2)\n• (a + b)^2 - (a - b)^2 = 4ab\n• a^2 - b^2 = (a - b)(a + b)\n• a^3 + b^3 = (a + b)(a^2 - ab + b^2)\n• a^3 - b^3 = (a - b)(a^2 + ab + b^2)\n• Master Identity: a^3 + b^3 + c^3 - 3abc = (a + b + c)(a^2 + b^2 + c^2 - ab - bc - ca)\n  Key Theorem: If a + b + c = 0, then a^3 + b^3 + c^3 = 3abc! This allows instant simplification of expressions like (28)^3 + (-15)^3 + (-13)^3 = 3 * 28 * (-15) * (-13).\n\n3. Linear and Quadratic Equations:\n• Quadratic Roots: For ax^2 + bx + c = 0, roots x = [-b ± √(b^2 - 4ac)] / 2a.\n• Sum of roots = -b/a, Product of roots = c/a.\n• Surd Simplification: To find √(a + √b), express it in form √(x) + √(y) by solving x + y = a and 4xy = b.",
     "formulas": [
       "BODMAS order: B -> O -> D -> M -> A -> S",
       "(a + b)^2 = a^2 + 2ab + b^2",
@@ -226,8 +226,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section A: Quantitative",
     "title": "Percentages & Quick Shortcuts",
     "category": "Quantitative Aptitude",
-    "readTime": "9 min read",
-    "concepts": "Percentage means 'per centum' (out of 100). Successive percentage changes and expenditure balancing shortcuts are paramount in aptitude tests.",
+    "readTime": "15-20 min read",
+    "concepts": "Percentage is a standardized ratio expressed as a fraction of 100. It is the single most heavily tested foundational topic across campus placements, consulting benchmarks, and technical aptitude screens.\n\n1. Multiplier Concept (Decimal Scaling Factor):\nInstead of computing percentage and adding/subtracting in two manual steps, use single-step multipliers:\n• An increase of P% scales the quantity by (1 + P/100). E.g., +25% => multiply by 1.25 (or 5/4).\n• A decrease of P% scales the quantity by (1 - P/100). E.g., -15% => multiply by 0.85 (or 17/20).\n• Compounded multi-step changes: Final = Initial * M1 * M2 * M3.\n\n2. Product-Constancy and Compensatory Variations:\nIf Quantity = Price * Consumption, and Expenditure is kept constant:\n• If price increases by a/b, consumption must decrease by a / (a + b) to keep expenditure unchanged.\n• If price increases by 25% (1/4), consumption must decrease by 1/(4+1) = 1/5 = 20%.\n• If price decreases by a/b, consumption must increase by a / (b - a).\n• If price drops by 20% (1/5), consumption increases by 1/(5-1) = 1/4 = 25%.\n\n3. Successive Percentage Change Formula:\nWhen a quantity undergoes two consecutive changes of A% and B%:\nNet Percentage Change = [A + B + (A * B) / 100]%\n(Preserve positive signs for increase and negative signs for decrease).\nExample: A 20% hike followed by a 10% discount gives: +20 - 10 + (20 * -10)/100 = 10 - 2 = +8% net gain.\n\n4. Base Shift Pitfalls:\nA percentage change is strictly relative to its initial base. If A is 25% more than B: A = 1.25 B. Then B as a percentage of A is (B / 1.25 B) = 1/1.25 = 80%, which means B is 20% less than A, NOT 25% less!",
     "formulas": [
       "Percentage = (Required / Total) × 100",
       "Net successive % change = a + b + (a × b) / 100",
@@ -272,8 +272,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section A: Quantitative",
     "title": "Profit, Loss and Discounts",
     "category": "Quantitative Aptitude",
-    "readTime": "10 min read",
-    "concepts": "Profit or loss is always calculated on Cost Price (CP). Discounts are always calculated on Marked Price (MP). Dishonest shopkeeper problems use the error-over-false-weight formula.",
+    "readTime": "15-20 min read",
+    "concepts": "Profit, Loss, and Discount quantify the financial economics of commercial transactions. They are formulated entirely in terms of Cost Price (CP), Selling Price (SP), and Marked Price (MP / List Price).\n\n1. Foundational Relationships:\n• Profit (Gain) = SP - CP (when SP > CP)\n• Loss = CP - SP (when CP > SP)\n• Profit % = (Profit / CP) * 100 (Profit is always calculated on CP unless stated otherwise)\n• Loss % = (Loss / CP) * 100\n• SP = CP * (100 + P%) / 100 or CP * (100 - L%) / 100\n\n2. Markup and Discounts:\n• Marked Price (MP): The catalogue price tagged onto goods before offering customer discounts.\n• Markup % = [(MP - CP) / CP] * 100\n• Discount = MP - SP\n• Discount % = (Discount / MP) * 100 (Discount is always calculated on Marked Price)\n• SP = MP * (100 - D%) / 100\n• Master Golden Ratio connecting CP, MP, Profit% and Discount%:\n  CP / MP = (100 - Discount%) / (100 + Profit%)\n\n3. Successive Discounts:\nWhen successive trade discounts of d1%, d2%, and d3% are offered on an item:\nNet SP = MP * (1 - d1/100) * (1 - d2/100) * (1 - d3/100)\nEquivalent Single Discount = [d1 + d2 - (d1 * d2)/100]% for two discounts.\nExample: Successive discounts of 20% and 10% yield: 20 + 10 - 2 = 28% net discount, not 30%!\n\n4. Dishonest Shopkeeper & False Weights:\nWhen a trader claims to sell at Cost Price but cheats using a false weight:\nGain % = [Error / (True Value - Error)] * 100\nIf a merchant uses 900g instead of 1000g: Error = 100g, True - Error = 900g.\nGain % = (100 / 900) * 100 = 11.11%.",
     "formulas": [
       "Profit % = [(SP - CP) / CP] × 100",
       "Loss % = [(CP - SP) / CP] × 100",
@@ -319,8 +319,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section A: Quantitative",
     "title": "Simple and Compound Interest",
     "category": "Quantitative Aptitude",
-    "readTime": "9 min read",
-    "concepts": "Simple Interest (SI) grows linearly with time on the initial principal. Compound Interest (CI) accrues interest on interest, compounding periodically.",
+    "readTime": "15-20 min read",
+    "concepts": "Interest represents the time value of capital. It separates into Simple Interest (where interest accrues linearly on the static principal) and Compound Interest (where interest compounds exponentially upon accumulated capital).\n\n1. Simple Interest (SI):\n• Formula: SI = (P * R * T) / 100\n  Where P = Principal, R = Annual Rate of Interest (%), T = Time in years.\n• Total Amount A = P + SI = P * [1 + (R * T)/100].\n• Linear Invariant: SI is identical in every individual year. If an investment doubles in 5 years, it earned 100% principal interest in 5 years, so rate R = 100/5 = 20% per year.\n\n2. Compound Interest (CI):\n• Annual Compounding: A = P * [1 + R/100]^T\n• Semi-Annual (Half-Yearly) Compounding: A = P * [1 + (R/2)/100]^(2T)\n• Quarterly Compounding: A = P * [1 + (R/4)/100]^(4T)\n• Continuous Compounding: A = P * e^(r*t)\n• Compound Interest CI = A - P = P * [(1 + R/100)^T - 1]\n\n3. Difference Between CI and SI (Most Frequently Tested Shortcut):\n• For 2 Years: Difference = P * (R / 100)^2\n• For 3 Years: Difference = P * (R / 100)^2 * [(300 + R) / 100]\n\n4. Rule of 72 & Doubling Times:\n• Doubling Period ≈ 72 / R years under annual compound interest. E.g., at 8% annual return, capital doubles in ~9 years.\n• Tripling Period ≈ 114 / R years.\n• When a sum quadruples under CI in N years, it doubles in N/2 years because (1 + R/100)^N = 4 = 2^2.",
     "formulas": [
       "SI = (P × R × T) / 100",
       "CI Amount: A = P(1 + R/100)^N",
@@ -366,8 +366,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section A: Quantitative",
     "title": "Ratios, Proportions and Variations",
     "category": "Quantitative Aptitude",
-    "readTime": "8 min read",
-    "concepts": "A ratio compares two quantities of same units. Proportion equates two ratios (a:b = c:d implies a×d = b×c). Variation can be direct (y ∝ x) or inverse (y ∝ 1/x).",
+    "readTime": "15-20 min read",
+    "concepts": "Ratio expresses the relative magnitude of two or more quantities of identical dimension. Proportion denotes the formal equivalence between two independent ratios.\n\n1. Definitions & Ratio Operations:\n• If a : b = c : d, then a, b, c, d are in proportion, written a : b :: c : d.\n• Product of Extremes = Product of Means: a * d = b * c.\n• Fourth Proportional to a, b, c is x = (b * c) / a.\n• Third Proportional to a and b is x = b^2 / a.\n• Mean Proportional between a and b is √(a * b).\n• Compounded Ratio of (a:b) and (c:d) is (a*c) : (b*d).\n\n2. Ratio Scaling & Invertendo/Componendo/Dividendo:\n• Invertendo: If a/b = c/d, then b/a = d/c.\n• Alternando: If a/b = c/d, then a/c = b/d.\n• Componendo & Dividendo: If a/b = c/d, then (a + b) / (a - b) = (c + d) / (c - d).\nThis property is invaluable for rapidly solving equations such as (√(x+1) + √(x-1)) / (√(x+1) - √(x-1)) = 3.\n\n3. Chain Ratios (Bridging Multiple Variables):\nIf A : B = 2 : 3 and B : C = 4 : 5:\nFind LCM of common term B (LCM of 3 and 4 is 12).\nScale first ratio by 4: A : B = 8 : 12.\nScale second ratio by 3: B : C = 12 : 15.\nConsolidated Ratio: A : B : C = 8 : 12 : 15.\n\n4. Direct and Inverse Variation:\n• Direct Variation: Y ∝ X => Y1 / X1 = Y2 / X2.\n• Inverse Variation: Y ∝ 1/X => Y1 * X1 = Y2 * X2.\n• Joint Variation: Z ∝ (X / Y) => (Z1 * Y1) / X1 = (Z2 * Y2) / X2.",
     "formulas": [
       "Mean Proportional between a and b = sqrt(a × b)",
       "Third Proportional to a and b = b^2 / a",
@@ -401,8 +401,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section A: Quantitative",
     "title": "Partnership & Capital Sharing",
     "category": "Quantitative Aptitude",
-    "readTime": "7 min read",
-    "concepts": "When multiple people invest capital in a business, profits or losses are distributed in proportion to (Capital × Time). Active working partners may receive an agreed managerial salary or % bonus before remaining profits are divided.",
+    "readTime": "15-20 min read",
+    "concepts": "Partnership quantitative problems analyze financial business ventures where two or more partners invest capital for variable durations, requiring profit and loss sharing in direct proportion to capital-time weightings.\n\n1. The Fundamental Law of Partnership:\nProfit Ratio = (Capital 1 * Time 1) : (Capital 2 * Time 2) : ... : (Capital n * Time n)\nIf investment durations are identical, profit distribution mirrors capital investments directly: P1 : P2 = C1 : C2.\nIf investment amounts are identical, profit distribution mirrors investment durations: P1 : P2 = T1 : T2.\n\n2. Active vs Sleeping Partners:\n• Working (Active) Partner: A partner who manages daily business operations and receives a fixed salary or commission percentage from total revenue/profit before the remaining profit is distributed.\n• Sleeping (Financing) Partner: A partner who only contributes capital and receives returns solely through profit sharing.\n• Calculation Flow:\n  1. Deduct operational salary/commission: Net Distributable Profit = Total Profit - Active Management Fees.\n  2. Distribute the remaining balance among all partners strictly in ratio of (Capital * Time).\n\n3. Dynamic Capital Injection & Withdrawal:\nWhen partners alter their invested capital periodically:\nEffective Capital = ∑ (Capital_i * Months_i) for each partner over the fiscal year.\nExample: A invests $10,000 for 12 months. B invests $15,000 initially, withdraws $5,000 after 4 months.\nEffective Capital A = 10,000 * 12 = 120,000.\nEffective Capital B = (15,000 * 4) + (10,000 * 8) = 60,000 + 80,000 = 140,000.\nProfit Ratio A : B = 120,000 : 140,000 = 6 : 7.",
     "formulas": [
       "Same time period: Profit A : Profit B = Capital A : Capital B",
       "Different time periods: Profit A : Profit B = (Capital A × Months A) : (Capital B × Months B)",
@@ -435,8 +435,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section A: Quantitative",
     "title": "Problems on Ages",
     "category": "Quantitative Aptitude",
-    "readTime": "7 min read",
-    "concepts": "Age problems model linear relationships over time. If a person's present age is X, their age n years ago was (X - n), and n years hence will be (X + n). The age difference between two people remains constant throughout life.",
+    "readTime": "15-20 min read",
+    "concepts": "Problems on Ages are structured linear word problems involving time translations (past, present, future). They test your ability to convert linguistic relationships into precise simultaneous algebraic systems.\n\n1. Core Time Translation Invariant:\n• The absolute difference between the ages of two individuals remains invariant across all time.\nIf Father is 24 years older than Son today, Father will remain exactly 24 years older 10 years in the past or 50 years into the future.\n• Let present age be X.\n  Age 'N' years ago = (X - N).\n  Age 'N' years hence = (X + N).\n\n2. Ratio Scaling Method (Mental Math Without Algebraic Variables):\nSuppose the ratio of ages of A and B is 3 : 4 today, and becomes 4 : 5 after 5 years.\n• Check the horizontal difference: In 3:4, difference = 1 unit. In 4:5, difference = 1 unit. Differences are already equal!\n• Check the vertical step: A goes from 3 to 4 units (+1 unit). B goes from 4 to 5 units (+1 unit).\n• 1 unit increase corresponds to the 5-year chronological interval.\n• Therefore, 1 unit = 5 years.\n• Present age of A = 3 * 5 = 15 years, B = 4 * 5 = 20 years!\n\n3. Handling Unequal Horizontal Differences:\nIf A : B is 2 : 3 now, and 5 : 7 in 10 years:\nDifference in first ratio = 3 - 2 = 1. Difference in second ratio = 7 - 5 = 2.\nMultiply the first ratio by 2 to balance differences: 4 : 6 (difference is now 2).\nVertical step: 4 -> 5 (+1 unit) in 10 years.\n1 unit = 10 years. Present ages: A = 40, B = 60!",
     "formulas": [
       "Age n years ago = X - n; Age n years hence = X + n",
       "Ratio p:q implies ages are px and qx",
@@ -469,8 +469,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section A: Quantitative",
     "title": "Averages & Weighted Mean",
     "category": "Quantitative Aptitude",
-    "readTime": "8 min read",
-    "concepts": "Average is the central value: Sum of values / Number of values. Weighted average assigns weights w_i to values x_i: W = sum(w_i * x_i) / sum(w_i).",
+    "readTime": "15-20 min read",
+    "concepts": "Average (Arithmetic Mean) is the single representative value summarizing a set of numbers, defined as the ratio of total sum of observations to the total number of observations.\n\n1. Definitions & The Deviation Balancing Principle:\n• Average = Sum of all observations / Number of observations => Sum = Average * N.\n• Deviation Method: Choose an assumed mean A. The sum of algebraic deviations of all items from the true average is always zero: ∑ (Xi - Mean) = 0.\nThis eliminates calculating huge multi-digit sums. If numbers are 98, 102, 105, 94, 101, choose A = 100. Deviations are (-2, +2, +5, -6, +1) = 0. Mean = 100!\n\n2. Weighted Average:\nWhen combining groups with different counts and individual averages:\nWeighted Average = (N1 * A1 + N2 * A2 + ... + Nk * Ak) / (N1 + N2 + ... + Nk).\n\n3. Impact of Universal Transformations:\n• If each observation is increased/decreased by k, the new average increases/decreases by k.\n• If each observation is multiplied/divided by k (k ≠ 0), the new average is multiplied/divided by k.\n\n4. Replacement & Addition Shortcuts:\n• New Item Added: Weight of New Person = Old Average + (New Count * Increase in Average).\n• Item Replaced: Weight of New Person = Weight of Replaced Person + (Total Count * Change in Average).\nExample: Average weight of 24 students increases by 1 kg when a student weighing 40 kg is replaced.\nNew Student Weight = 40 + (24 * 1) = 64 kg!",
     "formulas": [
       "Average = Sum / N",
       "Average of first N natural numbers = (N + 1) / 2",
@@ -505,8 +505,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section A: Quantitative",
     "title": "Alligations and Mixtures",
     "category": "Quantitative Aptitude",
-    "readTime": "8 min read",
-    "concepts": "Alligation is the cross-method rule to determine the ratio in which two ingredients at different prices are mixed to produce a desired mixture price.",
+    "readTime": "15-20 min read",
+    "concepts": "Alligation is a specialized graphical algorithm that reverses weighted averages to determine the exact mixing ratio of two constituent ingredients differing in price, concentration, or quality.\n\n1. The Alligation Cross Rule:\nLet C = Cheaper value, D = Dearer (Higher) value, and M = Mean (Desired Mixture) value.\nRule:\n(Quantity of Cheaper) / (Quantity of Dearer) = (Dearer Price - Mean Price) / (Mean Price - Cheaper Price) = (D - M) / (M - C)\n\nDiagrammatic Cross Representation:\n       Cheaper (C)         Dearer (D)\n                 \\         /\n                   Mean (M)\n                 /                     (D - M)       (M - C)\nRatio of quantities = (D - M) : (M - C).\n\n2. Critical Rule of Common Reference Base:\nAll three quantities (C, D, and M) must represent identical metrics computed on the same base:\n• If mixing liquids with profit: Mean price MUST be converted to Cost Price before applying alligation!\n  If selling price is $120 with 20% profit, CP = 120 / 1.2 = $100. Use M = 100, not 120!\n\n3. Successive Dilution / Replacement Formula:\nA vessel initially contains Q units of pure liquid. If x units are withdrawn and replaced with water, and this operation is repeated n times:\nRemaining Pure Liquid = Q * [1 - (x / Q)]^n\nRatio of pure liquid to total solution = [1 - (x / Q)]^n.",
     "formulas": [
       "(Quantity of Cheaper) / (Quantity of Dearer) = (Cost of Dearer - Mean Price) / (Mean Price - Cost of Cheaper)",
       "Repeated Dilution: If x units of liquid are diluted by taking out y units and replacing with water n times, Pure Liquid remaining = x(1 - y/x)^n"
@@ -538,8 +538,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section A: Quantitative",
     "title": "Time and Work & Pipes-Cisterns",
     "category": "Quantitative Aptitude",
-    "readTime": "9 min read",
-    "concepts": "Time and work problems use the reciprocal efficiency or total LCM unit work method. Pipes and cisterns treat filling pipes as positive work and leaks/drain pipes as negative work.",
+    "readTime": "15-20 min read",
+    "concepts": "Time and Work problems model rate-of-work mechanics, where the total work is normalized as a unified task (1 whole unit) or mapped to integer units using LCM for lightning-fast mental resolution.\n\n1. The Inversion Rule and The LCM Method:\n• If a worker completes a project in D days, their 1-day work rate is 1/D of the total task.\n• Modern LCM Method:\n  1. Let Total Work = LCM of individual completion times.\n  2. Efficiency (Units/Day) = Total Work Units / Days.\n  3. Total Time = Total Work Units / Combined Efficiency.\n  Example: A takes 10 days, B takes 15 days. LCM(10, 15) = 30 units.\n  A's rate = 3 units/day, B's rate = 2 units/day.\n  Together = 3 + 2 = 5 units/day.\n  Time taken = 30 / 5 = 6 days!\n\n2. Chain Rule (The Universal Work Equation):\nFor multi-worker groups with varying hours and days:\n(M1 * D1 * H1 * E1) / W1 = (M2 * D2 * H2 * E2) / W2\nWhere M = Men, D = Days, H = Hours/day, E = Efficiency, W = Work produced (or food consumed).\n\n3. Pipes and Cisterns Mechanics:\n• Inlet Pipes do positive work: Rate = +Total Capacity / Time.\n• Outlet (Leak) Pipes do negative work: Rate = -Total Capacity / Time.\n• Net Filling Rate = ∑ (Inlet Rates) - ∑ (Outlet Rates).\nIf a leak empties a full tank in 20 hours while inlet fills in 10 hours: Capacity = 20 units. Inlet = +2, Leak = -1. Net = +1 unit/hr. Tank fills in 20 hours.",
     "formulas": [
       "Total Work = Days × Efficiency",
       "Man-Days Formula: (M1 × D1 × H1) / W1 = (M2 × D2 × H2) / W2",
@@ -572,8 +572,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section A: Quantitative",
     "title": "Time, Speed and Distance",
     "category": "Quantitative Aptitude",
-    "readTime": "8 min read",
-    "concepts": "Speed = Distance / Time. Multiply by 5/18 to convert km/h to m/s; multiply by 18/5 to convert m/s to km/h.",
+    "readTime": "15-20 min read",
+    "concepts": "Time, Speed, and Distance (TSD) form the core physics of kinematic motion applied to aptitude. All variations derive from the fundamental relation: Distance = Speed * Time.\n\n1. Unit Conversions & Proportionality Invariants:\n• km/h to m/s: Multiply by 5/18 (since 1000m / 3600s = 5/18).\n• m/s to km/h: Multiply by 18/5.\n• Constant Distance Invariant: Speed ∝ 1 / Time. If speed increases by 25% (4 -> 5), time taken reduces by 20% (5 -> 4).\n• Constant Time Invariant: Distance ∝ Speed.\n• Constant Speed Invariant: Distance ∝ Time.\n\n2. Average Speed (Harmonic Mean):\nAverage Speed = Total Distance Covered / Total Time Taken.\n• Equal Distances Scenario: When covering distance D at speed S1 and returning at speed S2:\n  Average Speed = (2 * S1 * S2) / (S1 + S2) [Harmonic Mean].\n  Warning: It is NEVER the arithmetic average (S1 + S2)/2!\n• Equal Times Scenario: If traveling at S1 for T hours and S2 for T hours:\n  Average Speed = (S1 + S2) / 2 [Arithmetic Mean].\n\n3. Relative Speed:\n• Moving in Opposite Directions (towards or away): Relative Speed = S1 + S2.\n• Moving in Same Direction: Relative Speed = |S1 - S2|.\n• Meeting Time = Initial Distance Apart / Relative Speed.\n• Circular Track:\n  - First meeting time = Circumference / Relative Speed.\n  - Meeting at starting point = LCM(T1, T2).",
     "formulas": [
       "1 km/h = 5/18 m/s; 1 m/s = 18/5 km/h",
       "Average Speed for equal distances = 2xy / (x + y)",
@@ -607,8 +607,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section A: Quantitative",
     "title": "Trains, Boats & Streams, Races",
     "category": "Quantitative Aptitude",
-    "readTime": "9 min read",
-    "concepts": "Train crossing a platform traverses (Train length + Platform length). Upstream speed = Boat - Stream; Downstream speed = Boat + Stream.",
+    "readTime": "15-20 min read",
+    "concepts": "Trains, Boats, and Races are high-frequency specialized sub-disciplines of Time, Speed, and Distance featuring physical object dimensions and flowing medium velocities.\n\n1. Train Motion Mechanics:\n• Crossing a Stationary Point Object (pole, tree, standing man):\n  Distance to cover = Length of Train (L_train). Time = L_train / S_train.\n• Crossing a Platform / Bridge / Tunnel of Length L_plat:\n  Distance to cover = L_train + L_plat. Time = (L_train + L_plat) / S_train.\n• Two Trains Crossing:\n  Distance to cover = Length 1 + Length 2.\n  Speed = S1 + S2 (opposite direction) or |S1 - S2| (same direction).\n\n2. Boats and Streams (Hydrodynamic Motion):\nLet B = Speed of boat in still water, S = Speed of stream/current.\n• Downstream Speed (with current): D = B + S.\n• Upstream Speed (against current): U = B - S.\n• Boat in Still Water B = (Downstream + Upstream) / 2 = (D + U) / 2.\n• Stream Speed S = (Downstream - Upstream) / 2 = (D - U) / 2.\n\n3. Linear Races and Head Starts:\n• \"A beats B by x meters in a 100m race\": When A covers 100m, B has covered (100 - x)m.\n• \"A beats B by t seconds\": When A crosses finish line, B requires t more seconds.\n• Head Start: If A gives B a start of x meters, B starts from position x while A starts at 0.\n  Dead Heat: Both runners reach the finish line simultaneously.",
     "formulas": [
       "Time to pass = (Length 1 + Length 2) / Relative Speed",
       "Downstream Speed D = B + S; Upstream Speed U = B - S",
@@ -642,8 +642,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section A: Quantitative",
     "title": "Permutation & Combination",
     "category": "Quantitative Aptitude",
-    "readTime": "10 min read",
-    "concepts": "Permutations measure ordered arrangements: nPr = n! / (n - r)!. Combinations measure unordered selections: nCr = n! / [r!(n - r)!].",
+    "readTime": "15-20 min read",
+    "concepts": "Combinatorics is the branch of discrete mathematics focused on counting, arrangement, and selection. It is governed by two bedrock operational axioms: The Multiplication and Addition Principles.\n\n1. Fundamental Counting Principles:\n• Rule of Product (Multiplication): If event A occurs in m ways and independent event B occurs in n ways, both occur in m * n ways.\n• Rule of Sum (Addition): If mutually exclusive event A occurs in m ways and B occurs in n ways, either A OR B occurs in m + n ways.\n\n2. Permutations (Order Matters):\n• Arrangement of r distinct items selected from n items:\n  nPr = n! / (n - r)!\n• Identical Items: Distinct permutations of n objects where p are identical of type 1, q of type 2:\n  Permutations = n! / (p! * q! * r!).\n• Circular Permutations: Arranging n distinct objects in a circle = (n - 1)!.\n  For necklaces/garlands (where clockwise and counter-clockwise are indistinguishable) = (n - 1)! / 2.\n\n3. Combinations (Selection Only - Order Irrelevant):\n• Selection of r items from n items:\n  nCr = n! / [r! * (n - r)!]\n• Symmetry Invariant: nCr = nC(n - r).\n• Pascal's Identity: nCr + nC(r - 1) = (n + 1)Cr.\n• Sum of all subsets: nC0 + nC1 + ... + nCn = 2^n.\n\n4. Advanced Arrangement Techniques:\n• Tie-Together (String / Block) Method: When items must always be together, bind them into 1 composite block.\n• Gap Method: When no two items of a given type may sit together, arrange remaining items first, then place constrained items in the gaps.",
     "formulas": [
       "nPr = n! / (n - r)!",
       "nCr = n! / [r!(n - r)!]",
@@ -677,8 +677,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section A: Quantitative",
     "title": "Probability & Expected Value",
     "category": "Quantitative Aptitude",
-    "readTime": "9 min read",
-    "concepts": "Probability P(E) = Favourable outcomes / Total outcomes. 0 <= P(E) <= 1. For independent events, P(A ∩ B) = P(A) × P(B).",
+    "readTime": "15-20 min read",
+    "concepts": "Probability formalizes uncertainty, measuring the likelihood of random events on a real normalized scale [0, 1].\n\n1. Classical Probability Definition:\nP(E) = Number of Favorable Outcomes / Total Exhaustive Outcomes in Sample Space = n(E) / n(S).\n• Impossible event: P = 0. Certain event: P = 1. Complementary event: P(E') = 1 - P(E).\n\n2. Addition and Multiplication Laws:\n• Addition Law (Union): P(A ∪ B) = P(A) + P(B) - P(A ∩ B).\n  For mutually exclusive events: P(A ∩ B) = 0 => P(A ∪ B) = P(A) + P(B).\n• Multiplication Law (Intersection): P(A ∩ B) = P(A) * P(B|A).\n  For independent events: P(A ∩ B) = P(A) * P(B).\n\n3. Standard Benchmark Sample Spaces:\n• Coin Tosses: For n fair coins, total outcomes = 2^n.\n• Dice Throws: For 2 fair dice, total outcomes = 6^2 = 36.\n  Sum distribution for 2 dice: Sum of 7 has maximum probability (6/36 = 1/6).\n• Standard 52-Card Deck: 4 suits of 13 cards (Hearts, Diamonds, Clubs, Spades). 26 Red, 26 Black. 12 Face cards (J, Q, K).\n\n4. Conditional Probability & Bayes' Theorem:\n• P(A|B) = P(A ∩ B) / P(B) [Probability of A given B has already occurred].\n• Bayes' Theorem reverses conditionality to find posterior probability:\n  P(A|B) = [P(B|A) * P(A)] / P(B).",
     "formulas": [
       "P(E) = n(E) / n(S)",
       "P(A ∪ B) = P(A) + P(B) - P(A ∩ B)",
@@ -712,8 +712,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section A: Quantitative",
     "title": "Data Interpretation (DI)",
     "category": "Quantitative Aptitude",
-    "readTime": "9 min read",
-    "concepts": "Data interpretation evaluates bar graphs, pie charts (360 degrees = 100%), line graphs, and tables for statistical trends, percentage comparisons, and ratios.",
+    "readTime": "15-20 min read",
+    "concepts": "Data Interpretation (DI) tests graphical analysis, synthetic trend forecasting, and numerical rapid estimation across tables, bar charts, line graphs, pie charts, and radar maps.\n\n1. Chart Types & Angles in Pie Charts:\n• Pie Chart Angular Mechanics: 100% corresponds to 360°.\n  1% = 3.6°. Conversely, 1° = 100 / 360 = 5/18%.\n  To convert an angle θ° to percentage: % = θ / 3.6.\n• Bar and Line Charts: Used for chronological time series, growth rates, and category comparisons.\n\n2. The 4 Essential Calculations in DI:\n• Absolute Growth = Value_final - Value_initial.\n• Percentage Growth = [(Value_final - Value_initial) / Value_initial] * 100.\n• Compounded Annual Growth Rate (CAGR) = (Final / Initial)^(1/t) - 1.\n• Share of Total = (Sub-category Value / Total Grand Sum) * 100.\n\n3. Speed Calculation Techniques for DI:\n• Approximation & Rounding: Round numbers to 2 or 3 significant digits before computing division (e.g., 47,892 / 121,450 ≈ 48 / 121 ≈ 39.6%).\n• Fraction-to-Percentage Recall: Memorize reciprocals 1/2 through 1/16 to convert ratios instantly without pen and paper.\n• Visual Inspection: In bar charts, eliminate options by inspecting steepness of slopes rather than calculating every intermediate data point.",
     "formulas": [
       "1% of Pie Chart = 3.6 degrees",
       "% Growth = [(Final - Initial) / Initial] × 100",
@@ -746,8 +746,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section A: Quantitative",
     "title": "Mensuration 2D & 3D",
     "category": "Quantitative Aptitude",
-    "readTime": "10 min read",
-    "concepts": "Mensuration analyzes geometric perimeters, surface areas, and volumes for 2D plane polygons and 3D solids.",
+    "readTime": "15-20 min read",
+    "concepts": "Mensuration computes perimeter, surface area, and volume across 2-dimensional plane figures and 3-dimensional solid spatial geometries.\n\n1. 2D Planar Geometries:\n• Triangles: Area = 1/2 * base * height.\n  Heron's Formula: Area = √[s(s - a)(s - b)(s - c)] where semi-perimeter s = (a + b + c)/2.\n  Equilateral Triangle: Area = (√3 / 4) * a^2, Height = (√3 / 2) * a.\n• Quadrilaterals:\n  Rectangle: Area = l * w, Diagonal = √(l^2 + w^2).\n  Rhombus: Area = 1/2 * d1 * d2, Side = 1/2 * √(d1^2 + d2^2).\n  Trapezoid: Area = 1/2 * (a + b) * h.\n• Circle: Area = πr^2, Circumference = 2πr.\n  Sector Area = (θ / 360) * πr^2, Arc Length = (θ / 360) * 2πr.\n\n2. 3D Spatial Geometries:\n• Cylinder: Volume = πr^2h, Curved Surface Area = 2πrh, Total Surface Area = 2πr(r + h).\n• Cone: Slant Height l = √(r^2 + h^2). Volume = 1/3 * πr^2h, CSA = πrl, TSA = πr(r + l).\n• Sphere: Volume = 4/3 * πr^3, Surface Area = 4πr^2.\n• Hemisphere: Volume = 2/3 * πr^3, CSA = 2πr^2, TSA = 3πr^2.\n\n3. Melting, Recasting, and Dimensional Scaling:\n• When a solid is melted and recast into another shape, Total Volume remains conserved.\n• If all linear dimensions of a 3D solid are scaled by factor k:\n  Perimeter / Length scales by k.\n  Surface Area scales by k^2.\n  Volume scales by k^3.",
     "formulas": [
       "Equilateral Triangle Area = (sqrt(3) / 4) × a^2",
       "Circle Area = π r^2, Circumference = 2 π r",
@@ -782,8 +782,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section B: Logical Reasoning",
     "title": "Blood Relations & Family Tree Maps",
     "category": "Logical Reasoning",
-    "readTime": "7 min read",
-    "concepts": "Family tree mapping uses symbols: Male [+], Female [-], Marriage [=], Siblings [-], Generations [|]. Decipher relationships by working backwards from possessive phrases.",
+    "readTime": "15-20 min read",
+    "concepts": "Blood Relations problems model genealogical lineage structures, evaluating kinship connectivity across generational tiers using structured Family Tree Graphs.\n\n1. Standard Family Tree Representation Rules:\n• Horizontal Line (—): Sibling relationship (Brother — Sister).\n• Double Horizontal Line (=): Marital relationship (Husband = Wife).\n• Vertical Line (|): Generational relationship (Parent above, Offspring below).\n• Gender Badges: Box [ ] or (+) for Male; Circle ( ) or (-) for Female.\n\n2. Generational Tiers Hierarchy:\n• Generation +2: Paternal/Maternal Grandfather, Grandmother.\n• Generation +1: Father, Mother, Uncle (paternal/maternal), Aunt.\n• Generation 0 (Self): Ego, Brother, Sister, Cousin, Brother-in-law, Sister-in-law.\n• Generation -1: Son, Daughter, Nephew, Niece.\n• Generation -2: Grandson, Granddaughter.\n\n3. Deciphering \"Pointing to a Person\" Puzzles:\nAlways parse the statement backwards from the ego identifier (\"my\"):\nExample: \"He is the only son of my father's only daughter.\"\n1. \"My father's only daughter\" = Myself (if speaker is female) or My sister (if speaker is male).\n2. \"The only son of myself\" = My Son.\nConclusion: The person is the speaker's son.",
     "formulas": [
       "Father's or Mother's Son = Brother / Myself",
       "Father's or Mother's Sister = Aunt",
@@ -817,8 +817,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section B: Logical Reasoning",
     "title": "Direction Sense Test & Compass Angles",
     "category": "Logical Reasoning",
-    "readTime": "7 min read",
-    "concepts": "Cardinal directions: North, South, East, West. Intercardinal: NE, NW, SE, SW. Clockwise turn is right (+90°), counterclockwise is left (-90°). At sunrise, shadows fall West; at sunset, shadows fall East.",
+    "readTime": "15-20 min read",
+    "concepts": "Direction Sense problems measure spatial navigation, rotational displacement, and trigonometric vectors relative to the standard 8-point compass rose.\n\n1. The 8-Point Compass System:\n• Cardinal Directions: North (0°), East (90°), South (180°), West (270°).\n• Intercardinal Directions: North-East (45°), South-East (135°), South-West (225°), North-West (315°).\n• Right Turn = 90° Clockwise.\n• Left Turn = 90° Counter-Clockwise.\n\n2. Vector Coordinates & Pythagorean Theorem:\nTreat the starting point as origin (0, 0) on Cartesian plane:\n• Walking North increases y (+y); Walking South decreases y (-y).\n• Walking East increases x (+x); Walking West decreases x (-x).\n• Net Displacement: Shortest straight-line distance d = √(Δx^2 + Δy^2).\n\n3. Shadow Problems (Solar Compass Invariants):\n• Morning (Sunrise in East): Shadows always cast towards West.\n  If facing North, shadow falls to Left. If facing South, shadow falls to Right.\n• Evening (Sunset in West): Shadows always cast towards East.\n  If facing North, shadow falls to Right. If facing South, shadow falls to Left.\n• Exactly Noon (12 PM): Sun is directly overhead; no horizontal shadow is cast.",
     "formulas": [
       "Shortest straight displacement d = sqrt(x^2 + y^2) (Pythagoras Theorem)",
       "Facing North at sunrise: shadow is to Left (West)",
@@ -851,8 +851,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section B: Logical Reasoning",
     "title": "Series Completion (Number & Letter)",
     "category": "Logical Reasoning",
-    "readTime": "8 min read",
-    "concepts": "Series problems test identification of patterns: squares, cubes, prime intervals, alternating additions, and alphabetical sequences. The EJOTY tool maps letters at intervals of 5: E=5, J=10, O=15, T=20, Y=25.",
+    "readTime": "15-20 min read",
+    "concepts": "Series Completion assesses inductive pattern recognition across numerical sequences, alphabetic strings, and alphanumeric hybrids.\n\n1. Classification of Number Series Patterns:\n• Difference Series: Compute 1st and 2nd level differences. If 2nd differences are constant, it is a quadratic sequence an^2 + bn + c.\n• Multiplicative & Alternating: Numbers scale by factor k ± c (e.g., *2 + 1, *3 - 2).\n• Polynomial & Geometric: Powers of consecutive primes or n^2 ± k, n^3 ± k.\n• Fibonacci / Accumulator: Each term is sum of preceding two: x_n = x_(n-1) + x_(n-2).\n\n2. Letter & Alphabetical Series Mechanics:\n• Direct Position Codes: A=1, B=2 ... Z=26.\n• Reverse Position Codes: Z=1, Y=2 ... A=26 (Formula: Reverse = 27 - Direct).\n• Mnemonic \"EJOTY\": E=5, J=10, O=15, T=20, Y=25 for rapid positional navigation.\n• Opposite Letter Pairs (Sum of positions = 27):\n  A-Z (AZ), B-Y (BY), C-X (CruX), D-W (Dew), E-V (EVen), F-U (FUll), G-T (GT road), H-S (High School), I-R (Indian Rail), J-Q (Jungle Queen), K-P (KanPur), L-O (LOve), M-N (MaN).",
     "formulas": [
       "EJOTY: E(5), J(10), O(15), T(20), Y(25)",
       "VQLGB (Reverse): V(5), Q(10), L(15), G(20), B(25)",
@@ -885,8 +885,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section B: Logical Reasoning",
     "title": "Coding and Decoding Techniques",
     "category": "Logical Reasoning",
-    "readTime": "8 min read",
-    "concepts": "Coding encrypts text based on letter shifts (+n/-n), reverse pairings, numerical positions, substitution, or matrix lookups.",
+    "readTime": "15-20 min read",
+    "concepts": "Coding and Decoding transforms plaintext into encrypted cipher text via systematic algebraic shifts, anagram scrambling, or symbol mappings.\n\n1. Cipher Types:\n• Caesar / Shift Cipher: Each letter is translated forward or backward by a constant k: C = (P + k) mod 26.\n• Reverse & Cross-Pattern Coding: Word is split into halves, and each half is reversed independently (e.g. SYSTEM -> SYS / TEM -> SYSTEM scrambled).\n• Substitution & Position Coding: Letters mapped directly to numeric values or symbols.\n• Matrix / Sentence Decryption (\"Chinese Coding\"): Multiple statements share common words. Isolate codes by finding common words across overlapping sentences.",
     "formulas": [
       "Opposite letter pairs: AZ, BY, CX, DW, EV, FU, GT, HS, IR, JQ, KP, LO, MN",
       "Position shift: New_pos = (Old_pos + shift) mod 26"
@@ -918,8 +918,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section B: Logical Reasoning",
     "title": "Analogy Reasoning (Number, Word, Letter)",
     "category": "Logical Reasoning",
-    "readTime": "7 min read",
-    "concepts": "Analogies test matching relations between pairs: semantic relationships, cause-effect, tool-worker, country-currency, or mathematical power patterns.",
+    "readTime": "15-20 min read",
+    "concepts": "Analogy reasoning tests relational abstraction, identifying the hidden relationship connecting pair A:B and projecting that exact relation onto C:D.\n\n1. Analogy Taxonomy:\n• Semantic & Linguistic: Synonyms, Antonyms, Part-to-Whole, Worker-to-Tool, Cause-and-Effect.\n• Scientific & Empirical: Instrument to Measurement (Barometer:Pressure :: Ammeter:Current).\n• Mathematical & Numerical: Squares, Cubes, Digit sums, Prime intervals (7 : 56 :: 9 : 90 => n : n(n+1)).",
     "formulas": [
       "Relationship invariant: A is to B as C is to D (A : B :: C : D)"
     ],
@@ -950,8 +950,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section B: Logical Reasoning",
     "title": "Seating Arrangements (Linear & Circular)",
     "category": "Logical Reasoning",
-    "readTime": "9 min read",
-    "concepts": "In circular arrangements facing inward, clockwise movement is Left and counterclockwise is Right. In linear rows facing North, left is West and right is East.",
+    "readTime": "15-20 min read",
+    "concepts": "Seating Arrangement puzzles test constrained spatial permutations across Linear lines, Parallel rows, and Closed Circular/Polygonal perimeters.\n\n1. Circular Arrangement Invariants:\n• Facing Center: Right is Counter-Clockwise; Left is Clockwise.\n• Facing Outward: Right is Clockwise; Left is Counter-Clockwise.\n• Step 1: Count total entities (N). For even N, opposite pairs sit separated by (N/2 - 1) people.\n• Step 2: Anchor definitive statements first (e.g. \"A sits 3rd to right of B\").\n• Step 3: Handle indeterminate clues by branching into 2 parallel hypothetical cases.",
     "formulas": [
       "Facing centre: Left = Clockwise, Right = Anticlockwise",
       "Facing outwards: Left = Anticlockwise, Right = Clockwise"
@@ -983,8 +983,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section B: Logical Reasoning",
     "title": "Data Arrangement & Complex Puzzles",
     "category": "Logical Reasoning",
-    "readTime": "9 min read",
-    "concepts": "Data arrangement puzzles involve cross-referencing multiple variables (names, professions, cities, colors) into a matrix grid and eliminating conflicts.",
+    "readTime": "15-20 min read",
+    "concepts": "Data Arrangement & Complex Puzzles synthesize multiple relational dimensions (names, professions, cities, colors, days) into structured Grid Matrices.\n\n1. Solving Methodology:\n• Construct a 2D matrix where static categories (days of week, floors) form columns or rows.\n• Use Checkmarks (✓) for confirmed matches and Crosses (✗) for definite negatives.\n• Never guess: Propagate deductions using process of elimination.",
     "formulas": [
       "Use 2D Cross-Grid / Matrix elimination tables",
       "Fill direct facts first, followed by conditional negative clues"
@@ -1016,8 +1016,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section B: Logical Reasoning",
     "title": "Clocks: Angles & Time Speed",
     "category": "Logical Reasoning",
-    "readTime": "8 min read",
-    "concepts": "Hour hand moves at 0.5 degrees/min. Minute hand moves at 6 degrees/min. Relative speed = 5.5 degrees/min. Hands coincide 22 times in 24 hours.",
+    "readTime": "15-20 min read",
+    "concepts": "Clock problems model continuous uniform angular velocities of minute and hour hands revolving around a 360° circular dial.\n\n1. Angular Velocities:\n• Minute Hand: Moves 360° in 60 mins = 6° per minute.\n• Hour Hand: Moves 360° in 12 hours = 0.5° per minute.\n• Relative Speed of Minute hand relative to Hour hand = 6° - 0.5° = 5.5°/min = (11/2)° per minute.\n\n2. Master Angle Formula:\nAngle θ between hands at H hours and M minutes:\nθ = |30 * H - (11/2) * M|\n(If θ > 180°, reflex angle is 360° - θ).\n\n3. Coincidence, Right Angle & Opposite Positions:\n• Hands coincide (θ = 0°): 11 times in 12 hours (22 times in 24 hours).\n• Hands opposite (θ = 180°): 11 times in 12 hours.\n• Hands perpendicular (θ = 90°): 22 times in 12 hours (44 times in 24 hours).",
     "formulas": [
       "Angle between hands: θ = |30H - 5.5M|",
       "Hands coincide: 22 times per day; Perpendicular: 44 times per day",
@@ -1050,8 +1050,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section B: Logical Reasoning",
     "title": "Calendars & Odd Days Calculation",
     "category": "Logical Reasoning",
-    "readTime": "8 min read",
-    "concepts": "An ordinary year (365 days) has 52 weeks + 1 odd day. A leap year (366 days) has 2 odd days. Century years must be divisible by 400 to be leap years (1600, 2000 are leap; 1700, 1800, 1900 are not).",
+    "readTime": "15-20 min read",
+    "concepts": "Calendar calculations determine the day of the week for any historical or future date using Gregorian modular arithmetic and \"Odd Days\".\n\n1. Odd Days Definition:\nThe remainder when total number of days is divided by 7: Odd Days = Total Days mod 7.\n• Ordinary Year (365 days): 52 weeks + 1 odd day.\n• Leap Year (366 days): 52 weeks + 2 odd days.\n• Leap Year Rule: Divisible by 4, except century years which must be divisible by 400 (e.g., 2000 was leap, 1900 was not).\n\n2. Century Odd Days Invariants:\n• 100 Years = 5 odd days.\n• 200 Years = (5 * 2) mod 7 = 3 odd days.\n• 300 Years = (5 * 3) mod 7 = 1 odd day.\n• 400 Years = 0 odd days (Cycles restart completely every 400 years!).\n• Day Map: 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat.",
     "formulas": [
       "100 years = 5 odd days; 200 years = 3 odd days; 300 years = 1 odd day; 400 years = 0 odd days",
       "Days of week code: Sunday=0, Monday=1, Tuesday=2, Wednesday=3, Thursday=4, Friday=5, Saturday=6"
@@ -1083,8 +1083,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section B: Logical Reasoning",
     "title": "Syllogisms & Venn Deductions",
     "category": "Logical Reasoning",
-    "readTime": "9 min read",
-    "concepts": "Syllogisms test formal deductive logic. Statements: Universal Affirmative [A: All A are B], Universal Negative [E: No A are B], Particular Affirmative [I: Some A are B], Particular Negative [O: Some A are not B].",
+    "readTime": "15-20 min read",
+    "concepts": "Syllogisms deduce formal logical truths from categorical premises using Aristotle's categorical logic or Euler/Venn Diagrams.\n\n1. Categorical Quantifiers:\n• Universal Affirmative (A): \"All S are P\" (100% inclusion).\n• Universal Negative (E): \"No S are P\" (0% inclusion).\n• Particular Affirmative (I): \"Some S are P\" (>0% overlap).\n• Particular Negative (O): \"Some S are not P\".\n\n2. Golden Syllogism Rules:\n• Two negative premises yield NO valid conclusion.\n• Two particular premises yield NO valid conclusion.\n• If one premise is negative, conclusion must be negative.\n• \"Possibility\" conclusions hold true if there exists at least one valid Venn diagram configuration satisfying the premises.",
     "formulas": [
       "All + All => All",
       "All + No => No",
@@ -1118,8 +1118,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section B: Logical Reasoning",
     "title": "Data Sufficiency Decision Systems",
     "category": "Logical Reasoning",
-    "readTime": "8 min read",
-    "concepts": "Data sufficiency assesses whether given statements provide enough information to definitively answer a question. Do not solve fully if sufficiency can be logically verified.",
+    "readTime": "15-20 min read",
+    "concepts": "Data Sufficiency evaluates whether given information is mathematically adequate to solve a problem without executing tedious full calculations.\n\n1. Decision Flowchart:\n• Statement 1 Alone: Sufficient or Insufficient.\n• Statement 2 Alone: Sufficient or Insufficient.\n• If neither alone is sufficient, combine Statement 1 + Statement 2.\n• Trap: Do not assume unstated properties (e.g. do not assume x is an integer unless explicitly specified!).",
     "formulas": [
       "Choice 1: Statement I alone is sufficient",
       "Choice 2: Statement II alone is sufficient",
@@ -1153,8 +1153,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section B: Logical Reasoning",
     "title": "Cubes: Cuts, Slices & Painted Faces",
     "category": "Logical Reasoning",
-    "readTime": "8 min read",
-    "concepts": "When a cube with n pieces per edge is painted on the outside and cut into n^3 smaller cubes: 3 faces painted are at corners, 2 faces painted are along edges, 1 face painted are on face centers, and 0 faces painted are in the interior core.",
+    "readTime": "15-20 min read",
+    "concepts": "Cube cutting and painting problems analyze 3D geometric volumetric dissections of a large cube sliced into n^3 smaller identical unit cubes.\n\n1. Formula Matrix for Painted Cube Cuts:\nLet a cube painted on all outer faces be cut into n equal unit cubes along each edge (Total cubes = n^3):\n• 3 Faces Painted: Exactly 8 cubes (the 8 corners of the cube, independent of n).\n• 2 Faces Painted: Located on edges = 12 * (n - 2).\n• 1 Face Painted: Located on face centers = 6 * (n - 2)^2.\n• 0 Faces Painted (Unpainted Core): Inner volume = (n - 2)^3.",
     "formulas": [
       "3 faces painted = exactly 8 (always at corners)",
       "2 faces painted = 12 × (n - 2)",
@@ -1189,8 +1189,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section B: Logical Reasoning",
     "title": "Visual Reasoning: Mirror, Water & Folds",
     "category": "Logical Reasoning",
-    "readTime": "7 min read",
-    "concepts": "Mirror images reflect across the vertical Y-axis (left and right swap, top and bottom stay constant). Water images reflect across the horizontal X-axis (top and bottom invert, left and right stay constant).",
+    "readTime": "15-20 min read",
+    "concepts": "Visual and Non-Verbal Reasoning tests mental spatial rotation, symmetrical reflections across water and mirror planes, and paper folding dissections.\n\n1. Reflection Invariants:\n• Mirror Image (Vertical Axis): Left and Right invert; Top and Bottom remain unchanged.\n• Water Image (Horizontal Axis): Top and Bottom invert; Left and Right remain unchanged.\n• Paper Folding & Punching: Unfolding is mathematically identical to reflecting across each crease line in reverse order.",
     "formulas": [
       "Mirror reflection: X-coordinates invert, Y-coordinates remain identical",
       "Water reflection: Y-coordinates invert, X-coordinates remain identical"
@@ -1222,8 +1222,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section B: Logical Reasoning",
     "title": "Cryptarithmetic & Verbal Arithmetic",
     "category": "Logical Reasoning",
-    "readTime": "8 min read",
-    "concepts": "Cryptarithmetic puzzles replace digits 0-9 with unique letters. Leading characters cannot be zero. The carry of two single-digit sums can never exceed 1.",
+    "readTime": "15-20 min read",
+    "concepts": "Cryptarithmetic puzzles are mathematical alphametic ciphers where alphabetic letters replace numerical digits [0-9] in arithmetic equations.\n\n1. Solving Rules & Invariants:\n• Each distinct letter represents a unique digit (0-9).\n• The leading digit of a number can NEVER be 0.\n• Addition Carry-Over Rule: When adding two single digits, maximum sum is 9 + 9 + 1 (carry) = 19.\n  Therefore, any carry-over from adding two columns can ONLY be 1! (e.g., in SEND + MORE = MONEY, M must be 1).",
     "formulas": [
       "Leading letter of sum is always 1 (e.g., in SEND + MORE = MONEY, M = 1)",
       "Unique mapping: Each distinct letter represents a unique digit 0..9",
@@ -1256,8 +1256,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section C: Verbal Ability",
     "title": "Articles and Prepositions Mastery",
     "category": "Verbal Ability",
-    "readTime": "8 min read",
-    "concepts": "Articles define specificity: 'the' is definite; 'a/an' are indefinite based on pronunciation sound ('an honest man' because 'h' is silent, 'a university' because 'u' starts with a 'y' consonant sound). Prepositions govern relationships of time, place, and direction.",
+    "readTime": "15-20 min read",
+    "concepts": "Articles (a, an, the) and Prepositions govern nominal determiners and spatial/temporal relationships in standard English syntax.\n\n1. Indefinite Articles (A / An):\n• Chosen strictly by initial phonetic sound, NOT spelling!\n  - \"An hour\", \"An honest man\" (silent h => vowel sound).\n  - \"A European\", \"A university\" (consonant 'yu' sound).\n2. Definite Article (The): Used for unique entities, superlatives, and previously introduced nouns.\n3. Prepositions of Time & Place:\n• At: Exact points in time or specific locations (at 5 PM, at the station).\n• On: Days, dates, and flat surfaces (on Monday, on the table).\n• In: Enclosed spaces, months, years, and long eras (in July, in 2026, in the room).",
     "formulas": [
       "Vowel SOUNDS take 'an' (an hour, an MBA, an heir)",
       "Consonant SOUNDS take 'a' (a European, a one-rupee coin, a university)",
@@ -1302,8 +1302,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section C: Verbal Ability",
     "title": "Tenses & Subject-Verb Agreement",
     "category": "Verbal Ability",
-    "readTime": "8 min read",
-    "concepts": "A singular subject demands a singular verb; a plural subject demands a plural verb. Indefinite pronouns (each, everyone, neither) are singular. In 'either/or' and 'neither/nor', the verb agrees with the nearer subject.",
+    "readTime": "15-20 min read",
+    "concepts": "Tenses and Subject-Verb Agreement constitute the core grammatical rules governing sentence construction in competitive examinations.\n\n1. Subject-Verb Agreement Invariants:\n• Singular subject requires singular verb; plural subject requires plural verb.\n• Prepositional Phrase Trap: \"The quality of the apples [is/are] good\" => Subject is 'quality' (singular), so verb is 'is'!\n• Either...Or / Neither...Nor: Verb agrees with the nearest subject (\"Neither the teacher nor the students were present\").\n• Indefinite Pronouns: Everyone, somebody, each, neither are grammatically singular.",
     "formulas": [
       "Singular: The student runs. Plural: The students run.",
       "Neither A nor B: Verb agrees with B (e.g. Neither the teacher nor the students were happy)",
@@ -1348,8 +1348,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section C: Verbal Ability",
     "title": "Change of Voice and Speech",
     "category": "Verbal Ability",
-    "readTime": "8 min read",
-    "concepts": "Active Voice focuses on the doer; Passive Voice focuses on the receiver (Object + form of 'be' + Past Participle V3 + by Subject). Direct speech quotes exact words; Indirect speech backshifts tenses and alters pronouns and time markers.",
+    "readTime": "15-20 min read",
+    "concepts": "Voice (Active/Passive) and Speech (Direct/Indirect) evaluate syntax transformation without altering semantic meaning.\n\n1. Active to Passive Voice Rules:\n• Subject becomes object, and Object becomes subject.\n• Standard form: Subject + Helping Verb + Past Participle (V3) + by + Object.\n• Continuous tenses introduce \"being\": \"is repairing\" -> \"is being repaired\".\n2. Direct to Indirect Speech:\n• Backshift of tenses: Simple Present -> Simple Past; Present Perfect -> Past Perfect.\n• Time shifts: \"today\" -> \"that day\", \"now\" -> \"then\", \"yesterday\" -> \"the previous day\".",
     "formulas": [
       "Active: Subject + Verb + Object => Passive: Object + be + V3 + by Subject",
       "Present Continuous Passive: is/am/are + being + V3",
@@ -1382,8 +1382,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section C: Verbal Ability",
     "title": "Error Spotting & Sentence Correction",
     "category": "Verbal Ability",
-    "readTime": "9 min read",
-    "concepts": "Tests syntactic precision: parallelism in coordinate clauses, misplaced modifiers, redundant qualifiers ('returned back' -> 'returned'), and faulty comparisons.",
+    "readTime": "15-20 min read",
+    "concepts": "Error Spotting tests rapid identification of grammatical violations across parallelism, modifiers, and idiomatic expressions.\n\n1. Frequent Exam Traps:\n• Dangling Modifiers: \"Walking down the street, a car hit him\" (car was not walking!). Correct: \"While he was walking down the street, a car hit him.\"\n• Faulty Parallelism: Correlative conjunctions (not only... but also) must balance identical grammatical parts of speech.\n• Redundancy: \"Return back\" (return already means go back), \"Discuss about\".",
     "formulas": [
       "Parallelism: Elements in a list must share identical grammatical form (dancing, singing, and reading)",
       "Dangling Modifier: Participial phrase at start of sentence must logically modify the immediate subject"
@@ -1415,8 +1415,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section C: Verbal Ability",
     "title": "Synonyms, Antonyms & Root Words",
     "category": "Verbal Ability",
-    "readTime": "9 min read",
-    "concepts": "Etymological root words provide structural clues to vocabulary: 'Cred' (believe: credible, incredulous), 'Mal' (bad: malevolent, malicious), 'Bene' (good: benevolent, beneficiary), 'Loq/Loc' (speech: loquacious, eloquent).",
+    "readTime": "15-20 min read",
+    "concepts": "Vocabulary mastery relies on Etymology (Greek and Latin root words), prefixes, and morphological affixes.\n\n1. High-Yield Root Words:\n• 'Mal-' (bad/evil): Malicious, Malevolent, Malignant.\n• 'Bene-' (good/well): Benefactor, Benevolent, Beneficial.\n• 'Chron-' (time): Chronic, Anachronism, Synchronize.\n• 'Loqu- / Locu-' (speak): Loquacious, Eloquent, Circumlocution.\n• 'Path-' (feeling): Sympathy, Apathy, Antipathy, Empathy.",
     "formulas": [
       "Prefix 'Dis-', 'Un-', 'In-', 'A-' negates word meaning",
       "Suffix '-ous', '-ful' converts nouns to adjectives of fullness",
@@ -1460,8 +1460,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section C: Verbal Ability",
     "title": "Sentence Completion & One-Word Substitution",
     "category": "Verbal Ability",
-    "readTime": "8 min read",
-    "concepts": "Sentence completion uses contextual transition indicators (however, therefore, despite). One-word substitution condenses descriptive phrases into formal lexical units (e.g. Philanthropist, Polyglot, Cartographer).",
+    "readTime": "15-20 min read",
+    "concepts": "Sentence Completion and One-Word Substitution evaluate context clues, tonal direction, and precise lexical substitution.\n\n1. Structural Sentence Clues:\n• Contrast Markers (Although, Despite, However, Yet): Second clause contrasts with first.\n• Elaboration Markers (Moreover, Furthermore, In addition): Second clause reinforces first.\n2. One-Word Substitution Domains:\n• Philanthropist (lover of mankind) vs Misanthrope (hater of mankind).\n• Omniscient (all-knowing), Omnipotent (all-powerful), Omnipresent (present everywhere).",
     "formulas": [
       "Contrast markers (although, despite, yet) signal opposite valence in blank",
       "Causal markers (because, since, consequently) signal consistent direction",
@@ -1494,8 +1494,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section C: Verbal Ability",
     "title": "Para Jumbles & Cloze Tests",
     "category": "Verbal Ability",
-    "readTime": "9 min read",
-    "concepts": "Para jumbles require identifying the opening topic sentence, tracking noun-pronoun chains, observing chronology, and recognizing concluding statements. Cloze tests test contextual semantic coherence.",
+    "readTime": "15-20 min read",
+    "concepts": "Para Jumbles (Sentence Rearrangement) and Cloze Tests assess paragraph coherence, discourse continuity, and lexical insertion.\n\n1. Para Jumble Decoding Strategies:\n• Identify Mandatory Pairs: Look for Pronoun-Noun references (John... He).\n• Chronological & Causal Flow: Cause precedes Effect.\n• Acronym Rule: Full form precedes abbreviation (e.g. World Health Organization precedes WHO).\n• Concluding Markers: Sentences starting with \"Therefore\", \"Thus\", \"In conclusion\" typically terminate paragraphs.",
     "formulas": [
       "Opening sentence must be an independent noun statement (no pronouns or conjunctions)",
       "Mandatory pairs: Connect causes with their immediate effects",
@@ -1528,8 +1528,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section C: Verbal Ability",
     "title": "Reading Comprehension Analysis",
     "category": "Verbal Ability",
-    "readTime": "11 min read",
-    "concepts": "Reading comprehension evaluates analytical reading across diverse domains: economic policy, literature and poetry, human ethical values, geopolitical history, and technological philosophy.",
+    "readTime": "15-20 min read",
+    "concepts": "Reading Comprehension (RC) measures critical reading efficiency, main-idea synthesis, inference deduction, and authorial tone analysis.\n\n1. Passage Navigation Tactics:\n• Question-First Strategy: Skim questions first to identify target keywords before reading the passage.\n• Topic Sentence Focus: The first and last sentences of each paragraph typically contain 80% of the core argument.\n• Tone Identification: Objective, Cynical, Laudatory, Sarcastic, Didactic, Analytical.\n• Extreme Option Trap: Eliminate choices containing extreme words (\"always\", \"never\", \"only\", \"all\") unless explicitly supported by the text.",
     "formulas": [
       "Main Idea: Focus on the author's primary thesis and tonal attitude",
       "Inference: Must be logically substantiated by the text without outside bias",
@@ -1562,8 +1562,8 @@ window.APTITUDE_TRIAD_CURRICULUM = [
     "section": "Section C: Verbal Ability",
     "title": "Critical Reasoning: Argument Analysis",
     "category": "Verbal Ability",
-    "readTime": "9 min read",
-    "concepts": "Critical reasoning dissects arguments into Premises, Assumptions, and Conclusions. Questions test identifying assumptions, strengthening arguments with corroborative evidence, and weakening arguments with alternative explanations.",
+    "readTime": "15-20 min read",
+    "concepts": "Critical Reasoning deconstructs logical arguments into Premise, Assumption, and Conclusion to test deductive validity.\n\n1. Anatomy of an Argument:\n• Premise: Factual evidence provided by the author.\n• Conclusion: The main claim or hypothesis the author seeks to prove.\n• Assumption: The unstated bridge connecting Premise to Conclusion (Conclusion = Premise + Assumption).\n2. Question Types:\n• Strengthen: Add an external fact that validates the unstated assumption.\n• Weaken: Add an external fact that breaks the unstated assumption.\n• Negation Technique for Assumptions: If negating a statement destroys the argument, that statement is a required assumption!",
     "formulas": [
       "Argument = Premise + Unstated Assumption => Conclusion",
       "To Strengthen: Validate the unstated assumption or rule out alternate causes",

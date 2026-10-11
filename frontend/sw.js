@@ -1,22 +1,22 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
-// Version: 5.8.34 (Prominent Typography Restored & Borderless Header System)
+// Version: 5.8.35 (825 DSA Questions Bank, Question Discussions Community, LeetCode Editorials, Deep Books & Aptitude)
 
-const CACHE_NAME = 'prepspace-static-v5.8.34';
-const RUNTIME_CACHE = 'prepspace-runtime-v5.8.34';
+const CACHE_NAME = 'prepspace-static-v5.8.35';
+const RUNTIME_CACHE = 'prepspace-runtime-v5.8.35';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/index.css?v=5.8.34',
-  './assets/js/dsa-notes-data.js?v=5.8.34',
-  './assets/js/app.js?v=5.8.34',
-  './assets/js/components.js?v=5.8.34',
-  './assets/js/interview-suite.js?v=5.8.34',
-  './assets/js/technical-library-data.js?v=5.8.34',
-  './assets/js/questions-data.js?v=5.8.34',
-  './assets/js/aptitude-curriculum.js?v=5.8.34',
-  './assets/js/production-pages.js?v=5.8.34',
+  './assets/css/index.css?v=5.8.35',
+  './assets/js/dsa-notes-data.js?v=5.8.35',
+  './assets/js/app.js?v=5.8.35',
+  './assets/js/components.js?v=5.8.35',
+  './assets/js/interview-suite.js?v=5.8.35',
+  './assets/js/technical-library-data.js?v=5.8.35',
+  './assets/js/questions-data.js?v=5.8.35',
+  './assets/js/aptitude-curriculum.js?v=5.8.35',
+  './assets/js/production-pages.js?v=5.8.35',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',
