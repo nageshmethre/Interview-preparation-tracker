@@ -236,9 +236,18 @@ window.showAdModal = function(force = false) {
     return;
   }
 
+  // Check 24-hour dismissal preference
+  const dismissedUntil = localStorage.getItem('prepspace_ad_dismissed_until');
+  if (dismissedUntil) {
+    const parsedTime = parseInt(dismissedUntil, 10);
+    if (!isNaN(parsedTime) && Date.now() < parsedTime) {
+      if (!force) return;
+    }
+  }
+
+  // Avoid showing repeatedly in the same session on automatic triggers
   if (!force) {
-    const dismissedUntil = localStorage.getItem('prepspace_ad_dismissed_until');
-    if (dismissedUntil && Date.now() < parseInt(dismissedUntil, 10)) {
+    if (sessionStorage.getItem('prepspace_promo_shown_session')) {
       return;
     }
   }
@@ -251,7 +260,12 @@ window.showAdModal = function(force = false) {
 
   const modalEl = document.getElementById('platformAdModal');
   if (modalEl && typeof bootstrap !== 'undefined' && bootstrap.Modal) {
-    const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+    const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl, {
+      backdrop: true,
+      keyboard: true
+    });
+    
+    sessionStorage.setItem('prepspace_promo_shown_session', 'true');
     modal.show();
 
     const chk = document.getElementById('ad-dont-show-today');
@@ -259,8 +273,16 @@ window.showAdModal = function(force = false) {
       modalEl._adHooked = true;
       modalEl.addEventListener('hidden.bs.modal', () => {
         if (chk && chk.checked) {
-          localStorage.setItem('prepspace_ad_dismissed_until', Date.now() + 24 * 60 * 60 * 1000);
+          try {
+            localStorage.setItem('prepspace_ad_dismissed_until', String(Date.now() + 24 * 60 * 60 * 1000));
+          } catch(e) {}
         }
+        // Restore background scrolling and cleanup backdrop
+        document.body.classList.remove('modal-open');
+        document.body.style.removeProperty('overflow');
+        document.body.style.removeProperty('padding-right');
+        const leftovers = document.querySelectorAll('.modal-backdrop');
+        leftovers.forEach(el => el.remove());
       });
     }
   }
@@ -2005,7 +2027,7 @@ function bindAuthEvents(mode) {
         }
         setTimeout(() => {
           if (window.showAdModal) {
-            window.showAdModal(true);
+            window.showAdModal(false);
           }
         }, 1200);
 
@@ -2279,7 +2301,7 @@ function bindAuthEvents(mode) {
             }
             setTimeout(() => {
               if (window.showAdModal) {
-                window.showAdModal(true);
+                window.showAdModal(false);
               }
             }, 1200);
             redirectTo('#/dashboard');

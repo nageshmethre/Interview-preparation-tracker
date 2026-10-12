@@ -416,25 +416,25 @@ const components = {
 
           <!-- 1-Year Pro Tier (Recommended) -->
           <div class="col-md-6 col-lg-4">
-            <div class="glass-panel p-4 h-100 d-flex flex-column text-start justify-content-between position-relative" style="border: 2px solid #f59e0b !important; box-shadow: 0 0 25px rgba(245, 158, 11, 0.2);">
+            <div class="glass-panel p-4 h-100 d-flex flex-column text-start justify-content-between position-relative" style="border: 1px solid #3f3f46 !important; background: #1c1c20;">
               <div>
                 <div class="d-flex align-items-center justify-content-between mb-3">
-                  <span class="badge bg-warning text-dark px-2.5 py-1 rounded-pill font-monospace fs-9 fw-bold">BEST VALUE &bull; SAVE 41%</span>
-                  <span class="badge bg-warning bg-opacity-20 text-warning border border-warning-subtle px-2.5 py-1 rounded-pill font-monospace fs-9">ANNUAL PASS</span>
+                  <span class="badge bg-secondary bg-opacity-30 text-light border border-secondary border-opacity-30 px-2.5 py-1 rounded-pill font-monospace fs-9 fw-semibold">BEST VALUE &bull; SAVE 41%</span>
+                  <span class="badge bg-secondary bg-opacity-20 text-muted px-2.5 py-1 rounded-pill font-monospace fs-9">ANNUAL PASS</span>
                 </div>
                 <h3 class="text-white h5 fw-bold mb-1">PrepPro 1-Year</h3>
                 <p class="text-muted fs-8 mb-3">Complete placement suite for serious engineers</p>
                 <div class="my-3"><span class="display-6 fw-extrabold text-white">₹1,399</span><span class="text-muted fs-8"> / year (~₹116/mo)</span></div>
-                <div class="p-2 rounded bg-warning bg-opacity-10 border border-warning border-opacity-20 text-warning fs-8 fw-semibold mb-3">
-                  <i class="fa-solid fa-crown me-1.5"></i> 365 Days Unrestricted Access
+                <div class="p-2 rounded bg-secondary bg-opacity-20 border border-secondary border-opacity-25 text-light fs-8 fw-semibold mb-3">
+                  <i class="fa-solid fa-crown text-warning me-1.5"></i> 365 Days Unrestricted Access
                 </div>
                 <ul class="list-unstyled text-start mb-4 text-muted fs-8 d-flex flex-column gap-2">
-                  <li><i class="fa-solid fa-check text-warning me-2"></i> <strong>Unlimited 50-MCQ Timed Exams</strong></li>
-                  <li><i class="fa-solid fa-check text-warning me-2"></i> <strong>AI ATS Resume & Keyword Audit</strong></li>
-                  <li><i class="fa-solid fa-check text-warning me-2"></i> <strong>AI Custom Study Planners</strong></li>
-                  <li><i class="fa-solid fa-check text-warning me-2"></i> <strong>Company Interview Guides & Prompts</strong></li>
-                  <li><i class="fa-solid fa-check text-warning me-2"></i> <strong>Export Excel / PDF Progress Reports</strong></li>
-                  <li><i class="fa-solid fa-check text-warning me-2"></i> Verified Completion Certificates</li>
+                  <li><i class="fa-solid fa-check text-muted me-2"></i> <strong>Unlimited 50-MCQ Timed Exams</strong></li>
+                  <li><i class="fa-solid fa-check text-muted me-2"></i> <strong>AI ATS Resume & Keyword Audit</strong></li>
+                  <li><i class="fa-solid fa-check text-muted me-2"></i> <strong>AI Custom Study Planners</strong></li>
+                  <li><i class="fa-solid fa-check text-muted me-2"></i> <strong>Company Interview Guides & Prompts</strong></li>
+                  <li><i class="fa-solid fa-check text-muted me-2"></i> <strong>Export Excel / PDF Progress Reports</strong></li>
+                  <li><i class="fa-solid fa-check text-muted me-2"></i> Verified Completion Certificates</li>
                 </ul>
               </div>
               <a href="#/register" class="btn btn-primary w-100 py-2 fs-7 fw-bold mt-auto shadow-sm">
@@ -445,15 +445,15 @@ const components = {
         </div>
 
         <!-- Top 100 Merit Scholarship Highlight -->
-        <div class="mt-4 p-4 rounded-3 border border-warning border-opacity-30 text-start" style="background: rgba(245, 158, 11, 0.08);">
+        <div class="mt-4 p-4 rounded-3 text-start" style="background: #1c1c20; border: 1px solid #27272a;">
           <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
             <div class="d-flex align-items-center gap-3">
-              <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.4);">
-                <i class="fa-solid fa-trophy text-primary fs-5"></i>
+              <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);">
+                <i class="fa-solid fa-trophy text-warning fs-5"></i>
               </div>
               <div>
                 <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
-                  <span class="badge bg-primary text-white font-monospace fs-9">MERIT SCHOLARSHIP</span>
+                  <span class="badge bg-secondary bg-opacity-30 text-light border border-secondary border-opacity-30 font-monospace fs-9">MERIT SCHOLARSHIP</span>
                   <span class="text-white fw-bold fs-6">Top 100 Mock Test Candidates Win 1-Year Pro 100% Free!</span>
                 </div>
                 <p class="text-muted fs-8 mb-0">Score in the Top 100 on our 50-MCQ timed mock assessment leaderboard to automatically unlock a 1-Year Pro subscription at ₹0.</p>
@@ -4871,11 +4871,11 @@ const components = {
         
         <!-- Tier 3: PrepPro 1-Year Plan (₹1,399 / year) -->
         <div class="col-md-6 col-lg-4">
-          <div class="glass-panel p-4 h-100 text-start d-flex flex-column justify-content-between position-relative overflow-hidden" style="border: 2px solid #f59e0b !important; box-shadow: 0 0 25px rgba(245, 158, 11, 0.2);">
+          <div class="glass-panel p-4 h-100 text-start d-flex flex-column justify-content-between position-relative overflow-hidden" style="border: 1px solid #3f3f46 !important; background: #1c1c20;">
             <div>
               <div class="d-flex align-items-center justify-content-between mb-3">
-                <span class="badge bg-warning text-dark font-monospace fw-bold fs-9 px-2.5 py-1 rounded-pill">BEST VALUE &bull; SAVE 41%</span>
-                <span class="badge bg-warning bg-opacity-20 text-warning border border-warning-subtle px-2.5 py-1 rounded-pill font-monospace fs-9">ANNUAL PASS</span>
+                <span class="badge bg-secondary bg-opacity-30 text-light border border-secondary border-opacity-30 font-monospace fw-semibold fs-9 px-2.5 py-1 rounded-pill">BEST VALUE &bull; SAVE 41%</span>
+                <span class="badge bg-secondary bg-opacity-20 text-muted px-2.5 py-1 rounded-pill font-monospace fs-9">ANNUAL PASS</span>
               </div>
               <h3 class="text-white h5 fw-bold mb-1">PrepPro 1-Year</h3>
               <p class="text-muted fs-8 mb-3">Comprehensive career suite for serious jobseekers</p>
@@ -4883,16 +4883,16 @@ const components = {
                 <span class="display-6 fw-bold text-white">₹1,399</span>
                 <span class="text-muted fs-8 ms-1">/ year (~₹116/mo)</span>
               </div>
-              <div class="p-2 rounded bg-warning bg-opacity-10 border border-warning border-opacity-20 text-warning fs-8 fw-semibold mb-3 text-start">
-                <i class="fa-solid fa-crown me-1.5"></i> Full 365 Days Unlimited Access & Placement Suite
+              <div class="p-2 rounded bg-secondary bg-opacity-20 border border-secondary border-opacity-25 text-light fs-8 fw-semibold mb-3 text-start">
+                <i class="fa-solid fa-crown text-warning me-1.5"></i> Full 365 Days Unlimited Access & Placement Suite
               </div>
               <ul class="list-unstyled text-start mb-4 text-muted fs-8 d-flex flex-column gap-2">
-                <li><i class="fa-solid fa-check text-warning me-2"></i> <strong>Everything in Monthly Plan</strong></li>
-                <li><i class="fa-solid fa-check text-warning me-2"></i> <strong>Priority AI Evaluation</strong> & Resume Parsing</li>
-                <li><i class="fa-solid fa-check text-warning me-2"></i> <strong>Offline Code Sandbox</strong> & Desktop Client Sync</li>
-                <li><i class="fa-solid fa-check text-warning me-2"></i> <strong>Verified Course Completion Certificates</strong></li>
-                <li><i class="fa-solid fa-check text-warning me-2"></i> <strong>Top 100 Leaderboard Badge & Direct Recruiter Visibility</strong></li>
-                <li><i class="fa-solid fa-check text-warning me-2"></i> One-time payment, no recurring billing surprises</li>
+                <li><i class="fa-solid fa-check text-muted me-2"></i> <strong>Everything in Monthly Plan</strong></li>
+                <li><i class="fa-solid fa-check text-muted me-2"></i> <strong>Priority AI Evaluation</strong> & Resume Parsing</li>
+                <li><i class="fa-solid fa-check text-muted me-2"></i> <strong>Offline Code Sandbox</strong> & Desktop Client Sync</li>
+                <li><i class="fa-solid fa-check text-muted me-2"></i> <strong>Verified Course Completion Certificates</strong></li>
+                <li><i class="fa-solid fa-check text-muted me-2"></i> <strong>Top 100 Leaderboard Badge & Direct Recruiter Visibility</strong></li>
+                <li><i class="fa-solid fa-check text-muted me-2"></i> One-time payment, no recurring billing surprises</li>
               </ul>
             </div>
             <div>

@@ -7289,3 +7289,267 @@ h5.fs-7, h5.fs-8, h5.fs-9 {
   padding-bottom: 0.65rem !important;
 }
 
+/* =========================================================================
+   PREPSPACE PROMOTIONAL MODAL (PREMIUM SAAS REDESIGN)
+   ========================================================================= */
+.prepspace-promo-modal .modal-dialog {
+  max-width: 800px;
+  width: min(800px, calc(100vw - 32px));
+  margin: 1.75rem auto;
+}
+
+.prepspace-promo-modal .modal-content {
+  background: #141416 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.06) !important;
+  max-height: 90dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.prepspace-promo-modal .modal-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  padding: 1.1rem 1.75rem !important;
+}
+
+.prepspace-promo-modal .modal-body {
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1.75rem 2.25rem !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+.prepspace-promo-modal .modal-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+  padding: 0.85rem 1.75rem !important;
+  background: #111113;
+}
+
+.promo-badge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #e4e4e7;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 4px 11px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.promo-gift-icon-wrap {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.9rem;
+}
+
+.promo-gift-icon-wrap i {
+  color: #f59e0b;
+  font-size: 1.15rem;
+}
+
+.promo-title {
+  color: #f4f4f5;
+  font-weight: 700;
+  font-size: 1.6rem;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
+  margin-bottom: 0.45rem;
+}
+
+.promo-subtitle {
+  color: #a1a1aa;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  margin-bottom: 0.95rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.promo-availability-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #d4d4d8;
+  font-size: 0.78rem;
+  font-family: var(--font-mono, monospace);
+  margin-bottom: 1.4rem;
+}
+
+.promo-features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px 18px;
+  text-align: left;
+  margin-bottom: 1.25rem;
+}
+
+.promo-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.promo-feature-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.09);
+}
+
+.promo-feature-item i {
+  color: #a1a1aa;
+  font-size: 0.9rem;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.promo-feature-name {
+  color: #f4f4f5;
+  font-weight: 600;
+  font-size: 0.86rem;
+  line-height: 1.35;
+}
+
+.promo-feature-desc {
+  color: #71717a;
+  font-size: 0.77rem;
+  line-height: 1.35;
+  margin-top: 2px;
+}
+
+.promo-reward-callout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: #a1a1aa;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  margin-bottom: 1.25rem;
+}
+
+.promo-reward-callout i {
+  color: #f59e0b;
+  font-size: 0.82rem;
+  flex-shrink: 0;
+}
+
+.promo-actions-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.promo-actions-group .btn-cta-primary {
+  background: #f59e0b !important;
+  color: #18181b !important;
+  border: 1px solid #f59e0b !important;
+  font-weight: 600 !important;
+  font-size: 0.86rem !important;
+  padding: 8px 20px !important;
+  border-radius: 8px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  transition: all 0.15s ease !important;
+}
+
+.promo-actions-group .btn-cta-primary:hover {
+  background: #fbbf24 !important;
+  border-color: #fbbf24 !important;
+  color: #18181b !important;
+}
+
+.promo-actions-group .btn-cta-secondary {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #f4f4f5 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  font-weight: 500 !important;
+  font-size: 0.86rem !important;
+  padding: 8px 18px !important;
+  border-radius: 8px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  transition: all 0.15s ease !important;
+}
+
+.promo-actions-group .btn-cta-secondary:hover {
+  background: rgba(255, 255, 255, 0.09) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+.promo-actions-group .btn-cta-tertiary {
+  background: transparent !important;
+  color: #71717a !important;
+  border: 1px solid transparent !important;
+  font-weight: 500 !important;
+  font-size: 0.84rem !important;
+  padding: 8px 14px !important;
+  border-radius: 8px !important;
+  text-decoration: none !important;
+  transition: color 0.15s ease !important;
+}
+
+.promo-actions-group .btn-cta-tertiary:hover {
+  color: #f4f4f5 !important;
+}
+
+@media (max-width: 768px) {
+  .prepspace-promo-modal .modal-dialog {
+    width: calc(100vw - 24px) !important;
+    margin: 0.75rem auto !important;
+  }
+  .prepspace-promo-modal .modal-body {
+    padding: 1.25rem 1.15rem !important;
+  }
+  .promo-features-grid {
+    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+  .promo-title {
+    font-size: 1.3rem;
+  }
+  .promo-subtitle {
+    font-size: 0.86rem;
+  }
+  .promo-actions-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  .promo-actions-group .btn-cta-primary,
+  .promo-actions-group .btn-cta-secondary,
+  .promo-actions-group .btn-cta-tertiary {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
