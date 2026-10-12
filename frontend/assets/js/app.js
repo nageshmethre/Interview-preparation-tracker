@@ -122,6 +122,9 @@ window.UserStreak = {
     if (headerCount) headerCount.textContent = streak;
 
     // Dashboard widgets
+    const dashStreakBadge = document.getElementById('dash-streak-count');
+    if (dashStreakBadge) dashStreakBadge.textContent = streak;
+
     const dashBannerDays = document.getElementById('dash-streak-banner-days');
     if (dashBannerDays) dashBannerDays.textContent = `${streak} ${streak === 1 ? 'Day' : 'Days'}`;
 
@@ -173,9 +176,9 @@ window.UserStreak = {
       const wasActive = history[dateStr] && history[dateStr].count > 0;
 
       chips.push(`
-        <div class="flex-fill text-center p-2 rounded-2 ${wasActive ? 'bg-warning bg-opacity-15 border border-warning border-opacity-40' : 'bg-secondary bg-opacity-10 border border-secondary border-opacity-15'} ${isToday ? 'border border-primary' : ''}">
+        <div class="flex-fill text-center p-2 rounded-2 ${wasActive ? 'bg-primary bg-opacity-20 border border-primary border-opacity-40' : 'bg-secondary bg-opacity-10 border border-secondary border-opacity-15'} ${isToday ? 'border-primary' : ''}">
           <div class="text-muted fs-10 font-monospace text-uppercase">${dayName}</div>
-          <div class="fw-bold fs-7 ${wasActive ? 'text-warning' : 'text-secondary'} font-monospace my-0.5">${dayNum}</div>
+          <div class="fw-bold fs-7 ${wasActive ? 'text-primary' : 'text-secondary'} font-monospace my-0.5">${dayNum}</div>
           <div class="fs-8">${wasActive ? '🔥' : '<span class="text-muted opacity-40">•</span>'}</div>
         </div>
       `);
@@ -183,6 +186,28 @@ window.UserStreak = {
 
     return chips.join('');
   }
+};
+
+// Genuine Real User Counter Engine (No Hardcoded Fake Numbers)
+window.getRealClaimedCount = function() {
+  let count = 0;
+  const accountsRaw = localStorage.getItem('prepspace_candidate_accounts');
+  if (accountsRaw) {
+    try {
+      const accounts = JSON.parse(accountsRaw);
+      if (Array.isArray(accounts)) {
+        // Count real non-mock candidate records
+        count = accounts.filter(u => u && !String(u.id).startsWith('mock-')).length;
+      }
+    } catch(e) {}
+  }
+  if (count === 0 && (state.token || state.email)) {
+    count = 1;
+  }
+  if (localStorage.getItem('prepspace_earlybird_claimed') === 'true' && count === 0) {
+    count = 1;
+  }
+  return Math.max(1, count);
 };
 
 window.showStreakModal = function() {
@@ -197,11 +222,22 @@ window.showStreakModal = function() {
 };
 
 window.showAdModal = function(force = false) {
+  // If user is already a pro member, do NOT show the 1-Year Free promotional modal!
+  if (state.isPaid || localStorage.getItem('isPaid') === 'true' || localStorage.getItem('user_is_paid') === 'true') {
+    return;
+  }
+
   if (!force) {
     const dismissedUntil = localStorage.getItem('prepspace_ad_dismissed_until');
     if (dismissedUntil && Date.now() < parseInt(dismissedUntil, 10)) {
       return;
     }
+  }
+
+  // Update dynamic real counter before showing
+  const counterEl = document.getElementById('ad-modal-claimed-counter');
+  if (counterEl && window.getRealClaimedCount) {
+    counterEl.textContent = window.getRealClaimedCount();
   }
 
   const modalEl = document.getElementById('platformAdModal');
@@ -218,7 +254,6 @@ window.showAdModal = function(force = false) {
         }
       });
     }
-  }
 };
 
 function getReferralCodeFromUrl() {
@@ -1071,7 +1106,8 @@ function router() {
     bindProfileEvents();
   } else if (hash === '#/billing') {
     viewTitle.textContent = 'Billing & Upgrade';
-    pageMount.innerHTML = components.billing(state.isPaid);
+    const claimedCount = window.getRealClaimedCount ? window.getRealClaimedCount() : 1;
+    pageMount.innerHTML = components.billing(state.isPaid, claimedCount);
     bindBillingEvents();
   } else if (hash === '#/referral') {
     redirectTo('#/billing');
@@ -9084,7 +9120,7 @@ function bindBillingEvents() {
         updateUserPlanDisplay(true);
         const mount = document.getElementById('page-mount');
         if (mount) {
-          mount.innerHTML = components.billing(true);
+          mount.innerHTML = components.billing(true, window.getRealClaimedCount ? window.getRealClaimedCount() : 1);
           bindBillingEvents();
         }
       }, 700);
@@ -9107,7 +9143,7 @@ function bindBillingEvents() {
         updateUserPlanDisplay(true);
         const mount = document.getElementById('page-mount');
         if (mount) {
-          mount.innerHTML = components.billing(true);
+          mount.innerHTML = components.billing(true, window.getRealClaimedCount ? window.getRealClaimedCount() : 1);
           bindBillingEvents();
         }
       }, 700);

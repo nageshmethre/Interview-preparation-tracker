@@ -13,53 +13,58 @@ const components = {
     const isActive = config ? config.active !== 'false' : true;
     if (!isActive) return '';
 
+    const isUserPaid = localStorage.getItem('isPaid') === 'true' || localStorage.getItem('user_is_paid') === 'true';
+    const realClaimed = (typeof window.getRealClaimedCount === 'function') ? window.getRealClaimedCount() : (parseInt(localStorage.getItem('prepspace_claimed_count') || '1', 10));
+
     const badge1 = (config && config.badge1) || 'TOP 100 SCHOLARSHIP';
-    const text1 = (config && config.text1) || 'Rank in the <strong class=\"text-white\">Top 100</strong> of any Mock Exam (Java, Python, C++, React, DSA) & win a <strong style=\"color: #fbbf24;\">100% Free 1-Year Pro Subscription!</strong>';
+    const text1 = (config && config.text1) || 'Top 100 on Mock Exam Leaderboard win <strong class=\"text-white\">1-Year Pro 100% Free</strong> • Global Merit Program';
     const btn1 = (config && config.btn1) || 'Take Mock Exam →';
     const link1 = (config && config.link1) || '#/mock-exams';
 
-    const badge2 = (config && config.badge2) || 'FIRST 1,000 USERS';
-    const text2 = (config && config.text2) || 'Special Launch Offer: First 1,000 Registered Users get <strong class=\"text-white\">1-Year Pro 100% Free</strong> • <span class=\"text-warning font-monospace\">864 / 1,000 Claimed</span>';
-    const btn2 = (config && config.btn2) || 'Claim 1-Year Free →';
-    const link2 = (config && config.link2) || '#/billing';
+    const badge2 = (config && config.badge2) || (isUserPaid ? 'PREPPRO ACTIVE' : 'FIRST 1,000 USERS');
+    const text2 = (config && config.text2) || (isUserPaid 
+      ? 'Welcome to PrepSpace Pro! Full access to 825+ algorithmic challenges & mock exams.' 
+      : `Inaugural Community Launch: First 1,000 Registered Users get <strong class=\"text-white\">1-Year Pro Free</strong> • <span class=\"font-monospace text-primary\"><span id=\"ticker-claimed-counter\">${realClaimed}</span> / 1,000 Claimed</span>`);
+    const btn2 = (config && config.btn2) || (isUserPaid ? 'Go to Dashboard →' : 'Claim 1-Year Free →');
+    const link2 = (config && config.link2) || (isUserPaid ? '#/dashboard' : '#/billing');
 
     return `
       <div id="top-promo-banner" class="promo-ticker-wrapper" title="Hover to pause ticker">
         <div class="promo-ticker-track">
           <!-- Slide 1 -->
           <a href="${link1}" class="promo-ticker-item">
-            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(245, 158, 11, 0.18); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.35); font-size: 0.72rem;">
+            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(99, 102, 241, 0.18); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.35); font-size: 0.72rem;">
               <i class="fa-solid fa-trophy me-1"></i> ${badge1}
             </span>
             <span>${text1}</span>
-            <span class="badge rounded-pill fw-bold text-dark px-2.5 py-1" style="background: #f59e0b; font-size: 0.75rem;">${btn1}</span>
+            <span class="badge rounded-pill fw-bold text-white px-2.5 py-1" style="background: #6366f1; font-size: 0.75rem;">${btn1}</span>
           </a>
 
           <!-- Slide 2 -->
           <a href="${link2}" class="promo-ticker-item">
-            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); font-size: 0.72rem;">
-              <i class="fa-solid fa-fire me-1"></i> ${badge2}
+            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(99, 102, 241, 0.18); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.35); font-size: 0.72rem;">
+              <i class="fa-solid fa-bolt me-1"></i> ${badge2}
             </span>
             <span>${text2}</span>
-            <span class="badge rounded-pill fw-bold text-dark px-2.5 py-1" style="background: #10b981; font-size: 0.75rem;">${btn2}</span>
+            <span class="badge rounded-pill fw-bold text-white px-2.5 py-1" style="background: #6366f1; font-size: 0.75rem;">${btn2}</span>
           </a>
 
           <!-- Slide 3 (Seamless Repeat) -->
           <a href="${link1}" class="promo-ticker-item">
-            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(245, 158, 11, 0.18); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.35); font-size: 0.72rem;">
+            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(99, 102, 241, 0.18); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.35); font-size: 0.72rem;">
               <i class="fa-solid fa-trophy me-1"></i> ${badge1}
             </span>
             <span>${text1}</span>
-            <span class="badge rounded-pill fw-bold text-dark px-2.5 py-1" style="background: #f59e0b; font-size: 0.75rem;">${btn1}</span>
+            <span class="badge rounded-pill fw-bold text-white px-2.5 py-1" style="background: #6366f1; font-size: 0.75rem;">${btn1}</span>
           </a>
 
           <!-- Slide 4 (Seamless Repeat) -->
           <a href="${link2}" class="promo-ticker-item">
-            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); font-size: 0.72rem;">
-              <i class="fa-solid fa-fire me-1"></i> ${badge2}
+            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(99, 102, 241, 0.18); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.35); font-size: 0.72rem;">
+              <i class="fa-solid fa-bolt me-1"></i> ${badge2}
             </span>
             <span>${text2}</span>
-            <span class="badge rounded-pill fw-bold text-dark px-2.5 py-1" style="background: #10b981; font-size: 0.75rem;">${btn2}</span>
+            <span class="badge rounded-pill fw-bold text-white px-2.5 py-1" style="background: #6366f1; font-size: 0.75rem;">${btn2}</span>
           </a>
         </div>
       </div>
@@ -420,53 +425,106 @@ const components = {
         </div>
       </section>
 
-      <!-- Pricing Section (Stripe-Style Cards) -->
+      <!-- Pricing Section (Upgraded Subscription Tiers) -->
       <section id="pricing" class="container py-5">
         <div class="text-center mb-5">
-          <span class="badge bg-indigo-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-2">SIMPLE & TRANSPARENT</span>
-          <h2 class="display-5 fw-extrabold text-white mb-3">Straightforward Pricing</h2>
-          <p class="text-muted fs-5">Invest in your career with a single one-time payment. No hidden monthly subscriptions.</p>
+          <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-2 font-monospace fs-8">TRANSPARENT PRICING</span>
+          <h2 class="display-5 fw-extrabold text-white mb-3">Simple, Transparent Investment</h2>
+          <p class="text-muted fs-6" style="max-width: 600px; margin: 0 auto;">Everything you need to master technical interviews and land top software engineering offers.</p>
         </div>
 
-        <div class="row g-4 justify-content-center">
+        <div class="row g-4 justify-content-center align-items-stretch">
           <!-- Free Tier -->
-          <div class="col-md-6 col-lg-5 col-xl-4">
-            <div class="glass-panel p-4 h-100 d-flex flex-column text-start">
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-panel p-4 h-100 d-flex flex-column text-start justify-content-between">
               <div>
+                <span class="badge border border-secondary border-opacity-30 text-white px-2.5 py-1 rounded-pill mb-3 font-monospace fs-9">FREE TIER</span>
                 <h3 class="text-white h5 fw-bold mb-1">PrepFree</h3>
                 <p class="text-muted fs-8 mb-3">Essential tools to start tracking your daily prep</p>
                 <div class="my-3"><span class="display-6 fw-extrabold text-white">₹0</span><span class="text-muted fs-8"> / lifetime</span></div>
                 <ul class="list-unstyled text-start mb-4 text-muted fs-8 d-flex flex-column gap-2">
-                  <li><i class="fa-solid fa-check text-success me-2"></i> Access to Core Question Bank</li>
-                  <li><i class="fa-solid fa-check text-success me-2"></i> Log Solved Problems & Streaks</li>
-                  <li><i class="fa-solid fa-check text-success me-2"></i> Standard Placement Kanban</li>
-                  <li><i class="fa-solid fa-check text-success me-2"></i> Basic Progress Graphs</li>
+                  <li><i class="fa-solid fa-check text-primary me-2"></i> Access to Core Question Bank</li>
+                  <li><i class="fa-solid fa-check text-primary me-2"></i> Log Solved Problems & Streaks</li>
+                  <li><i class="fa-solid fa-check text-primary me-2"></i> Standard Placement Kanban</li>
+                  <li><i class="fa-solid fa-check text-primary me-2"></i> Basic Progress Analytics</li>
                 </ul>
               </div>
-              <a href="#/register" class="btn btn-glass w-100 py-2 fs-7 fw-bold mt-auto">Get Started Free</a>
+              <a href="#/register" class="btn btn-glass w-100 py-2 fs-7 fw-semibold mt-auto">Get Started Free</a>
             </div>
           </div>
 
-          <!-- Pro Tier -->
-          <div class="col-md-6 col-lg-5 col-xl-4">
-            <div class="glass-panel p-4 h-100 d-flex flex-column text-start border-primary position-relative" style="box-shadow: 0 0 35px var(--accent-glow);">
-              <div class="badge bg-primary text-white border border-primary-subtle px-3 py-1 rounded-pill position-absolute top-0 start-50 translate-middle fw-bold fs-9">
-                MOST POPULAR
-              </div>
+          <!-- Monthly Tier (7-Day Free Trial) -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-panel p-4 h-100 d-flex flex-column text-start justify-content-between">
               <div>
-                <h3 class="text-white h5 fw-bold mb-1 mt-1">PrepPro</h3>
-                <p class="text-indigo fs-8 mb-3">Recommended for Active Jobseekers & Students</p>
-                <div class="my-3"><span class="display-6 fw-extrabold text-white">₹399</span><span class="text-muted fs-8"> / one-time lifetime</span></div>
+                <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle px-2.5 py-1 rounded-pill mb-3 font-monospace fs-9">7-DAY FREE TRIAL</span>
+                <h3 class="text-white h5 fw-bold mb-1">PrepPro Monthly</h3>
+                <p class="text-muted fs-8 mb-3">Flexible access with zero upfront commitment</p>
+                <div class="my-3"><span class="display-6 fw-extrabold text-white">₹199</span><span class="text-muted fs-8"> / month</span></div>
+                <div class="p-2 rounded bg-primary bg-opacity-10 border border-primary border-opacity-20 text-primary fs-8 fw-semibold mb-3">
+                  <i class="fa-solid fa-circle-check me-1.5"></i> Includes 7-Day Free Trial (₹0 today)
+                </div>
                 <ul class="list-unstyled text-start mb-4 text-muted fs-8 d-flex flex-column gap-2">
-                  <li><i class="fa-solid fa-check text-success me-2"></i> <strong>Unlimited 50-MCQ Timed Exams</strong></li>
-                  <li><i class="fa-solid fa-check text-success me-2"></i> <strong>AI ATS Resume & Keyword Audit</strong></li>
-                  <li><i class="fa-solid fa-check text-success me-2"></i> <strong>AI Custom Study Planners</strong></li>
-                  <li><i class="fa-solid fa-check text-success me-2"></i> <strong>Company Interview Guides & Prompts</strong></li>
-                  <li><i class="fa-solid fa-check text-success me-2"></i> <strong>Export Excel / PDF Progress Reports</strong></li>
-                  <li><i class="fa-solid fa-check text-success me-2"></i> Verified Completion Certificates</li>
+                  <li><i class="fa-solid fa-check text-primary me-2"></i> <strong>7-Day Free Trial</strong> (cancel anytime)</li>
+                  <li><i class="fa-solid fa-check text-primary me-2"></i> <strong>All 825+ Solved DSA Challenges</strong></li>
+                  <li><i class="fa-solid fa-check text-primary me-2"></i> <strong>42 Aptitude & Reasoning Modules</strong></li>
+                  <li><i class="fa-solid fa-check text-primary me-2"></i> <strong>Unlimited 50-MCQ Timed Exams</strong></li>
+                  <li><i class="fa-solid fa-check text-primary me-2"></i> <strong>AI ATS Resume Audit & Diagnostics</strong></li>
                 </ul>
               </div>
-              <a href="#/register" class="btn btn-premium w-100 py-2 fs-7 fw-bold mt-auto"><i class="fa-solid fa-gem me-2"></i>Upgrade to PrepPro Access</a>
+              <a href="#/register" class="btn btn-outline-primary w-100 py-2 fs-7 fw-semibold mt-auto">Start 7-Day Free Trial</a>
+            </div>
+          </div>
+
+          <!-- 1-Year Pro Tier (Recommended) -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-panel p-4 h-100 d-flex flex-column text-start justify-content-between border-primary position-relative" style="box-shadow: 0 0 30px rgba(99, 102, 241, 0.25);">
+              <div class="badge bg-primary text-white border border-primary px-3 py-1 rounded-pill position-absolute top-0 start-50 translate-middle fw-bold fs-9">
+                BEST VALUE &bull; SAVE 41%
+              </div>
+              <div>
+                <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle px-2.5 py-1 rounded-pill mb-3 font-monospace fs-9 mt-1">ANNUAL PASS</span>
+                <h3 class="text-white h5 fw-bold mb-1">PrepPro 1-Year</h3>
+                <p class="text-muted fs-8 mb-3">Complete placement suite for serious engineers</p>
+                <div class="my-3"><span class="display-6 fw-extrabold text-white">₹1,399</span><span class="text-muted fs-8"> / year (~₹116/mo)</span></div>
+                <div class="p-2 rounded bg-primary bg-opacity-10 border border-primary border-opacity-20 text-primary fs-8 fw-semibold mb-3">
+                  <i class="fa-solid fa-crown me-1.5"></i> 365 Days Unrestricted Access
+                </div>
+                <ul class="list-unstyled text-start mb-4 text-muted fs-8 d-flex flex-column gap-2">
+                  <li><i class="fa-solid fa-check text-primary me-2"></i> <strong>Unlimited 50-MCQ Timed Exams</strong></li>
+                  <li><i class="fa-solid fa-check text-primary me-2"></i> <strong>AI ATS Resume & Keyword Audit</strong></li>
+                  <li><i class="fa-solid fa-check text-primary me-2"></i> <strong>AI Custom Study Planners</strong></li>
+                  <li><i class="fa-solid fa-check text-primary me-2"></i> <strong>Company Interview Guides & Prompts</strong></li>
+                  <li><i class="fa-solid fa-check text-primary me-2"></i> <strong>Export Excel / PDF Progress Reports</strong></li>
+                  <li><i class="fa-solid fa-check text-primary me-2"></i> Verified Completion Certificates</li>
+                </ul>
+              </div>
+              <a href="#/register" class="btn btn-primary text-white w-100 py-2 fs-7 fw-bold mt-auto shadow-sm">
+                <i class="fa-solid fa-bolt me-1.5"></i> Get 1-Year Pro Access
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top 100 Merit Scholarship Highlight -->
+        <div class="mt-4 p-3.5 rounded-3 border border-primary border-opacity-30 text-start" style="background: rgba(99, 102, 241, 0.06);">
+          <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center gap-3">
+              <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px; background: rgba(99, 102, 241, 0.18); border: 1px solid rgba(99, 102, 241, 0.35);">
+                <i class="fa-solid fa-trophy text-primary fs-6"></i>
+              </div>
+              <div>
+                <div class="d-flex align-items-center gap-2 mb-0.5">
+                  <span class="badge bg-primary text-white font-monospace fs-10">MERIT SCHOLARSHIP</span>
+                  <span class="text-white fw-bold fs-7">Top 100 Mock Test Candidates Win 1-Year Pro 100% Free!</span>
+                </div>
+                <p class="text-muted fs-8 mb-0">Score in the Top 100 on our 50-MCQ timed mock assessment leaderboard to automatically unlock a 1-Year Pro subscription at ₹0.</p>
+              </div>
+            </div>
+            <div>
+              <a href="#/register" class="btn btn-outline-primary btn-sm px-3 py-1.5 fs-8 fw-semibold text-nowrap">
+                Join Mock Exam &rarr;
+              </a>
             </div>
           </div>
         </div>
@@ -1016,16 +1074,16 @@ const components = {
           </div>
           
           <div class="d-flex align-items-center gap-2 flex-shrink-0">
-            <!-- Daily Streak Flame Widget -->
-            <button type="button" class="btn btn-glass btn-sm d-flex align-items-center gap-1.5 py-1 px-2.5 text-warning fw-bold border-warning border-opacity-30" id="header-streak-btn" onclick="window.showStreakModal && window.showStreakModal()" title="View Daily Streak Activity">
+            <!-- Daily Streak Flame Widget (Icon Only) -->
+            <button type="button" class="btn btn-glass btn-sm d-flex align-items-center gap-1.5 py-1 px-2.5 text-white border-secondary border-opacity-25" id="header-streak-btn" onclick="window.showStreakModal && window.showStreakModal()" title="Daily Streak: Click to view activity">
               <span class="fs-7">🔥</span>
-              <span class="font-monospace fs-8" id="header-streak-count">1</span>
-              <span class="d-none d-sm-inline fs-9 text-muted font-monospace">DAY</span>
+              <span class="font-monospace fs-8 fw-bold" id="header-streak-count">1</span>
             </button>
-            <!-- Launch Offer: First 1,000 Users 1-Year Free -->
-            <a href="#/billing" class="btn btn-warning text-dark fw-bold btn-sm py-1 px-2.5 fs-8 d-none d-md-inline-flex align-items-center gap-1" title="Launch Offer: First 1,000 Users 1-Year Free">
+            <!-- Launch Offer: First 1,000 Users 1-Year Free (Only for unpaid candidates) -->
+            ${!isPaid ? `
+            <a href="#/billing" class="btn btn-primary text-white fw-semibold btn-sm py-1 px-2.5 fs-8 d-none d-md-inline-flex align-items-center gap-1 shadow-sm" title="Launch Offer: First 1,000 Users 1-Year Free">
               <i class="fa-solid fa-gift"></i> <span>1-Yr Free</span>
-            </a>
+            </a>` : ''}
             <!-- User Dropdown -->
             <div class="dropdown">
               <button class="btn btn-glass btn-sm dropdown-toggle d-flex align-items-center gap-2 py-1.5 px-3" type="button" id="userDropdown" data-bs-toggle="dropdown">
@@ -1081,6 +1139,9 @@ const components = {
           <div class="d-flex align-items-center gap-2.5 mb-1">
             <h2 class="text-white fw-bold m-0 fs-2 dashboard-hero-title">${userName}'s Dashboard</h2>
             <span class="ps-status-pill ps-status-active">Active</span>
+            <button type="button" class="btn btn-glass btn-sm py-0.5 px-2 font-monospace fs-8 text-white border-secondary border-opacity-30 d-inline-flex align-items-center gap-1 rounded-pill" onclick="window.showStreakModal && window.showStreakModal()" title="Daily Streak Activity">
+              <span>🔥</span> <span id="dash-streak-count">1</span>
+            </button>
           </div>
           <p class="text-muted fs-7 mb-0">Track preparation velocity, solve coding challenges, and manage recruitment pipeline.</p>
         </div>
@@ -1095,27 +1156,6 @@ const components = {
           <a href="#/studyplanner" class="btn btn-sm btn-glass px-3 py-1.5 fs-8 text-white d-inline-flex align-items-center gap-1.5">
             <span>Study Planner</span>
           </a>
-        </div>
-      </div>
-
-      <!-- Daily Streak Flame Consistency Widget -->
-      <div class="p-3 rounded-3 bg-dark border border-warning border-opacity-30 d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 cursor-pointer" onclick="window.showStreakModal && window.showStreakModal()" style="cursor: pointer; background: linear-gradient(90deg, rgba(245,158,11,0.09) 0%, rgba(20,20,25,0.7) 100%);">
-        <div class="d-flex align-items-center gap-3">
-          <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35);">
-            <span class="fs-4">🔥</span>
-          </div>
-          <div>
-            <div class="d-flex align-items-center gap-2 flex-wrap">
-              <span class="text-white fw-bold fs-6">Daily Preparation Streak: <span class="text-warning font-monospace" id="dash-streak-banner-days">1 Day</span></span>
-              <span class="badge bg-success bg-opacity-20 text-success border border-success-subtle fs-10 font-monospace"><i class="fa-solid fa-circle-check me-1"></i>ACTIVE TODAY</span>
-            </div>
-            <p class="text-muted fs-8 mb-0">Real date-based consistency tracker. All-time personal best: <span class="text-white font-monospace fw-semibold" id="dash-streak-banner-best">1 Day</span> &bull; Practice daily to protect your flame.</p>
-          </div>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <button type="button" class="btn btn-warning text-dark btn-sm py-1.5 px-3 fs-8 fw-bold">
-            <i class="fa-solid fa-chart-simple me-1"></i> View 7-Day Tracker
-          </button>
         </div>
       </div>
 
@@ -4703,31 +4743,64 @@ const components = {
     </div>
   `,
 
-  billing: (isPaid) => `
+  billing: (isPaid, claimedCount = 1) => `
     <div class="container-fluid py-4">
       <!-- Page Header -->
       <div class="row justify-content-center text-center mb-4">
         <div class="col-lg-8">
-          <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle px-3 py-1 mb-2 font-mono fs-8">TRANSPARENT & FAIR PRICING</span>
+          <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle px-3 py-1 mb-2 font-monospace fs-8">TRANSPARENT PRICING</span>
           <h2 class="text-white fw-bold mb-2">Upgrade Your PrepSpace</h2>
           <p class="text-muted">Accelerate your software engineering placement journey with full access to 825+ algorithmic challenges, 42 aptitude modules, and AI ATS diagnostics.</p>
         </div>
       </div>
 
-      <!-- 1. First 1,000 Users Launch Offer Banner -->
+      ${isPaid ? `
+      <!-- Pro Active Status Card (Shown to Active Pro Members) -->
       <div class="row justify-content-center mb-4">
         <div class="col-lg-10">
-          <div class="p-3.5 p-md-4 rounded-3 border border-warning border-opacity-40 text-start position-relative overflow-hidden shadow-lg" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(20, 20, 25, 0.85) 100%);">
+          <div class="p-3.5 p-md-4 rounded-3 border border-primary border-opacity-30 text-start position-relative overflow-hidden shadow-sm" style="background: rgba(99, 102, 241, 0.08);">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-              <div class="d-flex align-items-start gap-3 col-12 col-md-8">
-                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px; background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.4);">
-                  <i class="fa-solid fa-gift text-warning fs-4"></i>
+              <div class="d-flex align-items-center gap-3">
+                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px; background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4);">
+                  <i class="fa-solid fa-crown text-primary fs-4"></i>
                 </div>
                 <div>
                   <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
-                    <span class="badge bg-warning text-dark font-monospace fw-bold fs-9 px-2.5 py-0.5">INAUGURAL LAUNCH OFFER</span>
+                    <span class="badge bg-primary text-white font-monospace fw-bold fs-9 px-2.5 py-0.5">PREPPRO ACTIVE</span>
                     <span class="badge bg-success bg-opacity-20 text-success border border-success-subtle font-monospace fs-9">
-                      <i class="fa-solid fa-fire me-1"></i> <span id="earlybird-counter">864</span> / 1,000 Claimed &bull; Only 136 Spots Left
+                      <i class="fa-solid fa-circle-check me-1"></i> Full Access Unlocked
+                    </span>
+                  </div>
+                  <h4 class="text-white fw-bold m-0 fs-5">You are on PrepSpace Pro</h4>
+                  <p class="text-muted fs-8 mb-0 mt-1">
+                    Your account has unrestricted access to all 825+ algorithmic challenges, 42 aptitude modules, AI ATS resume audits, and unlimited timed mock tests.
+                  </p>
+                </div>
+              </div>
+              <div class="text-md-end">
+                <a href="#/dashboard" class="btn btn-outline-primary btn-sm px-3.5 py-2 fs-8 fw-semibold">
+                  <i class="fa-solid fa-arrow-left me-1.5"></i> Back to Workspace
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      ` : `
+      <!-- 1. First 1,000 Users Launch Offer Banner (Only shown if NOT paid) -->
+      <div class="row justify-content-center mb-4">
+        <div class="col-lg-10">
+          <div class="p-3.5 p-md-4 rounded-3 border border-primary border-opacity-30 text-start position-relative overflow-hidden shadow-sm" style="background: rgba(99, 102, 241, 0.08);">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+              <div class="d-flex align-items-start gap-3 col-12 col-md-8">
+                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px; background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4);">
+                  <i class="fa-solid fa-gift text-primary fs-4"></i>
+                </div>
+                <div>
+                  <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                    <span class="badge bg-primary text-white font-monospace fw-bold fs-9 px-2.5 py-0.5">INAUGURAL LAUNCH OFFER</span>
+                    <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle font-monospace fs-9">
+                      <i class="fa-solid fa-fire me-1"></i> <span id="earlybird-counter">${claimedCount}</span> / 1,000 Claimed
                     </span>
                   </div>
                   <h4 class="text-white fw-bold m-0 fs-5">First 1,000 Users: 1-Year Pro 100% Free!</h4>
@@ -4737,8 +4810,8 @@ const components = {
                 </div>
               </div>
               <div class="text-md-end col-12 col-md-3">
-                <button type="button" id="btn-claim-earlybird" class="btn btn-warning text-dark fw-bold px-3.5 py-2 fs-8 w-100 shadow-sm" ${isPaid ? 'disabled' : ''}>
-                  ${isPaid ? '✓ Pro Already Active' : '<i class="fa-solid fa-bolt me-1.5"></i> Claim 1-Year Free Pro'}
+                <button type="button" id="btn-claim-earlybird" class="btn btn-primary text-white fw-bold px-3.5 py-2 fs-8 w-100 shadow-sm">
+                  <i class="fa-solid fa-bolt me-1.5"></i> Claim 1-Year Free Pro
                 </button>
                 <div class="text-muted fs-10 mt-1.5 text-center"><i class="fa-solid fa-clock-rotate-left me-1"></i> Instant 365-day activation</div>
               </div>
@@ -4746,19 +4819,20 @@ const components = {
           </div>
         </div>
       </div>
+      `}
 
       <!-- 2. Top 100 Mock Test Merit Scholarship Banner -->
       <div class="row justify-content-center mb-5">
         <div class="col-lg-10">
-          <div class="p-3.5 p-md-4 rounded-3 border border-indigo border-opacity-40 text-start position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.10) 0%, rgba(20, 20, 25, 0.85) 100%);">
+          <div class="p-3.5 p-md-4 rounded-3 border border-primary border-opacity-30 text-start position-relative overflow-hidden" style="background: rgba(99, 102, 241, 0.05);">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
               <div class="d-flex align-items-start gap-3 col-12 col-md-8">
-                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px; background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4);">
-                  <i class="fa-solid fa-trophy text-warning fs-4"></i>
+                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3);">
+                  <i class="fa-solid fa-trophy text-primary fs-4"></i>
                 </div>
                 <div>
                   <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
-                    <span class="badge bg-indigo text-white font-monospace fw-bold fs-9 px-2.5 py-0.5">MERIT SCHOLARSHIP</span>
+                    <span class="badge bg-primary text-white font-monospace fw-bold fs-9 px-2.5 py-0.5">MERIT SCHOLARSHIP</span>
                     <span class="badge bg-secondary bg-opacity-30 text-white font-monospace fs-10">GLOBAL ASSESSMENT</span>
                   </div>
                   <h4 class="text-white fw-bold m-0 fs-5">Top 100 Mock Test Candidates Win 1-Year Pro 100% Free!</h4>
@@ -4771,7 +4845,7 @@ const components = {
                 <a href="#/mock-exams" class="btn btn-outline-primary btn-sm px-3.5 py-2 fs-8 fw-semibold w-100">
                   <i class="fa-solid fa-stopwatch me-1.5"></i> Take Mock Exam &rarr;
                 </a>
-                <div class="text-muted fs-10 mt-1.5 text-center"><i class="fa-solid fa-ranking-star text-warning me-1"></i> Live Global Leaderboard</div>
+                <div class="text-muted fs-10 mt-1.5 text-center"><i class="fa-solid fa-ranking-star text-primary me-1"></i> Live Global Leaderboard</div>
               </div>
             </div>
           </div>
@@ -4784,7 +4858,7 @@ const components = {
         <div class="col-md-6 col-lg-4">
           <div class="glass-panel p-4 h-100 text-center d-flex flex-column justify-content-between">
             <div>
-              <span class="badge border border-secondary border-opacity-30 text-white px-3 py-1 mb-3 font-mono fs-8">FOUNDATION TIER</span>
+              <span class="badge border border-secondary border-opacity-30 text-white px-3 py-1 mb-3 font-monospace fs-8">FOUNDATION TIER</span>
               <h3 class="text-white h4 mb-1">PrepFree</h3>
               <p class="text-muted fs-8 mb-3">Core tracker tools for personal preparation</p>
               <div class="my-3">
@@ -4792,10 +4866,10 @@ const components = {
                 <span class="text-muted fs-8 ms-1">/ free forever</span>
               </div>
               <ul class="list-unstyled text-start mb-4 text-muted fs-8">
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Access to Core Practice Bank (Easy/Medium)</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Track & Log Solved Algorithmic Problems</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Standard Placement Application Kanban</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Daily Streak Consistency Tracker</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> Access to Core Practice Bank (Easy/Medium)</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> Track & Log Solved Algorithmic Problems</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> Standard Placement Application Kanban</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> Daily Streak Consistency Tracker</li>
                 <li class="mb-2 text-muted opacity-50"><i class="fa-solid fa-xmark text-secondary me-2"></i> All 825+ LeetCode-Grade Solutions & Breakdowns</li>
                 <li class="mb-2 text-muted opacity-50"><i class="fa-solid fa-xmark text-secondary me-2"></i> AI ATS Resume Compliance Audits</li>
                 <li class="mb-2 text-muted opacity-50"><i class="fa-solid fa-xmark text-secondary me-2"></i> Custom AI Study Planners & Diagnostics</li>
@@ -4809,33 +4883,33 @@ const components = {
 
         <!-- Tier 2: PrepPro Monthly (with 7-Day Free Trial) -->
         <div class="col-md-6 col-lg-4">
-          <div class="glass-panel p-4 h-100 text-center d-flex flex-column justify-content-between" style="border-color: rgba(99, 102, 241, 0.4);">
+          <div class="glass-panel p-4 h-100 text-center d-flex flex-column justify-content-between">
             <div>
-              <span class="badge bg-indigo bg-opacity-25 text-info border border-info border-opacity-30 px-3 py-1 mb-3 font-mono fs-8">FLEXIBLE &bull; 7-DAY FREE TRIAL</span>
+              <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle px-3 py-1 mb-3 font-monospace fs-8">FLEXIBLE &bull; 7-DAY FREE TRIAL</span>
               <h3 class="text-white h4 mb-1">PrepPro Monthly</h3>
               <p class="text-muted fs-8 mb-3">Complete AI preparation suite with zero upfront commitment</p>
               <div class="my-3">
                 <span class="display-6 fw-bold text-white">₹199</span>
                 <span class="text-muted fs-8 ms-1">/ month</span>
               </div>
-              <div class="p-2 rounded bg-info bg-opacity-10 border border-info border-opacity-25 text-info fs-8 fw-semibold mb-3 text-start">
+              <div class="p-2 rounded bg-primary bg-opacity-10 border border-primary border-opacity-20 text-primary fs-8 fw-semibold mb-3 text-start">
                 <i class="fa-solid fa-circle-check me-1.5"></i> Includes 7-Day Free Trial (₹0 charged today)
               </div>
               <ul class="list-unstyled text-start mb-4 text-muted fs-8">
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>7-Day Free Trial</strong> (test all features risk-free)</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>All 825+ Solved DSA Questions</strong> & Step-by-Step Code</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>42 Aptitude & Reasoning Modules</strong> with Formulas</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>AI Career Assistant</strong> (ATS Audit, Planners)</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Timed 50-MCQ Mock Exams</strong> & Scorecards</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Cancel anytime with 1 click</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> <strong>7-Day Free Trial</strong> (test all features risk-free)</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> <strong>All 825+ Solved DSA Questions</strong> & Step-by-Step Code</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> <strong>42 Aptitude & Reasoning Modules</strong> with Formulas</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> <strong>AI Career Assistant</strong> (ATS Audit, Planners)</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> <strong>Timed 50-MCQ Mock Exams</strong> & Scorecards</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> Cancel anytime with 1 click</li>
               </ul>
             </div>
             <div>
-              <button id="btn-start-free-trial" class="btn btn-info text-dark w-100 py-2.5 fw-bold fs-8 mb-2" ${isPaid ? 'disabled' : ''}>
-                <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Start 7-Day Free Trial (₹0)
+              <button id="btn-start-free-trial" class="btn btn-outline-primary w-100 py-2.5 fw-bold fs-8 mb-2" ${isPaid ? 'disabled' : ''}>
+                <i class="fa-solid fa-wand-magic-sparkles me-1"></i> ${isPaid ? 'Pro Active' : 'Start 7-Day Free Trial (₹0)'}
               </button>
               <button id="btn-upgrade-monthly" class="btn btn-glass w-100 py-2 fs-8 text-light" ${isPaid ? 'disabled' : ''}>
-                Subscribe Monthly (₹199/mo)
+                ${isPaid ? 'Already Subscribed' : 'Subscribe Monthly (₹199/mo)'}
               </button>
             </div>
           </div>
@@ -4843,34 +4917,33 @@ const components = {
         
         <!-- Tier 3: PrepPro 1-Year Plan (₹1,399 / year) -->
         <div class="col-md-6 col-lg-4">
-          <div class="glass-panel p-4 h-100 text-center d-flex flex-column justify-content-between position-relative overflow-hidden" style="border: 2px solid rgba(245, 158, 11, 0.6); box-shadow: 0 10px 30px rgba(245, 158, 11, 0.15);">
-            <div class="position-absolute top-0 end-0 bg-warning text-dark font-monospace fw-bold fs-10 px-3 py-0.5" style="border-bottom-left-radius: 8px;">
-              POPULAR
+          <div class="glass-panel p-4 h-100 text-center d-flex flex-column justify-content-between position-relative overflow-hidden border-primary" style="box-shadow: 0 0 30px rgba(99, 102, 241, 0.25);">
+            <div class="position-absolute top-0 end-0 bg-primary text-white font-monospace fw-bold fs-10 px-3 py-0.5" style="border-bottom-left-radius: 8px;">
+              RECOMMENDED
             </div>
             <div>
-              <span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-30 px-3 py-1 mb-3 font-mono fs-8">BEST VALUE &bull; ANNUAL PASS &bull; SAVE 41%</span>
+              <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle px-3 py-1 mb-3 font-monospace fs-8">BEST VALUE &bull; ANNUAL PASS &bull; SAVE 41%</span>
               <h3 class="text-white h4 mb-1">PrepPro 1-Year</h3>
-              <p class="text-warning fs-8 mb-3">Comprehensive career suite for serious jobseekers</p>
+              <p class="text-muted fs-8 mb-3">Comprehensive career suite for serious jobseekers</p>
               <div class="my-3">
                 <span class="display-6 fw-bold text-white">₹1,399</span>
                 <span class="text-muted fs-8 ms-1">/ year (~₹116/mo)</span>
               </div>
-              <div class="p-2 rounded bg-warning bg-opacity-10 border border-warning border-opacity-25 text-warning fs-8 fw-semibold mb-3 text-start">
+              <div class="p-2 rounded bg-primary bg-opacity-10 border border-primary border-opacity-20 text-primary fs-8 fw-semibold mb-3 text-start">
                 <i class="fa-solid fa-crown me-1.5"></i> Full 365 Days Unlimited Access & Placement Suite
               </div>
               <ul class="list-unstyled text-start mb-4 text-muted fs-8">
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Full 1-Year (365 Days) Pro Validity</strong></li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>All 825+ LeetCode-Grade Solutions</strong> in Java, Python, C++, JS</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>42 Complete Aptitude & Reasoning Textbook Modules</strong></li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Unlimited AI ATS Resume Audits</strong> & Score Diagnostics</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Unlimited 50-MCQ Timed Mock Exams</strong> with Leaderboard Ranking</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Top 100 Merit Leaderboard Certification</strong></li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Export Progress & Analytics to Excel / PDF</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> <strong>Everything in Monthly Plan</strong></li>
+                <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> <strong>Priority AI Evaluation</strong> & Resume Parsing</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> <strong>Offline Code Sandbox</strong> & Desktop Client Sync</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> <strong>Verified Course Completion Certificates</strong></li>
+                <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> <strong>Top 100 Leaderboard Badge & Direct Recruiter Visibility</strong></li>
+                <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> One-time payment, no recurring billing surprises</li>
               </ul>
             </div>
             <div>
-              <button id="btn-upgrade-pro" class="btn btn-premium w-100 py-3 fw-bold fs-7 shadow-sm" ${isPaid ? 'disabled' : ''}>
-                ${isPaid ? '✓ Active Premium Access' : '<i class="fa-solid fa-gem me-1.5"></i> Unlock 1-Year Pro (₹1,399 / yr)'}
+              <button id="btn-upgrade-pro" class="btn btn-primary text-white w-100 py-2.5 fw-bold fs-7 shadow-sm" ${isPaid ? 'disabled' : ''}>
+                <i class="fa-solid fa-bolt me-1.5"></i> ${isPaid ? '✓ Active Pro Member' : 'Unlock 1-Year Pro (₹1,399 / yr)'}
               </button>
             </div>
           </div>
@@ -4882,9 +4955,9 @@ const components = {
         <div class="col-lg-8">
           <div class="d-flex flex-wrap justify-content-center gap-4 text-muted fs-8 text-center border-top border-secondary border-opacity-10 pt-4">
             <div><i class="fa-solid fa-bolt text-primary me-1"></i> Instant Activation</div>
-            <div><i class="fa-solid fa-shield-halved text-success me-1"></i> 256-bit Secure Cashfree & UPI</div>
-            <div><i class="fa-solid fa-calendar-check text-info me-1"></i> 1-Year Full Validity</div>
-            <div><i class="fa-solid fa-circle-check text-warning me-1"></i> Cancel Anytime</div>
+            <div><i class="fa-solid fa-shield-halved text-primary me-1"></i> 256-bit Secure Cashfree & UPI</div>
+            <div><i class="fa-solid fa-calendar-check text-primary me-1"></i> 1-Year Full Validity</div>
+            <div><i class="fa-solid fa-circle-check text-primary me-1"></i> Cancel Anytime</div>
           </div>
         </div>
       </div>

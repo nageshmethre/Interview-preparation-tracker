@@ -1,22 +1,22 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
-// Version: 5.8.37 (Daily User Streak, ₹1,399/yr Pro, Monthly & 7-Day Trial, First 1000 Free, Top 100 Scholarship, Ad Popup)
+// Version: 5.8.38 (Landing Pricing Tiers, Real User Count, Pro Suppression, Icon Streak)
 
-const CACHE_NAME = 'prepspace-static-v5.8.37';
-const RUNTIME_CACHE = 'prepspace-runtime-v5.8.37';
+const CACHE_NAME = 'prepspace-static-v5.8.38';
+const RUNTIME_CACHE = 'prepspace-runtime-v5.8.38';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/index.css?v=5.8.37',
-  './assets/js/dsa-notes-data.js?v=5.8.37',
-  './assets/js/app.js?v=5.8.37',
-  './assets/js/components.js?v=5.8.37',
-  './assets/js/interview-suite.js?v=5.8.37',
-  './assets/js/technical-library-data.js?v=5.8.37',
-  './assets/js/questions-data.js?v=5.8.37',
-  './assets/js/aptitude-curriculum.js?v=5.8.37',
-  './assets/js/production-pages.js?v=5.8.37',
+  './assets/css/index.css?v=5.8.38',
+  './assets/js/dsa-notes-data.js?v=5.8.38',
+  './assets/js/app.js?v=5.8.38',
+  './assets/js/components.js?v=5.8.38',
+  './assets/js/interview-suite.js?v=5.8.38',
+  './assets/js/technical-library-data.js?v=5.8.38',
+  './assets/js/questions-data.js?v=5.8.38',
+  './assets/js/aptitude-curriculum.js?v=5.8.38',
+  './assets/js/production-pages.js?v=5.8.38',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',
