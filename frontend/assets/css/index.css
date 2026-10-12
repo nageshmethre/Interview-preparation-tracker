@@ -319,17 +319,41 @@ input:-webkit-autofill:focus,
 }
 
 .btn-primary, .btn-premium {
-  background: #f59e0b !important;
-  color: #18181b !important;
-  border: 1px solid #f59e0b !important;
+  background: #6366f1 !important;
+  color: #ffffff !important;
+  border: 1px solid #6366f1 !important;
   font-weight: 600 !important;
   padding: 6px 14px !important;
 }
 
 .btn-primary:hover, .btn-premium:hover {
-  background: #fbbf24 !important;
-  border-color: #fbbf24 !important;
-  color: #18181b !important;
+  background: #4f46e5 !important;
+  border-color: #4f46e5 !important;
+  color: #ffffff !important;
+}
+
+.bg-primary {
+  background-color: #6366f1 !important;
+}
+
+.text-primary {
+  color: #818cf8 !important;
+}
+
+.border-primary {
+  border-color: #6366f1 !important;
+}
+
+.btn-outline-primary {
+  border: 1px solid rgba(99, 102, 241, 0.5) !important;
+  color: #818cf8 !important;
+  background: transparent !important;
+}
+
+.btn-outline-primary:hover {
+  background: #6366f1 !important;
+  border-color: #6366f1 !important;
+  color: #ffffff !important;
 }
 
 .btn-glass, .btn-vercel-secondary, .btn-secondary {

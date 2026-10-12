@@ -2,80 +2,12 @@
 
 const components = {
   // Moving Announcement Ticker (Top Banner) - Configurable dynamically from Admin Panel
-  renderTopPromoTicker: (customConfig) => {
-    let config = customConfig;
-    if (!config) {
-      try {
-        const raw = localStorage.getItem('admin_announcement_ticker');
-        if (raw) config = JSON.parse(raw);
-      } catch (e) {}
-    }
-    const isActive = config ? config.active !== 'false' : true;
-    if (!isActive) return '';
-
-    const isUserPaid = localStorage.getItem('isPaid') === 'true' || localStorage.getItem('user_is_paid') === 'true';
-    const realClaimed = (typeof window.getRealClaimedCount === 'function') ? window.getRealClaimedCount() : (parseInt(localStorage.getItem('prepspace_claimed_count') || '1', 10));
-
-    const badge1 = (config && config.badge1) || 'TOP 100 SCHOLARSHIP';
-    const text1 = (config && config.text1) || 'Top 100 on Mock Exam Leaderboard win <strong class=\"text-white\">1-Year Pro 100% Free</strong> • Global Merit Program';
-    const btn1 = (config && config.btn1) || 'Take Mock Exam →';
-    const link1 = (config && config.link1) || '#/mock-exams';
-
-    const badge2 = (config && config.badge2) || (isUserPaid ? 'PREPPRO ACTIVE' : 'FIRST 1,000 USERS');
-    const text2 = (config && config.text2) || (isUserPaid 
-      ? 'Welcome to PrepSpace Pro! Full access to 825+ algorithmic challenges & mock exams.' 
-      : `Inaugural Community Launch: First 1,000 Registered Users get <strong class=\"text-white\">1-Year Pro Free</strong> • <span class=\"font-monospace text-primary\"><span id=\"ticker-claimed-counter\">${realClaimed}</span> / 1,000 Claimed</span>`);
-    const btn2 = (config && config.btn2) || (isUserPaid ? 'Go to Dashboard →' : 'Claim 1-Year Free →');
-    const link2 = (config && config.link2) || (isUserPaid ? '#/dashboard' : '#/billing');
-
-    return `
-      <div id="top-promo-banner" class="promo-ticker-wrapper" title="Hover to pause ticker">
-        <div class="promo-ticker-track">
-          <!-- Slide 1 -->
-          <a href="${link1}" class="promo-ticker-item">
-            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(99, 102, 241, 0.18); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.35); font-size: 0.72rem;">
-              <i class="fa-solid fa-trophy me-1"></i> ${badge1}
-            </span>
-            <span>${text1}</span>
-            <span class="badge rounded-pill fw-bold text-white px-2.5 py-1" style="background: #6366f1; font-size: 0.75rem;">${btn1}</span>
-          </a>
-
-          <!-- Slide 2 -->
-          <a href="${link2}" class="promo-ticker-item">
-            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(99, 102, 241, 0.18); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.35); font-size: 0.72rem;">
-              <i class="fa-solid fa-bolt me-1"></i> ${badge2}
-            </span>
-            <span>${text2}</span>
-            <span class="badge rounded-pill fw-bold text-white px-2.5 py-1" style="background: #6366f1; font-size: 0.75rem;">${btn2}</span>
-          </a>
-
-          <!-- Slide 3 (Seamless Repeat) -->
-          <a href="${link1}" class="promo-ticker-item">
-            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(99, 102, 241, 0.18); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.35); font-size: 0.72rem;">
-              <i class="fa-solid fa-trophy me-1"></i> ${badge1}
-            </span>
-            <span>${text1}</span>
-            <span class="badge rounded-pill fw-bold text-white px-2.5 py-1" style="background: #6366f1; font-size: 0.75rem;">${btn1}</span>
-          </a>
-
-          <!-- Slide 4 (Seamless Repeat) -->
-          <a href="${link2}" class="promo-ticker-item">
-            <span class="badge rounded-pill font-monospace fw-bold" style="background: rgba(99, 102, 241, 0.18); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.35); font-size: 0.72rem;">
-              <i class="fa-solid fa-bolt me-1"></i> ${badge2}
-            </span>
-            <span>${text2}</span>
-            <span class="badge rounded-pill fw-bold text-white px-2.5 py-1" style="background: #6366f1; font-size: 0.75rem;">${btn2}</span>
-          </a>
-        </div>
-      </div>
-    `;
-  },
+  // Top promo ticker disabled per user request (promotions surfaced as modals/pricing cards)
+  renderTopPromoTicker: () => '',
 
   // Public SaaS Landing Page - Full Developer Grid Mesh Layout
   landing: () => `
     <div class="landing-page-mesh">
-      <!-- Animated Moving Announcement Ticker (Side by Side) -->
-      ${components.renderTopPromoTicker()}
 
       <!-- Vercel Minimalist Glass Navigation -->
       <nav class="navbar navbar-expand-lg navbar-dark py-3 sticky-top" style="background: rgba(24, 24, 27, 0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);">
@@ -438,7 +370,10 @@ const components = {
           <div class="col-md-6 col-lg-4">
             <div class="glass-panel p-4 h-100 d-flex flex-column text-start justify-content-between">
               <div>
-                <span class="badge border border-secondary border-opacity-30 text-white px-2.5 py-1 rounded-pill mb-3 font-monospace fs-9">FREE TIER</span>
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                  <span class="badge border border-secondary border-opacity-30 text-white px-2.5 py-1 rounded-pill font-monospace fs-9">FREE TIER</span>
+                  <span class="badge bg-secondary bg-opacity-20 text-muted px-2 py-0.5 rounded-pill font-monospace fs-10">STARTER</span>
+                </div>
                 <h3 class="text-white h5 fw-bold mb-1">PrepFree</h3>
                 <p class="text-muted fs-8 mb-3">Essential tools to start tracking your daily prep</p>
                 <div class="my-3"><span class="display-6 fw-extrabold text-white">₹0</span><span class="text-muted fs-8"> / lifetime</span></div>
@@ -457,7 +392,10 @@ const components = {
           <div class="col-md-6 col-lg-4">
             <div class="glass-panel p-4 h-100 d-flex flex-column text-start justify-content-between">
               <div>
-                <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle px-2.5 py-1 rounded-pill mb-3 font-monospace fs-9">7-DAY FREE TRIAL</span>
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                  <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle px-2.5 py-1 rounded-pill font-monospace fs-9">7-DAY FREE TRIAL</span>
+                  <span class="badge bg-primary bg-opacity-15 text-primary px-2 py-0.5 rounded-pill font-monospace fs-10">MONTHLY</span>
+                </div>
                 <h3 class="text-white h5 fw-bold mb-1">PrepPro Monthly</h3>
                 <p class="text-muted fs-8 mb-3">Flexible access with zero upfront commitment</p>
                 <div class="my-3"><span class="display-6 fw-extrabold text-white">₹199</span><span class="text-muted fs-8"> / month</span></div>
@@ -478,12 +416,12 @@ const components = {
 
           <!-- 1-Year Pro Tier (Recommended) -->
           <div class="col-md-6 col-lg-4">
-            <div class="glass-panel p-4 h-100 d-flex flex-column text-start justify-content-between border-primary position-relative" style="box-shadow: 0 0 30px rgba(99, 102, 241, 0.25);">
-              <div class="badge bg-primary text-white border border-primary px-3 py-1 rounded-pill position-absolute top-0 start-50 translate-middle fw-bold fs-9">
-                BEST VALUE &bull; SAVE 41%
-              </div>
+            <div class="glass-panel p-4 h-100 d-flex flex-column text-start justify-content-between position-relative" style="border: 2px solid #6366f1 !important; box-shadow: 0 0 30px rgba(99, 102, 241, 0.25);">
               <div>
-                <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle px-2.5 py-1 rounded-pill mb-3 font-monospace fs-9 mt-1">ANNUAL PASS</span>
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                  <span class="badge bg-primary text-white px-2.5 py-1 rounded-pill font-monospace fs-9 fw-bold">BEST VALUE &bull; SAVE 41%</span>
+                  <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle px-2.5 py-1 rounded-pill font-monospace fs-9">ANNUAL PASS</span>
+                </div>
                 <h3 class="text-white h5 fw-bold mb-1">PrepPro 1-Year</h3>
                 <p class="text-muted fs-8 mb-3">Complete placement suite for serious engineers</p>
                 <div class="my-3"><span class="display-6 fw-extrabold text-white">₹1,399</span><span class="text-muted fs-8"> / year (~₹116/mo)</span></div>
@@ -507,22 +445,22 @@ const components = {
         </div>
 
         <!-- Top 100 Merit Scholarship Highlight -->
-        <div class="mt-4 p-3.5 rounded-3 border border-primary border-opacity-30 text-start" style="background: rgba(99, 102, 241, 0.06);">
+        <div class="mt-4 p-4 rounded-3 border border-primary border-opacity-30 text-start" style="background: rgba(99, 102, 241, 0.08);">
           <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
             <div class="d-flex align-items-center gap-3">
-              <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px; background: rgba(99, 102, 241, 0.18); border: 1px solid rgba(99, 102, 241, 0.35);">
-                <i class="fa-solid fa-trophy text-primary fs-6"></i>
+              <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4);">
+                <i class="fa-solid fa-trophy text-primary fs-5"></i>
               </div>
               <div>
-                <div class="d-flex align-items-center gap-2 mb-0.5">
-                  <span class="badge bg-primary text-white font-monospace fs-10">MERIT SCHOLARSHIP</span>
-                  <span class="text-white fw-bold fs-7">Top 100 Mock Test Candidates Win 1-Year Pro 100% Free!</span>
+                <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                  <span class="badge bg-primary text-white font-monospace fs-9">MERIT SCHOLARSHIP</span>
+                  <span class="text-white fw-bold fs-6">Top 100 Mock Test Candidates Win 1-Year Pro 100% Free!</span>
                 </div>
                 <p class="text-muted fs-8 mb-0">Score in the Top 100 on our 50-MCQ timed mock assessment leaderboard to automatically unlock a 1-Year Pro subscription at ₹0.</p>
               </div>
             </div>
             <div>
-              <a href="#/register" class="btn btn-outline-primary btn-sm px-3 py-1.5 fs-8 fw-semibold text-nowrap">
+              <a href="#/register" class="btn btn-primary text-white px-4 py-2 fs-7 fw-semibold text-nowrap">
                 Join Mock Exam &rarr;
               </a>
             </div>
@@ -968,7 +906,15 @@ const components = {
   `,
 
   // Application Layout Wrapper - Style 2: Stripe / Supabase Enterprise Gradient Workspace
-  appLayout: (userName, isAdmin, isPaid = false) => `
+  appLayout: (userName, isAdmin, isPaid = false) => {
+    const isEffectivePaid = Boolean(
+      isPaid || 
+      isAdmin || 
+      (typeof state !== 'undefined' && state && (state.isPaid || (state.role && (state.role.includes('ADMIN') || state.role.startsWith('ROLE_ADMIN'))))) || 
+      localStorage.getItem('isPaid') === 'true' || 
+      localStorage.getItem('user_is_paid') === 'true'
+    );
+    return `
     <div id="app-container" class="d-flex w-100 position-relative">
       <!-- Sidebar -->
       <div id="sidebar" class="sidebar glass-panel border-top-0 border-bottom-0 border-start-0 rounded-0 d-flex flex-column">
@@ -1080,7 +1026,7 @@ const components = {
               <span class="font-monospace fs-8 fw-bold" id="header-streak-count">1</span>
             </button>
             <!-- Launch Offer: First 1,000 Users 1-Year Free (Only for unpaid candidates) -->
-            ${!isPaid ? `
+            ${!isEffectivePaid ? `
             <a href="#/billing" class="btn btn-primary text-white fw-semibold btn-sm py-1 px-2.5 fs-8 d-none d-md-inline-flex align-items-center gap-1 shadow-sm" title="Launch Offer: First 1,000 Users 1-Year Free">
               <i class="fa-solid fa-gift"></i> <span>1-Yr Free</span>
             </a>` : ''}
@@ -1093,14 +1039,14 @@ const components = {
               <ul class="dropdown-menu dropdown-menu-end glass-panel shadow-lg" aria-labelledby="userDropdown">
                 <li class="px-3 py-1.5 border-bottom border-secondary border-opacity-20 mb-1" id="dropdown-plan-info">
                   <div class="fs-9 text-muted font-monospace">PLAN</div>
-                  <div class="fw-semibold ${isPaid ? 'text-primary' : 'text-secondary'} fs-8 d-flex align-items-center gap-1 mt-0.5">
-                    ${isPaid 
+                  <div class="fw-semibold ${isEffectivePaid ? 'text-primary' : 'text-secondary'} fs-8 d-flex align-items-center gap-1 mt-0.5">
+                    ${isEffectivePaid 
                       ? '<span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle font-monospace me-1 fs-10">PRO</span> PrepPro Active' 
                       : '<span class="badge bg-secondary bg-opacity-25 text-muted border border-secondary font-monospace me-1 fs-10">FREE</span> Free Plan'}
                   </div>
                 </li>
                 <li><a class="dropdown-item text-white fs-8 py-1.5" href="#/profile"><i class="fa-solid fa-gear me-2 text-secondary"></i>Settings</a></li>
-                ${!isPaid ? `<li><a class="dropdown-item text-primary fw-semibold fs-8 py-1.5" href="#/billing"><i class="fa-solid fa-gem me-2"></i>Upgrade to Pro</a></li>` : ''}
+                ${!isEffectivePaid ? `<li><a class="dropdown-item text-primary fw-semibold fs-8 py-1.5" href="#/billing"><i class="fa-solid fa-gem me-2"></i>Upgrade to Pro</a></li>` : ''}
                 <li><hr class="dropdown-divider border-secondary border-opacity-20 my-1"></li>
                 <li><button class="dropdown-item text-danger fs-8 py-1.5" id="dropdown-logout"><i class="fa-solid fa-right-from-bracket me-2 text-danger"></i>Logout</button></li>
               </ul>
@@ -1115,7 +1061,8 @@ const components = {
         <div id="page-mount" class="flex-grow-1 overflow-y-auto"></div>
       </div>
     </div>
-  `,
+  `;
+  },
 
   // Dashboard Page Sub-view - Professional Engineering Workspace
   dashboard: (stats = {}) => {
@@ -1139,9 +1086,6 @@ const components = {
           <div class="d-flex align-items-center gap-2.5 mb-1">
             <h2 class="text-white fw-bold m-0 fs-2 dashboard-hero-title">${userName}'s Dashboard</h2>
             <span class="ps-status-pill ps-status-active">Active</span>
-            <button type="button" class="btn btn-glass btn-sm py-0.5 px-2 font-monospace fs-8 text-white border-secondary border-opacity-30 d-inline-flex align-items-center gap-1 rounded-pill" onclick="window.showStreakModal && window.showStreakModal()" title="Daily Streak Activity">
-              <span>🔥</span> <span id="dash-streak-count">1</span>
-            </button>
           </div>
           <p class="text-muted fs-7 mb-0">Track preparation velocity, solve coding challenges, and manage recruitment pipeline.</p>
         </div>

@@ -138,6 +138,9 @@ window.UserStreak = {
     if (dashLongest) dashLongest.textContent = `${best} ${best === 1 ? 'Day' : 'Days'}`;
 
     // Modal elements
+    const modalDaysNum = document.getElementById('modal-streak-days-num');
+    if (modalDaysNum) modalDaysNum.textContent = streak;
+
     const modalCurrent = document.getElementById('modal-current-streak');
     if (modalCurrent) modalCurrent.textContent = `${streak} ${streak === 1 ? 'Day' : 'Days'}`;
 
@@ -222,8 +225,14 @@ window.showStreakModal = function() {
 };
 
 window.showAdModal = function(force = false) {
-  // If user is already a pro member, do NOT show the 1-Year Free promotional modal!
-  if (state.isPaid || localStorage.getItem('isPaid') === 'true' || localStorage.getItem('user_is_paid') === 'true') {
+  // If user is already a pro member or an administrator, do NOT show the 1-Year Free promotional modal!
+  const isEffectivePaid = Boolean(
+    state.isPaid || 
+    (state.role && (state.role.includes('ADMIN') || state.role.startsWith('ROLE_ADMIN'))) ||
+    localStorage.getItem('isPaid') === 'true' || 
+    localStorage.getItem('user_is_paid') === 'true'
+  );
+  if (isEffectivePaid) {
     return;
   }
 
