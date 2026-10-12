@@ -254,6 +254,7 @@ window.showAdModal = function(force = false) {
         }
       });
     }
+  }
 };
 
 function getReferralCodeFromUrl() {
