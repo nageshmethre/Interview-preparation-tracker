@@ -473,7 +473,7 @@ const components = {
         <div class="container-md text-center mb-5">
           <span class="badge bg-warning bg-opacity-15 text-warning border border-warning-subtle px-3 py-1 rounded-pill mb-2 font-monospace fs-8">KNOWLEDGE BASE</span>
           <h2 class="display-6 fw-bold text-white mb-2">Frequently Asked Questions</h2>
-          <p class="text-muted fs-6">Everything you need to know about PrepSpace features, exams, and platform lifetime access.</p>
+          <p class="text-muted fs-6">Everything you need to know about PrepSpace features, exams, and subscription plans.</p>
         </div>
         <div class="container-md">
           <div class="ui-accordion" id="landingFaq" role="region" aria-label="Frequently Asked Questions">
@@ -503,7 +503,7 @@ const components = {
                 <button class="ui-accordion-button" type="button" aria-expanded="false" aria-controls="faq-body-2" id="faq-btn-2" onclick="window.UI.toggleAccordion(this)">
                   <span class="d-flex align-items-center gap-2.5">
                     <i class="fa-solid fa-circle-question text-warning fs-6"></i>
-                    <span>Is the ₹399 PrepPro payment a recurring subscription?</span>
+                    <span>Is the PrepPro membership a recurring subscription?</span>
                   </span>
                   <span class="ui-accordion-icon"><i class="fa-solid fa-chevron-down"></i></span>
                 </button>
@@ -511,7 +511,7 @@ const components = {
               <div id="faq-body-2" class="ui-accordion-collapse" role="region" aria-labelledby="faq-btn-2">
                 <div class="ui-accordion-body">
                   <div class="ui-accordion-content">
-                    No. PrepPro is a single one-time payment of ₹399 with lifetime access. You get unlimited 50-MCQ timed exams, AI ATS resume audits, verified certificates, and all future updates without ever being billed again.
+                    No surprise renewals. Our 1-Year Pro Plan (₹1,399/year) is a single upfront payment pass for 365 days of unrestricted access—with zero automatic recurring charges. We also offer a flexible monthly subscription at ₹199/month with a 7-Day Free Trial. Plus, the first 1,000 registered engineers and top 100 mock exam leaderboard candidates unlock 1-Year Pro 100% free!
                   </div>
                 </div>
               </div>
@@ -739,11 +739,11 @@ const components = {
 
             <div class="p-3 rounded-3 mt-2" style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25);">
               <div class="d-flex align-items-center gap-2 text-warning fw-bold fs-7 mb-1">
-                <i class="fa-solid fa-gem"></i>
-                <span>PrepPro Lifetime Access</span>
+                <i class="fa-solid fa-crown"></i>
+                <span>PrepPro 1-Year Access</span>
               </div>
-              <p class="text-muted fs-8 mb-2">₹399 one-time payment. Unlimited exams, AI ATS audit, and verified certificates.</p>
-              <a href="#/register" class="btn btn-warning btn-sm w-100 fw-bold text-dark" onclick="window.UI.closeDrawer('platform-drawer')">Claim PrepPro →</a>
+              <p class="text-muted fs-8 mb-2">₹1,399 annual pass or ₹0 for first 1,000 engineers. Unlimited exams, AI ATS audit, and verified certificates.</p>
+              <a href="#/billing" class="btn btn-warning btn-sm w-100 fw-bold text-dark" onclick="window.UI.closeDrawer('platform-drawer')">Claim 1-Year Free Pro →</a>
             </div>
           </div>
         </div>
@@ -4926,7 +4926,7 @@ const components = {
           <div class="col-md-9">
             <span class="badge bg-warning bg-opacity-15 text-warning border border-warning border-opacity-30 px-3 py-1 rounded-pill mb-3 font-mono fs-8">AFFILIATE PARTNER BOUNTY</span>
             <h2 class="text-white fw-bold mb-2">Share PrepSpace, Earn Cash Payouts!</h2>
-            <p class="text-muted mb-0">Invite classmates, friends, and peers. You earn <strong class="text-warning">₹199 direct cash bounty</strong> on every user who upgrades their tracker space to PrepPro (₹399). Withdrawable instantly to your UPI ID!</p>
+            <p class="text-muted mb-0">Invite classmates, friends, and peers. You earn <strong class="text-warning">₹199 direct cash bounty</strong> on every user who upgrades their tracker space to PrepPro. Withdrawable instantly to your UPI ID!</p>
           </div>
           <div class="col-md-3 text-md-end mt-3 mt-md-0 d-none d-md-block">
             <div class="stat-num text-warning display-6 mb-0">₹199</div>
@@ -6146,7 +6146,7 @@ const components = {
               <label class="form-label text-muted fs-8 uppercase">Product Premium Access Price (INR)</label>
               <div class="input-group input-group-sm">
                 <span class="input-group-text bg-secondary border-0 text-white font-monospace">₹</span>
-                <input type="number" id="setting-PRODUCT_PRICE_INR" class="form-control admin-input" value="${settings.PRODUCT_PRICE_INR || 399}">
+                <input type="number" id="setting-PRODUCT_PRICE_INR" class="form-control admin-input" value="${settings.PRODUCT_PRICE_INR || 1399}">
                 <button class="btn btn-primary btn-save-setting" data-key="PRODUCT_PRICE_INR">Update</button>
               </div>
               <small class="text-muted fs-9">Current live charge on Cashfree gateway.</small>
@@ -6582,7 +6582,7 @@ const components = {
           <p class="text-muted mb-4 fs-8">The <strong>${featureName}</strong> suite is exclusive to PrepPro members. Upgrade today to unlock full AI diagnostics, unlimited mock exams, and personalized guides.</p>
           
           <div class="bg-dark bg-opacity-50 p-3 rounded mb-4 text-start border border-secondary border-opacity-25 fs-8 text-muted">
-            <h6 class="text-white fw-bold fs-8 mb-2"><i class="fa-solid fa-gem text-primary me-2"></i>Included with PrepPro (₹399 one-time):</h6>
+            <h6 class="text-white fw-bold fs-8 mb-2"><i class="fa-solid fa-crown text-warning me-2"></i>Included with PrepPro:</h6>
             <ul class="list-unstyled m-0">
               <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i> Unlimited AI ATS Resume Compliance Audits</li>
               <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i> Custom AI Study Planner & Weak Topic Diagnostic</li>
@@ -6592,7 +6592,7 @@ const components = {
             </ul>
           </div>
 
-          <a href="#/billing" class="btn btn-premium w-100 py-3 fs-7 fw-bold"><i class="fa-solid fa-bolt me-1"></i> Upgrade to PrepPro for ₹399</a>
+          <a href="#/billing" class="btn btn-primary w-100 py-3 fs-7 fw-bold"><i class="fa-solid fa-bolt me-1"></i> Upgrade to PrepPro</a>
         </div>
       </div>
     </div>
@@ -7355,8 +7355,8 @@ const components = {
                   </div>
 
                   <div class="d-flex flex-wrap justify-content-center gap-3">
-                    <a href="#/billing" class="btn btn-premium btn-lg px-4 py-2.5 fs-7 fw-bold shadow">
-                      <i class="fa-solid fa-bolt me-2"></i> Unlock All 19 Domains for ₹399
+                    <a href="#/billing" class="btn btn-primary btn-lg px-4 py-2.5 fs-7 fw-bold shadow">
+                      <i class="fa-solid fa-bolt me-2"></i> Unlock All 19 Domains with PrepPro
                     </a>
                     <a href="#/library/read?id=${book.id}&ch=1" class="btn btn-glass btn-lg px-4 py-2.5 fs-7">
                       <i class="fa-solid fa-book-open me-2"></i> Read Free Sample Chapter

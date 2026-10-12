@@ -1,22 +1,22 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
-// Version: 5.8.41 (Compact half-width billing cards, borderless styling, complete Pro upgrade suppression)
+// Version: 5.8.42 (Updated FAQ pricing, Warm Amber color restoration, borderless compact billing cards)
 
-const CACHE_NAME = 'prepspace-static-v5.8.41';
-const RUNTIME_CACHE = 'prepspace-runtime-v5.8.41';
+const CACHE_NAME = 'prepspace-static-v5.8.42';
+const RUNTIME_CACHE = 'prepspace-runtime-v5.8.42';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/index.css?v=5.8.41',
-  './assets/js/dsa-notes-data.js?v=5.8.41',
-  './assets/js/app.js?v=5.8.41',
-  './assets/js/components.js?v=5.8.41',
-  './assets/js/interview-suite.js?v=5.8.41',
-  './assets/js/technical-library-data.js?v=5.8.41',
-  './assets/js/questions-data.js?v=5.8.41',
-  './assets/js/aptitude-curriculum.js?v=5.8.41',
-  './assets/js/production-pages.js?v=5.8.41',
+  './assets/css/index.css?v=5.8.42',
+  './assets/js/dsa-notes-data.js?v=5.8.42',
+  './assets/js/app.js?v=5.8.42',
+  './assets/js/components.js?v=5.8.42',
+  './assets/js/interview-suite.js?v=5.8.42',
+  './assets/js/technical-library-data.js?v=5.8.42',
+  './assets/js/questions-data.js?v=5.8.42',
+  './assets/js/aptitude-curriculum.js?v=5.8.42',
+  './assets/js/production-pages.js?v=5.8.42',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',

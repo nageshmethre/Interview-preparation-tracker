@@ -251,7 +251,7 @@
   <script>
     (function() {
       try {
-        const CURRENT_DEPLOY_VER = '5.8.41';
+        const CURRENT_DEPLOY_VER = '5.8.42';
         const activeVer = localStorage.getItem('prepspace_client_version');
         if (activeVer !== CURRENT_DEPLOY_VER) {
           if ('caches' in window) {
@@ -270,19 +270,19 @@
       } catch (err) {}
     })();
   </script>
-  <script src="assets/js/dsa-notes-data.js?v=5.8.41"></script>
-  <script src="assets/js/questions-data.js?v=5.8.41"></script>
-  <script src="assets/js/aptitude-curriculum.js?v=5.8.41"></script>
-  <script src="assets/js/technical-library-data.js?v=5.8.41"></script>
-  <script src="assets/js/components.js?v=5.8.41"></script>
-  <script src="assets/js/interview-suite.js?v=5.8.41"></script>
-  <script src="assets/js/production-pages.js?v=5.8.41"></script>
-  <script src="assets/js/app.js?v=5.8.41"></script>
+  <script src="assets/js/dsa-notes-data.js?v=5.8.42"></script>
+  <script src="assets/js/questions-data.js?v=5.8.42"></script>
+  <script src="assets/js/aptitude-curriculum.js?v=5.8.42"></script>
+  <script src="assets/js/technical-library-data.js?v=5.8.42"></script>
+  <script src="assets/js/components.js?v=5.8.42"></script>
+  <script src="assets/js/interview-suite.js?v=5.8.42"></script>
+  <script src="assets/js/production-pages.js?v=5.8.42"></script>
+  <script src="assets/js/app.js?v=5.8.42"></script>
   <!-- Service Worker Registration for PWA Offline Support -->
   <script>
     if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=5.8.41').then(reg => {
+        navigator.serviceWorker.register('./sw.js?v=5.8.42').then(reg => {
           console.log('PrepSpace Service Worker registered successfully, scope:', reg.scope);
           // Proactively check for updates immediately
           reg.update();

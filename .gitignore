@@ -42,3 +42,6 @@ node_modules/
 www/
 scratch/
 
+
+.vercel
+.env*
