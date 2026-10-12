@@ -1115,9 +1115,15 @@ function router() {
     loadProfileDetails();
     bindProfileEvents();
   } else if (hash === '#/billing') {
-    viewTitle.textContent = 'Billing & Upgrade';
+    const isEffectivePaid = Boolean(
+      state.isPaid || 
+      (state.role && (state.role.includes('ADMIN') || state.role.startsWith('ROLE_ADMIN'))) ||
+      localStorage.getItem('isPaid') === 'true' || 
+      localStorage.getItem('user_is_paid') === 'true'
+    );
+    viewTitle.textContent = isEffectivePaid ? 'Subscription & Plan' : 'Billing & Upgrade';
     const claimedCount = window.getRealClaimedCount ? window.getRealClaimedCount() : 1;
-    pageMount.innerHTML = components.billing(state.isPaid, claimedCount);
+    pageMount.innerHTML = components.billing(isEffectivePaid, claimedCount);
     bindBillingEvents();
   } else if (hash === '#/referral') {
     redirectTo('#/billing');
@@ -1749,36 +1755,74 @@ function fetchUserProfile() {
     });
 }
 
+window.updateUserPlanDisplay = function(isPaid) {
+  updateSidebarPlanBadge(isPaid);
+};
+
 function updateSidebarPlanBadge(isPaid) {
+  const isEffectivePaid = Boolean(
+    isPaid || 
+    state.isPaid ||
+    (state.role && (state.role.includes('ADMIN') || state.role.startsWith('ROLE_ADMIN'))) ||
+    localStorage.getItem('isPaid') === 'true' || 
+    localStorage.getItem('user_is_paid') === 'true'
+  );
+
   const planEl = document.getElementById('sidebar-user-plan');
   const badgeEl = document.getElementById('sidebar-user-badge');
   const avatarDot = document.querySelector('.user-avatar-dot i');
   const statusDot = document.querySelector('.user-avatar-dot span');
   const dropdownPlan = document.getElementById('dropdown-plan-info');
+  const dropdownUpgradeItem = document.getElementById('dropdown-upgrade-pro-item');
+  const dropdownUpgrade = document.getElementById('dropdown-upgrade-pro');
+  const dropdownBillingItem = document.getElementById('dropdown-billing-info-item');
+  const headerLaunchOffer = document.getElementById('header-launch-offer-btn');
+  const sidebarUpgradeLink = document.getElementById('sidebar-upgrade-link');
 
   if (planEl) {
-    planEl.textContent = isPaid ? 'Pro Workspace' : 'Free Plan';
+    planEl.textContent = isEffectivePaid ? 'Pro Workspace' : 'Free Plan';
   }
   if (badgeEl) {
-    badgeEl.innerHTML = isPaid 
+    badgeEl.innerHTML = isEffectivePaid 
       ? `<span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle font-monospace">PRO</span>`
       : `<a href="#/billing" class="badge bg-secondary bg-opacity-25 text-muted border border-secondary text-decoration-none font-monospace">FREE</a>`;
   }
   if (avatarDot) {
-    avatarDot.className = `fa-solid fa-circle-user fs-4 ${isPaid ? 'text-primary' : 'text-secondary'}`;
+    avatarDot.className = `fa-solid fa-circle-user fs-4 ${isEffectivePaid ? 'text-primary' : 'text-secondary'}`;
   }
   if (statusDot) {
-    statusDot.className = `position-absolute bottom-0 end-0 ${isPaid ? 'bg-success' : 'bg-secondary'} border border-dark rounded-circle`;
+    statusDot.className = `position-absolute bottom-0 end-0 ${isEffectivePaid ? 'bg-success' : 'bg-secondary'} border border-dark rounded-circle`;
   }
   if (dropdownPlan) {
     dropdownPlan.innerHTML = `
       <div class="fs-8 text-muted font-monospace">MEMBERSHIP</div>
-      <div class="fw-bold ${isPaid ? 'text-primary' : 'text-secondary'} fs-7 d-flex align-items-center gap-1">
-        ${isPaid 
-          ? '<span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle font-monospace me-1">PRO</span> PrepPro Active' 
-          : '<span class="badge bg-secondary bg-opacity-25 text-muted border border-secondary font-monospace me-1">FREE</span> Starter Workspace'}
+      <div class="fw-bold ${isEffectivePaid ? 'text-primary' : 'text-secondary'} fs-7 d-flex align-items-center gap-1">
+        ${isEffectivePaid 
+          ? '<span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle font-monospace me-1 fs-10">PRO</span> PrepPro Active' 
+          : '<span class="badge bg-secondary bg-opacity-25 text-muted border border-secondary font-monospace me-1 fs-10">FREE</span> Free Plan'}
       </div>
     `;
+  }
+  if (dropdownUpgradeItem) {
+    dropdownUpgradeItem.style.display = isEffectivePaid ? 'none' : 'block';
+  }
+  if (dropdownUpgrade) {
+    dropdownUpgrade.style.display = isEffectivePaid ? 'none' : 'block';
+  }
+  if (dropdownBillingItem) {
+    dropdownBillingItem.style.display = isEffectivePaid ? 'block' : 'none';
+  }
+  if (headerLaunchOffer) {
+    headerLaunchOffer.style.display = isEffectivePaid ? 'none' : 'inline-flex';
+  }
+  const allLaunchBtns = document.querySelectorAll('.workspace-top-header a[title*="Launch Offer"], .workspace-top-header a[href="#/billing"]');
+  allLaunchBtns.forEach(btn => {
+    if (btn.textContent.includes('1-Yr Free') || (btn.getAttribute('title') && btn.getAttribute('title').includes('Launch Offer'))) {
+      btn.style.display = isEffectivePaid ? 'none' : 'inline-flex';
+    }
+  });
+  if (sidebarUpgradeLink) {
+    sidebarUpgradeLink.innerHTML = `<i class="fa-solid fa-credit-card"></i> <span>${isEffectivePaid ? 'Billing & Plan' : 'Upgrade Space'}</span>`;
   }
 }
 
