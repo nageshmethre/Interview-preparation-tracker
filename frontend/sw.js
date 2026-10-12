@@ -1,22 +1,22 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
-// Version: 5.8.36 (42 Full Aptitude Curriculum Modules, Snug Box Fit, Clean Chapter Selector, 825 LeetCode-Grade Questions)
+// Version: 5.8.37 (Daily User Streak, ₹1,399/yr Pro, Monthly & 7-Day Trial, First 1000 Free, Top 100 Scholarship, Ad Popup)
 
-const CACHE_NAME = 'prepspace-static-v5.8.36';
-const RUNTIME_CACHE = 'prepspace-runtime-v5.8.36';
+const CACHE_NAME = 'prepspace-static-v5.8.37';
+const RUNTIME_CACHE = 'prepspace-runtime-v5.8.37';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/index.css?v=5.8.36',
-  './assets/js/dsa-notes-data.js?v=5.8.36',
-  './assets/js/app.js?v=5.8.36',
-  './assets/js/components.js?v=5.8.36',
-  './assets/js/interview-suite.js?v=5.8.36',
-  './assets/js/technical-library-data.js?v=5.8.36',
-  './assets/js/questions-data.js?v=5.8.36',
-  './assets/js/aptitude-curriculum.js?v=5.8.36',
-  './assets/js/production-pages.js?v=5.8.36',
+  './assets/css/index.css?v=5.8.37',
+  './assets/js/dsa-notes-data.js?v=5.8.37',
+  './assets/js/app.js?v=5.8.37',
+  './assets/js/components.js?v=5.8.37',
+  './assets/js/interview-suite.js?v=5.8.37',
+  './assets/js/technical-library-data.js?v=5.8.37',
+  './assets/js/questions-data.js?v=5.8.37',
+  './assets/js/aptitude-curriculum.js?v=5.8.37',
+  './assets/js/production-pages.js?v=5.8.37',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',

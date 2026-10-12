@@ -29,8 +29,197 @@ function prewarmBackendServer() {
     }).catch(() => {});
   } catch (e) {}
 }
-// Initiate immediate pre-warm handshake on initial load
 prewarmBackendServer();
+
+// Genuine Date-Based Daily Streak Engine (No Fake Numbers)
+window.UserStreak = {
+  STORAGE_KEY: 'prepspace_user_streak_v2',
+
+  getLocalDateString(d = new Date()) {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  },
+
+  getYesterdayDateString() {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    return this.getLocalDateString(d);
+  },
+
+  getData() {
+    try {
+      const raw = localStorage.getItem(this.STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (typeof parsed.currentStreak === 'number') {
+          return parsed;
+        }
+      }
+    } catch (e) {}
+
+    const today = this.getLocalDateString();
+    return {
+      currentStreak: 1,
+      longestStreak: 1,
+      lastActiveDate: today,
+      history: {
+        [today]: { count: 1, activities: ['visit'] }
+      }
+    };
+  },
+
+  saveData(data) {
+    try {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {}
+  },
+
+  recordActivity(activityType = 'activity') {
+    const today = this.getLocalDateString();
+    const yesterday = this.getYesterdayDateString();
+    const data = this.getData();
+
+    if (!data.history) data.history = {};
+
+    if (data.lastActiveDate === today) {
+      // Already active today: Streak is maintained
+      if (!data.history[today]) {
+        data.history[today] = { count: 0, activities: [] };
+      }
+      data.history[today].count = (data.history[today].count || 0) + 1;
+      if (!data.history[today].activities) data.history[today].activities = [];
+      if (!data.history[today].activities.includes(activityType)) {
+        data.history[today].activities.push(activityType);
+      }
+    } else if (data.lastActiveDate === yesterday) {
+      // Consecutive calendar day: Streak increments by +1
+      data.currentStreak = (data.currentStreak || 0) + 1;
+      data.longestStreak = Math.max(data.longestStreak || 1, data.currentStreak);
+      data.lastActiveDate = today;
+      data.history[today] = { count: 1, activities: [activityType] };
+    } else {
+      // 1 or more calendar days missed: Streak resets to day 1
+      data.currentStreak = 1;
+      data.longestStreak = Math.max(data.longestStreak || 1, 1);
+      data.lastActiveDate = today;
+      data.history[today] = { count: 1, activities: [activityType] };
+    }
+
+    this.saveData(data);
+    this.updateUI();
+    return data;
+  },
+
+  updateUI() {
+    const data = this.getData();
+    const streak = data.currentStreak || 1;
+    const best = data.longestStreak || streak;
+
+    // Header flame counter
+    const headerCount = document.getElementById('header-streak-count');
+    if (headerCount) headerCount.textContent = streak;
+
+    // Dashboard widgets
+    const dashBannerDays = document.getElementById('dash-streak-banner-days');
+    if (dashBannerDays) dashBannerDays.textContent = `${streak} ${streak === 1 ? 'Day' : 'Days'}`;
+
+    const dashBannerBest = document.getElementById('dash-streak-banner-best');
+    if (dashBannerBest) dashBannerBest.textContent = `${best} ${best === 1 ? 'Day' : 'Days'}`;
+
+    const dashVal = document.getElementById('dash-streak-value');
+    if (dashVal) dashVal.textContent = streak;
+
+    const dashLongest = document.getElementById('dash-longest-streak-value');
+    if (dashLongest) dashLongest.textContent = `${best} ${best === 1 ? 'Day' : 'Days'}`;
+
+    // Modal elements
+    const modalCurrent = document.getElementById('modal-current-streak');
+    if (modalCurrent) modalCurrent.textContent = `${streak} ${streak === 1 ? 'Day' : 'Days'}`;
+
+    const modalLongest = document.getElementById('modal-longest-streak');
+    if (modalLongest) modalLongest.textContent = `${best} ${best === 1 ? 'Day' : 'Days'}`;
+
+    const modalTodayDate = document.getElementById('modal-streak-today-date');
+    if (modalTodayDate) {
+      modalTodayDate.textContent = new Date().toLocaleDateString(undefined, {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+    }
+
+    // Render 7-day visual consistency matrix in modal
+    const chipsContainer = document.getElementById('modal-streak-week-chips');
+    if (chipsContainer) {
+      chipsContainer.innerHTML = this.render7DayMatrix(data);
+    }
+  },
+
+  render7DayMatrix(data) {
+    const chips = [];
+    const today = new Date();
+    const history = data.history || {};
+    const daysShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(today.getDate() - i);
+      const dateStr = this.getLocalDateString(d);
+      const dayName = daysShort[d.getDay()];
+      const dayNum = d.getDate();
+      const isToday = i === 0;
+      const wasActive = history[dateStr] && history[dateStr].count > 0;
+
+      chips.push(`
+        <div class="flex-fill text-center p-2 rounded-2 ${wasActive ? 'bg-warning bg-opacity-15 border border-warning border-opacity-40' : 'bg-secondary bg-opacity-10 border border-secondary border-opacity-15'} ${isToday ? 'border border-primary' : ''}">
+          <div class="text-muted fs-10 font-monospace text-uppercase">${dayName}</div>
+          <div class="fw-bold fs-7 ${wasActive ? 'text-warning' : 'text-secondary'} font-monospace my-0.5">${dayNum}</div>
+          <div class="fs-8">${wasActive ? '🔥' : '<span class="text-muted opacity-40">•</span>'}</div>
+        </div>
+      `);
+    }
+
+    return chips.join('');
+  }
+};
+
+window.showStreakModal = function() {
+  if (window.UserStreak) {
+    window.UserStreak.updateUI();
+  }
+  const modalEl = document.getElementById('userStreakModal');
+  if (modalEl && typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+    const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+    modal.show();
+  }
+};
+
+window.showAdModal = function(force = false) {
+  if (!force) {
+    const dismissedUntil = localStorage.getItem('prepspace_ad_dismissed_until');
+    if (dismissedUntil && Date.now() < parseInt(dismissedUntil, 10)) {
+      return;
+    }
+  }
+
+  const modalEl = document.getElementById('platformAdModal');
+  if (modalEl && typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+    const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+    modal.show();
+
+    const chk = document.getElementById('ad-dont-show-today');
+    if (modalEl && !modalEl._adHooked) {
+      modalEl._adHooked = true;
+      modalEl.addEventListener('hidden.bs.modal', () => {
+        if (chk && chk.checked) {
+          localStorage.setItem('prepspace_ad_dismissed_until', Date.now() + 24 * 60 * 60 * 1000);
+        }
+      });
+    }
+  }
+};
 
 function getReferralCodeFromUrl() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -160,6 +349,18 @@ document.addEventListener('DOMContentLoaded', () => {
   initScreenTimeTracker();
   window.addEventListener('hashchange', router);
   router();
+
+  // 1. Genuine Streak Activity Record on Site Entry
+  if (window.UserStreak) {
+    window.UserStreak.recordActivity('visit');
+  }
+
+  // 2. Platform Entry Ad / Launch Offer Modal Popup (Respects 24h dismissal)
+  setTimeout(() => {
+    if (window.showAdModal) {
+      window.showAdModal(false);
+    }
+  }, 1800);
 });
 
 // Interactive Showcase Tabs for Landing Page (Style 2: Stripe / Supabase)
@@ -873,26 +1074,8 @@ function router() {
     pageMount.innerHTML = components.billing(state.isPaid);
     bindBillingEvents();
   } else if (hash === '#/referral') {
-    viewTitle.textContent = 'Affiliate & Referral Bounties';
-    pageMount.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div><div class="text-muted fs-8 mt-2">Loading affiliate wallet & earnings...</div></div>`;
-    apiFetch('/referrals/stats')
-      .then(stats => {
-        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/referral') return;
-        pageMount.innerHTML = components.referral(stats || {});
-        bindReferralEvents();
-        loadReferralHistory();
-      })
-      .catch(err => {
-        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/referral') return;
-        pageMount.innerHTML = components.referral({
-          totalReferrals: 0,
-          totalEarnings: 0,
-          availableBalance: 0,
-          minWithdrawal: 199,
-          referralCode: localStorage.getItem('referral_code') || (state.name ? state.name.replace(/\s+/g, '').substring(0, 4).toUpperCase() + '-101' : 'PREP-101')
-        });
-        bindReferralEvents();
-      });
+    redirectTo('#/billing');
+    return;
   } else if (hash === '#/desktop-client') {
     viewTitle.textContent = 'Mobile & Desktop Apps';
     pageMount.innerHTML = components.desktopClient();
@@ -1727,6 +1910,15 @@ function bindAuthEvents(mode) {
 
         showToast(`Welcome back, ${res.name || 'Engineer'}!`, 'success');
         
+        if (window.UserStreak) {
+          window.UserStreak.recordActivity('login');
+        }
+        setTimeout(() => {
+          if (window.showAdModal) {
+            window.showAdModal(true);
+          }
+        }, 1200);
+
         // Immediate redirection
         redirectTo(postLoginRoute);
 
@@ -1992,6 +2184,14 @@ function bindAuthEvents(mode) {
             state.role = loginRes.role || 'ROLE_USER';
             
             showToast(`Welcome to PrepSpace, ${loginRes.name || pendingRegistration.name}!`, 'success');
+            if (window.UserStreak) {
+              window.UserStreak.recordActivity('login');
+            }
+            setTimeout(() => {
+              if (window.showAdModal) {
+                window.showAdModal(true);
+              }
+            }, 1200);
             redirectTo('#/dashboard');
             fetchUserProfile().catch(() => {});
           }).catch(() => {
@@ -6386,6 +6586,10 @@ function bindCodingPracticeEvents(rawQuestions = []) {
             `;
           }
 
+          if (window.UserStreak) {
+            window.UserStreak.recordActivity('coding');
+          }
+
           apiFetch(`/v1/questions/${activeQuestionId}/status?status=SOLVED`, {
             method: 'POST',
             body: userCode
@@ -6566,6 +6770,10 @@ function bindAptitudeEvents(topics = [], questions = []) {
     if (idx < 0 || idx >= chapters.length) return;
     currentChapIdx = idx;
     const chap = chapters[idx];
+
+    if (window.UserStreak) {
+      window.UserStreak.recordActivity('reading');
+    }
 
     const chapCategoryEl = document.getElementById('book-chap-category');
     const chapReadTimeEl = document.getElementById('book-chap-readtime');
@@ -7301,19 +7509,20 @@ function finishAndGradeExam(testId, questions, userAnswers, startTime, duration,
     timeSpent: timeSpentStr
   };
 
-  // Top 50 Free Lifetime Pro Subscription Pass Award
-  if (percentage >= 60) {
+  // Automatic streak credit when candidates take mock tests
+  if (window.UserStreak) {
+    window.UserStreak.recordActivity('mock_exam');
+  }
+
+  // Top 100 Mock Test Merit Scholarship: 1-Year Pro Subscription 100% FREE
+  if (percentage >= 50) {
     localStorage.setItem('user_is_paid', 'true');
+    localStorage.setItem('isPaid', 'true');
     state.isPaid = true;
-    const badgeEl = document.getElementById('sidebar-user-badge');
-    if (badgeEl) {
-      badgeEl.innerHTML = `<span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle font-monospace">PRO</span>`;
+    if (typeof updateUserPlanDisplay === 'function') {
+      updateUserPlanDisplay(true);
     }
-    const planEl = document.getElementById('sidebar-user-plan');
-    if (planEl) {
-      planEl.textContent = 'Pro Workspace';
-    }
-    showToast('🏆 Milestone: Top 50 Qualification! Free Lifetime Pro Pass Activated!', 'success', 10000);
+    showToast('🏆 Top 100 Merit Scholarship Achieved! 1-Year Free PrepSpace Pro Pass Activated!', 'success', 10000);
   }
 
   // Submit calculated score to server to update UserStreak and Leaderboard
@@ -8860,117 +9069,182 @@ function loadRazorpayScript() {
 }
 
 function bindBillingEvents() {
-  const upgradeBtn = document.getElementById('btn-upgrade-pro');
-  if (!upgradeBtn) return;
-  upgradeBtn.addEventListener('click', () => {
-    upgradeBtn.disabled = true;
-    upgradeBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Securing Checkout...`;
-
-    // Primary: Cashfree Payment Gateway
-    apiFetch('/payments/cashfree/order', { method: 'POST' })
-      .then(cfData => {
-        if (typeof window.Cashfree === 'function' && cfData.paymentSessionId) {
-          const cashfree = window.Cashfree({ mode: cfData.environment || "production" });
-          cashfree.checkout({
-            paymentSessionId: cfData.paymentSessionId,
-            redirectTarget: "_modal"
-          }).then((result) => {
-            if (result.error) {
-              showToast(result.error.message || 'Payment window closed.', 'warning');
-              upgradeBtn.disabled = false;
-              upgradeBtn.textContent = 'Buy PrepPro Access';
-              return;
-            }
-            if (result.paymentDetails) {
-              apiFetch('/payments/cashfree/verify', {
-                method: 'POST',
-                body: JSON.stringify({ order_id: cfData.orderId })
-              }).then(verifyRes => {
-                if (verifyRes.status === 'SUCCESS') {
-                  showToast('Payment verified! Welcome to PrepSpace Pro.', 'success');
-                  state.isPaid = true;
-                  localStorage.setItem('isPaid', 'true');
-                  fetchUserProfile().then(() => redirectTo('#/referral'));
-                } else {
-                  showToast('Payment verification pending. Please refresh.', 'warning');
-                  upgradeBtn.disabled = false;
-                  upgradeBtn.textContent = 'Buy PrepPro Access';
-                }
-              }).catch(err => {
-                showToast(err.message, 'danger');
-                upgradeBtn.disabled = false;
-                upgradeBtn.textContent = 'Buy PrepPro Access';
-              });
-            }
-          });
-        } else {
-          fallbackRazorpay();
+  // 1. First 1,000 Users Launch Offer Claim
+  const claimEarlyBirdBtn = document.getElementById('btn-claim-earlybird');
+  if (claimEarlyBirdBtn) {
+    claimEarlyBirdBtn.addEventListener('click', () => {
+      claimEarlyBirdBtn.disabled = true;
+      claimEarlyBirdBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-1.5"></span> Claiming Spot...`;
+      setTimeout(() => {
+        state.isPaid = true;
+        localStorage.setItem('user_is_paid', 'true');
+        localStorage.setItem('isPaid', 'true');
+        localStorage.setItem('prepspace_earlybird_claimed', 'true');
+        showToast('🎉 Congratulations! You claimed 1-Year PrepSpace Pro 100% Free under the First 1,000 Users Launch Offer!', 'success', 8000);
+        updateUserPlanDisplay(true);
+        const mount = document.getElementById('page-mount');
+        if (mount) {
+          mount.innerHTML = components.billing(true);
+          bindBillingEvents();
         }
-      })
-      .catch(cfErr => {
-        console.warn('Cashfree initiation notice, switching to secondary gateway:', cfErr);
-        fallbackRazorpay();
-      });
+      }, 700);
+    });
+  }
 
-    function fallbackRazorpay() {
-      apiFetch('/payments/order', { method: 'POST' })
-        .then(orderData => {
-          loadRazorpayScript().then(loaded => {
-            if (!loaded) {
-              showToast('Failed to load payment gateway SDK.', 'danger');
-              upgradeBtn.disabled = false;
-              upgradeBtn.textContent = 'Buy PrepPro Access';
-              return;
-            }
-            
-            const options = {
-              key: orderData.keyId,
-              amount: orderData.amount,
-              currency: orderData.currency,
-              name: 'PrepSpace Premium',
-              description: 'Upgrade your workspace to PrepSpace PrepPro lifetime access',
-              order_id: orderData.orderId,
-              handler: function (response) {
-                apiFetch('/payments/verify', {
-                  method: 'POST',
-                  body: JSON.stringify({
-                    razorpay_order_id: response.razorpay_order_id,
-                    razorpay_payment_id: response.razorpay_payment_id,
-                    razorpay_signature: response.razorpay_signature
-                  })
-                }).then(verifyRes => {
-                  if (verifyRes.status === 'SUCCESS') {
-                    showToast('Payment verified! Welcome to PrepSpace Pro.', 'success');
-                    state.isPaid = true;
-                    localStorage.setItem('isPaid', 'true');
-                    fetchUserProfile().then(() => {
-                      redirectTo('#/referral');
-                    });
-                  }
-                }).catch(err => {
-                  showToast('Payment verification failed: ' + err.message, 'danger');
-                  upgradeBtn.disabled = false;
-                  upgradeBtn.textContent = 'Buy PrepPro Access';
-                });
-              },
-              prefill: {
-                name: state.name || '',
-                email: state.email || ''
-              },
-              theme: { color: '#000000' }
-            };
-            
-            const rzp = new window.Razorpay(options);
-            rzp.open();
-          });
-        })
-        .catch(err => {
-          showToast(err.message, 'danger');
-          upgradeBtn.disabled = false;
-          upgradeBtn.textContent = 'Buy PrepPro Access';
+  // 2. Start 7-Day Free Trial
+  const startTrialBtn = document.getElementById('btn-start-free-trial');
+  if (startTrialBtn) {
+    startTrialBtn.addEventListener('click', () => {
+      startTrialBtn.disabled = true;
+      startTrialBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-1.5"></span> Activating Trial...`;
+      setTimeout(() => {
+        state.isPaid = true;
+        state.isTrial = true;
+        localStorage.setItem('user_is_paid', 'true');
+        localStorage.setItem('isPaid', 'true');
+        localStorage.setItem('prepspace_trial_active', 'true');
+        showToast('🎉 7-Day Free Trial Activated! Enjoy full access to 825+ problems, mock exams, and AI tools for 7 days with ₹0 charged today.', 'success', 8000);
+        updateUserPlanDisplay(true);
+        const mount = document.getElementById('page-mount');
+        if (mount) {
+          mount.innerHTML = components.billing(true);
+          bindBillingEvents();
+        }
+      }, 700);
+    });
+  }
+
+  // 3. Helper to trigger Payment Flow
+  function triggerSubscriptionCheckout(planName, amountInr, triggerBtn) {
+    if (!triggerBtn) return;
+    const originalText = triggerBtn.innerHTML;
+    triggerBtn.disabled = true;
+    triggerBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Securing Checkout...`;
+
+    apiFetch('/payments/cashfree/order', {
+      method: 'POST',
+      body: JSON.stringify({ plan: planName, amount: amountInr })
+    }).then(cfData => {
+      if (typeof window.Cashfree === 'function' && cfData.paymentSessionId) {
+        const cashfree = window.Cashfree({ mode: cfData.environment || "production" });
+        cashfree.checkout({
+          paymentSessionId: cfData.paymentSessionId,
+          redirectTarget: "_modal"
+        }).then((result) => {
+          if (result.error) {
+            showToast(result.error.message || 'Payment window closed.', 'warning');
+            triggerBtn.disabled = false;
+            triggerBtn.innerHTML = originalText;
+            return;
+          }
+          if (result.paymentDetails) {
+            apiFetch('/payments/cashfree/verify', {
+              method: 'POST',
+              body: JSON.stringify({ order_id: cfData.orderId })
+            }).then(verifyRes => {
+              if (verifyRes.status === 'SUCCESS') {
+                showToast(`Payment verified! Welcome to PrepSpace Pro (${planName}).`, 'success');
+                state.isPaid = true;
+                localStorage.setItem('isPaid', 'true');
+                localStorage.setItem('user_is_paid', 'true');
+                updateUserPlanDisplay(true);
+                fetchUserProfile().then(() => redirectTo('#/dashboard'));
+              } else {
+                showToast('Payment verification pending. Please refresh.', 'warning');
+                triggerBtn.disabled = false;
+                triggerBtn.innerHTML = originalText;
+              }
+            }).catch(err => {
+              showToast(err.message, 'danger');
+              triggerBtn.disabled = false;
+              triggerBtn.innerHTML = originalText;
+            });
+          }
         });
-    }
-  });
+      } else {
+        fallbackRazorpay(planName, amountInr, triggerBtn, originalText);
+      }
+    }).catch(cfErr => {
+      console.warn('Cashfree notice, switching to secondary gateway:', cfErr);
+      fallbackRazorpay(planName, amountInr, triggerBtn, originalText);
+    });
+  }
+
+  function fallbackRazorpay(planName, amountInr, triggerBtn, originalText) {
+    apiFetch('/payments/order', {
+      method: 'POST',
+      body: JSON.stringify({ plan: planName, amount: amountInr })
+    }).then(orderData => {
+      loadRazorpayScript().then(loaded => {
+        if (!loaded) {
+          showToast('Failed to load payment gateway SDK.', 'danger');
+          triggerBtn.disabled = false;
+          triggerBtn.innerHTML = originalText;
+          return;
+        }
+        
+        const options = {
+          key: orderData.keyId,
+          amount: orderData.amount || (amountInr * 100),
+          currency: orderData.currency || 'INR',
+          name: 'PrepSpace Pro',
+          description: `Unlock PrepSpace Pro (${planName})`,
+          order_id: orderData.orderId,
+          handler: function (response) {
+            apiFetch('/payments/verify', {
+              method: 'POST',
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature
+              })
+            }).then(verifyRes => {
+              if (verifyRes.status === 'SUCCESS') {
+                showToast(`Payment verified! Welcome to PrepSpace Pro (${planName}).`, 'success');
+                state.isPaid = true;
+                localStorage.setItem('isPaid', 'true');
+                localStorage.setItem('user_is_paid', 'true');
+                updateUserPlanDisplay(true);
+                fetchUserProfile().then(() => redirectTo('#/dashboard'));
+              }
+            }).catch(err => {
+              showToast('Payment verification failed: ' + err.message, 'danger');
+              triggerBtn.disabled = false;
+              triggerBtn.innerHTML = originalText;
+            });
+          },
+          prefill: {
+            name: state.name || '',
+            email: state.email || ''
+          },
+          theme: { color: '#000000' }
+        };
+        
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+      });
+    }).catch(err => {
+      showToast(err.message, 'danger');
+      triggerBtn.disabled = false;
+      triggerBtn.innerHTML = originalText;
+    });
+  }
+
+  // 4. Monthly Plan Subscription Button (₹199 / mo)
+  const upgradeMonthlyBtn = document.getElementById('btn-upgrade-monthly');
+  if (upgradeMonthlyBtn) {
+    upgradeMonthlyBtn.addEventListener('click', () => {
+      triggerSubscriptionCheckout('Monthly Plan', 199, upgradeMonthlyBtn);
+    });
+  }
+
+  // 5. 1-Year Pro Plan Button (₹1,399 / yr)
+  const upgradeAnnualBtn = document.getElementById('btn-upgrade-pro');
+  if (upgradeAnnualBtn) {
+    upgradeAnnualBtn.addEventListener('click', () => {
+      triggerSubscriptionCheckout('1-Year Pro Annual Plan', 1399, upgradeAnnualBtn);
+    });
+  }
 }
 
 function bindReferralEvents() {

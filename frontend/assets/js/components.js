@@ -13,15 +13,15 @@ const components = {
     const isActive = config ? config.active !== 'false' : true;
     if (!isActive) return '';
 
-    const badge1 = (config && config.badge1) || 'TOP 50 PERK';
-    const text1 = (config && config.text1) || 'Rank in the <strong class=\"text-white\">Top 50</strong> of any Mock Exam (Java, Python, C++, React, DSA) & win a <strong style=\"color: #fbbf24;\">100% Free Lifetime Pro Subscription!</strong>';
+    const badge1 = (config && config.badge1) || 'TOP 100 SCHOLARSHIP';
+    const text1 = (config && config.text1) || 'Rank in the <strong class=\"text-white\">Top 100</strong> of any Mock Exam (Java, Python, C++, React, DSA) & win a <strong style=\"color: #fbbf24;\">100% Free 1-Year Pro Subscription!</strong>';
     const btn1 = (config && config.btn1) || 'Take Mock Exam →';
     const link1 = (config && config.link1) || '#/mock-exams';
 
-    const badge2 = (config && config.badge2) || 'LEADERBOARD CHALLENGE';
-    const text2 = (config && config.text2) || 'Compete with 2,400+ developers globally in real-time timed technical evaluations';
-    const btn2 = (config && config.btn2) || 'Join Leaderboard →';
-    const link2 = (config && config.link2) || '#/mock-exams';
+    const badge2 = (config && config.badge2) || 'FIRST 1,000 USERS';
+    const text2 = (config && config.text2) || 'Special Launch Offer: First 1,000 Registered Users get <strong class=\"text-white\">1-Year Pro 100% Free</strong> • <span class=\"text-warning font-monospace\">864 / 1,000 Claimed</span>';
+    const btn2 = (config && config.btn2) || 'Claim 1-Year Free →';
+    const link2 = (config && config.link2) || '#/billing';
 
     return `
       <div id="top-promo-banner" class="promo-ticker-wrapper" title="Hover to pause ticker">
@@ -495,7 +495,7 @@ const components = {
               <div id="faq-body-1" class="ui-accordion-collapse" role="region" aria-labelledby="faq-btn-1">
                 <div class="ui-accordion-body">
                   <div class="ui-accordion-content">
-                    PrepSpace generates a balanced 50-question examination covering Data Structures, Algorithms, Core Java, OOP, and Database concepts. The system auto-grades your submission instantly, calculates exact percentile marks, and records your evaluation score in your permanent profile dashboard.
+                    PrepSpace generates a balanced 50-question examination covering Data Structures, Algorithms, Core Java, OOP, and Relational Databases. The system auto-grades your submission instantly, calculates exact percentile marks, and records your evaluation score in your permanent profile dashboard.
                   </div>
                 </div>
               </div>
@@ -986,7 +986,6 @@ const components = {
             <div class="sidebar-group-items">
               <a href="#/profile" class="sidebar-link"><i class="fa-solid fa-sliders"></i> <span>Settings</span></a>
               <a href="#/billing" class="sidebar-link"><i class="fa-solid fa-credit-card"></i> <span>Upgrade Space</span></a>
-              <a href="#/referral" class="sidebar-link"><i class="fa-solid fa-gift"></i> <span>Referral & Earn</span></a>
               ${isAdmin ? `<a href="#/admin" class="sidebar-link"><i class="fa-solid fa-shield-halved"></i> <span>Admin Panel</span></a>` : ''}
             </div>
           </details>
@@ -1017,6 +1016,16 @@ const components = {
           </div>
           
           <div class="d-flex align-items-center gap-2 flex-shrink-0">
+            <!-- Daily Streak Flame Widget -->
+            <button type="button" class="btn btn-glass btn-sm d-flex align-items-center gap-1.5 py-1 px-2.5 text-warning fw-bold border-warning border-opacity-30" id="header-streak-btn" onclick="window.showStreakModal && window.showStreakModal()" title="View Daily Streak Activity">
+              <span class="fs-7">🔥</span>
+              <span class="font-monospace fs-8" id="header-streak-count">1</span>
+              <span class="d-none d-sm-inline fs-9 text-muted font-monospace">DAY</span>
+            </button>
+            <!-- Launch Offer: First 1,000 Users 1-Year Free -->
+            <a href="#/billing" class="btn btn-warning text-dark fw-bold btn-sm py-1 px-2.5 fs-8 d-none d-md-inline-flex align-items-center gap-1" title="Launch Offer: First 1,000 Users 1-Year Free">
+              <i class="fa-solid fa-gift"></i> <span>1-Yr Free</span>
+            </a>
             <!-- User Dropdown -->
             <div class="dropdown">
               <button class="btn btn-glass btn-sm dropdown-toggle d-flex align-items-center gap-2 py-1.5 px-3" type="button" id="userDropdown" data-bs-toggle="dropdown">
@@ -1086,6 +1095,27 @@ const components = {
           <a href="#/studyplanner" class="btn btn-sm btn-glass px-3 py-1.5 fs-8 text-white d-inline-flex align-items-center gap-1.5">
             <span>Study Planner</span>
           </a>
+        </div>
+      </div>
+
+      <!-- Daily Streak Flame Consistency Widget -->
+      <div class="p-3 rounded-3 bg-dark border border-warning border-opacity-30 d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 cursor-pointer" onclick="window.showStreakModal && window.showStreakModal()" style="cursor: pointer; background: linear-gradient(90deg, rgba(245,158,11,0.09) 0%, rgba(20,20,25,0.7) 100%);">
+        <div class="d-flex align-items-center gap-3">
+          <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35);">
+            <span class="fs-4">🔥</span>
+          </div>
+          <div>
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <span class="text-white fw-bold fs-6">Daily Preparation Streak: <span class="text-warning font-monospace" id="dash-streak-banner-days">1 Day</span></span>
+              <span class="badge bg-success bg-opacity-20 text-success border border-success-subtle fs-10 font-monospace"><i class="fa-solid fa-circle-check me-1"></i>ACTIVE TODAY</span>
+            </div>
+            <p class="text-muted fs-8 mb-0">Real date-based consistency tracker. All-time personal best: <span class="text-white font-monospace fw-semibold" id="dash-streak-banner-best">1 Day</span> &bull; Practice daily to protect your flame.</p>
+          </div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <button type="button" class="btn btn-warning text-dark btn-sm py-1.5 px-3 fs-8 fw-bold">
+            <i class="fa-solid fa-chart-simple me-1"></i> View 7-Day Tracker
+          </button>
         </div>
       </div>
 
@@ -4675,62 +4705,172 @@ const components = {
 
   billing: (isPaid) => `
     <div class="container-fluid py-4">
-      <div class="row justify-content-center text-center mb-5">
-        <div class="col-lg-7">
-          <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle px-3 py-1 mb-2 font-mono fs-8">TRANSPARENT & FAIR</span>
-          <h2 class="text-white fw-bold mb-2">Upgrade Space Metrics</h2>
-          <p class="text-muted">Accelerate your technical preparation journey with unlimited AI diagnostics and premium tools.</p>
+      <!-- Page Header -->
+      <div class="row justify-content-center text-center mb-4">
+        <div class="col-lg-8">
+          <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle px-3 py-1 mb-2 font-mono fs-8">TRANSPARENT & FAIR PRICING</span>
+          <h2 class="text-white fw-bold mb-2">Upgrade Your PrepSpace</h2>
+          <p class="text-muted">Accelerate your software engineering placement journey with full access to 825+ algorithmic challenges, 42 aptitude modules, and AI ATS diagnostics.</p>
         </div>
       </div>
 
+      <!-- 1. First 1,000 Users Launch Offer Banner -->
+      <div class="row justify-content-center mb-4">
+        <div class="col-lg-10">
+          <div class="p-3.5 p-md-4 rounded-3 border border-warning border-opacity-40 text-start position-relative overflow-hidden shadow-lg" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(20, 20, 25, 0.85) 100%);">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+              <div class="d-flex align-items-start gap-3 col-12 col-md-8">
+                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px; background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.4);">
+                  <i class="fa-solid fa-gift text-warning fs-4"></i>
+                </div>
+                <div>
+                  <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                    <span class="badge bg-warning text-dark font-monospace fw-bold fs-9 px-2.5 py-0.5">INAUGURAL LAUNCH OFFER</span>
+                    <span class="badge bg-success bg-opacity-20 text-success border border-success-subtle font-monospace fs-9">
+                      <i class="fa-solid fa-fire me-1"></i> <span id="earlybird-counter">864</span> / 1,000 Claimed &bull; Only 136 Spots Left
+                    </span>
+                  </div>
+                  <h4 class="text-white fw-bold m-0 fs-5">First 1,000 Users: 1-Year Pro 100% Free!</h4>
+                  <p class="text-muted fs-8 mb-0 mt-1">
+                    As part of our community launch, the first 1,000 registered engineers get full 1-Year Pro access with ₹0 payment. Unlock all solved DSA questions, 42 aptitude modules, and AI mock diagnostics.
+                  </p>
+                </div>
+              </div>
+              <div class="text-md-end col-12 col-md-3">
+                <button type="button" id="btn-claim-earlybird" class="btn btn-warning text-dark fw-bold px-3.5 py-2 fs-8 w-100 shadow-sm" ${isPaid ? 'disabled' : ''}>
+                  ${isPaid ? '✓ Pro Already Active' : '<i class="fa-solid fa-bolt me-1.5"></i> Claim 1-Year Free Pro'}
+                </button>
+                <div class="text-muted fs-10 mt-1.5 text-center"><i class="fa-solid fa-clock-rotate-left me-1"></i> Instant 365-day activation</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Top 100 Mock Test Merit Scholarship Banner -->
+      <div class="row justify-content-center mb-5">
+        <div class="col-lg-10">
+          <div class="p-3.5 p-md-4 rounded-3 border border-indigo border-opacity-40 text-start position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.10) 0%, rgba(20, 20, 25, 0.85) 100%);">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+              <div class="d-flex align-items-start gap-3 col-12 col-md-8">
+                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px; background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4);">
+                  <i class="fa-solid fa-trophy text-warning fs-4"></i>
+                </div>
+                <div>
+                  <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                    <span class="badge bg-indigo text-white font-monospace fw-bold fs-9 px-2.5 py-0.5">MERIT SCHOLARSHIP</span>
+                    <span class="badge bg-secondary bg-opacity-30 text-white font-monospace fs-10">GLOBAL ASSESSMENT</span>
+                  </div>
+                  <h4 class="text-white fw-bold m-0 fs-5">Top 100 Mock Test Candidates Win 1-Year Pro 100% Free!</h4>
+                  <p class="text-muted fs-8 mb-0 mt-1">
+                    Score in the Top 100 on our 50-MCQ timed mock assessment leaderboard (Java, Python, C++, React, DSA). Qualifying candidates automatically receive a 1-Year PrepPro license on merit with zero fees!
+                  </p>
+                </div>
+              </div>
+              <div class="text-md-end col-12 col-md-3">
+                <a href="#/mock-exams" class="btn btn-outline-primary btn-sm px-3.5 py-2 fs-8 fw-semibold w-100">
+                  <i class="fa-solid fa-stopwatch me-1.5"></i> Take Mock Exam &rarr;
+                </a>
+                <div class="text-muted fs-10 mt-1.5 text-center"><i class="fa-solid fa-ranking-star text-warning me-1"></i> Live Global Leaderboard</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Three Pricing Tiers Grid -->
       <div class="row g-4 justify-content-center align-items-stretch">
+        <!-- Tier 1: PrepFree -->
         <div class="col-md-6 col-lg-4">
-          <div class="glass-panel p-4 p-md-5 h-100 text-center d-flex flex-column justify-content-between">
+          <div class="glass-panel p-4 h-100 text-center d-flex flex-column justify-content-between">
             <div>
               <span class="badge border border-secondary border-opacity-30 text-white px-3 py-1 mb-3 font-mono fs-8">FOUNDATION TIER</span>
               <h3 class="text-white h4 mb-1">PrepFree</h3>
-              <p class="text-muted fs-8 mb-4">Core tracker tools for personal preparation</p>
-              <div class="my-4">
-                <span class="display-5 fw-bold text-white">₹0</span>
+              <p class="text-muted fs-8 mb-3">Core tracker tools for personal preparation</p>
+              <div class="my-3">
+                <span class="display-6 fw-bold text-white">₹0</span>
                 <span class="text-muted fs-8 ms-1">/ free forever</span>
               </div>
               <ul class="list-unstyled text-start mb-4 text-muted fs-8">
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Access to Core Question Bank</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Log Solved Algorithmic Problems</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Access to Core Practice Bank (Easy/Medium)</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Track & Log Solved Algorithmic Problems</li>
                 <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Standard Placement Application Kanban</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Public Peer Community & Discussions</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Daily Streak Consistency Tracker</li>
+                <li class="mb-2 text-muted opacity-50"><i class="fa-solid fa-xmark text-secondary me-2"></i> All 825+ LeetCode-Grade Solutions & Breakdowns</li>
                 <li class="mb-2 text-muted opacity-50"><i class="fa-solid fa-xmark text-secondary me-2"></i> AI ATS Resume Compliance Audits</li>
                 <li class="mb-2 text-muted opacity-50"><i class="fa-solid fa-xmark text-secondary me-2"></i> Custom AI Study Planners & Diagnostics</li>
               </ul>
             </div>
             <div>
-              <button class="btn btn-glass w-100 py-3 disabled fs-8">${!isPaid ? 'Current Active Plan' : 'Basic Tier'}</button>
+              <button class="btn btn-glass w-100 py-2.5 disabled fs-8">${!isPaid ? 'Current Active Plan' : 'Basic Tier'}</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tier 2: PrepPro Monthly (with 7-Day Free Trial) -->
+        <div class="col-md-6 col-lg-4">
+          <div class="glass-panel p-4 h-100 text-center d-flex flex-column justify-content-between" style="border-color: rgba(99, 102, 241, 0.4);">
+            <div>
+              <span class="badge bg-indigo bg-opacity-25 text-info border border-info border-opacity-30 px-3 py-1 mb-3 font-mono fs-8">FLEXIBLE &bull; 7-DAY FREE TRIAL</span>
+              <h3 class="text-white h4 mb-1">PrepPro Monthly</h3>
+              <p class="text-muted fs-8 mb-3">Complete AI preparation suite with zero upfront commitment</p>
+              <div class="my-3">
+                <span class="display-6 fw-bold text-white">₹199</span>
+                <span class="text-muted fs-8 ms-1">/ month</span>
+              </div>
+              <div class="p-2 rounded bg-info bg-opacity-10 border border-info border-opacity-25 text-info fs-8 fw-semibold mb-3 text-start">
+                <i class="fa-solid fa-circle-check me-1.5"></i> Includes 7-Day Free Trial (₹0 charged today)
+              </div>
+              <ul class="list-unstyled text-start mb-4 text-muted fs-8">
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>7-Day Free Trial</strong> (test all features risk-free)</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>All 825+ Solved DSA Questions</strong> & Step-by-Step Code</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>42 Aptitude & Reasoning Modules</strong> with Formulas</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>AI Career Assistant</strong> (ATS Audit, Planners)</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Timed 50-MCQ Mock Exams</strong> & Scorecards</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Cancel anytime with 1 click</li>
+              </ul>
+            </div>
+            <div>
+              <button id="btn-start-free-trial" class="btn btn-info text-dark w-100 py-2.5 fw-bold fs-8 mb-2" ${isPaid ? 'disabled' : ''}>
+                <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Start 7-Day Free Trial (₹0)
+              </button>
+              <button id="btn-upgrade-monthly" class="btn btn-glass w-100 py-2 fs-8 text-light" ${isPaid ? 'disabled' : ''}>
+                Subscribe Monthly (₹199/mo)
+              </button>
             </div>
           </div>
         </div>
         
+        <!-- Tier 3: PrepPro 1-Year Plan (₹1,399 / year) -->
         <div class="col-md-6 col-lg-4">
-          <div class="glass-panel p-4 p-md-5 h-100 text-center d-flex flex-column justify-content-between" style="box-shadow: 0 10px 30px rgba(99, 102, 241, 0.15);">
+          <div class="glass-panel p-4 h-100 text-center d-flex flex-column justify-content-between position-relative overflow-hidden" style="border: 2px solid rgba(245, 158, 11, 0.6); box-shadow: 0 10px 30px rgba(245, 158, 11, 0.15);">
+            <div class="position-absolute top-0 end-0 bg-warning text-dark font-monospace fw-bold fs-10 px-3 py-0.5" style="border-bottom-left-radius: 8px;">
+              POPULAR
+            </div>
             <div>
-              <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle px-3 py-1 mb-3 font-mono fs-8">RECOMMENDED • LIFETIME ACCESS</span>
-              <h3 class="text-white h4 mb-1">PrepPro</h3>
-              <p class="text-indigo fs-8 mb-4">Complete AI career suite for active jobseekers</p>
-              <div class="my-4">
-                <span class="display-5 fw-bold text-white">₹399</span>
-                <span class="text-muted fs-8 ms-1">/ one-time payment</span>
+              <span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-30 px-3 py-1 mb-3 font-mono fs-8">BEST VALUE &bull; ANNUAL PASS &bull; SAVE 41%</span>
+              <h3 class="text-white h4 mb-1">PrepPro 1-Year</h3>
+              <p class="text-warning fs-8 mb-3">Comprehensive career suite for serious jobseekers</p>
+              <div class="my-3">
+                <span class="display-6 fw-bold text-white">₹1,399</span>
+                <span class="text-muted fs-8 ms-1">/ year (~₹116/mo)</span>
+              </div>
+              <div class="p-2 rounded bg-warning bg-opacity-10 border border-warning border-opacity-25 text-warning fs-8 fw-semibold mb-3 text-start">
+                <i class="fa-solid fa-crown me-1.5"></i> Full 365 Days Unlimited Access & Placement Suite
               </div>
               <ul class="list-unstyled text-start mb-4 text-muted fs-8">
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>AI Career Assistant</strong> (ATS Audit, Planner)</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>AI Custom Study Planners</strong> & Weakness Diagnostics</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Company Interview Guides</strong> & Prompts</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Export Excel & PDF Progress reports</strong></li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Full 50-MCQ Timed Mock Exams</strong> & Candidate Leaderboard</li>
-                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Top 50 Global Leaderboard Ranking Eligibility</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Full 1-Year (365 Days) Pro Validity</strong></li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>All 825+ LeetCode-Grade Solutions</strong> in Java, Python, C++, JS</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>42 Complete Aptitude & Reasoning Textbook Modules</strong></li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Unlimited AI ATS Resume Audits</strong> & Score Diagnostics</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Unlimited 50-MCQ Timed Mock Exams</strong> with Leaderboard Ranking</li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> <strong>Top 100 Merit Leaderboard Certification</strong></li>
+                <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Export Progress & Analytics to Excel / PDF</li>
               </ul>
             </div>
             <div>
-              <button id="btn-upgrade-pro" class="btn btn-premium w-100 py-3 fw-bold fs-7" ${isPaid ? 'disabled' : ''}>
-                ${isPaid ? '✓ Active Premium Access' : '<i class="fa-solid fa-gem me-1"></i> Unlock PrepPro Access (₹399)'}
+              <button id="btn-upgrade-pro" class="btn btn-premium w-100 py-3 fw-bold fs-7 shadow-sm" ${isPaid ? 'disabled' : ''}>
+                ${isPaid ? '✓ Active Premium Access' : '<i class="fa-solid fa-gem me-1.5"></i> Unlock 1-Year Pro (₹1,399 / yr)'}
               </button>
             </div>
           </div>
@@ -4743,7 +4883,8 @@ const components = {
           <div class="d-flex flex-wrap justify-content-center gap-4 text-muted fs-8 text-center border-top border-secondary border-opacity-10 pt-4">
             <div><i class="fa-solid fa-bolt text-primary me-1"></i> Instant Activation</div>
             <div><i class="fa-solid fa-shield-halved text-success me-1"></i> 256-bit Secure Cashfree & UPI</div>
-            <div><i class="fa-solid fa-infinity text-info me-1"></i> Lifetime Validity (Zero Recurring Fees)</div>
+            <div><i class="fa-solid fa-calendar-check text-info me-1"></i> 1-Year Full Validity</div>
+            <div><i class="fa-solid fa-circle-check text-warning me-1"></i> Cancel Anytime</div>
           </div>
         </div>
       </div>
@@ -6975,7 +7116,7 @@ const components = {
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
               <h3 class="text-white fw-bold mb-0 fs-6">Complete Curriculum & Chapters</h3>
-              <div class="text-muted fs-8">Step-by-step textbook chapters covering all core concepts</div>
+              <div class="text-muted fs-8">Step-by-step textbook chapters covering syllabus theory, formulas & problems</div>
             </div>
             <span class="badge bg-secondary bg-opacity-25 text-white fs-8">${chapters.length} Chapters</span>
           </div>
