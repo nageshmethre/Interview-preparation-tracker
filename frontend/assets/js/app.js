@@ -12,12 +12,26 @@ const state = {
   name: localStorage.getItem('name'),
   email: localStorage.getItem('email'),
   role: localStorage.getItem('role'),
-  isPaid: localStorage.getItem('isPaid') === 'true' || Boolean(localStorage.getItem('role') && (localStorage.getItem('role').includes('ADMIN') || localStorage.getItem('role').startsWith('ROLE_ADMIN'))),
+  isPaid: localStorage.getItem('isPaid') === 'true' || 
+          localStorage.getItem('user_is_paid') === 'true' || 
+          localStorage.getItem('prepspace_earlybird_claimed') === 'true' || 
+          Boolean(localStorage.getItem('role') && (localStorage.getItem('role').includes('ADMIN') || localStorage.getItem('role').startsWith('ROLE_ADMIN'))),
   activePomodoroInterval: null,
   pomodoroTimeLeft: 25 * 60,
   pomodoroRunning: false,
   pomodoroMode: 'study', // study, break
   theme: localStorage.getItem('theme') || 'dark'
+};
+
+window.isUserPro = function() {
+  return Boolean(
+    (typeof state !== 'undefined' && state && state.isPaid) ||
+    localStorage.getItem('isPaid') === 'true' ||
+    localStorage.getItem('user_is_paid') === 'true' ||
+    localStorage.getItem('prepspace_earlybird_claimed') === 'true' ||
+    (typeof state !== 'undefined' && state && state.role && (state.role.includes('ADMIN') || state.role.startsWith('ROLE_ADMIN'))) ||
+    (localStorage.getItem('role') && (localStorage.getItem('role').includes('ADMIN') || localStorage.getItem('role').startsWith('ROLE_ADMIN')))
+  );
 };
 
 function prewarmBackendServer() {
@@ -226,13 +240,7 @@ window.showStreakModal = function() {
 
 window.showAdModal = function(force = false) {
   // If user is already a pro member or an administrator, do NOT show the 1-Year Free promotional modal!
-  const isEffectivePaid = Boolean(
-    state.isPaid || 
-    (state.role && (state.role.includes('ADMIN') || state.role.startsWith('ROLE_ADMIN'))) ||
-    localStorage.getItem('isPaid') === 'true' || 
-    localStorage.getItem('user_is_paid') === 'true'
-  );
-  if (isEffectivePaid) {
+  if (window.isUserPro && window.isUserPro()) {
     return;
   }
 
@@ -1138,10 +1146,12 @@ function router() {
     bindProfileEvents();
   } else if (hash === '#/billing') {
     const isEffectivePaid = Boolean(
+      (typeof window.isUserPro === 'function' ? window.isUserPro() : false) ||
       state.isPaid || 
       (state.role && (state.role.includes('ADMIN') || state.role.startsWith('ROLE_ADMIN'))) ||
       localStorage.getItem('isPaid') === 'true' || 
-      localStorage.getItem('user_is_paid') === 'true'
+      localStorage.getItem('user_is_paid') === 'true' ||
+      localStorage.getItem('prepspace_earlybird_claimed') === 'true'
     );
     viewTitle.textContent = isEffectivePaid ? 'Subscription & Plan' : 'Billing & Upgrade';
     const claimedCount = window.getRealClaimedCount ? window.getRealClaimedCount() : 1;
@@ -1755,10 +1765,14 @@ function fetchUserProfile() {
   if (!state.token) return Promise.resolve();
   return apiFetch('/users/profile')
     .then(profile => {
-      const isPaidUser = Boolean(profile.isPaid) || (state.role && (state.role.startsWith('ROLE_ADMIN') || state.role.startsWith('ADMIN')));
+      const isLocallyPaid = localStorage.getItem('user_is_paid') === 'true' || 
+                            localStorage.getItem('prepspace_earlybird_claimed') === 'true' ||
+                            localStorage.getItem('isPaid') === 'true';
+      const isPaidUser = Boolean(profile.isPaid) || isLocallyPaid || (state.role && (state.role.startsWith('ROLE_ADMIN') || state.role.startsWith('ADMIN')));
       localStorage.setItem('isPaid', isPaidUser ? 'true' : 'false');
-      localStorage.setItem('referralCode', profile.referralCode || '');
-      localStorage.setItem('referralEarnings', profile.referralEarnings || '0');
+      if (isPaidUser) {
+        localStorage.setItem('user_is_paid', 'true');
+      }
       
       state.isPaid = isPaidUser;
       state.referralCode = profile.referralCode;
@@ -1784,10 +1798,12 @@ window.updateUserPlanDisplay = function(isPaid) {
 function updateSidebarPlanBadge(isPaid) {
   const isEffectivePaid = Boolean(
     isPaid || 
+    (typeof window.isUserPro === 'function' ? window.isUserPro() : false) ||
     state.isPaid ||
     (state.role && (state.role.includes('ADMIN') || state.role.startsWith('ROLE_ADMIN'))) ||
     localStorage.getItem('isPaid') === 'true' || 
-    localStorage.getItem('user_is_paid') === 'true'
+    localStorage.getItem('user_is_paid') === 'true' ||
+    localStorage.getItem('prepspace_earlybird_claimed') === 'true'
   );
 
   const planEl = document.getElementById('sidebar-user-plan');

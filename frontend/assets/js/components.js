@@ -6,7 +6,15 @@ const components = {
   renderTopPromoTicker: () => '',
 
   // Public SaaS Landing Page - Full Developer Grid Mesh Layout
-  landing: () => `
+  landing: () => {
+    const isEffectivePaid = Boolean(
+      (typeof window !== 'undefined' && typeof window.isUserPro === 'function' && window.isUserPro()) ||
+      (typeof state !== 'undefined' && state && (state.isPaid || (state.role && (state.role.includes('ADMIN') || state.role.startsWith('ROLE_ADMIN'))))) ||
+      localStorage.getItem('isPaid') === 'true' ||
+      localStorage.getItem('user_is_paid') === 'true' ||
+      localStorage.getItem('prepspace_earlybird_claimed') === 'true'
+    );
+    return `
     <div class="landing-page-mesh">
 
       <!-- Vercel Minimalist Glass Navigation -->
@@ -144,32 +152,32 @@ const components = {
             </div>
 
             <!-- Inside Mockup Viewport -->
-            <div class="p-4 p-md-5" style="background: #222226;">
+            <div class="p-4 p-md-5" style="background: #141417;">
               <!-- Live Metrics Strip -->
               <div class="row g-3 mb-4">
                 <div class="col-6 col-md-3">
-                  <div class="p-3 rounded-3 border border-secondary border-opacity-20" style="background: #1c1c20; border-color: #323238; text-start">
+                  <div class="p-3" style="background: #18181c; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px !important; text-align: left;">
                     <span class="text-muted fs-8 uppercase">Readiness Score</span>
                     <h3 class="text-white fw-bold mt-1 mb-0 gradient-text-stripe">96.8%</h3>
                     <small class="text-success fs-8"><i class="fa-solid fa-arrow-trend-up me-1"></i>+12% this week</small>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
-                  <div class="p-3 rounded-3 border border-secondary border-opacity-20" style="background: #1c1c20; border-color: #323238; text-start">
+                  <div class="p-3" style="background: #18181c; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px !important; text-align: left;">
                     <span class="text-muted fs-8 uppercase">DSA Streaks</span>
                     <h3 class="text-warning fw-bold mt-1 mb-0"><i class="fa-solid fa-fire me-1"></i>18 Days</h3>
                     <small class="text-muted fs-8">240 Problems Solved</small>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
-                  <div class="p-3 rounded-3 border border-secondary border-opacity-20" style="background: #1c1c20; border-color: #323238; text-start">
+                  <div class="p-3" style="background: #18181c; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px !important; text-align: left;">
                     <span class="text-muted fs-8 uppercase">50-MCQ Exam Grade</span>
                     <h3 class="text-info fw-bold mt-1 mb-0">50 / 50</h3>
                     <small class="text-success fs-8">100% Top Percentile</small>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
-                  <div class="p-3 rounded-3 border border-secondary border-opacity-20" style="background: #1c1c20; border-color: #323238; text-start">
+                  <div class="p-3" style="background: #18181c; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px !important; text-align: left;">
                     <span class="text-muted fs-8 uppercase">Active Pipeline</span>
                     <h3 class="text-success fw-bold mt-1 mb-0">4 Offers</h3>
                     <small class="text-muted fs-8">8 Companies In Review</small>
@@ -302,17 +310,19 @@ const components = {
 
       <!-- Interactive Preparation ROI Calculator -->
       <section id="calculator" class="container py-5">
-        <div class="p-4 p-md-5 rounded-4 border border-secondary border-opacity-20" style="background: #222226; border-color: #323238;">
+        <div class="p-4 p-md-5 position-relative" style="background: #141417; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px !important; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);">
           <div class="row align-items-center g-4">
             <div class="col-lg-6 text-start">
-              <span class="badge bg-primary bg-opacity-25 text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-3">READINESS SIMULATOR</span>
-              <h2 class="display-6 fw-extrabold text-white mb-3">Calculate Your Interview Readiness</h2>
-              <p class="text-muted fs-7 mb-4">Adjust your daily study pace and preparation timeframe to simulate your total solved problem forecast and target readiness score.</p>
+              <div class="d-inline-flex align-items-center mb-3">
+                <span class="px-3.5 py-1 rounded-pill font-monospace fw-bold" style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.35); color: #fbbf24; font-size: 0.75rem; letter-spacing: 0.06em;">READINESS SIMULATOR</span>
+              </div>
+              <h2 class="display-6 fw-extrabold text-white mb-2" style="letter-spacing: -0.025em;">Calculate Your Interview Readiness</h2>
+              <p class="text-muted fs-7 mb-4" style="color: #a1a1aa !important;">Adjust your daily study pace and preparation timeframe to simulate your total solved problem forecast and target readiness score.</p>
               
               <div class="mb-4">
                 <div class="d-flex justify-content-between text-white fs-7 mb-1">
                   <span>Questions Practiced Per Day</span>
-                  <strong id="calc-questions-val" class="text-primary">5 Problems / day</strong>
+                  <strong id="calc-questions-val" class="text-warning">5 Problems / day</strong>
                 </div>
                 <input type="range" class="calc-slider" id="calc-questions" min="1" max="20" value="5" oninput="window.updateRoiCalculator()">
               </div>
@@ -320,7 +330,7 @@ const components = {
               <div class="mb-2">
                 <div class="d-flex justify-content-between text-white fs-7 mb-1">
                   <span>Preparation Timeframe</span>
-                  <strong id="calc-weeks-val" class="text-cyan">8 Weeks</strong>
+                  <strong id="calc-weeks-val" class="text-info">8 Weeks</strong>
                 </div>
                 <input type="range" class="calc-slider" id="calc-weeks" min="2" max="24" value="8" oninput="window.updateRoiCalculator()">
               </div>
@@ -329,26 +339,26 @@ const components = {
             <div class="col-lg-6">
               <div class="row g-3 text-center">
                 <div class="col-sm-6">
-                  <div class="p-4 rounded-3 glass-panel border-primary">
-                    <span class="text-muted fs-8 uppercase">Projected Solved</span>
+                  <div class="p-4 rounded-4" style="background: #18181c; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px !important;">
+                    <span class="text-muted fs-8 uppercase font-monospace">Projected Solved</span>
                     <h2 class="display-5 fw-extrabold text-white mt-2 mb-0" id="calc-total-problems">280</h2>
                     <small class="text-success fs-8"><i class="fa-solid fa-code me-1"></i>Mastery Milestone</small>
                   </div>
                 </div>
                 <div class="col-sm-6">
-                  <div class="p-4 rounded-3 glass-panel border-success">
-                    <span class="text-muted fs-8 uppercase">Readiness Level</span>
+                  <div class="p-4 rounded-4" style="background: #18181c; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px !important;">
+                    <span class="text-muted fs-8 uppercase font-monospace">Readiness Level</span>
                     <h2 class="display-5 fw-extrabold text-success mt-2 mb-0" id="calc-readiness-score">92%</h2>
                     <small class="text-muted fs-8">FAANG-Ready Tier</small>
                   </div>
                 </div>
                 <div class="col-12">
-                  <div class="p-3 rounded-3 border border-secondary border-opacity-20" style="background: #1c1c20; border-color: #323238; text-start d-flex align-items-center justify-content-between">
+                  <div class="p-3.5 d-flex align-items-center justify-content-between text-start" style="background: #18181c; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px !important;">
                     <div>
                       <span class="text-white fw-bold fs-7">Estimated Offer Probability</span>
-                      <p class="text-muted fs-8 mb-0" id="calc-odds-desc">Top 5% Placement Performance Group</p>
+                      <p class="text-muted fs-8 mb-0" id="calc-odds-desc" style="color: #a1a1aa !important;">Top 5% Placement Performance Group</p>
                     </div>
-                    <span class="badge bg-success px-3 py-2 fs-6 fw-bold" id="calc-odds-val">94% Probability</span>
+                    <span class="badge px-3 py-2 fs-7 fw-bold" style="background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.35); color: #4ade80; border-radius: 9999px;" id="calc-odds-val">94% Probability</span>
                   </div>
                 </div>
               </div>
@@ -360,72 +370,74 @@ const components = {
       <!-- Pricing Section (Upgraded Subscription Tiers) -->
       <section id="pricing" class="container py-5">
         <div class="text-center mb-5">
-          <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle px-3 py-1 rounded-pill mb-2 font-monospace fs-8">TRANSPARENT PRICING</span>
-          <h2 class="display-5 fw-extrabold text-white mb-3">Simple, Transparent Investment</h2>
-          <p class="text-muted fs-6" style="max-width: 600px; margin: 0 auto;">Everything you need to master technical interviews and land top software engineering offers.</p>
+          <div class="d-inline-flex align-items-center mb-3">
+            <span class="px-3.5 py-1 rounded-pill font-monospace fw-bold" style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.35); color: #fbbf24; font-size: 0.75rem; letter-spacing: 0.06em;">TRANSPARENT PRICING</span>
+          </div>
+          <h2 class="display-5 fw-extrabold text-white mb-2" style="letter-spacing: -0.025em;">Simple, Transparent Investment</h2>
+          <p class="text-muted fs-6" style="max-width: 620px; margin: 0 auto; color: #a1a1aa !important;">Everything you need to master technical interviews and land top software engineering offers.</p>
         </div>
 
         <div class="row g-4 justify-content-center align-items-stretch">
           <!-- Free Tier -->
           <div class="col-md-6 col-lg-4">
-            <div class="glass-panel p-4 h-100 d-flex flex-column text-start justify-content-between">
+            <div class="p-4 h-100 d-flex flex-column text-start justify-content-between position-relative" style="background: #141417; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px !important; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);">
               <div>
                 <div class="d-flex align-items-center justify-content-between mb-3">
-                  <span class="badge border border-secondary border-opacity-30 text-white px-2.5 py-1 rounded-pill font-monospace fs-9">FREE TIER</span>
-                  <span class="badge bg-secondary bg-opacity-20 text-muted px-2 py-0.5 rounded-pill font-monospace fs-10">STARTER</span>
+                  <span class="px-2.5 py-1 rounded-pill font-monospace fw-bold" style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); color: #ffffff; font-size: 0.72rem; letter-spacing: 0.05em;">FREE TIER</span>
+                  <span class="px-2.5 py-0.5 rounded-pill font-monospace fw-semibold" style="background: rgba(255, 255, 255, 0.05); color: #71717a; font-size: 0.72rem;">STARTER</span>
                 </div>
                 <h3 class="text-white h5 fw-bold mb-1">PrepFree</h3>
                 <p class="text-muted fs-8 mb-3">Essential tools to start tracking your daily prep</p>
                 <div class="my-3"><span class="display-6 fw-extrabold text-white">₹0</span><span class="text-muted fs-8"> / lifetime</span></div>
                 <ul class="list-unstyled text-start mb-4 text-muted fs-8 d-flex flex-column gap-2">
-                  <li><i class="fa-solid fa-check text-primary me-2"></i> Access to Core Question Bank</li>
-                  <li><i class="fa-solid fa-check text-primary me-2"></i> Log Solved Problems & Streaks</li>
-                  <li><i class="fa-solid fa-check text-primary me-2"></i> Standard Placement Kanban</li>
-                  <li><i class="fa-solid fa-check text-primary me-2"></i> Basic Progress Analytics</li>
+                  <li><i class="fa-solid fa-check text-warning me-2"></i> Access to Core Question Bank</li>
+                  <li><i class="fa-solid fa-check text-warning me-2"></i> Log Solved Problems & Streaks</li>
+                  <li><i class="fa-solid fa-check text-warning me-2"></i> Standard Placement Kanban</li>
+                  <li><i class="fa-solid fa-check text-warning me-2"></i> Basic Progress Analytics</li>
                 </ul>
               </div>
-              <a href="#/register" class="btn btn-glass w-100 py-2 fs-7 fw-semibold mt-auto">Get Started Free</a>
+              <a href="#/register" class="btn w-100 py-2.5 fs-7 fw-semibold mt-auto" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; color: #ffffff;">Get Started Free</a>
             </div>
           </div>
 
           <!-- Monthly Tier (7-Day Free Trial) -->
           <div class="col-md-6 col-lg-4">
-            <div class="glass-panel p-4 h-100 d-flex flex-column text-start justify-content-between">
+            <div class="p-4 h-100 d-flex flex-column text-start justify-content-between position-relative" style="background: #141417; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px !important; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);">
               <div>
                 <div class="d-flex align-items-center justify-content-between mb-3">
-                  <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle px-2.5 py-1 rounded-pill font-monospace fs-9">7-DAY FREE TRIAL</span>
-                  <span class="badge bg-primary bg-opacity-15 text-primary px-2 py-0.5 rounded-pill font-monospace fs-10">MONTHLY</span>
+                  <span class="px-2.5 py-1 rounded-pill font-monospace fw-bold" style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); color: #fbbf24; font-size: 0.72rem; letter-spacing: 0.05em;">7-DAY FREE TRIAL</span>
+                  <span class="px-2.5 py-0.5 rounded-pill font-monospace fw-semibold" style="background: rgba(245, 158, 11, 0.08); color: #f59e0b; font-size: 0.72rem;">MONTHLY</span>
                 </div>
                 <h3 class="text-white h5 fw-bold mb-1">PrepPro Monthly</h3>
                 <p class="text-muted fs-8 mb-3">Flexible access with zero upfront commitment</p>
                 <div class="my-3"><span class="display-6 fw-extrabold text-white">₹199</span><span class="text-muted fs-8"> / month</span></div>
-                <div class="p-2 rounded bg-primary bg-opacity-10 border border-primary border-opacity-20 text-primary fs-8 fw-semibold mb-3">
+                <div class="p-2.5 rounded-3 mb-3 text-start" style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.22); color: #fbbf24; font-size: 0.82rem; font-weight: 600; border-radius: 14px;">
                   <i class="fa-solid fa-circle-check me-1.5"></i> Includes 7-Day Free Trial (₹0 today)
                 </div>
                 <ul class="list-unstyled text-start mb-4 text-muted fs-8 d-flex flex-column gap-2">
-                  <li><i class="fa-solid fa-check text-primary me-2"></i> <strong>7-Day Free Trial</strong> (cancel anytime)</li>
-                  <li><i class="fa-solid fa-check text-primary me-2"></i> <strong>All 825+ Solved DSA Challenges</strong></li>
-                  <li><i class="fa-solid fa-check text-primary me-2"></i> <strong>42 Aptitude & Reasoning Modules</strong></li>
-                  <li><i class="fa-solid fa-check text-primary me-2"></i> <strong>Unlimited 50-MCQ Timed Exams</strong></li>
-                  <li><i class="fa-solid fa-check text-primary me-2"></i> <strong>AI ATS Resume Audit & Diagnostics</strong></li>
+                  <li><i class="fa-solid fa-check text-warning me-2"></i> <strong>7-Day Free Trial</strong> (cancel anytime)</li>
+                  <li><i class="fa-solid fa-check text-warning me-2"></i> <strong>All 825+ Solved DSA Challenges</strong></li>
+                  <li><i class="fa-solid fa-check text-warning me-2"></i> <strong>42 Aptitude & Reasoning Modules</strong></li>
+                  <li><i class="fa-solid fa-check text-warning me-2"></i> <strong>Unlimited 50-MCQ Timed Exams</strong></li>
+                  <li><i class="fa-solid fa-check text-warning me-2"></i> <strong>AI ATS Resume Audit & Diagnostics</strong></li>
                 </ul>
               </div>
-              <a href="#/register" class="btn btn-outline-primary w-100 py-2 fs-7 fw-semibold mt-auto">Start 7-Day Free Trial</a>
+              <a href="#/register" class="btn w-100 py-2.5 fs-7 fw-bold mt-auto d-inline-flex align-items-center justify-content-center gap-1.5" style="background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.55); color: #fbbf24; border-radius: 12px;">Start 7-Day Free Trial</a>
             </div>
           </div>
 
           <!-- 1-Year Pro Tier (Recommended) -->
           <div class="col-md-6 col-lg-4">
-            <div class="glass-panel p-4 h-100 d-flex flex-column text-start justify-content-between position-relative" style="border: 1px solid #3f3f46 !important; background: #1c1c20;">
+            <div class="p-4 h-100 d-flex flex-column text-start justify-content-between position-relative overflow-hidden" style="background: #141417; border: 1px solid rgba(255, 255, 255, 0.12) !important; border-radius: 20px !important; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);">
               <div>
                 <div class="d-flex align-items-center justify-content-between mb-3">
-                  <span class="badge bg-secondary bg-opacity-30 text-light border border-secondary border-opacity-30 px-2.5 py-1 rounded-pill font-monospace fs-9 fw-semibold">BEST VALUE &bull; SAVE 41%</span>
-                  <span class="badge bg-secondary bg-opacity-20 text-muted px-2.5 py-1 rounded-pill font-monospace fs-9">ANNUAL PASS</span>
+                  <span class="px-2.5 py-1 rounded-pill font-monospace fw-bold" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.14); color: #f4f4f5; font-size: 0.72rem; letter-spacing: 0.05em;">BEST VALUE &bull; SAVE 41%</span>
+                  <span class="px-2.5 py-0.5 rounded-pill font-monospace fw-semibold" style="background: rgba(255, 255, 255, 0.05); color: #a1a1aa; font-size: 0.72rem;">ANNUAL PASS</span>
                 </div>
                 <h3 class="text-white h5 fw-bold mb-1">PrepPro 1-Year</h3>
                 <p class="text-muted fs-8 mb-3">Complete placement suite for serious engineers</p>
                 <div class="my-3"><span class="display-6 fw-extrabold text-white">₹1,399</span><span class="text-muted fs-8"> / year (~₹116/mo)</span></div>
-                <div class="p-2 rounded bg-secondary bg-opacity-20 border border-secondary border-opacity-25 text-light fs-8 fw-semibold mb-3">
+                <div class="p-2.5 rounded-3 mb-3 text-start" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.09); color: #f4f4f5; font-size: 0.82rem; font-weight: 600; border-radius: 14px;">
                   <i class="fa-solid fa-crown text-warning me-1.5"></i> 365 Days Unrestricted Access
                 </div>
                 <ul class="list-unstyled text-start mb-4 text-muted fs-8 d-flex flex-column gap-2">
@@ -437,31 +449,37 @@ const components = {
                   <li><i class="fa-solid fa-check text-muted me-2"></i> Verified Completion Certificates</li>
                 </ul>
               </div>
-              <a href="#/register" class="btn btn-primary w-100 py-2 fs-7 fw-bold mt-auto shadow-sm">
-                <i class="fa-solid fa-bolt me-1.5"></i> Get 1-Year Pro Access
+              ${isEffectivePaid ? `
+              <a href="#/dashboard" class="btn w-100 py-2.5 fs-7 fw-bold mt-auto d-inline-flex align-items-center justify-content-center gap-2" style="background: linear-gradient(180deg, #fbb03b 0%, #f39c12 100%); color: #000000; border-radius: 12px; border: none; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);">
+                <i class="fa-solid fa-circle-check"></i> <span>Plan Active &bull; Go to Workspace</span>
               </a>
+              ` : `
+              <a href="#/register" class="btn w-100 py-2.5 fs-7 fw-bold mt-auto d-inline-flex align-items-center justify-content-center gap-2" style="background: linear-gradient(180deg, #fbb03b 0%, #f39c12 100%); color: #000000; border-radius: 12px; border: none; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);">
+                <i class="fa-solid fa-bolt"></i> <span>Get 1-Year Pro Access</span>
+              </a>
+              `}
             </div>
           </div>
         </div>
 
-        <!-- Top 100 Merit Scholarship Highlight -->
-        <div class="mt-4 p-4 rounded-3 text-start" style="background: #1c1c20; border: 1px solid #27272a;">
+        <!-- Top 100 Merit Scholarship Highlight (Image 2 style) -->
+        <div class="mt-4 p-4 text-start position-relative" style="background: #141417; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px !important; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);">
           <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
             <div class="d-flex align-items-center gap-3">
-              <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);">
-                <i class="fa-solid fa-trophy text-warning fs-5"></i>
+              <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 52px; height: 52px; background: radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, rgba(245, 158, 11, 0.05) 75%); border: 1px solid rgba(245, 158, 11, 0.28);">
+                <i class="fa-solid fa-trophy text-warning fs-4"></i>
               </div>
               <div>
                 <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
-                  <span class="badge bg-secondary bg-opacity-30 text-light border border-secondary border-opacity-30 font-monospace fs-9">MERIT SCHOLARSHIP</span>
-                  <span class="text-white fw-bold fs-6">Top 100 Mock Test Candidates Win 1-Year Pro 100% Free!</span>
+                  <span class="px-3 py-1 rounded-pill font-monospace fw-extrabold" style="background: #f59e0b; color: #000000; font-size: 0.72rem; letter-spacing: 0.06em;">MERIT SCHOLARSHIP</span>
+                  <span class="text-white fw-bold fs-6">Top 100 Candidates Win 1-Year Free Pro!</span>
                 </div>
-                <p class="text-muted fs-8 mb-0">Score in the Top 100 on our 50-MCQ timed mock assessment leaderboard to automatically unlock a 1-Year Pro subscription at ₹0.</p>
+                <p class="text-muted fs-8 mb-0">Score in the Top 100 on our 50-MCQ timed mock assessment leaderboard to automatically unlock 1-Year Pro at ₹0.</p>
               </div>
             </div>
             <div>
-              <a href="#/register" class="btn btn-primary px-4 py-2 fs-7 fw-semibold text-nowrap">
-                Join Mock Exam &rarr;
+              <a href="#/register" class="btn fw-bold d-inline-flex align-items-center gap-2" style="background: linear-gradient(180deg, #fbb03b 0%, #f39c12 100%); color: #000000; border-radius: 12px; padding: 10px 24px; font-size: 0.92rem; border: none; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);">
+                <span>Join Mock Exam</span> <i class="fa-solid fa-arrow-right"></i>
               </a>
             </div>
           </div>
@@ -705,7 +723,7 @@ const components = {
         </div>
         <div class="ui-drawer-body">
           <div class="d-flex flex-column gap-3">
-            <div class="p-3 rounded-3" style="background: #222226; border: 1px solid #323238;">
+            <div class="p-3" style="background: #141417; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);">
               <div class="d-flex align-items-center justify-content-between mb-2">
                 <span class="text-white fw-bold fs-7">System Status</span>
                 <span class="badge bg-success bg-opacity-20 text-success border border-success-subtle font-monospace">ONLINE</span>
@@ -737,14 +755,25 @@ const components = {
               </a>
             </div>
 
-            <div class="p-3 rounded-3 mt-2" style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25);">
-              <div class="d-flex align-items-center gap-2 text-warning fw-bold fs-7 mb-1">
-                <i class="fa-solid fa-crown"></i>
+            ${isEffectivePaid ? `
+            <div class="p-3.5 mt-2 position-relative" style="background: #141417; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px !important; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);">
+              <div class="d-flex align-items-center gap-2 text-white fw-bold fs-7 mb-1">
+                <i class="fa-solid fa-crown text-warning"></i>
+                <span>PrepPro Membership Active</span>
+              </div>
+              <p class="text-muted fs-8 mb-2.5">Your account has full unrestricted access to all interview tools, questions, and mock tests.</p>
+              <a href="#/dashboard" class="btn w-100 py-2 fs-8 fw-bold d-inline-flex align-items-center justify-content-center gap-1.5" style="background: linear-gradient(180deg, #fbb03b 0%, #f39c12 100%); color: #000000; border-radius: 10px; border: none;" onclick="window.UI.closeDrawer('platform-drawer')">Open Workspace &rarr;</a>
+            </div>
+            ` : `
+            <div class="p-3.5 mt-2 position-relative" style="background: #141417; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px !important; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);">
+              <div class="d-flex align-items-center gap-2 text-white fw-bold fs-7 mb-1">
+                <i class="fa-solid fa-crown text-warning"></i>
                 <span>PrepPro 1-Year Access</span>
               </div>
-              <p class="text-muted fs-8 mb-2">₹1,399 annual pass or ₹0 for first 1,000 engineers. Unlimited exams, AI ATS audit, and verified certificates.</p>
-              <a href="#/billing" class="btn btn-warning btn-sm w-100 fw-bold text-dark" onclick="window.UI.closeDrawer('platform-drawer')">Claim 1-Year Free Pro →</a>
+              <p class="text-muted fs-8 mb-2.5">₹1,399 annual pass or ₹0 for first 1,000 engineers. Unlimited exams, AI ATS audit, and verified certificates.</p>
+              <a href="#/billing" class="btn w-100 py-2 fs-8 fw-bold d-inline-flex align-items-center justify-content-center gap-1.5" style="background: linear-gradient(180deg, #fbb03b 0%, #f39c12 100%); color: #000000; border-radius: 10px; border: none;" onclick="window.UI.closeDrawer('platform-drawer')">Claim 1-Year Free Pro &rarr;</a>
             </div>
+            `}
           </div>
         </div>
         <div class="ui-drawer-footer">
@@ -756,7 +785,8 @@ const components = {
       </div>
     </div>
   </div>
-  `,
+  `;
+  },
 
   // Authentication: Login Page (Vercel UI/UX)
   login: () => `
@@ -1307,19 +1337,19 @@ const components = {
               <h3 class="text-white fw-bold m-0 fs-4">Candidate Utilities</h3>
             </div>
             <div class="d-flex flex-column gap-1.5 mt-2">
-              <a href="#/ai-assistant" class="p-2 rounded d-flex justify-content-between align-items-center text-decoration-none text-light" style="background: rgba(255,255,255,0.03); border: 1px solid #27272a;">
+              <a href="#/ai-assistant" class="p-2.5 d-flex justify-content-between align-items-center text-decoration-none text-light" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; transition: all 0.15s ease;">
                 <span class="fs-8">AI ATS Resume & Keyword Audit</span>
                 <i class="fa-solid fa-chevron-right text-muted fs-9"></i>
               </a>
-              <a href="#/star-vault" class="p-2 rounded d-flex justify-content-between align-items-center text-decoration-none text-light" style="background: rgba(255,255,255,0.03); border: 1px solid #27272a;">
+              <a href="#/star-vault" class="p-2.5 d-flex justify-content-between align-items-center text-decoration-none text-light" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; transition: all 0.15s ease;">
                 <span class="fs-8">STAR Method Story Vault</span>
                 <i class="fa-solid fa-chevron-right text-muted fs-9"></i>
               </a>
-              <a href="#/studyplanner" class="p-2 rounded d-flex justify-content-between align-items-center text-decoration-none text-light" style="background: rgba(255,255,255,0.03); border: 1px solid #27272a;">
+              <a href="#/studyplanner" class="p-2.5 d-flex justify-content-between align-items-center text-decoration-none text-light" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; transition: all 0.15s ease;">
                 <span class="fs-8">Preparation Milestones Planner</span>
                 <i class="fa-solid fa-chevron-right text-muted fs-9"></i>
               </a>
-              <a href="#/desktop-client" class="p-2 rounded d-flex justify-content-between align-items-center text-decoration-none text-light" style="background: rgba(255,255,255,0.03); border: 1px solid #27272a;">
+              <a href="#/desktop-client" class="p-2.5 d-flex justify-content-between align-items-center text-decoration-none text-light" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; transition: all 0.15s ease;">
                 <span class="fs-8">Download Desktop & Mobile App</span>
                 <i class="fa-solid fa-chevron-right text-muted fs-9"></i>
               </a>
@@ -4693,108 +4723,114 @@ const components = {
   `,
 
   billing: (isPaid, claimedCount = 1) => `
-    <div class="container-fluid py-4">
+    <div class="container-fluid py-4" style="max-width: 1200px;">
       <!-- Page Header -->
       <div class="row justify-content-center text-center mb-4">
         <div class="col-lg-8">
-          <span class="badge bg-primary bg-opacity-20 text-primary border border-primary-subtle px-3 py-1 mb-2 font-monospace fs-8">${isPaid ? 'MEMBERSHIP & SUBSCRIPTION' : 'TRANSPARENT PRICING'}</span>
-          <h2 class="text-white fw-bold mb-1">${isPaid ? 'Subscription & Plan Details' : 'Upgrade Your PrepSpace'}</h2>
-          <p class="text-muted fs-7 mb-0">${isPaid ? 'Your unrestricted access to all 825+ algorithmic challenges, 42 aptitude modules, and AI ATS diagnostics is active.' : 'Accelerate your software engineering placement journey with full access to 825+ algorithmic challenges, 42 aptitude modules, and AI ATS diagnostics.'}</p>
+          <div class="d-inline-flex align-items-center mb-3">
+            <span class="px-3.5 py-1 rounded-pill font-monospace fw-bold" style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.35); color: #fbbf24; font-size: 0.75rem; letter-spacing: 0.06em;">MEMBERSHIP &amp; SUBSCRIPTION</span>
+          </div>
+          <h1 class="text-white fw-extrabold mb-2" style="font-size: 2.35rem; letter-spacing: -0.03em;">Subscription &amp; Plan Details</h1>
+          <p class="text-secondary fs-6 mb-4 mx-auto" style="max-width: 680px; color: #a1a1aa !important; line-height: 1.55;">
+            Your access to 825+ coding challenges, 42 aptitude modules, and AI-powered ATS resume diagnostics.
+          </p>
         </div>
       </div>
 
-      <!-- Top Two Compact Cards (1/2 space each, rich background, NO border lines) -->
-      <div class="row g-3 justify-content-center mb-4">
+      <!-- Top Two Half-Width Cards (Style matched to Image 2) -->
+      <div class="row g-4 justify-content-center mb-5">
         <!-- Left Card (1/2 space): Active Pro Status OR First 1,000 Early Bird Claim -->
         <div class="col-12 col-md-6 col-lg-5">
           ${isPaid ? `
-          <div class="p-3.5 rounded-3 text-start h-100 d-flex flex-column justify-content-between" style="background: #1e1e24; border: none !important; box-shadow: none;">
+          <div class="p-4 rounded-4 text-start h-100 d-flex flex-column justify-content-between position-relative" style="background: #141417; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px !important; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);">
             <div>
-              <div class="d-flex align-items-center justify-content-between mb-2.5">
-                <span class="badge bg-warning text-dark font-monospace fw-bold fs-9 px-2.5 py-0.5">PREPPRO ACTIVE</span>
-                <span class="badge bg-success bg-opacity-20 text-success border-0 font-monospace fs-10">
-                  <i class="fa-solid fa-circle-check me-1"></i> Full Access Unlocked
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <span class="px-3 py-1 rounded-pill font-monospace fw-extrabold" style="background: #f59e0b; color: #000000; font-size: 0.72rem; letter-spacing: 0.06em;">PREPPRO ACTIVE</span>
+                <span class="px-3 py-1 rounded-pill font-monospace fw-bold d-inline-flex align-items-center gap-1.5" style="background: rgba(34, 197, 94, 0.12); border: 1px solid rgba(34, 197, 94, 0.35); color: #4ade80; font-size: 0.72rem; letter-spacing: 0.04em;">
+                  <i class="fa-solid fa-circle-check"></i> FULL ACCESS UNLOCKED
                 </span>
               </div>
-              <div class="d-flex align-items-center gap-2.5 mb-2">
-                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px; background: rgba(245, 158, 11, 0.18);">
-                  <i class="fa-solid fa-crown text-warning fs-5"></i>
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 52px; height: 52px; background: radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, rgba(245, 158, 11, 0.05) 75%); border: 1px solid rgba(245, 158, 11, 0.28);">
+                  <i class="fa-solid fa-crown text-warning fs-4"></i>
                 </div>
                 <div>
-                  <h4 class="text-white fw-bold m-0 fs-6">You are on PrepSpace Pro</h4>
-                  <div class="text-muted fs-9">Annual Unrestricted Access Active</div>
+                  <h3 class="text-white fw-bold m-0" style="font-size: 1.35rem; letter-spacing: -0.01em;">You’re on PrepSpace Pro</h3>
+                  <div class="text-secondary mt-0.5" style="color: #a1a1aa !important; font-size: 0.88rem;">Annual unrestricted access is active</div>
                 </div>
               </div>
-              <p class="text-muted fs-8 mb-3">
-                Your account has unrestricted access to all 825+ algorithmic challenges, 42 aptitude modules, AI ATS resume audits, and unlimited timed mock tests.
+              <p class="mb-4" style="color: #d4d4d8; font-size: 0.94rem; line-height: 1.6;">
+                Your plan includes 825+ coding challenges, 42 aptitude modules, AI-powered ATS resume audits, and unlimited timed mock tests.
               </p>
             </div>
-            <div class="d-flex align-items-center gap-2">
-              <a href="#/dashboard" class="btn btn-primary btn-sm px-3.5 py-1.5 fs-8 fw-semibold">
-                <i class="fa-solid fa-arrow-left me-1"></i> Back to Workspace
+            <div class="d-flex align-items-center gap-3 flex-wrap">
+              <a href="#/dashboard" class="btn fw-bold d-inline-flex align-items-center gap-2" style="background: linear-gradient(180deg, #fbb03b 0%, #f39c12 100%); color: #000000; border-radius: 12px; padding: 11px 24px; font-size: 0.95rem; border: none; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);">
+                <i class="fa-solid fa-arrow-left"></i> <span>Back to Workspace</span>
               </a>
-              <a href="#/coding-practice" class="btn btn-glass btn-sm px-3 py-1.5 fs-8 text-white">
-                <i class="fa-solid fa-code me-1"></i> Practice IDE
+              <a href="#/coding-practice" class="btn fw-semibold d-inline-flex align-items-center gap-2 text-white" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 12px; padding: 11px 24px; font-size: 0.95rem;">
+                <i class="fa-solid fa-code"></i> <span>Practice IDE</span>
               </a>
             </div>
           </div>
           ` : `
-          <div class="p-3.5 rounded-3 text-start h-100 d-flex flex-column justify-content-between" style="background: #1e1e24; border: none !important; box-shadow: none;">
+          <div class="p-4 rounded-4 text-start h-100 d-flex flex-column justify-content-between position-relative" style="background: #141417; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px !important; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);">
             <div>
-              <div class="d-flex align-items-center justify-content-between mb-2.5">
-                <span class="badge bg-warning text-dark font-monospace fw-bold fs-9 px-2.5 py-0.5">INAUGURAL LAUNCH OFFER</span>
-                <span class="badge bg-warning bg-opacity-20 text-warning border-0 font-monospace fs-10">
-                  <i class="fa-solid fa-fire me-1"></i> <span id="earlybird-counter">${claimedCount}</span> / 1,000 Claimed
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <span class="px-3 py-1 rounded-pill font-monospace fw-extrabold" style="background: #f59e0b; color: #000000; font-size: 0.72rem; letter-spacing: 0.06em;">INAUGURAL LAUNCH OFFER</span>
+                <span class="px-3 py-1 rounded-pill font-monospace fw-bold d-inline-flex align-items-center gap-1.5" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); color: #fbbf24; font-size: 0.72rem; letter-spacing: 0.04em;">
+                  <i class="fa-solid fa-fire text-warning"></i> <span id="earlybird-counter">${claimedCount}</span> / 1,000 Claimed
                 </span>
               </div>
-              <div class="d-flex align-items-center gap-2.5 mb-2">
-                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px; background: rgba(245, 158, 11, 0.18);">
-                  <i class="fa-solid fa-gift text-warning fs-5"></i>
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 52px; height: 52px; background: radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, rgba(245, 158, 11, 0.05) 75%); border: 1px solid rgba(245, 158, 11, 0.28);">
+                  <i class="fa-solid fa-gift text-warning fs-4"></i>
                 </div>
                 <div>
-                  <h4 class="text-white fw-bold m-0 fs-6">First 1,000 Users: 1-Year Pro 100% Free!</h4>
-                  <div class="text-muted fs-9">Early Adopter Engineering Cohort</div>
+                  <h3 class="text-white fw-bold m-0" style="font-size: 1.35rem; letter-spacing: -0.01em;">First 1,000 Users: 1-Year Pro 100% Free!</h3>
+                  <div class="text-secondary mt-0.5" style="color: #a1a1aa !important; font-size: 0.88rem;">Early Adopter Engineering Cohort</div>
                 </div>
               </div>
-              <p class="text-muted fs-8 mb-3">
+              <p class="mb-4" style="color: #d4d4d8; font-size: 0.94rem; line-height: 1.6;">
                 First 1,000 registered engineers get full 1-Year Pro access with ₹0 payment. Unlock all solved DSA questions, 42 aptitude modules, and AI mock diagnostics.
               </p>
             </div>
             <div>
-              <button type="button" id="btn-claim-earlybird" class="btn btn-primary fw-bold px-3.5 py-1.5 fs-8 shadow-sm">
-                <i class="fa-solid fa-bolt me-1.5"></i> Claim 1-Year Free Pro
+              <button type="button" id="btn-claim-earlybird" class="btn fw-bold d-inline-flex align-items-center gap-2" style="background: linear-gradient(180deg, #fbb03b 0%, #f39c12 100%); color: #000000; border-radius: 12px; padding: 11px 26px; font-size: 0.95rem; border: none; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);">
+                <i class="fa-solid fa-bolt"></i> <span>Claim 1-Year Free Pro</span>
               </button>
             </div>
           </div>
           `}
         </div>
 
-        <!-- Right Card (1/2 space): Top 100 Mock Test Merit Scholarship -->
+        <!-- Right Card (1/2 space): Top 100 Mock Test Merit Scholarship (Image 2 design) -->
         <div class="col-12 col-md-6 col-lg-5">
-          <div class="p-3.5 rounded-3 text-start h-100 d-flex flex-column justify-content-between" style="background: #1e1e24; border: none !important; box-shadow: none;">
+          <div class="p-4 rounded-4 text-start h-100 d-flex flex-column justify-content-between position-relative" style="background: #141417; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px !important; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);">
             <div>
-              <div class="d-flex align-items-center justify-content-between mb-2.5">
-                <span class="badge bg-warning text-dark font-monospace fw-bold fs-9 px-2.5 py-0.5">MERIT SCHOLARSHIP</span>
-                <span class="badge bg-secondary bg-opacity-25 text-muted font-monospace fs-10">GLOBAL ASSESSMENT</span>
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <span class="px-3 py-1 rounded-pill font-monospace fw-extrabold" style="background: #f59e0b; color: #000000; font-size: 0.72rem; letter-spacing: 0.06em;">MERIT SCHOLARSHIP</span>
+                <span class="px-3 py-1 rounded-pill font-monospace fw-bold" style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); color: #a1a1aa; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase;">GLOBAL ASSESSMENT</span>
               </div>
-              <div class="d-flex align-items-center gap-2.5 mb-2">
-                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px; background: rgba(245, 158, 11, 0.18);">
-                  <i class="fa-solid fa-trophy text-warning fs-5"></i>
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 52px; height: 52px; background: radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, rgba(245, 158, 11, 0.05) 75%); border: 1px solid rgba(245, 158, 11, 0.28);">
+                  <i class="fa-solid fa-trophy text-warning fs-4"></i>
                 </div>
                 <div>
-                  <h4 class="text-white fw-bold m-0 fs-6">Top 100 Candidates Win 1-Year Free</h4>
-                  <div class="text-muted fs-9">Leaderboard Performance Award</div>
+                  <h3 class="text-white fw-bold m-0" style="font-size: 1.35rem; letter-spacing: -0.01em;">Top 100 Candidates Win 1-Year Free Pro</h3>
+                  <div class="text-secondary mt-0.5" style="color: #a1a1aa !important; font-size: 0.88rem;">Leaderboard Performance Award</div>
                 </div>
               </div>
-              <p class="text-muted fs-8 mb-3">
-                Score in the Top 100 on our 50-MCQ timed mock assessment leaderboard (Java, Python, C++, React, DSA) to automatically unlock 1-Year Pro at ₹0.
+              <p class="mb-4" style="color: #d4d4d8; font-size: 0.94rem; line-height: 1.6;">
+                Rank in the top 100 on our timed 50-question mock assessment leaderboard covering Java, Python, C++, React, and DSA to qualify for 1 year of PrepSpace Pro at ₹0.
               </p>
             </div>
-            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-              <a href="#/mock-exams" class="btn btn-outline-primary btn-sm px-3.5 py-1.5 fs-8 fw-semibold">
-                <i class="fa-solid fa-stopwatch me-1.5"></i> Take Mock Exam &rarr;
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+              <a href="#/mock-exams" class="btn fw-bold d-inline-flex align-items-center gap-2" style="background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.55); color: #fbbf24; border-radius: 12px; padding: 10px 22px; font-size: 0.92rem;">
+                <i class="fa-solid fa-stopwatch"></i> <span>Take Mock Exam &rarr;</span>
               </a>
-              <span class="text-muted fs-10"><i class="fa-solid fa-ranking-star text-warning me-1"></i> Live Global Leaderboard</span>
+              <span class="d-inline-flex align-items-center gap-2 fw-semibold" style="color: #fbbf24; font-size: 0.88rem;">
+                <i class="fa-solid fa-ranking-star"></i> <span>Live Global Leaderboard</span>
+              </span>
             </div>
           </div>
         </div>
@@ -4804,11 +4840,11 @@ const components = {
       <div class="row g-4 justify-content-center align-items-stretch">
         <!-- Tier 1: PrepFree -->
         <div class="col-md-6 col-lg-4">
-          <div class="glass-panel p-4 h-100 text-start d-flex flex-column justify-content-between" style="border: 1px solid #323238 !important;">
+          <div class="p-4 h-100 text-start d-flex flex-column justify-content-between position-relative" style="background: #141417; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px !important; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);">
             <div>
               <div class="d-flex align-items-center justify-content-between mb-3">
-                <span class="badge border border-secondary border-opacity-30 text-white px-2.5 py-1 rounded-pill font-monospace fs-9">FREE TIER</span>
-                <span class="badge bg-secondary bg-opacity-20 text-muted px-2 py-0.5 rounded-pill font-monospace fs-10">STARTER</span>
+                <span class="px-2.5 py-1 rounded-pill font-monospace fw-bold" style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); color: #ffffff; font-size: 0.72rem; letter-spacing: 0.05em;">FREE TIER</span>
+                <span class="px-2.5 py-0.5 rounded-pill font-monospace fw-semibold" style="background: rgba(255, 255, 255, 0.05); color: #71717a; font-size: 0.72rem;">STARTER</span>
               </div>
               <h3 class="text-white h5 fw-bold mb-1">PrepFree</h3>
               <p class="text-muted fs-8 mb-3">Core tracker tools for personal preparation</p>
@@ -4827,18 +4863,18 @@ const components = {
               </ul>
             </div>
             <div>
-              <button class="btn btn-glass w-100 py-2 disabled fs-8">${!isPaid ? 'Current Active Plan' : 'Free Starter Tier'}</button>
+              <button class="btn w-100 py-2.5 disabled fs-8 fw-semibold" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; color: #71717a;">${!isPaid ? 'Current Active Plan' : 'Free Starter Tier'}</button>
             </div>
           </div>
         </div>
 
         <!-- Tier 2: PrepPro Monthly (with 7-Day Free Trial) -->
         <div class="col-md-6 col-lg-4">
-          <div class="glass-panel p-4 h-100 text-start d-flex flex-column justify-content-between" style="border: 1px solid #323238 !important;">
+          <div class="p-4 h-100 text-start d-flex flex-column justify-content-between position-relative" style="background: #141417; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px !important; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);">
             <div>
               <div class="d-flex align-items-center justify-content-between mb-3">
-                <span class="badge bg-warning bg-opacity-20 text-warning border border-warning-subtle px-2.5 py-1 rounded-pill font-monospace fs-9">7-DAY FREE TRIAL</span>
-                <span class="badge bg-warning bg-opacity-15 text-warning px-2 py-0.5 rounded-pill font-monospace fs-10">MONTHLY</span>
+                <span class="px-2.5 py-1 rounded-pill font-monospace fw-bold" style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); color: #fbbf24; font-size: 0.72rem; letter-spacing: 0.05em;">7-DAY FREE TRIAL</span>
+                <span class="px-2.5 py-0.5 rounded-pill font-monospace fw-semibold" style="background: rgba(245, 158, 11, 0.08); color: #f59e0b; font-size: 0.72rem;">MONTHLY</span>
               </div>
               <h3 class="text-white h5 fw-bold mb-1">PrepPro Monthly</h3>
               <p class="text-muted fs-8 mb-3">Complete AI preparation suite with zero upfront commitment</p>
@@ -4846,7 +4882,7 @@ const components = {
                 <span class="display-6 fw-bold text-white">₹199</span>
                 <span class="text-muted fs-8 ms-1">/ month</span>
               </div>
-              <div class="p-2 rounded bg-warning bg-opacity-10 border border-warning border-opacity-20 text-warning fs-8 fw-semibold mb-3 text-start">
+              <div class="p-2.5 rounded-3 mb-3 text-start" style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.22); color: #fbbf24; font-size: 0.82rem; font-weight: 600; border-radius: 14px;">
                 <i class="fa-solid fa-circle-check me-1.5"></i> Includes 7-Day Free Trial (₹0 charged today)
               </div>
               <ul class="list-unstyled text-start mb-4 text-muted fs-8 d-flex flex-column gap-2">
@@ -4859,10 +4895,10 @@ const components = {
               </ul>
             </div>
             <div>
-              <button id="btn-start-free-trial" class="btn btn-outline-primary w-100 py-2 fw-bold fs-8 mb-2" ${isPaid ? 'disabled' : ''}>
-                <i class="fa-solid fa-wand-magic-sparkles me-1"></i> ${isPaid ? 'Included in Pro Plan' : 'Start 7-Day Free Trial (₹0)'}
+              <button id="btn-start-free-trial" class="btn w-100 py-2.5 fw-bold fs-8 mb-2 d-inline-flex align-items-center justify-content-center gap-1.5" style="background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.55); color: #fbbf24; border-radius: 12px;" ${isPaid ? 'disabled' : ''}>
+                <i class="fa-solid fa-wand-magic-sparkles"></i> <span>${isPaid ? 'Included in Pro Plan' : 'Start 7-Day Free Trial (₹0)'}</span>
               </button>
-              <button id="btn-upgrade-monthly" class="btn btn-glass w-100 py-2 fs-8 text-light" ${isPaid ? 'disabled' : ''}>
+              <button id="btn-upgrade-monthly" class="btn w-100 py-2 fs-8 text-light" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px;" ${isPaid ? 'disabled' : ''}>
                 ${isPaid ? 'Included in Pro Plan' : 'Subscribe Monthly (₹199/mo)'}
               </button>
             </div>
@@ -4871,11 +4907,11 @@ const components = {
         
         <!-- Tier 3: PrepPro 1-Year Plan (₹1,399 / year) -->
         <div class="col-md-6 col-lg-4">
-          <div class="glass-panel p-4 h-100 text-start d-flex flex-column justify-content-between position-relative overflow-hidden" style="border: 1px solid #3f3f46 !important; background: #1c1c20;">
+          <div class="p-4 h-100 text-start d-flex flex-column justify-content-between position-relative overflow-hidden" style="background: #141417; border: 1px solid rgba(255, 255, 255, 0.12) !important; border-radius: 20px !important; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);">
             <div>
               <div class="d-flex align-items-center justify-content-between mb-3">
-                <span class="badge bg-secondary bg-opacity-30 text-light border border-secondary border-opacity-30 font-monospace fw-semibold fs-9 px-2.5 py-1 rounded-pill">BEST VALUE &bull; SAVE 41%</span>
-                <span class="badge bg-secondary bg-opacity-20 text-muted px-2.5 py-1 rounded-pill font-monospace fs-9">ANNUAL PASS</span>
+                <span class="px-2.5 py-1 rounded-pill font-monospace fw-bold" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.14); color: #f4f4f5; font-size: 0.72rem; letter-spacing: 0.05em;">BEST VALUE &bull; SAVE 41%</span>
+                <span class="px-2.5 py-0.5 rounded-pill font-monospace fw-semibold" style="background: rgba(255, 255, 255, 0.05); color: #a1a1aa; font-size: 0.72rem;">ANNUAL PASS</span>
               </div>
               <h3 class="text-white h5 fw-bold mb-1">PrepPro 1-Year</h3>
               <p class="text-muted fs-8 mb-3">Comprehensive career suite for serious jobseekers</p>
@@ -4883,7 +4919,7 @@ const components = {
                 <span class="display-6 fw-bold text-white">₹1,399</span>
                 <span class="text-muted fs-8 ms-1">/ year (~₹116/mo)</span>
               </div>
-              <div class="p-2 rounded bg-secondary bg-opacity-20 border border-secondary border-opacity-25 text-light fs-8 fw-semibold mb-3 text-start">
+              <div class="p-2.5 rounded-3 mb-3 text-start" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.09); color: #f4f4f5; font-size: 0.82rem; font-weight: 600; border-radius: 14px;">
                 <i class="fa-solid fa-crown text-warning me-1.5"></i> Full 365 Days Unlimited Access & Placement Suite
               </div>
               <ul class="list-unstyled text-start mb-4 text-muted fs-8 d-flex flex-column gap-2">
@@ -4896,8 +4932,8 @@ const components = {
               </ul>
             </div>
             <div>
-              <button id="btn-upgrade-pro" class="btn btn-primary w-100 py-2 fw-bold fs-7 shadow-sm" ${isPaid ? 'disabled' : ''}>
-                <i class="fa-solid fa-bolt me-1.5"></i> ${isPaid ? '✓ Active Pro Member' : 'Unlock 1-Year Pro (₹1,399 / yr)'}
+              <button id="btn-upgrade-pro" class="btn w-100 py-2.5 fw-bold fs-7 d-inline-flex align-items-center justify-content-center gap-2" style="background: linear-gradient(180deg, #fbb03b 0%, #f39c12 100%); color: #000000; border-radius: 12px; border: none; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);" ${isPaid ? 'disabled' : ''}>
+                <i class="fa-solid fa-bolt"></i> <span>${isPaid ? '✓ Active Pro Member' : 'Unlock 1-Year Pro (₹1,399 / yr)'}</span>
               </button>
             </div>
           </div>
