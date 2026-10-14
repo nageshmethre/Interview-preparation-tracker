@@ -1055,6 +1055,12 @@ const components = {
               <span class="fs-7">🔥</span>
               <span class="font-monospace fs-8 fw-bold" id="header-streak-count">1</span>
             </button>
+            <!-- Official Launch Announcement Pill Button -->
+            <button type="button" class="btn btn-sm d-flex align-items-center gap-1.5 py-1 px-2.5 text-white" id="header-launch-modal-btn" onclick="window.showLaunchModal && window.showLaunchModal(true)" title="PrepSpace 1.0 is Officially Launched! Click to view launch perks" style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 9999px;">
+              <span class="fs-8">🚀</span>
+              <span class="font-monospace fs-8 fw-bold text-warning d-none d-sm-inline">PrepSpace 1.0 Live</span>
+              <span class="font-monospace fs-9 fw-bold text-warning d-sm-none">Live!</span>
+            </button>
             <!-- Launch Offer: First 1,000 Users 1-Year Free (Only for unpaid candidates) -->
             ${!isEffectivePaid ? `
             <a href="#/billing" class="btn btn-primary fw-semibold btn-sm py-1 px-2.5 fs-8 d-none d-md-inline-flex align-items-center gap-1 shadow-sm" id="header-launch-offer-btn" title="Launch Offer: First 1,000 Users 1-Year Free">
@@ -1193,6 +1199,46 @@ const components = {
         </div>
       </div>
 
+      <!-- 2b. Daily Interview Challenge (Problem of the Day) -->
+      <div class="ps-daily-challenge-card mb-4 p-3 p-md-3.5" style="background: #141417; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);">
+        <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+          <div class="d-flex align-items-start gap-3">
+            <div class="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0" style="width: 50px; height: 50px; background: radial-gradient(circle, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.03) 70%); border: 1px solid rgba(245, 158, 11, 0.3); font-size: 1.4rem;">
+              <span>⚡</span>
+            </div>
+            <div>
+              <div class="d-flex flex-wrap align-items-center gap-2 mb-1.5">
+                <span class="badge-amber-pill"><i class="fa-solid fa-calendar-day"></i> Daily Challenge</span>
+                <span class="badge-muted-pill font-monospace" id="daily-challenge-timer"><i class="fa-regular fa-clock"></i> Reset in <span id="daily-timer-text">14h 25m</span></span>
+                <span class="badge-success-pill d-none" id="daily-challenge-status-badge"><i class="fa-solid fa-circle-check"></i> Solved Today</span>
+              </div>
+              <h3 class="text-white fw-bold fs-5 m-0 mb-1" id="daily-challenge-heading">
+                <span id="daily-challenge-q-title">Two Sum &bull; Pair Target Complement Search</span>
+              </h3>
+              <div class="d-flex flex-wrap align-items-center gap-2 text-muted fs-8">
+                <span class="badge bg-warning bg-opacity-15 text-warning border border-warning border-opacity-25 font-monospace fs-9" id="daily-challenge-diff">EASY</span>
+                <span>•</span>
+                <span id="daily-challenge-topic"><i class="fa-solid fa-tags text-secondary me-1"></i>Arrays & Hash Table</span>
+                <span>•</span>
+                <span class="text-secondary" id="daily-challenge-companies"><i class="fa-solid fa-building text-secondary me-1"></i>Google, Amazon, Meta</span>
+                <span>•</span>
+                <span class="text-warning fw-semibold"><i class="fa-solid fa-fire me-1"></i>+25 Streak XP</span>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex flex-wrap align-items-center gap-2 flex-shrink-0 align-self-stretch align-self-lg-center justify-content-end">
+            <a href="#/coding-practice?q=1" class="btn-amber-gradient text-decoration-none px-3 py-2 fs-8 fw-bold" id="btn-daily-challenge-solve">
+              <span>Solve Challenge</span>
+              <i class="fa-solid fa-arrow-right ms-1 fs-9"></i>
+            </a>
+            <button type="button" class="btn-dark-glass px-3 py-2 fs-8 fw-semibold" id="btn-daily-challenge-mark">
+              <i class="fa-solid fa-check text-success me-1"></i>
+              <span id="btn-daily-mark-text">Mark Solved</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- 3. Main Workspace Grid (8-col / 4-col) -->
       <div class="row g-3">
         <!-- LEFT 8-COLUMN MAIN ANALYTICS & TOOLS -->
@@ -1272,10 +1318,104 @@ const components = {
               </div>
             </div>
           </div>
+
+          <!-- Target Company Placement Roadmap & Milestone Checklist -->
+          <div class="ps-panel-box p-3 mb-3 mt-3">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+              <div>
+                <div class="d-flex align-items-center gap-2">
+                  <h3 class="text-white fw-bold m-0 fs-4">Placement Milestones Checklist</h3>
+                  <span class="badge-amber-pill fs-10" id="checklist-progress-pill">0/5 Complete</span>
+                </div>
+                <p class="text-muted fs-8 mb-0 mt-0.5">Key placement objectives for Google, Amazon, Microsoft & Tier-1 software engineering roles</p>
+              </div>
+              <button type="button" class="btn btn-sm btn-dark-glass py-1 px-2.5 fs-8" id="btn-reset-milestones" title="Reset all checkboxes">
+                <i class="fa-solid fa-rotate-left me-1 text-secondary"></i> Reset
+              </button>
+            </div>
+            <!-- Progress Bar -->
+            <div class="progress mb-3" style="height: 6px; background: rgba(255, 255, 255, 0.08); border-radius: 9999px;">
+              <div class="progress-bar bg-warning" id="milestones-progress-bar" role="progressbar" style="width: 0%; transition: width 0.3s ease;"></div>
+            </div>
+            <!-- Checklist Items Container -->
+            <div class="d-flex flex-column gap-2" id="milestones-checklist-container">
+              <!-- Rendered dynamically with localStorage persistence -->
+            </div>
+          </div>
         </div>
 
         <!-- RIGHT 4-COLUMN SIDEBAR -->
         <div class="col-lg-4">
+          <!-- AI Interview Readiness Index -->
+          <div class="ps-panel-box p-3 mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2.5">
+              <div>
+                <h3 class="text-white fw-bold m-0 fs-4">Interview Readiness Index</h3>
+                <div class="text-muted fs-8 mt-0.5">Live AI diagnostic evaluation</div>
+              </div>
+              <span class="badge-success-pill fs-9" id="readiness-tier-pill">Evaluating</span>
+            </div>
+
+            <!-- Central Score Metric -->
+            <div class="d-flex align-items-center justify-content-between p-3 rounded-3 mb-3" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px;">
+              <div>
+                <div class="display-6 fw-bold text-white font-monospace lh-1" id="readiness-score-val">--%</div>
+                <div class="text-muted fs-8 mt-1" id="readiness-score-status">Calculating profile readiness...</div>
+              </div>
+              <div class="d-flex align-items-center justify-content-center rounded-circle" style="width: 48px; height: 48px; background: radial-gradient(circle, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.03) 70%); border: 1px solid rgba(34, 197, 94, 0.35);">
+                <i class="fa-solid fa-chart-pie text-success fs-5"></i>
+              </div>
+            </div>
+
+            <!-- 4 Vector Progress Bars -->
+            <div class="d-flex flex-column gap-2 mb-3">
+              <div>
+                <div class="d-flex justify-content-between fs-8 mb-1">
+                  <span class="text-muted">DSA Coding Velocity</span>
+                  <span class="text-white font-monospace" id="vector-dsa-val">${totalSolved}/150</span>
+                </div>
+                <div class="progress" style="height: 5px; background: rgba(255, 255, 255, 0.06); border-radius: 9999px;">
+                  <div class="progress-bar bg-warning" id="vector-dsa-bar" style="width: ${Math.min(100, Math.round((totalSolved / 150) * 100))}%;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="d-flex justify-content-between fs-8 mb-1">
+                  <span class="text-muted">Timed 50-MCQ Exam Score</span>
+                  <span class="text-white font-monospace" id="vector-mock-val">${averageMockScore}</span>
+                </div>
+                <div class="progress" style="height: 5px; background: rgba(255, 255, 255, 0.06); border-radius: 9999px;">
+                  <div class="progress-bar bg-success" id="vector-mock-bar" style="width: ${Math.min(100, stats.averageMockScore ? Math.round(stats.averageMockScore) : 0)}%;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="d-flex justify-content-between fs-8 mb-1">
+                  <span class="text-muted">Preparation Consistency</span>
+                  <span class="text-white font-monospace" id="vector-consistency-val">Active Streak</span>
+                </div>
+                <div class="progress" style="height: 5px; background: rgba(255, 255, 255, 0.06); border-radius: 9999px;">
+                  <div class="progress-bar bg-info" id="vector-consistency-bar" style="width: 80%;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="d-flex justify-content-between fs-8 mb-1">
+                  <span class="text-muted">Placement Board Activity</span>
+                  <span class="text-white font-monospace">${applicationsCount} Applications</span>
+                </div>
+                <div class="progress" style="height: 5px; background: rgba(255, 255, 255, 0.06); border-radius: 9999px;">
+                  <div class="progress-bar bg-primary" id="vector-pipeline-bar" style="width: ${Math.min(100, applicationsCount * 25)}%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Workable Action to Boost Readiness -->
+            <button type="button" class="btn btn-sm btn-amber-outline w-100 py-2 fs-8 fw-bold" id="btn-boost-readiness" onclick="window.handleBoostReadiness && window.handleBoostReadiness()">
+              <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Boost Readiness Score
+            </button>
+          </div>
+
           <!-- Placement Pipeline Breakdown -->
           <div class="ps-panel-box p-3 mb-3">
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -3006,14 +3146,14 @@ const components = {
         <!-- 1. LeetCode Modern Top Navigation Bar -->
         <header class="lc-top-bar d-flex align-items-center justify-content-between px-2 px-md-3 py-1.5 flex-shrink-0">
           <!-- Left: Back Navigation, Sidebar Toggle, Problem List Dropdown & Fast Navigation -->
-          <div class="d-flex align-items-center gap-1 gap-md-2 flex-shrink-0">
-            <button class="btn btn-sm lc-icon-btn d-lg-none px-2" id="lc-sidebar-toggle-btn" title="Toggle Sidebar Navigation">
-              <i class="fa-solid fa-bars"></i>
+          <div class="d-flex align-items-center gap-1.5 gap-md-2 flex-shrink-0">
+            <button type="button" class="btn btn-sm lc-btn-nav lc-btn-back d-flex align-items-center gap-1.5 px-2.5 py-1 text-white border-0" id="btn-coding-back" title="Go Back">
+              <i class="fa-solid fa-arrow-left text-warning fs-8"></i>
+              <span class="fs-8 fw-bold">Back</span>
             </button>
-            <a href="#/dsa-roadmap" class="btn btn-sm lc-btn-nav d-flex align-items-center gap-1 text-decoration-none px-2" title="Return to DSA Roadmap">
-              <i class="fa-solid fa-chevron-left fs-9 text-muted"></i>
-              <span class="d-none d-md-inline fs-9 text-muted">Roadmap</span>
-            </a>
+            <button type="button" class="btn btn-sm lc-icon-btn d-lg-none px-2 py-1 text-light" id="lc-sidebar-toggle-btn" title="Toggle Navigation Menu">
+              <i class="fa-solid fa-bars fs-7"></i>
+            </button>
             <div class="dropdown">
               <button class="btn btn-sm lc-btn-nav d-flex align-items-center gap-1.5 px-2 px-md-2.5" type="button" id="lcProblemListBtn" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa-solid fa-list-ul text-warning"></i>

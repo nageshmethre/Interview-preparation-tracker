@@ -6741,6 +6741,34 @@ body.ui-drawer-open {
   .lc-main-split[data-mobile-pane="console"] #vscode-right-pane {
     display: flex !important;
   }
+  .lc-main-split[data-mobile-pane="console"] #agy-editor-wrapper,
+  .lc-main-split[data-mobile-pane="console"] #lc-horizontal-resizer,
+  .lc-main-split[data-mobile-pane="console"] .lc-editor-subfooter {
+    display: none !important;
+  }
+  .lc-main-split[data-mobile-pane="console"] #vscode-terminal-panel {
+    display: flex !important;
+    flex: 1 1 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+  }
+  .lc-main-split[data-mobile-pane="console"] #vscode-terminal-panel.collapsed {
+    max-height: 100% !important;
+    height: 100% !important;
+  }
+  .lc-main-split[data-mobile-pane="console"] #vscode-terminal-panel .tab-content {
+    max-height: none !important;
+    flex: 1 1 auto !important;
+    height: 100% !important;
+  }
+  .lc-main-split[data-mobile-pane="code"] #vscode-terminal-panel {
+    display: none !important;
+  }
+  .lc-main-split[data-mobile-pane="code"] #agy-editor-wrapper {
+    display: flex !important;
+    flex: 1 1 100% !important;
+    height: calc(100% - 40px) !important;
+  }
   .lc-pane-left {
     border-right: none !important;
     border-bottom: none !important;
@@ -7679,3 +7707,64 @@ h5.fs-7, h5.fs-8, h5.fs-9 {
   }
 }
 
+/* ==========================================================================
+   MOBILE INTERFACE & WORKSPACE CONTROLS (V5.8.46)
+   ========================================================================== */
+
+/* Mobile Sidebar Backdrop Overlay */
+.sidebar-mobile-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1040;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+  pointer-events: none;
+}
+
+.sidebar-mobile-backdrop.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Coding Practice Back Button */
+.lc-btn-back {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #f4f4f5 !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer;
+  white-space: nowrap;
+  touch-action: manipulation;
+}
+
+.lc-btn-back:hover,
+.lc-btn-back:active {
+  background: rgba(245, 158, 11, 0.16) !important;
+  border-color: rgba(245, 158, 11, 0.4) !important;
+  color: #fbbf24 !important;
+  transform: translateX(-1px);
+}
+
+@media (max-width: 575.98px) {
+  .lc-top-bar {
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+  }
+  .lc-top-bar::-webkit-scrollbar {
+    display: none !important;
+  }
+  .lc-btn-back {
+    padding: 3px 8px !important;
+    font-size: 11px !important;
+  }
+}

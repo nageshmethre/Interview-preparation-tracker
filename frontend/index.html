@@ -41,7 +41,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome Icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/index.css?v=5.8.45">
+  <link rel="stylesheet" href="assets/css/index.css?v=5.8.46">
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Cashfree Payment Gateway SDK -->
@@ -255,13 +255,108 @@
     </div>
   </div>
 
+  <!-- Official Platform Launch Announcement Modal -->
+  <div class="modal fade prepspace-promo-modal" id="officialLaunchModal" tabindex="-1" aria-labelledby="officialLaunchModalLabel" aria-hidden="true" data-bs-backdrop="true" data-bs-keyboard="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-white" style="background: #141417 !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; border-radius: 20px !important; box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85) !important;">
+        <!-- Header -->
+        <div class="modal-header d-flex justify-content-between align-items-center" style="border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding: 1.1rem 1.75rem !important;">
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge-amber-pill"><i class="fa-solid fa-rocket"></i> Official Launch</span>
+            <span class="badge-success-pill"><i class="fa-solid fa-circle-check"></i> Version 1.0 Live</span>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" id="btn-close-launch-modal"></button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="modal-body text-center p-4">
+          <!-- Spotlight Rocket Wrapper -->
+          <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width: 58px; height: 58px; background: radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, rgba(245, 158, 11, 0.04) 70%); border: 1px solid rgba(245, 158, 11, 0.35); box-shadow: 0 0 24px rgba(245, 158, 11, 0.25);">
+            <span style="font-size: 1.75rem;">🚀</span>
+          </div>
+          <h2 class="promo-title mb-2 text-white fw-bold" id="officialLaunchModalLabel">PrepSpace is Officially Live!</h2>
+          <p class="promo-subtitle mb-3" style="max-width: 620px;">
+            The all-in-one technical placement suite is officially released. Engineered for candidates targeting Google, Microsoft, Amazon, Top Product Companies, and High-Growth Tech.
+          </p>
+
+          <!-- Launch Highlights Grid -->
+          <div class="promo-features-grid mb-3">
+            <div class="promo-feature-item">
+              <i class="fa-solid fa-code text-warning"></i>
+              <div>
+                <div class="promo-feature-name">825+ Curated DSA Challenges</div>
+                <div class="promo-feature-desc">Multi-language execution engine (Java, Python, C++, JS) with real test cases</div>
+              </div>
+            </div>
+            <div class="promo-feature-item">
+              <i class="fa-solid fa-stopwatch text-success"></i>
+              <div>
+                <div class="promo-feature-name">Timed 50-MCQ Mock Exam Engine</div>
+                <div class="promo-feature-desc">Full-length assessments testing DSA, DBMS, OOP, OS, and System Design</div>
+              </div>
+            </div>
+            <div class="promo-feature-item">
+              <i class="fa-solid fa-file-shield text-info"></i>
+              <div>
+                <div class="promo-feature-name">AI ATS Resume Optimizer</div>
+                <div class="promo-feature-desc">Real keyword density audit, formatting validation, and target company match</div>
+              </div>
+            </div>
+            <div class="promo-feature-item">
+              <i class="fa-solid fa-trophy text-warning"></i>
+              <div>
+                <div class="promo-feature-name">Top 100 Merit Scholarships</div>
+                <div class="promo-feature-desc">Global live leaderboards where top performers unlock 1-Year Free Pro</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Launch Perk Banner -->
+          <div class="p-3 mb-3 text-start d-flex align-items-center gap-3" style="background: rgba(245, 158, 11, 0.06); border: 1px solid rgba(245, 158, 11, 0.22); border-radius: 14px;">
+            <div class="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0" style="width: 40px; height: 40px; background: rgba(245, 158, 11, 0.15); color: #fbbf24; font-size: 1.1rem;">
+              <i class="fa-solid fa-gift"></i>
+            </div>
+            <div>
+              <div class="text-white fw-bold fs-7">Launch Cohort Perk: 1-Year Free Pro Pass</div>
+              <div class="text-muted fs-8">First 1,000 early candidates unlock full unrestricted access with zero payment required today.</div>
+            </div>
+          </div>
+
+          <!-- Actions Group -->
+          <div class="promo-actions-group">
+            <a href="#/coding-practice" class="btn btn-amber-gradient" data-bs-dismiss="modal">
+              <i class="fa-solid fa-code me-1"></i> Start Coding Free
+            </a>
+            <a href="#/billing" class="btn btn-amber-outline" data-bs-dismiss="modal">
+              <i class="fa-solid fa-crown me-1"></i> View Launch Perks
+            </a>
+            <button type="button" class="btn btn-dark-glass" data-bs-dismiss="modal">
+              Explore Dashboard &rarr;
+            </button>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer d-flex justify-content-between align-items-center" style="border-top: 1px solid rgba(255, 255, 255, 0.06); background: #141417; padding: 0.85rem 1.75rem !important;">
+          <div class="form-check m-0 d-flex align-items-center gap-2">
+            <input class="form-check-input bg-dark border-secondary mt-0" type="checkbox" id="launch-dont-show-today" style="cursor: pointer;">
+            <label class="form-check-label text-muted fs-8" for="launch-dont-show-today" style="cursor: pointer; user-select: none;">
+              Don't show again today (24h)
+            </label>
+          </div>
+          <span class="text-muted fs-9 font-monospace">PrepSpace 1.0 &bull; Officially Launched</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Bootstrap 5 Bundle JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Client-side Cache Invalidation for Ultra-Fast Login & Instant Auth Handshake -->
   <script>
     (function() {
       try {
-        const CURRENT_DEPLOY_VER = '5.8.45';
+        const CURRENT_DEPLOY_VER = '5.8.46';
         const activeVer = localStorage.getItem('prepspace_client_version');
         if (activeVer !== CURRENT_DEPLOY_VER) {
           if ('caches' in window) {
@@ -280,19 +375,19 @@
       } catch (err) {}
     })();
   </script>
-  <script src="assets/js/dsa-notes-data.js?v=5.8.45"></script>
-  <script src="assets/js/questions-data.js?v=5.8.45"></script>
-  <script src="assets/js/aptitude-curriculum.js?v=5.8.45"></script>
-  <script src="assets/js/technical-library-data.js?v=5.8.45"></script>
-  <script src="assets/js/components.js?v=5.8.45"></script>
-  <script src="assets/js/interview-suite.js?v=5.8.45"></script>
-  <script src="assets/js/production-pages.js?v=5.8.45"></script>
-  <script src="assets/js/app.js?v=5.8.45"></script>
+  <script src="assets/js/dsa-notes-data.js?v=5.8.46"></script>
+  <script src="assets/js/questions-data.js?v=5.8.46"></script>
+  <script src="assets/js/aptitude-curriculum.js?v=5.8.46"></script>
+  <script src="assets/js/technical-library-data.js?v=5.8.46"></script>
+  <script src="assets/js/components.js?v=5.8.46"></script>
+  <script src="assets/js/interview-suite.js?v=5.8.46"></script>
+  <script src="assets/js/production-pages.js?v=5.8.46"></script>
+  <script src="assets/js/app.js?v=5.8.46"></script>
   <!-- Service Worker Registration for PWA Offline Support -->
   <script>
     if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=5.8.45').then(reg => {
+        navigator.serviceWorker.register('./sw.js?v=5.8.46').then(reg => {
           console.log('PrepSpace Service Worker registered successfully, scope:', reg.scope);
           // Proactively check for updates immediately
           reg.update();

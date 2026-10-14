@@ -1,22 +1,22 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
-// Version: 5.8.45 (Image 2 design overhaul: 20px rounded cards, pill badges, and amber gradients)
+// Version: 5.8.46 (Mobile interface fix, Coding Practice Back button, workable dashboard features, Official launch ad)
 
-const CACHE_NAME = 'prepspace-static-v5.8.45';
-const RUNTIME_CACHE = 'prepspace-runtime-v5.8.45';
+const CACHE_NAME = 'prepspace-static-v5.8.46';
+const RUNTIME_CACHE = 'prepspace-runtime-v5.8.46';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/index.css?v=5.8.45',
-  './assets/js/dsa-notes-data.js?v=5.8.45',
-  './assets/js/app.js?v=5.8.45',
-  './assets/js/components.js?v=5.8.45',
-  './assets/js/interview-suite.js?v=5.8.45',
-  './assets/js/technical-library-data.js?v=5.8.45',
-  './assets/js/questions-data.js?v=5.8.45',
-  './assets/js/aptitude-curriculum.js?v=5.8.45',
-  './assets/js/production-pages.js?v=5.8.45',
+  './assets/css/index.css?v=5.8.46',
+  './assets/js/dsa-notes-data.js?v=5.8.46',
+  './assets/js/app.js?v=5.8.46',
+  './assets/js/components.js?v=5.8.46',
+  './assets/js/interview-suite.js?v=5.8.46',
+  './assets/js/technical-library-data.js?v=5.8.46',
+  './assets/js/questions-data.js?v=5.8.46',
+  './assets/js/aptitude-curriculum.js?v=5.8.46',
+  './assets/js/production-pages.js?v=5.8.46',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',

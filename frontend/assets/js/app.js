@@ -238,6 +238,52 @@ window.showStreakModal = function() {
   }
 };
 
+window.showLaunchModal = function(force = false) {
+  // Check 24-hour dismissal preference
+  const dismissedUntil = localStorage.getItem('prepspace_launch_ad_dismissed_until');
+  if (dismissedUntil) {
+    const parsedTime = parseInt(dismissedUntil, 10);
+    if (!isNaN(parsedTime) && Date.now() < parsedTime) {
+      if (!force) return;
+    }
+  }
+
+  // Avoid showing repeatedly in the same session on automatic triggers
+  if (!force) {
+    if (sessionStorage.getItem('prepspace_launch_ad_shown_session')) {
+      return;
+    }
+  }
+
+  const modalEl = document.getElementById('officialLaunchModal');
+  if (modalEl && typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+    const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl, {
+      backdrop: true,
+      keyboard: true
+    });
+    
+    sessionStorage.setItem('prepspace_launch_ad_shown_session', 'true');
+    modal.show();
+
+    const chk = document.getElementById('launch-dont-show-today');
+    if (modalEl && !modalEl._launchHooked) {
+      modalEl._launchHooked = true;
+      modalEl.addEventListener('hidden.bs.modal', () => {
+        if (chk && chk.checked) {
+          try {
+            localStorage.setItem('prepspace_launch_ad_dismissed_until', String(Date.now() + 24 * 60 * 60 * 1000));
+          } catch(e) {}
+        }
+        document.body.classList.remove('modal-open');
+        document.body.style.removeProperty('overflow');
+        document.body.style.removeProperty('padding-right');
+        const leftovers = document.querySelectorAll('.modal-backdrop');
+        leftovers.forEach(el => el.remove());
+      });
+    }
+  }
+};
+
 window.showAdModal = function(force = false) {
   // If user is already a pro member or an administrator, do NOT show the 1-Year Free promotional modal!
   if (window.isUserPro && window.isUserPro()) {
@@ -432,7 +478,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 2. Platform Entry Ad / Launch Offer Modal Popup (Respects 24h dismissal)
   setTimeout(() => {
-    if (window.showAdModal) {
+    if (window.showLaunchModal) {
+      window.showLaunchModal(false);
+    } else if (window.showAdModal) {
       window.showAdModal(false);
     }
   }, 1800);
@@ -802,6 +850,20 @@ function router() {
     }
   }
 
+  // Track last workspace hash for Coding Practice Back button navigation
+  if (hash && !hash.startsWith('#/coding-practice') && hash.startsWith('#/')) {
+    window.lastWorkspaceHash = hash;
+  }
+
+  // Ensure mobile sidebar is closed on any route navigation
+  const currentMobileSidebar = document.querySelector('.sidebar');
+  if (currentMobileSidebar && currentMobileSidebar.classList.contains('active')) {
+    currentMobileSidebar.classList.remove('active');
+    if (typeof toggleMobileSidebarBackdrop === 'function') {
+      toggleMobileSidebarBackdrop(false);
+    }
+  }
+
   // Cleanup admin live polling & clock when leaving admin panel
   if (hash !== '#/admin') {
     if (window.adminTelemetryInterval) {
@@ -826,7 +888,7 @@ function router() {
     if (freshStats) {
       pageMount.innerHTML = components.dashboard(freshStats);
       renderDashboardCharts(freshStats);
-      syncDashboardScreenTime();
+      initDashboardInteractiveFeatures(freshStats);
       return;
     }
     const cachedStatsStr = localStorage.getItem('cached_dashboard_stats_v2');
@@ -836,7 +898,7 @@ function router() {
         const stats = JSON.parse(cachedStatsStr).data;
         pageMount.innerHTML = components.dashboard(stats);
         renderDashboardCharts(stats);
-        syncDashboardScreenTime();
+        initDashboardInteractiveFeatures(stats);
         hasCache = true;
       } catch (e) {}
     }
@@ -856,7 +918,7 @@ function router() {
     if (!hasCache) {
       pageMount.innerHTML = components.dashboard(defaultStats);
       renderDashboardCharts(defaultStats);
-      syncDashboardScreenTime();
+      initDashboardInteractiveFeatures(defaultStats);
     }
     apiFetch('/dashboard/stats')
       .then(stats => {
@@ -865,7 +927,7 @@ function router() {
           setCachedData('cached_dashboard_stats_v2', stats);
           pageMount.innerHTML = components.dashboard(stats);
           renderDashboardCharts(stats);
-          syncDashboardScreenTime();
+          initDashboardInteractiveFeatures(stats);
         }
       })
       .catch(err => {
@@ -1652,6 +1714,27 @@ function handleSessionExpired(target = '#/') {
   redirectTo(target);
 }
 
+function toggleMobileSidebarBackdrop(show) {
+  let backdrop = document.getElementById('sidebar-mobile-backdrop');
+  if (show) {
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.id = 'sidebar-mobile-backdrop';
+      backdrop.className = 'sidebar-mobile-backdrop';
+      backdrop.addEventListener('click', () => {
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar) sidebar.classList.remove('active');
+        toggleMobileSidebarBackdrop(false);
+      });
+      document.body.appendChild(backdrop);
+    }
+    backdrop.classList.add('show');
+  } else if (backdrop) {
+    backdrop.classList.remove('show');
+  }
+}
+window.toggleMobileSidebarBackdrop = toggleMobileSidebarBackdrop;
+
 // layout events
 function bindLayoutEvents() {
   const toggleBtn = document.getElementById('sidebar-toggle-btn');
@@ -1659,7 +1742,8 @@ function bindLayoutEvents() {
   if (toggleBtn && sidebar) {
     toggleBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      sidebar.classList.toggle('active');
+      const isActive = sidebar.classList.toggle('active');
+      toggleMobileSidebarBackdrop(isActive);
     });
   }
 
@@ -1669,6 +1753,7 @@ function bindLayoutEvents() {
     closeBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       sidebar.classList.remove('active');
+      toggleMobileSidebarBackdrop(false);
     });
   }
 
@@ -1677,6 +1762,7 @@ function bindLayoutEvents() {
     link.addEventListener('click', () => {
       if (window.innerWidth < 992 && sidebar && sidebar.classList.contains('active')) {
         sidebar.classList.remove('active');
+        toggleMobileSidebarBackdrop(false);
       }
     });
   });
@@ -1684,11 +1770,25 @@ function bindLayoutEvents() {
   // Mobile sidebar click outside to close
   document.addEventListener('click', (e) => {
     if (window.innerWidth < 992 && sidebar && sidebar.classList.contains('active')) {
-      if (!sidebar.contains(e.target) && (!toggleBtn || !toggleBtn.contains(e.target))) {
+      const lcToggle = document.getElementById('lc-sidebar-toggle-btn');
+      if (!sidebar.contains(e.target) && (!toggleBtn || !toggleBtn.contains(e.target)) && (!lcToggle || !lcToggle.contains(e.target))) {
         sidebar.classList.remove('active');
+        toggleMobileSidebarBackdrop(false);
       }
     }
   });
+
+  // Header Launch Announcement Pill Button
+  const launchModalBtn = document.getElementById('header-launch-modal-btn');
+  if (launchModalBtn && !launchModalBtn._launchHooked) {
+    launchModalBtn._launchHooked = true;
+    launchModalBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (typeof window.showLaunchModal === 'function') {
+        window.showLaunchModal(true);
+      }
+    });
+  }
 
   const collapseBtn = document.getElementById('sidebar-collapse-btn');
   const container = document.getElementById('app-container');
@@ -6191,13 +6291,40 @@ function bindCodingPracticeEvents(rawQuestions = []) {
   };
   document.addEventListener('keydown', keyNavHandler);
 
-  // 7. Layout Toggles & Editor Controls
+  // 7. Navigation, Layout Toggles & Editor Controls
+  const btnCodingBack = document.getElementById('btn-coding-back');
+  if (btnCodingBack) {
+    const handleCodingBack = (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      const prevHash = (window.lastWorkspaceHash && window.lastWorkspaceHash !== '#/coding-practice' && !window.lastWorkspaceHash.startsWith('#/coding-practice'))
+        ? window.lastWorkspaceHash
+        : '#/dashboard';
+      window.location.hash = prevHash;
+    };
+    btnCodingBack.addEventListener('click', handleCodingBack);
+    btnCodingBack.addEventListener('touchend', handleCodingBack);
+  }
+
   const btnSidebarToggle = document.getElementById('lc-sidebar-toggle-btn');
   if (btnSidebarToggle) {
-    btnSidebarToggle.addEventListener('click', () => {
+    const handleSidebarToggle = (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
       const sidebar = document.getElementById('sidebar') || document.querySelector('.sidebar');
-      if (sidebar) sidebar.classList.toggle('active');
-    });
+      if (sidebar) {
+        const isActive = sidebar.classList.toggle('active');
+        if (typeof toggleMobileSidebarBackdrop === 'function') {
+          toggleMobileSidebarBackdrop(isActive);
+        }
+      }
+    };
+    btnSidebarToggle.addEventListener('click', handleSidebarToggle);
+    btnSidebarToggle.addEventListener('touchend', handleSidebarToggle);
   }
 
   const btnToggleLayout = document.getElementById('btn-toggle-layout');
@@ -11773,6 +11900,348 @@ function syncDashboardScreenTime() {
   const todayKey = getScreenTimeTodayKey();
   const todaySeconds = parseInt(localStorage.getItem(todayKey) || '0', 10);
   updateScreenTimeUi(todaySeconds, activeSessionSeconds);
+}
+
+// ----------------------------------------------------
+// WORKABLE DASHBOARD FEATURES (V5.8.46)
+// ----------------------------------------------------
+
+function initDailyChallenge() {
+  const challengeTitleEl = document.getElementById('daily-challenge-title');
+  const timerTextEl = document.getElementById('daily-timer-text');
+  const diffEl = document.getElementById('daily-challenge-diff');
+  const topicEl = document.getElementById('daily-challenge-topic');
+  const companiesEl = document.getElementById('daily-challenge-companies');
+  const solveBtn = document.getElementById('btn-daily-challenge-solve');
+  const markBtn = document.getElementById('btn-daily-challenge-mark');
+  const markText = document.getElementById('btn-daily-mark-text');
+
+  if (!challengeTitleEl && !solveBtn && !markBtn) return;
+
+  const today = new Date();
+  const dateKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  const dayIndex = Math.floor(today.getTime() / (1000 * 60 * 60 * 24)) % 7;
+
+  const dailyProblems = [
+    { id: 1, title: 'Two Sum', diff: 'EASY', topic: 'Arrays & Hash Table', companies: 'Google, Amazon, Meta' },
+    { id: 2, title: 'Valid Anagram', diff: 'EASY', topic: 'Strings & Hash Map', companies: 'Meta, Apple, Uber' },
+    { id: 3, title: 'Reverse Linked List', diff: 'EASY', topic: 'Linked Lists & Pointers', companies: 'Microsoft, Amazon, Adobe' },
+    { id: 4, title: 'Container With Most Water', diff: 'MEDIUM', topic: 'Two Pointers & Greedy', companies: 'Google, Uber, Bloomberg' },
+    { id: 5, title: 'Binary Tree Level Order Traversal', diff: 'MEDIUM', topic: 'Binary Trees & BFS', companies: 'Amazon, LinkedIn, Meta' },
+    { id: 6, title: 'Climbing Stairs', diff: 'EASY', topic: 'Dynamic Programming', companies: 'Adobe, Apple, Goldman Sachs' },
+    { id: 7, title: 'Search in Rotated Sorted Array', diff: 'MEDIUM', topic: 'Binary Search', companies: 'Google, Microsoft, Netflix' }
+  ];
+
+  const currentDaily = dailyProblems[dayIndex] || dailyProblems[0];
+
+  if (challengeTitleEl) challengeTitleEl.textContent = currentDaily.title;
+  if (diffEl) {
+    diffEl.textContent = currentDaily.diff;
+    diffEl.className = currentDaily.diff === 'EASY'
+      ? 'badge bg-success bg-opacity-20 text-success border border-success border-opacity-30 font-monospace fs-9'
+      : 'badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-30 font-monospace fs-9';
+  }
+  if (topicEl) topicEl.innerHTML = `<i class="fa-solid fa-tags text-secondary me-1"></i>${currentDaily.topic}`;
+  if (companiesEl) companiesEl.innerHTML = `<i class="fa-solid fa-building text-secondary me-1"></i>${currentDaily.companies}`;
+  if (solveBtn) solveBtn.href = `#/coding-practice?q=${currentDaily.id}`;
+
+  // Countdown timer to midnight
+  function updateCountdown() {
+    if (!document.getElementById('daily-timer-text')) return;
+    const now = new Date();
+    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
+    const diffMs = midnight - now;
+    if (diffMs <= 0) {
+      if (timerTextEl) timerTextEl.textContent = 'Refreshing new challenge...';
+      return;
+    }
+    const h = String(Math.floor(diffMs / (1000 * 60 * 60))).padStart(2, '0');
+    const m = String(Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+    const s = String(Math.floor((diffMs % (1000 * 60)) / 1000)).padStart(2, '0');
+    if (timerTextEl) timerTextEl.textContent = `${h}:${m}:${s} Remaining`;
+  }
+  updateCountdown();
+  if (window._dailyCountdownTimer) clearInterval(window._dailyCountdownTimer);
+  window._dailyCountdownTimer = setInterval(updateCountdown, 1000);
+
+  // Solved state persistence
+  const storageKey = `prepspace_daily_challenge_${dateKey}`;
+  const isSolved = localStorage.getItem(storageKey) === 'true';
+
+  function renderMarkBtn(solved) {
+    if (!markBtn) return;
+    if (solved) {
+      markBtn.className = 'btn btn-sm btn-success px-3 py-2 fs-8 fw-semibold';
+      markBtn.innerHTML = '<i class="fa-solid fa-circle-check text-white me-1.5"></i><span>Solved (+25 XP)</span>';
+    } else {
+      markBtn.className = 'btn btn-sm btn-dark-glass px-3 py-2 fs-8 fw-semibold';
+      markBtn.innerHTML = '<i class="fa-solid fa-check text-success me-1.5"></i><span id="btn-daily-mark-text">Mark Solved</span>';
+    }
+  }
+  renderMarkBtn(isSolved);
+
+  if (markBtn && !markBtn._dailyHooked) {
+    markBtn._dailyHooked = true;
+    markBtn.addEventListener('click', () => {
+      const currentState = localStorage.getItem(storageKey) === 'true';
+      const newState = !currentState;
+      localStorage.setItem(storageKey, String(newState));
+      renderMarkBtn(newState);
+      if (newState) {
+        showToast(`🎉 Daily Challenge Completed! +25 Streak XP awarded for ${currentDaily.title}.`, 'success');
+        try {
+          if (window.UserStreak && window.UserStreak.recordActivity) {
+            window.UserStreak.recordActivity();
+          }
+        } catch (e) {}
+      } else {
+        showToast('Daily Challenge marked as uncompleted.', 'info');
+      }
+      initReadinessIndex();
+    });
+  }
+}
+
+function initReadinessIndex(passedStats = null) {
+  const scoreEl = document.getElementById('readiness-score-val');
+  const tierPill = document.getElementById('readiness-tier-pill');
+  const statusEl = document.getElementById('readiness-score-status');
+  if (!scoreEl) return;
+
+  let stats = passedStats;
+  if (!stats) {
+    try {
+      const cached = localStorage.getItem('cached_dashboard_stats_v2');
+      if (cached) stats = JSON.parse(cached).data;
+    } catch (e) {}
+  }
+  stats = stats || {};
+
+  const totalSolved = stats.totalSolved || 0;
+  const avgMockScore = stats.averageMockScore || 0;
+  const streakDays = stats.streakDays || 1;
+  const applicationsCount = stats.applicationsCount || 0;
+
+  // Component calculations
+  const dsaPct = Math.min(100, Math.round((totalSolved / 150) * 100));
+  const mockPct = avgMockScore > 0 ? Math.min(100, Math.round(avgMockScore)) : 50;
+  const consistencyPct = Math.min(100, Math.max(35, streakDays * 14));
+  const pipelinePct = Math.min(100, Math.max(20, applicationsCount * 25));
+
+  // Daily challenge bonus (+5%)
+  const today = new Date();
+  const dateKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  const dailySolvedBonus = localStorage.getItem(`prepspace_daily_challenge_${dateKey}`) === 'true' ? 5 : 0;
+
+  const finalScore = Math.min(99, Math.max(32, Math.round(
+    (dsaPct * 0.35) + (mockPct * 0.30) + (consistencyPct * 0.20) + (pipelinePct * 0.15) + dailySolvedBonus
+  )));
+
+  scoreEl.textContent = `${finalScore}%`;
+
+  if (tierPill) {
+    if (finalScore >= 85) {
+      tierPill.textContent = 'Tier-1 Ready (FAANG)';
+      tierPill.className = 'badge-success-pill fs-9';
+    } else if (finalScore >= 70) {
+      tierPill.textContent = 'Interview Ready';
+      tierPill.className = 'badge-primary-pill fs-9';
+    } else if (finalScore >= 50) {
+      tierPill.textContent = 'Intermediate Prep';
+      tierPill.className = 'badge-amber-pill fs-9';
+    } else {
+      tierPill.textContent = 'Foundation Phase';
+      tierPill.className = 'badge-glass-pill fs-9';
+    }
+  }
+
+  if (statusEl) {
+    if (finalScore >= 85) {
+      statusEl.textContent = 'Exceptional profile velocity. Qualified for FAANG on-sites.';
+    } else if (finalScore >= 70) {
+      statusEl.textContent = 'Strong technical readiness. Polish system design & mock MCQs.';
+    } else if (finalScore >= 50) {
+      statusEl.textContent = 'On track. Boost DSA problem count and 50-MCQ exams.';
+    } else {
+      statusEl.textContent = 'Beginner foundation. Solve 3 daily problems to accelerate.';
+    }
+  }
+
+  // Update vector displays
+  const dsaVal = document.getElementById('vector-dsa-val');
+  const dsaBar = document.getElementById('vector-dsa-bar');
+  if (dsaVal) dsaVal.textContent = `${totalSolved}/150`;
+  if (dsaBar) dsaBar.style.width = `${Math.min(100, dsaPct)}%`;
+
+  const mockVal = document.getElementById('vector-mock-val');
+  const mockBar = document.getElementById('vector-mock-bar');
+  if (mockVal) mockVal.textContent = avgMockScore > 0 ? `${Math.round(avgMockScore)}%` : 'No Exams Yet';
+  if (mockBar) mockBar.style.width = `${mockPct}%`;
+
+  const conBar = document.getElementById('vector-consistency-bar');
+  if (conBar) conBar.style.width = `${consistencyPct}%`;
+
+  const pipeBar = document.getElementById('vector-pipeline-bar');
+  if (pipeBar) pipeBar.style.width = `${pipelinePct}%`;
+}
+
+window.handleBoostReadiness = function() {
+  showToast('⚡ AI Readiness Insight: Completing 1 timed mock assessment or 3 DSA problems will boost your score by +8%!', 'info');
+  setTimeout(() => {
+    window.location.hash = '#/coding-practice';
+  }, 800);
+};
+
+function initMilestonesChecklist() {
+  const container = document.getElementById('milestones-checklist-container');
+  const progressBar = document.getElementById('milestones-progress-bar');
+  const progressPill = document.getElementById('checklist-progress-pill');
+  const resetBtn = document.getElementById('btn-reset-milestones');
+
+  if (!container) return;
+
+  const milestones = [
+    {
+      id: 'm1',
+      title: 'Master 50 Core LeetCode Patterns',
+      desc: 'Arrays, Two Pointers, Trees, Dynamic Programming, and Graph Traversals.',
+      badge: 'Coding IDE',
+      link: '#/coding-practice'
+    },
+    {
+      id: 'm2',
+      title: 'Attain ≥ 80% Score in Timed 50-MCQ Exam',
+      desc: 'Quantitative Aptitude, Logical Reasoning, and Technical MCQs.',
+      badge: 'Mock Exam',
+      link: '#/mock-interview'
+    },
+    {
+      id: 'm3',
+      title: 'Optimize ATS Resume for SDE-1 / SDE-2 Target Roles',
+      desc: 'Match 85%+ keywords for Google, Amazon, Microsoft job descriptions.',
+      badge: 'Resume AI',
+      link: '#/resume-scanner'
+    },
+    {
+      id: 'm4',
+      title: 'Master Microservices & Scalability Trade-offs',
+      desc: 'Study Distributed Caching, Sharding, Load Balancing, and CAP Theorem.',
+      badge: 'System Design',
+      link: '#/system-design'
+    },
+    {
+      id: 'm5',
+      title: 'Maintain 5+ Active Placement Applications',
+      desc: 'Log off-campus referrals and university hiring drives in Placement Tracker.',
+      badge: 'Pipeline',
+      link: '#/placement-board'
+    }
+  ];
+
+  let stateMap = {};
+  try {
+    stateMap = JSON.parse(localStorage.getItem('prepspace_placement_milestones') || '{}');
+  } catch (e) {
+    stateMap = {};
+  }
+
+  function updateProgress() {
+    const total = milestones.length;
+    let completed = 0;
+    milestones.forEach(m => {
+      if (stateMap[m.id]) completed++;
+    });
+    const pct = Math.round((completed / total) * 100);
+    if (progressBar) progressBar.style.width = `${pct}%`;
+    if (progressPill) progressPill.textContent = `${completed}/${total} Complete`;
+
+    if (completed === total) {
+      if (progressBar) progressBar.className = 'progress-bar bg-success';
+      if (progressPill) progressPill.className = 'badge-success-pill fs-10';
+    } else {
+      if (progressBar) progressBar.className = 'progress-bar bg-warning';
+      if (progressPill) progressPill.className = 'badge-amber-pill fs-10';
+    }
+  }
+
+  container.innerHTML = milestones.map(m => {
+    const checked = Boolean(stateMap[m.id]);
+    return `
+      <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 ${checked ? 'bg-success bg-opacity-10 border border-success border-opacity-25' : 'bg-dark bg-opacity-40 border border-secondary border-opacity-15'} transition-all" id="milestone-row-${m.id}">
+        <div class="d-flex align-items-start gap-2.5 flex-grow-1 me-2">
+          <input class="form-check-input mt-1 ms-1 milestone-checkbox" type="checkbox" id="chk-${m.id}" data-id="${m.id}" ${checked ? 'checked' : ''} style="cursor: pointer; width: 1.15rem; height: 1.15rem;">
+          <label class="form-check-label fs-8 text-white m-0" for="chk-${m.id}" style="cursor: pointer;">
+            <div class="fw-semibold ${checked ? 'text-decoration-line-through text-muted' : 'text-white'}">${m.title}</div>
+            <div class="text-muted fs-9 mt-0.5">${m.desc}</div>
+          </label>
+        </div>
+        <a href="${m.link}" class="btn btn-xs btn-dark-glass text-secondary text-nowrap px-2 py-1 fs-9 d-none d-sm-inline-flex align-items-center gap-1">
+          <span>${m.badge}</span> <i class="fa-solid fa-arrow-right fs-10"></i>
+        </a>
+      </div>
+    `;
+  }).join('');
+
+  container.querySelectorAll('.milestone-checkbox').forEach(input => {
+    input.addEventListener('change', (e) => {
+      const id = e.target.dataset.id;
+      stateMap[id] = e.target.checked;
+      try {
+        localStorage.setItem('prepspace_placement_milestones', JSON.stringify(stateMap));
+      } catch (err) {}
+      
+      const row = document.getElementById(`milestone-row-${id}`);
+      const labelTitle = row ? row.querySelector('.fw-semibold') : null;
+      if (e.target.checked) {
+        if (row) {
+          row.classList.remove('bg-dark', 'bg-opacity-40', 'border-secondary');
+          row.classList.add('bg-success', 'bg-opacity-10', 'border-success', 'border-opacity-25');
+        }
+        if (labelTitle) labelTitle.classList.add('text-decoration-line-through', 'text-muted');
+        showToast('🎯 Milestone completed! Target placement progress updated.', 'success');
+      } else {
+        if (row) {
+          row.classList.remove('bg-success', 'bg-opacity-10', 'border-success', 'border-opacity-25');
+          row.classList.add('bg-dark', 'bg-opacity-40', 'border-secondary');
+        }
+        if (labelTitle) labelTitle.classList.remove('text-decoration-line-through', 'text-muted');
+      }
+
+      updateProgress();
+      initReadinessIndex();
+    });
+  });
+
+  if (resetBtn && !resetBtn._resetHooked) {
+    resetBtn._resetHooked = true;
+    resetBtn.addEventListener('click', () => {
+      stateMap = {};
+      try {
+        localStorage.removeItem('prepspace_placement_milestones');
+      } catch (err) {}
+      container.querySelectorAll('.milestone-checkbox').forEach(chk => {
+        chk.checked = false;
+      });
+      container.querySelectorAll('[id^="milestone-row-"]').forEach(row => {
+        row.classList.remove('bg-success', 'bg-opacity-10', 'border-success', 'border-opacity-25');
+        row.classList.add('bg-dark', 'bg-opacity-40', 'border-secondary');
+        const lt = row.querySelector('.fw-semibold');
+        if (lt) lt.classList.remove('text-decoration-line-through', 'text-muted');
+      });
+      updateProgress();
+      initReadinessIndex();
+      showToast('Milestones checklist reset.', 'info');
+    });
+  }
+
+  updateProgress();
+}
+
+function initDashboardInteractiveFeatures(stats = {}) {
+  syncDashboardScreenTime();
+  initDailyChallenge();
+  initReadinessIndex(stats);
+  initMilestonesChecklist();
 }
 
 // ----------------------------------------------------
