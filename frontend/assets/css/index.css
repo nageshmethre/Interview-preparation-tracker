@@ -762,20 +762,27 @@ input:-webkit-autofill:focus,
   }
 
   .sidebar {
-    width: 260px !important;
-    min-width: 260px !important;
-    max-width: 260px !important;
+    width: 280px !important;
+    min-width: 280px !important;
+    max-width: min(85vw, 320px) !important;
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
     bottom: 0 !important;
     height: 100vh !important;
     height: 100dvh !important;
+    background: #141417 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
     z-index: 1050 !important;
     transform: translateX(-100%) !important;
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.6) !important;
+    box-shadow: 10px 0 32px rgba(0, 0, 0, 0.65) !important;
     -webkit-overflow-scrolling: touch !important;
+    padding-bottom: max(16px, env(safe-area-inset-bottom, 16px)) !important;
+    display: flex !important;
+    flex-direction: column !important;
   }
   
   .sidebar.active {
@@ -7711,20 +7718,20 @@ h5.fs-7, h5.fs-8, h5.fs-9 {
    MOBILE INTERFACE & WORKSPACE CONTROLS (V5.8.46)
    ========================================================================== */
 
-/* Mobile Sidebar Backdrop Overlay */
+/* Mobile Sidebar Backdrop Overlay: Subtle Tint, No Dark Blur Distortion */
 .sidebar-mobile-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   z-index: 1040;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.25s ease, visibility 0.25s ease;
+  transition: opacity 0.22s ease, visibility 0.22s ease;
   pointer-events: none;
 }
 
@@ -7734,25 +7741,29 @@ h5.fs-7, h5.fs-8, h5.fs-9 {
   pointer-events: auto;
 }
 
-/* Coding Practice Back Button */
+/* Coding Practice Back Button - Touch Optimized */
 .lc-btn-back {
-  background: rgba(255, 255, 255, 0.06) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: rgba(255, 255, 255, 0.07) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
   color: #f4f4f5 !important;
-  transition: all 0.2s ease !important;
+  transition: all 0.15s ease !important;
   cursor: pointer;
   white-space: nowrap;
   touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 30px;
+  user-select: none;
 }
 
 .lc-btn-back:hover,
 .lc-btn-back:active {
-  background: rgba(245, 158, 11, 0.16) !important;
-  border-color: rgba(245, 158, 11, 0.4) !important;
+  background: rgba(245, 158, 11, 0.18) !important;
+  border-color: rgba(245, 158, 11, 0.45) !important;
   color: #fbbf24 !important;
   transform: translateX(-1px);
 }
 
+/* Mobile & Ultra-narrow Viewports (320px - 575px) Dashboard Layout */
 @media (max-width: 575.98px) {
   .lc-top-bar {
     padding-left: 6px !important;
@@ -7766,5 +7777,29 @@ h5.fs-7, h5.fs-8, h5.fs-9 {
   .lc-btn-back {
     padding: 3px 8px !important;
     font-size: 11px !important;
+    min-height: 28px !important;
+  }
+  .ps-daily-challenge-card {
+    padding: 12px !important;
+    border-radius: 14px !important;
+  }
+  .ps-stat-box {
+    padding: 12px !important;
+    border-radius: 12px !important;
+  }
+  .ps-stat-value {
+    font-size: 1.45rem !important;
+  }
+  .ps-stat-title {
+    font-size: 0.76rem !important;
+  }
+  .ps-professional-dashboard {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    overflow-x: hidden !important;
+  }
+  .workspace-top-header {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
   }
 }

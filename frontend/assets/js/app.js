@@ -475,15 +475,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (window.UserStreak) {
     window.UserStreak.recordActivity('visit');
   }
-
-  // 2. Platform Entry Ad / Launch Offer Modal Popup (Respects 24h dismissal)
-  setTimeout(() => {
-    if (window.showLaunchModal) {
-      window.showLaunchModal(false);
-    } else if (window.showAdModal) {
-      window.showAdModal(false);
-    }
-  }, 1800);
 });
 
 // Interactive Showcase Tabs for Landing Page (Style 2: Stripe / Supabase)
@@ -1729,8 +1720,16 @@ function toggleMobileSidebarBackdrop(show) {
       document.body.appendChild(backdrop);
     }
     backdrop.classList.add('show');
-  } else if (backdrop) {
-    backdrop.classList.remove('show');
+    try {
+      document.body.style.overflow = 'hidden';
+    } catch (_) {}
+  } else {
+    if (backdrop) {
+      backdrop.classList.remove('show');
+    }
+    try {
+      document.body.style.removeProperty('overflow');
+    } catch (_) {}
   }
 }
 window.toggleMobileSidebarBackdrop = toggleMobileSidebarBackdrop;
@@ -1778,14 +1777,16 @@ function bindLayoutEvents() {
     }
   });
 
-  // Header Launch Announcement Pill Button
-  const launchModalBtn = document.getElementById('header-launch-modal-btn');
-  if (launchModalBtn && !launchModalBtn._launchHooked) {
-    launchModalBtn._launchHooked = true;
-    launchModalBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (typeof window.showLaunchModal === 'function') {
-        window.showLaunchModal(true);
+  // Mobile sidebar Escape key dismiss
+  if (!window._sidebarKeyHooked) {
+    window._sidebarKeyHooked = true;
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' || e.keyCode === 27) {
+        const activeSidebar = document.querySelector('.sidebar');
+        if (activeSidebar && activeSidebar.classList.contains('active')) {
+          activeSidebar.classList.remove('active');
+          toggleMobileSidebarBackdrop(false);
+        }
       }
     });
   }
@@ -2572,14 +2573,29 @@ function renderDashboardCharts(stats = {}) {
   let weeklyLabels = defaultLabels;
   let weeklyData = defaultValues;
 
+  let hasNonZero = false;
   if (stats && stats.weeklyStudyTime && typeof stats.weeklyStudyTime === 'object' && Object.keys(stats.weeklyStudyTime).length > 0) {
     const rawKeys = Object.keys(stats.weeklyStudyTime);
     const rawVals = Object.values(stats.weeklyStudyTime);
-    const hasNonZero = rawVals.some(v => v > 0);
+    hasNonZero = rawVals.some(v => v > 0);
     if (hasNonZero) {
       weeklyLabels = rawKeys.map(k => k.length > 5 ? k.substring(5) : k);
       weeklyData = rawVals;
     }
+  }
+
+  // Honest Empty State handling
+  let emptyStateMsg = document.getElementById('weekly-chart-empty-msg');
+  if (!hasNonZero) {
+    if (!emptyStateMsg && weeklyCanvas.parentElement) {
+      emptyStateMsg = document.createElement('div');
+      emptyStateMsg.id = 'weekly-chart-empty-msg';
+      emptyStateMsg.className = 'text-center text-muted fs-8 py-1 mt-1';
+      emptyStateMsg.innerHTML = '<i class="fa-regular fa-calendar-xmark me-1 text-secondary"></i> No focus sessions logged yet this week. Complete a Pomodoro session or practice in the IDE to track velocity.';
+      weeklyCanvas.parentElement.appendChild(emptyStateMsg);
+    }
+  } else if (emptyStateMsg) {
+    emptyStateMsg.remove();
   }
 
   if (window._weeklyHoursChartInstance) {
@@ -2623,12 +2639,14 @@ function renderDashboardCharts(stats = {}) {
       plugins: {
         legend: { display: false },
         tooltip: {
+          position: 'nearest',
           backgroundColor: '#18181b',
           titleColor: '#ffffff',
           bodyColor: '#a1a1aa',
           borderColor: '#27272a',
           borderWidth: 1,
-          padding: 10,
+          padding: 8,
+          caretSize: 6,
           cornerRadius: 6,
           displayColors: false,
           callbacks: {
@@ -6292,20 +6310,21 @@ function bindCodingPracticeEvents(rawQuestions = []) {
   document.addEventListener('keydown', keyNavHandler);
 
   // 7. Navigation, Layout Toggles & Editor Controls
+  const handleCodingBack = (e) => {
+    if (e) {
+      try { e.preventDefault(); } catch (_) {}
+      try { e.stopPropagation(); } catch (_) {}
+    }
+    const prevHash = (window.lastWorkspaceHash && window.lastWorkspaceHash !== '#/coding-practice' && !window.lastWorkspaceHash.startsWith('#/coding-practice'))
+      ? window.lastWorkspaceHash
+      : '#/dashboard';
+    window.location.hash = prevHash;
+  };
+  window.handleCodingBackNav = handleCodingBack;
+
   const btnCodingBack = document.getElementById('btn-coding-back');
   if (btnCodingBack) {
-    const handleCodingBack = (e) => {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-      const prevHash = (window.lastWorkspaceHash && window.lastWorkspaceHash !== '#/coding-practice' && !window.lastWorkspaceHash.startsWith('#/coding-practice'))
-        ? window.lastWorkspaceHash
-        : '#/dashboard';
-      window.location.hash = prevHash;
-    };
     btnCodingBack.addEventListener('click', handleCodingBack);
-    btnCodingBack.addEventListener('touchend', handleCodingBack);
   }
 
   const btnSidebarToggle = document.getElementById('lc-sidebar-toggle-btn');
@@ -12017,23 +12036,54 @@ function initReadinessIndex(passedStats = null) {
   }
   stats = stats || {};
 
-  const totalSolved = stats.totalSolved || 0;
-  const avgMockScore = stats.averageMockScore || 0;
-  const streakDays = stats.streakDays || 1;
-  const applicationsCount = stats.applicationsCount || 0;
+  const totalSolved = parseInt(stats.totalSolved || 0, 10);
+  const avgMockScore = parseFloat(stats.averageMockScore || 0);
+  const streakDays = parseInt(stats.streakDays || stats.streak || 0, 10);
+  const applicationsCount = parseInt(stats.applicationsCount || 0, 10);
+  const mockExamsCompleted = parseInt(stats.mockExamsCompleted || 0, 10);
 
-  // Component calculations
+  const hasActivity = (totalSolved > 0 || mockExamsCompleted > 0 || applicationsCount > 0);
+
+  if (!hasActivity) {
+    scoreEl.textContent = '--%';
+    if (tierPill) {
+      tierPill.textContent = 'Not assessed yet';
+      tierPill.className = 'badge-glass-pill fs-9';
+    }
+    if (statusEl) {
+      statusEl.textContent = 'Solve 1 coding problem or complete a mock exam to generate your score.';
+    }
+    const dsaVal = document.getElementById('vector-dsa-val');
+    const dsaBar = document.getElementById('vector-dsa-bar');
+    if (dsaVal) dsaVal.textContent = '0/150';
+    if (dsaBar) dsaBar.style.width = '0%';
+
+    const mockVal = document.getElementById('vector-mock-val');
+    const mockBar = document.getElementById('vector-mock-bar');
+    if (mockVal) mockVal.textContent = 'No Exams Yet';
+    if (mockBar) mockBar.style.width = '0%';
+
+    const conBar = document.getElementById('vector-consistency-bar');
+    if (conBar) conBar.style.width = '0%';
+
+    const pipeBar = document.getElementById('vector-pipeline-bar');
+    if (pipeBar) pipeBar.style.width = '0%';
+    return;
+  }
+
+  // Component calculations for genuine user activity
   const dsaPct = Math.min(100, Math.round((totalSolved / 150) * 100));
-  const mockPct = avgMockScore > 0 ? Math.min(100, Math.round(avgMockScore)) : 50;
-  const consistencyPct = Math.min(100, Math.max(35, streakDays * 14));
-  const pipelinePct = Math.min(100, Math.max(20, applicationsCount * 25));
+  const mockPct = mockExamsCompleted > 0 ? Math.min(100, Math.round(avgMockScore)) : 0;
+  const consistencyPct = Math.min(100, Math.max(0, streakDays * 14));
+  const pipelinePct = Math.min(100, Math.max(0, applicationsCount * 25));
 
   // Daily challenge bonus (+5%)
   const today = new Date();
   const dateKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
   const dailySolvedBonus = localStorage.getItem(`prepspace_daily_challenge_${dateKey}`) === 'true' ? 5 : 0;
 
-  const finalScore = Math.min(99, Math.max(32, Math.round(
+  // Honest score without artificial 32% floor
+  const finalScore = Math.min(99, Math.max(1, Math.round(
     (dsaPct * 0.35) + (mockPct * 0.30) + (consistencyPct * 0.20) + (pipelinePct * 0.15) + dailySolvedBonus
   )));
 
@@ -12063,7 +12113,7 @@ function initReadinessIndex(passedStats = null) {
     } else if (finalScore >= 50) {
       statusEl.textContent = 'On track. Boost DSA problem count and 50-MCQ exams.';
     } else {
-      statusEl.textContent = 'Beginner foundation. Solve 3 daily problems to accelerate.';
+      statusEl.textContent = 'Early foundation. Solve 3 daily problems to accelerate.';
     }
   }
 
@@ -12075,7 +12125,7 @@ function initReadinessIndex(passedStats = null) {
 
   const mockVal = document.getElementById('vector-mock-val');
   const mockBar = document.getElementById('vector-mock-bar');
-  if (mockVal) mockVal.textContent = avgMockScore > 0 ? `${Math.round(avgMockScore)}%` : 'No Exams Yet';
+  if (mockVal) mockVal.textContent = mockExamsCompleted > 0 ? `${Math.round(avgMockScore)}%` : 'No Exams Yet';
   if (mockBar) mockBar.style.width = `${mockPct}%`;
 
   const conBar = document.getElementById('vector-consistency-bar');
@@ -12092,7 +12142,7 @@ window.handleBoostReadiness = function() {
   }, 800);
 };
 
-function initMilestonesChecklist() {
+function initMilestonesChecklist(passedStats = null) {
   const container = document.getElementById('milestones-checklist-container');
   const progressBar = document.getElementById('milestones-progress-bar');
   const progressPill = document.getElementById('checklist-progress-pill');
@@ -12100,41 +12150,66 @@ function initMilestonesChecklist() {
 
   if (!container) return;
 
+  let stats = passedStats;
+  if (!stats) {
+    try {
+      const cached = localStorage.getItem('cached_dashboard_stats_v2');
+      if (cached) stats = JSON.parse(cached).data;
+    } catch (e) {}
+  }
+  stats = stats || {};
+
+  const totalSolved = parseInt(stats.totalSolved || 0, 10);
+  const bestMock = parseInt(stats.bestMockScore || (stats.averageMockScore ? Math.round(stats.averageMockScore) : 0), 10);
+  const appsCount = parseInt(stats.applicationsCount || 0, 10);
+  const resumeOptimized = (localStorage.getItem('prepspace_resume_saved') === 'true' || parseInt(localStorage.getItem('prepspace_ats_score') || 0, 10) >= 80);
+  const systemDesignDone = (localStorage.getItem('prepspace_system_design_completed') === 'true');
+
   const milestones = [
     {
       id: 'm1',
       title: 'Master 50 Core LeetCode Patterns',
       desc: 'Arrays, Two Pointers, Trees, Dynamic Programming, and Graph Traversals.',
       badge: 'Coding IDE',
-      link: '#/coding-practice'
+      link: '#/coding-practice',
+      autoCompleted: totalSolved >= 50,
+      progressText: `${Math.min(50, totalSolved)}/50 Solved`
     },
     {
       id: 'm2',
       title: 'Attain ≥ 80% Score in Timed 50-MCQ Exam',
       desc: 'Quantitative Aptitude, Logical Reasoning, and Technical MCQs.',
       badge: 'Mock Exam',
-      link: '#/mock-interview'
+      link: '#/mock-exams',
+      autoCompleted: bestMock >= 80,
+      progressText: `Best: ${bestMock}% (Target: ≥80%)`
     },
     {
       id: 'm3',
       title: 'Optimize ATS Resume for SDE-1 / SDE-2 Target Roles',
       desc: 'Match 85%+ keywords for Google, Amazon, Microsoft job descriptions.',
       badge: 'Resume AI',
-      link: '#/resume-scanner'
+      link: '#/ai-assistant',
+      autoCompleted: resumeOptimized,
+      progressText: resumeOptimized ? 'Target Match 85%+' : 'Pending Audit'
     },
     {
       id: 'm4',
       title: 'Master Microservices & Scalability Trade-offs',
       desc: 'Study Distributed Caching, Sharding, Load Balancing, and CAP Theorem.',
       badge: 'System Design',
-      link: '#/system-design'
+      link: '#/library',
+      autoCompleted: systemDesignDone,
+      progressText: systemDesignDone ? 'Verified Track' : 'Core Architecture'
     },
     {
       id: 'm5',
       title: 'Maintain 5+ Active Placement Applications',
       desc: 'Log off-campus referrals and university hiring drives in Placement Tracker.',
       badge: 'Pipeline',
-      link: '#/placement-board'
+      link: '#/placement',
+      autoCompleted: appsCount >= 5,
+      progressText: `${Math.min(5, appsCount)}/5 Tracked`
     }
   ];
 
@@ -12145,11 +12220,18 @@ function initMilestonesChecklist() {
     stateMap = {};
   }
 
+  // Sync automatic completions into stateMap
+  milestones.forEach(m => {
+    if (m.autoCompleted) {
+      stateMap[m.id] = true;
+    }
+  });
+
   function updateProgress() {
     const total = milestones.length;
     let completed = 0;
     milestones.forEach(m => {
-      if (stateMap[m.id]) completed++;
+      if (stateMap[m.id] || m.autoCompleted) completed++;
     });
     const pct = Math.round((completed / total) * 100);
     if (progressBar) progressBar.style.width = `${pct}%`;
@@ -12165,7 +12247,7 @@ function initMilestonesChecklist() {
   }
 
   container.innerHTML = milestones.map(m => {
-    const checked = Boolean(stateMap[m.id]);
+    const checked = Boolean(stateMap[m.id] || m.autoCompleted);
     return `
       <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 ${checked ? 'bg-success bg-opacity-10 border border-success border-opacity-25' : 'bg-dark bg-opacity-40 border border-secondary border-opacity-15'} transition-all" id="milestone-row-${m.id}">
         <div class="d-flex align-items-start gap-2.5 flex-grow-1 me-2">
@@ -12175,9 +12257,14 @@ function initMilestonesChecklist() {
             <div class="text-muted fs-9 mt-0.5">${m.desc}</div>
           </label>
         </div>
-        <a href="${m.link}" class="btn btn-xs btn-dark-glass text-secondary text-nowrap px-2 py-1 fs-9 d-none d-sm-inline-flex align-items-center gap-1">
-          <span>${m.badge}</span> <i class="fa-solid fa-arrow-right fs-10"></i>
-        </a>
+        <div class="d-flex align-items-center gap-1.5 flex-shrink-0">
+          <span class="badge ${checked ? 'bg-success bg-opacity-15 text-success border border-success border-opacity-30' : 'bg-secondary bg-opacity-20 text-secondary border border-secondary border-opacity-25'} font-monospace fs-10 d-none d-md-inline-block">
+            ${checked ? '<i class="fa-solid fa-check me-0.5"></i> Verified' : m.progressText}
+          </span>
+          <a href="${m.link}" class="btn btn-xs btn-dark-glass text-secondary text-nowrap px-2 py-1 fs-9 d-inline-flex align-items-center gap-1">
+            <span>${m.badge}</span> <i class="fa-solid fa-arrow-right fs-10"></i>
+          </a>
+        </div>
       </div>
     `;
   }).join('');
@@ -12208,7 +12295,7 @@ function initMilestonesChecklist() {
       }
 
       updateProgress();
-      initReadinessIndex();
+      initReadinessIndex(stats);
     });
   });
 
@@ -12229,7 +12316,7 @@ function initMilestonesChecklist() {
         if (lt) lt.classList.remove('text-decoration-line-through', 'text-muted');
       });
       updateProgress();
-      initReadinessIndex();
+      initReadinessIndex(stats);
       showToast('Milestones checklist reset.', 'info');
     });
   }
@@ -12241,7 +12328,7 @@ function initDashboardInteractiveFeatures(stats = {}) {
   syncDashboardScreenTime();
   initDailyChallenge();
   initReadinessIndex(stats);
-  initMilestonesChecklist();
+  initMilestonesChecklist(stats);
 }
 
 // ----------------------------------------------------

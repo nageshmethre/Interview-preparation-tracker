@@ -1055,12 +1055,6 @@ const components = {
               <span class="fs-7">🔥</span>
               <span class="font-monospace fs-8 fw-bold" id="header-streak-count">1</span>
             </button>
-            <!-- Official Launch Announcement Pill Button -->
-            <button type="button" class="btn btn-sm d-flex align-items-center gap-1.5 py-1 px-2.5 text-white" id="header-launch-modal-btn" onclick="window.showLaunchModal && window.showLaunchModal(true)" title="PrepSpace 1.0 is Officially Launched! Click to view launch perks" style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 9999px;">
-              <span class="fs-8">🚀</span>
-              <span class="font-monospace fs-8 fw-bold text-warning d-none d-sm-inline">PrepSpace 1.0 Live</span>
-              <span class="font-monospace fs-9 fw-bold text-warning d-sm-none">Live!</span>
-            </button>
             <!-- Launch Offer: First 1,000 Users 1-Year Free (Only for unpaid candidates) -->
             ${!isEffectivePaid ? `
             <a href="#/billing" class="btn btn-primary fw-semibold btn-sm py-1 px-2.5 fs-8 d-none d-md-inline-flex align-items-center gap-1 shadow-sm" id="header-launch-offer-btn" title="Launch Offer: First 1,000 Users 1-Year Free">
@@ -1105,6 +1099,37 @@ const components = {
   `;
   },
 
+  // Reusable Advertisement / Platform Spotlight Banner Component
+  advertisementBanner: (adConfig = null) => {
+    // Strictly adheres to truth-in-advertising: No fake advertisers or fabricated revenue numbers.
+    const config = (adConfig !== undefined && adConfig !== null) ? adConfig : {
+      enabled: true,
+      label: 'Platform Announcement',
+      badge: 'OFFICIALLY LIVE',
+      title: 'PrepSpace 1.0 is Officially Launched!',
+      desc: 'All-in-one technical placement suite. Practice 300+ curated LeetCode problems, take full-length 50-MCQ timed mock exams, and optimize your resume with AI ATS analysis.',
+      ctaText: 'View Launch Features',
+      ctaAction: 'window.showLaunchModal && window.showLaunchModal(true)'
+    };
+
+    if (!config || !config.enabled) return '';
+
+    return `
+      <div class="ps-ad-banner-box p-3 mb-3" style="background: rgba(245, 158, 11, 0.03); border: 1px dashed rgba(245, 158, 11, 0.3); border-radius: 14px;">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-35 font-monospace fs-10 fw-bold px-2 py-0.5">${config.badge}</span>
+          <span class="text-muted fs-9 text-uppercase font-monospace" style="letter-spacing: 0.5px;">${config.label}</span>
+        </div>
+        <h4 class="text-white fw-bold fs-6 m-0 mb-1">${config.title}</h4>
+        <p class="text-muted fs-8 mb-2.5">${config.desc}</p>
+        <button type="button" class="btn btn-sm btn-dark-glass w-100 py-1.5 fs-8 text-warning border-warning border-opacity-40 fw-semibold d-inline-flex align-items-center justify-content-center gap-1.5 shadow-none" onclick="${config.ctaAction || ''}">
+          <span>${config.ctaText}</span>
+          <i class="fa-solid fa-arrow-right fs-9"></i>
+        </button>
+      </div>
+    `;
+  },
+
   // Dashboard Page Sub-view - Professional Engineering Workspace
   dashboard: (stats = {}) => {
     const totalSolved = parseInt(stats.totalSolved ?? 0, 10);
@@ -1116,6 +1141,8 @@ const components = {
     const averageMockScore = stats.averageMockScore ? `${Math.round(stats.averageMockScore)}%` : 'No attempts';
     const applicationsCount = parseInt(stats.applicationsCount ?? 0, 10);
     const upcomingInterviewsCount = parseInt(stats.upcomingInterviewsCount ?? 0, 10);
+    const totalXp = parseInt(stats.xpPoints ?? 0, 10);
+    const totalPoints = parseInt(stats.totalPoints ?? (stats.xpPoints ? Math.round(stats.xpPoints / 10) : 0), 10);
 
     const userName = (typeof state !== 'undefined' && state && state.name) ? state.name : 'Candidate';
 
@@ -1124,11 +1151,11 @@ const components = {
       <!-- 1. Top Executive Control Bar (Borderless Clean Hero) -->
       <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
-          <div class="d-flex align-items-center gap-2.5 mb-1">
-            <h2 class="text-white fw-bold m-0 fs-2 dashboard-hero-title">${userName}'s Dashboard</h2>
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <h2 class="text-white fw-bold m-0 fs-3">${userName ? 'Welcome back, ' + userName : 'Welcome back'}</h2>
             <span class="ps-status-pill ps-status-active">Active</span>
           </div>
-          <p class="text-muted fs-7 mb-0">Track preparation velocity, solve coding challenges, and manage recruitment pipeline.</p>
+          <p class="text-muted fs-8 mb-0">Track preparation velocity, master coding patterns, and manage your placement pipeline.</p>
         </div>
         <div class="d-flex flex-wrap align-items-center gap-2">
           <a href="#/coding-practice" class="btn btn-sm btn-primary px-3 py-1.5 fs-8 fw-semibold d-inline-flex align-items-center gap-1.5 shadow-sm">
@@ -1144,9 +1171,9 @@ const components = {
         </div>
       </div>
 
-      <!-- 2. Four Clean KPI Cards -->
-      <div class="row g-3 mb-4">
-        <!-- Daily Focus Time -->
+      <!-- 2. Primary Statistics Grid (4 Cards) -->
+      <div class="row g-3 mb-3">
+        <!-- Study Time -->
         <div class="col-12 col-sm-6 col-xl-3">
           <div class="ps-stat-box p-3 h-100 text-start">
             <div class="d-flex align-items-center justify-content-between mb-2">
@@ -1162,7 +1189,7 @@ const components = {
         <div class="col-12 col-sm-6 col-xl-3">
           <div class="ps-stat-box p-3 h-100 text-start">
             <div class="d-flex align-items-center justify-content-between mb-2">
-              <span class="ps-stat-title">Problems Practiced</span>
+              <span class="ps-stat-title">Problems Solved</span>
               <a href="#/coding-practice" class="ps-card-link fs-8 text-decoration-none">Practice &rarr;</a>
             </div>
             <div class="ps-stat-value mb-1">${totalSolved} <span class="fs-7 text-muted fw-normal">/ ${totalQuestions}</span></div>
@@ -1174,11 +1201,11 @@ const components = {
           </div>
         </div>
 
-        <!-- Mock Evaluations -->
+        <!-- Mock Exams Completed -->
         <div class="col-12 col-sm-6 col-xl-3">
           <div class="ps-stat-box p-3 h-100 text-start">
             <div class="d-flex align-items-center justify-content-between mb-2">
-              <span class="ps-stat-title">Mock Evaluations</span>
+              <span class="ps-stat-title">Mock Exams Completed</span>
               <a href="#/mock-exams" class="ps-card-link fs-8 text-decoration-none">Take Test &rarr;</a>
             </div>
             <div class="ps-stat-value mb-1">${mockExamsCompleted} <span class="fs-7 text-muted fw-normal">Completed</span></div>
@@ -1186,52 +1213,89 @@ const components = {
           </div>
         </div>
 
-        <!-- Active Pipeline -->
+        <!-- Placement Applications -->
         <div class="col-12 col-sm-6 col-xl-3">
           <div class="ps-stat-box p-3 h-100 text-start">
             <div class="d-flex align-items-center justify-content-between mb-2">
-              <span class="ps-stat-title">Placement Pipeline</span>
+              <span class="ps-stat-title">Placement Applications</span>
               <a href="#/placement" class="ps-card-link fs-8 text-decoration-none">Kanban &rarr;</a>
             </div>
-            <div class="ps-stat-value mb-1">${applicationsCount} <span class="fs-7 text-muted fw-normal">Applications</span></div>
+            <div class="ps-stat-value mb-1">${applicationsCount} <span class="fs-7 text-muted fw-normal">Tracked</span></div>
             <div class="text-muted fs-8">Upcoming Interviews: <span class="text-white font-monospace fw-medium">${upcomingInterviewsCount}</span></div>
           </div>
         </div>
       </div>
 
-      <!-- 2b. Daily Interview Challenge (Problem of the Day) -->
-      <div class="ps-daily-challenge-card mb-4 p-3 p-md-3.5" style="background: #141417; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);">
-        <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
-          <div class="d-flex align-items-start gap-3">
-            <div class="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0" style="width: 50px; height: 50px; background: radial-gradient(circle, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.03) 70%); border: 1px solid rgba(245, 158, 11, 0.3); font-size: 1.4rem;">
+      <!-- 2b. Gamification Statistics Grid (Total XP & Total Points) -->
+      <div class="row g-3 mb-4">
+        <!-- Total XP Earned -->
+        <div class="col-12 col-md-6">
+          <div class="ps-stat-box p-3 h-100 text-start" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.07) 0%, rgba(20, 20, 23, 0.95) 100%); border: 1px solid rgba(245, 158, 11, 0.22);">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center justify-content-center rounded-2 bg-warning bg-opacity-15 text-warning" style="width: 28px; height: 28px; font-size: 0.85rem;">
+                  <i class="fa-solid fa-bolt"></i>
+                </div>
+                <span class="ps-stat-title text-white">Total XP Earned</span>
+              </div>
+              <span class="badge bg-warning bg-opacity-15 text-warning border border-warning border-opacity-30 font-monospace fs-10">Velocity Metric</span>
+            </div>
+            <div class="ps-stat-value mb-1 text-warning">${totalXp.toLocaleString()} <span class="fs-7 text-muted fw-normal">XP</span></div>
+            <div class="text-muted fs-8">Accumulated from coding practice, daily streaks & assessments</div>
+          </div>
+        </div>
+
+        <!-- Total Points Earned -->
+        <div class="col-12 col-md-6">
+          <div class="ps-stat-box p-3 h-100 text-start" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.07) 0%, rgba(20, 20, 23, 0.95) 100%); border: 1px solid rgba(34, 197, 94, 0.22);">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center justify-content-center rounded-2 bg-success bg-opacity-15 text-success" style="width: 28px; height: 28px; font-size: 0.85rem;">
+                  <i class="fa-solid fa-trophy"></i>
+                </div>
+                <span class="ps-stat-title text-white">Total Points Earned</span>
+              </div>
+              <span class="badge bg-success bg-opacity-15 text-success border border-success border-opacity-30 font-monospace fs-10">Platform Currency</span>
+            </div>
+            <div class="ps-stat-value mb-1 text-success">${totalPoints.toLocaleString()} <span class="fs-7 text-muted fw-normal">PTS</span></div>
+            <div class="text-muted fs-8">Achievement currency redeemable for mock slots & platform rewards</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2c. Daily Interview Challenge (Compact & Mobile-Responsive) -->
+      <div class="ps-daily-challenge-card mb-4 p-3 p-md-3.5" style="background: #141417; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);">
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+          <div class="d-flex align-items-center gap-3">
+            <div class="d-none d-sm-flex align-items-center justify-content-center rounded-circle flex-shrink-0" style="width: 44px; height: 44px; background: radial-gradient(circle, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.03) 70%); border: 1px solid rgba(245, 158, 11, 0.3); font-size: 1.25rem;">
               <span>⚡</span>
             </div>
-            <div>
-              <div class="d-flex flex-wrap align-items-center gap-2 mb-1.5">
+            <div style="min-width: 0;">
+              <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
                 <span class="badge-amber-pill"><i class="fa-solid fa-calendar-day"></i> Daily Challenge</span>
                 <span class="badge-muted-pill font-monospace" id="daily-challenge-timer"><i class="fa-regular fa-clock"></i> Reset in <span id="daily-timer-text">14h 25m</span></span>
                 <span class="badge-success-pill d-none" id="daily-challenge-status-badge"><i class="fa-solid fa-circle-check"></i> Solved Today</span>
               </div>
-              <h3 class="text-white fw-bold fs-5 m-0 mb-1" id="daily-challenge-heading">
+              <h3 class="text-white fw-bold fs-6 m-0 mb-1 text-truncate" id="daily-challenge-heading">
                 <span id="daily-challenge-q-title">Two Sum &bull; Pair Target Complement Search</span>
               </h3>
-              <div class="d-flex flex-wrap align-items-center gap-2 text-muted fs-8">
-                <span class="badge bg-warning bg-opacity-15 text-warning border border-warning border-opacity-25 font-monospace fs-9" id="daily-challenge-diff">EASY</span>
-                <span>•</span>
+              <div class="d-flex flex-wrap align-items-center gap-1.5 text-muted fs-8">
+                <span class="badge bg-warning bg-opacity-15 text-warning border border-warning border-opacity-25 font-monospace fs-10" id="daily-challenge-diff">EASY</span>
+                <span>&bull;</span>
                 <span id="daily-challenge-topic"><i class="fa-solid fa-tags text-secondary me-1"></i>Arrays & Hash Table</span>
-                <span>•</span>
-                <span class="text-secondary" id="daily-challenge-companies"><i class="fa-solid fa-building text-secondary me-1"></i>Google, Amazon, Meta</span>
-                <span>•</span>
+                <span>&bull;</span>
+                <span class="text-secondary d-none d-md-inline" id="daily-challenge-companies"><i class="fa-solid fa-building text-secondary me-1"></i>Google, Amazon, Meta</span>
+                <span class="d-none d-md-inline">&bull;</span>
                 <span class="text-warning fw-semibold"><i class="fa-solid fa-fire me-1"></i>+25 Streak XP</span>
               </div>
             </div>
           </div>
-          <div class="d-flex flex-wrap align-items-center gap-2 flex-shrink-0 align-self-stretch align-self-lg-center justify-content-end">
-            <a href="#/coding-practice?q=1" class="btn-amber-gradient text-decoration-none px-3 py-2 fs-8 fw-bold" id="btn-daily-challenge-solve">
+          <div class="d-flex align-items-center gap-2 flex-shrink-0">
+            <a href="#/coding-practice?q=1" class="btn-amber-gradient text-decoration-none px-3 py-1.5 fs-8 fw-bold d-inline-flex align-items-center gap-1.5" id="btn-daily-challenge-solve">
               <span>Solve Challenge</span>
-              <i class="fa-solid fa-arrow-right ms-1 fs-9"></i>
+              <i class="fa-solid fa-arrow-right fs-9"></i>
             </a>
-            <button type="button" class="btn-dark-glass px-3 py-2 fs-8 fw-semibold" id="btn-daily-challenge-mark">
+            <button type="button" class="btn-dark-glass px-2.5 py-1.5 fs-8 fw-semibold" id="btn-daily-challenge-mark">
               <i class="fa-solid fa-check text-success me-1"></i>
               <span id="btn-daily-mark-text">Mark Solved</span>
             </button>
@@ -1348,12 +1412,12 @@ const components = {
         <div class="col-lg-4">
           <!-- AI Interview Readiness Index -->
           <div class="ps-panel-box p-3 mb-3">
-            <div class="d-flex justify-content-between align-items-center mb-2.5">
-              <div>
-                <h3 class="text-white fw-bold m-0 fs-4">Interview Readiness Index</h3>
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2.5">
+              <div style="min-width: 0;">
+                <h3 class="text-white fw-bold m-0 fs-5 text-truncate">Interview Readiness Index</h3>
                 <div class="text-muted fs-8 mt-0.5">Live AI diagnostic evaluation</div>
               </div>
-              <span class="badge-success-pill fs-9" id="readiness-tier-pill">Evaluating</span>
+              <span class="badge-success-pill fs-9 flex-shrink-0" id="readiness-tier-pill">Evaluating</span>
             </div>
 
             <!-- Central Score Metric -->
@@ -1494,6 +1558,11 @@ const components = {
                 <i class="fa-solid fa-chevron-right text-muted fs-9"></i>
               </a>
             </div>
+          </div>
+
+          <!-- Reserved Reusable Advertisement / Platform Spotlight Placement -->
+          <div class="mt-3" id="dashboard-ad-container">
+            ${components.advertisementBanner()}
           </div>
         </div>
       </div>
@@ -3147,10 +3216,10 @@ const components = {
         <header class="lc-top-bar d-flex align-items-center justify-content-between px-2 px-md-3 py-1.5 flex-shrink-0">
           <!-- Left: Back Navigation, Sidebar Toggle, Problem List Dropdown & Fast Navigation -->
           <div class="d-flex align-items-center gap-1.5 gap-md-2 flex-shrink-0">
-            <button type="button" class="btn btn-sm lc-btn-nav lc-btn-back d-flex align-items-center gap-1.5 px-2.5 py-1 text-white border-0" id="btn-coding-back" title="Go Back">
+            <a href="#/dashboard" class="btn btn-sm lc-btn-nav lc-btn-back d-inline-flex align-items-center gap-1.5 px-2.5 py-1 text-white text-decoration-none border-0" id="btn-coding-back" role="button" onclick="if(window.handleCodingBackNav) { window.handleCodingBackNav(event); }" title="Go Back">
               <i class="fa-solid fa-arrow-left text-warning fs-8"></i>
               <span class="fs-8 fw-bold">Back</span>
-            </button>
+            </a>
             <button type="button" class="btn btn-sm lc-icon-btn d-lg-none px-2 py-1 text-light" id="lc-sidebar-toggle-btn" title="Toggle Navigation Menu">
               <i class="fa-solid fa-bars fs-7"></i>
             </button>

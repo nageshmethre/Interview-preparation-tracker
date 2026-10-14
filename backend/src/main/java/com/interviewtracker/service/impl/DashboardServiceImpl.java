@@ -29,6 +29,12 @@ public class DashboardServiceImpl implements DashboardService {
     @Autowired
     private UserStreakRepository userStreakRepository;
 
+    @Autowired
+    private UserProblemStatusRepository userProblemStatusRepository;
+
+    @Autowired
+    private MockTestRepository mockTestRepository;
+
     private User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found: " + email));
@@ -105,19 +111,39 @@ public class DashboardServiceImpl implements DashboardService {
             difficultyStats.put(diff.toUpperCase(), count);
         }
 
-        // 8. Solved Coding platforms (Bonus metrics mock syncing)
-        Map<String, Integer> codingPlatformsSolved = new HashMap<>();
-        // Set up some realistic numbers based on user's progress log
+        // Count actual solved coding problems from UserProblemStatus
+        List<UserProblemStatus> solvedList = userProblemStatusRepository.findByUserIdAndStatus(userId, "SOLVED");
+        long realSolvedCount = solvedList != null ? solvedList.size() : 0L;
+        if (solvedList != null) {
+            for (UserProblemStatus ups : solvedList) {
+                if (ups.getQuestion() != null && ups.getQuestion().getDifficulty() != null) {
+                    String d = ups.getQuestion().getDifficulty().toUpperCase();
+                    difficultyStats.put(d, difficultyStats.getOrDefault(d, 0L) + 1);
+                }
+            }
+        }
         long easySolved = difficultyStats.get("EASY");
         long medSolved = difficultyStats.get("MEDIUM");
         long hardSolved = difficultyStats.get("HARD");
-        int totalSolved = (int) (easySolved + medSolved + hardSolved);
+        long totalSolved = Math.max(realSolvedCount, easySolved + medSolved + hardSolved);
 
-        codingPlatformsSolved.put("LeetCode", totalSolved * 7 + 12); // Mock multiplier
-        codingPlatformsSolved.put("CodeChef", totalSolved * 3 + 4);
-        codingPlatformsSolved.put("Codeforces", totalSolved * 2);
+        // 8. Completed Mock Tests & Scores
+        List<MockTest> mockTests = mockTestRepository.findByUserIdOrderByCompletedAtDesc(userId);
+        int mockTestsCompleted = mockTests != null ? mockTests.size() : 0;
+        double averageMockScore = (mockTests != null && !mockTests.isEmpty())
+                ? mockTests.stream().mapToInt(MockTest::getScore).average().orElse(0.0)
+                : 0.0;
+        int bestMockScore = (mockTests != null && !mockTests.isEmpty())
+                ? mockTests.stream().mapToInt(MockTest::getScore).max().orElse(0)
+                : 0;
 
-        // 9. Streak Logic (Consecutive days logged or recorded streak)
+        // 9. Solved Coding platforms (clean honest summary or actual solved)
+        Map<String, Integer> codingPlatformsSolved = new HashMap<>();
+        codingPlatformsSolved.put("PrepSpace IDE", (int) totalSolved);
+        codingPlatformsSolved.put("LeetCode Sync", (int) totalSolved);
+        codingPlatformsSolved.put("Codeforces", 0);
+
+        // 10. Streak Logic (Consecutive days logged or recorded streak)
         int streak = calculateStreak(userId);
         Optional<UserStreak> streakOpt = userStreakRepository.findByUserId(userId);
         if (streakOpt.isPresent()) {
@@ -127,18 +153,25 @@ public class DashboardServiceImpl implements DashboardService {
             }
         }
 
-        // 10. Readiness Score Calculation
-        Double avgMockScore = mockInterviewRepository.getAverageScoreByUserId(userId);
-        int scorePart = avgMockScore == null ? 0 : (int) (avgMockScore * 0.7);
-        int topicsPart = (int) Math.min(completedCount * 4, 30); // Max 30% from topics completion
-        int readinessScore = Math.min(scorePart + topicsPart, 100);
-        if (readinessScore == 0 && appsCount > 0) readinessScore = 55; // Default starter score
+        // 11. Honest Readiness Score Calculation
+        // Zero fake starter scores: 0 if no activity recorded yet
+        Integer readinessScore = 0;
+        if (totalSolved > 0 || mockTestsCompleted > 0 || appsCount > 0) {
+            double dsaComponent = Math.min(100.0, (totalSolved / 50.0) * 100.0) * 0.35;
+            double mockComponent = (mockTestsCompleted > 0 ? averageMockScore : 0.0) * 0.35;
+            double consistencyComponent = Math.min(100.0, streak * 15.0) * 0.15;
+            double pipelineComponent = Math.min(100.0, appsCount * 20.0) * 0.15;
+            readinessScore = (int) Math.min(100, Math.round(dsaComponent + mockComponent + consistencyComponent + pipelineComponent));
+        }
 
-        // 11. XP Points (Combined from study progress + earned exam/coding awards)
+        // 12. XP Points & Separate Platform Points
         int totalMinutesVal = totalMinutes == null ? 0 : totalMinutes.intValue();
-        int baseStudyXp = totalMinutesVal * 2 + (int) (completedCount * 50) + (streak * 10);
+        int baseStudyXp = totalMinutesVal * 2 + (int) (totalSolved * 25) + (int) (completedCount * 15) + (streak * 10) + (mockTestsCompleted * 50);
         int streakAwardXp = streakOpt.map(us -> us.getXpPoints() != null ? us.getXpPoints() : 0).orElse(0);
         int totalXpPoints = baseStudyXp + streakAwardXp;
+
+        // Separate Achievement Points Currency (10 PTS per solved problem + 20 per mock exam + 5 per streak day)
+        int totalPoints = (int) (totalSolved * 10 + mockTestsCompleted * 20 + streak * 5 + appsCount * 5);
 
         return DashboardStatsDto.builder()
                 .totalStudyHours(totalHours)
@@ -152,6 +185,14 @@ public class DashboardServiceImpl implements DashboardService {
                 .streak(streak)
                 .readinessScore(readinessScore)
                 .xpPoints(totalXpPoints)
+                .totalPoints(totalPoints)
+                .mockExamsCompleted(mockTestsCompleted)
+                .averageMockScore(averageMockScore)
+                .bestMockScore(bestMockScore)
+                .totalSolved(totalSolved)
+                .easySolved(easySolved)
+                .mediumSolved(medSolved)
+                .hardSolved(hardSolved)
                 .build();
     }
 

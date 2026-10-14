@@ -18,4 +18,12 @@ public class DashboardStatsDto {
     private Integer streak;
     private Integer readinessScore;
     private Integer xpPoints;
+    private Integer totalPoints;
+    private Integer mockExamsCompleted;
+    private Double averageMockScore;
+    private Integer bestMockScore;
+    private Long totalSolved;
+    private Long easySolved;
+    private Long mediumSolved;
+    private Long hardSolved;
 }
