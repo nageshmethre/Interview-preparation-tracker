@@ -12042,7 +12042,13 @@ function initReadinessIndex(passedStats = null) {
   const applicationsCount = parseInt(stats.applicationsCount || 0, 10);
   const mockExamsCompleted = parseInt(stats.mockExamsCompleted || 0, 10);
 
-  const hasActivity = (totalSolved > 0 || mockExamsCompleted > 0 || applicationsCount > 0);
+  let milestonesAchieved = 0;
+  try {
+    const saved = JSON.parse(localStorage.getItem('prepspace_placement_milestones') || '{}');
+    milestonesAchieved = Object.values(saved).filter(Boolean).length;
+  } catch (e) {}
+
+  const hasActivity = (totalSolved > 0 || mockExamsCompleted > 0 || applicationsCount > 0 || milestonesAchieved > 0);
 
   if (!hasActivity) {
     scoreEl.textContent = '--%';
@@ -12077,14 +12083,15 @@ function initReadinessIndex(passedStats = null) {
   const consistencyPct = Math.min(100, Math.max(0, streakDays * 14));
   const pipelinePct = Math.min(100, Math.max(0, applicationsCount * 25));
 
-  // Daily challenge bonus (+5%)
+  // Daily challenge bonus (+5%) & Milestones bonus (+3% per milestone)
   const today = new Date();
   const dateKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
   const dailySolvedBonus = localStorage.getItem(`prepspace_daily_challenge_${dateKey}`) === 'true' ? 5 : 0;
+  const milestoneBonus = milestonesAchieved * 3;
 
-  // Honest score without artificial 32% floor
+  // Genuine comprehensive readiness calculation
   const finalScore = Math.min(99, Math.max(1, Math.round(
-    (dsaPct * 0.35) + (mockPct * 0.30) + (consistencyPct * 0.20) + (pipelinePct * 0.15) + dailySolvedBonus
+    (dsaPct * 0.35) + (mockPct * 0.30) + (consistencyPct * 0.15) + (pipelinePct * 0.10) + dailySolvedBonus + milestoneBonus
   )));
 
   scoreEl.textContent = `${finalScore}%`;
@@ -12220,18 +12227,25 @@ function initMilestonesChecklist(passedStats = null) {
     stateMap = {};
   }
 
-  // Sync automatic completions into stateMap
+  // System auto-completion: If criteria are satisfied, mark complete automatically
   milestones.forEach(m => {
-    if (m.autoCompleted) {
+    if (m.autoCompleted && stateMap[m.id] === undefined) {
       stateMap[m.id] = true;
     }
   });
+
+  function isMilestoneComplete(m) {
+    if (stateMap[m.id] !== undefined) {
+      return Boolean(stateMap[m.id]);
+    }
+    return Boolean(m.autoCompleted);
+  }
 
   function updateProgress() {
     const total = milestones.length;
     let completed = 0;
     milestones.forEach(m => {
-      if (stateMap[m.id] || m.autoCompleted) completed++;
+      if (isMilestoneComplete(m)) completed++;
     });
     const pct = Math.round((completed / total) * 100);
     if (progressBar) progressBar.style.width = `${pct}%`;
@@ -12247,19 +12261,23 @@ function initMilestonesChecklist(passedStats = null) {
   }
 
   container.innerHTML = milestones.map(m => {
-    const checked = Boolean(stateMap[m.id] || m.autoCompleted);
+    const checked = isMilestoneComplete(m);
+    const badgeText = checked 
+      ? (m.autoCompleted ? '<i class="fa-solid fa-circle-check me-1"></i> Auto-Verified' : '<i class="fa-solid fa-check me-1"></i> Achieved') 
+      : m.progressText;
+
     return `
       <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 ${checked ? 'bg-success bg-opacity-10 border border-success border-opacity-25' : 'bg-dark bg-opacity-40 border border-secondary border-opacity-15'} transition-all" id="milestone-row-${m.id}">
         <div class="d-flex align-items-start gap-2.5 flex-grow-1 me-2">
-          <input class="form-check-input mt-1 ms-1 milestone-checkbox" type="checkbox" id="chk-${m.id}" data-id="${m.id}" ${checked ? 'checked' : ''} style="cursor: pointer; width: 1.15rem; height: 1.15rem;">
+          <input class="milestone-checkbox mt-1 ms-1" type="checkbox" id="chk-${m.id}" data-id="${m.id}" ${checked ? 'checked' : ''} style="cursor: pointer;">
           <label class="form-check-label fs-8 text-white m-0" for="chk-${m.id}" style="cursor: pointer;">
             <div class="fw-semibold ${checked ? 'text-decoration-line-through text-muted' : 'text-white'}">${m.title}</div>
             <div class="text-muted fs-9 mt-0.5">${m.desc}</div>
           </label>
         </div>
         <div class="d-flex align-items-center gap-1.5 flex-shrink-0">
-          <span class="badge ${checked ? 'bg-success bg-opacity-15 text-success border border-success border-opacity-30' : 'bg-secondary bg-opacity-20 text-secondary border border-secondary border-opacity-25'} font-monospace fs-10 d-none d-md-inline-block">
-            ${checked ? '<i class="fa-solid fa-check me-0.5"></i> Verified' : m.progressText}
+          <span class="milestone-status-badge badge ${checked ? 'bg-success bg-opacity-15 text-success border border-success border-opacity-30' : 'bg-secondary bg-opacity-20 text-secondary border border-secondary border-opacity-25'} font-monospace fs-10 d-none d-md-inline-block">
+            ${badgeText}
           </span>
           <a href="${m.link}" class="btn btn-xs btn-dark-glass text-secondary text-nowrap px-2 py-1 fs-9 d-inline-flex align-items-center gap-1">
             <span>${m.badge}</span> <i class="fa-solid fa-arrow-right fs-10"></i>
@@ -12272,26 +12290,38 @@ function initMilestonesChecklist(passedStats = null) {
   container.querySelectorAll('.milestone-checkbox').forEach(input => {
     input.addEventListener('change', (e) => {
       const id = e.target.dataset.id;
-      stateMap[id] = e.target.checked;
+      const isChecked = e.target.checked;
+      stateMap[id] = isChecked;
       try {
         localStorage.setItem('prepspace_placement_milestones', JSON.stringify(stateMap));
       } catch (err) {}
       
       const row = document.getElementById(`milestone-row-${id}`);
       const labelTitle = row ? row.querySelector('.fw-semibold') : null;
-      if (e.target.checked) {
+      const statusBadge = row ? row.querySelector('.milestone-status-badge') : null;
+      const m = milestones.find(item => item.id === id);
+
+      if (isChecked) {
         if (row) {
-          row.classList.remove('bg-dark', 'bg-opacity-40', 'border-secondary');
+          row.classList.remove('bg-dark', 'bg-opacity-40', 'border-secondary', 'border-opacity-15');
           row.classList.add('bg-success', 'bg-opacity-10', 'border-success', 'border-opacity-25');
         }
         if (labelTitle) labelTitle.classList.add('text-decoration-line-through', 'text-muted');
-        showToast('🎯 Milestone completed! Target placement progress updated.', 'success');
+        if (statusBadge) {
+          statusBadge.className = 'milestone-status-badge badge bg-success bg-opacity-15 text-success border border-success border-opacity-30 font-monospace fs-10 d-none d-md-inline-block';
+          statusBadge.innerHTML = (m && m.autoCompleted) ? '<i class="fa-solid fa-circle-check me-1"></i> Auto-Verified' : '<i class="fa-solid fa-check me-1"></i> Achieved';
+        }
+        showToast('🎯 Milestone achieved! Placement readiness updated.', 'success');
       } else {
         if (row) {
           row.classList.remove('bg-success', 'bg-opacity-10', 'border-success', 'border-opacity-25');
-          row.classList.add('bg-dark', 'bg-opacity-40', 'border-secondary');
+          row.classList.add('bg-dark', 'bg-opacity-40', 'border-secondary', 'border-opacity-15');
         }
         if (labelTitle) labelTitle.classList.remove('text-decoration-line-through', 'text-muted');
+        if (statusBadge) {
+          statusBadge.className = 'milestone-status-badge badge bg-secondary bg-opacity-20 text-secondary border border-secondary border-opacity-25 font-monospace fs-10 d-none d-md-inline-block';
+          statusBadge.textContent = m ? m.progressText : 'Pending';
+        }
       }
 
       updateProgress();
@@ -12311,7 +12341,7 @@ function initMilestonesChecklist(passedStats = null) {
       });
       container.querySelectorAll('[id^="milestone-row-"]').forEach(row => {
         row.classList.remove('bg-success', 'bg-opacity-10', 'border-success', 'border-opacity-25');
-        row.classList.add('bg-dark', 'bg-opacity-40', 'border-secondary');
+        row.classList.add('bg-dark', 'bg-opacity-40', 'border-secondary', 'border-opacity-15');
         const lt = row.querySelector('.fw-semibold');
         if (lt) lt.classList.remove('text-decoration-line-through', 'text-muted');
       });

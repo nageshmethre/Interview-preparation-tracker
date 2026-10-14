@@ -361,6 +361,97 @@ h1, h2, h3, h4, h5, h6,
   transform: translateY(-1px);
 }
 
+/* Compact Equal Action Buttons for Dashboard */
+.btn-daily-action {
+  height: 32px !important;
+  padding: 0 14px !important;
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  line-height: 1 !important;
+  text-decoration: none !important;
+  transition: all 0.15s ease !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+}
+
+.btn-daily-primary {
+  background: linear-gradient(180deg, #fbb03b 0%, #f39c12 100%) !important;
+  color: #000000 !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25) !important;
+}
+
+.btn-daily-primary:hover {
+  background: linear-gradient(180deg, #fcd34d 0%, #f59e0b 100%) !important;
+  color: #000000 !important;
+  transform: translateY(-1px);
+}
+
+.btn-daily-secondary {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  color: #ffffff !important;
+}
+
+.btn-daily-secondary:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+/* Dark-Themed Milestone Checkbox (No Stark White Boxes) */
+.milestone-checkbox {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  min-width: 1.25rem !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative !important;
+  transition: all 0.15s ease-in-out !important;
+  outline: none !important;
+}
+
+.milestone-checkbox:hover {
+  background-color: rgba(255, 255, 255, 0.14) !important;
+  border-color: rgba(245, 158, 11, 0.65) !important;
+}
+
+.milestone-checkbox:checked {
+  background-color: #22c55e !important;
+  border-color: #22c55e !important;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.35) !important;
+}
+
+.milestone-checkbox:checked::after {
+  content: "" !important;
+  display: block !important;
+  width: 5px !important;
+  height: 9px !important;
+  border: solid #000000 !important;
+  border-width: 0 2px 2px 0 !important;
+  transform: rotate(45deg) !important;
+  margin-top: -2px !important;
+}
+
+.milestone-checkbox:focus {
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25) !important;
+}
+
 .btn-amber-outline {
   background: rgba(245, 158, 11, 0.05) !important;
   border: 1px solid rgba(245, 158, 11, 0.55) !important;
@@ -6865,14 +6956,14 @@ body.ui-drawer-open {
   font-size: 0.72rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #a1a1aa;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
 }
 
 .ps-stat-value {
-  font-size: 1.85rem;
+  font-size: 1.35rem;
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.2;
   letter-spacing: -0.02em;
   color: #ffffff;
 }
@@ -7423,16 +7514,18 @@ h5.fs-7, h5.fs-8, h5.fs-9 {
 
 /* Specific Section Titles & Card Headers */
 .ps-stat-title {
-  font-size: 0.95rem !important;
+  font-size: 0.72rem !important;
   font-weight: 600 !important;
-  color: #a1a1aa !important;
-  letter-spacing: -0.01em !important;
+  color: #94a3b8 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
 }
 
 .ps-stat-value {
-  font-size: clamp(1.6rem, 2.5vw, 2.25rem) !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.025em !important;
+  font-size: clamp(1.2rem, 1.4vw, 1.45rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.2 !important;
 }
 
 /* Sidebar Brand Title */
@@ -7788,10 +7881,10 @@ h5.fs-7, h5.fs-8, h5.fs-9 {
     border-radius: 12px !important;
   }
   .ps-stat-value {
-    font-size: 1.45rem !important;
+    font-size: 1.25rem !important;
   }
   .ps-stat-title {
-    font-size: 0.76rem !important;
+    font-size: 0.70rem !important;
   }
   .ps-professional-dashboard {
     padding-left: 0 !important;

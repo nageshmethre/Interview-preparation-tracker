@@ -1171,139 +1171,121 @@ const components = {
         </div>
       </div>
 
-      <!-- 2. Primary Statistics Grid (4 Cards) -->
-      <div class="row g-3 mb-3">
-        <!-- Study Time -->
-        <div class="col-12 col-sm-6 col-xl-3">
+      <!-- 2. Primary & Gamification Statistics Grid (6 Equal Compact Cards) -->
+      <div class="row g-2.5 g-md-3 mb-3">
+        <!-- 1. Daily Focus Time -->
+        <div class="col-6 col-md-4 col-xl-2">
           <div class="ps-stat-box p-3 h-100 text-start">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-              <span class="ps-stat-title">Daily Focus Time</span>
-              <span class="text-muted fs-8 font-monospace" id="live-session-timer">Active</span>
+            <div class="d-flex align-items-center justify-content-between mb-1.5">
+              <span class="ps-stat-title text-truncate">Daily Focus</span>
+              <span class="text-muted fs-9 font-monospace" id="live-session-timer">Active</span>
             </div>
             <div class="ps-stat-value mb-1" id="daily-screentime-display">0m</div>
-            <div class="text-muted fs-8">Screen time logged today</div>
+            <div class="text-muted fs-8 text-truncate">Screen time today</div>
           </div>
         </div>
 
-        <!-- Problems Solved -->
-        <div class="col-12 col-sm-6 col-xl-3">
+        <!-- 2. Problems Solved -->
+        <div class="col-6 col-md-4 col-xl-2">
           <div class="ps-stat-box p-3 h-100 text-start">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-              <span class="ps-stat-title">Problems Solved</span>
+            <div class="d-flex align-items-center justify-content-between mb-1.5">
+              <span class="ps-stat-title text-truncate">Problems Solved</span>
               <a href="#/coding-practice" class="ps-card-link fs-8 text-decoration-none">Practice &rarr;</a>
             </div>
-            <div class="ps-stat-value mb-1">${totalSolved} <span class="fs-7 text-muted fw-normal">/ ${totalQuestions}</span></div>
-            <div class="text-muted fs-8 font-monospace">
-              <span class="text-success fw-medium">E: ${easySolved}</span> &bull; 
-              <span class="text-warning fw-medium">M: ${mediumSolved}</span> &bull; 
-              <span class="text-danger fw-medium">H: ${hardSolved}</span>
+            <div class="ps-stat-value mb-1">${totalSolved} <span class="fs-8 text-muted fw-normal">/ ${totalQuestions}</span></div>
+            <div class="text-muted fs-8 text-truncate font-monospace">
+              <span class="text-success fw-medium">E:${easySolved}</span> 
+              <span class="text-warning fw-medium">M:${mediumSolved}</span> 
+              <span class="text-danger fw-medium">H:${hardSolved}</span>
             </div>
           </div>
         </div>
 
-        <!-- Mock Exams Completed -->
-        <div class="col-12 col-sm-6 col-xl-3">
+        <!-- 3. Mock Exams Completed -->
+        <div class="col-6 col-md-4 col-xl-2">
           <div class="ps-stat-box p-3 h-100 text-start">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-              <span class="ps-stat-title">Mock Exams Completed</span>
-              <a href="#/mock-exams" class="ps-card-link fs-8 text-decoration-none">Take Test &rarr;</a>
+            <div class="d-flex align-items-center justify-content-between mb-1.5">
+              <span class="ps-stat-title text-truncate">Mock Exams</span>
+              <a href="#/mock-exams" class="ps-card-link fs-8 text-decoration-none">Test &rarr;</a>
             </div>
-            <div class="ps-stat-value mb-1">${mockExamsCompleted} <span class="fs-7 text-muted fw-normal">Completed</span></div>
-            <div class="text-muted fs-8">Average Score: <span class="text-white font-monospace fw-medium">${averageMockScore}</span></div>
+            <div class="ps-stat-value mb-1">${mockExamsCompleted} <span class="fs-8 text-muted fw-normal">Done</span></div>
+            <div class="text-muted fs-8 text-truncate">Avg: <span class="text-white font-monospace">${averageMockScore}</span></div>
           </div>
         </div>
 
-        <!-- Placement Applications -->
-        <div class="col-12 col-sm-6 col-xl-3">
+        <!-- 4. Placement Applications -->
+        <div class="col-6 col-md-4 col-xl-2">
           <div class="ps-stat-box p-3 h-100 text-start">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-              <span class="ps-stat-title">Placement Applications</span>
+            <div class="d-flex align-items-center justify-content-between mb-1.5">
+              <span class="ps-stat-title text-truncate">Applications</span>
               <a href="#/placement" class="ps-card-link fs-8 text-decoration-none">Kanban &rarr;</a>
             </div>
-            <div class="ps-stat-value mb-1">${applicationsCount} <span class="fs-7 text-muted fw-normal">Tracked</span></div>
-            <div class="text-muted fs-8">Upcoming Interviews: <span class="text-white font-monospace fw-medium">${upcomingInterviewsCount}</span></div>
+            <div class="ps-stat-value mb-1">${applicationsCount} <span class="fs-8 text-muted fw-normal">Tracked</span></div>
+            <div class="text-muted fs-8 text-truncate">${upcomingInterviewsCount} Interviews</div>
+          </div>
+        </div>
+
+        <!-- 5. Total XP Earned -->
+        <div class="col-6 col-md-4 col-xl-2">
+          <div class="ps-stat-box p-3 h-100 text-start">
+            <div class="d-flex align-items-center justify-content-between mb-1.5">
+              <span class="ps-stat-title text-truncate">Total XP</span>
+              <span class="badge bg-warning bg-opacity-15 text-warning border border-warning border-opacity-30 font-monospace fs-10">Velocity</span>
+            </div>
+            <div class="ps-stat-value mb-1 text-warning">${totalXp.toLocaleString()} <span class="fs-8 text-muted fw-normal">XP</span></div>
+            <div class="text-muted fs-8 text-truncate">Practice & streak XP</div>
+          </div>
+        </div>
+
+        <!-- 6. Total Points Earned -->
+        <div class="col-6 col-md-4 col-xl-2">
+          <div class="ps-stat-box p-3 h-100 text-start">
+            <div class="d-flex align-items-center justify-content-between mb-1.5">
+              <span class="ps-stat-title text-truncate">Total Points</span>
+              <span class="badge bg-success bg-opacity-15 text-success border border-success border-opacity-30 font-monospace fs-10">Currency</span>
+            </div>
+            <div class="ps-stat-value mb-1 text-success">${totalPoints.toLocaleString()} <span class="fs-8 text-muted fw-normal">PTS</span></div>
+            <div class="text-muted fs-8 text-truncate">Platform currency</div>
           </div>
         </div>
       </div>
 
-      <!-- 2b. Gamification Statistics Grid (Total XP & Total Points) -->
-      <div class="row g-3 mb-4">
-        <!-- Total XP Earned -->
-        <div class="col-12 col-md-6">
-          <div class="ps-stat-box p-3 h-100 text-start" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.07) 0%, rgba(20, 20, 23, 0.95) 100%); border: 1px solid rgba(245, 158, 11, 0.22);">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-              <div class="d-flex align-items-center gap-2">
-                <div class="d-flex align-items-center justify-content-center rounded-2 bg-warning bg-opacity-15 text-warning" style="width: 28px; height: 28px; font-size: 0.85rem;">
-                  <i class="fa-solid fa-bolt"></i>
-                </div>
-                <span class="ps-stat-title text-white">Total XP Earned</span>
-              </div>
-              <span class="badge bg-warning bg-opacity-15 text-warning border border-warning border-opacity-30 font-monospace fs-10">Velocity Metric</span>
-            </div>
-            <div class="ps-stat-value mb-1 text-warning">${totalXp.toLocaleString()} <span class="fs-7 text-muted fw-normal">XP</span></div>
-            <div class="text-muted fs-8">Accumulated from coding practice, daily streaks & assessments</div>
-          </div>
-        </div>
-
-        <!-- Total Points Earned -->
-        <div class="col-12 col-md-6">
-          <div class="ps-stat-box p-3 h-100 text-start" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.07) 0%, rgba(20, 20, 23, 0.95) 100%); border: 1px solid rgba(34, 197, 94, 0.22);">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-              <div class="d-flex align-items-center gap-2">
-                <div class="d-flex align-items-center justify-content-center rounded-2 bg-success bg-opacity-15 text-success" style="width: 28px; height: 28px; font-size: 0.85rem;">
-                  <i class="fa-solid fa-trophy"></i>
-                </div>
-                <span class="ps-stat-title text-white">Total Points Earned</span>
-              </div>
-              <span class="badge bg-success bg-opacity-15 text-success border border-success border-opacity-30 font-monospace fs-10">Platform Currency</span>
-            </div>
-            <div class="ps-stat-value mb-1 text-success">${totalPoints.toLocaleString()} <span class="fs-7 text-muted fw-normal">PTS</span></div>
-            <div class="text-muted fs-8">Achievement currency redeemable for mock slots & platform rewards</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2c. Daily Interview Challenge (Compact & Mobile-Responsive) -->
-      <div class="ps-daily-challenge-card mb-4 p-3 p-md-3.5" style="background: #141417; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);">
+      <!-- 2c. Daily Interview Challenge (Compact & Proportioned) -->
+      <div class="ps-daily-challenge-card mb-3 p-3" style="background: #141417; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);">
         <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
-          <div class="d-flex align-items-center gap-3">
-            <div class="d-none d-sm-flex align-items-center justify-content-center rounded-circle flex-shrink-0" style="width: 44px; height: 44px; background: radial-gradient(circle, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.03) 70%); border: 1px solid rgba(245, 158, 11, 0.3); font-size: 1.25rem;">
-              <span>⚡</span>
+          <div style="min-width: 0;">
+            <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+              <span class="badge-amber-pill"><i class="fa-solid fa-calendar-day"></i> Daily Challenge</span>
+              <span class="badge-muted-pill font-monospace" id="daily-challenge-timer"><i class="fa-regular fa-clock"></i> Reset in <span id="daily-timer-text">14h 25m</span></span>
+              <span class="badge-success-pill d-none" id="daily-challenge-status-badge"><i class="fa-solid fa-circle-check"></i> Solved Today</span>
             </div>
-            <div style="min-width: 0;">
-              <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
-                <span class="badge-amber-pill"><i class="fa-solid fa-calendar-day"></i> Daily Challenge</span>
-                <span class="badge-muted-pill font-monospace" id="daily-challenge-timer"><i class="fa-regular fa-clock"></i> Reset in <span id="daily-timer-text">14h 25m</span></span>
-                <span class="badge-success-pill d-none" id="daily-challenge-status-badge"><i class="fa-solid fa-circle-check"></i> Solved Today</span>
-              </div>
-              <h3 class="text-white fw-bold fs-6 m-0 mb-1 text-truncate" id="daily-challenge-heading">
-                <span id="daily-challenge-q-title">Two Sum &bull; Pair Target Complement Search</span>
-              </h3>
-              <div class="d-flex flex-wrap align-items-center gap-1.5 text-muted fs-8">
-                <span class="badge bg-warning bg-opacity-15 text-warning border border-warning border-opacity-25 font-monospace fs-10" id="daily-challenge-diff">EASY</span>
-                <span>&bull;</span>
-                <span id="daily-challenge-topic"><i class="fa-solid fa-tags text-secondary me-1"></i>Arrays & Hash Table</span>
-                <span>&bull;</span>
-                <span class="text-secondary d-none d-md-inline" id="daily-challenge-companies"><i class="fa-solid fa-building text-secondary me-1"></i>Google, Amazon, Meta</span>
-                <span class="d-none d-md-inline">&bull;</span>
-                <span class="text-warning fw-semibold"><i class="fa-solid fa-fire me-1"></i>+25 Streak XP</span>
-              </div>
+            <h3 class="text-white fw-bold fs-6 m-0 mb-1 text-truncate" id="daily-challenge-heading">
+              <span id="daily-challenge-q-title">Two Sum &bull; Pair Target Complement Search</span>
+            </h3>
+            <div class="d-flex flex-wrap align-items-center gap-1.5 text-muted fs-8">
+              <span class="badge bg-warning bg-opacity-15 text-warning border border-warning border-opacity-25 font-monospace fs-10" id="daily-challenge-diff">EASY</span>
+              <span>&bull;</span>
+              <span id="daily-challenge-topic">Arrays & Hash Table</span>
+              <span>&bull;</span>
+              <span class="text-secondary d-none d-md-inline" id="daily-challenge-companies">Google, Amazon, Meta</span>
+              <span class="d-none d-md-inline">&bull;</span>
+              <span class="text-warning fw-semibold"><i class="fa-solid fa-fire me-1"></i>+25 Streak XP</span>
             </div>
           </div>
           <div class="d-flex align-items-center gap-2 flex-shrink-0">
-            <a href="#/coding-practice?q=1" class="btn-amber-gradient text-decoration-none px-3 py-1.5 fs-8 fw-bold d-inline-flex align-items-center gap-1.5" id="btn-daily-challenge-solve">
+            <a href="#/coding-practice?q=1" class="btn-daily-action btn-daily-primary" id="btn-daily-challenge-solve">
               <span>Solve Challenge</span>
               <i class="fa-solid fa-arrow-right fs-9"></i>
             </a>
-            <button type="button" class="btn-dark-glass px-2.5 py-1.5 fs-8 fw-semibold" id="btn-daily-challenge-mark">
-              <i class="fa-solid fa-check text-success me-1"></i>
+            <button type="button" class="btn-daily-action btn-daily-secondary" id="btn-daily-challenge-mark">
+              <i class="fa-solid fa-check text-success"></i>
               <span id="btn-daily-mark-text">Mark Solved</span>
             </button>
           </div>
         </div>
       </div>
 
-      <!-- 3. Main Workspace Grid (8-col / 4-col) -->
+      <!-- 3. Main Workspace Grid (8-col / 4-col Balanced) -->
       <div class="row g-3">
         <!-- LEFT 8-COLUMN MAIN ANALYTICS & TOOLS -->
         <div class="col-lg-8">
@@ -1311,22 +1293,22 @@ const components = {
           <div class="ps-panel-box p-3 mb-3">
             <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
               <div>
-                <h3 class="text-white fw-bold m-0 fs-4">Study Velocity (Minutes)</h3>
+                <h3 class="text-white fw-bold m-0 fs-5">Study Velocity (Minutes)</h3>
                 <p class="text-muted fs-8 mb-0">Daily active focus time recorded over the last 7 days</p>
               </div>
             </div>
-            <div style="position: relative; height: 190px;">
+            <div style="position: relative; height: 185px;">
               <canvas id="weeklyHoursChart"></canvas>
             </div>
           </div>
 
           <!-- 4 Workspace Cards: Coding IDE, 50-MCQ Mock, Tech Library, DSA Roadmap -->
-          <div class="row g-3">
+          <div class="row g-3 mb-3">
             <div class="col-md-6">
               <div class="ps-workspace-card p-3 h-100 d-flex flex-column justify-content-between">
                 <div>
                   <div class="d-flex justify-content-between align-items-center mb-1">
-                    <h4 class="text-white fw-bold fs-5 m-0">Coding Practice IDE</h4>
+                    <h4 class="text-white fw-bold fs-6 m-0">Coding Practice IDE</h4>
                     <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-30 fs-9 font-monospace">300+ Problems</span>
                   </div>
                   <p class="text-muted fs-8 mb-3">In-browser code editor with multi-language execution (Java, Python, C++, JS), testcase validation, and LeetCode-standard challenges.</p>
@@ -1341,7 +1323,7 @@ const components = {
               <div class="ps-workspace-card p-3 h-100 d-flex flex-column justify-content-between">
                 <div>
                   <div class="d-flex justify-content-between align-items-center mb-1">
-                    <h4 class="text-white fw-bold fs-5 m-0">50-MCQ Timed Mock Exam</h4>
+                    <h4 class="text-white fw-bold fs-6 m-0">50-MCQ Timed Mock Exam</h4>
                     <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-30 fs-9 font-monospace">50 Questions</span>
                   </div>
                   <p class="text-muted fs-8 mb-3">Full-length timed screening engine testing Core Java, DSA, DBMS, OOP, and System Design with automated score calculation.</p>
@@ -1356,7 +1338,7 @@ const components = {
               <div class="ps-workspace-card p-3 h-100 d-flex flex-column justify-content-between">
                 <div>
                   <div class="d-flex justify-content-between align-items-center mb-1">
-                    <h4 class="text-white fw-bold fs-5 m-0">Technical Library & Guides</h4>
+                    <h4 class="text-white fw-bold fs-6 m-0">Technical Library & Guides</h4>
                     <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-30 fs-9 font-monospace">E-Books & Articles</span>
                   </div>
                   <p class="text-muted fs-8 mb-3">Curated engineering textbooks, interview guides, and high-yield cheat sheets formatted for deep, distraction-free reading.</p>
@@ -1371,7 +1353,7 @@ const components = {
               <div class="ps-workspace-card p-3 h-100 d-flex flex-column justify-content-between">
                 <div>
                   <div class="d-flex justify-content-between align-items-center mb-1">
-                    <h4 class="text-white fw-bold fs-5 m-0">Interactive DSA Syllabus</h4>
+                    <h4 class="text-white fw-bold fs-6 m-0">Interactive DSA Syllabus</h4>
                     <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-30 fs-9 font-monospace">16 Domains</span>
                   </div>
                   <p class="text-muted fs-8 mb-3">Structured curriculum covering Arrays, Linked Lists, Binary Trees, Dynamic Programming, Graphs, and System Design.</p>
@@ -1384,11 +1366,11 @@ const components = {
           </div>
 
           <!-- Target Company Placement Roadmap & Milestone Checklist -->
-          <div class="ps-panel-box p-3 mb-3 mt-3">
+          <div class="ps-panel-box p-3 mb-3">
             <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
               <div>
                 <div class="d-flex align-items-center gap-2">
-                  <h3 class="text-white fw-bold m-0 fs-4">Placement Milestones Checklist</h3>
+                  <h3 class="text-white fw-bold m-0 fs-5">Placement Milestones Checklist</h3>
                   <span class="badge-amber-pill fs-10" id="checklist-progress-pill">0/5 Complete</span>
                 </div>
                 <p class="text-muted fs-8 mb-0 mt-0.5">Key placement objectives for Google, Amazon, Microsoft & Tier-1 software engineering roles</p>
@@ -1406,6 +1388,56 @@ const components = {
               <!-- Rendered dynamically with localStorage persistence -->
             </div>
           </div>
+
+          <!-- Core Curriculum Matrix (Placed on Left to Fully Fill Space) -->
+          <div class="ps-panel-box p-3 mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h3 class="text-white fw-bold m-0 fs-5">Core Curriculum Matrix</h3>
+                <p class="text-muted fs-8 mb-0">High-yield technical interview domains and problem roadmaps</p>
+              </div>
+              <a href="#/dsa-roadmap" class="ps-card-link fs-8 text-decoration-none">View All 16 Domains &rarr;</a>
+            </div>
+            
+            <div class="row g-2.5">
+              <div class="col-12 col-md-6">
+                <div class="p-2.5 rounded-3 d-flex justify-content-between align-items-center" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.07);">
+                  <div>
+                    <div class="text-white fs-8 fw-semibold">Arrays, Strings & Two Pointers</div>
+                    <div class="text-muted fs-9 font-monospace">32 Problems &bull; Sliding Window & Binary Search</div>
+                  </div>
+                  <a href="#/coding-practice" class="btn btn-xs btn-dark-glass text-secondary text-nowrap px-2 py-1 fs-9">Practice</a>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="p-2.5 rounded-3 d-flex justify-content-between align-items-center" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.07);">
+                  <div>
+                    <div class="text-white fs-8 fw-semibold">Trees & Binary Search Trees</div>
+                    <div class="text-muted fs-9 font-monospace">28 Problems &bull; DFS, BFS, Traversals & LCA</div>
+                  </div>
+                  <a href="#/coding-practice" class="btn btn-xs btn-dark-glass text-secondary text-nowrap px-2 py-1 fs-9">Practice</a>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="p-2.5 rounded-3 d-flex justify-content-between align-items-center" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.07);">
+                  <div>
+                    <div class="text-white fs-8 fw-semibold">Dynamic Programming & Recursion</div>
+                    <div class="text-muted fs-9 font-monospace">24 Problems &bull; Memoization & Tabulation</div>
+                  </div>
+                  <a href="#/coding-practice" class="btn btn-xs btn-dark-glass text-secondary text-nowrap px-2 py-1 fs-9">Practice</a>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="p-2.5 rounded-3 d-flex justify-content-between align-items-center" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.07);">
+                  <div>
+                    <div class="text-white fs-8 fw-semibold">System Design & Databases</div>
+                    <div class="text-muted fs-9 font-monospace">16 Topics &bull; Caching, Sharding & SQL Schema</div>
+                  </div>
+                  <a href="#/library" class="btn btn-xs btn-dark-glass text-secondary text-nowrap px-2 py-1 fs-9">Read</a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- RIGHT 4-COLUMN SIDEBAR -->
@@ -1420,14 +1452,14 @@ const components = {
               <span class="badge-success-pill fs-9 flex-shrink-0" id="readiness-tier-pill">Evaluating</span>
             </div>
 
-            <!-- Central Score Metric -->
+            <!-- Central Score Metric (No Redundant Circular Icon, Crisp Font Size) -->
             <div class="d-flex align-items-center justify-content-between p-3 rounded-3 mb-3" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px;">
               <div>
-                <div class="display-6 fw-bold text-white font-monospace lh-1" id="readiness-score-val">--%</div>
+                <div class="fs-2 fw-bold text-white font-monospace lh-1" id="readiness-score-val">--%</div>
                 <div class="text-muted fs-8 mt-1" id="readiness-score-status">Calculating profile readiness...</div>
               </div>
-              <div class="d-flex align-items-center justify-content-center rounded-circle" style="width: 48px; height: 48px; background: radial-gradient(circle, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.03) 70%); border: 1px solid rgba(34, 197, 94, 0.35);">
-                <i class="fa-solid fa-chart-pie text-success fs-5"></i>
+              <div class="text-end">
+                <span class="badge bg-success bg-opacity-15 text-success border border-success border-opacity-30 fs-8 font-monospace px-2.5 py-1 rounded-pill">Target: 85%+</span>
               </div>
             </div>
 
@@ -1483,7 +1515,7 @@ const components = {
           <!-- Placement Pipeline Breakdown -->
           <div class="ps-panel-box p-3 mb-3">
             <div class="d-flex justify-content-between align-items-center mb-3">
-              <h3 class="text-white fw-bold m-0 fs-4">Recruitment Pipeline</h3>
+              <h3 class="text-white fw-bold m-0 fs-5">Recruitment Pipeline</h3>
               <a href="#/placement" class="ps-card-link fs-8 text-decoration-none">Open Board &rarr;</a>
             </div>
             <div style="position: relative; height: 140px;" class="mb-3">
@@ -1495,50 +1527,10 @@ const components = {
             </div>
           </div>
 
-          <!-- Curriculum Progress -->
+          <!-- Essential Candidate Tools Direct Links -->
           <div class="ps-panel-box p-3 mb-3">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h3 class="text-white fw-bold m-0 fs-4">Core Curriculum Matrix</h3>
-              <a href="#/dsa-roadmap" class="ps-card-link fs-8 text-decoration-none">All Topics &rarr;</a>
-            </div>
-            
-            <div class="ps-prep-area-item">
-              <div>
-                <div class="text-white fs-8 fw-medium">Arrays, Strings & Two Pointers</div>
-                <div class="text-muted fs-9 font-monospace">Core linear data structures</div>
-              </div>
-              <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-30 fs-9 font-monospace">Active</span>
-            </div>
-
-            <div class="ps-prep-area-item">
-              <div>
-                <div class="text-white fs-8 fw-medium">Trees & Binary Search Trees</div>
-                <div class="text-muted fs-9 font-monospace">DFS, BFS, traversals & LCA</div>
-              </div>
-              <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-30 fs-9 font-monospace">Active</span>
-            </div>
-
-            <div class="ps-prep-area-item">
-              <div>
-                <div class="text-white fs-8 fw-medium">Dynamic Programming & Recursion</div>
-                <div class="text-muted fs-9 font-monospace">Memoization & tabulation patterns</div>
-              </div>
-              <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-30 fs-9 font-monospace">Active</span>
-            </div>
-
-            <div class="ps-prep-area-item" style="border-bottom: none;">
-              <div>
-                <div class="text-white fs-8 fw-medium">System Design & Databases</div>
-                <div class="text-muted fs-9 font-monospace">Scalability, caching & SQL schema</div>
-              </div>
-              <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-30 fs-9 font-monospace">Active</span>
-            </div>
-          </div>
-
-          <!-- Essential Tools Direct Links -->
-          <div class="ps-panel-box p-3">
             <div class="d-flex justify-content-between align-items-center mb-2">
-              <h3 class="text-white fw-bold m-0 fs-4">Candidate Utilities</h3>
+              <h3 class="text-white fw-bold m-0 fs-5">Candidate Utilities</h3>
             </div>
             <div class="d-flex flex-column gap-1.5 mt-2">
               <a href="#/ai-assistant" class="p-2.5 d-flex justify-content-between align-items-center text-decoration-none text-light" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; transition: all 0.15s ease;">
@@ -1561,7 +1553,7 @@ const components = {
           </div>
 
           <!-- Reserved Reusable Advertisement / Platform Spotlight Placement -->
-          <div class="mt-3" id="dashboard-ad-container">
+          <div id="dashboard-ad-container">
             ${components.advertisementBanner()}
           </div>
         </div>
