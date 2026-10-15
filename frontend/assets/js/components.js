@@ -947,7 +947,7 @@ const components = {
     return `
     <div id="app-container" class="d-flex w-100 position-relative">
       <!-- Sidebar -->
-      <div id="sidebar" class="sidebar glass-panel border-top-0 border-bottom-0 border-start-0 rounded-0 d-flex flex-column">
+      <div id="sidebar" class="sidebar border-top-0 border-bottom-0 border-start-0 d-flex flex-column">
         <!-- Brand Header -->
         <div class="p-3 d-flex align-items-center justify-content-between brand-header-box flex-shrink-0">
           <a class="navbar-brand d-flex align-items-center brand-text text-decoration-none" href="#/dashboard">
@@ -960,8 +960,8 @@ const components = {
           <button id="sidebar-collapse-btn" class="btn btn-glass btn-sm border-0 rounded-circle text-white d-none d-lg-flex align-items-center justify-content-center" style="width: 26px; height: 26px; padding: 0;">
             <i class="fa-solid fa-chevron-left" id="collapse-icon" style="font-size: 0.8rem;"></i>
           </button>
-          <button id="sidebar-close-btn" class="btn btn-glass btn-sm border-0 rounded-circle text-white d-flex d-lg-none align-items-center justify-content-center" style="width: 26px; height: 26px; padding: 0;">
-            <i class="fa-solid fa-xmark" style="font-size: 0.9rem;"></i>
+          <button id="sidebar-close-btn" class="btn btn-glass border-0 rounded-circle text-white d-flex d-lg-none align-items-center justify-content-center" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; padding: 0;" aria-label="Close Navigation">
+            <i class="fa-solid fa-xmark fs-6"></i>
           </button>
         </div>
         
@@ -1043,7 +1043,9 @@ const components = {
         <!-- Top Nav Header (Borderless Premium SaaS Header) -->
         <header class="workspace-top-header d-flex align-items-center justify-content-between py-2.5 mb-2 flex-shrink-0 px-3 px-md-4" style="min-height: 54px;">
           <div class="d-flex align-items-center gap-2.5 overflow-hidden flex-grow-1 me-2" style="min-width: 0;">
-            <button class="btn btn-glass btn-sm d-lg-none me-1 flex-shrink-0 px-2 py-1" id="sidebar-toggle-btn" aria-label="Toggle Navigation"><i class="fa-solid fa-bars fs-7"></i></button>
+            <button class="btn btn-glass border-0 rounded-2 text-white d-inline-flex d-lg-none align-items-center justify-content-center me-1 flex-shrink-0" id="sidebar-toggle-btn" style="width: 38px; height: 38px; min-width: 38px; min-height: 38px; padding: 0;" aria-label="Toggle Navigation">
+              <i class="fa-solid fa-bars fs-6"></i>
+            </button>
             <div class="d-flex align-items-center gap-2 overflow-hidden" style="min-width: 0;">
               <h1 class="text-white fw-bold m-0 fs-3 current-view-title text-truncate" id="current-view-title" style="max-width: clamp(220px, 60vw, 650px);">Dashboard</h1>
             </div>
@@ -1144,6 +1146,7 @@ const components = {
     const totalXp = parseInt(stats.xpPoints ?? 0, 10);
     const totalPoints = parseInt(stats.totalPoints ?? (stats.xpPoints ? Math.round(stats.xpPoints / 10) : 0), 10);
 
+    const streakDays = parseInt(stats.streakDays ?? stats.streak ?? 1, 10);
     const userName = (typeof state !== 'undefined' && state && state.name) ? state.name : 'Candidate';
 
     return `
@@ -1171,22 +1174,22 @@ const components = {
         </div>
       </div>
 
-      <!-- 2. Primary & Gamification Statistics Grid (6 Equal Compact Cards) -->
-      <div class="row g-2.5 g-md-3 mb-3">
+      <!-- 2. Primary Statistics Grid (Row 1: 4 Equal Cards) -->
+      <div class="row g-2.5 g-md-3 mb-2.5">
         <!-- 1. Daily Focus Time -->
-        <div class="col-6 col-md-4 col-xl-2">
+        <div class="col-12 col-sm-6 col-xl-3">
           <div class="ps-stat-box p-3 h-100 text-start">
             <div class="d-flex align-items-center justify-content-between mb-1.5">
-              <span class="ps-stat-title text-truncate">Daily Focus</span>
+              <span class="ps-stat-title text-truncate">Daily Focus Time</span>
               <span class="text-muted fs-9 font-monospace" id="live-session-timer">Active</span>
             </div>
             <div class="ps-stat-value mb-1" id="daily-screentime-display">0m</div>
-            <div class="text-muted fs-8 text-truncate">Screen time today</div>
+            <div class="text-muted fs-8 text-truncate">Screen time logged today</div>
           </div>
         </div>
 
         <!-- 2. Problems Solved -->
-        <div class="col-6 col-md-4 col-xl-2">
+        <div class="col-12 col-sm-6 col-xl-3">
           <div class="ps-stat-box p-3 h-100 text-start">
             <div class="d-flex align-items-center justify-content-between mb-1.5">
               <span class="ps-stat-title text-truncate">Problems Solved</span>
@@ -1194,58 +1197,85 @@ const components = {
             </div>
             <div class="ps-stat-value mb-1">${totalSolved} <span class="fs-8 text-muted fw-normal">/ ${totalQuestions}</span></div>
             <div class="text-muted fs-8 text-truncate font-monospace">
-              <span class="text-success fw-medium">E:${easySolved}</span> 
-              <span class="text-warning fw-medium">M:${mediumSolved}</span> 
+              <span class="text-success fw-medium">E:${easySolved}</span> &bull; 
+              <span class="text-warning fw-medium">M:${mediumSolved}</span> &bull; 
               <span class="text-danger fw-medium">H:${hardSolved}</span>
             </div>
           </div>
         </div>
 
         <!-- 3. Mock Exams Completed -->
-        <div class="col-6 col-md-4 col-xl-2">
+        <div class="col-12 col-sm-6 col-xl-3">
           <div class="ps-stat-box p-3 h-100 text-start">
             <div class="d-flex align-items-center justify-content-between mb-1.5">
-              <span class="ps-stat-title text-truncate">Mock Exams</span>
-              <a href="#/mock-exams" class="ps-card-link fs-8 text-decoration-none">Test &rarr;</a>
+              <span class="ps-stat-title text-truncate">Mock Exams Completed</span>
+              <a href="#/mock-exams" class="ps-card-link fs-8 text-decoration-none">Take Test &rarr;</a>
             </div>
             <div class="ps-stat-value mb-1">${mockExamsCompleted} <span class="fs-8 text-muted fw-normal">Done</span></div>
-            <div class="text-muted fs-8 text-truncate">Avg: <span class="text-white font-monospace">${averageMockScore}</span></div>
+            <div class="text-muted fs-8 text-truncate">Average Score: <span class="text-white font-monospace fw-medium">${averageMockScore}</span></div>
           </div>
         </div>
 
         <!-- 4. Placement Applications -->
-        <div class="col-6 col-md-4 col-xl-2">
+        <div class="col-12 col-sm-6 col-xl-3">
           <div class="ps-stat-box p-3 h-100 text-start">
             <div class="d-flex align-items-center justify-content-between mb-1.5">
-              <span class="ps-stat-title text-truncate">Applications</span>
+              <span class="ps-stat-title text-truncate">Placement Applications</span>
               <a href="#/placement" class="ps-card-link fs-8 text-decoration-none">Kanban &rarr;</a>
             </div>
             <div class="ps-stat-value mb-1">${applicationsCount} <span class="fs-8 text-muted fw-normal">Tracked</span></div>
-            <div class="text-muted fs-8 text-truncate">${upcomingInterviewsCount} Interviews</div>
+            <div class="text-muted fs-8 text-truncate">Upcoming Interviews: <span class="text-white font-monospace fw-medium">${upcomingInterviewsCount}</span></div>
           </div>
         </div>
+      </div>
 
+      <!-- 2b. Momentum & Gamification Grid (Row 2: 4 Equal Cards, Matching Row 1) -->
+      <div class="row g-2.5 g-md-3 mb-3">
         <!-- 5. Total XP Earned -->
-        <div class="col-6 col-md-4 col-xl-2">
+        <div class="col-12 col-sm-6 col-xl-3">
           <div class="ps-stat-box p-3 h-100 text-start">
             <div class="d-flex align-items-center justify-content-between mb-1.5">
-              <span class="ps-stat-title text-truncate">Total XP</span>
+              <span class="ps-stat-title text-truncate">Total XP Earned</span>
               <span class="badge bg-warning bg-opacity-15 text-warning border border-warning border-opacity-30 font-monospace fs-10">Velocity</span>
             </div>
             <div class="ps-stat-value mb-1 text-warning">${totalXp.toLocaleString()} <span class="fs-8 text-muted fw-normal">XP</span></div>
-            <div class="text-muted fs-8 text-truncate">Practice & streak XP</div>
+            <div class="text-muted fs-8 text-truncate">Practice, streaks & assessments</div>
           </div>
         </div>
 
         <!-- 6. Total Points Earned -->
-        <div class="col-6 col-md-4 col-xl-2">
+        <div class="col-12 col-sm-6 col-xl-3">
           <div class="ps-stat-box p-3 h-100 text-start">
             <div class="d-flex align-items-center justify-content-between mb-1.5">
-              <span class="ps-stat-title text-truncate">Total Points</span>
+              <span class="ps-stat-title text-truncate">Total Points Earned</span>
               <span class="badge bg-success bg-opacity-15 text-success border border-success border-opacity-30 font-monospace fs-10">Currency</span>
             </div>
             <div class="ps-stat-value mb-1 text-success">${totalPoints.toLocaleString()} <span class="fs-8 text-muted fw-normal">PTS</span></div>
-            <div class="text-muted fs-8 text-truncate">Platform currency</div>
+            <div class="text-muted fs-8 text-truncate">Platform achievement rewards</div>
+          </div>
+        </div>
+
+        <!-- 7. Daily Prep Streak -->
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="ps-stat-box p-3 h-100 text-start">
+            <div class="d-flex align-items-center justify-content-between mb-1.5">
+              <span class="ps-stat-title text-truncate">Daily Prep Streak</span>
+              <span class="badge bg-warning bg-opacity-15 text-warning border border-warning border-opacity-30 font-monospace fs-10"><i class="fa-solid fa-fire text-warning me-0.5"></i> Active</span>
+            </div>
+            <div class="ps-stat-value mb-1 text-warning">${streakDays} <span class="fs-8 text-muted fw-normal">Days</span></div>
+            <div class="text-muted fs-8 text-truncate">Calendar prep consistency</div>
+          </div>
+        </div>
+
+        <!-- 8. Readiness Standing -->
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="ps-stat-box p-3 h-100 text-start">
+            <div class="d-flex align-items-center justify-content-between mb-1.5">
+              <span class="ps-stat-title text-truncate">Readiness Standing</span>
+              <span class="badge bg-primary bg-opacity-15 text-primary border border-primary border-opacity-30 font-monospace fs-10">Target Track</span>
+            </div>
+            <div class="ps-stat-value mb-1 text-white" id="readiness-kpi-standing">Tier-1 <span class="fs-8 text-muted fw-normal">Target</span></div>
+            <div class="text-muted fs-8 text-truncate">SDE-1 / SDE-2 benchmark</div>
           </div>
         </div>
       </div>

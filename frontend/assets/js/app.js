@@ -848,11 +848,11 @@ function router() {
 
   // Ensure mobile sidebar is closed on any route navigation
   const currentMobileSidebar = document.querySelector('.sidebar');
-  if (currentMobileSidebar && currentMobileSidebar.classList.contains('active')) {
+  if (currentMobileSidebar) {
     currentMobileSidebar.classList.remove('active');
-    if (typeof toggleMobileSidebarBackdrop === 'function') {
-      toggleMobileSidebarBackdrop(false);
-    }
+  }
+  if (typeof toggleMobileSidebarBackdrop === 'function') {
+    toggleMobileSidebarBackdrop(false);
   }
 
   // Cleanup admin live polling & clock when leaving admin panel
@@ -1712,15 +1712,23 @@ function toggleMobileSidebarBackdrop(show) {
       backdrop = document.createElement('div');
       backdrop.id = 'sidebar-mobile-backdrop';
       backdrop.className = 'sidebar-mobile-backdrop';
-      backdrop.addEventListener('click', () => {
+      const handleClose = (e) => {
+        if (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
         const sidebar = document.querySelector('.sidebar');
         if (sidebar) sidebar.classList.remove('active');
         toggleMobileSidebarBackdrop(false);
-      });
+      };
+      backdrop.addEventListener('click', handleClose);
+      backdrop.addEventListener('touchend', handleClose, { passive: false });
       document.body.appendChild(backdrop);
     }
     backdrop.classList.add('show');
     try {
+      document.documentElement.classList.add('mobile-sidebar-open');
+      document.body.classList.add('mobile-sidebar-open');
       document.body.style.overflow = 'hidden';
     } catch (_) {}
   } else {
@@ -1728,6 +1736,8 @@ function toggleMobileSidebarBackdrop(show) {
       backdrop.classList.remove('show');
     }
     try {
+      document.documentElement.classList.remove('mobile-sidebar-open');
+      document.body.classList.remove('mobile-sidebar-open');
       document.body.style.removeProperty('overflow');
     } catch (_) {}
   }
@@ -1739,21 +1749,31 @@ function bindLayoutEvents() {
   const toggleBtn = document.getElementById('sidebar-toggle-btn');
   const sidebar = document.querySelector('.sidebar');
   if (toggleBtn && sidebar) {
-    toggleBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
+    const handleToggle = (e) => {
+      if (e) {
+        e.stopPropagation();
+        if (e.type === 'touchend') e.preventDefault();
+      }
       const isActive = sidebar.classList.toggle('active');
       toggleMobileSidebarBackdrop(isActive);
-    });
+    };
+    toggleBtn.addEventListener('click', handleToggle);
+    toggleBtn.addEventListener('touchend', handleToggle, { passive: false });
   }
 
   // Mobile sidebar close button handler
   const closeBtn = document.getElementById('sidebar-close-btn');
   if (closeBtn && sidebar) {
-    closeBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
+    const handleClose = (e) => {
+      if (e) {
+        e.stopPropagation();
+        if (e.type === 'touchend') e.preventDefault();
+      }
       sidebar.classList.remove('active');
       toggleMobileSidebarBackdrop(false);
-    });
+    };
+    closeBtn.addEventListener('click', handleClose);
+    closeBtn.addEventListener('touchend', handleClose, { passive: false });
   }
 
   // Mobile sidebar auto-close on link clicks
@@ -1766,16 +1786,25 @@ function bindLayoutEvents() {
     });
   });
 
-  // Mobile sidebar click outside to close
-  document.addEventListener('click', (e) => {
-    if (window.innerWidth < 992 && sidebar && sidebar.classList.contains('active')) {
-      const lcToggle = document.getElementById('lc-sidebar-toggle-btn');
-      if (!sidebar.contains(e.target) && (!toggleBtn || !toggleBtn.contains(e.target)) && (!lcToggle || !lcToggle.contains(e.target))) {
-        sidebar.classList.remove('active');
-        toggleMobileSidebarBackdrop(false);
+  // Mobile sidebar click outside to close (attach once globally)
+  if (!window._sidebarOutsideClickHooked) {
+    window._sidebarOutsideClickHooked = true;
+    const handleOutsideDismiss = (e) => {
+      if (window.innerWidth < 992) {
+        const curSidebar = document.querySelector('.sidebar');
+        if (curSidebar && curSidebar.classList.contains('active')) {
+          const curToggle = document.getElementById('sidebar-toggle-btn');
+          const lcToggle = document.getElementById('lc-sidebar-toggle-btn');
+          if (!curSidebar.contains(e.target) && (!curToggle || !curToggle.contains(e.target)) && (!lcToggle || !lcToggle.contains(e.target))) {
+            curSidebar.classList.remove('active');
+            toggleMobileSidebarBackdrop(false);
+          }
+        }
       }
-    }
-  });
+    };
+    document.addEventListener('click', handleOutsideDismiss);
+    document.addEventListener('touchend', handleOutsideDismiss);
+  }
 
   // Mobile sidebar Escape key dismiss
   if (!window._sidebarKeyHooked) {
@@ -12056,6 +12085,10 @@ function initReadinessIndex(passedStats = null) {
       tierPill.textContent = 'Not assessed yet';
       tierPill.className = 'badge-glass-pill fs-9';
     }
+    const standingEl = document.getElementById('readiness-kpi-standing');
+    if (standingEl) {
+      standingEl.innerHTML = `Starting <span class="fs-8 text-muted fw-normal">Track</span>`;
+    }
     if (statusEl) {
       statusEl.textContent = 'Solve 1 coding problem or complete a mock exam to generate your score.';
     }
@@ -12109,6 +12142,19 @@ function initReadinessIndex(passedStats = null) {
     } else {
       tierPill.textContent = 'Foundation Phase';
       tierPill.className = 'badge-glass-pill fs-9';
+    }
+  }
+
+  const standingEl = document.getElementById('readiness-kpi-standing');
+  if (standingEl) {
+    if (finalScore >= 85) {
+      standingEl.innerHTML = `Tier-1 Ready <span class="fs-8 text-muted fw-normal">FAANG</span>`;
+    } else if (finalScore >= 70) {
+      standingEl.innerHTML = `Interview Ready <span class="fs-8 text-muted fw-normal">Tier-2</span>`;
+    } else if (finalScore >= 50) {
+      standingEl.innerHTML = `Intermediate <span class="fs-8 text-muted fw-normal">Prep</span>`;
+    } else {
+      standingEl.innerHTML = `Foundation <span class="fs-8 text-muted fw-normal">Track</span>`;
     }
   }
 
@@ -12229,7 +12275,7 @@ function initMilestonesChecklist(passedStats = null) {
 
   // System auto-completion: If criteria are satisfied, mark complete automatically
   milestones.forEach(m => {
-    if (m.autoCompleted && stateMap[m.id] === undefined) {
+    if (m.autoCompleted) {
       stateMap[m.id] = true;
     }
   });

@@ -657,9 +657,8 @@ input:-webkit-autofill:focus,
   background-color: #1c1c20 !important;
   border-right: 1px solid #323238 !important;
   border-top: none !important;
-  border-bottom: none !important;
-  border-left: none !important;
   z-index: 100 !important;
+  border-radius: 0 !important;
   overflow: hidden !important;
   overflow-y: hidden !important;
   overflow-x: hidden !important;
@@ -853,8 +852,8 @@ input:-webkit-autofill:focus,
   }
 
   .sidebar {
-    width: 280px !important;
-    min-width: 280px !important;
+    width: 285px !important;
+    min-width: 285px !important;
     max-width: min(85vw, 320px) !important;
     position: fixed !important;
     top: 0 !important;
@@ -862,18 +861,24 @@ input:-webkit-autofill:focus,
     bottom: 0 !important;
     height: 100vh !important;
     height: 100dvh !important;
+    max-height: 100vh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
     background: #141417 !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-left: none !important;
     z-index: 1050 !important;
     transform: translateX(-100%) !important;
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    box-shadow: 10px 0 32px rgba(0, 0, 0, 0.65) !important;
-    -webkit-overflow-scrolling: touch !important;
-    padding-bottom: max(16px, env(safe-area-inset-bottom, 16px)) !important;
+    box-shadow: 10px 0 32px rgba(0, 0, 0, 0.75) !important;
     display: flex !important;
     flex-direction: column !important;
+    touch-action: pan-y !important;
   }
   
   .sidebar.active {
@@ -881,8 +886,20 @@ input:-webkit-autofill:focus,
   }
 
   .sidebar-scroll-content {
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y !important;
     overscroll-behavior-y: contain !important;
+    padding-bottom: 2rem !important;
+  }
+
+  .sidebar-footer-box {
+    flex-shrink: 0 !important;
+    background: #141417 !important;
+    padding-bottom: max(16px, env(safe-area-inset-bottom, 16px)) !important;
   }
 
   /* Release fixed viewport constraints on mobile so the whole page scrolls smoothly */
@@ -7818,7 +7835,7 @@ h5.fs-7, h5.fs-8, h5.fs-9 {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.62);
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   z-index: 1040;
@@ -7826,12 +7843,22 @@ h5.fs-7, h5.fs-8, h5.fs-9 {
   visibility: hidden;
   transition: opacity 0.22s ease, visibility 0.22s ease;
   pointer-events: none;
+  cursor: pointer !important;
+  -webkit-tap-highlight-color: transparent !important;
+  touch-action: none !important;
 }
 
 .sidebar-mobile-backdrop.show {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
+}
+
+/* Background scroll freeze when mobile drawer is open (no touch-action: none so drawer can scroll) */
+html.mobile-sidebar-open,
+body.mobile-sidebar-open {
+  overflow: hidden !important;
+  height: 100% !important;
 }
 
 /* Coding Practice Back Button - Touch Optimized */
