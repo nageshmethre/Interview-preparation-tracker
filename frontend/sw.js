@@ -1,22 +1,22 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
-// Version: 5.9.1 (Mobile interface & sidebar scrolling fix, zero-radius drawer, 4+4 dashboard grid, cache purge)
+// Version: 5.9.2 (Mobile navigation & stacking context fix, active interactive links, crisp backdrop, instant cache refresh)
 
-const CACHE_NAME = 'prepspace-static-v5.9.1';
-const RUNTIME_CACHE = 'prepspace-runtime-v5.9.1';
+const CACHE_NAME = 'prepspace-static-v5.9.2';
+const RUNTIME_CACHE = 'prepspace-runtime-v5.9.2';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/index.css?v=5.9.1',
-  './assets/js/dsa-notes-data.js?v=5.9.1',
-  './assets/js/app.js?v=5.9.1',
-  './assets/js/components.js?v=5.9.1',
-  './assets/js/interview-suite.js?v=5.9.1',
-  './assets/js/technical-library-data.js?v=5.9.1',
-  './assets/js/questions-data.js?v=5.9.1',
-  './assets/js/aptitude-curriculum.js?v=5.9.1',
-  './assets/js/production-pages.js?v=5.9.1',
+  './assets/css/index.css?v=5.9.2',
+  './assets/js/dsa-notes-data.js?v=5.9.2',
+  './assets/js/app.js?v=5.9.2',
+  './assets/js/components.js?v=5.9.2',
+  './assets/js/interview-suite.js?v=5.9.2',
+  './assets/js/technical-library-data.js?v=5.9.2',
+  './assets/js/questions-data.js?v=5.9.2',
+  './assets/js/aptitude-curriculum.js?v=5.9.2',
+  './assets/js/production-pages.js?v=5.9.2',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',

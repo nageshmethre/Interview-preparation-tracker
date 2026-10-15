@@ -946,6 +946,9 @@ const components = {
     );
     return `
     <div id="app-container" class="d-flex w-100 position-relative">
+      <!-- Mobile Sidebar Backdrop Overlay -->
+      <div id="sidebar-mobile-backdrop" class="sidebar-mobile-backdrop" aria-hidden="true"></div>
+
       <!-- Sidebar -->
       <div id="sidebar" class="sidebar border-top-0 border-bottom-0 border-start-0 d-flex flex-column">
         <!-- Brand Header -->

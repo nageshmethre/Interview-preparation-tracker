@@ -873,6 +873,7 @@ input:-webkit-autofill:focus,
     border-bottom: none !important;
     border-left: none !important;
     z-index: 1050 !important;
+    pointer-events: auto !important;
     transform: translateX(-100%) !important;
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
     box-shadow: 10px 0 32px rgba(0, 0, 0, 0.75) !important;
@@ -883,6 +884,17 @@ input:-webkit-autofill:focus,
   
   .sidebar.active {
     transform: translateX(0) !important;
+    pointer-events: auto !important;
+  }
+
+  .sidebar .sidebar-link,
+  .sidebar #sidebar-close-btn,
+  .sidebar details summary,
+  #sidebar-toggle-btn,
+  #lc-sidebar-toggle-btn {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    -webkit-tap-highlight-color: transparent !important;
   }
 
   .sidebar-scroll-content {
@@ -7830,28 +7842,41 @@ h5.fs-7, h5.fs-8, h5.fs-9 {
 
 /* Mobile Sidebar Backdrop Overlay: Subtle Tint, No Dark Blur Distortion */
 .sidebar-mobile-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.62);
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  background: rgba(0, 0, 0, 0.55) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  z-index: 1040;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.22s ease, visibility 0.22s ease;
-  pointer-events: none;
+  z-index: 1040 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: opacity 0.22s ease, visibility 0.22s ease !important;
+  pointer-events: none !important;
   cursor: pointer !important;
   -webkit-tap-highlight-color: transparent !important;
   touch-action: none !important;
 }
 
 .sidebar-mobile-backdrop.show {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+@media (min-width: 992px) {
+  .sidebar-mobile-backdrop,
+  .sidebar-mobile-backdrop.show {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
 }
 
 /* Background scroll freeze when mobile drawer is open (no touch-action: none so drawer can scroll) */
