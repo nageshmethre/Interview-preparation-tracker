@@ -1070,10 +1070,6 @@ const components = {
           </div>
           
           <div class="d-flex align-items-center gap-2 flex-shrink-0">
-            <!-- Product Hunt Support Pill -->
-            <a href="https://www.producthunt.com/products/prepspace?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-prepspace" target="_blank" rel="noopener noreferrer" class="btn btn-sm d-inline-flex align-items-center gap-1.5 py-1 px-2.5 text-white border-0 shadow-sm" style="background: linear-gradient(135deg, #ff6154 0%, #da3e33 100%); border-radius: 9999px; font-size: 0.72rem; font-weight: 700; text-decoration: none;" title="Support PrepSpace on Product Hunt">
-              <i class="fa-brands fa-product-hunt"></i> <span class="d-none d-sm-inline">Product Hunt</span><span class="d-inline d-sm-none">PH</span>
-            </a>
             <!-- Daily Streak Flame Widget (Icon Only) -->
             <button type="button" class="btn btn-glass btn-sm d-flex align-items-center gap-1.5 py-1 px-2.5 text-white border-secondary border-opacity-25" id="header-streak-btn" onclick="window.showStreakModal && window.showStreakModal()" title="Daily Streak: Click to view activity">
               <span class="fs-7">🔥</span>
@@ -1197,27 +1193,6 @@ const components = {
           </a>
           <a href="#/studyplanner" class="btn btn-sm btn-glass px-3 py-1.5 fs-8 text-white d-inline-flex align-items-center gap-1.5">
             <span>Study Planner</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Product Hunt Official Launch Banner -->
-      <div class="p-3 mb-4 d-flex flex-wrap align-items-center justify-content-between gap-3" style="background: linear-gradient(135deg, rgba(255, 97, 84, 0.08) 0%, rgba(218, 62, 51, 0.04) 100%); border: 1px solid rgba(255, 97, 84, 0.28); border-radius: 14px;">
-        <div class="d-flex align-items-center gap-3">
-          <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; background: rgba(255, 97, 84, 0.15); border: 1px solid rgba(255, 97, 84, 0.35);">
-            <i class="fa-brands fa-product-hunt text-danger fs-4"></i>
-          </div>
-          <div class="text-start">
-            <div class="d-flex align-items-center gap-2 mb-0.5 flex-wrap">
-              <span class="badge font-monospace fw-bold text-white px-2 py-0.5" style="background: #ff6154; font-size: 0.7rem;">PRODUCT HUNT LAUNCH</span>
-              <span class="text-white fw-semibold fs-7">PrepSpace is Featured on Product Hunt Today!</span>
-            </div>
-            <p class="text-muted fs-8 mb-0">We are officially live! Check out our launch page, upvote, and share your feedback with the tech community.</p>
-          </div>
-        </div>
-        <div class="d-flex align-items-center gap-2 flex-shrink-0">
-          <a href="https://www.producthunt.com/products/prepspace?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-prepspace" target="_blank" rel="noopener noreferrer" title="Support PrepSpace on Product Hunt" style="display: inline-block;">
-            <img alt="PrepSpace - The ultimate tech interview prep tracker &amp; 50-MCQ exams | Product Hunt" width="220" height="48" style="width: 220px; height: 48px; border-radius: 8px;" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1282377&amp;theme=dark&amp;t=1792146140649">
           </a>
         </div>
       </div>
