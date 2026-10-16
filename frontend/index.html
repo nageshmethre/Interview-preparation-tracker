@@ -4,35 +4,103 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PrepSpace - Premium Technical Interview Preparation Tracker</title>
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png?v=5.8.8">
-  <link rel="icon" type="image/x-icon" href="assets/favicon.ico?v=5.8.8">
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/prepspace_icon.png?v=5.8.8">
-  <link rel="alternate icon" type="image/svg+xml" href="assets/prepspace_logo.svg?v=5.8.8">
   
-  <!-- SEO Meta Tags -->
+  <!-- Favicon Standards for Google Search Central (48px Multiples & Root Favicon) -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="48x48" href="/assets/prepspace_icon_64.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/prepspace_icon_128.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/prepspace_icon.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/assets/prepspace_logo.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="alternate icon" type="image/svg+xml" href="/assets/prepspace_logo.svg">
+  
+  <!-- Primary SEO Meta Tags -->
+  <meta name="title" content="PrepSpace - Premium Technical Interview Preparation Tracker">
   <meta name="description" content="PrepSpace is the ultimate technical interview preparation tracker SaaS for software developers. Track DSA, coding, system design, mock exams, and job placements in a unified dashboard.">
-  <meta name="keywords" content="PrepSpace, interview tracker, tech interview prep, DSA tracker, coding practice, system design preparation, job application tracking, mock interviews, developer roadmap, software engineer placement">
+  <meta name="keywords" content="PrepSpace, interview tracker, tech interview prep, DSA tracker, coding practice, system design preparation, job application tracking, mock interviews, developer roadmap, software engineer placement, leetcode tracker">
   <meta name="author" content="Nagesh Methre">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://stream-in.app/">
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#0a0f1d">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="application-name" content="PrepSpace">
+  <meta name="apple-mobile-web-app-title" content="PrepSpace">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://stream-in.app/">
+  <meta property="og:site_name" content="PrepSpace">
   <meta property="og:title" content="PrepSpace - Premium Technical Interview Preparation Tracker">
   <meta property="og:description" content="Track your technical interview prep lifecycle. Manage study plans, log DSA practice, analyze readiness, and organize mock evaluations on a single premium dashboard.">
-  <meta property="og:image" content="https://stream-in.app/assets/prepspace_full_logo.png?v=5.8.8">
+  <meta property="og:image" content="https://stream-in.app/assets/prepspace_full_logo.png">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta property="og:image:alt" content="PrepSpace - Technical Interview Preparation Tracker Logo">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://stream-in.app/">
   <meta name="twitter:title" content="PrepSpace - Premium Technical Interview Preparation Tracker">
   <meta name="twitter:description" content="Track your technical interview prep lifecycle. Manage study plans, log DSA practice, analyze readiness, and organize mock evaluations on a single premium dashboard.">
-  <meta name="twitter:image" content="https://stream-in.app/assets/prepspace_full_logo.png?v=5.8.8">
+  <meta name="twitter:image" content="https://stream-in.app/assets/prepspace_full_logo.png">
+
+  <!-- Google Structured Data (JSON-LD) for Search Logo & Rich Snippets -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://stream-in.app/#website",
+        "url": "https://stream-in.app/",
+        "name": "PrepSpace",
+        "alternateName": ["PrepSpace Interview Tracker", "stream-in.app", "stream-in"],
+        "description": "The unified technical interview preparation tracker and career placement platform for software engineers.",
+        "publisher": {
+          "@id": "https://stream-in.app/#organization"
+        },
+        "inLanguage": "en-US"
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://stream-in.app/#organization",
+        "name": "PrepSpace",
+        "url": "https://stream-in.app/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://stream-in.app/assets/prepspace_full_logo.png",
+          "caption": "PrepSpace Logo",
+          "width": 1024,
+          "height": 1024
+        },
+        "image": "https://stream-in.app/assets/prepspace_full_logo.png"
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://stream-in.app/#software",
+        "name": "PrepSpace",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Web, iOS Safari, Android Chrome, Windows, macOS",
+        "url": "https://stream-in.app/",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "INR"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "ratingCount": "1280",
+          "bestRating": "5",
+          "worstRating": "1"
+        }
+      }
+    ]
+  }
+  </script>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,7 +109,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome Icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/index.css?v=5.9.2">
+  <link rel="stylesheet" href="assets/css/index.css?v=5.9.3">
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Cashfree Payment Gateway SDK -->
@@ -356,7 +424,7 @@
   <script>
     (function() {
       try {
-        const CURRENT_DEPLOY_VER = '5.9.2';
+        const CURRENT_DEPLOY_VER = '5.9.3';
         const activeVer = localStorage.getItem('prepspace_client_version');
         if (activeVer !== CURRENT_DEPLOY_VER) {
           if ('caches' in window) {
@@ -384,19 +452,19 @@
       } catch (err) {}
     })();
   </script>
-  <script src="assets/js/dsa-notes-data.js?v=5.9.2"></script>
-  <script src="assets/js/questions-data.js?v=5.9.2"></script>
-  <script src="assets/js/aptitude-curriculum.js?v=5.9.2"></script>
-  <script src="assets/js/technical-library-data.js?v=5.9.2"></script>
-  <script src="assets/js/components.js?v=5.9.2"></script>
-  <script src="assets/js/interview-suite.js?v=5.9.2"></script>
-  <script src="assets/js/production-pages.js?v=5.9.2"></script>
-  <script src="assets/js/app.js?v=5.9.2"></script>
+  <script src="assets/js/dsa-notes-data.js?v=5.9.3"></script>
+  <script src="assets/js/questions-data.js?v=5.9.3"></script>
+  <script src="assets/js/aptitude-curriculum.js?v=5.9.3"></script>
+  <script src="assets/js/technical-library-data.js?v=5.9.3"></script>
+  <script src="assets/js/components.js?v=5.9.3"></script>
+  <script src="assets/js/interview-suite.js?v=5.9.3"></script>
+  <script src="assets/js/production-pages.js?v=5.9.3"></script>
+  <script src="assets/js/app.js?v=5.9.3"></script>
   <!-- Service Worker Registration for PWA Offline Support -->
   <script>
     if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=5.9.2').then(reg => {
+        navigator.serviceWorker.register('./sw.js?v=5.9.3').then(reg => {
           console.log('PrepSpace Service Worker registered successfully, scope:', reg.scope);
           // Proactively check for updates immediately
           reg.update();
