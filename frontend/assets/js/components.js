@@ -82,7 +82,7 @@ const components = {
             Master Data Structures & Algorithms, test your knowledge with 50-MCQ timed technical screens, audit your resume against AI ATS systems, and manage your entire placement pipeline in one unified platform.
           </p>
 
-          <div class="ui-hero-actions">
+          <div class="ui-hero-actions d-flex flex-wrap align-items-center justify-content-center gap-3">
             <a href="#/register" class="ui-btn-primary">
               <i class="fa-solid fa-rocket"></i>
               <span>Initialize Space Free</span>
@@ -91,6 +91,11 @@ const components = {
               <i class="fa-solid fa-layer-group text-warning"></i>
               <span>Explore Live Platform</span>
             </a>
+            <div class="d-inline-flex align-items-center justify-content-center pt-1 pt-sm-0">
+              <a href="https://www.producthunt.com/products/prepspace?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-prepspace" target="_blank" rel="noopener noreferrer" title="PrepSpace on Product Hunt" style="display: inline-block; transition: transform 0.2s ease;">
+                <img alt="PrepSpace - The ultimate tech interview prep tracker &amp; 50-MCQ exams | Product Hunt" width="250" height="54" style="width: 250px; height: 54px; max-width: 100%; border-radius: 10px;" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1282377&amp;theme=dark&amp;t=1792146140649">
+              </a>
+            </div>
           </div>
 
           <!-- Master Marquee: Social Proof Strip with Seamless Loop -->
@@ -625,6 +630,11 @@ const components = {
             <div class="d-flex align-items-center gap-2 text-success fs-8">
               <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981;"></span>
               <span>All Systems Operational (Zero-Trust)</span>
+            </div>
+            <div class="mt-3">
+              <a href="https://www.producthunt.com/products/prepspace?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-prepspace" target="_blank" rel="noopener noreferrer" title="PrepSpace on Product Hunt" style="display: inline-block;">
+                <img alt="PrepSpace - The ultimate tech interview prep tracker &amp; 50-MCQ exams | Product Hunt" width="220" height="48" style="width: 220px; height: 48px; border-radius: 8px;" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1282377&amp;theme=dark&amp;t=1792146140649">
+              </a>
             </div>
           </div>
 
