@@ -1,8 +1,8 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
-// Version: 5.9.3 (Google Search SEO & Favicon optimization, JSON-LD rich snippets, multi-res icon support)
+// Version: 5.9.4 (Product Hunt Official Launch badges & widgets across header, dashboard, sidebar, and landing page)
 
-const CACHE_NAME = 'prepspace-static-v5.9.3';
-const RUNTIME_CACHE = 'prepspace-runtime-v5.9.3';
+const CACHE_NAME = 'prepspace-static-v5.9.4';
+const RUNTIME_CACHE = 'prepspace-runtime-v5.9.4';
 
 const PRECACHE_ASSETS = [
   './',
@@ -11,15 +11,15 @@ const PRECACHE_ASSETS = [
   './favicon.ico',
   './favicon.png',
   './apple-touch-icon.png',
-  './assets/css/index.css?v=5.9.3',
-  './assets/js/dsa-notes-data.js?v=5.9.3',
-  './assets/js/app.js?v=5.9.3',
-  './assets/js/components.js?v=5.9.3',
-  './assets/js/interview-suite.js?v=5.9.3',
-  './assets/js/technical-library-data.js?v=5.9.3',
-  './assets/js/questions-data.js?v=5.9.3',
-  './assets/js/aptitude-curriculum.js?v=5.9.3',
-  './assets/js/production-pages.js?v=5.9.3',
+  './assets/css/index.css?v=5.9.4',
+  './assets/js/dsa-notes-data.js?v=5.9.4',
+  './assets/js/app.js?v=5.9.4',
+  './assets/js/components.js?v=5.9.4',
+  './assets/js/interview-suite.js?v=5.9.4',
+  './assets/js/technical-library-data.js?v=5.9.4',
+  './assets/js/questions-data.js?v=5.9.4',
+  './assets/js/aptitude-curriculum.js?v=5.9.4',
+  './assets/js/production-pages.js?v=5.9.4',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',
