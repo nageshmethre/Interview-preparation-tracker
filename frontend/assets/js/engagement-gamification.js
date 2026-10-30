@@ -272,7 +272,13 @@
   // 2. DAILY CHALLENGES COMPONENT (8 Categories)
   // =========================================================================
   window.components.dailyChallenges = function(payload) {
-    const list = (payload && payload.challenges) || [];
+    const defaultChallenges = [
+      { id: 1, title: 'Two Pointers in Sorted Arrays', category: 'DSA', difficulty: 'EASY', xp: 50, question: 'Given a 1-indexed array of integers sorted in non-decreasing order, find two numbers such that they add up to a specific target number with O(1) extra space.' },
+      { id: 2, title: 'Optimizing SQL Nested Subqueries with CTEs', category: 'DBMS', difficulty: 'MEDIUM', xp: 75, question: 'Refactor a correlated subquery fetching high-earning employee salaries per department into a performant Common Table Expression with Windowing Functions.' },
+      { id: 3, title: 'Process Scheduling & Mutex Locks in POSIX', category: 'CS Fundamentals', difficulty: 'HARD', xp: 100, question: 'Analyze potential race conditions when two pthread workers mutate a shared ring buffer without atomic memory barriers.' }
+    ];
+    const rawList = (payload && payload.challenges) || [];
+    const list = rawList.length > 0 ? rawList : defaultChallenges;
     const countdown = (payload && payload.countdownSeconds) || 36000;
     const activeCategory = (payload && payload.selectedCategory) || 'ALL';
 
