@@ -873,6 +873,50 @@ function router() {
   if (pageMount) pageMount.scrollTop = 0;
   window.scrollTo({ top: 0, behavior: 'instant' });
 
+  // Dynamic Browser Tab & Route Title Mapper (fixes stuck 'Two Sum' tab title)
+  const routeTabTitles = {
+    '#/dashboard': 'Dashboard',
+    '#/missions': 'Daily Missions',
+    '#/daily-missions': 'Daily Missions',
+    '#/daily-challenge': 'Daily Engineering Challenges',
+    '#/challenges': 'Daily Engineering Challenges',
+    '#/quick-learning': '5-Minute Quick Learning',
+    '#/5-min-bites': '5-Minute Quick Learning',
+    '#/leaderboard': 'Student Leaderboard',
+    '#/gamification': 'Student Leaderboard',
+    '#/rewards': 'PrepCoins Rewards Store',
+    '#/coin-rewards': 'PrepCoins Rewards Store',
+    '#/ai-mentor': 'AI Personal Mentor',
+    '#/ai-doubt': 'AI Technical Doubt Solver',
+    '#/ai-doubt-solver': 'AI Technical Doubt Solver',
+    '#/ai-interviewer': 'AI Mock Interview Simulator',
+    '#/career-roadmaps': 'AI Career Roadmaps',
+    '#/ai-career-roadmap': 'AI Career Roadmaps',
+    '#/placement-hub': 'Campus Placement Readiness',
+    '#/placement-prep': 'Campus Placement Readiness',
+    '#/placement': 'Placement Pipeline Kanban',
+    '#/study-rooms': 'Virtual Study Rooms',
+    '#/pulse': 'PrepSpace Pulse • Tech Discovery',
+    '#/coding-practice': 'Coding Practice Workspace',
+    '#/aptitude': 'Aptitude & Logical Reasoning',
+    '#/mock-exams': '50-MCQ Mock Exams',
+    '#/dsa-roadmap': 'DSA Complete Roadmap',
+    '#/studyplanner': 'Study Planner',
+    '#/courses': 'LMS Course Catalog',
+    '#/library': 'Technical Library',
+    '#/certificates': 'Certificates',
+    '#/flashcards': 'Flashcards',
+    '#/notes': 'Study Notes',
+    '#/experiences': 'Interview Experiences',
+    '#/calendar': 'Interview Calendar',
+    '#/reports': 'Progress Reports',
+    '#/profile': 'User Profile & Settings',
+    '#/billing': 'Billing & Plan'
+  };
+  const activeTabTitle = routeTabTitles[hash] || 'PrepSpace';
+  document.title = activeTabTitle + ' - PrepSpace';
+  if (viewTitle && routeTabTitles[hash]) viewTitle.textContent = routeTabTitles[hash];
+
   if (hash === '#/dashboard') {
     viewTitle.textContent = 'Dashboard';
     const freshStats = getCachedData('cached_dashboard_stats_v2', 180000);
@@ -6314,7 +6358,7 @@ function bindCodingPracticeEvents(rawQuestions = []) {
     const communitySolEl = document.getElementById('active-q-community-sol');
 
     if (titleEl) titleEl.textContent = `${activeQuestionFullObj.id || data.questionId || 1}. ${activeQuestionFullObj.title || data.title}`;
-    if (data.title) {
+    if (data.title && (window.location.hash.startsWith('#/coding-practice'))) {
       document.title = `${data.title} - PrepSpace`;
     }
     if (catEl) catEl.textContent = activeQuestionFullObj.category || data.category || 'Algorithms';
