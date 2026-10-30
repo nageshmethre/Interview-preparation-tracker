@@ -17,7 +17,13 @@
   // 1. VIRTUAL STUDY ROOMS COMPONENT
   // =========================================================================
   window.components.studyRooms = function(roomsList) {
-    roomsList = roomsList || [];
+    const defaultRooms = [
+      { roomCode: 'ROOM-LEETCODE-01', title: 'Blind 75 LeetCode Grind', topic: 'DSA & Algorithms', hostName: 'PrepSpace Peer', activeParticipants: 4, pomodoroMinutes: 25 },
+      { roomCode: 'ROOM-ARCH-02', title: 'System Design & Scalability', topic: 'System Design', hostName: 'PrepSpace Peer', activeParticipants: 3, pomodoroMinutes: 45 },
+      { roomCode: 'ROOM-JAVA-03', title: 'Java Concurrency & Spring Boot', topic: 'Java Backend', hostName: 'PrepSpace Peer', activeParticipants: 5, pomodoroMinutes: 25 },
+      { roomCode: 'ROOM-APTITUDE-04', title: 'Campus Drive Quantitative Sprint', topic: 'Aptitude Prep', hostName: 'PrepSpace Peer', activeParticipants: 2, pomodoroMinutes: 30 }
+    ];
+    roomsList = (roomsList && roomsList.length > 0) ? roomsList : defaultRooms;
 
     return `
       <div class="row g-4 mb-4">
@@ -51,17 +57,17 @@
           <div class="row g-3">
             ${roomsList.map(r => `
               <div class="col-md-6 col-xl-3">
-                <div class="glass-panel p-4 h-100 d-flex flex-column justify-content-between position-relative">
-                  <div>
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                      <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-30 px-2 py-0.5 fs-9 fw-semibold">
+                <div class="glass-panel p-4 h-100 d-flex flex-column position-relative">
+                  <div class="d-flex flex-column flex-grow-1">
+                    <div class="d-flex align-items-center justify-content-between mb-3 gap-2">
+                      <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-30 px-2 py-0.5 fs-9 fw-semibold text-truncate" style="max-width: 125px;" title="${r.topic}">
                         ${r.topic}
                       </span>
-                      <span class="badge bg-warning bg-opacity-20 text-warning px-2 py-0.5 fs-9 fw-bold">
+                      <span class="badge bg-warning bg-opacity-20 text-warning px-2 py-0.5 fs-9 fw-bold flex-shrink-0">
                         <i class="fa-solid fa-users me-1"></i> ${r.activeParticipants || 1} online
                       </span>
                     </div>
-                    <h5 class="text-white fw-bold mb-2 fs-6">${r.title}</h5>
+                    <h5 class="text-white fw-bold mb-2 fs-6 lh-sm">${r.title}</h5>
                     <p class="text-muted fs-8 mb-3">Hosted by <strong class="text-white">${r.hostName}</strong></p>
 
                     <div class="d-flex align-items-center gap-2 text-muted fs-9 mb-4">
@@ -70,8 +76,12 @@
                     </div>
                   </div>
 
+                  <div class="d-flex align-items-center justify-content-between mb-2 mt-auto">
+                    <span class="badge bg-body border border-secondary border-opacity-25 text-muted font-monospace fs-9">${r.roomCode}</span>
+                    <span class="text-muted fs-9"><i class="fa-solid fa-signal text-success me-1"></i> Live</span>
+                  </div>
                   <button class="btn btn-glass btn-sm text-white w-100 border-warning-subtle" onclick="window.enterActiveStudyRoom('${r.roomCode}', '${escape(r.title)}', ${r.pomodoroMinutes})">
-                    <i class="fa-solid fa-arrow-right-to-bracket text-warning me-1.5"></i> Join Room (${r.roomCode})
+                    <i class="fa-solid fa-arrow-right-to-bracket text-warning me-1.5"></i> Join Focus Room
                   </button>
                 </div>
               </div>

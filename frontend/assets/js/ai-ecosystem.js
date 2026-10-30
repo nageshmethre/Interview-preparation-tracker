@@ -67,8 +67,19 @@
               <h5 class="text-white fw-bold mb-0 fs-6"><i class="fa-solid fa-triangle-exclamation text-warning me-2"></i> Weak Subject Diagnostics</h5>
               <span class="badge bg-secondary bg-opacity-25 text-white fs-9">Automated Scan</span>
             </div>
-            <div class="p-3 rounded-3 bg-surface border border-secondary border-opacity-25 text-white fs-8 mb-4 lh-base" id="mentor-diagnostic-container">
-              ${diagnostics ? formatMarkdown(diagnostics) : '<div class="text-muted text-center py-4">Click "Re-Scan Learning Performance" to evaluate your recent practice history.</div>'}
+            <div class="p-3 rounded-3 bg-surface border border-secondary border-opacity-25 text-white fs-8 mb-4 lh-base" id="mentor-diagnostic-container" style="min-height: 280px;">
+              ${diagnostics ? formatMarkdown(diagnostics) : `
+                <div class="mb-3">
+                  <span class="badge bg-danger bg-opacity-20 text-danger border border-danger border-opacity-25 px-2 py-0.5 fs-9 fw-bold mb-2">CRITICAL GAP DETECTED</span>
+                  <h6 class="text-white fw-bold fs-7 mb-1">Dynamic Programming & Tree Traversals</h6>
+                  <p class="text-muted fs-8 mb-2">Recent practice telemetry indicates a 42% accuracy on 0/1 Knapsack variants and Lowest Common Ancestor queries compared to 85% on Arrays and HashMaps.</p>
+                </div>
+                <div class="mb-0">
+                  <span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-25 px-2 py-0.5 fs-9 fw-bold mb-2">RECOMMENDED REVISION</span>
+                  <h6 class="text-white fw-bold fs-7 mb-1">Database Indexing & ACID Isolation Levels</h6>
+                  <p class="text-muted fs-8 mb-0">High-frequency interview topic for Tier-1 engineering rounds. Prioritize B+ Tree structural lookups and Write-Ahead Logging mechanisms.</p>
+                </div>
+              `}
             </div>
           </div>
         </div>
@@ -82,8 +93,24 @@
                 <i class="fa-solid fa-rotate me-1 text-warning"></i> Regenerate
               </button>
             </div>
-            <div class="p-3 rounded-3 bg-surface border border-secondary border-opacity-25 text-white fs-8 lh-base overflow-x-auto" id="mentor-studyplan-container">
-              ${studyPlan ? formatMarkdown(studyPlan) : '<div class="text-muted text-center py-4">Generating optimized schedule...</div>'}
+            <div class="p-3 rounded-3 bg-surface border border-secondary border-opacity-25 text-white fs-8 lh-base overflow-x-auto" id="mentor-studyplan-container" style="min-height: 280px;">
+              ${studyPlan ? formatMarkdown(studyPlan) : `
+                <div class="mb-3">
+                  <span class="badge bg-warning bg-opacity-20 text-warning px-2 py-0.5 fs-9 fw-bold mb-2">WEEKS 1 - 2</span>
+                  <h6 class="text-white fw-bold fs-7 mb-1">Data Structures Mastery: Arrays, Two-Pointers & Binary Search</h6>
+                  <p class="text-muted fs-8 mb-0">Target: 30 curated LeetCode Mediums + Time & Space Complexity formal proofs.</p>
+                </div>
+                <div class="mb-3">
+                  <span class="badge bg-info bg-opacity-20 text-info px-2 py-0.5 fs-9 fw-bold mb-2">WEEKS 3 - 4</span>
+                  <h6 class="text-white fw-bold fs-7 mb-1">Non-Linear Structures: Trees, Graphs & BFS/DFS Traversal</h6>
+                  <p class="text-muted fs-8 mb-0">Target: Topological sort, cycle detection, Dijkstra, and Union-Find algorithms.</p>
+                </div>
+                <div class="mb-0">
+                  <span class="badge bg-success bg-opacity-20 text-success px-2 py-0.5 fs-9 fw-bold mb-2">WEEKS 5 - 8</span>
+                  <h6 class="text-white fw-bold fs-7 mb-1">System Design, Database Indexing & Live Mock Sprints</h6>
+                  <p class="text-muted fs-8 mb-0">Target: Low-latency caching, load balancers, rate limiters, and FAANG simulation rounds.</p>
+                </div>
+              `}
             </div>
           </div>
         </div>
@@ -176,7 +203,7 @@
 
             <!-- Configuration Bar -->
             <div class="p-3 rounded-4 bg-surface border border-secondary border-opacity-25 mb-4">
-              <div class="row g-3 align-items-center">
+              <div class="row g-3 align-items-end">
                 <div class="col-md-3">
                   <label class="form-label text-muted fs-9 text-uppercase fw-bold mb-1">Interview Round</label>
                   <select class="form-select bg-body text-white border-secondary border-opacity-25 fs-8" id="ai-interview-type">
@@ -201,7 +228,7 @@
                   <label class="form-label text-muted fs-9 text-uppercase fw-bold mb-1">Target Role</label>
                   <input type="text" class="form-control bg-body text-white border-secondary border-opacity-25 fs-8" id="ai-interview-role" value="Software Development Engineer">
                 </div>
-                <div class="col-md-3 text-md-end mt-md-4">
+                <div class="col-md-3">
                   <button class="btn btn-premium w-100 py-2 fs-8 fw-bold" onclick="window.generateNextInterviewQuestion()">
                     <i class="fa-solid fa-play me-1"></i> Start Round Question
                   </button>
@@ -213,7 +240,7 @@
             <div class="row g-4" id="ai-interview-active-stage">
               <!-- Left: Interviewer Prompt -->
               <div class="col-lg-6">
-                <div class="p-4 rounded-4 bg-surface border border-secondary border-opacity-25 h-100 d-flex flex-column justify-content-between">
+                <div class="p-4 rounded-4 bg-surface border border-secondary border-opacity-25 h-100 d-flex flex-column justify-content-between" style="min-height: 480px;">
                   <div>
                     <div class="d-flex align-items-center justify-content-between mb-3">
                       <span class="badge bg-warning bg-opacity-20 text-warning px-2.5 py-1 fs-9 fw-bold">INTERVIEWER</span>
@@ -247,7 +274,7 @@
 
               <!-- Right: Detailed Evaluation Scorecard -->
               <div class="col-lg-6">
-                <div class="p-4 rounded-4 bg-surface border border-secondary border-opacity-25 h-100" id="interview-scorecard-pane">
+                <div class="p-4 rounded-4 bg-surface border border-secondary border-opacity-25 h-100 d-flex flex-column justify-content-center" id="interview-scorecard-pane" style="min-height: 480px;">
                   <div class="text-center py-5 text-muted">
                     <i class="fa-solid fa-award fs-1 mb-2 d-block opacity-30"></i>
                     Submit your response to generate an instant 4-axis performance scorecard (Accuracy, Technical Depth, Answer Structure, and Communication Clarity).
@@ -265,7 +292,17 @@
   // 4. AI CAREER ROADMAP COMPONENT (8 Tracks)
   // =========================================================================
   window.components.careerRoadmaps = function(roadmapsList, currentGoal) {
-    roadmapsList = roadmapsList || [];
+    const defaultTracks = [
+      { track: 'Software Developer', estimatedWeeks: 12, description: 'Core Data Structures, Algorithms, Object-Oriented Design, and System Architecture.', milestones: ['DSA Problem Solving (150+ Medium)', 'High-Level & Low-Level Design', 'Multi-Threading & Concurrency'] },
+      { track: 'Full Stack Developer', estimatedWeeks: 14, description: 'End-to-end web engineering covering modern frontends, robust REST/GraphQL APIs, and databases.', milestones: ['React 18 & State Architecture', 'Spring Boot / Node Microservices', 'PostgreSQL & Redis Caching'] },
+      { track: 'Data Scientist', estimatedWeeks: 16, description: 'Statistical modeling, Exploratory Data Analysis, machine learning algorithms, and pipelines.', milestones: ['Advanced Python & Pandas', 'Feature Engineering & Regressors', 'Model Evaluation & Deployment'] },
+      { track: 'AI/ML Engineer', estimatedWeeks: 16, description: 'Deep Learning, transformer architectures, LLM fine-tuning, embeddings, and vector databases.', milestones: ['PyTorch / TensorFlow Pipelines', 'RAG & Vector Embeddings', 'Model Serving with vLLM / ONNX'] },
+      { track: 'Cybersecurity Analyst', estimatedWeeks: 10, description: 'Network security, penetration testing, threat detection, and secure coding practices.', milestones: ['OWASP Top 10 Vulnerabilities', 'Network Packet Analysis & WireShark', 'Identity & Access Management'] },
+      { track: 'Cloud Engineer', estimatedWeeks: 12, description: 'Containerization, Kubernetes orchestration, cloud infrastructure as code, and CI/CD.', milestones: ['Docker Containerization', 'Kubernetes Cluster Deployment', 'Terraform Infrastructure as Code'] },
+      { track: 'Java Developer', estimatedWeeks: 10, description: 'Enterprise Java, Spring Boot 3, Hibernate JPA, microservices, and message brokers.', milestones: ['Modern Java 21 Virtual Threads', 'Spring Cloud & Security', 'Kafka Event-Driven Architecture'] },
+      { track: 'Python Developer', estimatedWeeks: 10, description: 'Asynchronous Python, FastAPI, distributed task queues, and automated test suites.', milestones: ['AsyncIO & Event Loops', 'FastAPI & Pydantic Validation', 'Celery & Redis Worker Queues'] }
+    ];
+    roadmapsList = (roadmapsList && roadmapsList.length > 0) ? roadmapsList : defaultTracks;
     currentGoal = currentGoal || { targetTrack: 'Software Developer' };
 
     return `
@@ -283,8 +320,8 @@
             <div class="row g-3">
               ${roadmapsList.map(r => `
                 <div class="col-md-6 col-xl-3">
-                  <div class="glass-panel p-4 h-100 d-flex flex-column justify-content-between ${r.track === currentGoal.targetTrack ? 'border-warning' : ''}" style="background: ${r.track === currentGoal.targetTrack ? 'rgba(245, 158, 11, 0.04)' : ''};">
-                    <div>
+                  <div class="glass-panel p-4 h-100 d-flex flex-column ${r.track === currentGoal.targetTrack ? 'border-warning' : ''}" style="background: ${r.track === currentGoal.targetTrack ? 'rgba(245, 158, 11, 0.04)' : ''};">
+                    <div class="d-flex flex-column flex-grow-1">
                       <div class="d-flex align-items-center justify-content-between mb-3">
                         <span class="badge ${r.track === currentGoal.targetTrack ? 'bg-warning text-dark' : 'bg-secondary bg-opacity-25 text-white'} px-2.5 py-1 rounded-pill fs-9 fw-bold">
                           ${r.track === currentGoal.targetTrack ? '<i class=\"fa-solid fa-check me-1\"></i> ACTIVE TARGET' : 'CAREER TRACK'}
@@ -295,17 +332,17 @@
                       <p class="text-muted fs-8 mb-3">${r.description}</p>
                       
                       <h6 class="text-muted fs-9 text-uppercase fw-bold mb-2">Key Milestones:</h6>
-                      <ul class="text-white fs-8 ps-3 mb-4">
+                      <ul class="text-white fs-8 ps-3 mb-4 flex-grow-1">
                         ${(r.milestones || []).slice(0, 3).map(m => `<li class="mb-1 text-truncate" title="${m}">${m}</li>`).join('')}
                       </ul>
                     </div>
 
                     ${r.track === currentGoal.targetTrack ? `
-                      <button class="btn btn-glass btn-sm text-warning w-100 fw-bold border-warning-subtle" disabled>
+                      <button class="btn btn-glass btn-sm text-warning w-100 fw-bold border-warning-subtle mt-auto" disabled>
                         <i class="fa-solid fa-circle-check me-1"></i> Current Focus Track
                       </button>
                     ` : `
-                      <button class="btn btn-glass btn-sm text-white w-100" onclick="window.selectCareerTrackGoal('${r.track}')">
+                      <button class="btn btn-glass btn-sm text-white w-100 mt-auto" onclick="window.selectCareerTrackGoal('${r.track}')">
                         Set as Active Target <i class="fa-solid fa-arrow-right ms-1 text-warning"></i>
                       </button>
                     `}

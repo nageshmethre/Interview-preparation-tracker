@@ -16,7 +16,15 @@
   // 1. PREPSPACE PULSE – TECHNOLOGY DISCOVERY COMPONENT
   // =========================================================================
   window.components.pulse = function(articlesList, selectedCat = 'ALL') {
-    articlesList = articlesList || [];
+    const defaultArticles = [
+      { id: 1, title: 'JDK 23 GA Released: Primitive Patterns in Switch & Markdown Docs', summary: 'Oracle officially announces Java 23 with finalized primitive types in pattern matching, class-file API, and native markdown support.', category: 'LANGUAGES', isVerified: true, readTimeMinutes: 4, source: 'OpenJDK Announcement', sourceUrl: 'https://openjdk.org' },
+      { id: 2, title: 'Meta Llama 3.2: Edge & Vision Multi-Modal AI Reasoning', summary: 'Compact 1B and 3B parameter open models tuned specifically for on-device reasoning and vision-language comprehension.', category: 'AI', isVerified: true, readTimeMinutes: 5, source: 'Meta AI Engineering', sourceUrl: 'https://ai.meta.com' },
+      { id: 3, title: 'Google Summer of Code & Winter SDE Internships 2026', summary: 'Application deadlines, eligibility criteria, and preparation roadmaps for undergraduate engineering candidates.', category: 'INTERNSHIPS', isVerified: true, readTimeMinutes: 3, source: 'Google Student Careers', sourceUrl: 'https://careers.google.com' },
+      { id: 4, title: 'PostgreSQL 17: Query Performance Speedups & Memory Optimizations', summary: 'Massive gains in high-concurrency VACUUM operations, JSON_TABLE enhancements, and streaming replication failover.', category: 'DEV_TOOLS', isVerified: true, readTimeMinutes: 6, source: 'PostgreSQL Global Org', sourceUrl: 'https://postgresql.org' },
+      { id: 5, title: 'Smart India Hackathon 2026: National Problem Statements Live', summary: 'Ministry of Education launches nationwide challenge with industrial hardware & software tracks for college innovators.', category: 'HACKATHONS', isVerified: true, readTimeMinutes: 4, source: 'AICTE / SIH Portal', sourceUrl: 'https://sih.gov.in' },
+      { id: 6, title: 'Microservices Reliability: Circuit Breakers, Bulkheads & Rate Limiters', summary: 'A complete architectural walkthrough of resilience design patterns used by Netflix and Uber for 99.999% uptime.', category: 'DEV_TOOLS', isVerified: true, readTimeMinutes: 5, source: 'System Design Digest', sourceUrl: 'https://highscalability.com' }
+    ];
+    articlesList = (articlesList && articlesList.length > 0) ? articlesList : defaultArticles;
 
     const categories = [
       { key: 'ALL', label: 'All Discovery' },
@@ -62,8 +70,8 @@
           <div class="row g-3" id="pulse-articles-grid">
             ${articlesList.map(a => `
               <div class="col-md-6 col-xl-4">
-                <div class="glass-panel p-4 h-100 d-flex flex-column justify-content-between">
-                  <div>
+                <div class="glass-panel p-4 h-100 d-flex flex-column">
+                  <div class="d-flex flex-column flex-grow-1">
                     <div class="d-flex align-items-center justify-content-between mb-3">
                       <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-30 px-2 py-0.5 fs-9 fw-semibold">
                         ${a.category}
@@ -75,14 +83,14 @@
                     </div>
 
                     <h5 class="text-white fw-bold mb-2 fs-6 lh-sm">${a.title}</h5>
-                    <p class="text-muted fs-8 mb-3 lh-base">${a.summary}</p>
+                    <p class="text-muted fs-8 mb-3 lh-base flex-grow-1">${a.summary}</p>
                     
                     <div class="text-muted fs-9 mb-3">
                       <i class="fa-solid fa-building-columns me-1 text-warning"></i> Source: <strong class="text-white-50">${a.source}</strong>
                     </div>
                   </div>
 
-                  <div class="d-flex align-items-center justify-content-between pt-3 border-top border-secondary border-opacity-25 mt-2">
+                  <div class="d-flex align-items-center justify-content-between pt-3 border-top border-secondary border-opacity-25 mt-auto">
                     <a href="${a.sourceUrl || '#'}" target="_blank" rel="noopener noreferrer" class="btn btn-glass btn-sm text-white fs-8">
                       Read Full Brief <i class="fa-solid fa-arrow-up-right-from-square ms-1 text-warning"></i>
                     </a>
@@ -115,7 +123,14 @@
       appsCount: 2,
       recommendations: ['Solve more DSA problems to improve placement readiness score.']
     };
-    companyQuestions = companyQuestions || [];
+    const defaultCompanyQuestions = [
+      { id: 1, title: 'Two Sum & 3-Sum Optimal Pointer Variants', category: 'DSA', difficulty: 'EASY', companies: 'Google, Amazon, Meta' },
+      { id: 2, title: 'Longest Substring Without Repeating Characters', category: 'DSA', difficulty: 'MEDIUM', companies: 'Amazon, Microsoft, Bloomberg' },
+      { id: 3, title: 'LRU Cache Design & Concurrent Eviction Policy', category: 'System Design', difficulty: 'MEDIUM', companies: 'Google, Uber, Apple' },
+      { id: 4, title: 'Merge k Sorted Linked Lists', category: 'DSA', difficulty: 'HARD', companies: 'Amazon, Microsoft, Meta' },
+      { id: 5, title: 'Detect and Resolve SQL Transaction Deadlocks', category: 'DBMS', difficulty: 'MEDIUM', companies: 'TCS Digital, Infosys, Oracle' }
+    ];
+    companyQuestions = (companyQuestions && companyQuestions.length > 0) ? companyQuestions : defaultCompanyQuestions;
 
     const companies = ['Google', 'Amazon', 'Microsoft', 'TCS', 'Infosys', 'Meta'];
 

@@ -926,117 +926,107 @@ function router() {
         // Keep rendered cached/default state smoothly
         console.warn('Live dashboard stats refresh skipped:', err.message);
       });
-  } else if (hash === '#/missions') {
+  } else if (hash === '#/missions' || hash === '#/daily-missions') {
     viewTitle.textContent = 'Daily Missions';
-    pageMount.innerHTML = components.dailyMissions ? components.dailyMissions() : '<div class="text-center py-5"><div class="spinner-border text-warning"></div></div>';
+    if (components.dailyMissions) pageMount.innerHTML = components.dailyMissions();
     apiFetch('/v1/missions/today')
       .then(data => {
-        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/missions') return;
+        if (navSeq !== currentNavigationSeq) return;
         if (components.dailyMissions) pageMount.innerHTML = components.dailyMissions(data);
       })
       .catch(() => {});
-  } else if (hash === '#/daily-challenge') {
+  } else if (hash === '#/daily-challenge' || hash === '#/challenges') {
     viewTitle.textContent = 'Daily Engineering Challenges';
-    pageMount.innerHTML = components.dailyChallenges ? components.dailyChallenges() : '<div class="text-center py-5"><div class="spinner-border text-warning"></div></div>';
+    if (components.dailyChallenges) pageMount.innerHTML = components.dailyChallenges();
     apiFetch('/v1/challenges/today')
       .then(data => {
-        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/daily-challenge') return;
+        if (navSeq !== currentNavigationSeq) return;
         if (components.dailyChallenges) pageMount.innerHTML = components.dailyChallenges(data);
       })
       .catch(() => {});
-  } else if (hash === '#/quick-learning') {
+  } else if (hash === '#/quick-learning' || hash === '#/5-min-bites') {
     viewTitle.textContent = '5-Minute Quick Learning';
-    pageMount.innerHTML = components.quickLearning ? components.quickLearning() : '<div class="text-center py-5"><div class="spinner-border text-warning"></div></div>';
+    if (components.quickLearning) pageMount.innerHTML = components.quickLearning();
     apiFetch('/v1/pulse/quick-learn')
       .then(data => {
-        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/quick-learning') return;
+        if (navSeq !== currentNavigationSeq) return;
         if (components.quickLearning) pageMount.innerHTML = components.quickLearning(data);
       })
       .catch(() => {});
   } else if (hash === '#/leaderboard' || hash === '#/gamification') {
     viewTitle.textContent = 'Leaderboard & Gamification Tiers';
-    pageMount.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-warning"></div></div>';
+    if (components.leaderboard) pageMount.innerHTML = components.leaderboard();
     Promise.all([
-      apiFetch('/v1/gamification/status'),
-      apiFetch('/v1/gamification/leaderboard?type=global')
+      apiFetch('/v1/gamification/status').catch(() => ({ xp: 0, coins: 50 })),
+      apiFetch('/v1/gamification/leaderboard?type=global').catch(() => ({}))
     ]).then(([status, leaderboard]) => {
       if (navSeq !== currentNavigationSeq) return;
       if (components.leaderboard) pageMount.innerHTML = components.leaderboard({ status, leaderboard });
-    }).catch(() => {
-      if (components.leaderboard) pageMount.innerHTML = components.leaderboard();
     });
-  } else if (hash === '#/rewards') {
+  } else if (hash === '#/rewards' || hash === '#/coin-rewards') {
     viewTitle.textContent = 'PrepCoins Rewards Store';
-    pageMount.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-warning"></div></div>';
+    if (components.rewardsStore) pageMount.innerHTML = components.rewardsStore([], [], 50);
     Promise.all([
-      apiFetch('/v1/gamification/rewards'),
-      apiFetch('/v1/gamification/rewards/redemptions'),
-      apiFetch('/v1/gamification/status')
+      apiFetch('/v1/gamification/rewards').catch(() => []),
+      apiFetch('/v1/gamification/rewards/redemptions').catch(() => []),
+      apiFetch('/v1/gamification/status').catch(() => ({ coins: 50 }))
     ]).then(([catalog, redemptions, status]) => {
-      if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/rewards') return;
-      if (components.rewardsStore) pageMount.innerHTML = components.rewardsStore(catalog, redemptions, status.coins || 50);
-    }).catch(() => {
-      if (components.rewardsStore) pageMount.innerHTML = components.rewardsStore([], [], 50);
+      if (navSeq !== currentNavigationSeq) return;
+      if (components.rewardsStore) pageMount.innerHTML = components.rewardsStore(catalog, redemptions, (status && status.coins) || 50);
     });
   } else if (hash === '#/ai-mentor') {
     viewTitle.textContent = 'AI Personal Mentor';
-    pageMount.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-warning"></div></div>';
+    if (components.aiMentor) pageMount.innerHTML = components.aiMentor();
     Promise.all([
-      apiFetch('/v1/ai/weak-topics').catch(() => 'All attempted topics mastered!'),
-      apiFetch('/v1/ai/study-plan').catch(() => '8-Week roadmap active.'),
+      apiFetch('/v1/ai/weak-topics').catch(() => '### 📊 AI Learning Diagnostic Report\n\n**Status**: **All Attempted Topics Mastered!**\n\n- **Algorithms**: Arrays, Two Pointers verified.\n- **Recommended Focus**: Binary Search and Tree Traversals.'),
+      apiFetch('/v1/ai/study-plan').catch(() => '### 📅 8-Week Personalized Sprint Schedule\n\n- **Week 1-2**: Linear Structures & Pointers\n- **Week 3-4**: Trees, Graphs & BFS/DFS\n- **Week 5-6**: Dynamic Programming Patterns\n- **Week 7-8**: System Design & Mock Interviews'),
       apiFetch('/v1/career/goal').catch(() => ({ targetTrack: 'Software Developer' }))
     ]).then(([diagnostics, studyPlan, goal]) => {
-      if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/ai-mentor') return;
+      if (navSeq !== currentNavigationSeq) return;
       if (components.aiMentor) pageMount.innerHTML = components.aiMentor(diagnostics, studyPlan, goal);
     });
-  } else if (hash === '#/ai-doubt') {
+  } else if (hash === '#/ai-doubt' || hash === '#/ai-doubt-solver') {
     viewTitle.textContent = 'AI Technical Doubt Solver';
     if (components.aiDoubtSolver) pageMount.innerHTML = components.aiDoubtSolver();
   } else if (hash === '#/ai-interviewer') {
     viewTitle.textContent = 'AI Mock Interview Simulator';
     if (components.aiInterviewer) pageMount.innerHTML = components.aiInterviewer();
-  } else if (hash === '#/career-roadmaps') {
+  } else if (hash === '#/career-roadmaps' || hash === '#/ai-career-roadmap') {
     viewTitle.textContent = 'AI Interactive Career Roadmaps';
-    pageMount.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-warning"></div></div>';
+    if (components.careerRoadmaps) pageMount.innerHTML = components.careerRoadmaps([], { targetTrack: 'Software Developer' });
     Promise.all([
-      apiFetch('/v1/career/roadmaps'),
+      apiFetch('/v1/career/roadmaps').catch(() => []),
       apiFetch('/v1/career/goal').catch(() => ({ targetTrack: 'Software Developer' }))
     ]).then(([roadmaps, goal]) => {
-      if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/career-roadmaps') return;
+      if (navSeq !== currentNavigationSeq) return;
       if (components.careerRoadmaps) pageMount.innerHTML = components.careerRoadmaps(roadmaps, goal);
-    }).catch(() => {
-      if (components.careerRoadmaps) pageMount.innerHTML = components.careerRoadmaps([], { targetTrack: 'Software Developer' });
     });
-  } else if (hash === '#/placement-hub') {
+  } else if (hash === '#/placement-hub' || hash === '#/placement-prep') {
     viewTitle.textContent = 'Campus Placement Readiness';
-    pageMount.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-warning"></div></div>';
+    if (components.placementHub) pageMount.innerHTML = components.placementHub();
     Promise.all([
-      apiFetch('/v1/career/readiness'),
-      apiFetch('/v1/career/company-questions?company=Google')
+      apiFetch('/v1/career/readiness').catch(() => null),
+      apiFetch('/v1/career/company-questions?company=Google').catch(() => [])
     ]).then(([readiness, companyQuestions]) => {
-      if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/placement-hub') return;
+      if (navSeq !== currentNavigationSeq) return;
       if (components.placementHub) pageMount.innerHTML = components.placementHub(readiness, companyQuestions);
-    }).catch(() => {
-      if (components.placementHub) pageMount.innerHTML = components.placementHub();
     });
   } else if (hash === '#/study-rooms') {
     viewTitle.textContent = 'Virtual Study Rooms';
-    pageMount.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-warning"></div></div>';
+    if (components.studyRooms) pageMount.innerHTML = components.studyRooms([]);
     apiFetch('/v1/social/study-rooms')
       .then(rooms => {
-        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/study-rooms') return;
+        if (navSeq !== currentNavigationSeq) return;
         if (components.studyRooms) pageMount.innerHTML = components.studyRooms(rooms);
         if (window.refreshStudyPartners) window.refreshStudyPartners();
       })
-      .catch(() => {
-        if (components.studyRooms) pageMount.innerHTML = components.studyRooms([]);
-      });
+      .catch(() => {});
   } else if (hash === '#/pulse') {
     viewTitle.textContent = 'PrepSpace Pulse • Tech Discovery';
-    pageMount.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-warning"></div></div>';
+    if (components.pulse) pageMount.innerHTML = components.pulse([]);
     apiFetch('/v1/pulse/articles')
       .then(articles => {
-        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/pulse') return;
+        if (navSeq !== currentNavigationSeq) return;
         if (components.pulse) pageMount.innerHTML = components.pulse(articles);
       })
       .catch(() => {
