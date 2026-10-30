@@ -947,6 +947,10 @@ const components = {
 
   // Application Layout Wrapper - Style 2: Stripe / Supabase Enterprise Gradient Workspace
   appLayout: (userName, isAdmin, isPaid = false) => {
+    let displayName = userName || 'Student';
+    if (!displayName || /admin|superadmin/i.test(displayName)) {
+      displayName = localStorage.getItem('prepspace_student_name') || 'Nagesh Methre';
+    }
     const isEffectivePaid = Boolean(
       isPaid || 
       isAdmin || 
@@ -1120,7 +1124,7 @@ const components = {
             <div class="dropdown">
               <button class="btn btn-glass btn-sm dropdown-toggle d-flex align-items-center gap-2 py-1.5 px-3" type="button" id="userDropdown" data-bs-toggle="dropdown">
                 <i class="fa-solid fa-circle-user fs-6 text-secondary"></i>
-                <span class="d-none d-md-inline fs-7 fw-semibold" id="user-display-name">${userName}</span>
+                <span class="d-none d-md-inline fs-7 fw-semibold" id="user-display-name">${displayName}</span>
               </button>
               <ul class="dropdown-menu dropdown-menu-end glass-panel shadow-lg" aria-labelledby="userDropdown">
                 <li class="px-3 py-1.5 border-bottom border-secondary border-opacity-20 mb-1" id="dropdown-plan-info">

@@ -408,28 +408,30 @@
               <!-- Left: Concept Deep Dive -->
               <div class="col-lg-7">
                 <div class="p-4 rounded-4 bg-surface border border-secondary border-opacity-25 mb-3">
-                  <span class="badge bg-primary text-dark fw-bold px-2 py-0.5 fs-9 mb-2">TODAY'S TOPIC</span>
+                  <span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-30 fw-bold px-2.5 py-1 fs-9 mb-2">TODAY'S TOPIC</span>
                   <h4 class="text-white fw-bold mb-3 fs-5">${data.topic}</h4>
                   <p class="text-secondary fs-7 mb-3 lh-base">${data.summary}</p>
-                  <div class="p-3 rounded-3 bg-body border-start border-3 border-warning mb-3">
+                  <div class="p-3 rounded-3 border-start border-3 border-warning mb-2" style="background: rgba(245, 158, 11, 0.08); border-top: 1px solid rgba(255, 255, 255, 0.05); border-right: 1px solid rgba(255, 255, 255, 0.05); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
                     <span class="text-warning fw-bold fs-8 d-block mb-1"><i class="fa-solid fa-lightbulb me-1"></i> Key Placement Takeaway:</span>
-                    <span class="text-white fs-8">${data.keyTakeaway}</span>
+                    <span class="text-light fs-8 lh-base">${data.keyTakeaway}</span>
                   </div>
                 </div>
 
                 <!-- Pro Tip of the Day -->
                 <div class="p-4 rounded-4 bg-surface border border-secondary border-opacity-25">
                   <span class="badge bg-warning bg-opacity-20 text-warning fw-bold px-2 py-0.5 fs-9 mb-2"><i class="fa-solid fa-code me-1"></i> CODE CRAFT TIP</span>
-                  <p class="text-white fs-8 mb-2 font-monospace bg-body p-3 rounded-3 border border-secondary border-opacity-25 overflow-x-auto">
-                    ${data.codeTip}
-                  </p>
+                  <div class="p-3 rounded-3 border border-secondary border-opacity-25 overflow-x-auto" style="background: #141416;">
+                    <code class="text-warning-emphasis font-monospace fs-8 d-block" style="color: #fbbf24 !important;">
+                      <i class="fa-solid fa-terminal me-2 text-warning fs-9"></i>${data.codeTip}
+                    </code>
+                  </div>
                 </div>
               </div>
 
               <!-- Right: Interview Prompt & Speed Quiz -->
               <div class="col-lg-5">
                 <div class="p-4 rounded-4 bg-surface border border-secondary border-opacity-25 mb-3">
-                  <span class="badge bg-info bg-opacity-20 text-info fw-bold px-2 py-0.5 fs-9 mb-2"><i class="fa-solid fa-user-tie me-1"></i> FAANG INTERVIEW QUESTION</span>
+                  <span class="badge border border-info border-opacity-30 text-info fw-bold px-2.5 py-1 fs-9 mb-2" style="background: rgba(13, 202, 240, 0.12);"><i class="fa-solid fa-user-tie me-1"></i> FAANG INTERVIEW QUESTION</span>
                   <p class="text-white fs-8 fw-semibold mb-2 whitespace-pre-line">${data.interviewQuestion}</p>
                 </div>
 

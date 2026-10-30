@@ -9,7 +9,7 @@ const API_BASE = (typeof window !== 'undefined' && window.API_BASE_OVERRIDE)
 // State Store
 const state = {
   token: localStorage.getItem('token'),
-  name: localStorage.getItem('name'),
+  name: (/admin|superadmin/i.test(localStorage.getItem('name') || '')) ? 'Nagesh Methre' : (localStorage.getItem('name') || 'Nagesh Methre'),
   email: localStorage.getItem('email'),
   role: localStorage.getItem('role'),
   isPaid: localStorage.getItem('isPaid') === 'true' || 

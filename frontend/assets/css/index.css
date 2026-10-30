@@ -1,3 +1,28 @@
+
+/* Bootstrap 5.3 Dark Mode Overrides & Global Surface Enforcements */
+:root, [data-bs-theme="dark"], html {
+  --bs-body-bg: #18181b !important;
+  --bs-body-color: #d4d4d8 !important;
+  --bs-emphasis-color: #f4f4f5 !important;
+  --bs-secondary-bg: #222226 !important;
+  --bs-tertiary-bg: #1c1c20 !important;
+  --bs-border-color: #323238 !important;
+}
+
+.bg-body,
+body .bg-body,
+[data-bs-theme="dark"] .bg-body {
+  background-color: #18181b !important;
+  color: #f4f4f5 !important;
+}
+
+.bg-surface,
+body .bg-surface,
+[data-bs-theme="dark"] .bg-surface {
+  background-color: #222226 !important;
+  color: #f4f4f5 !important;
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
