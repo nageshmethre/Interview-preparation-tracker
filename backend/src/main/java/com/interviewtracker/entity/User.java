@@ -71,6 +71,17 @@ public class User {
     @Builder.Default
     private Boolean isSuspended = false;
 
+    @Column(name = "xp_points")
+    @Builder.Default
+    private Integer xpPoints = 0;
+
+    @Column(name = "coins")
+    @Builder.Default
+    private Integer coins = 50;
+
+    @Column(name = "college", length = 150)
+    private String college;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -89,6 +100,12 @@ public class User {
         }
         if (isSuspended == null) {
             isSuspended = false;
+        }
+        if (xpPoints == null) {
+            xpPoints = 0;
+        }
+        if (coins == null) {
+            coins = 50;
         }
         if (referralCode == null || referralCode.trim().isEmpty()) {
             referralCode = "REF-" + java.util.UUID.randomUUID().toString().substring(0, 8).toUpperCase();

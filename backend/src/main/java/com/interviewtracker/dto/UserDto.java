@@ -11,4 +11,7 @@ public class UserDto {
     private Boolean isPaid;
     private String referralCode;
     private Double referralEarnings;
+    private Integer xpPoints;
+    private Integer coins;
+    private String college;
 }

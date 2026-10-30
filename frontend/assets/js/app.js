@@ -926,9 +926,122 @@ function router() {
         // Keep rendered cached/default state smoothly
         console.warn('Live dashboard stats refresh skipped:', err.message);
       });
-  } else if (hash === '#/gamification') {
-    window.location.hash = '#/dashboard';
-    return;
+  } else if (hash === '#/missions') {
+    viewTitle.textContent = 'Daily Missions';
+    pageMount.innerHTML = components.dailyMissions ? components.dailyMissions() : '<div class="text-center py-5"><div class="spinner-border text-warning"></div></div>';
+    apiFetch('/v1/missions/today')
+      .then(data => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/missions') return;
+        if (components.dailyMissions) pageMount.innerHTML = components.dailyMissions(data);
+      })
+      .catch(() => {});
+  } else if (hash === '#/daily-challenge') {
+    viewTitle.textContent = 'Daily Engineering Challenges';
+    pageMount.innerHTML = components.dailyChallenges ? components.dailyChallenges() : '<div class="text-center py-5"><div class="spinner-border text-warning"></div></div>';
+    apiFetch('/v1/challenges/today')
+      .then(data => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/daily-challenge') return;
+        if (components.dailyChallenges) pageMount.innerHTML = components.dailyChallenges(data);
+      })
+      .catch(() => {});
+  } else if (hash === '#/quick-learning') {
+    viewTitle.textContent = '5-Minute Quick Learning';
+    pageMount.innerHTML = components.quickLearning ? components.quickLearning() : '<div class="text-center py-5"><div class="spinner-border text-warning"></div></div>';
+    apiFetch('/v1/pulse/quick-learn')
+      .then(data => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/quick-learning') return;
+        if (components.quickLearning) pageMount.innerHTML = components.quickLearning(data);
+      })
+      .catch(() => {});
+  } else if (hash === '#/leaderboard' || hash === '#/gamification') {
+    viewTitle.textContent = 'Leaderboard & Gamification Tiers';
+    pageMount.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-warning"></div></div>';
+    Promise.all([
+      apiFetch('/v1/gamification/status'),
+      apiFetch('/v1/gamification/leaderboard?type=global')
+    ]).then(([status, leaderboard]) => {
+      if (navSeq !== currentNavigationSeq) return;
+      if (components.leaderboard) pageMount.innerHTML = components.leaderboard({ status, leaderboard });
+    }).catch(() => {
+      if (components.leaderboard) pageMount.innerHTML = components.leaderboard();
+    });
+  } else if (hash === '#/rewards') {
+    viewTitle.textContent = 'PrepCoins Rewards Store';
+    pageMount.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-warning"></div></div>';
+    Promise.all([
+      apiFetch('/v1/gamification/rewards'),
+      apiFetch('/v1/gamification/rewards/redemptions'),
+      apiFetch('/v1/gamification/status')
+    ]).then(([catalog, redemptions, status]) => {
+      if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/rewards') return;
+      if (components.rewardsStore) pageMount.innerHTML = components.rewardsStore(catalog, redemptions, status.coins || 50);
+    }).catch(() => {
+      if (components.rewardsStore) pageMount.innerHTML = components.rewardsStore([], [], 50);
+    });
+  } else if (hash === '#/ai-mentor') {
+    viewTitle.textContent = 'AI Personal Mentor';
+    pageMount.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-warning"></div></div>';
+    Promise.all([
+      apiFetch('/v1/ai/weak-topics').catch(() => 'All attempted topics mastered!'),
+      apiFetch('/v1/ai/study-plan').catch(() => '8-Week roadmap active.'),
+      apiFetch('/v1/career/goal').catch(() => ({ targetTrack: 'Software Developer' }))
+    ]).then(([diagnostics, studyPlan, goal]) => {
+      if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/ai-mentor') return;
+      if (components.aiMentor) pageMount.innerHTML = components.aiMentor(diagnostics, studyPlan, goal);
+    });
+  } else if (hash === '#/ai-doubt') {
+    viewTitle.textContent = 'AI Technical Doubt Solver';
+    if (components.aiDoubtSolver) pageMount.innerHTML = components.aiDoubtSolver();
+  } else if (hash === '#/ai-interviewer') {
+    viewTitle.textContent = 'AI Mock Interview Simulator';
+    if (components.aiInterviewer) pageMount.innerHTML = components.aiInterviewer();
+  } else if (hash === '#/career-roadmaps') {
+    viewTitle.textContent = 'AI Interactive Career Roadmaps';
+    pageMount.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-warning"></div></div>';
+    Promise.all([
+      apiFetch('/v1/career/roadmaps'),
+      apiFetch('/v1/career/goal').catch(() => ({ targetTrack: 'Software Developer' }))
+    ]).then(([roadmaps, goal]) => {
+      if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/career-roadmaps') return;
+      if (components.careerRoadmaps) pageMount.innerHTML = components.careerRoadmaps(roadmaps, goal);
+    }).catch(() => {
+      if (components.careerRoadmaps) pageMount.innerHTML = components.careerRoadmaps([], { targetTrack: 'Software Developer' });
+    });
+  } else if (hash === '#/placement-hub') {
+    viewTitle.textContent = 'Campus Placement Readiness';
+    pageMount.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-warning"></div></div>';
+    Promise.all([
+      apiFetch('/v1/career/readiness'),
+      apiFetch('/v1/career/company-questions?company=Google')
+    ]).then(([readiness, companyQuestions]) => {
+      if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/placement-hub') return;
+      if (components.placementHub) pageMount.innerHTML = components.placementHub(readiness, companyQuestions);
+    }).catch(() => {
+      if (components.placementHub) pageMount.innerHTML = components.placementHub();
+    });
+  } else if (hash === '#/study-rooms') {
+    viewTitle.textContent = 'Virtual Study Rooms';
+    pageMount.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-warning"></div></div>';
+    apiFetch('/v1/social/study-rooms')
+      .then(rooms => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/study-rooms') return;
+        if (components.studyRooms) pageMount.innerHTML = components.studyRooms(rooms);
+        if (window.refreshStudyPartners) window.refreshStudyPartners();
+      })
+      .catch(() => {
+        if (components.studyRooms) pageMount.innerHTML = components.studyRooms([]);
+      });
+  } else if (hash === '#/pulse') {
+    viewTitle.textContent = 'PrepSpace Pulse • Tech Discovery';
+    pageMount.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-warning"></div></div>';
+    apiFetch('/v1/pulse/articles')
+      .then(articles => {
+        if (navSeq !== currentNavigationSeq || window.location.hash.split('?')[0] !== '#/pulse') return;
+        if (components.pulse) pageMount.innerHTML = components.pulse(articles);
+      })
+      .catch(() => {
+        if (components.pulse) pageMount.innerHTML = components.pulse([]);
+      });
   } else if (hash === '#/studyplanner') {
     viewTitle.textContent = 'Study Planner';
     pageMount.innerHTML = components.studyPlanner();
@@ -13001,3 +13114,30 @@ if (typeof window !== 'undefined') {
   });
 }
 
+
+// Sync Header XP & Gamification Badges
+window.updateHeaderGamification = function() {
+  const token = localStorage.getItem('token');
+  if (!token) return;
+  fetch(`${API_BASE}/v1/gamification/status`, {
+    headers: { 'Authorization': `Bearer ${token}` }
+  })
+    .then(r => r.json())
+    .then(data => {
+      if (data && data.level) {
+        const lvlEl = document.getElementById('header-level-name');
+        const xpEl = document.getElementById('header-xp-points');
+        const streakEl = document.getElementById('header-streak-count');
+        if (lvlEl) lvlEl.textContent = data.level.levelName || 'Beginner';
+        if (xpEl) xpEl.textContent = `${data.xp || 0} XP`;
+        if (streakEl && data.currentStreak) streakEl.textContent = data.currentStreak;
+      }
+    })
+    .catch(() => {});
+};
+
+// Hook router to auto-sync gamification
+window.addEventListener('hashchange', () => {
+  if (window.updateHeaderGamification) window.updateHeaderGamification();
+  if (window.PrepSpaceNotifications) window.PrepSpaceNotifications.fetchNotifications();
+});

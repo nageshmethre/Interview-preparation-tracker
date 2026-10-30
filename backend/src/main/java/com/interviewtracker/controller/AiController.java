@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/ai")
@@ -44,5 +45,31 @@ public class AiController {
             @RequestParam String role
     ) {
         return ResponseEntity.ok(aiService.generateInterviewQuestions(company, role));
+    }
+
+    @PostMapping("/doubt-solve")
+    public ResponseEntity<Map<String, Object>> solveDoubt(@RequestBody Map<String, String> payload) {
+        String question = payload.get("question");
+        String code = payload.get("code");
+        String category = payload.get("category");
+        return ResponseEntity.ok(aiService.solveDoubt(question, code, category));
+    }
+
+    @PostMapping("/interview-eval")
+    public ResponseEntity<Map<String, Object>> evaluateInterviewAnswer(@RequestBody Map<String, String> payload) {
+        String role = payload.get("role");
+        String company = payload.get("company");
+        String question = payload.get("question");
+        String candidateAnswer = payload.get("candidateAnswer");
+        return ResponseEntity.ok(aiService.evaluateInterviewAnswer(role, company, question, candidateAnswer));
+    }
+
+    @PostMapping("/code-assistant")
+    public ResponseEntity<Map<String, Object>> getCodingAssistance(@RequestBody Map<String, String> payload) {
+        String code = payload.get("code");
+        String language = payload.get("language");
+        String action = payload.get("action");
+        String problemContext = payload.get("problemContext");
+        return ResponseEntity.ok(aiService.getCodingAssistance(code, language, action, problemContext));
     }
 }

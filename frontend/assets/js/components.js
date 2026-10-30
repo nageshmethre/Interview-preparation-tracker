@@ -982,11 +982,14 @@ const components = {
         <nav class="flex-grow-1 py-2 overflow-y-auto sidebar-scroll-content" id="sidebar-nav-container" aria-label="Platform Workspace Navigation">
           <details class="sidebar-group" open>
             <summary class="sidebar-section-title px-4 mb-1">
-              <span>Core Tracker</span>
+              <span>Daily & Practice</span>
               <i class="fa-solid fa-chevron-down sidebar-group-chevron"></i>
             </summary>
             <div class="sidebar-group-items">
               <a href="#/dashboard" class="sidebar-link active"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
+              <a href="#/missions" class="sidebar-link"><i class="fa-solid fa-crosshairs text-warning"></i> <span>Daily Missions</span></a>
+              <a href="#/daily-challenge" class="sidebar-link"><i class="fa-solid fa-trophy text-warning"></i> <span>Daily Challenges</span></a>
+              <a href="#/quick-learning" class="sidebar-link"><i class="fa-solid fa-bolt text-warning"></i> <span>5-Min Quick Bites</span></a>
               <a href="#/coding-practice" class="sidebar-link"><i class="fa-solid fa-code"></i> <span>Coding Practice</span></a>
               <a href="#/aptitude" class="sidebar-link"><i class="fa-solid fa-book-open-reader"></i> <span>Aptitude & Book</span></a>
               <a href="#/mock-exams" class="sidebar-link"><i class="fa-solid fa-stopwatch"></i> <span>50-MCQ Mock Exams</span></a>
@@ -996,6 +999,36 @@ const components = {
           </details>
 
           <details class="sidebar-group" open>
+            <summary class="sidebar-section-title px-4 mt-2 mb-1">
+              <span>AI & Career Hub</span>
+              <i class="fa-solid fa-chevron-down sidebar-group-chevron"></i>
+            </summary>
+            <div class="sidebar-group-items">
+              <a href="#/ai-mentor" class="sidebar-link"><i class="fa-solid fa-brain text-warning"></i> <span>AI Personal Mentor</span></a>
+              <a href="#/ai-doubt" class="sidebar-link"><i class="fa-solid fa-wand-magic-sparkles text-warning"></i> <span>AI Doubt Solver</span></a>
+              <a href="#/ai-interviewer" class="sidebar-link"><i class="fa-solid fa-microphone-lines text-warning"></i> <span>AI Mock Interviewer</span></a>
+              <a href="#/career-roadmaps" class="sidebar-link"><i class="fa-solid fa-signs-post text-warning"></i> <span>Career Roadmaps</span></a>
+              <a href="#/placement-hub" class="sidebar-link"><i class="fa-solid fa-briefcase text-primary"></i> <span>Placement Readiness</span></a>
+              <a href="#/ai-assistant" class="sidebar-link"><i class="fa-solid fa-robot"></i> <span>AI ATS Assistant</span></a>
+              <a href="#/placement" class="sidebar-link"><i class="fa-solid fa-table-columns"></i> <span>Placement Kanban</span></a>
+            </div>
+          </details>
+
+          <details class="sidebar-group" open>
+            <summary class="sidebar-section-title px-4 mt-2 mb-1">
+              <span>Community & Ranks</span>
+              <i class="fa-solid fa-chevron-down sidebar-group-chevron"></i>
+            </summary>
+            <div class="sidebar-group-items">
+              <a href="#/leaderboard" class="sidebar-link"><i class="fa-solid fa-ranking-star text-warning"></i> <span>Leaderboard & Tiers</span></a>
+              <a href="#/rewards" class="sidebar-link"><i class="fa-solid fa-coins text-warning"></i> <span>Coins & Rewards</span></a>
+              <a href="#/study-rooms" class="sidebar-link"><i class="fa-solid fa-people-roof text-primary"></i> <span>Study Rooms</span></a>
+              <a href="#/pulse" class="sidebar-link"><i class="fa-solid fa-satellite-dish text-info"></i> <span>Tech Pulse</span></a>
+              <a href="#/community" class="sidebar-link"><i class="fa-solid fa-comments"></i> <span>Community</span></a>
+            </div>
+          </details>
+
+          <details class="sidebar-group">
             <summary class="sidebar-section-title px-4 mt-2 mb-1">
               <span>Academy & Prep</span>
               <i class="fa-solid fa-chevron-down sidebar-group-chevron"></i>
@@ -1007,30 +1040,18 @@ const components = {
               <a href="#/flashcards" class="sidebar-link"><i class="fa-solid fa-clone"></i> <span>Flashcards</span></a>
               <a href="#/notes" class="sidebar-link"><i class="fa-solid fa-note-sticky"></i> <span>Study Notes</span></a>
               <a href="#/experiences" class="sidebar-link"><i class="fa-solid fa-user-tie"></i> <span>Experiences</span></a>
-              <a href="#/community" class="sidebar-link"><i class="fa-solid fa-comments"></i> <span>Community</span></a>
             </div>
           </details>
 
           <details class="sidebar-group">
             <summary class="sidebar-section-title px-4 mt-2 mb-1">
-              <span>Career & Tools</span>
+              <span>Account & Tools</span>
               <i class="fa-solid fa-chevron-down sidebar-group-chevron"></i>
             </summary>
             <div class="sidebar-group-items">
-              <a href="#/placement" class="sidebar-link"><i class="fa-solid fa-briefcase"></i> <span>Placement Kanban</span></a>
-              <a href="#/ai-assistant" class="sidebar-link"><i class="fa-solid fa-robot"></i> <span>AI ATS Assistant</span></a>
               <a href="#/calendar" class="sidebar-link"><i class="fa-solid fa-calendar-days"></i> <span>Interview Calendar</span></a>
               <a href="#/reports" class="sidebar-link"><i class="fa-solid fa-file-invoice"></i> <span>Progress Reports</span></a>
               <a href="#/desktop-client" class="sidebar-link"><i class="fa-solid fa-mobile-screen"></i> <span>Download App</span></a>
-            </div>
-          </details>
-
-          <details class="sidebar-group">
-            <summary class="sidebar-section-title px-4 mt-2 mb-1">
-              <span>Account</span>
-              <i class="fa-solid fa-chevron-down sidebar-group-chevron"></i>
-            </summary>
-            <div class="sidebar-group-items">
               <a href="#/profile" class="sidebar-link"><i class="fa-solid fa-sliders"></i> <span>Settings</span></a>
               <a href="#/billing" class="sidebar-link" id="sidebar-upgrade-link"><i class="fa-solid fa-credit-card"></i> <span>${isEffectivePaid ? 'Billing & Plan' : 'Upgrade Space'}</span></a>
               ${isAdmin ? `<a href="#/admin" class="sidebar-link"><i class="fa-solid fa-shield-halved"></i> <span>Admin Panel</span></a>` : ''}
@@ -1070,11 +1091,26 @@ const components = {
           </div>
           
           <div class="d-flex align-items-center gap-2 flex-shrink-0">
+            <!-- XP & Level Pill -->
+            <a href="#/leaderboard" class="btn btn-glass btn-sm d-none d-sm-flex align-items-center gap-1.5 py-1 px-2.5 text-warning border-secondary border-opacity-25 text-decoration-none" id="header-xp-badge" title="Your XP & Level">
+              <i class="fa-solid fa-bolt text-warning fs-8"></i>
+              <span class="fs-8 fw-bold" id="header-level-name">Beginner</span>
+              <span class="badge bg-warning text-dark px-1.5 py-0.5 fs-9 fw-bolder rounded-pill" id="header-xp-points">0 XP</span>
+            </a>
             <!-- Daily Streak Flame Widget (Icon Only) -->
             <button type="button" class="btn btn-glass btn-sm d-flex align-items-center gap-1.5 py-1 px-2.5 text-white border-secondary border-opacity-25" id="header-streak-btn" onclick="window.showStreakModal && window.showStreakModal()" title="Daily Streak: Click to view activity">
               <span class="fs-7">🔥</span>
               <span class="font-monospace fs-8 fw-bold" id="header-streak-count">1</span>
             </button>
+            <!-- Notification Bell -->
+            <div class="dropdown" id="header-notification-dropdown">
+              <button type="button" class="btn btn-glass btn-sm position-relative py-1 px-2.5 text-white border-secondary border-opacity-25" id="header-notification-btn" data-bs-toggle="dropdown" aria-expanded="false" title="Notifications">
+                <i class="fa-solid fa-bell fs-7"></i>
+                <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-dark rounded-circle d-none" id="header-notification-dot"></span>
+              </button>
+              <div class="dropdown-menu dropdown-menu-end shadow-lg p-0 border border-secondary border-opacity-25" id="notification-menu-panel" style="width: 320px; max-width: 90vw; background: #1c1c20; border-radius: 14px;">
+              </div>
+            </div>
             <!-- Launch Offer: First 1,000 Users 1-Year Free (Only for unpaid candidates) -->
             ${!isEffectivePaid ? `
             <a href="#/billing" class="btn btn-primary fw-semibold btn-sm py-1 px-2.5 fs-8 d-none d-md-inline-flex align-items-center gap-1 shadow-sm" id="header-launch-offer-btn" title="Launch Offer: First 1,000 Users 1-Year Free">

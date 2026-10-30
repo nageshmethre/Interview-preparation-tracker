@@ -17,6 +17,9 @@ public class DtoMapper {
         dto.setIsPaid(user.getIsPaid());
         dto.setReferralCode(user.getReferralCode());
         dto.setReferralEarnings(user.getReferralEarnings());
+        dto.setXpPoints(user.getXpPoints());
+        dto.setCoins(user.getCoins());
+        dto.setCollege(user.getCollege());
         return dto;
     }
 

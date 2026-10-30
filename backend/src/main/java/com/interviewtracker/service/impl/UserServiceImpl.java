@@ -43,6 +43,9 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
         
         user.setName(updateDto.getName());
+        if (updateDto.getCollege() != null) {
+            user.setCollege(updateDto.getCollege());
+        }
         User savedUser = userRepository.save(user);
         return dtoMapper.toUserDto(savedUser);
     }
