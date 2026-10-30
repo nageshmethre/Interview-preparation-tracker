@@ -457,7 +457,13 @@
   window.components.leaderboard = function(payload) {
     const status = (payload && payload.status) || {};
     const leaderboardData = (payload && payload.leaderboard) || {};
-    const rankList = leaderboardData.leaderboard || [];
+    const rawRankList = leaderboardData.leaderboard || [];
+    // Strictly filter out any administrator accounts from student leaderboard
+    const rankList = rawRankList.filter(r => {
+      const n = (r.name || '').toLowerCase();
+      const e = (r.email || '').toLowerCase();
+      return !n.includes('admin') && !n.includes('superadmin') && !e.includes('admin');
+    });
     const activeType = leaderboardData.type || 'global';
     const userRank = leaderboardData.userRank || 1;
 
@@ -580,7 +586,6 @@
                           </div>
                           <div>
                             <span class="text-white fw-semibold fs-8 d-block ${r.isCurrentUser ? 'text-warning' : ''}">${r.name} ${r.isCurrentUser ? '<span class="badge bg-warning text-dark fs-9 ms-1">YOU</span>' : ''}</span>
-                            <small class="text-muted fs-9 font-monospace">${r.email}</small>
                           </div>
                         </div>
                       </td>

@@ -1,0 +1,8 @@
+target/
+backend/
+desktop-app/
+.git/
+node_modules/
+.idea/
+.vscode/
+*.jar

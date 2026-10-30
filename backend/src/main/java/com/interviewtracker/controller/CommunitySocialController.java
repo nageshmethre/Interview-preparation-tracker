@@ -95,12 +95,17 @@ public class CommunitySocialController {
         int pomodoro = body.get("pomodoroMinutes") != null ? Integer.parseInt(body.get("pomodoroMinutes").toString()) : 25;
         boolean isPrivate = body.get("isPrivate") != null && Boolean.parseBoolean(body.get("isPrivate").toString());
 
+        boolean isAdmin = user.getRole() != null && (user.getRole().toUpperCase().contains("ADMIN") || user.getRole().toUpperCase().contains("SUPER"));
+        String host = (isAdmin || (user.getName() != null && user.getName().toLowerCase().contains("admin")))
+                ? "PrepSpace Peer"
+                : (user.getName() != null && !user.getName().trim().isEmpty() ? user.getName() : "Student");
+
         String code = "ROOM-" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
         StudyRoom room = StudyRoom.builder()
                 .roomCode(code)
                 .title(title)
                 .topic(topic)
-                .hostName(user.getName())
+                .hostName(host)
                 .activeParticipants(1)
                 .pomodoroMinutes(pomodoro)
                 .isPrivate(isPrivate)
@@ -136,6 +141,14 @@ public class CommunitySocialController {
         User currentUser = getUser(principal);
         List<User> students = userRepository.findAll().stream()
                 .filter(u -> !u.getId().equals(currentUser.getId()) && !Boolean.TRUE.equals(u.getIsSuspended()))
+                .filter(u -> {
+                    String r = u.getRole() != null ? u.getRole().toUpperCase() : "";
+                    String n = u.getName() != null ? u.getName().toUpperCase() : "";
+                    String e = u.getEmail() != null ? u.getEmail().toLowerCase() : "";
+                    return !r.contains("ADMIN") && !r.contains("SUPER") && !r.contains("STAFF")
+                            && !n.contains("ADMIN") && !n.contains("SUPERADMIN")
+                            && !e.contains("admin");
+                })
                 .limit(8)
                 .collect(Collectors.toList());
 
@@ -144,7 +157,7 @@ public class CommunitySocialController {
             Map<String, Object> lvl = GamificationController.calculateLevel(xp);
             Map<String, Object> m = new HashMap<>();
             m.put("userId", u.getId());
-            m.put("name", u.getName());
+            m.put("name", u.getName() != null && !u.getName().trim().isEmpty() ? u.getName().trim() : "Student #" + u.getId());
             m.put("avatarUrl", u.getAvatarUrl());
             m.put("levelName", lvl.get("levelName"));
             m.put("college", u.getCollege() != null ? u.getCollege() : "Engineering Campus");
@@ -161,6 +174,14 @@ public class CommunitySocialController {
     public ResponseEntity<Map<String, Object>> getStudentProfile(@PathVariable Integer userId) {
         User u = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("Student not found"));
+
+        // Strictly protect admin identities from public discovery
+        String r = u.getRole() != null ? u.getRole().toUpperCase() : "";
+        String n = u.getName() != null ? u.getName().toUpperCase() : "";
+        String e = u.getEmail() != null ? u.getEmail().toLowerCase() : "";
+        if (r.contains("ADMIN") || r.contains("SUPER") || n.contains("ADMIN") || e.contains("admin")) {
+            throw new NoSuchElementException("Student not found");
+        }
 
         int xp = u.getXpPoints() != null ? u.getXpPoints() : 0;
         Map<String, Object> lvl = GamificationController.calculateLevel(xp);

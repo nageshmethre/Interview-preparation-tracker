@@ -120,9 +120,17 @@ public class GamificationController {
         User currentUser = getUser(principal);
         List<User> allUsers = userRepository.findAll();
 
-        // Sort by XP descending (or 0 if null)
+        // Sort by XP descending (or 0 if null), strictly excluding admin/staff accounts
         List<User> sorted = allUsers.stream()
                 .filter(u -> !Boolean.TRUE.equals(u.getIsSuspended()))
+                .filter(u -> {
+                    String r = u.getRole() != null ? u.getRole().toUpperCase() : "";
+                    String n = u.getName() != null ? u.getName().toUpperCase() : "";
+                    String e = u.getEmail() != null ? u.getEmail().toLowerCase() : "";
+                    return !r.contains("ADMIN") && !r.contains("SUPER") && !r.contains("STAFF")
+                            && !n.contains("ADMIN") && !n.contains("SUPERADMIN")
+                            && !e.contains("admin");
+                })
                 .sorted((a, b) -> {
                     int xpA = a.getXpPoints() != null ? a.getXpPoints() : 0;
                     int xpB = b.getXpPoints() != null ? b.getXpPoints() : 0;
@@ -151,8 +159,7 @@ public class GamificationController {
             Map<String, Object> item = new HashMap<>();
             item.put("rank", rank);
             item.put("userId", u.getId());
-            item.put("name", u.getName());
-            item.put("email", maskEmail(u.getEmail()));
+            item.put("name", u.getName() != null && !u.getName().trim().isEmpty() ? u.getName().trim() : "Student #" + u.getId());
             item.put("avatarUrl", u.getAvatarUrl());
             item.put("xp", xp);
             item.put("levelName", lvl.get("levelName"));
@@ -163,7 +170,7 @@ public class GamificationController {
 
         Map<String, Object> result = new HashMap<>();
         result.put("type", type);
-        result.put("userRank", userRank > 0 ? userRank : rankItems.size() + 1);
+        result.put("userRank", userRank > 0 ? userRank : 1);
         result.put("leaderboard", rankItems);
         result.put("totalParticipants", rankItems.size());
 

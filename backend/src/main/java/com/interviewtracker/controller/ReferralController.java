@@ -103,20 +103,8 @@ public class ReferralController {
 
         for (User u : referredUsers) {
             Map<String, Object> row = new HashMap<>();
-            
-            // Mask email (e.g. na****@gmail.com)
-            String email = u.getEmail();
-            String[] parts = email.split("@");
-            if (parts.length == 2) {
-                String namePart = parts[0];
-                String domainPart = parts[1];
-                String masked = namePart.length() > 2 
-                        ? namePart.substring(0, 2) + "*".repeat(namePart.length() - 2)
-                        : namePart + "*";
-                row.put("referredUser", masked + "@" + domainPart);
-            } else {
-                row.put("referredUser", email);
-            }
+            String displayName = u.getName() != null && !u.getName().trim().isEmpty() ? u.getName().trim() : "Student";
+            row.put("referredUser", displayName);
 
             row.put("date", u.getCreatedAt());
             row.put("purchaseStatus", Boolean.TRUE.equals(u.getIsPaid()) ? "PAID" : "PENDING");
