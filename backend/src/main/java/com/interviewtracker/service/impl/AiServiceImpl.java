@@ -1,5 +1,7 @@
 package com.interviewtracker.service.impl;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.interviewtracker.entity.User;
 import com.interviewtracker.entity.UserProblemStatus;
 import com.interviewtracker.exception.BadRequestException;
@@ -10,6 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,11 +32,60 @@ public class AiServiceImpl implements AiService {
     @Value("${gemini.api.key:}")
     private String geminiApiKey;
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    private String callGemini(String prompt) {
+        if (geminiApiKey == null || geminiApiKey.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            String endpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=" + geminiApiKey.trim();
+            Map<String, Object> payload = Map.of(
+                    "contents", List.of(
+                            Map.of("parts", List.of(Map.of("text", prompt)))
+                    )
+            );
+            String jsonPayload = objectMapper.writeValueAsString(payload);
+
+            HttpClient client = HttpClient.newBuilder()
+                    .connectTimeout(Duration.ofSeconds(6))
+                    .build();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(endpoint))
+                    .timeout(Duration.ofSeconds(12))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                JsonNode root = objectMapper.readTree(response.body());
+                JsonNode candidates = root.path("candidates");
+                if (candidates.isArray() && !candidates.isEmpty()) {
+                    String text = candidates.get(0).path("content").path("parts").get(0).path("text").asText();
+                    if (text != null && !text.trim().isEmpty()) {
+                        return text;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Gracefully fall back to local engine
+        }
+        return null;
+    }
+
     @Override
     public String analyzeResume(String resumeText) {
         if (resumeText == null) resumeText = "";
-        String lower = resumeText.toLowerCase();
 
+        // Attempt live Gemini AI call first
+        String liveAi = callGemini("You are a senior FAANG technical recruiter and ATS resume optimization specialist. Analyze this tech resume text and generate an audit report formatted in markdown with: 1) Overall ATS match score (out of 100), 2) Skill stack alignment & missing frameworks (Spring Boot, Docker, SQL, Cloud), 3) Impact-driven bullet point revisions using Google XYZ format, and 4) ATS layout tips:\n\n" + resumeText);
+        if (liveAi != null) {
+            return liveAi;
+        }
+
+        String lower = resumeText.toLowerCase();
         boolean hasJava = lower.contains("java");
         boolean hasSpring = lower.contains("spring");
         boolean hasDocker = lower.contains("docker");
@@ -148,7 +204,6 @@ public class AiServiceImpl implements AiService {
 
         boolean hasNestedLoop = code.contains("for") && (code.substring(code.indexOf("for") + 3).contains("for"));
         boolean usesHashMap = code.contains("HashMap") || code.contains("Map") || code.contains("dict");
-        boolean usesRecursion = code.contains("return ") && code.contains("(");
 
         feedback.append("#### **1. Algorithmic Complexity**:\n");
         if (hasNestedLoop) {
@@ -177,6 +232,11 @@ public class AiServiceImpl implements AiService {
         String comp = company != null && !company.trim().isEmpty() ? company : "Product Tier-1";
         String r = role != null && !role.trim().isEmpty() ? role : "Software Development Engineer";
 
+        String liveAi = callGemini(String.format("You are a technical interviewer at %s. Generate a technical interview preparation guide for the role of %s with high-frequency questions, coding patterns, and system design topics.", comp, r));
+        if (liveAi != null) {
+            return liveAi;
+        }
+
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("### 🏢 %s Technical Interview Preparation Sheet\n\n", comp));
         sb.append(String.format("Target Role: **%s**\n\n", r));
@@ -196,6 +256,19 @@ public class AiServiceImpl implements AiService {
         Map<String, Object> res = new HashMap<>();
         res.put("category", category != null ? category : "General");
         res.put("question", question);
+
+        // Attempt live Gemini call
+        String prompt = String.format("You are an expert computer science tutor and senior software engineer. A student has this technical doubt in category %s:\n\nQuestion: %s\n\n%s\n\nProvide an encouraging, clear, step-by-step technical explanation with mathematical/logical invariants, correct code snippets, and time/space complexity analysis formatted in markdown.",
+                category != null ? category : "Computer Science",
+                question,
+                code != null && !code.trim().isEmpty() ? "Code snippet:\n" + code : "");
+
+        String liveAi = callGemini(prompt);
+        if (liveAi != null) {
+            res.put("explanation", liveAi);
+            res.put("recommendedProblems", List.of("Two Sum", "Valid Anagram", "Group Anagrams", "Longest Substring Without Repeating Characters"));
+            return res;
+        }
 
         StringBuilder explanation = new StringBuilder();
         explanation.append("### 💡 AI Doubt Solution: Step-by-Step Breakdown\n\n");
@@ -276,6 +349,20 @@ public class AiServiceImpl implements AiService {
         res.put("language", language != null ? language : "java");
 
         String act = action != null ? action.toLowerCase() : "explain";
+
+        // Attempt live Gemini call
+        String prompt = String.format("You are an expert DSA coding mentor. In language %s, perform this action: '%s' for the problem '%s'. If action is 'hint', provide a helpful non-spoiler clue. If 'debug', identify subtle boundary traps. If 'complexity', specify Big-O time and space. Code snippet:\n%s",
+                language != null ? language : "java",
+                act,
+                problemContext != null ? problemContext : "Active Problem",
+                code != null ? code : "");
+
+        String liveAi = callGemini(prompt);
+        if (liveAi != null) {
+            res.put("title", act.toUpperCase() + " (Live AI Gemini)");
+            res.put("content", liveAi);
+            return res;
+        }
 
         switch (act) {
             case "hint":
