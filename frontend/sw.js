@@ -1,8 +1,8 @@
 // PrepSpace Service Worker - PWA Offline Caching Engine
 // Version: 5.9.5 (Clean dashboard view, remove header pill and dashboard banner, retain sidebar and landing badges)
 
-const CACHE_NAME = 'prepspace-static-v5.9.5';
-const RUNTIME_CACHE = 'prepspace-runtime-v5.9.5';
+const CACHE_NAME = 'prepspace-static-v6.1.0';
+const RUNTIME_CACHE = 'prepspace-runtime-v6.1.0';
 
 const PRECACHE_ASSETS = [
   './',
@@ -11,15 +11,20 @@ const PRECACHE_ASSETS = [
   './favicon.ico',
   './favicon.png',
   './apple-touch-icon.png',
-  './assets/css/index.css?v=5.9.5',
-  './assets/js/dsa-notes-data.js?v=5.9.5',
-  './assets/js/app.js?v=5.9.5',
-  './assets/js/components.js?v=5.9.5',
-  './assets/js/interview-suite.js?v=5.9.5',
-  './assets/js/technical-library-data.js?v=5.9.5',
-  './assets/js/questions-data.js?v=5.9.5',
-  './assets/js/aptitude-curriculum.js?v=5.9.5',
-  './assets/js/production-pages.js?v=5.9.5',
+  './assets/css/index.css?v=6.1.0',
+  './assets/js/dsa-notes-data.js?v=6.1.0',
+  './assets/js/app.js?v=6.1.0',
+  './assets/js/components.js?v=6.1.0',
+  './assets/js/interview-suite.js?v=6.1.0',
+  './assets/js/technical-library-data.js?v=6.1.0',
+  './assets/js/questions-data.js?v=6.1.0',
+  './assets/js/aptitude-curriculum.js?v=6.1.0',
+  './assets/js/production-pages.js?v=6.1.0',
+  './assets/js/engagement-gamification.js?v=6.1.0',
+  './assets/js/ai-ecosystem.js?v=6.1.0',
+  './assets/js/community-social.js?v=6.1.0',
+  './assets/js/career-pulse.js?v=6.1.0',
+  './assets/js/notifications.js?v=6.1.0',
   './assets/favicon.ico',
   './assets/favicon.png',
   './assets/prepspace_icon.png',
