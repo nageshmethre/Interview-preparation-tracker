@@ -149,8 +149,8 @@
 
       <!-- Active In-Room Focus Modal -->
       <div class="modal fade" id="activeStudyRoomModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
-          <div class="modal-content bg-surface border border-secondary border-opacity-25 rounded-4 shadow-lg text-white" id="activeStudyRoomContent">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+          <div class="modal-content bg-surface border border-secondary border-opacity-25 rounded-4 shadow-lg text-white" id="activeStudyRoomContent" style="max-height: 94vh; overflow-y: auto; -webkit-overflow-scrolling: touch;">
             <!-- Dynamically populated -->
           </div>
         </div>
@@ -163,9 +163,16 @@
   // =========================================================================
 
   window.openCreateStudyRoomModal = function() {
-    const modalEl = document.getElementById('createStudyRoomModal');
+    let modalEl = document.getElementById('createStudyRoomModal');
     if (modalEl) {
-      const modal = new bootstrap.Modal(modalEl);
+      if (modalEl.parentElement !== document.body) {
+        const existing = document.body.querySelector(':scope > #createStudyRoomModal');
+        if (existing && existing !== modalEl) {
+          existing.remove();
+        }
+        document.body.appendChild(modalEl);
+      }
+      const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
       modal.show();
     }
   };
@@ -192,7 +199,16 @@
       });
       if (res.ok) {
         const modalEl = document.getElementById('createStudyRoomModal');
-        if (modalEl) bootstrap.Modal.getInstance(modalEl).hide();
+        if (modalEl) {
+          const inst = bootstrap.Modal.getInstance(modalEl);
+          if (inst) inst.hide();
+        }
+        setTimeout(() => {
+          document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+          document.body.classList.remove('modal-open');
+          document.body.style.removeProperty('overflow');
+          document.body.style.removeProperty('padding-right');
+        }, 350);
         location.hash = '#/study-rooms';
       }
     } catch (e) {
@@ -207,9 +223,19 @@
 
   window.enterActiveStudyRoom = function(roomCode, titleEscaped, pomodoroMin) {
     const title = unescape(titleEscaped);
-    const modalEl = document.getElementById('activeStudyRoomModal');
+    let modalEl = document.getElementById('activeStudyRoomModal');
+    if (!modalEl) return;
+
+    // Reparent to document.body to break out of nested scrolling context on iOS WebKit
+    if (modalEl.parentElement !== document.body) {
+      const existing = document.body.querySelector(':scope > #activeStudyRoomModal');
+      if (existing && existing !== modalEl) {
+        existing.remove();
+      }
+      document.body.appendChild(modalEl);
+    }
     const content = document.getElementById('activeStudyRoomContent');
-    if (!modalEl || !content) return;
+    if (!content) return;
 
     window._activeRoomCode = roomCode;
     window._roomSecondsLeft = (pomodoroMin || 25) * 60;
@@ -251,14 +277,14 @@
               
               <!-- Quick Timer Action Controls -->
               <div class="d-flex justify-content-center gap-2 mb-3 flex-wrap">
-                <button class="btn btn-glass btn-sm text-white fs-8 py-1.5 px-3" id="btn-toggle-room-timer" onclick="window.toggleRoomTimer()">
+                <button type="button" class="btn btn-glass btn-sm text-white fs-8 py-2 px-3" id="btn-toggle-room-timer" onclick="window.toggleRoomTimer()">
                   <i class="fa-solid fa-pause me-1 text-warning"></i> Pause
                 </button>
-                <button class="btn btn-glass btn-sm text-white fs-8 py-1.5 px-3" onclick="window.resetRoomTimer(${pomodoroMin})">
-                  <i class="fa-solid fa-rotate-left me-1 text-info"></i> Reset (${pomodoroMin}m)
+                <button type="button" class="btn btn-glass btn-sm text-white fs-8 py-2 px-3" onclick="window.resetRoomTimer(${pomodoroMin})">
+                  <i class="fa-solid fa-rotate-left me-1 text-warning"></i> Reset (${pomodoroMin}m)
                 </button>
-                <button class="btn btn-glass btn-sm text-info fs-8 py-1.5 px-3" onclick="window.resetRoomTimer(5, true)">
-                  <i class="fa-solid fa-mug-saucer me-1"></i> 5m Break
+                <button type="button" class="btn btn-glass btn-sm text-white fs-8 py-2 px-3" onclick="window.resetRoomTimer(5, true)">
+                  <i class="fa-solid fa-mug-saucer me-1 text-warning"></i> 5m Break
                 </button>
               </div>
             </div>
@@ -285,21 +311,21 @@
                   <span class="fw-semibold text-warning">${rawName}</span>
                 </div>
                 <div class="badge bg-surface border border-secondary border-opacity-30 p-2 text-white fs-8 d-flex align-items-center gap-1.5">
-                  <div class="rounded-circle bg-primary text-dark fw-bold d-flex align-items-center justify-content-center" style="width: 20px; height: 20px; font-size: 0.65rem;">RS</div>
+                  <div class="rounded-circle bg-secondary text-white fw-bold d-flex align-items-center justify-content-center" style="width: 20px; height: 20px; font-size: 0.65rem;">RS</div>
                   <span>Rahul S. (Amazon SDE)</span>
                 </div>
                 <div class="badge bg-surface border border-secondary border-opacity-30 p-2 text-white fs-8 d-flex align-items-center gap-1.5">
-                  <div class="rounded-circle bg-info text-dark fw-bold d-flex align-items-center justify-content-center" style="width: 20px; height: 20px; font-size: 0.65rem;">PM</div>
+                  <div class="rounded-circle bg-secondary text-white fw-bold d-flex align-items-center justify-content-center" style="width: 20px; height: 20px; font-size: 0.65rem;">PM</div>
                   <span>Priya M. (IIT Bombay)</span>
                 </div>
               </div>
 
               <!-- Lounge Tabs: Live Focus Chat vs Goals -->
               <div class="d-flex gap-2 border-bottom border-secondary border-opacity-25 pb-2 mb-3">
-                <button class="btn btn-sm py-1.5 px-3 rounded-pill fw-semibold fs-8 btn-primary text-dark" id="btn-tab-room-chat" onclick="window.switchRoomTab('chat')">
+                <button type="button" class="btn btn-sm py-2 px-3 rounded-pill fw-semibold fs-8 btn-primary text-dark" id="btn-tab-room-chat" onclick="window.switchRoomTab('chat')">
                   <i class="fa-solid fa-comments me-1.5"></i> Live Focus Chat & Doubts
                 </button>
-                <button class="btn btn-sm py-1.5 px-3 rounded-pill fw-semibold fs-8 btn-glass text-muted" id="btn-tab-room-goals" onclick="window.switchRoomTab('goals')">
+                <button type="button" class="btn btn-sm py-2 px-3 rounded-pill fw-semibold fs-8 btn-glass text-muted" id="btn-tab-room-goals" onclick="window.switchRoomTab('goals')">
                   <i class="fa-solid fa-list-check me-1.5 text-warning"></i> Session Goals & Notes
                 </button>
               </div>
@@ -308,16 +334,16 @@
               <div id="pane-room-chat">
                 <!-- Quick Reaction Chips -->
                 <div class="d-flex gap-1.5 overflow-x-auto pb-2 mb-2" style="scrollbar-width: thin;">
-                  <button class="btn btn-glass btn-sm fs-9 text-nowrap py-1 px-2.5 rounded-pill text-white" onclick="window.sendQuickRoomReaction('🎯 Grinding Blind 75 DSA Sprint!')">
+                  <button type="button" class="btn btn-glass btn-sm fs-9 text-nowrap py-1.5 px-3 rounded-pill text-white" onclick="window.sendQuickRoomReaction('🎯 Grinding Blind 75 DSA Sprint!')">
                     🎯 Grinding DSA
                   </button>
-                  <button class="btn btn-glass btn-sm fs-9 text-nowrap py-1 px-2.5 rounded-pill text-white" onclick="window.sendQuickRoomReaction('🚀 Solved problem with optimal O(1) space!')">
+                  <button type="button" class="btn btn-glass btn-sm fs-9 text-nowrap py-1.5 px-3 rounded-pill text-white" onclick="window.sendQuickRoomReaction('🚀 Solved problem with optimal O(1) space!')">
                     🚀 Solved Question!
                   </button>
-                  <button class="btn btn-glass btn-sm fs-9 text-nowrap py-1 px-2.5 rounded-pill text-white" onclick="window.sendQuickRoomReaction('☕ Taking a 5-minute breather')">
+                  <button type="button" class="btn btn-glass btn-sm fs-9 text-nowrap py-1.5 px-3 rounded-pill text-white" onclick="window.sendQuickRoomReaction('☕ Taking a 5-minute breather')">
                     ☕ 5m Coffee Break
                   </button>
-                  <button class="btn btn-glass btn-sm fs-9 text-nowrap py-1 px-2.5 rounded-pill text-white" onclick="window.sendQuickRoomReaction('❓ Quick doubt on Two Pointers index bounds')">
+                  <button type="button" class="btn btn-glass btn-sm fs-9 text-nowrap py-1.5 px-3 rounded-pill text-white" onclick="window.sendQuickRoomReaction('❓ Quick doubt on Two Pointers index bounds')">
                     ❓ Quick Doubt
                   </button>
                 </div>
@@ -326,21 +352,21 @@
                 <div class="p-3 rounded-3 border border-secondary border-opacity-25 mb-2 overflow-y-auto" id="room-chat-messages" style="height: 190px; background: #141416;">
                   <div class="mb-2.5">
                     <div class="d-flex align-items-center gap-1.5 mb-1">
-                      <span class="badge bg-primary bg-opacity-20 text-primary fs-10 fw-bold px-1.5 py-0.5">RS</span>
+                      <span class="badge bg-secondary bg-opacity-25 text-white fs-10 fw-bold px-1.5 py-0.5">RS</span>
                       <strong class="text-white fs-8">Rahul S.</strong>
                       <span class="text-muted fs-9 font-monospace">2m ago</span>
                     </div>
-                    <div class="text-secondary fs-8 ps-3 border-start border-2 border-primary border-opacity-40">
+                    <div class="text-secondary fs-8 ps-3 border-start border-2 border-secondary border-opacity-40">
                       🎯 Grinding LeetCode #15 (3Sum). Aiming for 20 mins.
                     </div>
                   </div>
                   <div class="mb-2.5">
                     <div class="d-flex align-items-center gap-1.5 mb-1">
-                      <span class="badge bg-info bg-opacity-20 text-info fs-10 fw-bold px-1.5 py-0.5">PM</span>
+                      <span class="badge bg-secondary bg-opacity-25 text-white fs-10 fw-bold px-1.5 py-0.5">PM</span>
                       <strong class="text-white fs-8">Priya M.</strong>
                       <span class="text-muted fs-9 font-monospace">Just now</span>
                     </div>
-                    <div class="text-secondary fs-8 ps-3 border-start border-2 border-info border-opacity-40">
+                    <div class="text-secondary fs-8 ps-3 border-start border-2 border-secondary border-opacity-40">
                       Reviewing Redis Cache Invalidation patterns! Feel free to ping if anyone has distributed systems questions.
                     </div>
                   </div>
@@ -349,7 +375,7 @@
                 <!-- Chat Input Form -->
                 <div class="d-flex gap-2">
                   <input type="text" class="form-control bg-dark text-white border-secondary border-opacity-25 fs-8" id="room-chat-input" placeholder="Type a message or share your progress..." onkeydown="if(event.key==='Enter') window.sendRoomChatMessage()">
-                  <button class="btn btn-premium px-3 fs-8 fw-bold" onclick="window.sendRoomChatMessage()" title="Send Message">
+                  <button type="button" class="btn btn-premium px-3 fs-8 fw-bold" onclick="window.sendRoomChatMessage()" title="Send Message">
                     <i class="fa-solid fa-paper-plane"></i>
                   </button>
                 </div>
@@ -386,7 +412,7 @@
       </div>
     `;
 
-    const modal = new bootstrap.Modal(modalEl);
+    const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
     modal.show();
 
     // Start timer interval
@@ -434,7 +460,7 @@
     if (badge) {
       if (isBreak) {
         badge.innerHTML = '<i class="fa-solid fa-mug-saucer me-1"></i> Coffee Break (5m)';
-        badge.className = 'badge bg-info bg-opacity-20 text-info px-3 py-1 rounded-pill fs-8 fw-semibold';
+        badge.className = 'badge bg-warning bg-opacity-20 text-warning px-3 py-1 rounded-pill fs-8 fw-semibold';
       } else {
         badge.innerHTML = '<i class="fa-solid fa-circle-dot me-1"></i> Active Focus Session';
         badge.className = 'badge bg-success bg-opacity-20 text-success px-3 py-1 rounded-pill fs-8 fw-semibold';
@@ -509,7 +535,16 @@
       window._roomTimerInterval = null;
     }
     const modalEl = document.getElementById('activeStudyRoomModal');
-    if (modalEl) bootstrap.Modal.getInstance(modalEl).hide();
+    if (modalEl) {
+      const inst = bootstrap.Modal.getInstance(modalEl);
+      if (inst) inst.hide();
+    }
+    setTimeout(() => {
+      document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+      document.body.classList.remove('modal-open');
+      document.body.style.removeProperty('overflow');
+      document.body.style.removeProperty('padding-right');
+    }, 350);
   };
 
   window.refreshStudyPartners = async function() {

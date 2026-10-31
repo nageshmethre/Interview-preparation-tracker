@@ -475,6 +475,35 @@ document.addEventListener('DOMContentLoaded', () => {
   if (window.UserStreak) {
     window.UserStreak.recordActivity('visit');
   }
+
+  // Universal Bootstrap modal reparenting & mobile WebKit stacking context fix
+  document.addEventListener('show.bs.modal', function(event) {
+    const modalEl = event.target;
+    if (modalEl && modalEl.classList && modalEl.classList.contains('modal')) {
+      if (modalEl.parentElement !== document.body) {
+        if (modalEl.id) {
+          const safeId = window.CSS && CSS.escape ? CSS.escape(modalEl.id) : modalEl.id;
+          const existingInBody = document.body.querySelector(':scope > #' + safeId);
+          if (existingInBody && existingInBody !== modalEl) {
+            existingInBody.remove();
+          }
+        }
+        document.body.appendChild(modalEl);
+      }
+    }
+  }, true);
+
+  document.addEventListener('hidden.bs.modal', function() {
+    setTimeout(() => {
+      const anyOpenModal = document.querySelector('.modal.show');
+      if (!anyOpenModal) {
+        document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+        document.body.classList.remove('modal-open');
+        document.body.style.removeProperty('overflow');
+        document.body.style.removeProperty('padding-right');
+      }
+    }, 350);
+  });
 });
 
 // Interactive Showcase Tabs for Landing Page (Style 2: Stripe / Supabase)
@@ -872,6 +901,12 @@ function router() {
   const viewTitle = document.getElementById('current-view-title');
   if (pageMount) pageMount.scrollTop = 0;
   window.scrollTo({ top: 0, behavior: 'instant' });
+
+  // Clean up any stray backdrops or body freeze states on route navigation
+  document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+  document.body.classList.remove('modal-open');
+  document.body.style.removeProperty('overflow');
+  document.body.style.removeProperty('padding-right');
 
   // Dynamic Browser Tab & Route Title Mapper (fixes stuck 'Two Sum' tab title)
   const routeTabTitles = {

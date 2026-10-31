@@ -259,8 +259,8 @@
 
       <!-- Interactive Task Execution Modal Container -->
       <div class="modal fade" id="missionTaskModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content bg-surface border border-secondary border-opacity-25 rounded-4 shadow-lg text-white" id="missionTaskModalContent">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+          <div class="modal-content bg-surface border border-secondary border-opacity-25 rounded-4 shadow-lg text-white" id="missionTaskModalContent" style="max-height: 94vh; overflow-y: auto; -webkit-overflow-scrolling: touch;">
             <!-- Injected dynamically -->
           </div>
         </div>
@@ -367,8 +367,8 @@
 
       <!-- Challenge Solver Modal -->
       <div class="modal fade" id="challengeSolverModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content bg-surface border border-secondary border-opacity-25 rounded-4 shadow-lg text-white" id="challengeSolverContent">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+          <div class="modal-content bg-surface border border-secondary border-opacity-25 rounded-4 shadow-lg text-white" id="challengeSolverContent" style="max-height: 94vh; overflow-y: auto; -webkit-overflow-scrolling: touch;">
             <!-- Dynamically populated -->
           </div>
         </div>
@@ -431,7 +431,7 @@
               <!-- Right: Interview Prompt & Speed Quiz -->
               <div class="col-lg-5">
                 <div class="p-4 rounded-4 bg-surface border border-secondary border-opacity-25 mb-3">
-                  <span class="badge border border-info border-opacity-30 text-info fw-bold px-2.5 py-1 fs-9 mb-2" style="background: rgba(13, 202, 240, 0.12);"><i class="fa-solid fa-user-tie me-1"></i> FAANG INTERVIEW QUESTION</span>
+                  <span class="badge border border-warning border-opacity-30 text-warning fw-bold px-2.5 py-1 fs-9 mb-2" style="background: rgba(245, 158, 11, 0.12);"><i class="fa-solid fa-user-tie me-1"></i> FAANG INTERVIEW QUESTION</span>
                   <p class="text-white fs-8 fw-semibold mb-2 whitespace-pre-line">${data.interviewQuestion}</p>
                 </div>
 
@@ -743,9 +743,19 @@
   // =========================================================================
 
   window.openMissionTaskModal = function(taskType) {
-    const modalEl = document.getElementById('missionTaskModal');
+    let modalEl = document.getElementById('missionTaskModal');
+    if (!modalEl) return;
+
+    if (modalEl.parentElement !== document.body) {
+      const existing = document.body.querySelector(':scope > #missionTaskModal');
+      if (existing && existing !== modalEl) {
+        existing.remove();
+      }
+      document.body.appendChild(modalEl);
+    }
+
     const content = document.getElementById('missionTaskModalContent');
-    if (!modalEl || !content) return;
+    if (!content) return;
 
     if (taskType === 'aptitude') {
       content.innerHTML = `
@@ -775,7 +785,7 @@
             </div>
           </div>
           <div id="mission-modal-msg" class="mb-3 d-none"></div>
-          <button class="btn btn-premium w-100 py-2.5 fw-bold" onclick="window.verifyMissionAptitude()">Verify & Submit</button>
+          <button type="button" class="btn btn-premium w-100 py-2.5 fw-bold" onclick="window.verifyMissionAptitude()">Verify & Submit</button>
         </div>
       `;
     } else if (taskType === 'coding') {
@@ -799,7 +809,7 @@ function isPalindrome(s) {
     let clean = s.toLowerCase().replace(/[^a-z0-9]/g, '');
     return clean === clean.split('').reverse().join('');
 }</textarea>
-          <button class="btn btn-premium w-100 py-2.5 fw-bold" onclick="window.submitMissionCoding()">Execute Test Cases & Complete (+100 XP)</button>
+          <button type="button" class="btn btn-premium w-100 py-2.5 fw-bold" onclick="window.submitMissionCoding()">Execute Test Cases & Complete (+100 XP)</button>
         </div>
       `;
     } else if (taskType === 'concept') {
@@ -816,7 +826,7 @@ function isPalindrome(s) {
             <h6 class="text-white fw-bold mb-1 fs-7">Virtual Threads (Project Loom - Java 21+)</h6>
             <p class="text-muted fs-8 mb-0">Unlike OS platform threads which consume ~1MB stack and are bounded by kernel scheduling, virtual threads are managed directly by the JVM runtime and cost just a few hundred bytes, enabling millions of concurrent I/O operations.</p>
           </div>
-          <div class="p-3 rounded-3 bg-surface border-start border-3 border-info mb-4">
+          <div class="p-3 rounded-3 bg-surface border-start border-3 border-warning mb-4">
             <h6 class="text-white fw-bold mb-1 fs-7">Consistent Hashing</h6>
             <p class="text-muted fs-8 mb-0">Maps both cluster nodes and object keys onto a circular ring (0 to 2^32 - 1). When a node fails or is added, only keys within that specific slice are re-hashed.</p>
           </div>
@@ -835,7 +845,7 @@ function isPalindrome(s) {
         <div class="p-4">
           <p class="text-white fs-7 mb-2"><strong>Question:</strong> "Tell me about a time you encountered a production deadlock or high latency bottleneck in your application. How did you resolve it?"</p>
           <textarea class="form-control bg-body text-white fs-8 border-secondary border-opacity-25 mb-3" rows="5" id="mission-interview-text" placeholder="Structure your answer using STAR: Situation, Task, Action taken, Result metrics..."></textarea>
-          <button class="btn btn-premium w-100 py-2.5 fw-bold" onclick="window.submitMissionInterview()">Submit Response (+50 XP)</button>
+          <button type="button" class="btn btn-premium w-100 py-2.5 fw-bold" onclick="window.submitMissionInterview()">Submit Response (+50 XP)</button>
         </div>
       `;
     } else if (taskType === 'quiz') {
@@ -850,16 +860,16 @@ function isPalindrome(s) {
         <div class="p-4">
           <h6 class="text-white fw-bold mb-3 fs-7">Which CPU scheduling algorithm is non-preemptive and guarantees zero starvation?</h6>
           <div class="d-flex flex-column gap-2 mb-4">
-            <button class="btn btn-glass text-start py-2.5 px-3 fs-8 text-white border-secondary border-opacity-25" onclick="window.submitMissionQuiz(false, this)">Shortest Job First (SJF)</button>
-            <button class="btn btn-glass text-start py-2.5 px-3 fs-8 text-white border-secondary border-opacity-25" onclick="window.submitMissionQuiz(true, this)">First-Come, First-Served (FCFS)</button>
-            <button class="btn btn-glass text-start py-2.5 px-3 fs-8 text-white border-secondary border-opacity-25" onclick="window.submitMissionQuiz(false, this)">Priority Scheduling</button>
+            <button type="button" class="btn btn-glass text-start py-2.5 px-3 fs-8 text-white border-secondary border-opacity-25" onclick="window.submitMissionQuiz(false, this)">Shortest Job First (SJF)</button>
+            <button type="button" class="btn btn-glass text-start py-2.5 px-3 fs-8 text-white border-secondary border-opacity-25" onclick="window.submitMissionQuiz(true, this)">First-Come, First-Served (FCFS)</button>
+            <button type="button" class="btn btn-glass text-start py-2.5 px-3 fs-8 text-white border-secondary border-opacity-25" onclick="window.submitMissionQuiz(false, this)">Priority Scheduling</button>
           </div>
           <div id="mission-quiz-verdict" class="d-none"></div>
         </div>
       `;
     }
 
-    const modal = new bootstrap.Modal(modalEl);
+    const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
     modal.show();
   };
 
@@ -924,6 +934,12 @@ function isPalindrome(s) {
       const modal = bootstrap.Modal.getInstance(modalEl);
       if (modal) modal.hide();
     }
+    setTimeout(() => {
+      document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+      document.body.classList.remove('modal-open');
+      document.body.style.removeProperty('overflow');
+      document.body.style.removeProperty('padding-right');
+    }, 350);
 
     const token = localStorage.getItem('token');
     try {
@@ -984,9 +1000,19 @@ function isPalindrome(s) {
 
   // Daily Challenge Modal
   window.openChallengeSolverModal = function(challengeId) {
-    const modalEl = document.getElementById('challengeSolverModal');
+    let modalEl = document.getElementById('challengeSolverModal');
+    if (!modalEl) return;
+
+    if (modalEl.parentElement !== document.body) {
+      const existing = document.body.querySelector(':scope > #challengeSolverModal');
+      if (existing && existing !== modalEl) {
+        existing.remove();
+      }
+      document.body.appendChild(modalEl);
+    }
+
     const content = document.getElementById('challengeSolverContent');
-    if (!modalEl || !content) return;
+    if (!content) return;
 
     fetch(`${API_BASE}/v1/challenges/today`)
       .then(res => res.json())
@@ -1007,19 +1033,19 @@ function isPalindrome(s) {
             <h6 class="text-muted fs-8 text-uppercase fw-bold mb-2">Select Your Solution:</h6>
             <div class="d-flex flex-column gap-2 mb-4" id="challenge-options-list">
               ${(target.options || []).map((opt, i) => `
-                <button class="btn btn-glass text-start py-2.5 px-3 fs-8 text-white border-secondary border-opacity-25 challenge-opt-btn" onclick="window.selectChallengeOption('${opt}', this)">
+                <button type="button" class="btn btn-glass text-start py-2.5 px-3 fs-8 text-white border-secondary border-opacity-25 challenge-opt-btn" onclick="window.selectChallengeOption('${opt}', this)">
                   <span class="text-warning font-monospace me-2">${String.fromCharCode(65 + i)}.</span> ${opt}
                 </button>
               `).join('')}
             </div>
             <div id="challenge-verdict-box" class="d-none mb-3"></div>
-            <button class="btn btn-premium w-100 py-2.5 fw-bold" id="btn-submit-challenge" onclick="window.submitChallengeAnswer(${target.id})" disabled>
+            <button type="button" class="btn btn-premium w-100 py-2.5 fw-bold" id="btn-submit-challenge" onclick="window.submitChallengeAnswer(${target.id})" disabled>
               Check Answer & Lock In +${target.xp} XP
             </button>
           </div>
         `;
 
-        const modal = new bootstrap.Modal(modalEl);
+        const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
         modal.show();
       });
   };
@@ -1073,7 +1099,7 @@ function isPalindrome(s) {
       }
     } catch (e) {
       if (verdictBox) {
-        verdictBox.className = 'alert alert-info fs-8 p-3 rounded-3';
+        verdictBox.className = 'alert alert-warning fs-8 p-3 rounded-3';
         verdictBox.textContent = 'Challenge response recorded!';
         verdictBox.classList.remove('d-none');
       }

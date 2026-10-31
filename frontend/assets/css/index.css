@@ -7,6 +7,11 @@
   --bs-secondary-bg: #222226 !important;
   --bs-tertiary-bg: #1c1c20 !important;
   --bs-border-color: #323238 !important;
+  --bs-info: #f59e0b !important;
+  --bs-info-rgb: 245, 158, 11 !important;
+  --bs-info-text-emphasis: #fbbf24 !important;
+  --bs-info-bg-subtle: rgba(245, 158, 11, 0.15) !important;
+  --bs-info-border-subtle: rgba(245, 158, 11, 0.3) !important;
 }
 
 .bg-body,
@@ -71,10 +76,17 @@ body .bg-surface,
   --sidebar-width: 260px;
 }
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+button, a, input, select, textarea, .btn, [role="button"], [onclick] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent !important;
+  cursor: pointer;
 }
 
 html {
@@ -2777,7 +2789,24 @@ input:-webkit-autofill {
 
 /* Sidebar styled above */
 
-/* Modals & Dialogs */
+/* Modals & Dialogs - iOS WebKit & Mobile Touch Hardened */
+.modal-backdrop {
+  z-index: 1050 !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.modal {
+  z-index: 1060 !important;
+  -webkit-overflow-scrolling: touch !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.modal-dialog {
+  z-index: 1061 !important;
+  position: relative !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
 .modal-content, .google-glass-card.modal-content {
   background: #141417 !important;
   backdrop-filter: none !important;
@@ -2786,6 +2815,42 @@ input:-webkit-autofill {
   color: #f4f4f5 !important;
   border-radius: 20px !important;
   overflow: hidden;
+  position: relative !important;
+  z-index: 1062 !important;
+  pointer-events: auto !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Ensure interactive controls inside modals are immediately clickable on mobile */
+.modal-content button,
+.modal-content a,
+.modal-content input,
+.modal-content select,
+.modal-content textarea,
+.modal-content .btn,
+.modal-content [role="button"],
+.modal-content [onclick] {
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 1065 !important;
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+  cursor: pointer;
+}
+
+@media (max-width: 767.98px) {
+  .modal-dialog {
+    margin: 0.5rem !important;
+    max-width: calc(100vw - 1rem) !important;
+  }
+  .modal-dialog-centered {
+    min-height: calc(100% - 1rem) !important;
+  }
+  .modal-content {
+    max-height: calc(100dvh - 1rem) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
 }
 
 .modal-header, .modal-footer {

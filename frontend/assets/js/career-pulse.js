@@ -196,7 +196,7 @@
                   <span class="badge bg-secondary bg-opacity-25 text-white fs-9 font-monospace">${data.mockCount} Completed</span>
                 </div>
                 <div class="progress" style="height: 6px; background: rgba(255,255,255,0.06); border-radius: 999px;">
-                  <div class="progress-bar bg-info" style="width: ${data.mockScore}%;"></div>
+                  <div class="progress-bar bg-warning" style="width: ${data.mockScore}%;"></div>
                 </div>
               </div>
             </div>

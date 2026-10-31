@@ -101,7 +101,7 @@
                   <p class="text-muted fs-8 mb-0">Target: 30 curated LeetCode Mediums + Time & Space Complexity formal proofs.</p>
                 </div>
                 <div class="mb-3">
-                  <span class="badge bg-info bg-opacity-20 text-info px-2 py-0.5 fs-9 fw-bold mb-2">WEEKS 3 - 4</span>
+                  <span class="badge bg-secondary bg-opacity-25 text-white px-2 py-0.5 fs-9 fw-bold mb-2">WEEKS 3 - 4</span>
                   <h6 class="text-white fw-bold fs-7 mb-1">Non-Linear Structures: Trees, Graphs & BFS/DFS Traversal</h6>
                   <p class="text-muted fs-8 mb-0">Target: Topological sort, cycle detection, Dijkstra, and Union-Find algorithms.</p>
                 </div>
@@ -260,7 +260,7 @@
                   <div>
                     <div class="d-flex align-items-center justify-content-between mb-2">
                       <label class="form-label text-muted fs-8 text-uppercase fw-bold mb-0">Your Answer</label>
-                      <button class="btn btn-glass btn-sm text-info py-0.5 px-2 fs-9" id="btn-toggle-speech-rec" onclick="window.toggleSpeechRecording()">
+                      <button class="btn btn-glass btn-sm text-warning py-0.5 px-2 fs-9" id="btn-toggle-speech-rec" onclick="window.toggleSpeechRecording()">
                         <i class="fa-solid fa-microphone me-1"></i> <span id="speech-rec-label">Speech-to-Text</span>
                       </button>
                     </div>
@@ -374,7 +374,7 @@
             <i class="fa-solid fa-lightbulb me-1"></i> Progressive Hint
           </button>
           <button class="btn btn-sm btn-glass text-white py-1.5 px-3 rounded-pill fs-8" onclick="window.runCodingAssistantAction('explain')">
-            <i class="fa-solid fa-book-open me-1 text-info"></i> Explain Approach
+            <i class="fa-solid fa-book-open me-1 text-warning"></i> Explain Approach
           </button>
           <button class="btn btn-sm btn-glass text-white py-1.5 px-3 rounded-pill fs-8" onclick="window.runCodingAssistantAction('debug')">
             <i class="fa-solid fa-bug me-1 text-danger"></i> Find Edge Cases
@@ -578,8 +578,8 @@
             </div>
 
             <!-- Model Answer -->
-            <div class="p-3 rounded-3 bg-body border-start border-3 border-info">
-              <span class="text-info fw-bold fs-9 text-uppercase d-block mb-1">FAANG Model Approach:</span>
+            <div class="p-3 rounded-3 bg-body border-start border-3 border-warning">
+              <span class="text-warning fw-bold fs-9 text-uppercase d-block mb-1">FAANG Model Approach:</span>
               <p class="text-white fs-9 mb-0">${data.modelAnswer || ''}</p>
             </div>
           </div>
